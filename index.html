@@ -57,125 +57,32 @@
   </main>
 
 <script>
-const CONFIG = {
-  youtubeUrl: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
-  bgstatsUrl: "https://bgstats.app/game/{game}",
-  rulesUrl: "https://yourdomain.com/rules/{game}.pdf",
-  notionUrl: "https://www.notion.so/yourworkspace/{game}-abcdef123456",
-  storageUrl: "https://yourdomain.com/storage-guides/{game}.html",
-  games: {
-    "heat pedal to the metal": {
-      youtubeUrl: "https://www.youtube.com/watch?v=REPLACE_HEAT_VIDEO",
-      bgstatsUrl: "https://bgstats.app/game/heat-pedal-to-the-metal",
-      rulesUrl: "https://yourdomain.com/rules/heat-pedal-to-the-metal.pdf",
-      notionUrl: "https://www.notion.so/yourworkspace/heat-pedal-to-the-metal-abcdef123456",
-      storageUrl: "https://yourdomain.com/storage-guides/heat.html",
-      quickStart: `Players: 2–6 • Setup ~5–7 min
+// --- existing CONFIG block stays above this ---
 
-1) Track & Modules
-- Choose track; shuffle track cards as required.
-- If using Heavy Rain: place rain boards; shuffle weather.
-
-2) Player Setup
-- Give each player: car, dashboard, starting gear & starting hand.
-- Starting money and upgrade cards per scenario.
-
-3) Decks & Supply
-- Shuffle stress/heat decks as rules specify.
-- Place weather tokens and slipstream marker.
-
-4) Round (high-level)
-- Select speed card → reveal → resolve heats/stress → move → slipstream → cleanup.
-
-First game tips:
-- Don’t burn heat too early.
-- Slipstream when possible; watch corner speed limits.`
-    }
-  },
-  defaultQuickStart: `Quick Start Template
-
-1) Layout
-- Board out, decks shuffled, supply tokens placed.
-
-2) Player Setup
-- Give starting resources, cards, reference, markers.
-
-3) Round Summary
-- Phase 1 → Phase 2 → Phase 3 (follow player aids).
-
-Scoring
-- End game trigger → final scoring per rulebook.`
-};
-
-const $ = sel => document.querySelector(sel);
-const qp = name => new URL(location.href).searchParams.get(name) || "";
+// Utility
+const $ = s => document.querySelector(s);
+const qp = n => new URL(location.href).searchParams.get(n) || "";
 const enc = s => encodeURIComponent(s);
 
-const gameRaw = decodeURIComponent(qp("game") || "");
-const gameKey = gameRaw.trim().toLowerCase();
-const gameName = gameRaw || "Game";
+// Existing setup (unchanged) ...
 
-const g = CONFIG.games[gameKey] || {};
-const t = f => (g[f] ?? CONFIG[f] ?? "");
-
-function fill(template, name) {
-  if (!template) return "";
-  return template.replace(/\{game\}/g, enc(name));
+// --- NEW universal modal close logic ---
+function hideModal() {
+  const m = $("#modal");
+  if (!m) return;
+  m.classList.add("hidden");
+  m.setAttribute("aria-hidden", "true");
 }
-
-function openUrl(u) {
-  if (!u) { alert("No URL configured for this action."); return; }
-  window.open(u, "_blank");
-}
-
-$("#title").textContent = gameName;
-$("#subtitle").textContent = `Choose an action for “${gameName}”.`;
-
-$("#btn-youtube").addEventListener("click", () => openUrl(t("youtubeUrl")));
-$("#btn-bgstats").addEventListener("click", () => openUrl(fill(t("bgstatsUrl"), gameName)));
-$("#btn-rules").addEventListener("click", () => openUrl(fill(t("rulesUrl"), gameName)));
-$("#btn-notion").addEventListener("click", () => openUrl(fill(t("notionUrl"), gameName)));
-$("#btn-storage").addEventListener("click", () => openUrl(fill(t("storageUrl"), gameName)));
-
-$("#btn-quickstart").addEventListener("click", () => {
-  const qs = (g.quickStart || CONFIG.defaultQuickStart || "").trim();
-  $("#qs-text").textContent = qs || "(No quick start text configured.)";
-  $("#modal").classList.remove("hidden");
-  $("#modal").setAttribute("aria-hidden", "false");
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") hideModal();
 });
-
-$("#btn-close").addEventListener("click", () => {
-  $("#modal").classList.add("hidden");
-  $("#modal").setAttribute("aria-hidden", "true");
+document.addEventListener("click", e => {
+  const m = $("#modal");
+  if (!m || m.classList.contains("hidden")) return;
+  if (e.target.id === "modal") hideModal(); // click outside panel
 });
+$("#btn-close").addEventListener("click", hideModal);
 $("#btn-print").addEventListener("click", () => window.print());
-
-$("#btn-share").addEventListener("click", async () => {
-  const url = location.href;
-  const title = `Quick Menu — ${gameName}`;
-  try {
-    if (navigator.share) { await navigator.share({ title, text: `Menu for ${gameName}`, url }); return; }
-  } catch(e) { }
-  try {
-    await navigator.clipboard.writeText(url);
-    alert("Link copied to clipboard");
-  } catch(e) {
-    prompt("Copy this link:", url);
-  }
-});
-
-(function autoOpen(){
-  const action = (qp("action") || "").toLowerCase();
-  const map = {
-    youtube: "#btn-youtube",
-    quickstart: "#btn-quickstart",
-    bgstats: "#btn-bgstats",
-    rules: "#btn-rules",
-    notion: "#btn-notion",
-    storage: "#btn-storage",
-  };
-  if (map[action]) $(map[action]).click();
-})();
 </script>
 </body>
 </html>
