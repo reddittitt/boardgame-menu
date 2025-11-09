@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Board Game Quick Menu</title>
+<link rel="icon" href="data:," />
+<style>
+  :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+  body { margin:0; background:#fafafa; color:#111; display:flex; min-height:100vh; align-items:center; justify-content:center; padding:20px; }
+  .card { width:100%; max-width:720px; background:#fff; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,.08); padding:18px; }
+  h1 { font-size:1.1rem; margin:.2rem 0 .7rem; }
+  p.meta { color:#666; font-size:.9rem; margin:0 0 14px; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  button { padding:12px; border-radius:10px; border:1px solid #eee; background:#fff; font-weight:600; cursor:pointer; }
+  button.primary { background:#0b63ff; color:#fff; border:none; }
+  .full { grid-column:1/-1; }
+  .small { font-size:.9rem; padding:10px; }
+  .hidden { display:none; }
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; padding:16px; }
+  .panel { background:#fff; max-width:720px; width:100%; border-radius:12px; padding:16px; max-height:84vh; overflow:auto; }
+  .panel h2 { margin:.2rem 0 .6rem; font-size:1.05rem; }
+  .panel pre { white-space:pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#f6f6f6; padding:12px; border-radius:8px; border:1px solid #eee; }
+  footer { font-size:.78rem; color:#777; margin-top:12px; text-align:center; }
+</style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1 id="title">Game Menu</h1>
+    <p class="meta" id="subtitle">Choose an action for this game.</p>
+
+    <div class="grid" id="buttons">
+      <button id="btn-youtube" class="full">▶️ How-to-Play (YouTube)</button>
+      <button id="btn-quickstart" class="primary">Quick Start</button>
+      <button id="btn-bgstats">BG Stats – Log a Play</button>
+      <button id="btn-rules">Open Rules (PDF)</button>
+      <button id="btn-notion">Open Notion Page</button>
+      <button id="btn-storage">Storage Guide</button>
+      <button id="btn-share" class="full">Share / Copy Link</button>
+    </div>
+
+    <!-- Quick Start Modal -->
+    <section id="modal" class="modal hidden" aria-hidden="true">
+      <div class="panel" role="dialog" aria-modal="true" aria-labelledby="qs-title">
+        <h2 id="qs-title">Quick Start</h2>
+        <pre id="qs-text">(No quick start text configured.)</pre>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+          <button id="btn-print" class="small">Print</button>
+          <button id="btn-close" class="small">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Tip: encode the game name with <code>?game=Heat%20Pedal%20to%20the%20Metal</code>. You can also auto-open actions with <code>&action=quickstart|youtube|bgstats|rules|notion|storage</code>.
+    </footer>
+  </main>
+
+<script>
+const CONFIG = {
+  youtubeUrl: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+  bgstatsUrl: "https://bgstats.app/game/{game}",
+  rulesUrl: "https://yourdomain.com/rules/{game}.pdf",
+  notionUrl: "https://www.notion.so/yourworkspace/{game}-abcdef123456",
+  storageUrl: "https://yourdomain.com/storage-guides/{game}.html",
+  games: {
+    "heat pedal to the metal": {
+      youtubeUrl: "https://www.youtube.com/watch?v=REPLACE_HEAT_VIDEO",
+      bgstatsUrl: "https://bgstats.app/game/heat-pedal-to-the-metal",
+      rulesUrl: "https://yourdomain.com/rules/heat-pedal-to-the-metal.pdf",
+      notionUrl: "https://www.notion.so/yourworkspace/heat-pedal-to-the-metal-abcdef123456",
+      storageUrl: "https://yourdomain.com/storage-guides/heat.html",
+      quickStart: `Players: 2–6 • Setup ~5–7 min
+
+1) Track & Modules
+- Choose track; shuffle track cards as required.
+- If using Heavy Rain: place rain boards; shuffle weather.
+
+2) Player Setup
+- Give each player: car, dashboard, starting gear & starting hand.
+- Starting money and upgrade cards per scenario.
+
+3) Decks & Supply
+- Shuffle stress/heat decks as rules specify.
+- Place weather tokens and slipstream marker.
+
+4) Round (high-level)
+- Select speed card → reveal → resolve heats/stress → move → slipstream → cleanup.
+
+First game tips:
+- Don’t burn heat too early.
+- Slipstream when possible; watch corner speed limits.`
+    }
+  },
+  defaultQuickStart: `Quick Start Template
+
+1) Layout
+- Board out, decks shuffled, supply tokens placed.
+
+2) Player Setup
+- Give starting resources, cards, reference, markers.
+
+3) Round Summary
+- Phase 1 → Phase 2 → Phase 3 (follow player aids).
+
+Scoring
+- End game trigger → final scoring per rulebook.`
+};
+
+const $ = sel => document.querySelector(sel);
+const qp = name => new URL(location.href).searchParams.get(name) || "";
+const enc = s => encodeURIComponent(s);
+
+const gameRaw = decodeURIComponent(qp("game") || "");
+const gameKey = gameRaw.trim().toLowerCase();
+const gameName = gameRaw || "Game";
+
+const g = CONFIG.games[gameKey] || {};
+const t = f => (g[f] ?? CONFIG[f] ?? "");
+
+function fill(template, name) {
+  if (!template) return "";
+  return template.replace(/\{game\}/g, enc(name));
+}
+
+function openUrl(u) {
+  if (!u) { alert("No URL configured for this action."); return; }
+  window.open(u, "_blank");
+}
+
+$("#title").textContent = gameName;
+$("#subtitle").textContent = `Choose an action for “${gameName}”.`;
+
+$("#btn-youtube").addEventListener("click", () => openUrl(t("youtubeUrl")));
+$("#btn-bgstats").addEventListener("click", () => openUrl(fill(t("bgstatsUrl"), gameName)));
+$("#btn-rules").addEventListener("click", () => openUrl(fill(t("rulesUrl"), gameName)));
+$("#btn-notion").addEventListener("click", () => openUrl(fill(t("notionUrl"), gameName)));
+$("#btn-storage").addEventListener("click", () => openUrl(fill(t("storageUrl"), gameName)));
+
+$("#btn-quickstart").addEventListener("click", () => {
+  const qs = (g.quickStart || CONFIG.defaultQuickStart || "").trim();
+  $("#qs-text").textContent = qs || "(No quick start text configured.)";
+  $("#modal").classList.remove("hidden");
+  $("#modal").setAttribute("aria-hidden", "false");
+});
+
+$("#btn-close").addEventListener("click", () => {
+  $("#modal").classList.add("hidden");
+  $("#modal").setAttribute("aria-hidden", "true");
+});
+$("#btn-print").addEventListener("click", () => window.print());
+
+$("#btn-share").addEventListener("click", async () => {
+  const url = location.href;
+  const title = `Quick Menu — ${gameName}`;
+  try {
+    if (navigator.share) { await navigator.share({ title, text: `Menu for ${gameName}`, url }); return; }
+  } catch(e) { }
+  try {
+    await navigator.clipboard.writeText(url);
+    alert("Link copied to clipboard");
+  } catch(e) {
+    prompt("Copy this link:", url);
+  }
+});
+
+(function autoOpen(){
+  const action = (qp("action") || "").toLowerCase();
+  const map = {
+    youtube: "#btn-youtube",
+    quickstart: "#btn-quickstart",
+    bgstats: "#btn-bgstats",
+    rules: "#btn-rules",
+    notion: "#btn-notion",
+    storage: "#btn-storage",
+  };
+  if (map[action]) $(map[action]).click();
+})();
+</script>
+</body>
+</html>
