@@ -12,15 +12,13 @@ header { padding:18px; background:#0b63ff; color:#fff; }
 header h1 { margin:0; font-size:1.1rem; }
 main { max-width:960px; margin:24px auto; padding:0 16px 32px; }
 .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:12px; }
-a.card { display:block; background:#fff; border:1px solid #eaeaea; border-radius:12px; padding:12px;
-text-decoration:none; color:inherit; box-shadow:0 4px 12px rgba(0,0,0,.04); }
+a.card { display:block; background:#fff; border:1px solid #eaeaea; border-radius:12px; padding:12px; text-decoration:none; color:inherit; box-shadow:0 4px 12px rgba(0,0,0,.04); }
 a.card:hover { transform: translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.06); }
 .card h2 { margin:.2rem 0 .3rem; font-size:1rem; }
 .card p { margin:0; color:#666; font-size:.85rem; }
 .search { margin:14px 0 18px; }
 .search input { width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:1rem; }
 .hint { color:#777; font-size:.85rem; margin-top:18px; }
-footer { color:#777; font-size:.85rem; text-align:center; margin-top:24px; }
 </style>
 </head>
 <body>
@@ -30,52 +28,17 @@ footer { color:#777; font-size:.85rem; text-align:center; margin-top:24px; }
 <input id="q" placeholder="Search your collection…" autocomplete="off" aria-label="Search games">
 </div>
 <div id="list" class="grid" aria-live="polite"></div>
-<p class="hint">Tip: Upload rulebooks to <code>/rulebooks/&lt;slug&gt;.pdf</code>. Click any game to open its menu.</p>
-<footer>All files are static and GitHub Pages–friendly.</footer>
+<p class="hint">Rulebooks live in <code>/rulebooks/&lt;slug&gt;.pdf</code>. Reminders in <code>/reminders/&lt;slug&gt;.html</code>.</p>
 </main>
 
+<script src="assets/games.js"></script>
 <script>
-// ---- data & helpers (inline, no imports) ----
-const slugify = (name) =>
-name.toLowerCase()
-.replace(/[:’'"]/g, "")
-.replace(/&/g, "and")
-.replace(/[^a-z0-9]+/g, "-")
-.replace(/(^-|-$)/g, "");
-
-const NAMES = [
-"7 Wonders","7 Wonders Duel","Acquire","Air, Land & Sea: Critters at War","Archduke","Ark Nova",
-"Ark Nova: Marine Worlds","Azul","Azul: Crystal Mosaic","Backgammon","Brass: Birmingham","Candy Land: Bluey",
-"Century: Golem Edition","Chess","Chronicles of Crime","Cover Your Assets","Critters at War: Flies, Lies, and Supplies",
-"Dune: Imperium - Uprising","Dutch Blitz","Everdell","The Fellowship of the Ring Trick-Taking Game","Fire Tower",
-"Fire Tower: Rising Flames","Five Crowns","For Sale","For Sale: Advisors","Forbidden Island","Foundations of Metropolis",
-"Heat: Pedal to the Metal","Heat: Heavy Rain","Jaipur","Kingdomino","Kingdomino Origins","Monopoly Deal",
-"Moonrakers: Titan Edition","Moonrakers: Dark Matter","Moonrakers: The Endless","Moonrakers: The Shard","Moonrakers: Starfall",
-"Moonrollers","New York Zoo","Pan Am","PARKS","PARKS: Nightfall","PARKS: Wildlife","Patchwork","Play Nine",
-"Quacks of Quedlinburg","Quacks of Quedlinburg: Alchemists","Quacks of Quedlinburg: Herb Witches","Radlands","Rage",
-"Ravine","Ravine: The Spirits Expansion","Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Splendor",
-"Star Wars: The Deck-Building Game","Vinhos Deluxe Edition","Watergate","Wingspan","Project L","Project L: Finesse",
-"Project L: Ghost","Harmonies","Wingspan: European Expansion","Forest Shuffle","Heat: Tunnel Vision","Brink","Tend"
-];
-
-const ENRICH = {
-[slugify("Heat: Pedal to the Metal")]: { players:"2–6", year:"2022" },
-[slugify("Quacks of Quedlinburg")]: { players:"2–4", year:"2018" },
-[slugify("Wingspan")]: { players:"1–5", year:"2019" },
-};
-
-const GAMES = NAMES.map(name => {
-const slug = slugify(name);
-return { name, slug, ...(ENRICH[slug]||{}) };
-});
-
-// ---- render ----
 const $list = document.getElementById('list');
 const $q = document.getElementById('q');
 
 function render(filter = "") {
 const f = filter.trim().toLowerCase();
-const items = GAMES
+const items = Object.values(window.GAMES)
 .slice()
 .sort((a,b)=>a.name.localeCompare(b.name))
 .filter(g => !f || g.name.toLowerCase().includes(f));
