@@ -19,6 +19,7 @@ a.card:hover { transform: translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.06
 .card p { margin:0; color:#666; font-size:.85rem; }
 .search { margin:14px 0 18px; }
 .search input { width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; font-size:1rem; }
+.hint { color:#777; font-size:.85rem; margin-top:18px; }
 footer { color:#777; font-size:.85rem; text-align:center; margin-top:24px; }
 </style>
 </head>
@@ -26,32 +27,65 @@ footer { color:#777; font-size:.85rem; text-align:center; margin-top:24px; }
 <header><h1>Board Game Quick Menus</h1></header>
 <main>
 <div class="search">
-<input id="q" placeholder="Search your collection…" autocomplete="off">
+<input id="q" placeholder="Search your collection…" autocomplete="off" aria-label="Search games">
 </div>
 <div id="list" class="grid" aria-live="polite"></div>
-<footer>Add rulebooks to <code>/rulebooks/&lt;slug&gt;.pdf</code>. Each game opens at <code>game.html?game=&lt;slug&gt;</code>.</footer>
+<p class="hint">Tip: Upload rulebooks to <code>/rulebooks/&lt;slug&gt;.pdf</code>. Click any game to open its menu.</p>
+<footer>All files are static and GitHub Pages–friendly.</footer>
 </main>
-<script type="module">
-import { GAMES, slugify } from "./assets/games.js";
 
+<script>
+// ---- data & helpers (inline, no imports) ----
+const slugify = (name) =>
+name.toLowerCase()
+.replace(/[:’'"]/g, "")
+.replace(/&/g, "and")
+.replace(/[^a-z0-9]+/g, "-")
+.replace(/(^-|-$)/g, "");
+
+const NAMES = [
+"7 Wonders","7 Wonders Duel","Acquire","Air, Land & Sea: Critters at War","Archduke","Ark Nova",
+"Ark Nova: Marine Worlds","Azul","Azul: Crystal Mosaic","Backgammon","Brass: Birmingham","Candy Land: Bluey",
+"Century: Golem Edition","Chess","Chronicles of Crime","Cover Your Assets","Critters at War: Flies, Lies, and Supplies",
+"Dune: Imperium - Uprising","Dutch Blitz","Everdell","The Fellowship of the Ring Trick-Taking Game","Fire Tower",
+"Fire Tower: Rising Flames","Five Crowns","For Sale","For Sale: Advisors","Forbidden Island","Foundations of Metropolis",
+"Heat: Pedal to the Metal","Heat: Heavy Rain","Jaipur","Kingdomino","Kingdomino Origins","Monopoly Deal",
+"Moonrakers: Titan Edition","Moonrakers: Dark Matter","Moonrakers: The Endless","Moonrakers: The Shard","Moonrakers: Starfall",
+"Moonrollers","New York Zoo","Pan Am","PARKS","PARKS: Nightfall","PARKS: Wildlife","Patchwork","Play Nine",
+"Quacks of Quedlinburg","Quacks of Quedlinburg: Alchemists","Quacks of Quedlinburg: Herb Witches","Radlands","Rage",
+"Ravine","Ravine: The Spirits Expansion","Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Splendor",
+"Star Wars: The Deck-Building Game","Vinhos Deluxe Edition","Watergate","Wingspan","Project L","Project L: Finesse",
+"Project L: Ghost","Harmonies","Wingspan: European Expansion","Forest Shuffle","Heat: Tunnel Vision","Brink","Tend"
+];
+
+const ENRICH = {
+[slugify("Heat: Pedal to the Metal")]: { players:"2–6", year:"2022" },
+[slugify("Quacks of Quedlinburg")]: { players:"2–4", year:"2018" },
+[slugify("Wingspan")]: { players:"1–5", year:"2019" },
+};
+
+const GAMES = NAMES.map(name => {
+const slug = slugify(name);
+return { name, slug, ...(ENRICH[slug]||{}) };
+});
+
+// ---- render ----
 const $list = document.getElementById('list');
 const $q = document.getElementById('q');
 
 function render(filter = "") {
 const f = filter.trim().toLowerCase();
-const items = Object.values(GAMES)
+const items = GAMES
+.slice()
 .sort((a,b)=>a.name.localeCompare(b.name))
-.filter(g => g.name.toLowerCase().includes(f));
+.filter(g => !f || g.name.toLowerCase().includes(f));
 
-$list.innerHTML = items.map(g => {
-const url = `game.html?game=${encodeURIComponent(g.slug)}`;
-return `
-<a class="card" href="${url}">
+$list.innerHTML = items.map(g => `
+<a class="card" href="game.html?game=${encodeURIComponent(g.slug)}">
 <h2>${g.name}</h2>
-<p>${g.players || ""} ${g.players ? " • " : ""}${g.year || ""}</p>
+<p>${[g.players, g.year].filter(Boolean).join(" • ")}</p>
 </a>
-`;
-}).join('');
+`).join('') || `<p>No matches. Try a different search.</p>`;
 }
 
 $q.addEventListener('input', () => render($q.value));
