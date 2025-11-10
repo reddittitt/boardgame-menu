@@ -17,70 +17,25 @@ header h1{margin:0;font-size:1.05rem}
 header a{margin-left:auto;color:#fff;text-decoration:none}
 main{max-width:900px;margin:18px auto 40px;padding:0 16px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;
-padding:12px;text-decoration:none;color:inherit}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-decoration:none;color:inherit}
 .card h2{margin:.1rem 0 .25rem;font-size:1rem}
 .sub{color:var(--muted);font-size:.85rem;margin:0}
 .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
 .actions{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-.btn,.btnlink{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;
-border:1px solid #ddd;text-decoration:none;font-weight:700;cursor:pointer}
+.btn,.btnlink{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;border:1px solid #ddd;text-decoration:none;font-weight:700;cursor:pointer}
 .btn.primary{background:var(--brand);color:#fff;border:none}
 .qs{margin-top:10px;padding:10px;border:1px dashed #ccc;border-radius:10px;background:#fafafa;display:none}
 .qs.open{display:block}
+#search{width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;margin-bottom:12px}
 footer{text-align:center;font-size:.8rem;color:#777;margin-top:16px}
+noscript{display:block;margin:18px;color:#b00}
 </style>
 </head>
 <body>
 <header><div class="wrap"><h1>Board Game Quick Menus</h1><a href="#/">All Games</a></div></header>
-<main id="app"></main>
+<main id="app"><noscript>JavaScript is required.</noscript></main>
 
-<script>
-const slugify=s=>s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-const qp=n=>new URL(location.href).searchParams.get(n)||"";
-const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
-const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
-const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
-const bgstatsUrl=s=>`https://bgstats.app/game/${s}`;
-
-const DATA=(()=>{const raw=document.getElementById('games-json').textContent,obj=JSON.parse(raw),map={};
-for(const n of obj.names){const s=slugify(n);map[s]={name:n,slug:s,...(obj.enrich[s]||{})}}return map})();
-const $app=document.getElementById('app');
-
-function renderList(f=""){f=f.toLowerCase();
-const games=Object.values(DATA).filter(g=>!f||g.name.toLowerCase().includes(f))
-.sort((a,b)=>a.name.localeCompare(b.name));
-$app.innerHTML=`<input id="search" placeholder="Search..." style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;margin-bottom:12px">
-<section class="grid">${games.map(g=>`<a class="card" href="#/game/${g.slug}"><h2>${g.name}</h2><p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p></a>`).join("")}</section>`;
-document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));}
-
-function renderDetail(slug,action=""){const g=DATA[slug];
-if(!g){$app.innerHTML=`<div class="detail"><p>Game not found.</p></div>`;return;}
-const links={youtube:g.youtube||"",bgstats:g.bgstats||bgstatsUrl(slug),
-reminders:g.reminders||remindersUrl(slug),rulebook:g.rulebook||rulebookUrl(slug)};
-$app.innerHTML=`<div class="detail">
-<h2>${g.name}</h2><p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p>
-<div class="actions">
-<a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank"`:""}>▶️ How-to-Play</a>
-<button class="btn primary" id="btn-quick">Quick Setup</button>
-<a class="btnlink" href="${links.bgstats}" target="_blank">BG Stats</a>
-<a class="btnlink" href="${links.reminders}" target="_blank">Reminders</a>
-<a class="btnlink" href="${links.rulebook}" target="_blank">Rulebook (PDF)</a>
-<button class="btn" id="share">Share / Copy Link</button>
-<div id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></div>
-</div></div>`;
-document.getElementById('btn-quick').onclick=()=>document.getElementById('qs').classList.toggle('open');
-document.getElementById('share').onclick=async()=>{const u=location.href;try{await navigator.clipboard.writeText(u);alert("Link copied!");}catch(e){prompt("Copy link:",u)}};
-if(action==="quicksetup")document.getElementById('btn-quick').click();
-}
-
-function normalizeIncoming(){const q=qp("game");if(q){const s=slugify(q);const a=(qp("action")||"").toLowerCase();
-location.replace(`#\/game\/${s}${a?`?action=${a}`:""}`);return true;}return false;}
-function parseHash(){const h=location.hash||"#/";const [p,q]=h.slice(2).split("?");const parts=(p||"").split("/");const params=new URLSearchParams(q||"");
-if(parts[0]==="game"&&parts[1])return{r:"detail",slug:parts[1],action:(params.get("action")||"").toLowerCase()};return{r:"list"};}
-function render(){if(normalizeIncoming())return;const {r,slug,action}=parseHash();r==="detail"?renderDetail(slug,action):renderList();}
-window.addEventListener("hashchange",render);document.addEventListener("DOMContentLoaded",render);
-</script>
+<!-- 1) DATA FIRST (so the app can read it safely) -->
 <script id="games-json" type="application/json">
 {
 "names": [
@@ -90,140 +45,120 @@ window.addEventListener("hashchange",render);document.addEventListener("DOMConte
 "Sky Team","Brink","Tend","Harmonies"
 ],
 "enrich": {
-
 "heat-pedal-to-the-metal": {
 "players":"2–6","year":"2022",
 "youtube":"https://www.youtube.com/watch?v=Ychy0Tgegjk",
 "bgstats":"https://bgstats.app/game/heat-pedal-to-the-metal",
 "quickStart":"Choose track. Set dashboards, gear, deck. Play speed cards → resolve heat/stress → move → slipstream."
 },
-
 "quacks-of-quedlinburg": {
 "players":"2–4","year":"2018",
 "youtube":"https://www.youtube.com/watch?v=0jVDu4c6tU4",
 "bgstats":"https://bgstats.app/game/the-quacks-of-quedlinburg",
 "quickStart":"Draw chips; stop before exploding. Score, buy ingredients, reset rats."
 },
-
 "wingspan": {
 "players":"1–5","year":"2019",
 "youtube":"https://www.youtube.com/watch?v=lgDgcLI2B0U",
 "bgstats":"https://bgstats.app/game/wingspan",
 "quickStart":"Play bird / Gain food / Lay eggs / Draw cards. 4 rounds. Eggs = points."
 },
-
 "ark-nova": {
 "players":"1–4","year":"2021",
 "youtube":"https://www.youtube.com/watch?v=oPW0jMG1DTM",
 "bgstats":"https://bgstats.app/game/ark-nova",
 "quickStart":"5 action cards: Cards, Build, Animals, Association, Sponsors. End when Appeal & Conservation cross."
 },
-
 "brass-birmingham": {
 "players":"2–4","year":"2018",
 "youtube":"https://www.youtube.com/watch?v=Lzxf4tfq9as",
 "bgstats":"https://bgstats.app/game/brass-birmingham",
 "quickStart":"Two eras: Canal → Rail. Take 2 actions. Flip industries for income & points."
 },
-
 "parks": {
 "players":"1–5","year":"2019",
 "youtube":"https://www.youtube.com/watch?v=J8tr_h1S2EY",
 "bgstats":"https://bgstats.app/game/parks",
 "quickStart":"Move hikers, take tile actions, visit parks for points. 4 seasons."
 },
-
 "splendor": {
 "players":"2–4","year":"2014",
 "youtube":"https://www.youtube.com/watch?v=2A0CQ0xsrv0",
 "bgstats":"https://bgstats.app/game/splendor",
 "quickStart":"Take gems or buy cards. Build discounts. First to 15 VP wins."
 },
-
 "watergate": {
 "players":"2","year":"2019",
 "youtube":"https://www.youtube.com/watch?v=6BQQyHA0g3Y",
 "bgstats":"https://bgstats.app/game/watergate",
 "quickStart":"Editor links informants to Nixon. Nixon wins with 5 momentum."
 },
-
 "for-sale": {
 "players":"3–6","year":"1997",
 "youtube":"https://www.youtube.com/watch?v=ZH54R8P3g_E",
 "bgstats":"https://bgstats.app/game/for-sale",
 "quickStart":"Auction properties, then sell them for highest checks."
 },
-
 "jaipur": {
 "players":"2","year":"2009",
 "youtube":"https://www.youtube.com/watch?v=IuSYx2f_Co4",
 "bgstats":"https://bgstats.app/game/jaipur",
 "quickStart":"Trade/sell goods for points. Best of 3 rounds."
 },
-
 "everdell": {
 "players":"1–4","year":"2018",
 "youtube":"https://www.youtube.com/watch?v=JtSd2CCTEqI",
 "bgstats":"https://bgstats.app/game/everdell",
 "quickStart":"Worker placement + tableau. Build up to 15 cards across 4 seasons."
 },
-
 "fire-tower": {
 "players":"2–4","year":"2019",
 "youtube":"https://www.youtube.com/watch?v=5vFZyHqtvN8",
 "bgstats":"https://bgstats.app/game/fire-tower",
 "quickStart":"Play cards to spread/block fire; wind direction each turn."
 },
-
 "moonrakers-titan-edition": {
 "players":"1–5","year":"2020",
 "youtube":"https://www.youtube.com/watch?v=BeZ0qdlB8Uw",
 "bgstats":"https://bgstats.app/game/moonrakers",
 "quickStart":"Negotiate contracts, build deck, upgrade ship. First to 10 prestige."
 },
-
 "vinhos-deluxe-edition": {
 "players":"1–4","year":"2016",
 "youtube":"https://www.youtube.com/watch?v=5AkDlsw77fY",
 "bgstats":"https://bgstats.app/game/vinhos-deluxe-edition",
 "quickStart":"Run winery, produce/sell wine. Plan fairs carefully."
 },
-
 "project-l": {
 "players":"1–4","year":"2020",
 "youtube":"https://www.youtube.com/watch?v=d2K2lOeE7Yo",
 "bgstats":"https://bgstats.app/game/project-l",
 "quickStart":"Take puzzle cards, add pieces, complete for points. Engine builds fast."
 },
-
 "radlands": {
 "players":"2","year":"2021",
 "youtube":"https://www.youtube.com/watch?v=G6hUBuEZyR8",
 "bgstats":"https://bgstats.app/game/radlands",
 "quickStart":"Protect 3 camps. Spend water for cards/events. Destroy enemy camps."
 },
-
 "sky-team": {
 "players":"2","year":"2023",
 "youtube":"https://www.youtube.com/watch?v=G0FJAfkxWbE",
 "bgstats":"https://bgstats.app/game/sky-team",
 "quickStart":"Co-op dice placement. Land plane before runway runs out."
 },
-
 "brink": {
 "players":"2–5","year":"2024",
 "youtube":"https://www.youtube.com/watch?v=KPV4YQfD8Go",
 "bgstats":"https://bgstats.app/game/brink",
 "quickStart":"IV Studios: simultaneous action bluffing & resource management."
 },
-
 "tend": {
 "players":"1–4","year":"2024",
 "youtube":"https://www.youtube.com/watch?v=V93pbb4TxwA",
 "bgstats":"https://bgstats.app/game/tend",
 "quickStart":"Cozy farm simulation by IV Studios. Manage animals & fields."
 },
-
 "harmonies": {
 "players":"1–4","year":"2024",
 "youtube":"https://www.youtube.com/watch?v=GyqIVuRGrSc",
@@ -233,6 +168,120 @@ window.addEventListener("hashchange",render);document.addEventListener("DOMConte
 }
 }
 </script>
+
+<!-- 2) APP SCRIPT (runs after data exists) -->
+<script>
+(function(){
+const $app = document.getElementById('app');
+
+function safeGetData(){
+const el = document.getElementById('games-json');
+if(!el){ console.error('Missing #games-json'); return {names:[], enrich:{}}; }
+try { return JSON.parse(el.textContent); }
+catch(e){ console.error('Bad JSON in #games-json', e); return {names:[], enrich:{}}; }
+}
+const RAW = safeGetData();
+
+const slugify = s => s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+const qp = n => new URL(location.href).searchParams.get(n)||"";
+const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
+const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
+const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
+const bgstatsUrl=s=>`https://bgstats.app/game/${s}`;
+
+// Build DATA map
+const DATA = {};
+(RAW.names||[]).forEach(name => {
+const slug = slugify(name);
+DATA[slug] = { name, slug, ...(RAW.enrich?.[slug]||{}) };
+});
+
+function renderList(filter=""){
+const f = (filter||"").toLowerCase();
+const games = Object.values(DATA)
+.filter(g => !f || g.name.toLowerCase().includes(f))
+.sort((a,b)=>a.name.localeCompare(b.name));
+
+$app.innerHTML = `
+<input id="search" placeholder="Search..." aria-label="Search games">
+<section class="grid">
+${games.map(g => `
+<a class="card" href="#/game/${g.slug}">
+<h2>${g.name}</h2>
+<p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p>
+</a>`).join('')}
+</section>
+`;
+const $s = document.getElementById('search');
+$s.value = filter;
+$s.addEventListener('input', e => renderList(e.target.value));
+}
+
+function renderDetail(slug, action=""){
+const g = DATA[slug];
+if(!g){
+$app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`;
+return;
+}
+const links = {
+youtube: g.youtube || "",
+bgstats: g.bgstats || bgstatsUrl(slug),
+reminders: g.reminders || remindersUrl(slug),
+rulebook: g.rulebook || rulebookUrl(slug)
+};
+$app.innerHTML = `
+<div class="detail">
+<h2>${g.name}</h2>
+<p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p>
+<div class="actions">
+<a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank" rel="noopener"`:""}>▶️ How-to-Play</a>
+<button class="btn primary" id="btn-quick">Quick Setup</button>
+<a class="btnlink" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats</a>
+<a class="btnlink" href="${links.reminders}" target="_blank" rel="noopener">Reminders</a>
+<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook (PDF)</a>
+<button class="btn" id="share">Share / Copy Link</button>
+<div id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></div>
+</div>
+</div>
+`;
+document.getElementById('btn-quick').onclick = () => document.getElementById('qs').classList.toggle('open');
+document.getElementById('share').onclick = async () => {
+const u = location.href;
+try { await navigator.clipboard.writeText(u); alert("Link copied!"); }
+catch(e) { prompt("Copy link:", u); }
+};
+if(action==="quicksetup") document.getElementById('btn-quick').click();
+}
+
+function normalizeIncoming(){
+const q = qp("game");
+if(q){
+const slug = (DATA[q.toLowerCase()] ? q.toLowerCase() : slugify(q));
+const a = (qp("action")||"").toLowerCase();
+location.replace(`#\/game\/${slug}${a?`?action=${a}`:""}`);
+return true;
+}
+return false;
+}
+
+function parseHash(){
+const h = location.hash||"#/";
+const [p,q] = h.slice(2).split("?");
+const parts = (p||"").split("/");
+const params = new URLSearchParams(q||"");
+if(parts[0]==="game" && parts[1]) return {route:"detail", slug:parts[1], action:(params.get("action")||"").toLowerCase()};
+return {route:"list"};
+}
+
+function render(){
+if(normalizeIncoming()) return;
+const {route, slug, action} = parseHash();
+route==="detail" ? renderDetail(slug, action) : renderList("");
+}
+
+window.addEventListener('hashchange', render);
+document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
 </body>
 </html>
-
