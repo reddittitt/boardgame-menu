@@ -127,8 +127,13 @@
   const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
   const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
   const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
-  const coverUrl=s=>`${basePath()}/covers/${s}.jpg`;
-  const bgstatsUrl=s=>`https://bgstats.app/game/${s}`;
+  function coverUrl(slug) {
+  const bp = basePath();
+  const webp = `${bp}/covers/${slug}.webp`;
+  const jpg  = `${bp}/covers/${slug}.jpg`;
+  return webp; // browsers will try to load webp; if missing, onerror hides it
+}
+  const bgstatsUrl=s=>`bgstats://app.bgstatsapp.com/addPlay.html?gameId=68448`;
 
   const DATA={};
   (RAW.names||[]).forEach(name=>{
