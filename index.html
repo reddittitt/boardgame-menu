@@ -222,7 +222,7 @@
 
   /* data */
   // --- BG Stats ID support ---
-const BGSTATS_ID_PREFIX = 'https://bgstats.app/bgg/'; // base link to open BG Stats via BGG ID
+const BGSTATS_ID_PREFIX = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId='; // base link to open BG Stats via BGG ID
 const extractBggId = (urlOrId) => {
   if (!urlOrId) return '';
   const m = String(urlOrId).match(/(\d{2,})/);
@@ -240,7 +240,6 @@ const extractBggId = (urlOrId) => {
   const jpg  = `${bp}/covers/${slug}.jpg`;
   return webp; // browsers will try to load webp; if missing, onerror hides it
 }
-  const bgstatsUrl=s=>`bgstats://app.bgstatsapp.com/addPlay.html?gameId=68448`;
 
   const DATA={};
   (RAW.names||[]).forEach(name=>{
