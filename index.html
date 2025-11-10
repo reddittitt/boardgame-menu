@@ -6,317 +6,233 @@
 <title>Board Game Quick Menus</title>
 <link rel="icon" href="data:," />
 <style>
-:root { --brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#666; --card:#fff; --border:#e9e9ee; font-family: system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; }
-html,body { height:100%; }
-body { margin:0; background:var(--bg); color:var(--fg); }
-header { position:sticky; top:0; z-index:5; background:var(--brand); color:#fff; padding:14px 16px; box-shadow:0 2px 12px rgba(0,0,0,.12); }
-header .wrap { max-width:1040px; margin:0 auto; display:flex; gap:12px; align-items:center; }
-header h1 { margin:0; font-size:1.05rem; }
-header input { margin-left:auto; width:320px; max-width:45vw; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.95); color:#111; font-size:0.95rem; }
-main { max-width:1040px; margin:18px auto 36px; padding:0 16px; }
-
-/* list view */
-.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
-.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; box-shadow:0 6px 16px rgba(0,0,0,.06); text-decoration:none; color:inherit; }
-.card:hover { transform:translateY(-1px); box-shadow:0 10px 22px rgba(0,0,0,.08); }
-.card h2 { margin:.1rem 0 .25rem; font-size:1rem; }
-.sub { color:var(--muted); font-size:.86rem; margin:0; }
-
-/* detail view */
-.detail { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px; box-shadow:0 6px 18px rgba(0,0,0,.08); }
-.breadcrumbs { margin-bottom:8px; }
-.breadcrumbs a { color:var(--brand); text-decoration:none; }
-.title { margin:.2rem 0 .25rem; font-size:1.25rem; }
-.meta { color:var(--muted); font-size:.92rem; margin:0 0 12px; }
-.btns { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-button, .btnlink {
-padding:12px; border-radius:10px; border:1px solid var(--border); background:#fff; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; color:inherit;
+:root {
+--brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#666; --card:#fff; --border:#e9e9ee;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
 }
-.primary { background:var(--brand); color:#fff; border:none; }
-.wide { grid-column:1/-1; }
-footer { color:#777; font-size:.85rem; text-align:center; margin-top:14px; }
-
-/* modal */
-.hidden { display:none; }
-.modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; padding:16px; z-index:20; }
-.panel { background:#fff; width:min(760px,92vw); border-radius:12px; padding:16px; max-height:84vh; overflow:auto; border:1px solid var(--border); }
-.panel h3 { margin:.2rem 0 .6rem; font-size:1.05rem; }
-.panel pre { white-space:pre-wrap; font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; background:#f6f6f6; padding:12px; border-radius:8px; border:1px solid #eee; }
-.row { display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
-.small { font-size:.9rem; padding:10px; }
+body{margin:0;background:var(--bg);color:var(--fg)}
+header{background:var(--brand);color:#fff;padding:14px 16px}
+header .wrap{max-width:900px;margin:0 auto;display:flex;align-items:center}
+header h1{margin:0;font-size:1.05rem}
+header a{margin-left:auto;color:#fff;text-decoration:none}
+main{max-width:900px;margin:18px auto 40px;padding:0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+padding:12px;text-decoration:none;color:inherit}
+.card h2{margin:.1rem 0 .25rem;font-size:1rem}
+.sub{color:var(--muted);font-size:.85rem;margin:0}
+.detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.btn,.btnlink{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;
+border:1px solid #ddd;text-decoration:none;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff;border:none}
+.qs{margin-top:10px;padding:10px;border:1px dashed #ccc;border-radius:10px;background:#fafafa;display:none}
+.qs.open{display:block}
+footer{text-align:center;font-size:.8rem;color:#777;margin-top:16px}
 </style>
 </head>
 <body>
-<header>
-<div class="wrap">
-<h1>Board Game Quick Menus</h1>
-<input id="search" placeholder="Search your collection…" aria-label="Search games">
-</div>
-</header>
-<main id="app" aria-live="polite"></main>
+<header><div class="wrap"><h1>Board Game Quick Menus</h1><a href="#/">All Games</a></div></header>
+<main id="app"></main>
 
 <script>
-/* ---------- DATA & HELPERS (inline; no imports) ---------- */
-const slugify = s => s.toLowerCase()
-.replace(/[:’'"]/g,"")
-.replace(/&/g,"and")
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/(^-|-$)/g,"");
+const slugify=s=>s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+const qp=n=>new URL(location.href).searchParams.get(n)||"";
+const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
+const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
+const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
+const bgstatsUrl=s=>`https://bgstats.app/game/${s}`;
 
-/* Your collection (from your list) */
-const NAMES = [
-"7 Wonders","7 Wonders Duel","Acquire","Air, Land & Sea: Critters at War","Archduke","Ark Nova",
-"Ark Nova: Marine Worlds","Azul","Azul: Crystal Mosaic","Backgammon","Brass: Birmingham","Candy Land: Bluey",
-"Century: Golem Edition","Chess","Chronicles of Crime","Cover Your Assets","Critters at War: Flies, Lies, and Supplies",
-"Dune: Imperium - Uprising","Dutch Blitz","Everdell","The Fellowship of the Ring Trick-Taking Game","Fire Tower",
-"Fire Tower: Rising Flames","Five Crowns","For Sale","For Sale: Advisors","Forbidden Island","Foundations of Metropolis",
-"Heat: Pedal to the Metal","Heat: Heavy Rain","Jaipur","Kingdomino","Kingdomino Origins","Monopoly Deal",
-"Moonrakers: Titan Edition","Moonrakers: Dark Matter","Moonrakers: The Endless","Moonrakers: The Shard","Moonrakers: Starfall",
-"Moonrollers","New York Zoo","Pan Am","PARKS","PARKS: Nightfall","PARKS: Wildlife","Patchwork","Play Nine",
-"Quacks of Quedlinburg","Quacks of Quedlinburg: Alchemists","Quacks of Quedlinburg: Herb Witches","Radlands","Rage",
-"Ravine","Ravine: The Spirits Expansion","Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Splendor",
-"Star Wars: The Deck-Building Game","Vinhos Deluxe Edition","Watergate","Wingspan","Project L","Project L: Finesse",
-"Project L: Ghost","Harmonies","Wingspan: European Expansion","Forest Shuffle","Heat: Tunnel Vision","Brink","Tend"
-];
+const DATA=(()=>{const raw=document.getElementById('games-json').textContent,obj=JSON.parse(raw),map={};
+for(const n of obj.names){const s=slugify(n);map[s]={name:n,slug:s,...(obj.enrich[s]||{})}}return map})();
+const $app=document.getElementById('app');
 
-/* Optional per-game enrichments */
-const ENRICH = {
-[slugify("Heat: Pedal to the Metal")]: {
-players:"2–6", year:"2022",
-youtube:"https://www.youtube.com/watch?v=REPLACE_HEAT_VIDEO",
-bgstats:"https://bgstats.app/game/heat-pedal-to-the-metal",
-quickStart:`Players: 2–6 • Setup ~5–7 min
+function renderList(f=""){f=f.toLowerCase();
+const games=Object.values(DATA).filter(g=>!f||g.name.toLowerCase().includes(f))
+.sort((a,b)=>a.name.localeCompare(b.name));
+$app.innerHTML=`<input id="search" placeholder="Search..." style="width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;margin-bottom:12px">
+<section class="grid">${games.map(g=>`<a class="card" href="#/game/${g.slug}"><h2>${g.name}</h2><p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p></a>`).join("")}</section>`;
+document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));}
 
-1) Track & Modules
-- Choose track; shuffle track cards as required.
-- If using Heavy Rain: place rain boards; shuffle weather.
-
-2) Player Setup
-- Each: car, dashboard, starting gear & starting hand.
-- Scenario starting money & upgrades.
-
-3) Decks & Supply
-- Shuffle stress/heat per rules; set weather tokens & slipstream.
-
-4) Round (high-level)
-- Select speed → reveal → resolve heat/stress → move → slipstream → cleanup.
-
-Tips: Don’t burn heat early; plan corners; slipstream when possible.`
-},
-[slugify("Quacks of Quedlinburg")]: {
-players:"2–4", year:"2018",
-youtube:"https://www.youtube.com/watch?v=REPLACE_QUACKS_VIDEO",
-bgstats:"https://bgstats.app/game/the-quacks-of-quedlinburg",
-quickStart:`Players: 2–4 • 9 rounds
-
-Setup
-- Each: pot board, droplet 0, rat 0, rubies 0, starting bag (per rules).
-- Ingredient books for chosen set.
-
-Round
-- Simultaneously draw & place chips; stop or risk explosion.
-- Resolve: bonus die, rubies, buy ingredients, rats next round.
-
-Tips: Track white chips; manage risk near 7+.`
-},
-[slugify("Wingspan")]: {
-players:"1–5", year:"2019",
-youtube:"https://www.youtube.com/watch?v=REPLACE_WINGSPAN_VIDEO",
-quickStart:`Players: 1–5 • 4 rounds
-
-Setup
-- Deal birds & food; keep some, pay others. Player mats & cubes; set round goals.
-
-Turn (choose 1):
-- Play bird; Gain food; Lay eggs; Draw cards. Resolve habitat powers right→left.
-
-Tips: Eggs are points; align engine with goals.`
-}
-};
-
-/* Build game map */
-const GAMES = {};
-for (const name of NAMES) {
-const slug = slugify(name);
-GAMES[slug] = { name, slug, ...(ENRICH[slug]||{}) };
+function renderDetail(slug,action=""){const g=DATA[slug];
+if(!g){$app.innerHTML=`<div class="detail"><p>Game not found.</p></div>`;return;}
+const links={youtube:g.youtube||"",bgstats:g.bgstats||bgstatsUrl(slug),
+reminders:g.reminders||remindersUrl(slug),rulebook:g.rulebook||rulebookUrl(slug)};
+$app.innerHTML=`<div class="detail">
+<h2>${g.name}</h2><p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p>
+<div class="actions">
+<a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank"`:""}>▶️ How-to-Play</a>
+<button class="btn primary" id="btn-quick">Quick Setup</button>
+<a class="btnlink" href="${links.bgstats}" target="_blank">BG Stats</a>
+<a class="btnlink" href="${links.reminders}" target="_blank">Reminders</a>
+<a class="btnlink" href="${links.rulebook}" target="_blank">Rulebook (PDF)</a>
+<button class="btn" id="share">Share / Copy Link</button>
+<div id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></div>
+</div></div>`;
+document.getElementById('btn-quick').onclick=()=>document.getElementById('qs').classList.toggle('open');
+document.getElementById('share').onclick=async()=>{const u=location.href;try{await navigator.clipboard.writeText(u);alert("Link copied!");}catch(e){prompt("Copy link:",u)}};
+if(action==="quicksetup")document.getElementById('btn-quick').click();
 }
 
-/* Base path helper so rulebook/reminders work on user or project pages */
-function basePath() {
-// e.g., "/<repo>" on project pages, "" on user/organization pages at root
-const p = location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
-return p;
-}
-function rulebookUrl(slug){ return `${basePath()}/rulebooks/${slug}.pdf`; }
-function remindersUrl(slug){ return `${basePath()}/reminders/${slug}.html`; }
-
-/* ---------- RENDERERS ---------- */
-const $app = document.getElementById('app');
-const $search = document.getElementById('search');
-
-function renderList(filter="") {
-const f = filter.trim().toLowerCase();
-const items = Object.values(GAMES)
-.slice()
-.sort((a,b)=>a.name.localeCompare(b.name))
-.filter(g => !f || g.name.toLowerCase().includes(f));
-
-$app.innerHTML = `
-<section class="grid">
-${items.map(g => `
-<a class="card" href="#/game/${g.slug}">
-<h2>${g.name}</h2>
-<p class="sub">${[g.players,g.year].filter(Boolean).join(" • ")}</p>
-</a>
-`).join('')}
-</section>
-${items.length===0 ? `<p class="sub" style="margin-top:12px">No matches. Try a different search.</p>` : ``}
-`;
-}
-
-function renderDetail(slug) {
-const g = GAMES[slug];
-if (!g) {
-$app.innerHTML = `
-<div class="detail">
-<div class="breadcrumbs"><a href="#/">All games</a></div>
-<h2 class="title">Game not found</h2>
-<p class="meta">The slug <code>${slug}</code> isn’t in your collection.</p>
-</div>`;
-return;
-}
-
-const links = {
-youtube: g.youtube || "",
-bgstats: g.bgstats || `https://bgstats.app/game/${slug}`,
-reminders: g.reminders || remindersUrl(slug),
-rules: g.rulebook || rulebookUrl(slug)
-};
-
-$app.innerHTML = `
-<div class="detail">
-<div class="breadcrumbs"><a href="#/">All games</a></div>
-<h2 class="title">${g.name}</h2>
-<p class="meta">${[g.players,g.year].filter(Boolean).join(" • ") || "Choose an action:"}</p>
-
-<div class="btns">
-<a class="btnlink wide" id="btn-youtube" ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ``}>▶️ How-to-Play (YouTube)</a>
-<button class="primary" id="btn-quick">Quick Setup</button>
-<a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats – Log a Play</a>
-<a class="btnlink" id="btn-rem" href="${links.reminders}" target="_blank" rel="noopener">Quick Reminders</a>
-<a class="btnlink" id="btn-rules" href="${links.rules}" target="_blank" rel="noopener">Open Rulebook (PDF)</a>
-<button class="wide" id="btn-share">Share / Copy Link</button>
-</div>
-
-<footer>Rulebook path: <code>${links.rules}</code></footer>
-</div>
-`;
-
-// Wire modal
-document.getElementById('btn-quick').addEventListener('click', () => {
-const text = (g.quickStart||"").trim() || "(No quick setup text configured.)";
-document.getElementById('qs-text').textContent = text;
-const modal = document.getElementById('modal');
-modal.classList.remove('hidden');
-modal.setAttribute('aria-hidden','false');
-});
-
-// Share
-document.getElementById('btn-share').addEventListener('click', async () => {
-const url = location.href;
-try {
-if (navigator.share) { await navigator.share({ title:`Quick Menu — ${g.name}`, text:`Menu for ${g.name}`, url }); return; }
-} catch(e){}
-try { await navigator.clipboard.writeText(url); alert("Link copied to clipboard"); }
-catch(e){ prompt("Copy this link:", url); }
-});
-
-// Disable YouTube button if unset
-const y = document.getElementById('btn-youtube');
-if (!links.youtube) {
-y.removeAttribute('href');
-y.addEventListener('click', () => alert("No YouTube link configured for this game."));
-}
-}
-
-<script>
-/* ---------- keep everything above this line the same (GAMES, basePath, renderers, etc.) ---------- */
-
-/* ---------- ENHANCED ROUTER (supports hash OR query params) ---------- */
-function qp(name){ return new URL(location.href).searchParams.get(name) || ""; }
-
-function normalizeIncomingDeepLink() {
-// Accept ?game=<slug or name>[&action=<...>] and turn it into #/game/<slug>
-const qGame = qp("game");
-if (qGame) {
-const want = qGame.trim();
-// if user passed a name, slugify it; if slug, this is a no-op
-const desiredSlug = (GAMES[want.toLowerCase()] ? want.toLowerCase() : slugify(want));
-const action = (qp("action") || "").toLowerCase();
-const actFrag = action ? `?action=${encodeURIComponent(action)}` : "";
-location.replace(`#\/game\/${desiredSlug}${actFrag}`);
-return true; // we changed the URL
-}
-return false;
-}
-
-function parseHash() {
-// routes: "#/" or "#/game/<slug>" with optional "?action=..."
-const h = location.hash || "#/";
-// Split off any query after the hash (e.g., #/game/slug?action=quickstart)
-const [path, query] = h.slice(2).split("?");
-const parts = (path || "").split("/");
-const params = new URLSearchParams(query || "");
-
-if (!parts[0]) return { route:"list" };
-if (parts[0] === "game" && parts[1]) {
-const slug = parts[1].toLowerCase();
-const action = (params.get("action") || "").toLowerCase();
-return { route:"detail", slug, action };
-}
-return { route:"list" };
-}
-
-function render() {
-const changed = normalizeIncomingDeepLink(); // handles ?game=... deep links
-if (changed) return; // URL updated; hashchange will re-run render
-
-const { route, slug, action } = parseHash();
-if (route === "detail") {
-renderDetail(slug);
-// Auto-open actions after the DOM is in place
-if (action) {
-const map = {
-youtube:"#btn-youtube",
-quickstart:"#btn-quick",
-bgstats:"#btn-bgstats",
-rules:"#btn-rules",
-reminders:"#btn-rem"
-};
-const sel = map[action];
-if (sel) document.querySelector(sel)?.click();
-}
-} else {
-renderList($search.value || "");
-}
-}
-
-window.addEventListener('hashchange', render);
-document.addEventListener('DOMContentLoaded', () => {
-// search works only on list view; clear it on detail
-$search.addEventListener('input', () => {
-if ((location.hash||"#/") !== "#/") location.hash = "#/";
-render();
-});
-
-// modal controls
-document.getElementById('btn-close').addEventListener('click', () => {
-const modal = document.getElementById('modal');
-modal.classList.add('hidden');
-modal.setAttribute('aria-hidden','true');
-});
-document.getElementById('btn-print').addEventListener('click', () => window.print());
-
-render();
-});
+function normalizeIncoming(){const q=qp("game");if(q){const s=slugify(q);const a=(qp("action")||"").toLowerCase();
+location.replace(`#\/game\/${s}${a?`?action=${a}`:""}`);return true;}return false;}
+function parseHash(){const h=location.hash||"#/";const [p,q]=h.slice(2).split("?");const parts=(p||"").split("/");const params=new URLSearchParams(q||"");
+if(parts[0]==="game"&&parts[1])return{r:"detail",slug:parts[1],action:(params.get("action")||"").toLowerCase()};return{r:"list"};}
+function render(){if(normalizeIncoming())return;const {r,slug,action}=parseHash();r==="detail"?renderDetail(slug,action):renderList();}
+window.addEventListener("hashchange",render);document.addEventListener("DOMContentLoaded",render);
 </script>
+<script id="games-json" type="application/json">
+{
+"names": [
+"Heat: Pedal to the Metal","Quacks of Quedlinburg","Wingspan","Ark Nova","Brass: Birmingham",
+"PARKS","Splendor","Watergate","For Sale","Jaipur","Everdell","Fire Tower",
+"Moonrakers: Titan Edition","Vinhos Deluxe Edition","Project L","Radlands",
+"Sky Team","Brink","Tend","Harmonies"
+],
+"enrich": {
+
+"heat-pedal-to-the-metal": {
+"players":"2–6","year":"2022",
+"youtube":"https://www.youtube.com/watch?v=Ychy0Tgegjk",
+"bgstats":"https://bgstats.app/game/heat-pedal-to-the-metal",
+"quickStart":"Choose track. Set dashboards, gear, deck. Play speed cards → resolve heat/stress → move → slipstream."
+},
+
+"quacks-of-quedlinburg": {
+"players":"2–4","year":"2018",
+"youtube":"https://www.youtube.com/watch?v=0jVDu4c6tU4",
+"bgstats":"https://bgstats.app/game/the-quacks-of-quedlinburg",
+"quickStart":"Draw chips; stop before exploding. Score, buy ingredients, reset rats."
+},
+
+"wingspan": {
+"players":"1–5","year":"2019",
+"youtube":"https://www.youtube.com/watch?v=lgDgcLI2B0U",
+"bgstats":"https://bgstats.app/game/wingspan",
+"quickStart":"Play bird / Gain food / Lay eggs / Draw cards. 4 rounds. Eggs = points."
+},
+
+"ark-nova": {
+"players":"1–4","year":"2021",
+"youtube":"https://www.youtube.com/watch?v=oPW0jMG1DTM",
+"bgstats":"https://bgstats.app/game/ark-nova",
+"quickStart":"5 action cards: Cards, Build, Animals, Association, Sponsors. End when Appeal & Conservation cross."
+},
+
+"brass-birmingham": {
+"players":"2–4","year":"2018",
+"youtube":"https://www.youtube.com/watch?v=Lzxf4tfq9as",
+"bgstats":"https://bgstats.app/game/brass-birmingham",
+"quickStart":"Two eras: Canal → Rail. Take 2 actions. Flip industries for income & points."
+},
+
+"parks": {
+"players":"1–5","year":"2019",
+"youtube":"https://www.youtube.com/watch?v=J8tr_h1S2EY",
+"bgstats":"https://bgstats.app/game/parks",
+"quickStart":"Move hikers, take tile actions, visit parks for points. 4 seasons."
+},
+
+"splendor": {
+"players":"2–4","year":"2014",
+"youtube":"https://www.youtube.com/watch?v=2A0CQ0xsrv0",
+"bgstats":"https://bgstats.app/game/splendor",
+"quickStart":"Take gems or buy cards. Build discounts. First to 15 VP wins."
+},
+
+"watergate": {
+"players":"2","year":"2019",
+"youtube":"https://www.youtube.com/watch?v=6BQQyHA0g3Y",
+"bgstats":"https://bgstats.app/game/watergate",
+"quickStart":"Editor links informants to Nixon. Nixon wins with 5 momentum."
+},
+
+"for-sale": {
+"players":"3–6","year":"1997",
+"youtube":"https://www.youtube.com/watch?v=ZH54R8P3g_E",
+"bgstats":"https://bgstats.app/game/for-sale",
+"quickStart":"Auction properties, then sell them for highest checks."
+},
+
+"jaipur": {
+"players":"2","year":"2009",
+"youtube":"https://www.youtube.com/watch?v=IuSYx2f_Co4",
+"bgstats":"https://bgstats.app/game/jaipur",
+"quickStart":"Trade/sell goods for points. Best of 3 rounds."
+},
+
+"everdell": {
+"players":"1–4","year":"2018",
+"youtube":"https://www.youtube.com/watch?v=JtSd2CCTEqI",
+"bgstats":"https://bgstats.app/game/everdell",
+"quickStart":"Worker placement + tableau. Build up to 15 cards across 4 seasons."
+},
+
+"fire-tower": {
+"players":"2–4","year":"2019",
+"youtube":"https://www.youtube.com/watch?v=5vFZyHqtvN8",
+"bgstats":"https://bgstats.app/game/fire-tower",
+"quickStart":"Play cards to spread/block fire; wind direction each turn."
+},
+
+"moonrakers-titan-edition": {
+"players":"1–5","year":"2020",
+"youtube":"https://www.youtube.com/watch?v=BeZ0qdlB8Uw",
+"bgstats":"https://bgstats.app/game/moonrakers",
+"quickStart":"Negotiate contracts, build deck, upgrade ship. First to 10 prestige."
+},
+
+"vinhos-deluxe-edition": {
+"players":"1–4","year":"2016",
+"youtube":"https://www.youtube.com/watch?v=5AkDlsw77fY",
+"bgstats":"https://bgstats.app/game/vinhos-deluxe-edition",
+"quickStart":"Run winery, produce/sell wine. Plan fairs carefully."
+},
+
+"project-l": {
+"players":"1–4","year":"2020",
+"youtube":"https://www.youtube.com/watch?v=d2K2lOeE7Yo",
+"bgstats":"https://bgstats.app/game/project-l",
+"quickStart":"Take puzzle cards, add pieces, complete for points. Engine builds fast."
+},
+
+"radlands": {
+"players":"2","year":"2021",
+"youtube":"https://www.youtube.com/watch?v=G6hUBuEZyR8",
+"bgstats":"https://bgstats.app/game/radlands",
+"quickStart":"Protect 3 camps. Spend water for cards/events. Destroy enemy camps."
+},
+
+"sky-team": {
+"players":"2","year":"2023",
+"youtube":"https://www.youtube.com/watch?v=G0FJAfkxWbE",
+"bgstats":"https://bgstats.app/game/sky-team",
+"quickStart":"Co-op dice placement. Land plane before runway runs out."
+},
+
+"brink": {
+"players":"2–5","year":"2024",
+"youtube":"https://www.youtube.com/watch?v=KPV4YQfD8Go",
+"bgstats":"https://bgstats.app/game/brink",
+"quickStart":"IV Studios: simultaneous action bluffing & resource management."
+},
+
+"tend": {
+"players":"1–4","year":"2024",
+"youtube":"https://www.youtube.com/watch?v=V93pbb4TxwA",
+"bgstats":"https://bgstats.app/game/tend",
+"quickStart":"Cozy farm simulation by IV Studios. Manage animals & fields."
+},
+
+"harmonies": {
+"players":"1–4","year":"2024",
+"youtube":"https://www.youtube.com/watch?v=GyqIVuRGrSc",
+"bgstats":"https://bgstats.app/game/harmonies",
+"quickStart":"Build peaceful landscapes with tiles and animals for harmony points."
+}
+}
+}
+</script>
+</body>
+</html>
+
