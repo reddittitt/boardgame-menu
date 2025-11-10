@@ -6,73 +6,138 @@
 <title>Board Game Quick Menus</title>
 <link rel="icon" href="data:," />
 <style>
-  :root{
-    --brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#555; --card:#fff; --border:#e6e6ef;
-    --btn:#fff; --btn-border:#dcdce6;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-  }
-  /* Dark theme */
-  :root[data-theme="dark"]{
-    --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme]){
-      --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
-    }
-  }
-  html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  img{max-width:100%;height:auto;display:block}
-  header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:10px 14px;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-  header .wrap{max-width:1000px;margin:0 auto;display:flex;gap:10px;align-items:center}
-  header h1{margin:0;font-size:1rem;white-space:nowrap}
-  header .spacer{flex:1}
-  header button.toggle{appearance:none;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:9px;padding:8px 10px;cursor:pointer;font-weight:600}
-  header a.home{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:9px;padding:8px 10px}
-  main{max-width:1000px;margin:16px auto 40px;padding:0 14px}
+:root {
+--brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#555; --card:#fff; --border:#e6e6ef;
+--btn:#fff; --btn-border:#dcdce6;
+font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+}
+:root[data-theme="dark"] {
+--brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a;
+--btn:#1b2030; --btn-border:#2a2f3a;
+}
+@media (prefers-color-scheme: dark) {
+:root:not([data-theme]) {
+--brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922;
+--border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
+}
+}
+html,body { height:100%; }
+body {
+margin:0; background:var(--bg); color:var(--fg);
+-webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+img { max-width:100%; height:auto; display:block; }
+header {
+position:sticky; top:0; z-index:5;
+background:var(--brand); color:#fff;
+padding:10px 14px; box-shadow:0 2px 12px rgba(0,0,0,.15);
+}
+header .wrap {
+max-width:1000px; margin:0 auto; display:flex; gap:10px; align-items:center;
+}
+header h1 { margin:0; font-size:1rem; white-space:nowrap; }
+header .spacer { flex:1; }
+header button.toggle {
+appearance:none; border:1px solid rgba(255,255,255,.35);
+background:transparent; color:#fff; border-radius:9px;
+padding:8px 10px; cursor:pointer; font-weight:600;
+}
+header a.home {
+color:#fff; text-decoration:none;
+border:1px solid rgba(255,255,255,.35); border-radius:9px;
+padding:8px 10px;
+}
+main { max-width:1000px; margin:16px auto 40px; padding:0 14px; }
 
-  /* List view */
-  #search{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);margin-bottom:12px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;text-decoration:none;color:inherit;display:flex;gap:10px}
-  .thumb{width:64px;height:64px;border-radius:8px;background:#0001;flex:0 0 auto;overflow:hidden}
-  .thumb img{width:100%;height:100%;object-fit:cover}
-  .metaWrap{min-width:0}
-  .card h2{margin:.1rem 0 .25rem;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sub{color:var(--muted);font-size:.85rem;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* List view */
+#search {
+width:100%; padding:12px; border-radius:10px; border:1px solid var(--border);
+background:var(--card); color:var(--fg); margin-bottom:12px;
+}
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; }
+.card {
+background:var(--card); border:1px solid var(--border); border-radius:12px;
+padding:10px; text-decoration:none; color:inherit; display:flex; gap:10px;
+}
+.thumb {
+width:64px; height:64px; border-radius:8px; background:#0001; flex:0 0 auto;
+overflow:hidden; display:grid; place-items:center;
+}
+/* Show entire thumbnail (no crop) */
+.thumb img { width:100%; height:100%; object-fit:contain; }
+.metaWrap { min-width:0; }
+.card h2 {
+margin:.1rem 0 .25rem; font-size:1rem;
+white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.sub {
+color:var(--muted); font-size:.85rem; margin:0;
+white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
 
-  /* Detail view */
-  .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:grid;grid-template-columns:120px 1fr;gap:14px}
-  .cover{width:120px;height:120px;border-radius:10px;overflow:hidden;background:#0001}
-  .title{margin:.2rem 0 .25rem;font-size:1.2rem;line-height:1.2}
-  .byline{color:var(--muted);font-size:.92rem;margin:0 0 6px}
-  .actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-  .btn,.btnlink{display:block;width:100%;text-align:center;padding:14px;border-radius:12px;border:1px solid var(--btn-border);background:var(--btn);color:inherit;text-decoration:none;font-weight:700;cursor:pointer}
-  .btn.primary{background:var(--brand);color:#fff;border:none}
-  .qs{margin-top:8px;padding:10px;border:1px dashed var(--border);border-radius:12px;background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%)}
-  .qs pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0}
-  footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:16px}
+/* Detail view */
+.detail {
+background:var(--card); border:1px solid var(--border); border-radius:14px;
+padding:16px; display:grid; grid-template-columns:120px 1fr; gap:14px;
+}
+.cover {
+width:120px; height:120px; border-radius:10px;
+overflow:hidden; background:#0001; display:grid; place-items:center;
+}
+/* Show the entire cover art (no crop) */
+.cover img { width:100%; height:100%; object-fit:contain; }
 
-  /* Mobile */
-  @media (max-width:640px){
-    .detail{grid-template-columns:1fr}
-    .cover{width:100%;height:200px}
-  }
+.title { margin:.2rem 0 .25rem; font-size:1.2rem; line-height:1.2; }
+.byline { color:var(--muted); font-size:.92rem; margin:0 0 6px; }
+
+/* Buttons */
+.actions { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.btn, .btnlink {
+display:block; width:100%; text-align:center;
+padding:14px; border-radius:12px;
+border:1px solid var(--btn-border);
+background:var(--btn); color:inherit;
+text-decoration:none; font-weight:700; cursor:pointer;
+}
+/* Hover stays neutral; blue only when selected */
+.btn:hover, .btnlink:hover { filter:brightness(.98); }
+/* Selected state = blue */
+.btn[aria-pressed="true"], .btnlink[aria-pressed="true"] {
+background:#0d6efd; color:#fff; border-color:#0b5ed7;
+}
+
+.qs {
+margin-top:8px; padding:10px;
+border:1px dashed var(--border); border-radius:12px;
+background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%);
+}
+.qs pre {
+white-space:pre-wrap;
+font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+margin:0;
+}
+footer {
+text-align:center; font-size:.8rem; color:var(--muted); margin-top:16px;
+}
+@media (max-width:640px) {
+.detail { grid-template-columns:1fr; }
+.cover { width:100%; height:200px; }
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="wrap">
-    <h1>Board Game Quick Menus</h1>
-    <div class="spacer"></div>
-    <button id="themeToggle" class="toggle" aria-label="Toggle dark mode">🌙/☀️</button>
-    <a class="home" href="#/">All Games</a>
-  </div>
+<div class="wrap">
+<h1>Board Game Quick Menus</h1>
+<div class="spacer"></div>
+<button id="themeToggle" class="toggle" aria-label="Toggle dark mode">🌙/☀️</button>
+<a class="home" href="#/">All Games</a>
+</div>
 </header>
 
 <main id="app"><noscript>JavaScript required.</noscript></main>
 
-<!-- DATA FIRST -->
+<!-- DATA: valid JSON -->
 <script id="games-json" type="application/json">
 {
 "names": [
@@ -84,279 +149,129 @@
 "enrich": {
 "heat-pedal-to-the-metal": {
 "players":"2–6","time":"45–60","year":"2022",
-"youtube":https://www.youtube.com/watch?v=Ychy0Tgegjk,
+"youtube":"https://www.youtube.com/watch?v=Ychy0Tgegjk",
 "bggId":"366013",
 "quickStart":"Choose track. Set dashboards, gear, deck. Play speed cards → resolve heat/stress → move → slipstream."
 },
 "quacks-of-quedlinburg": {
 "players":"2–4","time":"45","year":"2018",
-"youtube":https://www.youtube.com/watch?v=0jVDu4c6tU4,
+"youtube":"https://www.youtube.com/watch?v=0jVDu4c6tU4",
 "bggId":"244521",
 "quickStart":"Draw chips; stop before exploding. Score, buy ingredients, reset rats."
 },
 "wingspan": {
 "players":"1–5","time":"40–70","year":"2019",
-"youtube":https://www.youtube.com/watch?v=lgDgcLI2B0U,
+"youtube":"https://www.youtube.com/watch?v=lgDgcLI2B0U",
 "bggId":"266192",
 "quickStart":"Players start with 5 cards each. For every card discarded, players gain 1 unique food. Players discard 1 of 2 Bonus Cards."
 },
 "ark-nova": {
 "players":"1–4","time":"120–180","year":"2021",
-"youtube":https://www.youtube.com/watch?v=oPW0jMG1DTM,
+"youtube":"https://www.youtube.com/watch?v=oPW0jMG1DTM",
 "bggId":"342942",
 "quickStart":"5 actions: Cards, Build, Animals, Association, Sponsors. End when Appeal & Conservation cross."
 },
 "brass-birmingham": {
 "players":"2–4","time":"90–150","year":"2018",
-"youtube":https://www.youtube.com/watch?v=Lzxf4tfq9as,
+"youtube":"https://www.youtube.com/watch?v=Lzxf4tfq9as",
 "bggId":"224517",
 "quickStart":"Two eras: Canal → Rail. Take 2 actions. Flip industries for income & points."
 },
 "parks": {
 "players":"1–5","time":"40–60","year":"2019",
-"youtube":https://www.youtube.com/watch?v=J8tr_h1S2EY,
+"youtube":"https://www.youtube.com/watch?v=J8tr_h1S2EY",
 "bggId":"266524",
 "quickStart":"Move hikers, take tile actions, visit parks for points. 4 seasons."
 },
 "splendor": {
 "players":"2–4","time":"30","year":"2014",
-"youtube":https://www.youtube.com/watch?v=2A0CQ0xsrv0,
+"youtube":"https://www.youtube.com/watch?v=2A0CQ0xsrv0",
 "bggId":"148228",
 "quickStart":"Take gems or buy cards. Build discounts. First to 15 VP wins."
 },
 "watergate": {
 "players":"2","time":"30–45","year":"2019",
-"youtube":https://www.youtube.com/watch?v=6BQQyHA0g3Y,
+"youtube":"https://www.youtube.com/watch?v=6BQQyHA0g3Y",
 "bggId":"274364",
 "quickStart":"Editor links informants to Nixon. Nixon wins with 5 momentum."
 },
 "for-sale": {
 "players":"3–6","time":"20","year":"1997",
-"youtube":https://www.youtube.com/watch?v=ZH54R8P3g_E,
+"youtube":"https://www.youtube.com/watch?v=ZH54R8P3g_E",
 "bggId":"172",
 "quickStart":"Auction properties, then sell them for highest checks."
 },
 "jaipur": {
 "players":"2","time":"30","year":"2009",
-"youtube":https://www.youtube.com/watch?v=IuSYx2f_Co4,
+"youtube":"https://www.youtube.com/watch?v=IuSYx2f_Co4",
 "bggId":"54043",
 "quickStart":"Trade/sell goods for points. Best of 3 rounds."
 },
 "everdell": {
 "players":"1–4","time":"40–100","year":"2018",
-"youtube":https://www.youtube.com/watch?v=JtSd2CCTEqI,
+"youtube":"https://www.youtube.com/watch?v=JtSd2CCTEqI",
 "bggId":"199792",
 "quickStart":"Worker placement + tableau. Build up to 15 cards across 4 seasons."
 },
 "fire-tower": {
 "players":"2–4","time":"15–30","year":"2019",
-"youtube":https://www.youtube.com/watch?v=5vFZyHqtvN8,
+"youtube":"https://www.youtube.com/watch?v=5vFZyHqtvN8",
 "bggId":"226605",
 "quickStart":"Play cards to spread/block fire; wind direction each turn."
 },
 "moonrakers-titan-edition": {
 "players":"1–5","time":"60–120","year":"2020",
-"youtube":https://www.youtube.com/watch?v=BeZ0qdlB8Uw,
+"youtube":"https://www.youtube.com/watch?v=BeZ0qdlB8Uw",
 "bggId":"438924",
 "quickStart":"Negotiate contracts, build deck, upgrade ship. First to 10 prestige."
 },
 "vinhos-deluxe-edition": {
 "players":"1–4","time":"90–150","year":"2016",
-"youtube":https://www.youtube.com/watch?v=5AkDlsw77fY,
+"youtube":"https://www.youtube.com/watch?v=5AkDlsw77fY",
 "bggId":"175640",
 "quickStart":"Run winery, produce/sell wine. Plan fairs carefully."
 },
 "project-l": {
 "players":"1–4","time":"20–40","year":"2020",
-"youtube":https://www.youtube.com/watch?v=d2K2lOeE7Yo,
+"youtube":"https://www.youtube.com/watch?v=d2K2lOeE7Yo",
 "bggId":"260180",
 "quickStart":"Take puzzle cards, add pieces, complete for points. Engine builds fast."
 },
 "radlands": {
 "players":"2","time":"20–30","year":"2021",
-"youtube":https://www.youtube.com/watch?v=G6hUBuEZyR8,
+"youtube":"https://www.youtube.com/watch?v=G6hUBuEZyR8",
 "bggId":"329082",
 "quickStart":"Protect 3 camps. Spend water for cards/events. Destroy enemy camps."
 },
 "sky-team": {
 "players":"2","time":"20–40","year":"2023",
-"youtube":https://www.youtube.com/watch?v=G0FJAfkxWbE,
+"youtube":"https://www.youtube.com/watch?v=G0FJAfkxWbE",
 "bggId":"373106",
 "quickStart":"Co-op dice placement. Land plane before runway runs out."
 },
 "brink": {
 "players":"2–5","time":"45–90","year":"2024",
-"youtube":https://www.youtube.com/watch?v=KPV4YQfD8Go,
+"youtube":"https://www.youtube.com/watch?v=KPV4YQfD8Go",
 "bggId":"415078",
 "quickStart":"IV Studios: simultaneous action bluffing & resource management."
 },
 "tend": {
 "players":"1–4","time":"45–90","year":"2024",
-"youtube":https://www.youtube.com/watch?v=V93pbb4TxwA,
+"youtube":"https://www.youtube.com/watch?v=V93pbb4TxwA",
 "bggId":"427388",
 "quickStart":"Cozy farm simulation by IV Studios. Manage animals & fields."
 },
 "harmonies": {
 "players":"1–4","time":"30–45","year":"2024",
-"youtube":https://www.youtube.com/watch?v=GyqIVuRGrSc,
+"youtube":"https://www.youtube.com/watch?v=GyqIVuRGrSc",
 "bggId":"414317",
 "quickStart":"Build landscapes with tiles and animals for harmony points."
 }
 }
 }
-
 </script>
 
-<!-- APP SCRIPT -->
-<script>
-(() => {
-  /* theme toggle */
-  const root = document.documentElement;
-  const saved = localStorage.getItem("theme");
-  if (saved) root.setAttribute("data-theme", saved);
-  document.getElementById("themeToggle").addEventListener("click", () => {
-    const curr = root.getAttribute("data-theme");
-    const next = curr === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-  });
-
-  /* data */
-  const RAW = JSON.parse(document.getElementById('games-json').textContent);
-  const slugify = s => s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-  const qp = n => new URL(location.href).searchParams.get(n)||"";
-  const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
-  const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
-  const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
-  function coverUrl(slug) {
-  const bp = basePath();
-  const webp = `${bp}/covers/${slug}.webp`;
-  const jpg  = `${bp}/covers/${slug}.jpg`;
-  return webp; // browsers will try to load webp; if missing, onerror hides it
-}
-const BGSTATS_ID_PREFIX = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId=';
-
-const extractBggId = (urlOrId) => {
-if (!urlOrId) return '';
-const m = String(urlOrId).match(/(\d{2,})/);
-return m ? m[1] : '';
-};
-
-  const DATA={};
-  (RAW.names||[]).forEach(name=>{
-    const slug = slugify(name);
-    DATA[slug] = { name, slug, ...(RAW.enrich?.[slug]||{}) };
-  });
-
-  const $app = document.getElementById('app');
-
-  function listRow(g){
-    const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
-    return `
-      <a class="card" href="#/game/${g.slug}">
-        <div class="thumb"><img loading="lazy" src="${coverUrl(g.slug)}" onerror="this.parentNode.style.display='none'"></div>
-        <div class="metaWrap">
-          <h2>${g.name}</h2>
-          <p class="sub">${subbits}</p>
-        </div>
-      </a>`;
-  }
-
-  function renderList(filter=""){
-    const f=(filter||"").toLowerCase();
-    const games=Object.values(DATA).filter(g=>!f||g.name.toLowerCase().includes(f)).sort((a,b)=>a.name.localeCompare(b.name));
-    $app.innerHTML = `
-      <input id="search" placeholder="Search your collection…" aria-label="Search games" value="${filter.replace(/"/g,'&quot;')}">
-      <section class="grid">
-        ${games.map(listRow).join("")}
-      </section>`;
-    document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));
-  }
-
-  function renderDetail(slug, action="quicksetup"){  // default: open quick setup immediately
-    const g = DATA[slug];
-    if(!g){ $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`; return; }
-    const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
-    const links = {
-    youtube: g.youtube || "",
-    bgstats: g.bggId
-    ? `${BGSTATS_ID_PREFIX}${extractBggId(g.bggId)}`
-    : (g.bgstats || `https://bgstats.app/game/${slug}`),
-    reminders: g.reminders || remindersUrl(slug),
-    rulebook: g.rulebook || rulebookUrl(slug),
-    cover: coverUrl(slug)
-};
-
-    $app.innerHTML = `
-      <article class="detail">
-        <div class="cover"><img src="${links.cover}" alt="" onerror="this.style.display='none'"></div>
-        <div>
-          <h2 class="title">${g.name}</h2>
-          <p class="byline">${subbits || ""}</p>
-          <div class="actions">
-            <a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank" rel="noopener"`:""}>▶️ How-to-Play</a>
-            <button class="btn primary" id="btn-quick">Quick Setup</button>
-            <a class="btnlink" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
-            <a class="btnlink" href="${links.reminders}" target="_blank" rel="noopener">Quick Reminders</a>
-            <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook (PDF)</a>
-            <button class="btn" id="share">Share / Copy Link</button>
-            <section id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></section>
-          </div>
-        </div>
-      </article>
-      <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
-
-    const qs = document.getElementById('qs');
-    const openQuick = () => qs.classList.add('open');
-    const closeQuick = () => qs.classList.remove('open');
-    document.getElementById('btn-quick').addEventListener('click', () => qs.classList.toggle('open'));
-    document.getElementById('share').addEventListener('click', async () => {
-      const u = location.href;
-      try { if (navigator.share) { await navigator.share({title:`${g.name}`, text:`Quick Menu — ${g.name}`, url:u}); return; } } catch(e){}
-      try { await navigator.clipboard.writeText(u); alert("Link copied"); } catch(e){ prompt("Copy link:", u); }
-    });
-
-    // Show Quick Setup immediately (and still respect &action= if present)
-    if (action === "quicksetup" || !action) openQuick();
-    if (action && action !== "quicksetup") {
-      const map = { youtube:"#btn-youtube" };
-      const sel = map[action];
-      if (sel) document.querySelector(sel)?.click();
-    }
-  }
-
-  function normalizeIncoming(){
-    const q = qp("game");
-    if (q){
-      const want = q.trim();
-      const slug = (DATA[want.toLowerCase()] ? want.toLowerCase() : slugify(want));
-      const a = (qp("action")||"quicksetup").toLowerCase();
-      location.replace(`#\/game\/${slug}?action=${encodeURIComponent(a)}`);
-      return true;
-    }
-    return false;
-  }
-  function parseHash(){
-    const h=location.hash||"#/";
-    const [path,q] = h.slice(2).split("?");
-    const parts=(path||"").split("/");
-    const params=new URLSearchParams(q||"");
-    if (parts[0]==="game" && parts[1]) return {route:"detail", slug:parts[1].toLowerCase(), action:(params.get("action")||"quicksetup").toLowerCase()};
-    return {route:"list"};
-  }
-  function render(){
-    if (normalizeIncoming()) return;
-    const {route, slug, action} = parseHash();
-    route==="detail" ? renderDetail(slug, action) : renderList("");
-  }
-  window.addEventListener("hashchange", render);
-  document.addEventListener("DOMContentLoaded", render);
-
-  /* service worker */
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register(`${basePath()}/sw.js`).catch(()=>{});
-  }
-})();
-</script>
+<!-- App script -->
+<script src="app.js"></script>
 </body>
 </html>
