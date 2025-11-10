@@ -99,7 +99,6 @@
 "youtube":"https://www.youtube.com/watch?v=lgDgcLI2B0U",
 "bggId":"266192",
 "quickStart":"Play bird / Gain food / Lay eggs / Draw cards. 4 rounds. Eggs = points."
-"quickStart":"Players start with 5 cards each. For every card discarded, players gain 1 unique food. Players discard 1 of 2 Bonus Cards."
 },
 "ark-nova": {
 "players":"1–4","time":"120–180","year":"2021",
@@ -235,6 +234,7 @@
   const jpg  = `${bp}/covers/${slug}.jpg`;
   return webp; // browsers will try to load webp; if missing, onerror hides it
 }
+  const bgstatsUrl=s=>`bgstats://app.bgstatsapp.com/addPlay.html?gameId=68448`;
 const BGSTATS_ID_PREFIX = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId=';
 
 const extractBggId = (urlOrId) => {
@@ -278,6 +278,13 @@ return m ? m[1] : '';
     const g = DATA[slug];
     if(!g){ $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`; return; }
     const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
+    const links={
+      youtube: g.youtube||"",
+      bgstats: g.bgstats||bgstatsUrl(slug),
+      reminders: g.reminders||remindersUrl(slug),
+      rulebook: g.rulebook||rulebookUrl(slug),
+      cover: coverUrl(slug)
+    };
     const links = {
     youtube: g.youtube || "",
     bgstats: g.bggId
