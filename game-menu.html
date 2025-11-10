@@ -34,22 +34,21 @@ footer { font-size:.78rem; color:#777; margin-top:12px; text-align:center; }
 
 <div class="grid" id="buttons">
 <button id="btn-youtube" class="full">▶️ How-to-Play (YouTube)</button>
-<button id="btn-quickstart" class="primary">Quick Start</button>
+<button id="btn-quickstart" class="primary">Quick Setup</button>
 <button id="btn-bgstats">BG Stats – Log a Play</button>
+<button id="btn-reminders">Quick Reminders</button>
 <button id="btn-rules">Open Rulebook (PDF)</button>
-<button id="btn-notion">Open Notion Page</button>
-<button id="btn-storage">Storage Guide</button>
 <button id="btn-share" class="full">Share / Copy Link</button>
 </div>
 
 <footer id="foot"></footer>
 </main>
 
-<!-- Quick Start modal -->
+<!-- Quick Setup modal -->
 <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="qs-title" aria-hidden="true">
 <section class="panel">
-<h2 id="qs-title">Quick Start</h2>
-<pre id="qs-text">(No quick start text configured.)</pre>
+<h2 id="qs-title">Quick Setup</h2>
+<pre id="qs-text">(No quick setup text configured.)</pre>
 <div class="row">
 <button id="btn-print" class="small">Print</button>
 <button id="btn-close" class="small">Close</button>
@@ -57,98 +56,16 @@ footer { font-size:.78rem; color:#777; margin-top:12px; text-align:center; }
 </section>
 </div>
 
+<script src="assets/games.js"></script>
 <script>
-// ---- helpers & dataset (inline, no imports) ----
-const slugify = (name) =>
-name.toLowerCase()
-.replace(/[:’'"]/g, "")
-.replace(/&/g, "and")
-.replace(/[^a-z0-9]+/g, "-")
-.replace(/(^-|-$)/g, "");
+const qp = name => new URL(location.href).searchParams.get(name) || "";
+const openUrl = (u) => { if (!u) return alert("No URL configured for this action."); window.open(u, "_blank", "noopener"); };
 
-const GAMES = (() => {
-const names = [
-"7 Wonders","7 Wonders Duel","Acquire","Air, Land & Sea: Critters at War","Archduke","Ark Nova",
-"Ark Nova: Marine Worlds","Azul","Azul: Crystal Mosaic","Backgammon","Brass: Birmingham","Candy Land: Bluey",
-"Century: Golem Edition","Chess","Chronicles of Crime","Cover Your Assets","Critters at War: Flies, Lies, and Supplies",
-"Dune: Imperium - Uprising","Dutch Blitz","Everdell","The Fellowship of the Ring Trick-Taking Game","Fire Tower",
-"Fire Tower: Rising Flames","Five Crowns","For Sale","For Sale: Advisors","Forbidden Island","Foundations of Metropolis",
-"Heat: Pedal to the Metal","Heat: Heavy Rain","Jaipur","Kingdomino","Kingdomino Origins","Monopoly Deal",
-"Moonrakers: Titan Edition","Moonrakers: Dark Matter","Moonrakers: The Endless","Moonrakers: The Shard","Moonrakers: Starfall",
-"Moonrollers","New York Zoo","Pan Am","PARKS","PARKS: Nightfall","PARKS: Wildlife","Patchwork","Play Nine",
-"Quacks of Quedlinburg","Quacks of Quedlinburg: Alchemists","Quacks of Quedlinburg: Herb Witches","Radlands","Rage",
-"Ravine","Ravine: The Spirits Expansion","Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Splendor",
-"Star Wars: The Deck-Building Game","Vinhos Deluxe Edition","Watergate","Wingspan","Project L","Project L: Finesse",
-"Project L: Ghost","Harmonies","Wingspan: European Expansion","Forest Shuffle","Heat: Tunnel Vision","Brink","Tend"
-];
-const enrich = {
-[slugify("Heat: Pedal to the Metal")]: {
-players:"2–6",
-youtube:"https://www.youtube.com/watch?v=REPLACE_HEAT_VIDEO",
-bgstats:"https://bgstats.app/game/heat-pedal-to-the-metal",
-quickStart:`Players: 2–6 • Setup ~5–7 min
-
-1) Track & Modules
-- Choose track; shuffle track cards as required.
-- If using Heavy Rain: place rain boards; shuffle weather.
-
-2) Player Setup
-- Give each player: car, dashboard, starting gear & starting hand.
-- Starting money and upgrade cards per scenario.
-
-3) Decks & Supply
-- Shuffle stress/heat decks as rules specify.
-- Place weather tokens and slipstream marker.
-
-4) Round (high-level)
-- Select speed card → reveal → resolve heat/stress → move → slipstream → cleanup.
-
-First game tips:
-- Don’t burn heat too early.
-- Slipstream when possible; mind corner speed limits.`,
-},
-[slugify("Quacks of Quedlinburg")]: {
-players:"2–4",
-bgstats:"https://bgstats.app/game/the-quacks-of-quedlinburg",
-quickStart:`Players: 2–4 • 9 rounds
-
-1) Setup
-- Each player: pot board, droplet on 0, rat tail at 0, rubies 0, starting bag (per rules).
-- Market: ingredient books for current set.
-
-2) Round
-- Simultaneously draw chips, place in pot until you stop or explode.
-- Resolve phase: bonus die, rubies, buy ingredients, rats next round.
-
-Tip: track white chips; stop before 7+ risk if you’re ahead.`,
-}
-};
-const map = {};
-for (const name of names) {
-const slug = slugify(name);
-map[slug] = { name, slug, ...(enrich[slug]||{}) };
-}
-return map;
-})();
-
-function qp(name){ return new URL(location.href).searchParams.get(name) || ""; }
-function buildLinks(g){
-const slug = g.slug;
-return {
-youtube: g.youtube || "",
-bgstats: g.bgstats || `https://bgstats.app/game/${slug}`,
-notion: g.notion || "", // fill if you have it
-storage: g.storage || "", // fill if you have it
-rules: g.rulebook || `/rulebooks/${slug}.pdf`, // default local PDF
-};
-}
-
-// ---- page wiring ----
-const raw = (qp("game") || "").toLowerCase();
-const game = GAMES[raw] || null;
+// resolve game by slug (required)
+const slug = (qp("game") || "").toLowerCase();
+const game = window.GAMES?.[slug];
 
 const $ = s => document.querySelector(s);
-const openUrl = (u) => { if (!u) return alert("No URL configured for this action."); window.open(u, "_blank", "noopener"); };
 
 if (!game) {
 document.title = "Game not found";
@@ -159,17 +76,23 @@ $("#buttons").innerHTML = `<a class="btn full" href="index.html">Back to list</a
 document.title = `Menu — ${game.name}`;
 $("#title").textContent = game.name;
 $("#subtitle").textContent = game.players ? `Players: ${game.players}` : "Choose an action for this game.";
-const links = buildLinks(game);
+
+const links = {
+youtube: game.youtube || "",
+bgstats: game.bgstats || `https://bgstats.app/game/${slug}`,
+reminders: game.reminders || `/reminders/${slug}.html`,
+rules: game.rulebook || `/rulebooks/${slug}.pdf`
+};
 
 // Buttons
 $("#btn-youtube").addEventListener("click", () => openUrl(links.youtube));
 $("#btn-bgstats").addEventListener("click", () => openUrl(links.bgstats));
+$("#btn-reminders").addEventListener("click", () => openUrl(links.reminders));
 $("#btn-rules").addEventListener("click", () => openUrl(links.rules));
-$("#btn-notion").addEventListener("click", () => openUrl(links.notion));
-$("#btn-storage").addEventListener("click", () => openUrl(links.storage));
 
+// Quick Setup
 $("#btn-quickstart").addEventListener("click", () => {
-$("#qs-text").textContent = (game.quickStart||"").trim() || "(No quick start text configured.)";
+$("#qs-text").textContent = (game.quickStart||"").trim() || "(No quick setup text configured.)";
 $("#modal").classList.remove("hidden");
 $("#modal").setAttribute("aria-hidden","false");
 });
@@ -179,6 +102,7 @@ $("#modal").setAttribute("aria-hidden","true");
 });
 $("#btn-print").addEventListener("click", () => window.print());
 
+// Share
 $("#btn-share").addEventListener("click", async () => {
 const url = location.href;
 try { if (navigator.share) { await navigator.share({ title:`Quick Menu — ${game.name}`, text:`Menu for ${game.name}`, url }); return; } } catch(e){}
@@ -186,12 +110,12 @@ try { await navigator.clipboard.writeText(url); alert("Link copied to clipboard"
 catch(e){ prompt("Copy this link:", url); }
 });
 
-$("#foot").innerHTML = `Rulebook path: <code>/rulebooks/${game.slug}.pdf</code>`;
+$("#foot").innerHTML = `Rulebook path: <code>${links.rules}</code>`;
 }
 
-// Auto-open by action
+// Optional auto-open: ?action=quickstart|youtube|bgstats|rules|reminders
 const action = (qp("action") || "").toLowerCase();
-const map = { youtube:"#btn-youtube", quickstart:"#btn-quickstart", bgstats:"#btn-bgstats", rules:"#btn-rules", notion:"#btn-notion", storage:"#btn-storage" };
+const map = { youtube:"#btn-youtube", quickstart:"#btn-quickstart", bgstats:"#btn-bgstats", rules:"#btn-rules", reminders:"#btn-reminders" };
 if (map[action]) document.querySelector(map[action])?.click();
 </script>
 </body>
