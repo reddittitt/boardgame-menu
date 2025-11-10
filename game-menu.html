@@ -57,81 +57,141 @@ footer { font-size:.78rem; color:#777; margin-top:12px; text-align:center; }
 </section>
 </div>
 
-<script type="module">
-import { GAMES, buildLinks, slugify } from "./assets/games.js";
+<script>
+// ---- helpers & dataset (inline, no imports) ----
+const slugify = (name) =>
+name.toLowerCase()
+.replace(/[:’'"]/g, "")
+.replace(/&/g, "and")
+.replace(/[^a-z0-9]+/g, "-")
+.replace(/(^-|-$)/g, "");
+
+const GAMES = (() => {
+const names = [
+"7 Wonders","7 Wonders Duel","Acquire","Air, Land & Sea: Critters at War","Archduke","Ark Nova",
+"Ark Nova: Marine Worlds","Azul","Azul: Crystal Mosaic","Backgammon","Brass: Birmingham","Candy Land: Bluey",
+"Century: Golem Edition","Chess","Chronicles of Crime","Cover Your Assets","Critters at War: Flies, Lies, and Supplies",
+"Dune: Imperium - Uprising","Dutch Blitz","Everdell","The Fellowship of the Ring Trick-Taking Game","Fire Tower",
+"Fire Tower: Rising Flames","Five Crowns","For Sale","For Sale: Advisors","Forbidden Island","Foundations of Metropolis",
+"Heat: Pedal to the Metal","Heat: Heavy Rain","Jaipur","Kingdomino","Kingdomino Origins","Monopoly Deal",
+"Moonrakers: Titan Edition","Moonrakers: Dark Matter","Moonrakers: The Endless","Moonrakers: The Shard","Moonrakers: Starfall",
+"Moonrollers","New York Zoo","Pan Am","PARKS","PARKS: Nightfall","PARKS: Wildlife","Patchwork","Play Nine",
+"Quacks of Quedlinburg","Quacks of Quedlinburg: Alchemists","Quacks of Quedlinburg: Herb Witches","Radlands","Rage",
+"Ravine","Ravine: The Spirits Expansion","Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Splendor",
+"Star Wars: The Deck-Building Game","Vinhos Deluxe Edition","Watergate","Wingspan","Project L","Project L: Finesse",
+"Project L: Ghost","Harmonies","Wingspan: European Expansion","Forest Shuffle","Heat: Tunnel Vision","Brink","Tend"
+];
+const enrich = {
+[slugify("Heat: Pedal to the Metal")]: {
+players:"2–6",
+youtube:"https://www.youtube.com/watch?v=REPLACE_HEAT_VIDEO",
+bgstats:"https://bgstats.app/game/heat-pedal-to-the-metal",
+quickStart:`Players: 2–6 • Setup ~5–7 min
+
+1) Track & Modules
+- Choose track; shuffle track cards as required.
+- If using Heavy Rain: place rain boards; shuffle weather.
+
+2) Player Setup
+- Give each player: car, dashboard, starting gear & starting hand.
+- Starting money and upgrade cards per scenario.
+
+3) Decks & Supply
+- Shuffle stress/heat decks as rules specify.
+- Place weather tokens and slipstream marker.
+
+4) Round (high-level)
+- Select speed card → reveal → resolve heat/stress → move → slipstream → cleanup.
+
+First game tips:
+- Don’t burn heat too early.
+- Slipstream when possible; mind corner speed limits.`,
+},
+[slugify("Quacks of Quedlinburg")]: {
+players:"2–4",
+bgstats:"https://bgstats.app/game/the-quacks-of-quedlinburg",
+quickStart:`Players: 2–4 • 9 rounds
+
+1) Setup
+- Each player: pot board, droplet on 0, rat tail at 0, rubies 0, starting bag (per rules).
+- Market: ingredient books for current set.
+
+2) Round
+- Simultaneously draw chips, place in pot until you stop or explode.
+- Resolve phase: bonus die, rubies, buy ingredients, rats next round.
+
+Tip: track white chips; stop before 7+ risk if you’re ahead.`,
+}
+};
+const map = {};
+for (const name of names) {
+const slug = slugify(name);
+map[slug] = { name, slug, ...(enrich[slug]||{}) };
+}
+return map;
+})();
+
+function qp(name){ return new URL(location.href).searchParams.get(name) || ""; }
+function buildLinks(g){
+const slug = g.slug;
+return {
+youtube: g.youtube || "",
+bgstats: g.bgstats || `https://bgstats.app/game/${slug}`,
+notion: g.notion || "", // fill if you have it
+storage: g.storage || "", // fill if you have it
+rules: g.rulebook || `/rulebooks/${slug}.pdf`, // default local PDF
+};
+}
+
+// ---- page wiring ----
+const raw = (qp("game") || "").toLowerCase();
+const game = GAMES[raw] || null;
 
 const $ = s => document.querySelector(s);
-const qp = name => new URL(location.href).searchParams.get(name) || "";
-
-// resolve game by slug or name
-const raw = (qp("game") || "").trim();
-const slug = raw ? raw.toLowerCase() : "";
-const game = GAMES[slug] || Object.values(GAMES).find(g => g.name.toLowerCase() === raw.toLowerCase());
+const openUrl = (u) => { if (!u) return alert("No URL configured for this action."); window.open(u, "_blank", "noopener"); };
 
 if (!game) {
 document.title = "Game not found";
 $("#title").textContent = "Game not found";
-$("#subtitle").textContent = "The requested game is not in your collection.";
+$("#subtitle").textContent = "That slug isn’t in your collection.";
+$("#buttons").innerHTML = `<a class="btn full" href="index.html">Back to list</a>`;
 } else {
 document.title = `Menu — ${game.name}`;
 $("#title").textContent = game.name;
 $("#subtitle").textContent = game.players ? `Players: ${game.players}` : "Choose an action for this game.";
-
 const links = buildLinks(game);
 
-const openUrl = (u) => {
-if (!u) { alert("No URL configured for this action."); return; }
-window.open(u, "_blank", "noopener");
-};
-
-// Wire buttons
+// Buttons
 $("#btn-youtube").addEventListener("click", () => openUrl(links.youtube));
 $("#btn-bgstats").addEventListener("click", () => openUrl(links.bgstats));
 $("#btn-rules").addEventListener("click", () => openUrl(links.rules));
 $("#btn-notion").addEventListener("click", () => openUrl(links.notion));
 $("#btn-storage").addEventListener("click", () => openUrl(links.storage));
 
-// Quick Start modal
 $("#btn-quickstart").addEventListener("click", () => {
-$("#qs-text").textContent = (game.quickStart || "").trim() || "(No quick start text configured.)";
+$("#qs-text").textContent = (game.quickStart||"").trim() || "(No quick start text configured.)";
 $("#modal").classList.remove("hidden");
-$("#modal").setAttribute("aria-hidden", "false");
+$("#modal").setAttribute("aria-hidden","false");
 });
 $("#btn-close").addEventListener("click", () => {
 $("#modal").classList.add("hidden");
-$("#modal").setAttribute("aria-hidden", "true");
+$("#modal").setAttribute("aria-hidden","true");
 });
 $("#btn-print").addEventListener("click", () => window.print());
 
-// Share
 $("#btn-share").addEventListener("click", async () => {
 const url = location.href;
-const title = `Quick Menu — ${game.name}`;
-try {
-if (navigator.share) { await navigator.share({ title, text: `Menu for ${game.name}`, url }); return; }
-} catch(e) {}
-try {
-await navigator.clipboard.writeText(url);
-alert("Link copied to clipboard");
-} catch(e) {
-prompt("Copy this link:", url);
-}
+try { if (navigator.share) { await navigator.share({ title:`Quick Menu — ${game.name}`, text:`Menu for ${game.name}`, url }); return; } } catch(e){}
+try { await navigator.clipboard.writeText(url); alert("Link copied to clipboard"); }
+catch(e){ prompt("Copy this link:", url); }
 });
 
-// footer hint
-$("#foot").innerHTML = `Rulebook path: <code>${links.rules.replace(location.origin, "")}</code>`;
+$("#foot").innerHTML = `Rulebook path: <code>/rulebooks/${game.slug}.pdf</code>`;
 }
 
-// Auto-open support (?action=quickstart|youtube|bgstats|rules|notion|storage)
+// Auto-open by action
 const action = (qp("action") || "").toLowerCase();
-const map = {
-youtube: "#btn-youtube",
-quickstart: "#btn-quickstart",
-bgstats: "#btn-bgstats",
-rules: "#btn-rules",
-notion: "#btn-notion",
-storage: "#btn-storage",
-};
+const map = { youtube:"#btn-youtube", quickstart:"#btn-quickstart", bgstats:"#btn-bgstats", rules:"#btn-rules", notion:"#btn-notion", storage:"#btn-storage" };
 if (map[action]) document.querySelector(map[action])?.click();
 </script>
 </body>
