@@ -239,20 +239,63 @@ y.addEventListener('click', () => alert("No YouTube link configured for this gam
 }
 }
 
-/* ---------- ROUTER (hash) ---------- */
+<script>
+/* ---------- keep everything above this line the same (GAMES, basePath, renderers, etc.) ---------- */
+
+/* ---------- ENHANCED ROUTER (supports hash OR query params) ---------- */
+function qp(name){ return new URL(location.href).searchParams.get(name) || ""; }
+
+function normalizeIncomingDeepLink() {
+// Accept ?game=<slug or name>[&action=<...>] and turn it into #/game/<slug>
+const qGame = qp("game");
+if (qGame) {
+const want = qGame.trim();
+// if user passed a name, slugify it; if slug, this is a no-op
+const desiredSlug = (GAMES[want.toLowerCase()] ? want.toLowerCase() : slugify(want));
+const action = (qp("action") || "").toLowerCase();
+const actFrag = action ? `?action=${encodeURIComponent(action)}` : "";
+location.replace(`#\/game\/${desiredSlug}${actFrag}`);
+return true; // we changed the URL
+}
+return false;
+}
+
 function parseHash() {
-// routes: "#/" or "#/game/<slug>"
+// routes: "#/" or "#/game/<slug>" with optional "?action=..."
 const h = location.hash || "#/";
-const parts = h.slice(2).split("/"); // remove "#/"
-if (parts[0] === "" || parts[0] === undefined) return { route:"list" };
-if (parts[0] === "game" && parts[1]) return { route:"detail", slug:parts[1].toLowerCase() };
+// Split off any query after the hash (e.g., #/game/slug?action=quickstart)
+const [path, query] = h.slice(2).split("?");
+const parts = (path || "").split("/");
+const params = new URLSearchParams(query || "");
+
+if (!parts[0]) return { route:"list" };
+if (parts[0] === "game" && parts[1]) {
+const slug = parts[1].toLowerCase();
+const action = (params.get("action") || "").toLowerCase();
+return { route:"detail", slug, action };
+}
 return { route:"list" };
 }
 
 function render() {
-const { route, slug } = parseHash();
+const changed = normalizeIncomingDeepLink(); // handles ?game=... deep links
+if (changed) return; // URL updated; hashchange will re-run render
+
+const { route, slug, action } = parseHash();
 if (route === "detail") {
 renderDetail(slug);
+// Auto-open actions after the DOM is in place
+if (action) {
+const map = {
+youtube:"#btn-youtube",
+quickstart:"#btn-quick",
+bgstats:"#btn-bgstats",
+rules:"#btn-rules",
+reminders:"#btn-rem"
+};
+const sel = map[action];
+if (sel) document.querySelector(sel)?.click();
+}
 } else {
 renderList($search.value || "");
 }
@@ -277,5 +320,3 @@ document.getElementById('btn-print').addEventListener('click', () => window.prin
 render();
 });
 </script>
-</body>
-</html>
