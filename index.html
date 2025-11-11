@@ -11,7 +11,6 @@
     --btn:#fff; --btn-border:#dcdce6;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
   }
-  /* Dark theme */
   :root[data-theme="dark"]{
     --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
   }
@@ -42,21 +41,25 @@
   .sub{color:var(--muted);font-size:.85rem;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* Detail view */
-  .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:grid;grid-template-columns:120px 1fr;gap:14px}
-  .cover{width:120px;height:120px;border-radius:10px;overflow:hidden;background:#0001}
+  .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:grid;grid-template-columns:260px 1fr;gap:16px}
+  /* Show full cover (no crop) */
+  .cover{border-radius:12px;overflow:hidden;background:#0001}
+  .cover img{width:100%;height:auto;display:block;object-fit:contain}
   .title{margin:.2rem 0 .25rem;font-size:1.2rem;line-height:1.2}
-  .byline{color:var(--muted);font-size:.92rem;margin:0 0 6px}
-  .actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+  .byline{color:var(--muted);font-size:.92rem;margin:0 0 10px}
+  .actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
   .btn,.btnlink{display:block;width:100%;text-align:center;padding:14px;border-radius:12px;border:1px solid var(--btn-border);background:var(--btn);color:inherit;text-decoration:none;font-weight:700;cursor:pointer}
   .btn.primary{background:var(--brand);color:#fff;border:none}
-  .qs{margin-top:8px;padding:10px;border:1px dashed var(--border);border-radius:12px;background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%)}
+  .qs,.exp{margin-top:8px;padding:10px;border:1px dashed var(--border);border-radius:12px;background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%)}
   .qs pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0}
+  .exp h3{margin:.2rem 0 .6rem;font-size:1.05rem}
+  .exp ul{margin:.2rem 0 .2rem 1.1rem}
+  .exp a{color:inherit}
   footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:16px}
 
-  /* Mobile */
-  @media (max-width:640px){
+  @media (max-width:840px){
     .detail{grid-template-columns:1fr}
-    .cover{width:100%;height:200px}
+    .cover{width:100%}
   }
 </style>
 </head>
@@ -79,141 +82,149 @@
     "Heat: Pedal to the Metal","Quacks of Quedlinburg","Wingspan","Ark Nova","Brass: Birmingham",
     "PARKS","Splendor","Watergate","For Sale","Jaipur","Everdell","Fire Tower",
     "Moonrakers: Titan Edition","Vinhos Deluxe Edition","Project L","Radlands",
-    "Sky Team","Brink","Tend","Harmonies","Parks 2nd Edition","Moonrollers"
+    "Sky Team","Brink","Tend","Harmonies","Marvel Villainous","7 Wonders","7 Wonders Duel",
+    "Acquire","Air, Land & Sea: Critters at War","Archduke","Azul","Azul: Crystal Mosaic",
+    "Backgammon","Candy Land: Bluey","Century: Golem Edition","Chess","Chronicles of Crime",
+    "Cover Your Assets","Critters at War: Flies, Lies, and Supplies","Dune: Imperium - Uprising",
+    "Dutch Blitz","The Fellowship of the Ring Trick-Taking Game","Five Crowns","For Sale: Advisors",
+    "Forbidden Island","Foundations of Metropolis","Moonrakers","Moonrollers","New York Zoo","Pan Am",
+    "Parks: Nightfall","Parks: Wildlife","Patchwork","Play Nine","Quacks of Quedlinburg: Alchemists",
+    "Quacks of Quedlinburg: Herb Witches","Radlands","Rage","Ravine","Ravine: The Spirits Expansion",
+    "Rook","Rummikub","Sail","Sequence","Skip-Bo","Sky Team","Sniper Elite","Star Wars: The Deck-Building Game",
+    "Vinhos Deluxe Edition","Watergate","Wingspan: European Expansion","Project L: Finesse","Project L: Ghost",
+    "Harmonies","Forest Shuffle","Pan Am","Foundations of Metropolis","Brass: Birmingham"
   ],
   "enrich": {
+    /* ==== Base games (examples prefilled) ==== */
     "heat-pedal-to-the-metal": {
-      "players":"2–6","time":"45–60","year":"2022",
-      "youtube":"https://www.youtube.com/watch?v=Ychy0Tgegjk",
-      "bggId":"366013",
-      "quickStart":"Choose track. Set dashboards, gear, deck. Play speed cards → resolve heat/stress → move → slipstream."
+      "players":"2–6","time":"45–60","year":"2022","bggId":"366013",
+      "quickStart":"Choose track. Set dashboards, gear, deck. Play speed cards → resolve heat/stress → move → slipstream.",
+      "expansions":[
+        {"name":"Heavy Rain","rulebook":"rulebooks/heat-pedal-to-the-metal--heavy-rain.pdf"},
+        {"name":"Tunnel Vision","rulebook":"rulebooks/heat-pedal-to-the-metal--tunnel-vision.pdf"}
+      ]
     },
     "quacks-of-quedlinburg": {
-      "players":"2–4","time":"45","year":"2018",
-      "youtube":"https://www.youtube.com/watch?v=0jVDu4c6tU4",
-      "bggId":"244521",
-      "quickStart":"Draw chips; stop before exploding. Score, buy ingredients, reset rats."
+      "players":"2–4","time":"45","year":"2018","bggId":"244521",
+      "quickStart":"Draw chips; stop before exploding. Score, buy ingredients, reset rats.",
+      "expansions":[
+        {"name":"Herb Witches","rulebook":"rulebooks/quacks-of-quedlinburg--herb-witches.pdf"},
+        {"name":"Alchemists","rulebook":"rulebooks/quacks-of-quedlinburg--alchemists.pdf"}
+      ]
     },
     "wingspan": {
-      "players":"1–5","time":"40–70","year":"2019",
-      "youtube":"https://www.youtube.com/watch?v=lgDgcLI2B0U",
-      "bggId":"266192",
-      "quickStart":"Players start with 5 cards. Players may discard any # of cards, gaining 1 unique food for each card. Players discard 1 of 2 Bonus Cards."
+      "players":"1–5","time":"40–70","year":"2019","bggId":"266192",
+      "quickStart":"Play bird / Gain food / Lay eggs / Draw cards. 4 rounds. Eggs = points.",
+      "expansions":[
+        {"name":"European Expansion","rulebook":"rulebooks/wingspan--european-expansion.pdf"}
+      ]
     },
     "ark-nova": {
-      "players":"1–4","time":"120–180","year":"2021",
-      "youtube":"https://www.youtube.com/watch?v=oPW0jMG1DTM",
-      "bggId":"342942",
-      "quickStart":"5 actions: Cards, Build, Animals, Association, Sponsors. End when Appeal & Conservation cross."
+      "players":"1–4","time":"120–180","year":"2021","bggId":"342942",
+      "quickStart":"5 actions: Cards, Build, Animals, Association, Sponsors. End when Appeal & Conservation cross.",
+      "expansions":[
+        {"name":"Marine Worlds","rulebook":"rulebooks/ark-nova--marine-worlds.pdf"}
+      ]
     },
     "brass-birmingham": {
-      "players":"2–4","time":"90–150","year":"2018",
-      "youtube":"https://www.youtube.com/watch?v=Lzxf4tfq9as",
-      "bggId":"224517",
+      "players":"2–4","time":"90–150","year":"2018","bggId":"224517",
       "quickStart":"Two eras: Canal → Rail. Take 2 actions. Flip industries for income & points."
     },
     "parks": {
-      "players":"1–5","time":"40–60","year":"2019",
-      "youtube":"https://www.youtube.com/watch?v=J8tr_h1S2EY",
-      "bggId":"266524",
-      "quickStart":"Move hikers, take tile actions, visit parks for points. 4 seasons."
+      "players":"1–5","time":"40–60","year":"2019","bggId":"266524",
+      "quickStart":"Move hikers, take tile actions, visit parks for points. 4 seasons.",
+      "expansions":[
+        {"name":"Nightfall","rulebook":"rulebooks/parks--nightfall.pdf"},
+        {"name":"Wildlife","rulebook":"rulebooks/parks--wildlife.pdf"}
+      ]
     },
-    "splendor": {
-      "players":"2–4","time":"30","year":"2014",
-      "youtube":"https://www.youtube.com/watch?v=2A0CQ0xsrv0",
-      "bggId":"148228",
-      "quickStart":"Take gems or buy cards. Build discounts. First to 15 VP wins."
-    },
-    "watergate": {
-      "players":"2","time":"30–45","year":"2019",
-      "youtube":"https://www.youtube.com/watch?v=6BQQyHA0g3Y",
-      "bggId":"274364",
-      "quickStart":"Editor links informants to Nixon. Nixon wins with 5 momentum."
-    },
-    "for-sale": {
-      "players":"3–6","time":"20","year":"1997",
-      "youtube":"https://www.youtube.com/watch?v=ZH54R8P3g_E",
-      "bggId":"172",
-      "quickStart":"Auction properties, then sell them for highest checks."
-    },
-    "jaipur": {
-      "players":"2","time":"30","year":"2009",
-      "youtube":"https://www.youtube.com/watch?v=IuSYx2f_Co4",
-      "bggId":"54043",
-      "quickStart":"Trade/sell goods for points. Best of 3 rounds."
-    },
+    "splendor": {"players":"2–4","time":"30","year":"2014","bggId":"148228","quickStart":"Take gems or buy cards. Build discounts. First to 15 VP wins."},
+    "watergate": {"players":"2","time":"30–45","year":"2019","bggId":"274364","quickStart":"Editor links informants to Nixon. Nixon wins with 5 momentum."},
+    "for-sale": {"players":"3–6","time":"20","year":"1997","bggId":"172","quickStart":"Auction properties, then sell them for highest checks."},
+    "jaipur": {"players":"2","time":"30","year":"2009","bggId":"54043","quickStart":"Trade/sell goods for points. Best of 3 rounds."},
     "everdell": {
-      "players":"1–4","time":"40–100","year":"2018",
-      "youtube":"https://www.youtube.com/watch?v=1b9zQz7COxs",
-      "bggId":"199792",
-      "quickStart":"Player One starts with 5 cards and each following player gets one additional card."
+      "players":"1–4","time":"40–100","year":"2018","bggId":"199792",
+      "quickStart":"Worker placement + tableau. Build up to 15 cards across 4 seasons."
     },
     "fire-tower": {
-      "players":"2–4","time":"15–30","year":"2019",
-      "youtube":"https://www.youtube.com/watch?v=5vFZyHqtvN8",
-      "bggId":"226605",
-      "quickStart":"Play cards to spread/block fire; wind direction each turn."
+      "players":"2–4","time":"15–30","year":"2019","bggId":"226605",
+      "quickStart":"Play cards to spread/block fire; wind direction each turn.",
+      "expansions":[{"name":"Rising Flames","rulebook":"rulebooks/fire-tower--rising-flames.pdf"}]
     },
     "moonrakers-titan-edition": {
-      "players":"1–5","time":"60–120","year":"2020",
-      "youtube":"https://www.youtube.com/watch?v=BeZ0qdlB8Uw",
-      "bggId":"438924",
-      "quickStart":"Negotiate contracts, build deck, upgrade ship. First to 10 prestige."
+      "players":"1–5","time":"60–120","year":"2020","bggId":"438924",
+      "quickStart":"Negotiate contracts, build deck, upgrade ship. First to 10 prestige.",
+      "expansions":[
+        {"name":"Dark Matter","rulebook":"rulebooks/moonrakers--dark-matter.pdf"},
+        {"name":"The Endless","rulebook":"rulebooks/moonrakers--the-endless.pdf"},
+        {"name":"The Shard","rulebook":"rulebooks/moonrakers--the-shard.pdf"},
+        {"name":"Starfall","rulebook":"rulebooks/moonrakers--starfall.pdf"}
+      ]
     },
-    "vinhos-deluxe-edition": {
-      "players":"1–4","time":"90–150","year":"2016",
-      "youtube":"https://www.youtube.com/watch?v=5AkDlsw77fY",
-      "bggId":"175640",
-      "quickStart":"Run winery, produce/sell wine. Plan fairs carefully."
-    },
+    "vinhos-deluxe-edition": {"players":"1–4","time":"90–150","year":"2016","bggId":"175640","quickStart":"Run winery, produce/sell wine. Plan fairs carefully."},
     "project-l": {
-      "players":"1–4","time":"20–40","year":"2020",
-      "youtube":"https://www.youtube.com/watch?v=d2K2lOeE7Yo",
-      "bggId":"260180",
-      "quickStart":"Take puzzle cards, add pieces, complete for points. Engine builds fast."
+      "players":"1–4","time":"20–40","year":"2020","bggId":"260180",
+      "quickStart":"Take puzzle cards, add pieces, complete for points. Engine builds fast.",
+      "expansions":[
+        {"name":"Finesse","rulebook":"rulebooks/project-l--finesse.pdf"},
+        {"name":"Ghost","rulebook":"rulebooks/project-l--ghost.pdf"}
+      ]
     },
-    "radlands": {
-      "players":"2","time":"20–30","year":"2021",
-      "youtube":"https://www.youtube.com/watch?v=G6hUBuEZyR8",
-      "bggId":"329082",
-      "quickStart":"Protect 3 camps. Spend water for cards/events. Destroy enemy camps."
+    "radlands": {"players":"2","time":"20–30","year":"2021","bggId":"329082","quickStart":"Protect 3 camps. Spend water for cards/events. Destroy enemy camps."},
+    "sky-team": {"players":"2","time":"20–40","year":"2023","bggId":"373106","quickStart":"Co-op dice placement. Land plane before runway runs out."},
+    "brink": {"players":"2–5","time":"45–90","year":"2024","bggId":"415078","quickStart":"Simultaneous action bluffing & resource management."},
+    "tend": {"players":"1–4","time":"45–90","year":"2024","bggId":"427388","quickStart":"Cozy farm simulation. Manage animals & fields."},
+    "harmonies": {"players":"1–4","time":"30–45","year":"2024","bggId":"414317","quickStart":"Build landscapes with tiles and animals for harmony points."},
+    "marvel-villainous": {
+      "players":"2–4","time":"40–80","year":"2020","quickStart":"Each villain has unique objective. Manage fate deck and power.",
+      "expansions":[{"name":"(All expansions)","rulebook":"rulebooks/marvel-villainous--expansions.pdf"}]
     },
-    "sky-team": {
-      "players":"2","time":"20–40","year":"2023",
-      "youtube":"https://www.youtube.com/watch?v=G0FJAfkxWbE",
-      "bggId":"373106",
-      "quickStart":"Co-op dice placement. Land plane before runway runs out."
-    },
-    "brink": {
-      "players":"2–5","time":"45–90","year":"2024",
-      "youtube":"https://www.youtube.com/watch?v=KPV4YQfD8Go",
-      "bggId":"415078",
-      "quickStart":"IV Studios: simultaneous action bluffing & resource management."
-    },
-    "tend": {
-      "players":"1–4","time":"45–90","year":"2024",
-      "youtube":"https://www.youtube.com/watch?v=V93pbb4TxwA",
-      "bggId":"427388",
-      "quickStart":"Cozy farm simulation by IV Studios. Manage animals & fields."
-    },
-    "harmonies": {
-      "players":"1–4","time":"30–45","year":"2024",
-      "youtube":"https://www.youtube.com/watch?v=GyqIVuRGrSc",
-      "bggId":"414317",
-      "quickStart":"Build landscapes with tiles and animals for harmony points."
-    },
-    "parks-2nd-edition": {
-      "players":"*-*","time":"*-*","year":"****",
-      "youtube":"https://",
-      "bggId":"",
-      "qucikStart":"Filler."
-    },
-    "moonrollers": {
-    "players":"*-*","time":"*-*","year":"****",
-    "youtube":"https://",
-    "bggId":"",
-    "quickStart":"Filler."
-    }
+    /* ==== The rest of your base games (placeholders; fill as you go) ==== */
+    "7-wonders": {},
+    "7-wonders-duel": {},
+    "acquire": {},
+    "air-land-sea-critters-at-war": {},
+    "archduke": {},
+    "azul": {},
+    "azul-crystal-mosaic": {},  /* promo/exp board */
+    "backgammon": {},
+    "candy-land-bluey": {},
+    "century-golem-edition": {},
+    "chess": {},
+    "chronicles-of-crime": {},
+    "cover-your-assets": {},
+    "critters-at-war-flies-lies-and-supplies": {},
+    "dune-imperium-uprising": {},
+    "dutch-blitz": {},
+    "the-fellowship-of-the-ring-trick-taking-game": {},
+    "five-crowns": {},
+    "for-sale-advisors": {},
+    "forbidden-island": {},
+    "foundations-of-metropolis": {},
+    "moonrakers": {},
+    "moonrollers": {},
+    "new-york-zoo": {},
+    "pan-am": {},
+    "parks-nightfall": {},
+    "parks-wildlife": {},
+    "patchwork": {},
+    "play-nine": {},
+    "quacks-of-quedlinburg-alchemists": {},
+    "quacks-of-quedlinburg-herb-witches": {},
+    "rage": {},
+    "ravine": {},
+    "ravine-the-spirits-expansion": {},
+    "rook": {},
+    "rummikub": {},
+    "sail": {},
+    "sequence": {},
+    "skip-bo": {},
+    "sniper-elite": {},
+    "star-wars-the-deck-building-game": {},
+    "wingspan-european-expansion": {},
+    "project-l-finesse": {},
+    "project-l-ghost": {},
+    "forest-shuffle": {}
   }
 }
 </script>
@@ -232,26 +243,21 @@
     localStorage.setItem("theme", next);
   });
 
+  /* BG Stats helpers */
+  const BGSTATS_ID_PREFIX_APP  = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId=';
+  const BGSTATS_ID_PREFIX_WEB  = 'https://bgstats.app/bgg/';
+  const BGSTATS_SLUG_PREFIX_WEB = 'https://bgstats.app/game/';
+  const extractBggId = (urlOrId) => { if (!urlOrId) return ''; const m = String(urlOrId).match(/(\d{2,})/); return m ? m[1] : ''; };
+  const bgstatsUrl = (slug) => `${BGSTATS_SLUG_PREFIX_WEB}${slug}`;
+
   /* data */
-  // --- BG Stats ID support ---
-const BGSTATS_ID_PREFIX = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId='; // base link to open BG Stats via BGG ID
-const extractBggId = (urlOrId) => {
-  if (!urlOrId) return '';
-  const m = String(urlOrId).match(/(\d{2,})/);
-  return m ? m[1] : '';
-};
   const RAW = JSON.parse(document.getElementById('games-json').textContent);
   const slugify = s => s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
   const qp = n => new URL(location.href).searchParams.get(n)||"";
   const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
   const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
   const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
-  function coverUrl(slug) {
-  const bp = basePath();
-  const webp = `${bp}/covers/${slug}.webp`;
-  const jpg  = `${bp}/covers/${slug}.jpg`;
-  return webp; // browsers will try to load webp; if missing, onerror hides it
-}
+  function coverUrl(slug){ const bp=basePath(); return `${bp}/covers/${slug}.webp`; } // full cover shown (no crop)
 
   const DATA={};
   (RAW.names||[]).forEach(name=>{
@@ -284,41 +290,70 @@ const extractBggId = (urlOrId) => {
     document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));
   }
 
-  function renderDetail(slug, action="quicksetup"){  // default: open quick setup immediately
+  function expansionSlug(name){ return slugify(name); }
+  function expansionRulebook(gameSlug, exp){
+    // if explicit rulebook URL is provided, use it; else build a default path
+    if (exp.rulebook) return exp.rulebook;
+    const es = expansionSlug(exp.name || "");
+    return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,'')); // ensures "<game>--<exp>.pdf"
+  }
+
+  function renderExpansions(game){
+    const exps = Array.isArray(game.expansions) ? game.expansions : [];
+    if (!exps.length) return "";
+    const items = exps.map(e => {
+      const path = expansionRulebook(game.slug, e);
+      const note = e.notes ? `<div class="muted" style="font-size:.85rem;margin-top:2px">${e.notes}</div>` : "";
+      return `<li><a href="${path}" target="_blank" rel="noopener">${e.name}</a>${note}</li>`;
+    }).join("");
+    return `
+      <section id="exp" class="exp">
+        <h3>Expansions</h3>
+        <ul>${items}</ul>
+      </section>`;
+  }
+
+  function renderDetail(slug, action="quicksetup"){
     const g = DATA[slug];
     if(!g){ $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`; return; }
     const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
-const links = {
-  youtube: g.youtube || "",
-  bgstats: g.bggId
-    ? `${BGSTATS_ID_PREFIX}${extractBggId(g.bggId)}`
-    : (g.bgstats || bgstatsUrl(slug)),
-  reminders: g.reminders || remindersUrl(slug),
-  rulebook: g.rulebook || rulebookUrl(slug),
-  cover: coverUrl(slug)
-};
+    const id = extractBggId(g.bggId);
+    const links = {
+      youtube: g.youtube || "",
+      bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : bgstatsUrl(slug),
+      bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null,
+      reminders: g.reminders || remindersUrl(slug),
+      rulebook: g.rulebook || rulebookUrl(slug),
+      cover: coverUrl(slug)
+    };
+
     $app.innerHTML = `
       <article class="detail">
-        <div class="cover"><img src="${links.cover}" alt="" onerror="this.style.display='none'"></div>
+        <figure class="cover"><img src="${links.cover}" alt=""></figure>
         <div>
           <h2 class="title">${g.name}</h2>
           <p class="byline">${subbits || ""}</p>
           <div class="actions">
-            <a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank" rel="noopener"`:""}>▶️ How-to-Play</a>
+            <!-- REORDERED BUTTONS -->
             <button class="btn primary" id="btn-quick">Quick Setup</button>
-            <a class="btnlink" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
             <a class="btnlink" href="${links.reminders}" target="_blank" rel="noopener">Quick Reminders</a>
             <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook (PDF)</a>
-            <button class="btn" id="share">Share / Copy Link</button>
+            <a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
+            <a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank" rel="noopener"`:""}>▶️ How-to-Play</a>
+
             <section id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></section>
+
+            <button class="btn" id="btn-exp" ${Array.isArray(g.expansions)&&g.expansions.length? "":"disabled"}>Expansions</button>
+            ${renderExpansions(g)}
+            <button class="btn" id="share">Share / Copy Link</button>
           </div>
         </div>
       </article>
       <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
 
     const qs = document.getElementById('qs');
-    const openQuick = () => qs.classList.add('open');
-    const closeQuick = () => qs.classList.remove('open');
+    const exp = document.getElementById('exp');
+
     document.getElementById('btn-quick').addEventListener('click', () => qs.classList.toggle('open'));
     document.getElementById('share').addEventListener('click', async () => {
       const u = location.href;
@@ -326,11 +361,33 @@ const links = {
       try { await navigator.clipboard.writeText(u); alert("Link copied"); } catch(e){ prompt("Copy link:", u); }
     });
 
-    // Show Quick Setup immediately (and still respect &action= if present)
-    if (action === "quicksetup" || !action) openQuick();
-    if (action && action !== "quicksetup") {
+    // Expansions panel toggle
+    const expBtn = document.getElementById('btn-exp');
+    if (expBtn && exp) {
+      exp.style.display = "none";
+      expBtn.addEventListener('click', () => {
+        exp.style.display = exp.style.display === "none" ? "block" : "none";
+      });
+    }
+
+    // BG Stats app-first behavior with web fallback
+    const bgbtn = document.getElementById('btn-bgstats');
+    bgbtn.addEventListener('click', (e) => {
+      if (!links.bgstatsApp) return; // no ID, let the web link open
+      e.preventDefault();
+      const appUrl = links.bgstatsApp;
+      const webUrl = links.bgstats;
+      let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
+      const a = document.createElement('a'); a.href = appUrl; a.style.display='none'; document.body.appendChild(a); a.click();
+      setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
+    });
+
+    // Auto open Quick Setup (and respect &action)
+    const actionLower = (action||"").toLowerCase();
+    if (actionLower === "quicksetup" || !actionLower) qs.classList.add('open');
+    if (actionLower && actionLower !== "quicksetup") {
       const map = { youtube:"#btn-youtube" };
-      const sel = map[action];
+      const sel = map[actionLower];
       if (sel) document.querySelector(sel)?.click();
     }
   }
@@ -339,9 +396,9 @@ const links = {
     const q = qp("game");
     if (q){
       const want = q.trim();
-      const slug = (DATA[want.toLowerCase()] ? want.toLowerCase() : slugify(want));
+      const slugged = slugify(want);
       const a = (qp("action")||"quicksetup").toLowerCase();
-      location.replace(`#\/game\/${slug}?action=${encodeURIComponent(a)}`);
+      location.replace(`#\/game\/${slugged}?action=${encodeURIComponent(a)}`);
       return true;
     }
     return false;
