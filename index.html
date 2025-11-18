@@ -57,6 +57,40 @@
   .exp a{color:inherit}
   footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:16px}
 
+  /* Expansion details */
+  .expansion{
+    margin-bottom:8px;
+  }
+  .expansion summary{
+    cursor:pointer;
+    list-style:none;
+    font-weight:600;
+  }
+  .expansion summary::-webkit-details-marker{
+    display:none;
+  }
+  .expansion-body{
+    margin-top:6px;
+  }
+  .expansion-text-block h4{
+    margin:.2rem 0 .25rem;
+    font-size:.95rem;
+  }
+  .expansion-text-block p{
+    margin:0 0 .4rem;
+    font-size:.85rem;
+    line-height:1.4;
+  }
+  .expansion-btns{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:4px;
+  }
+  .expansion-name{
+    font-weight:600;
+  }
+
   @media (max-width:840px){
     .detail{grid-template-columns:1fr}
     .cover{width:100%}
@@ -75,7 +109,6 @@
 
 <main id="app"><noscript>JavaScript required.</noscript></main>
 
-<!-- DATA FIRST -->
 <script id="games-json" type="application/json">
 {
   "names": [
@@ -195,7 +228,6 @@
 }
 </script>
 
-<!-- APP SCRIPT -->
 <script>
 (() => {
   /* theme toggle */
@@ -261,21 +293,50 @@
     // if explicit rulebook URL is provided, use it; else build a default path
     if (exp.rulebook) return exp.rulebook;
     const es = expansionSlug(exp.name || "");
-    return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,'')); // ensures "<game>--<exp>.pdf"
+    return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,'')); // "<game>--<exp>.pdf"
   }
 
+  // Render expansions with their own quick setup, reminders, rulebook, BG Stats, and video
   function renderExpansions(game){
     const exps = Array.isArray(game.expansions) ? game.expansions : [];
     if (!exps.length) return "";
-    const items = exps.map(e => {
-      const path = expansionRulebook(game.slug, e);
-      const note = e.notes ? `<div class="muted" style="font-size:.85rem;margin-top:2px">${e.notes}</div>` : "";
-      return `<li><a href="${path}" target="_blank" rel="noopener">${e.name}</a>${note}</li>`;
+    const blocks = exps.map(exp => {
+      const expName = exp.name || "Expansion";
+      const expRulebook = expansionRulebook(game.slug, exp);
+
+      const expBggId = extractBggId(exp.bggId || "");
+      const baseBggId = extractBggId(game.bggId || "");
+      const id = expBggId || baseBggId;
+
+      const links = {
+        rulebook: expRulebook,
+        youtube: exp.youtube || "",
+        bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : "",
+        bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null
+      };
+
+      const qs = (exp.quickStart || "").trim();
+      const rem = (exp.reminders || "").trim();
+
+      return `
+        <details class="expansion">
+          <summary><span class="expansion-name">${expName}</span></summary>
+          <div class="expansion-body">
+            ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
+            ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
+            <div class="expansion-btns">
+              ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook (PDF)</a>` : ""}
+              ${links.bgstats ? `<a class="btnlink expansion-bgstats" data-app="${links.bgstatsApp || ""}" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>` : ""}
+              ${links.youtube ? `<a class="btnlink" href="${links.youtube}" target="_blank" rel="noopener">▶️ How-to-Play</a>` : ""}
+            </div>
+          </div>
+        </details>`;
     }).join("");
+
     return `
       <section id="exp" class="exp">
         <h3>Expansions</h3>
-        <ul>${items}</ul>
+        ${blocks}
       </section>`;
   }
 
@@ -336,7 +397,7 @@
       });
     }
 
-    // BG Stats app-first behavior with web fallback
+    // BG Stats app-first behavior with web fallback (base game)
     const bgbtn = document.getElementById('btn-bgstats');
     bgbtn.addEventListener('click', (e) => {
       if (!links.bgstatsApp) return; // no ID, let the web link open
@@ -346,6 +407,19 @@
       let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
       const a = document.createElement('a'); a.href = appUrl; a.style.display='none'; document.body.appendChild(a); a.click();
       setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
+    });
+
+    // BG Stats deep-link for expansions (if any)
+    document.querySelectorAll('.expansion-bgstats').forEach(el => {
+      const appUrl = el.dataset.app;
+      const webUrl = el.getAttribute('href');
+      if (!appUrl) return; // just use normal web link
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
+        const a = document.createElement('a'); a.href = appUrl; a.style.display='none'; document.body.appendChild(a); a.click();
+        setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
+      });
     });
 
     // Auto open Quick Setup (and respect &action)
