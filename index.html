@@ -407,8 +407,7 @@
             ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
             ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
             <div class="expansion-btns">
-              ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook (PDF)</a>` : ""}
-              ${links.bgstats ? `<a class="btnlink expansion-bgstats" data-app="${links.bgstatsApp || ""}" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>` : ""}
+              ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook</a>` : ""}
               ${links.youtube ? `<a class="btnlink" href="${links.youtube}" target="_blank" rel="noopener">▶️ How-to-Play</a>` : ""}
             </div>
           </div>
