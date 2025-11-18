@@ -230,7 +230,7 @@
     "Time to Panic"
   ],
   "enrich": {
-    "7-wonders":                        { "players":"3–7", "time":"30",     "year":"2010", "bggId":"68448",  "quickStart":"<p>Remove age cards not applicable for the player count.<br><br>Remove all purple cards from Age III. Shuffle them together and draw for player count +2. Shuffle back into Age III.<br><br>Each player starts with 3 coins.<br>Deal 7 cards to each player.</p>", "remindersText": "<p>The last card during the drafting of each age will be discarded.</p>", "expansions": [ {"name": "Armada", "quickStart": "<p>Test<br>Test 3</p>", "reminders": "Test", "rulebook": "", "youtube": "", "bggId": ""}, {"name": "Cities", "quickStart": "Test 2", "reminders": "Test 2", "rulebook": "", "youtube": "", "bggId": ""}]},
+    "7-wonders":                        { "players":"3–7", "time":"30",     "year":"2010", "bggId":"68448",  "quickStart":"<p>Remove age cards not applicable for the player count.<br><br>Remove all purple cards from Age III. Shuffle them together and draw for player count +2. Shuffle back into Age III.<br><br>Each player starts with 3 coins.<br>Deal 7 cards to each player.</p>", "remindersText": "<p>The last card during the drafting of each age will be discarded.</p>", "playerCountSetup": "<p>Remove cards based on player count.</p>", "startingResources": "3 Coins", "turnStructure": "<p><strong>Draft</strong><br><br>Each player takes a card and passes their hand the direction shown on the Age cards.</p>", "commonMistakes": "", "expansions": [ {"name": "Armada", "quickStart": "<p>Test<br>Test 3</p>", "reminders": "Test", "rulebook": "", "youtube": "", "bggId": ""}, {"name": "Cities", "quickStart": "Test 2", "reminders": "Test 2", "rulebook": "", "youtube": "", "bggId": ""}]},
     "7-wonders-duel":                   { "players":"2",   "time":"30",     "year":"2015", "bggId":"173346", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
     "acquire":                          { "players":"2–6", "time":"90",     "year":"1964", "bggId":"5",      "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
     "air-land-sea-critters-at-war":     { "players":"2",   "time":"20",     "year":"2021", "bggId":"304420", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
@@ -441,10 +441,13 @@
     };
 
     
-    // Base-game quick setup / reminders text
-    const quickText     = (g.quickStart || "").trim();
-    // Optional inline reminders text; you can add `remindersText` per game in the JSON later
-    const remindersText = (g.remindersText && String(g.remindersText).trim()) || "";
+       // Base-game quick setup / reference sections
+    const quickText        = (g.quickStart || "").trim();
+    const remindersText    = (g.remindersText && String(g.remindersText).trim()) || "";
+    const playerCountSetup = (g.playerCountSetup || "").trim();
+    const startingResources = (g.startingResources || "").trim();
+    const turnStructure    = (g.turnStructure || "").trim();
+    const commonMistakes   = (g.commonMistakes || "").trim();
 
     const quickBlocksHtml = `
       <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
@@ -464,8 +467,43 @@
           </div>
         </div>
       </details>
-    `;
 
+      <details class="expansion" id="playercount-block">
+        <summary><span class="expansion-name">Player Count Setup</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>")}</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="expansion" id="starting-resources-block">
+        <summary><span class="expansion-name">Starting Resources & Setup Checklist</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(startingResources || "(No starting resources/checklist yet.)").replace(/\n/g,"<br>")}</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="expansion" id="turn-structure-block">
+        <summary><span class="expansion-name">Turn Structure / Phases</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(turnStructure || "(No turn structure summary yet.)").replace(/\n/g,"<br>")}</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="expansion" id="common-mistakes-block">
+        <summary><span class="expansion-name">Common Mistakes</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(commonMistakes || "(No common mistakes noted yet.)").replace(/\n/g,"<br>")}</p>
+          </div>
+        </div>
+      </details>
+    `;
     $app.innerHTML = `
       <article class="detail">
         <figure class="cover"><img src="${links.cover}" alt=""></figure>
