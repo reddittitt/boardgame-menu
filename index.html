@@ -402,32 +402,30 @@
       cover: coverUrl(slug)
     };
 
+    
     // Base-game quick setup / reminders text
-    const quickText      = (g.quickStart || "").trim();
-    const remindersText  = (g.remindersText && String(g.remindersText).trim()) || "";
+    const quickText     = (g.quickStart || "").trim();
+    // Optional inline reminders text; you can add `remindersText` per game in the JSON later
+    const remindersText = (g.remindersText && String(g.remindersText).trim()) || "";
 
     const quickBlocksHtml = `
-      ${quickText ? `
-        <details class="expansion" id="quick-setup-block" open>
-          <summary><span class="expansion-name">Quick Set Up</span></summary>
-          <div class="expansion-body">
-            <div class="expansion-text-block">
-              <p>${quickText.replace(/\n/g,"<br>")}</p>
-            </div>
+      <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
+        <summary><span class="expansion-name">Quick Set Up</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(quickText || "(No quick setup yet.)").replace(/\n/g,"<br>")}</p>
           </div>
-        </details>
-      ` : ""}
+        </div>
+      </details>
 
-      ${remindersText ? `
-        <details class="expansion" id="reminders-block">
-          <summary><span class="expansion-name">Reminders</span></summary>
-          <div class="expansion-body">
-            <div class="expansion-text-block">
-              <p>${remindersText.replace(/\n/g,"<br>")}</p>
-            </div>
+      <details class="expansion" id="reminders-block">
+        <summary><span class="expansion-name">Reminders</span></summary>
+        <div class="expansion-body">
+          <div class="expansion-text-block">
+            <p>${(remindersText || "(No reminders yet.)").replace(/\n/g,"<br>")}</p>
           </div>
-        </details>
-      ` : ""}
+        </div>
+      </details>
     `;
 
     $app.innerHTML = `
