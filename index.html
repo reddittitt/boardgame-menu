@@ -398,16 +398,15 @@
     }
 
     // BG Stats app-first behavior with web fallback (base game)
-    const bgbtn = document.getElementById('btn-bgstats');
-    bgbtn.addEventListener('click', (e) => {
-      if (!links.bgstatsApp) return; // no ID, let the web link open
-      e.preventDefault();
-      const appUrl = links.bgstatsApp;
-      const webUrl = links.bgstats;
-      let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
-      const a = document.createElement('a'); a.href = appUrl; a.style.display='none'; document.body.appendChild(a); a.click();
-      setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
-    });
+const bgbtn = document.getElementById('btn-bgstats');
+bgbtn.addEventListener('click', (e) => {
+  // If we have an app deep link, use it and DO NOT fall back to web
+  if (links.bgstatsApp) {
+    e.preventDefault();
+    window.location.href = links.bgstatsApp;
+  }
+  // else: no app link available, let the normal href (web URL) behave as-is
+});
 
     // BG Stats deep-link for expansions (if any)
     document.querySelectorAll('.expansion-bgstats').forEach(el => {
