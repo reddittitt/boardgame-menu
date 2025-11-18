@@ -41,10 +41,29 @@
   .sub{color:var(--muted);font-size:.85rem;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
   /* Detail view */
-  .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:grid;grid-template-columns:260px 1fr;gap:16px}
+  .detail{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:16px;
+  }
+
   /* Show full cover (no crop) */
-  .cover{border-radius:12px;overflow:hidden;background:#0001}
-  .cover img{width:100%;height:auto;display:block;object-fit:contain}
+  .cover{
+    border-radius:12px;
+    overflow:hidden;
+    background:#0001;
+    justify-self:center;     /* center the cover art in its column */
+  }
+  .cover img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;      /* show full image, no cropping */
+  }
   .title{margin:.2rem 0 .25rem;font-size:1.2rem;line-height:1.2}
   .byline{color:var(--muted);font-size:.92rem;margin:0 0 10px}
   .actions{display:flex;flex-direction:column;gap:10px;margin-top:6px}
@@ -249,31 +268,49 @@
   const BGSTATS_ID_PREFIX_APP  = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId=';
   const BGSTATS_ID_PREFIX_WEB  = 'https://bgstats.app/bgg/';
   const BGSTATS_SLUG_PREFIX_WEB = 'https://bgstats.app/game/';
-  const extractBggId = (urlOrId) => { if (!urlOrId) return ''; const m = String(urlOrId).match(/(\d{2,})/); return m ? m[1] : ''; };
+  const extractBggId = (urlOrId) => {
+    if (!urlOrId) return '';
+    const m = String(urlOrId).match(/(\d{2,})/);
+    return m ? m[1] : '';
+  };
   const bgstatsUrl = (slug) => `${BGSTATS_SLUG_PREFIX_WEB}${slug}`;
 
   /* data */
   const RAW = JSON.parse(document.getElementById('games-json').textContent);
-  const slugify = s => s.toLowerCase().replace(/[:’'"]/g,"").replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+  const slugify = s => s.toLowerCase()
+    .replace(/[:’'"]/g,"")
+    .replace(/&/g,"and")
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/(^-|-$)/g,"");
   const qp = n => new URL(location.href).searchParams.get(n)||"";
-  const basePath=()=>location.pathname.replace(/\/index\.html$/,'').replace(/\/$/,'');
-  const rulebookUrl=s=>`${basePath()}/rulebooks/${s}.pdf`;
-  const remindersUrl=s=>`${basePath()}/reminders/${s}.html`;
-  function coverUrl(slug){ const bp=basePath(); return `${bp}/covers/${slug}.webp`; } // full cover shown (no crop)
+  const basePath = () =>
+    location.pathname
+      .replace(/\/index\.html$/,'')
+      .replace(/\/$/,'');
+  const rulebookUrl = s => `${basePath()}/rulebooks/${s}.pdf`;
+  const remindersUrl = s => `${basePath()}/reminders/${s}.html`;
+  function coverUrl(slug){
+    const bp = basePath();
+    return `${bp}/covers/${slug}.webp`;  // full cover shown (no crop)
+  }
 
-  const DATA={};
-  (RAW.names||[]).forEach(name=>{
+  const DATA = {};
+  (RAW.names || []).forEach(name => {
     const slug = slugify(name);
-    DATA[slug] = { name, slug, ...(RAW.enrich?.[slug]||{}) };
+    DATA[slug] = { name, slug, ...(RAW.enrich?.[slug] || {}) };
   });
 
   const $app = document.getElementById('app');
 
   function listRow(g){
-    const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
+    const subbits = [g.players, g.time ? `${g.time} min` : null, g.year]
+      .filter(Boolean)
+      .join(" • ");
     return `
       <a class="card" href="#/game/${g.slug}">
-        <div class="thumb"><img loading="lazy" src="${coverUrl(g.slug)}" onerror="this.parentNode.style.display='none'"></div>
+        <div class="thumb">
+          <img loading="lazy" src="${coverUrl(g.slug)}" onerror="this.parentNode.style.display='none'">
+        </div>
         <div class="metaWrap">
           <h2>${g.name}</h2>
           <p class="sub">${subbits}</p>
@@ -282,14 +319,16 @@
   }
 
   function renderList(filter=""){
-    const f=(filter||"").toLowerCase();
-    const games=Object.values(DATA).filter(g=>!f||g.name.toLowerCase().includes(f)).sort((a,b)=>a.name.localeCompare(b.name));
+    const f = (filter || "").toLowerCase();
+    const games = Object.values(DATA)
+      .filter(g => !f || g.name.toLowerCase().includes(f))
+      .sort((a,b) => a.name.localeCompare(b.name));
     $app.innerHTML = `
       <input id="search" placeholder="Search your collection…" aria-label="Search games" value="${filter.replace(/"/g,'&quot;')}">
       <section class="grid">
         ${games.map(listRow).join("")}
       </section>`;
-    document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));
+    document.getElementById('search').addEventListener('input', e => renderList(e.target.value));
   }
 
   function expansionSlug(name){ return slugify(name); }
@@ -319,8 +358,8 @@
         bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null
       };
 
-      const qs = (exp.quickStart || "").trim();
-      const rem = (exp.reminders || "").trim();
+      const qs  = (exp.quickStart || "").trim();
+      const rem = (exp.reminders  || "").trim();
 
       return `
         <details class="expansion">
@@ -346,8 +385,13 @@
 
   function renderDetail(slug, action="quicksetup"){
     const g = DATA[slug];
-    if(!g){ $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`; return; }
-    const subbits=[g.players,g.time?`${g.time} min`:null,g.year].filter(Boolean).join(" • ");
+    if(!g){
+      $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`;
+      return;
+    }
+    const subbits = [g.players, g.time ? `${g.time} min` : null, g.year]
+      .filter(Boolean)
+      .join(" • ");
     const id = extractBggId(g.bggId);
     const links = {
       youtube: g.youtube || "",
@@ -358,6 +402,34 @@
       cover: coverUrl(slug)
     };
 
+    // Base-game quick setup / reminders text
+    const quickText      = (g.quickStart || "").trim();
+    const remindersText  = (g.remindersText && String(g.remindersText).trim()) || "";
+
+    const quickBlocksHtml = `
+      ${quickText ? `
+        <details class="expansion" id="quick-setup-block" open>
+          <summary><span class="expansion-name">Quick Set Up</span></summary>
+          <div class="expansion-body">
+            <div class="expansion-text-block">
+              <p>${quickText.replace(/\n/g,"<br>")}</p>
+            </div>
+          </div>
+        </details>
+      ` : ""}
+
+      ${remindersText ? `
+        <details class="expansion" id="reminders-block">
+          <summary><span class="expansion-name">Reminders</span></summary>
+          <div class="expansion-body">
+            <div class="expansion-text-block">
+              <p>${remindersText.replace(/\n/g,"<br>")}</p>
+            </div>
+          </div>
+        </details>
+      ` : ""}
+    `;
+
     $app.innerHTML = `
       <article class="detail">
         <figure class="cover"><img src="${links.cover}" alt=""></figure>
@@ -365,50 +437,54 @@
           <h2 class="title">${g.name}</h2>
           <p class="byline">${subbits || ""}</p>
           <div class="actions">
-            <!-- REORDERED BUTTONS -->
+            <!-- Quick Set Up / Reminders block at the top -->
+            <section id="qs" class="exp">
+              ${quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>"}
+            </section>
+
+            <!-- Expansions block (unchanged, still collapsible per expansion) -->
+            ${renderExpansions(g)}
+
+            <!-- Buttons in new order: Rulebook, BG Stats, How-to-Play, Share -->
             <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook (PDF)</a>
             <a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
-            <a class="btnlink" id="btn-youtube" ${links.youtube?`href="${links.youtube}" target="_blank" rel="noopener"`:""}>▶️ How-to-Play</a>
+            <a class="btnlink" id="btn-youtube" ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>▶️ How-to-Play</a>
 
-            <section id="qs" class="qs"><pre>${(g.quickStart||"").trim()||"(No quick setup yet.)"}</pre></section>
-
-            <button class="btn" id="btn-exp" ${Array.isArray(g.expansions)&&g.expansions.length? "":"disabled"}>Expansions</button>
-            ${renderExpansions(g)}
             <button class="btn" id="share">Share / Copy Link</button>
           </div>
         </div>
       </article>
       <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
 
-    const qs = document.getElementById('qs');
-    const exp = document.getElementById('exp');
-
-    document.getElementById('btn-quick').addEventListener('click', () => qs.classList.toggle('open'));
+    // Share button
     document.getElementById('share').addEventListener('click', async () => {
       const u = location.href;
-      try { if (navigator.share) { await navigator.share({title:`${g.name}`, text:`Quick Menu — ${g.name}`, url:u}); return; } } catch(e){}
-      try { await navigator.clipboard.writeText(u); alert("Link copied"); } catch(e){ prompt("Copy link:", u); }
+      try {
+        if (navigator.share) {
+          await navigator.share({title:`${g.name}`, text:`Quick Menu — ${g.name}`, url:u});
+          return;
+        }
+      } catch(e){}
+      try {
+        await navigator.clipboard.writeText(u);
+        alert("Link copied");
+      } catch(e){
+        prompt("Copy link:", u);
+      }
     });
 
-    // Expansions panel toggle
-    const expBtn = document.getElementById('btn-exp');
-    if (expBtn && exp) {
-      exp.style.display = "none";
-      expBtn.addEventListener('click', () => {
-        exp.style.display = exp.style.display === "none" ? "block" : "none";
+    // BG Stats app-first behavior (base game)
+    const bgbtn = document.getElementById('btn-bgstats');
+    if (bgbtn) {
+      bgbtn.addEventListener('click', (e) => {
+        // If we have an app deep link, use it and DO NOT fall back to web
+        if (links.bgstatsApp) {
+          e.preventDefault();
+          window.location.href = links.bgstatsApp;
+        }
+        // else: no app link available, let the normal href (web URL) behave as-is
       });
     }
-
-    // BG Stats app-first behavior with web fallback (base game)
-const bgbtn = document.getElementById('btn-bgstats');
-bgbtn.addEventListener('click', (e) => {
-  // If we have an app deep link, use it and DO NOT fall back to web
-  if (links.bgstatsApp) {
-    e.preventDefault();
-    window.location.href = links.bgstatsApp;
-  }
-  // else: no app link available, let the normal href (web URL) behave as-is
-});
 
     // BG Stats deep-link for expansions (if any)
     document.querySelectorAll('.expansion-bgstats').forEach(el => {
@@ -418,14 +494,17 @@ bgbtn.addEventListener('click', (e) => {
       el.addEventListener('click', (e) => {
         e.preventDefault();
         let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
-        const a = document.createElement('a'); a.href = appUrl; a.style.display='none'; document.body.appendChild(a); a.click();
+        const a = document.createElement('a');
+        a.href = appUrl;
+        a.style.display='none';
+        document.body.appendChild(a);
+        a.click();
         setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
       });
     });
 
-    // Auto open Quick Setup (and respect &action)
-    const actionLower = (action||"").toLowerCase();
-    if (actionLower === "quicksetup" || !actionLower) qs.classList.add('open');
+    // Respect &action param (for things like ?action=youtube)
+    const actionLower = (action || "").toLowerCase();
     if (actionLower && actionLower !== "quicksetup") {
       const map = { youtube:"#btn-youtube" };
       const sel = map[actionLower];
@@ -438,25 +517,29 @@ bgbtn.addEventListener('click', (e) => {
     if (q){
       const want = q.trim();
       const slugged = slugify(want);
-      const a = (qp("action")||"quicksetup").toLowerCase();
+      const a = (qp("action") || "quicksetup").toLowerCase();
       location.replace(`#\/game\/${slugged}?action=${encodeURIComponent(a)}`);
       return true;
     }
     return false;
   }
+
   function parseHash(){
-    const h=location.hash||"#/";
+    const h = location.hash || "#/";
     const [path,q] = h.slice(2).split("?");
-    const parts=(path||"").split("/");
-    const params=new URLSearchParams(q||"");
-    if (parts[0]==="game" && parts[1]) return {route:"detail", slug:parts[1].toLowerCase(), action:(params.get("action")||"quicksetup").toLowerCase()};
+    const parts = (path || "").split("/");
+    const params = new URLSearchParams(q || "");
+    if (parts[0] === "game" && parts[1])
+      return {route:"detail", slug:parts[1].toLowerCase(), action:(params.get("action") || "quicksetup").toLowerCase()};
     return {route:"list"};
   }
+
   function render(){
     if (normalizeIncoming()) return;
     const {route, slug, action} = parseHash();
-    route==="detail" ? renderDetail(slug, action) : renderList("");
+    route === "detail" ? renderDetail(slug, action) : renderList("");
   }
+
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", render);
 
