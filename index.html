@@ -231,11 +231,132 @@
     "Fire Tower"
   ],
   "enrich": {
-    "7-wonders":                        { "players":"3–7", "time":"30",     "year":"2010", "bggId":"68448",  "quickStart":"<p>Remove age cards not applicable for the player count.<br><br>Remove all purple cards from Age III. Shuffle them together and draw for player count +2. Shuffle back into Age III.<br><br>Each player starts with 3 coins.<br>Deal 7 cards to each player.</p>", "remindersText": "<p>The last card during the drafting of each age will be discarded.</p>", "playerCountSetup": "<p>Remove cards based on player count.</p>", "startingResources": "3 Coins", "turnStructure": "<p><strong>Draft</strong><br><br>Each player takes a card and passes their hand the direction shown on the Age cards.</p>", "commonMistakes": "", "expansions": [ {"name": "Armada", "quickStart": "<p>Test<br>Test 3</p>", "reminders": "Test", "rulebook": "", "youtube": "", "bggId": ""}, {"name": "Cities", "quickStart": "Test 2", "reminders": "Test 2", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "7-wonders-duel":                   { "players":"2",   "time":"30",     "year":"2015", "bggId":"173346", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "acquire":                          { "players":"2–6", "time":"90",     "year":"1964", "bggId":"5",      "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "air-land-sea-critters-at-war":     { "players":"2",   "time":"20",     "year":"2021", "bggId":"304420", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "archduke":                         { "players":"*",   "time":"*",      "year":"*",    "bggId":"",       "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
+   "7-wonders": {
+  "players": "3–7",
+  "time": "30",
+  "year": "2010",
+  "bggId": "68448",
+
+  "quickStart": "- Give each player 3 coins.\n- Deal 7 Age I cards to each player.\n- Shuffle Guild cards (purple), draw player count +2, shuffle into Age III.\n- Give each player a Wonder board (A/B side as agreed).",
+
+  "startingResources": "- Wonder board.\n- 3 coins.\n- 7 starting cards.\n- Any starting resource shown on your wonder.",
+
+  "remindersText": "- Draft 1 card, play it, pass the remaining hand.\n- You may build, sell for 3 coins, or build a wonder stage.\n- Military resolves at the end of each Age.\n- Resources from neighbors may be purchased.",
+
+  "playerCountSetup": "- 3p: use only 3-player Age decks.\n- 7p: full decks.\n- No cards removed beyond the printed player icon rules.",
+
+  "turnStructure": "- Choose a card.\n- Play/Build/Sell.\n- Pass hand.\n- After 6 rounds, resolve Military.\n- Repeat for Age II → Age III.",
+
+  "commonMistakes": "- Forgetting to check if a card is already built (Free builds via chaining).\n- Thinking resources “carry over” — they do not.\n- Miscounting Military shields.",
+
+  "expansions": [
+    {
+      "name": "Cities",
+      "quickStart": "- Add black cards into each Age deck.\n- Give each player 6 coins instead of 3.\n- Add Diplomacy and Debt tokens.",
+      "reminders": "- Diplomacy avoids conflict for that Age.\n- Debt must be paid at end of Age; cannot go negative.",
+      "rulebook": "",
+      "youtube": "",
+      "bggId": "108745"
+    },
+    {
+      "name": "Armada",
+      "quickStart": "- Give each player a naval board.\n- Add Island and Armada cards to Age decks.\n- Add naval track cubes.",
+      "reminders": "- Naval combat happens across the whole table.\n- Islands trigger bonuses when discovered.",
+      "rulebook": "",
+      "youtube": "",
+      "bggId": "266192"
+    }
+  ]
+},
+"7-wonders-duel": {
+  "players": "2",
+  "time": "30",
+  "year": "2015",
+  "bggId": "173346",
+
+  "quickStart": "- Draft 4 wonders (2 picks each) using the snake method.\n- Place the Age I card pyramid.\n- Each player starts with 7 coins.\n- Place Conflict pawn in the center of the track.",
+
+  "startingResources": "- 7 coins.\n- 2 Wonders.\n- No starting production unless wonder provides it.",
+
+  "remindersText": "- You win by Military, Science, or points.\n- Face-down cards in the layout flip when revealed.\n- The Conflict pawn moves instantly when shields are gained.",
+
+  "playerCountSetup": "- Only 2 players.\n- No adjustments.",
+
+  "turnStructure": "- Take a card from the structure.\n- Build, discard for coins, or build a Wonder.\n- Replace structure when cards become uncovered.",
+
+  "commonMistakes": "- Forgetting that building a wonder lets you take an extra turn.\n- Ignoring Science symbols — 6 different symbols wins immediately.\n- Miscounting Military thresholds.",
+
+  "expansions": [
+    {
+      "name": "Pantheon",
+      "quickStart": "- Add Divinity cards.\n- Add new tokens and the Pantheon board above the center.",
+      "reminders": "- Divinities offer powerful one-time abilities.\n- Offering tokens reduce summon cost.",
+      "rulebook": "",
+      "youtube": "",
+      "bggId": "199786"
+    }
+  ]
+},
+"acquire": {
+  "players": "2–6",
+  "time": "90",
+  "year": "1964",
+  "bggId": "5",
+
+  "quickStart": "- Give each player starting money (varies by edition).\n- Place tiles facedown in a draw pool.\n- Each player draws 6 tiles.\n- Prepare stock certificates for all hotel chains.",
+
+  "startingResources": "- 6 tiles.\n- Starting cash.\n- Player marker (if edition has turn markers).",
+
+  "remindersText": "- On your turn: place a tile → form/merge hotels → buy stocks.\n- Mergers reward majority & minority shareholders.\n- Game ends when a chain is safe or all tiles placed.",
+
+  "playerCountSetup": "- 2–6 players use the same components.\n- Stock piles run out faster at high counts.",
+
+  "turnStructure": "- Place a tile.\n- Resolve new chain or merger.\n- Buy up to 3 stocks.\n- Draw a new tile.",
+
+  "commonMistakes": "- Not watching who has majority before triggering mergers.\n- Ignoring early chain growth for safe hotels.\n- Forgetting that stock supply is limited.",
+
+  "expansions": []
+},
+"air-land-sea-critters-at-war": {
+  "players": "2",
+  "time": "20",
+  "year": "2021",
+  "bggId": "304420",
+
+  "quickStart": "- Shuffle all 18 cards.\n- Deal 6 to each player.\n- Randomly choose 3 theaters to play face up.\n- Place the other 3 facedown as unused.",
+
+  "startingResources": "- 6 starting cards.\n- No other resources.",
+
+  "remindersText": "- You may deploy, flip (if allowed), or withdraw.\n- Ties favor the last player who played a card.\n- Each player’s deck is identical.",
+
+  "playerCountSetup": "- Only 2 players.\n- No scaling.",
+
+  "turnStructure": "- Play a card.\n- Resolve its effect.\n- Continue until both players pass or hands empty.\n- Score each Theatre.",
+
+  "commonMistakes": "- Forgetting timing windows on effects.\n- Under-using the withdrawal option to deny big points.\n- Misplacing cards in the wrong theater.",
+
+  "expansions": []
+},
+"archduke": {
+  "players": "2–4",
+  "time": "30–60",
+  "year": "*",
+  "bggId": "",
+
+  "quickStart": "- Give each player a player board.\n- Shuffle and deal starting cards/resources per rulebook.\n- Set central board/market/offers.\n- Place turn marker and round tracker.",
+
+  "startingResources": "- Starting hand.\n- Starting coins/resources.\n- Player markers.",
+
+  "remindersText": "- Core play is card selection and action resolution.\n- Most effects interact with timing, resource gains, or area control.",
+
+  "playerCountSetup": "- 2p: remove a few market cards/spaces.\n- 3–4p: full setup.",
+
+  "turnStructure": "- Take an action.\n- Resolve card/board effects.\n- Refresh hand/market as needed.\n- End round when all players have acted.",
+
+  "commonMistakes": "- Forgetting income phases.\n- Not chaining effects efficiently.\n- Over-extending before establishing an economy.",
+
+  "expansions": []
+},
     "ark-nova":                         { "players": "1–4","time": "120–180","year": "2021","bggId": "342942",
                                           "quickStart": "- Give zoo map + action cards\n- Set action cards in slots 1–5\n- Deal starting hand of zoo cards\n- Reveal card display\n- Set conservation projects",
                                           "startingResources": "- Zoo map\n- 5 action cards in slots 1–5\n- Starting money\n- 8 cubes\n- Starting cards",
@@ -250,18 +371,227 @@
                                               "rulebook": "",
                                               "youtube": "",
                                               "bggId": "368966"}]},
-    "azul":                             { "players":"2–4", "time":"30–45",  "year":"2017", "bggId":"230802", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "backgammon":                       { "players":"2",   "time":"30",     "year":"*",    "bggId":"11951",  "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "brass-birmingham":                 { "players":"2–4", "time":"90–150", "year":"2018", "bggId":"224517", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
+  "azul": {
+  "players": "2–4",
+  "time": "30–45",
+  "year": "2017",
+  "bggId": "230802",
+
+  "quickStart": "- Give each player a player board.\n- Place factory displays in center (5/7/9 based on player count).\n- Fill each factory with 4 random tiles.\n- Place starting player marker in center.",
+
+  "startingResources": "- Player board.\n- No starting tiles.\n- Scoring marker at 0.",
+
+  "remindersText": "- Take all tiles of one color from a factory OR center.\n- Excess go to center.\n- Tiles slide left once pattern line is filled.\n- Only complete lines score.",
+
+  "playerCountSetup": "- 2p → 5 factories.\n- 3p → 7 factories.\n- 4p → 9 factories.",
+
+  "turnStructure": "- Draft tiles.\n- Once all taken → tile placement.\n- Scoring.\n- Refill factories.",
+
+  "commonMistakes": "- Forgetting negative points for floor line.\n- Thinking you can place multiple tiles into the same pattern line in the same round — you can't.\n- Incorrectly placing tiles on the mosaic (only the matching column).",
+
+  "expansions": []
+},
+"backgammon": {
+  "players": "2",
+  "time": "30",
+  "year": "*",
+  "bggId": "11951",
+
+  "quickStart": "- Place checkers in standard starting positions.\n- Each player rolls one die; higher die goes first using both dice.\n- Movement direction is opposite for players.",
+
+  "startingResources": "- 15 checkers each.\n- One doubling cube.",
+  
+  "remindersText": "- You must use both dice if legal.\n- Doubles allow 4 moves.\n- A blot (single piece) can be hit.\n- You must enter from the bar before any other move.",
+
+  "playerCountSetup": "- Always 2 players—no changes.",
+
+  "turnStructure": "- Roll dice.\n- Move checkers.\n- Bear off when all 15 are in home quadrant.",
+
+  "commonMistakes": "- Not entering pieces from the bar ASAP.\n- Illegal moves (both dice must be played if possible).\n- Misreading direction of movement.",
+
+  "expansions": []
+},
+    "brass-birmingham": {
+  "players": "2–4",
+  "time": "90–150",
+  "year": "2018",
+  "bggId": "224517",
+
+  "quickStart": "- Give each player starting cards, 17 pounds, and player tokens.\n- Place canals on board.\n- Randomize turn order.\n- Reveal demand tiles.",
+
+  "startingResources": "- 17 pounds.\n- Full deck of industry cards.\n- Player markers.\n- Canal boats (for turn order).",
+
+  "remindersText": "- Every action requires discarding a card.\n- Loans do NOT require a card.\n- Coal must be connected; iron does not.\n- Overbuild only when rules allow.",
+
+  "playerCountSetup": "- 2p: Use 2p side of board.\n- 3–4p: Standard board.\n- Industry tiles removed depending on player count.",
+
+  "turnStructure": "- Each round: 2 actions per player.\n- Income + upkeep.\n- Move turn-order based on spending.\n- Era change after canal phase.",
+
+  "commonMistakes": "- Confusing iron vs coal requirements.\n- Forgetting to flip tiles when conditions met.\n- Overbuilding illegally.",
+
+  "expansions": []
+},
     "candy-land-bluey":                 { "players":"*",   "time":"*",      "year":"*",    "bggId":"",       "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "century-golem-edition":            { "players":"2–5", "time":"30–45",  "year":"2017", "bggId":"232832", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "chess":                            { "players":"2",   "time":"30–60",  "year":"*",    "bggId":"171",    "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "chronicles-of-crime":              { "players":"1–4", "time":"60–90" , "year":"2018", "bggId":"239188", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "cover-your-assets":                { "players":"2–6", "time":"20–40",  "year":"2008", "bggId":"48726",  "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "dune-imperium-uprising":           { "players":"1–6", "time":"60–120", "year":"2023", "bggId":"386211", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "dutch-blitz":                      { "players":"2–4", "time":"15",     "year":"1960", "bggId":"1239",   "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "the-fellowship-of-the-ring-trick-taking-game": { "players":"*", "time":"*", "year":"*", "bggId":"",     "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "five-crowns":                      { "players":"1–7", "time":"20–45",  "year":"1996", "bggId":"5011",   "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
+    "century-golem-edition": {
+  "players": "2–5",
+  "time": "30–45",
+  "year": "2017",
+  "bggId": "232832",
+
+  "quickStart": "- Give each player 2 yellow crystals.\n- Deal 6 merchant cards face up.\n- Flip 5 point cards.\n- Place bowls of colored crystals within reach.",
+
+  "startingResources": "- 2 yellow crystals.\n- Basic starting card (Upgrade).",
+
+  "remindersText": "- On your turn: Play → Rest → Acquire.\n- You may always upgrade crystals using upgrade cards.\n- Merchants stay in front of you permanently.",
+
+  "playerCountSetup": "- 2–5 players share the same setup.\n- Remove a few point cards at 2p.",
+
+  "turnStructure": "- Play a merchant card.\n- Rest to pick up discard pile.\n- Buy a new merchant.\n- Claim a point card.",
+
+  "commonMistakes": "- Forgetting you can take a card AND slide crystals onto leftmost empty card.\n- Not using upgrade actions efficiently.\n- Missing color conversion chains.",
+
+  "expansions": []
+},
+"chess": {
+  "players": "2",
+  "time": "30–60",
+  "year": "*",
+  "bggId": "171",
+
+  "quickStart": "- White moves first.\n- Set pieces in standard arrangement.\n- Pawns forward, rooks in corners, knights next, bishops next, queen on color.",
+
+  "startingResources": "- 16 pieces per player.\n- No other resources.",
+
+  "remindersText": "- Castling requires: no moved rook/king, path clear, no checks.\n- En passant only works immediately.\n- Promotion happens on final rank.",
+
+  "playerCountSetup": "- Always 2 players.",
+
+  "turnStructure": "- One move per turn.\n- Move must not leave king in check.\n- Checkmate ends the game.",
+
+  "commonMistakes": "- Illegal castling through check.\n- Forgetting en passant timing.\n- Leaving pieces hanging unnecessarily.",
+
+  "expansions": []
+},
+  "chronicles-of-crime": {
+  "players": "1–4",
+  "time": "60–90",
+  "year": "2018",
+  "bggId": "239188",
+
+  "quickStart": "- Download the app and select scenario.\n- Lay out location boards.\n- Place character cards face-up.\n- Prepare evidence category cards.\n- Scan starting cards as directed.",
+
+  "startingResources": "- Crime board.\n- Evidence cards.\n- Character/location decks.\n- Device for scanning QR codes.",
+
+  "remindersText": "- Time passes each time you travel or question.\n- Scan EVERYTHING: people, places, items.\n- VR mode costs time.\n- Evidence categories help sort leads.",
+
+  "playerCountSetup": "- 1–4 players; no component changes.\n- Cooperative — share scanning decision making.",
+
+  "turnStructure": "- Scan a location → investigate.\n- Scan people → question.\n- Scan evidence → analyze.\n- Follow leads until solution is formed.",
+
+  "commonMistakes": "- Not tracking time penalties.\n- Missing evidence due to not scanning background scenes.\n- Questioning characters about irrelevant items.",
+
+  "expansions": []
+},
+    "cover-your-assets": {
+  "players": "2–6",
+  "time": "20–40",
+  "year": "2008",
+  "bggId": "48726",
+
+  "quickStart": "- Shuffle and deal 4 cards to each player.\n- Create a draw pile.\n- Youngest player starts.",
+
+  "startingResources": "- 4 cards.\n- Empty stack for asset piles.",
+
+  "remindersText": "- Form asset sets using matching pairs OR pairs with a wild.\n- To steal: match top-set type and reveal same value.\n- Defender may counter with matching value.",
+
+  "playerCountSetup": "- No component changes.\n- More players = more stealing opportunities.",
+
+  "turnStructure": "- Draw 1.\n- Play a pair OR attempt to steal.\n- Refill hand to 4 when below.",
+
+  "commonMistakes": "- Forgetting you MUST play a pair if able.\n- Misplaying wild cards.\n- Thinking you can steal buried sets (only top is stealable).",
+
+  "expansions": []
+},
+"dune-imperium-uprising": {
+  "players": "1–6",
+  "time": "60–120",
+  "year": "2023",
+  "bggId": "386211",
+
+  "quickStart": "- Give each player leader board + starting deck.\n- Give 1 troop in garrison, 1 water, 1 spice.\n- Shuffle Imperium deck.\n- Place conflict deck: 3 cards per phase.\n- Place starting agents on player boards.",
+
+  "startingResources": "- 1 troop.\n- 1 water.\n- 1 spice.\n- Starting 10-card deck.",
+
+  "remindersText": "- Intrigue cards may be used in multiple phases.\n- Combat happens *after* reveals.\n- Some spaces require water.\n- Imperium row is ever-changing — plan around cycling.",
+
+  "playerCountSetup": "- 2p requires House Hagal bot.\n- 1p uses full solo rules.\n- 5–6p uses expanded board.",
+
+  "turnStructure": "- Agent turn: place agent → resolve space.\n- Reveal: play reveal effects + buy.\n- Combat: resolve strength + rewards.\n- Cleanup.",
+
+  "commonMistakes": "- Forgetting to gain persuasion from cards.\n- Miscounting combat strength.\n- Ignoring water chokepoints.",
+
+  "expansions": []
+},
+"dutch-blitz": {
+  "players": "2–4",
+  "time": "15",
+  "year": "1960",
+  "bggId": "1239",
+
+  "quickStart": "- Each player gets a Blitz pile of 10 cards (face-down).\n- Build Woodpile of 3 cards face-up.\n- Hold remaining cards as Stock pile for flipping.",
+
+  "startingResources": "- 10-card Blitz pile.\n- 3 Woodpile cards.\n- Stock pile.",
+  
+  "remindersText": "- Build center piles ascending 1→10, matching color.\n- Speed race: no turns.\n- Blitz cards score double.",
+
+  "playerCountSetup": "- 2 player: more center space.\n- 3–4 player: ensure table space.",
+
+  "turnStructure": "- No turns.\n- Play to center.\n- Flip Stock pile 3-at-a-time (or 1 if using variant).",
+
+  "commonMistakes": "- Incorrectly stacking colors.\n- Hiding Woodpile cards.\n- Forgetting to announce Blitz when empty.",
+
+  "expansions": []
+},
+"the-fellowship-of-the-ring-trick-taking-game": {
+  "players": "2–5",
+  "time": "20–30",
+  "year": "*",
+  "bggId": "",
+
+  "quickStart": "- Shuffle and deal full hand to players.\n- Reveal “Journey” card/goal if using variants.\n- Determine starting player at random.",
+
+  "startingResources": "- Full hand of cards.\n- Any location/quest cards (if variant used).",
+
+  "remindersText": "- Follow suit when possible.\n- Trump rules depend on scenario/quest.\n- Highest valid card wins trick.",
+
+  "playerCountSetup": "- 2–5 players with same deck.\n- Remove certain cards for 2p variant if rulebook specifies.",
+
+  "turnStructure": "- Lead card.\n- Others follow.\n- Resolve trick.\n- Apply quest/bonus effects.",
+
+  "commonMistakes": "- Forgetting mandatory follow-suit.\n- Misreading trump priority.\n- Forgetting ongoing quest effects.",
+
+  "expansions": []
+},
+"five-crowns": {
+  "players": "1–7",
+  "time": "20–45",
+  "year": "1996",
+  "bggId": "5011",
+
+  "quickStart": "- Round 1 starts with 3 cards each, increasing to 13.\n- Turn up the top card of the discard pile.\n- First round: 3s are wild; each round wild matches card count.",
+
+  "startingResources": "- Starting hand (3–13 depending on round).",
+
+  "remindersText": "- Goal: form runs and sets, then go out.\n- One draw + one discard each turn.\n- Wilds change every round.\n- You get one extra play after someone goes out.",
+
+  "playerCountSetup": "- No changes; scales to 7 players.",
+
+  "turnStructure": "- Draw from deck or discard.\n- Play runs/sets if going out.\n- Discard to end turn.",
+
+  "commonMistakes": "- Forgetting wild value changes.\n- Thinking you can go out without discarding — you must discard.\n- Overlooking singletons left in hand.",
+
+  "expansions": []
+},
     "fire-tower":                       { "players": "2–4","time": "15–30", "year": "2019","bggId": "260835",
                                           "quickStart": "- Place board\n- Place fire at center\n- Give each player 1 tower + matching deck\n- Shuffle decks; draw 5 cards\n- Place wind marker per initial card",
                                           "startingResources": "- 1 deck of cards\n- 1 tower piece\n- 5 cards in hand",
@@ -276,14 +606,147 @@
                                               "rulebook": "",
                                               "youtube": "",
                                               "bggId": "276224"}]},
-    "for-sale":                         { "players":"3–6", "time":"20",     "year":"1997", "bggId":"172",    "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "forbidden-island":                 { "players":"2–4", "time":"30",     "year":"2010", "bggId":"65244",  "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "foundations-of-metropolis":        { "players":"*",   "time":"*",      "year":"*",    "bggId":"",       "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
+   "for-sale": {
+  "players": "3–6",
+  "time": "20",
+  "year": "1997",
+  "bggId": "172",
+
+  "quickStart": "- Separate property deck (1–30) and checks deck.\n- Each player gets starting money (depends on player count).\n- Start Auction Phase: reveal as many properties as players.",
+
+  "startingResources": "- Starting cash.\n- No properties yet.",
+
+  "remindersText": "- Phase 1: Bid OR pass.\n- Phase 2: Sell properties via sealed bids.\n- Highest property earns highest check.",
+
+  "playerCountSetup": "- 3–6 players: remove highest/lowest property cards depending on count.",
+
+  "turnStructure": "- Auction Phase → pass/bid.\n- Check Phase → play property face-down.\n- Highest property wins highest check.",
+
+  "commonMistakes": "- Overpaying early properties.\n- Forgetting unused bid returns half the money.\n- Misjudging the check distribution.",
+
+  "expansions": []
+},
+  "forbidden-island": {
+  "players": "2–4",
+  "time": "30",
+  "year": "2010",
+  "bggId": "65244",
+
+  "quickStart": "- Build island grid with 24 tiles.\n- Give each player 2 treasure cards.\n- Set water meter based on difficulty.\n- Place treasures beside island.\n- Assign roles randomly.",
+
+  "startingResources": "- 2 treasure cards.\n- Player pawn.\n- Role card with special ability.",
+
+  "remindersText": "- On your turn: 3 actions → draw 2 treasure → flood cards.\n- Shore up to prevent sinking.\n- Must collect 4 of each treasure and escape.",
+
+  "playerCountSetup": "- 2p: Slightly easier; roles matter more.\n- 3–4p: Standard challenge.",
+
+  "turnStructure": "- 3 actions.\n- Draw 2 treasure cards.\n- Draw flood cards based on Water Level.",
+
+  "commonMistakes": "- Not curing sinks early.\n- Holding too many cards (hand limit 5).\n- Forgetting Water Level increases.",
+
+  "expansions": []
+},
+    "foundations-of-metropolis": {
+  "players": "2–4",
+  "time": "30–60",
+  "year": "*",
+  "bggId": "",
+
+  "quickStart": "- Lay out main board.\n- Give each player starting resources and cards per rulebook.\n- Shuffle supply/market decks.\n- Place starting buildings.",
+
+  "startingResources": "- Starting coins.\n- Starting resource tokens.\n- Starting hand.",
+
+  "remindersText": "- Core loop is building, upgrading, and managing economy.\n- Most buildings require adjacency or resource payments.\n- Scoring often tied to placement patterns.",
+
+  "playerCountSetup": "- 2p: remove some market tiles/cards.\n- 3–4p: full board.",
+
+  "turnStructure": "- Take action (build/upgrade/buy).\n- Refresh markets.\n- End of round production.",
+
+  "commonMistakes": "- Building without adjacency.\n- Forgetting production triggers.\n- Overpaying for early upgrades.",
+
+  "expansions": []
+},
     "heat-pedal-to-the-metal":          { "players": "2–6","time": "45–60", "year": "2022","bggId": "366013","quickStart": "- Give each player: 1 car, dashboard, 12-card deck, 6 Heat, 3 Stress\n- Set gear to 2nd\n- Randomize starting grid\n- Choose track + place corner speeds\n- Shuffle Stress into decks\n- Each player draws 7 cards", "startingResources": "- 12-card deck\n- 6 Heat cubes\n- 3 Stress cards\n- Car miniature + dashboard\n- Gear marker on 2nd gear", "remindersText": "- Shift only 1 gear unless you pay Heat\n- Heat must be paid when exceeding corner speed\n- Slipstream triggers if ending next to/behind a car\n- Cooldown happens at end of turn\n- Stress flips until total speed is met\n- Draw back to 7 each round", "playerCountSetup": "- 2p: bots recommended\n- 3–6p: standard setup\n- No components are removed at low counts\n- Track choice does not affect setup", "turnStructure": "- Shift\n- Play cards\n- Resolve effects\n- Check corners\n- Move\n- Slipstream\n- Cooldown + draw", "commonMistakes": "- Not paying Heat at corners\n- Forgetting slipstream\n- Miscounting which corner was passed\n- Playing Stress incorrectly\n- Staying in high gear too long", "expansions": [{"name": "Heavy Rain", "quickStart": "- Add new tracks (Japan/Mexico)\n- Support 7 players\n- Add weather/road modules\n- Add new upgrade/sponsor/event cards", "reminders": "- Weather changes corner speeds\n- More technical track layouts\n- Sponsorship cards add between-race powers", "rulebook": "", "youtube": "", "bggId": "410291"}, { "name": "Tunnel Vision", "quickStart": "- Add Netherlands/Spain tracks\n- Add tunnel + chicane rules\n- Add Front Wing upgrades\n- Add new event/sponsor cards", "reminders": "- Tunnels restrict movement options\n- Some corners are extremely tight\n- Front Wing improves slipstream interactions", "rulebook": "", "youtube": "", "bggId": "436904"}]},
-    "jaipur":                           { "players":"2",   "time":"30",     "year":"2009", "bggId":"54043",  "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "kingdomino":                       { "players":"2–4", "time":"15–30",  "year":"2016", "bggId":"204583", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "kingdomino-origins":               { "players":"2–4", "time":"25–45",  "year":"2021", "bggId":"329438", "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
-    "monopoly-deal":                    { "players":"2–5", "time":"15",     "year":"2008", "bggId":"37904",  "quickStart":"", "expansions": [ {"name": "", "quickStart": "", "reminders": "", "rulebook": "", "youtube": "", "bggId": ""}]},
+    "jaipur": {
+  "players": "2",
+  "time": "30",
+  "year": "2009",
+  "bggId": "54043",
+
+  "quickStart": "- Deal 5 cards to each player.\n- Place 3 camels in market.\n- Lay out market with 5 face-up cards total.\n- Prepare goods tokens and bonus tokens.",
+
+  "startingResources": "- 5 hand cards.\n- Camels (variable count).",
+
+  "remindersText": "- Actions: Take cards, take all camels, or sell goods.\n- Must sell at least 2 of expensive goods.\n- Largest trades earn bonus tokens.",
+
+  "playerCountSetup": "- 2 players only.",
+
+  "turnStructure": "- Choose 1 action.\n- Refill market.\n- Round ends when 3 goods piles empty.",
+
+  "commonMistakes": "- Forgetting camels refill market first.\n- Selling singletons of high-value goods.\n- Running out of hand space (limit 7).",
+
+  "expansions": []
+},
+  "kingdomino": {
+  "players": "2–4",
+  "time": "15–30",
+  "year": "2016",
+  "bggId": "204583",
+
+  "quickStart": "- Shuffle dominoes face-down.\n- Draw 4 dominoes and arrange in ascending order.\n- Each player places their king token on a domino to claim.\n- Give each player a 1×1 starting castle tile.",
+
+  "startingResources": "- 1 castle tile.\n- King token(s) (2 per player in 2p variant).",
+
+  "remindersText": "- Must place domino so at least one terrain matches.\n- Grid must stay within 5×5 (7×7 for 'Mighty Duel' variant).\n- Crowns multiply scoring — total terrain squares × crowns.",
+
+  "playerCountSetup": "- 2 players: use 2 king meeples each; play with a 7×7 grid if desired.\n- 3–4 players: standard 5×5.",
+
+  "turnStructure": "- Choose a domino.\n- Place previously-selected domino.\n- Reveal next row of dominoes.\n- Continue until all dominoes are placed.",
+
+  "commonMistakes": "- Misplacing edge dominoes outside grid.\n- Forgetting final incomplete dominoes score zero.\n- Miscounting crown multipliers.",
+
+  "expansions": []
+},
+  "kingdomino-origins": {
+  "players": "2–4",
+  "time": "25–45",
+  "year": "2021",
+  "bggId": "329438",
+
+  "quickStart": "- Choose game mode (Discovery, Totem, or Tribe).\n- Lay starting volcano tile for each player.\n- Shuffle dominoes; flip 4 for draft.\n- Place fire tokens based on volcano eruptions (later rounds).",
+
+  "startingResources": "- 1 volcano starting tile.\n- Tribe tokens depending on mode.",
+
+  "remindersText": "- Discovery: classic scoring.\n- Totem: earn tokens by majority of terrains.\n- Tribe: collect resources to recruit tribe cards.",
+
+  "playerCountSetup": "- 2 players: 2 kings each; larger grid.\n- 3–4 players: normal 5×5 layout.",
+
+  "turnStructure": "- Draft domino.\n- Place previous one.\n- Trigger eruptions → place fire tokens.\n- Continue until all tiles are used.",
+
+  "commonMistakes": "- Forgetting eruption placement rules.\n- Misplacing fire tokens.\n- Not accounting for tribe resource needs when drafting.",
+
+  "expansions": []
+},
+  "monopoly-deal": {
+  "players": "2–5",
+  "time": "15",
+  "year": "2008",
+  "bggId": "37904",
+
+  "quickStart": "- Shuffle deck; deal 5 cards.\n- Start with an empty tableau.\n- Draw 2 cards at start of your turn.",
+
+  "startingResources": "- 5 cards.\n- No bank or properties yet.",
+
+  "remindersText": "- Play up to 3 cards per turn.\n- Properties can be rearranged unless frozen by a hotel/house.\n- Action cards often go to the bank as money.\n- First player to 3 full property sets wins.",
+
+  "playerCountSetup": "- No component changes.\n- Plays fastest at 2–3 players.",
+
+  "turnStructure": "- Draw 2.\n- Play up to 3 cards (money, actions, or properties).\n- Discard down to 7 at end if over limit.",
+
+  "commonMistakes": "- Not realizing rent hits all opponents.\n- Forgetting action cards have monetary value.\n- Misusing Deal Breaker too early.",
+
+  "expansions": []
+},
     "moonrakers-titan-edition": {
   "players": "1–5",
   "time": "60–120",
