@@ -1642,11 +1642,6 @@ const links = {
 
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", render);
-
-  /* service worker */
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register(`${basePath()}/sw.js`).catch(()=>{});
-  }
 })();
 </script>
 </body>
