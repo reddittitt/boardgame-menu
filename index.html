@@ -1594,18 +1594,34 @@
       </a>`;
   }
 
-  function renderList(filter=""){
-    const f = (filter || "").toLowerCase();
+ function renderList() {
+  // Render the search bar + an empty grid container ONCE.
+  $app.innerHTML = `
+    <input id="search" placeholder="Search your collection…" aria-label="Search games">
+    <section id="game-grid" class="grid"></section>
+  `;
+
+  const $grid = document.getElementById("game-grid");
+  const $search = document.getElementById("search");
+
+  // Function to update only the grid, not the whole page.
+  function updateGrid(filter = "") {
+    const f = filter.toLowerCase();
     const games = Object.values(DATA)
       .filter(g => !f || g.name.toLowerCase().includes(f))
-      .sort((a,b) => a.name.localeCompare(b.name));
-    $app.innerHTML = `
-      <input id="search" placeholder="Search your collection…" aria-label="Search games" value="${filter.replace(/"/g,'&quot;')}">
-      <section class="grid">
-        ${games.map(listRow).join("")}
-      </section>`;
-    document.getElementById('search').addEventListener('input', e => renderList(e.target.value));
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    $grid.innerHTML = games.map(listRow).join("");
   }
+
+  // Initial render of the game grid.
+  updateGrid("");
+
+  // Keep keyboard open: DO NOT re-render the input.
+  $search.addEventListener("input", e => {
+    updateGrid(e.target.value);
+  });
+}
 
   function expansionSlug(name){ return slugify(name); }
   function expansionRulebook(gameSlug, exp){
