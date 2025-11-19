@@ -77,7 +77,53 @@
   font-size:.92rem;
   margin:0 0 10px;
 }
+.player-aid-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.75rem;
+}
 
+.pill-btn {
+  border-radius: 999px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.player-aid-btn[data-active="true"] {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 30%, transparent);
+}
+
+.player-aid-viewer {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.player-aid-viewer iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+}
+
+.dev-notes {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  resize: vertical;
+  font: inherit;
+}
+
+.dev-notes-actions {
+  margin-top: 0.5rem;
+}
 /* Actions + buttons */
 .actions{
   display:flex;
@@ -1346,6 +1392,68 @@ function renderExpansions(game){
     const turnStructure    = (g.turnStructure || "").trim();
     const commonMistakes   = (g.commonMistakes || "").trim();
 
+    // Player Aids: array of { label, file } in RAW.enrich[slug].playerAids
+    const playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
+    const playerAidSection = playerAids.length ? `
+      <section class="exp" id="player-aids">
+        <details class="expansion" open>
+          <summary><span class="expansion-name">Player Aids (PDF)</span></summary>
+          <div class="expansion-body">
+            <div class="expansion-text-block">
+              <p>Quick reference PDFs for this game. Switch between aids below.</p>
+            </div>
+            <div class="player-aid-list">
+              ${playerAids.map((aid, idx) => `
+                <button type="button"
+                        class="pill-btn player-aid-btn"
+                        data-file="${aid.file}"
+                        ${idx === 0 ? 'data-active="true"' : ''}>
+                  ${aid.label || `Aid ${idx + 1}`}
+                </button>
+              `).join("")}
+            </div>
+            <div class="player-aid-viewer">
+              <iframe
+                id="playerAidFrame"
+                src="${playerAids[0].file}"
+                title="Player Aid for ${g.name}"
+                loading="lazy">
+              </iframe>
+            </div>
+            <p class="expansion-text-block">
+              <a id="openAidLink" href="${playerAids[0].file}" target="_blank" rel="noopener">
+                Open current aid in new tab
+              </a>
+            </p>
+          </div>
+        </details>
+      </section>
+    ` : "";
+
+    // Dev Notes scratchpad – does NOT persist, just for you to copy
+    const devNotesSection = `
+      <section class="exp" id="dev-notes">
+        <details class="expansion" open>
+          <summary><span class="expansion-name">Dev Notes / Page Fixes</span></summary>
+          <div class="expansion-body">
+            <div class="expansion-text-block">
+              <p>
+                Use this box to jot down rule clarifications, wording fixes, or layout issues
+                for <strong>${g.name}</strong>. This does <em>not</em> save; copy the notes into
+                your HTML/JSON later.
+              </p>
+            </div>
+            <textarea id="devNotes"
+                      class="dev-notes"
+                      placeholder="Example: Add reminder about rat tails at 4+ players; fix setup order for expansions."></textarea>
+            <div class="dev-notes-actions">
+              <button type="button" id="copyDevNotes" class="pill-btn">Copy notes to clipboard</button>
+            </div>
+          </div>
+        </details>
+      </section>
+    `;
+    
     const quickBlocksHtml = `
       <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
         <summary><span class="expansion-name">Quick Set Up</span></summary>
@@ -1413,7 +1521,10 @@ function renderExpansions(game){
               ${quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>"}
             </section>
 
-            <!-- Expansions block (unchanged, still collapsible per expansion) -->
+            <!-- Player Aids (if any) -->
+            ${playerAidSection}
+
+            <!-- Expansions block -->
             ${renderExpansions(g)}
 
             <!-- Buttons in new order: Rulebook, BG Stats, How-to-Play, Share -->
@@ -1423,9 +1534,64 @@ function renderExpansions(game){
 
             <button class="btn" id="share">Share / Copy Link</button>
           </div>
+
+          <!-- Dev notes lives below main actions -->
+          ${devNotesSection}
         </div>
       </article>
       <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
+
+        // Player Aid interactions
+    if (playerAids.length) {
+      const frame = document.getElementById("playerAidFrame");
+      const openAidLink = document.getElementById("openAidLink");
+      const buttons = Array.from(document.querySelectorAll(".player-aid-btn"));
+
+      if (frame && openAidLink && buttons.length) {
+        buttons.forEach(btn => {
+          btn.addEventListener("click", () => {
+            const file = btn.getAttribute("data-file");
+            if (!file) return;
+
+            frame.src = file;
+            openAidLink.href = file;
+
+            buttons.forEach(b => b.removeAttribute("data-active"));
+            btn.setAttribute("data-active", "true");
+          });
+        });
+      }
+    }
+
+    // Dev notes copy helper
+    const notesArea = document.getElementById("devNotes");
+    const copyBtn = document.getElementById("copyDevNotes");
+
+    if (notesArea && copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const base = notesArea.value.trim();
+        if (!base) {
+          alert("No notes to copy yet.");
+          return;
+        }
+
+        const text = `[${g.name}] ${base}`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+            .then(() => alert("Dev notes copied. Paste them into your code later."))
+            .catch(() => {
+              notesArea.select();
+              document.execCommand("copy");
+              alert("Dev notes copied (fallback).");
+            });
+        } else {
+          notesArea.select();
+          document.execCommand("copy");
+          alert("Dev notes copied.");
+        }
+      });
+    }
 
     // Share button
     document.getElementById('share').addEventListener('click', async () => {
