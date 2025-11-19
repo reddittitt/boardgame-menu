@@ -1289,12 +1289,19 @@
 }
 
   function expansionSlug(name){ return slugify(name); }
-  function expansionRulebook(gameSlug, exp){
-    // if explicit rulebook URL is provided, use it; else build a default path
-    if (exp.rulebook) return exp.rulebook;
-    const es = expansionSlug(exp.name || "");
-    return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,'')); // "<game>--<exp>.pdf"
+function expansionRulebook(gameSlug, exp){
+  if (exp.rulebook) {
+    const rb = String(exp.rulebook).trim();
+    // If it's a full URL, use as-is
+    if (/^https?:\/\//i.test(rb)) return rb;
+    // Otherwise treat as slug and build /rulebooks/<slug>.pdf
+    return rulebookUrl(rb.replace(/\.pdf$/,''));
   }
+  const es = expansionSlug(exp.name || "");
+  // Default: <game>--<exp>.pdf inside /rulebooks
+  return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,''));
+}
+
 
 function renderExpansions(game){
   // Start with any expansions provided
@@ -1366,14 +1373,20 @@ function renderExpansions(game){
       .filter(Boolean)
       .join(" • ");
     const id = extractBggId(g.bggId);
-    const links = {
-      youtube: g.youtube || "",
-      bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : bgstatsUrl(slug),
-      bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null,
-      reminders: g.reminders || remindersUrl(slug),
-      rulebook: g.rulebook || rulebookUrl(slug),
-      cover: coverUrl(slug)
-    };
+const links = {
+  youtube: g.youtube || "",
+  bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : bgstatsUrl(slug),
+  bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null,
+  reminders: g.reminders || remindersUrl(slug),
+  rulebook: g.rulebook
+    ? (/^https?:\/\//i.test(String(g.rulebook).trim())
+        ? String(g.rulebook).trim()                                  // full URL
+        : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,'')) // slug → /rulebooks/slug.pdf
+      )
+    : rulebookUrl(slug),
+  cover: coverUrl(slug)
+};
+
 
     
        // Base-game quick setup / reference sections
@@ -1487,9 +1500,9 @@ function renderExpansions(game){
               ${quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>"}
             </section>
 
-            ${playerAidSection}
             ${renderExpansions(g)}
-
+            ${playerAidSection}
+            
             <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook</a>
             <a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
             <a class="btnlink" id="btn-youtube" ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>▶️ How-to-Play</a>
