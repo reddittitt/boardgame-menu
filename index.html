@@ -57,7 +57,7 @@
   overflow:hidden;
   background:#0001;
   justify-self:center;      /* center the cover art in its column */
-  max-width:130px;          /* half-ish of the 260px column */
+  max-width:180px;          /* half-ish of the 260px column */
 }
 
 .cover img{
@@ -1615,48 +1615,65 @@
     return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,'')); // "<game>--<exp>.pdf"
   }
 
-  // Render expansions with their own quick setup, reminders, rulebook, BG Stats, and video
-  function renderExpansions(game){
-    const exps = Array.isArray(game.expansions) ? game.expansions : [];
-    if (!exps.length) return "";
-    const blocks = exps.map(exp => {
-      const expName = exp.name || "Expansion";
-      const expRulebook = expansionRulebook(game.slug, exp);
+function renderExpansions(game){
+  // Start with any expansions provided
+  let exps = Array.isArray(game.expansions) ? game.expansions : [];
 
-      const expBggId = extractBggId(exp.bggId || "");
-      const baseBggId = extractBggId(game.bggId || "");
-      const id = expBggId || baseBggId;
+  // Filter out "empty" expansions (no name and no meaningful content)
+  exps = exps.filter(exp => {
+    if (!exp || typeof exp !== "object") return false;
+    const name = (exp.name || "").trim();
+    const hasContent = [
+      exp.quickStart,
+      exp.reminders,
+      exp.rulebook,
+      exp.youtube,
+      exp.bggId
+    ].some(v => v && String(v).trim() !== "");
+    return name || hasContent;
+  });
 
-      const links = {
-        rulebook: expRulebook,
-        youtube: exp.youtube || "",
-        bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : "",
-        bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null
-      };
+  // If nothing real is left, don't render the section at all
+  if (!exps.length) return "";
 
-      const qs  = (exp.quickStart || "").trim();
-      const rem = (exp.reminders  || "").trim();
+  const blocks = exps.map(exp => {
+    const expName = exp.name || "Expansion";
+    const expRulebook = expansionRulebook(game.slug, exp);
 
-      return `
-        <details class="expansion">
-          <summary><span class="expansion-name">${expName}</span></summary>
-          <div class="expansion-body">
-            ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
-            ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
-            <div class="expansion-btns">
-              ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook</a>` : ""}
-              ${links.youtube ? `<a class="btnlink" href="${links.youtube}" target="_blank" rel="noopener">▶️ How-to-Play</a>` : ""}
-            </div>
-          </div>
-        </details>`;
-    }).join("");
+    const expBggId = extractBggId(exp.bggId || "");
+    const baseBggId = extractBggId(game.bggId || "");
+    const id = expBggId || baseBggId;
+
+    const links = {
+      rulebook: expRulebook,
+      youtube: exp.youtube || "",
+      bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : "",
+      bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null
+    };
+
+    const qs  = (exp.quickStart || "").trim();
+    const rem = (exp.reminders  || "").trim();
 
     return `
-      <section id="exp" class="exp">
-        <h3>Expansions</h3>
-        ${blocks}
-      </section>`;
-  }
+      <details class="expansion">
+        <summary><span class="expansion-name">${expName}</span></summary>
+        <div class="expansion-body">
+          ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
+          ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
+          <div class="expansion-btns">
+            ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook</a>` : ""}
+            ${links.youtube ? `<a class="btnlink" href="${links.youtube}" target="_blank" rel="noopener">▶️ How-to-Play</a>` : ""}
+          </div>
+        </div>
+      </details>`;
+  }).join("");
+
+  return `
+    <section id="exp" class="exp">
+      <h3>Expansions</h3>
+      ${blocks}
+    </section>`;
+}
 
   function renderDetail(slug, action="quicksetup"){
     const g = DATA[slug];
