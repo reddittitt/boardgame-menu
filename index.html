@@ -110,20 +110,7 @@
   height: 400px;
   border: none;
 }
-
-.dev-notes {
-  width: 100%;
-  min-height: 120px;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.75rem;
-  resize: vertical;
-  font: inherit;
-}
-
-.dev-notes-actions {
-  margin-top: 0.5rem;
-}
+  
 /* Actions + buttons */
 .actions{
   display:flex;
@@ -1429,30 +1416,6 @@ function renderExpansions(game){
         </details>
       </section>
     ` : "";
-
-    // Dev Notes scratchpad – does NOT persist, just for you to copy
-    const devNotesSection = `
-      <section class="exp" id="dev-notes">
-        <details class="expansion" open>
-          <summary><span class="expansion-name">Dev Notes / Page Fixes</span></summary>
-          <div class="expansion-body">
-            <div class="expansion-text-block">
-              <p>
-                Use this box to jot down rule clarifications, wording fixes, or layout issues
-                for <strong>${g.name}</strong>. This does <em>not</em> save; copy the notes into
-                your HTML/JSON later.
-              </p>
-            </div>
-            <textarea id="devNotes"
-                      class="dev-notes"
-                      placeholder="Example: Add reminder about rat tails at 4+ players; fix setup order for expansions."></textarea>
-            <div class="dev-notes-actions">
-              <button type="button" id="copyDevNotes" class="pill-btn">Copy notes to clipboard</button>
-            </div>
-          </div>
-        </details>
-      </section>
-    `;
     
     const quickBlocksHtml = `
       <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
@@ -1508,35 +1471,26 @@ function renderExpansions(game){
           </div>
         </div>
       </details>
-    `;
-    $app.innerHTML = `
+    `;    $app.innerHTML = `
       <article class="detail">
         <figure class="cover"><img src="${links.cover}" alt=""></figure>
         <div>
           <h2 class="title">${g.name}</h2>
           <p class="byline">${subbits || ""}</p>
           <div class="actions">
-            <!-- Quick Set Up / Reminders block at the top -->
             <section id="qs" class="exp">
               ${quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>"}
             </section>
 
-            <!-- Player Aids (if any) -->
             ${playerAidSection}
-
-            <!-- Expansions block -->
             ${renderExpansions(g)}
 
-            <!-- Buttons in new order: Rulebook, BG Stats, How-to-Play, Share -->
             <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook</a>
             <a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
             <a class="btnlink" id="btn-youtube" ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>▶️ How-to-Play</a>
 
             <button class="btn" id="share">Share / Copy Link</button>
           </div>
-
-          <!-- Dev notes lives below main actions -->
-          ${devNotesSection}
         </div>
       </article>
       <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
@@ -1561,36 +1515,6 @@ function renderExpansions(game){
           });
         });
       }
-    }
-
-    // Dev notes copy helper
-    const notesArea = document.getElementById("devNotes");
-    const copyBtn = document.getElementById("copyDevNotes");
-
-    if (notesArea && copyBtn) {
-      copyBtn.addEventListener("click", () => {
-        const base = notesArea.value.trim();
-        if (!base) {
-          alert("No notes to copy yet.");
-          return;
-        }
-
-        const text = `[${g.name}] ${base}`;
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text)
-            .then(() => alert("Dev notes copied. Paste them into your code later."))
-            .catch(() => {
-              notesArea.select();
-              document.execCommand("copy");
-              alert("Dev notes copied (fallback).");
-            });
-        } else {
-          notesArea.select();
-          document.execCommand("copy");
-          alert("Dev notes copied.");
-        }
-      });
     }
 
     // Share button
