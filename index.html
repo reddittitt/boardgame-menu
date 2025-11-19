@@ -117,16 +117,51 @@
 
   /* Expansion details */
   .expansion{
-    margin-bottom:8px;
-  }
-  .expansion summary{
-    cursor:pointer;
-    list-style:none;
-    font-weight:600;
-  }
-  .expansion summary::-webkit-details-marker{
-    display:none;
-  }
+  margin-bottom:8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card);
+  overflow:hidden;
+}
+
+/* Clickable header row */
+.expansion summary{
+  cursor:pointer;
+  list-style:none;
+  font-weight:600;
+  padding:10px 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  position:relative;
+}
+
+/* Remove default marker */
+.expansion summary::-webkit-details-marker{
+  display:none;
+}
+
+/* Chevron icon */
+.expansion summary::before{
+  content:"▸";
+  font-size:.8rem;
+  transform:translateY(1px);
+}
+
+/* Rotate chevron when open */
+.expansion[open] summary::before{
+  transform:rotate(90deg) translateY(0);
+}
+
+/* Subtle hover/focus to make it obviously interactive */
+.expansion summary:hover{
+  background:color-mix(in oklab, var(--card) 85%, var(--brand) 15%);
+}
+
+.expansion-body{
+  padding:8px 12px 10px;
+  border-top:1px solid var(--border);
+}
   .expansion-body{
     margin-top:6px;
   }
