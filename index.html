@@ -5,11 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Board Game Quick Menus</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
+
+<!-- Typography upgrade -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+
+<!-- Preload logo for snappier header -->
+<link rel="preload" href="./logo.png" as="image">
+
 <style>
   :root{
     --brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#555; --card:#fff; --border:#e6e6ef;
     --btn:#fff; --btn-border:#dcdce6;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   :root[data-theme="dark"]{
     --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
@@ -20,25 +30,148 @@
     }
   }
   html,body{height:100%}
-  body{margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
   img{max-width:100%;height:auto;display:block}
-  header{position:sticky;top:0;z-index:5;background:var(--brand);color:#fff;padding:10px 14px;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-  header .wrap{max-width:1000px;margin:0 auto;display:flex;gap:10px;align-items:center}
-  header h1{margin:0;font-size:1rem;white-space:nowrap}
+
+  h1,h2,h3{
+    font-family:"Merriweather", Georgia, "Times New Roman", serif;
+  }
+
+  header{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:var(--brand);
+    color:#fff;
+    padding:10px 14px;
+    box-shadow:0 2px 12px rgba(0,0,0,.15);
+  }
+  header .wrap{
+    max-width:1000px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  header h1{
+    margin:0;
+    font-size:1rem;
+    white-space:nowrap;
+  }
   header .spacer{flex:1}
-  header button.toggle{appearance:none;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:9px;padding:8px 10px;cursor:pointer;font-weight:600}
-  header a.home{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:9px;padding:8px 10px}
-  main{max-width:1000px;margin:16px auto 40px;padding:0 14px}
+  header button.toggle{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.35);
+    background:transparent;
+    color:#fff;
+    border-radius:9px;
+    padding:8px 10px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  header a.home{
+    color:#fff;
+    text-decoration:none;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:9px;
+    padding:8px 10px;
+  }
+
+  .header-home-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:inherit;
+  }
+
+  main{
+    max-width:1000px;
+    margin:16px auto 40px;
+    padding:0 14px;
+    opacity:0;
+    transform:translateY(4px);
+    animation:fadeInUp .22s ease-out forwards;
+  }
+
+  @keyframes fadeInUp{
+    from{
+      opacity:0;
+      transform:translateY(6px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
 
   /* List view */
-  #search{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);margin-bottom:12px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;text-decoration:none;color:inherit;display:flex;gap:10px}
-  .thumb{width:64px;height:64px;border-radius:8px;background:#0001;flex:0 0 auto;overflow:hidden}
-  .thumb img{width:100%;height:100%;object-fit:cover}
+  #search{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--fg);
+    margin-bottom:12px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:10px;
+    text-decoration:none;
+    color:inherit;
+    display:flex;
+    gap:10px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.16);
+    border-color:color-mix(in srgb, var(--brand) 35%, var(--border));
+  }
+  .thumb{
+    width:64px;
+    height:64px;
+    border-radius:8px;
+    background:#0001;
+    flex:0 0 auto;
+    overflow:hidden;
+  }
+  .thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
   .metaWrap{min-width:0}
-  .card h2{margin:.1rem 0 .25rem;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sub{color:var(--muted);font-size:.85rem;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card h2{
+    margin:.1rem 0 .25rem;
+    font-size:1rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .sub{
+    color:var(--muted);
+    font-size:.85rem;
+    margin:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
 
   /* Detail view */
   .detail{
@@ -50,14 +183,6 @@
     grid-template-columns:260px 1fr;
     gap:16px;
   }
-
-  .header-home-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-}
 
   /* Show full cover (no crop) */
   .cover{
@@ -123,38 +248,38 @@
     font-size:.92rem;
     margin:0 0 10px;
   }
-  .player-aid-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0.5rem 0 0.75rem;
+  .player-aid-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+    margin:0.5rem 0 0.75rem;
   }
 
-  .pill-btn {
-    border-radius: 999px;
-    border: 1px solid var(--btn-border);
-    background: var(--btn);
-    padding: 0.25rem 0.75rem;
-    font-size: 0.85rem;
-    cursor: pointer;
+  .pill-btn{
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    padding:0.25rem 0.75rem;
+    font-size:0.85rem;
+    cursor:pointer;
   }
 
-  .player-aid-btn[data-active="true"] {
-    border-color: var(--brand);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 30%, transparent);
+  .player-aid-btn[data-active="true"]{
+    border-color:var(--brand);
+    box-shadow:0 0 0 1px color-mix(in srgb, var(--brand) 30%, transparent);
   }
 
-  .player-aid-viewer {
-    border: 1px solid var(--border);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
+  .player-aid-viewer{
+    border:1px solid var(--border);
+    border-radius:0.5rem;
+    overflow:hidden;
+    margin-bottom:0.5rem;
   }
 
-  .player-aid-viewer iframe {
-    width: 100%;
-    height: 400px;
-    border: none;
+  .player-aid-viewer iframe{
+    width:100%;
+    height:400px;
+    border:none;
   }
   
   /* Actions + buttons */
@@ -178,7 +303,7 @@
     text-decoration:none;
     font-weight:700;
     cursor:pointer;
-    box-sizing:border-box;    /* <-- THIS is what stops them falling off */
+    box-sizing:border-box;
   }
 
   .btn.primary{
@@ -186,13 +311,33 @@
     color:#fff;
     border:none;
   }
-  .btn.primary{background:var(--brand);color:#fff;border:none}
-  .qs,.exp{margin-top:8px;padding:10px;border:1px dashed var(--border);border-radius:12px;background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%)}
-  .qs pre{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0}
-  .exp h3{margin:.2rem 0 .6rem;font-size:1.05rem}
-  .exp ul{margin:.2rem 0 .2rem 1.1rem}
+
+  .qs,.exp{
+    margin-top:8px;
+    padding:10px;
+    border:1px dashed var(--border);
+    border-radius:12px;
+    background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%);
+  }
+  .qs pre{
+    white-space:pre-wrap;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    margin:0;
+  }
+  .exp h3{
+    margin:.2rem 0 .6rem;
+    font-size:1.05rem;
+  }
+  .exp ul{
+    margin:.2rem 0 .2rem 1.1rem;
+  }
   .exp a{color:inherit}
-  footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:16px}
+  footer{
+    text-align:center;
+    font-size:.8rem;
+    color:var(--muted);
+    margin-top:16px;
+  }
 
   /* Expansion details */
   .expansion{
@@ -203,7 +348,6 @@
     overflow:hidden;
   }
 
-  /* Clickable header row */
   .expansion summary{
     cursor:pointer;
     list-style:none;
@@ -215,24 +359,20 @@
     position:relative;
   }
 
-  /* Remove default marker */
   .expansion summary::-webkit-details-marker{
     display:none;
   }
 
-  /* Chevron icon */
   .expansion summary::before{
     content:"▸";
     font-size:.8rem;
     transform:translateY(1px);
   }
 
-  /* Rotate chevron when open */
   .expansion[open] summary::before{
     transform:rotate(90deg) translateY(0);
   }
 
-  /* Subtle hover/focus to make it obviously interactive */
   .expansion summary:hover{
     background:color-mix(in oklab, var(--card) 85%, var(--brand) 15%);
   }
@@ -240,10 +380,9 @@
   .expansion-body{
     padding:8px 12px 10px;
     border-top:1px solid var(--border);
-  }
-  .expansion-body{
     margin-top:6px;
   }
+
   .expansion-text-block h4{
     margin:.2rem 0 .25rem;
     font-size:.95rem;
@@ -261,6 +400,66 @@
   }
   .expansion-name{
     font-weight:600;
+  }
+
+  /* Expansion artwork */
+  .expansion-art{
+    margin-bottom:8px;
+  }
+  .expansion-art img{
+    width:100%;
+    max-width:220px;
+    border-radius:8px;
+    display:block;
+  }
+
+  /* Action link icons */
+  .action-link{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.4rem;
+  }
+  .action-link svg{
+    width:1em;
+    height:1em;
+    flex-shrink:0;
+  }
+
+  /* Recently viewed */
+  #recentlyViewed{
+    margin-top:2rem;
+    padding-top:1rem;
+    border-top:1px solid var(--border);
+  }
+  #recentlyViewed h2{
+    font-size:1rem;
+    margin-bottom:0.5rem;
+  }
+  #recentlyViewedList{
+    display:flex;
+    flex-wrap:nowrap;
+    gap:0.75rem;
+    overflow-x:auto;
+    padding-bottom:0.25rem;
+  }
+  .recent-chip{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+    padding:0.25rem 0.6rem;
+    border-radius:999px;
+    background:var(--card);
+    border:1px solid var(--border);
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .recent-chip img{
+    width:24px;
+    height:24px;
+    border-radius:4px;
+    object-fit:cover;
   }
 
   @media (max-width:840px){
@@ -284,6 +483,14 @@
   </div>
 </header>
 
+<main>
+  <div id="app"><noscript>JavaScript required.</noscript></div>
+
+  <section id="recentlyViewed" aria-label="Recently viewed games" hidden>
+    <h2>Recently Viewed</h2>
+    <div id="recentlyViewedList"></div>
+  </section>
+</main>
 
 <main id="app"><noscript>JavaScript required.</noscript></main>
 
@@ -1388,7 +1595,12 @@
   /* theme toggle */
   const root = document.documentElement;
   const saved = localStorage.getItem("theme");
-  if (saved) root.setAttribute("data-theme", saved);
+  if (saved) {
+    root.setAttribute("data-theme", saved);
+  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    root.setAttribute("data-theme", "dark");
+  }
+
   document.getElementById("themeToggle").addEventListener("click", () => {
     const curr = root.getAttribute("data-theme");
     const next = curr === "dark" ? "light" : "dark";
@@ -1426,7 +1638,6 @@
     return `${bp}/covers/${slug}.webp`;  // full cover shown (no crop)
   }
 
-  // Build a BoardGameGeek link from a stored bggId (if present)
   function bggLinkFromId(id) {
     id = extractBggId(id);
     return id ? `https://boardgamegeek.com/boardgame/${id}` : "";
@@ -1439,6 +1650,74 @@
   });
 
   const $app = document.getElementById('app');
+
+  /* Recently viewed helpers */
+  const RECENT_KEY = "bgq_recent";
+
+  function renderRecentlyViewed(list) {
+    const section = document.getElementById("recentlyViewed");
+    const container = document.getElementById("recentlyViewedList");
+    if (!section || !container) return;
+
+    container.innerHTML = "";
+    if (!list || !list.length) {
+      section.hidden = true;
+      return;
+    }
+    section.hidden = false;
+
+    list.forEach(item => {
+      const chip = document.createElement("button");
+      chip.className = "recent-chip";
+      chip.type = "button";
+
+      const img = document.createElement("img");
+      img.src = item.cover;
+      img.alt = item.name + " cover";
+
+      const span = document.createElement("span");
+      span.textContent = item.name;
+
+      chip.append(img, span);
+
+      chip.addEventListener("click", () => {
+        location.hash = "#/game/" + item.slug;
+      });
+
+      container.appendChild(chip);
+    });
+  }
+
+  function markRecentlyViewed(game) {
+    try {
+      const raw = localStorage.getItem(RECENT_KEY);
+      let list = raw ? JSON.parse(raw) : [];
+
+      list = list.filter(item => item.slug !== game.slug);
+
+      list.unshift({
+        slug: game.slug,
+        name: game.name,
+        cover: coverUrl(game.slug)
+      });
+
+      if (list.length > 8) list = list.slice(0, 8);
+
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+      renderRecentlyViewed(list);
+    } catch (e) {
+      // fail silently if localStorage not available
+    }
+  }
+
+  (function initRecentOnLoad() {
+    try {
+      const raw = localStorage.getItem(RECENT_KEY);
+      if (raw) {
+        renderRecentlyViewed(JSON.parse(raw));
+      }
+    } catch (e) {}
+  })();
 
   function listRow(g){
     const subbits = [g.players, g.time ? `${g.time} min` : null, g.year]
@@ -1457,7 +1736,6 @@
   }
 
   function renderList() {
-    // Render the search bar + an empty grid container ONCE.
     $app.innerHTML = `
       <input id="search" placeholder="Search your collection…" aria-label="Search games">
       <section id="game-grid" class="grid"></section>
@@ -1466,7 +1744,6 @@
     const $grid = document.getElementById("game-grid");
     const $search = document.getElementById("search");
 
-    // Function to update only the grid, not the whole page.
     function updateGrid(filter = "") {
       const f = filter.toLowerCase();
       const games = Object.values(DATA)
@@ -1476,34 +1753,42 @@
       $grid.innerHTML = games.map(listRow).join("");
     }
 
-    // Initial render of the game grid.
     updateGrid("");
 
-    // Keep keyboard open: DO NOT re-render the input.
     $search.addEventListener("input", e => {
       updateGrid(e.target.value);
     });
   }
 
   function expansionSlug(name){ return slugify(name); }
+
   function expansionRulebook(gameSlug, exp){
     if (exp.rulebook) {
       const rb = String(exp.rulebook).trim();
-      // If it's a full URL, use as-is
       if (/^https?:\/\//i.test(rb)) return rb;
-      // Otherwise treat as slug and build /rulebooks/<slug>.pdf
       return rulebookUrl(rb.replace(/\.pdf$/,''));
     }
     const es = expansionSlug(exp.name || "");
-    // Default: <game>--<exp>.pdf inside /rulebooks
     return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,''));
   }
 
+  function expansionCoverUrl(gameSlug, exp) {
+    const bp = basePath();
+    if (exp.cover) {
+      const c = String(exp.cover).trim();
+      if (/^https?:\/\//i.test(c)) return c;
+      if (/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(c)) {
+        return `${bp}/${c.replace(/^\//,'')}`;
+      }
+      return coverUrl(c);
+    }
+    const es = expansionSlug(exp.name || "");
+    return coverUrl(`${gameSlug}--${es}`);
+  }
+
   function renderExpansions(game){
-    // Start with any expansions provided
     let exps = Array.isArray(game.expansions) ? game.expansions : [];
 
-    // Filter out "empty" expansions (no name and no meaningful content)
     exps = exps.filter(exp => {
       if (!exp || typeof exp !== "object") return false;
       const name = (exp.name || "").trim();
@@ -1512,17 +1797,18 @@
         exp.reminders,
         exp.rulebook,
         exp.youtube,
-        exp.bggId
+        exp.bggId,
+        exp.cover
       ].some(v => v && String(v).trim() !== "");
       return name || hasContent;
     });
 
-    // If nothing real is left, don't render the section at all
     if (!exps.length) return "";
 
     const blocks = exps.map(exp => {
       const expName = exp.name || "Expansion";
       const expRulebook = expansionRulebook(game.slug, exp);
+      const cover = expansionCoverUrl(game.slug, exp);
 
       const expBggId = extractBggId(exp.bggId || "");
       const baseBggId = extractBggId(game.bggId || "");
@@ -1542,11 +1828,29 @@
         <details class="expansion">
           <summary><span class="expansion-name">${expName}</span></summary>
           <div class="expansion-body">
+            ${cover ? `<div class="expansion-art">
+              <img src="${cover}" alt="${expName} cover" loading="lazy">
+            </div>` : ""}
             ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
             ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
             <div class="expansion-btns">
-              ${links.rulebook ? `<a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Rulebook</a>` : ""}
-              ${links.youtube ? `<a class="btnlink" href="${links.youtube}" target="_blank" rel="noopener">How to Play Video</a>` : ""}
+              ${links.rulebook ? `
+                <a class="btnlink action-link"
+                   data-check="rulebook"
+                   href="${links.rulebook}"
+                   target="_blank"
+                   rel="noopener">
+                  <svg aria-hidden="true"><use href="#icon-rules"></use></svg>
+                  <span>Rulebook</span>
+                </a>` : ""}
+              ${links.youtube ? `
+                <a class="btnlink action-link"
+                   href="${links.youtube}"
+                   target="_blank"
+                   rel="noopener">
+                  <svg aria-hidden="true"><use href="#icon-play"></use></svg>
+                  <span>How to Play Video</span>
+                </a>` : ""}
             </div>
           </div>
         </details>`;
@@ -1557,6 +1861,32 @@
         <h3>Expansions</h3>
         ${blocks}
       </section>`;
+  }
+
+  async function attachRulebookGuards() {
+    const links = document.querySelectorAll('a[data-check="rulebook"]');
+    links.forEach(link => {
+      const url = link.href;
+      if (!url) return;
+
+      link.addEventListener("click", async (e) => {
+        // Let fully external URLs go through (e.g. publisher-hosted PDFs)
+        const sameOrigin = url.startsWith(location.origin) || url.startsWith('/');
+        if (!sameOrigin) return;
+
+        e.preventDefault();
+        try {
+          const res = await fetch(url, { method: "HEAD" });
+          if (res.ok) {
+            window.open(url, "_blank", "noopener");
+          } else {
+            alert(`Sorry, this rulebook is not available yet (HTTP ${res.status}).`);
+          }
+        } catch (err) {
+          alert("Sorry, this rulebook could not be loaded. Please try again later.");
+        }
+      }, { once: true });
+    });
   }
 
   function renderDetail(slug, action="quicksetup"){
@@ -1576,14 +1906,12 @@
       reminders: g.reminders || remindersUrl(slug),
       rulebook: g.rulebook
         ? (/^https?:\/\//i.test(String(g.rulebook).trim())
-            ? String(g.rulebook).trim()                                  // full URL
-            : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,'')) // slug → /rulebooks/slug.pdf
-          )
+            ? String(g.rulebook).trim()
+            : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,'')))
         : rulebookUrl(slug),
       cover: coverUrl(slug)
     };
 
-    // Base-game quick setup / reference sections
     const quickText        = (g.quickStart || "").trim();
     const remindersText    = (g.remindersText && String(g.remindersText).trim()) || "";
     const playerCountSetup = (g.playerCountSetup || "").trim();
@@ -1591,7 +1919,6 @@
     const turnStructure    = (g.turnStructure || "").trim();
     const commonMistakes   = (g.commonMistakes || "").trim();
 
-    // Player Aids: array of { label, file } in RAW.enrich[slug].playerAids
     const playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
     const playerAidSection = playerAids.length ? `
       <section class="exp" id="player-aids">
@@ -1689,7 +2016,7 @@
       <article class="detail">
         <figure class="cover">
           <a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">
-            <img src="${links.cover}" alt="">
+            <img src="${links.cover}" alt="${g.name} cover" loading="lazy">
             <span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG ↗</span>
           </a>
         </figure>
@@ -1704,17 +2031,40 @@
             ${renderExpansions(g)}
             ${playerAidSection}
             
-            <a class="btnlink" href="${links.rulebook}" target="_blank" rel="noopener">Open Rulebook</a>
-            <a class="btnlink" id="btn-bgstats" href="${links.bgstats}" target="_blank" rel="noopener">BG Stats — Log a Play</a>
-            <a class="btnlink" id="btn-youtube" ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>How to Play Video</a>
+            <a class="btnlink action-link"
+               data-check="rulebook"
+               href="${links.rulebook}"
+               target="_blank"
+               rel="noopener">
+              <svg aria-hidden="true"><use href="#icon-rules"></use></svg>
+              <span>Open Rulebook</span>
+            </a>
 
-            <button class="btn" id="share">Share / Copy Link</button>
+            <a class="btnlink action-link"
+               id="btn-bgstats"
+               href="${links.bgstats}"
+               target="_blank"
+               rel="noopener">
+              <svg aria-hidden="true"><use href="#icon-bgstats"></use></svg>
+              <span>BG Stats — Log a Play</span>
+            </a>
+
+            <a class="btnlink action-link"
+               id="btn-youtube"
+               ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>
+              <svg aria-hidden="true"><use href="#icon-play"></use></svg>
+              <span>How to Play Video</span>
+            </a>
+
+            <button class="btn action-link" id="share">
+              <svg aria-hidden="true"><use href="#icon-share"></use></svg>
+              <span>Share / Copy Link</span>
+            </button>
           </div>
         </div>
       </article>
       <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
 
-    // Make cover art link to BGG page (with graceful fallback if no bggId)
     const bggCoverLink = document.getElementById("bggCoverLink");
     const bggCoverBadge = document.getElementById("bggCoverBadge");
     if (bggCoverLink) {
@@ -1737,7 +2087,6 @@
       }
     }
 
-    // Player Aid interactions
     if (playerAids.length) {
       const frame = document.getElementById("playerAidFrame");
       const openAidLink = document.getElementById("openAidLink");
@@ -1759,7 +2108,6 @@
       }
     }
 
-    // Share button
     document.getElementById('share').addEventListener('click', async () => {
       const u = location.href;
       try {
@@ -1776,24 +2124,20 @@
       }
     });
 
-    // BG Stats app-first behavior (base game)
     const bgbtn = document.getElementById('btn-bgstats');
     if (bgbtn) {
       bgbtn.addEventListener('click', (e) => {
-        // If we have an app deep link, use it and DO NOT fall back to web
         if (links.bgstatsApp) {
           e.preventDefault();
           window.location.href = links.bgstatsApp;
         }
-        // else: no app link available, let the normal href (web URL) behave as-is
       });
     }
 
-    // BG Stats deep-link for expansions (if any)
     document.querySelectorAll('.expansion-bgstats').forEach(el => {
       const appUrl = el.dataset.app;
       const webUrl = el.getAttribute('href');
-      if (!appUrl) return; // just use normal web link
+      if (!appUrl) return;
       el.addEventListener('click', (e) => {
         e.preventDefault();
         let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
@@ -1806,7 +2150,10 @@
       });
     });
 
-    // Respect &action param (for things like ?action=youtube)
+    attachRulebookGuards();
+
+    markRecentlyViewed(g);
+
     const actionLower = (action || "").toLowerCase();
     if (actionLower && actionLower !== "quicksetup") {
       const map = { youtube:"#btn-youtube" };
@@ -1840,12 +2187,29 @@
   function render(){
     if (normalizeIncoming()) return;
     const {route, slug, action} = parseHash();
-    route === "detail" ? renderDetail(slug, action) : renderList("");
+    route === "detail" ? renderDetail(slug, action) : renderList();
   }
 
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", render);
 })();
 </script>
+
+<!-- SVG sprite for lightweight icons -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-play" viewBox="0 0 24 24">
+    <path d="M8 5v14l11-7z" />
+  </symbol>
+  <symbol id="icon-rules" viewBox="0 0 24 24">
+    <path d="M6 4h11a2 2 0 0 1 2 2v14l-4-3-4 3-4-3-4 3V6a2 2 0 0 1 2-2z" />
+  </symbol>
+  <symbol id="icon-bgstats" viewBox="0 0 24 24">
+    <path d="M5 19h3V9H5zm5 0h3V5h-3zm5 0h3V12h-3z" />
+  </symbol>
+  <symbol id="icon-share" viewBox="0 0 24 24">
+    <path d="M18 8a3 3 0 1 0-2.8-4H13v2h2.2A3 3 0 0 0 18 8zm-5 2-4-4v3H5v2h4v3zM5 18a3 3 0 1 0 3-3H5z" />
+  </symbol>
+</svg>
+
 </body>
 </html>
