@@ -6,85 +6,104 @@
 <title>Board Game Quick Menus</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
 
-<!-- Typography upgrade -->
+<!-- Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
-<!-- Preload logo for snappier header -->
+<!-- Preload logo -->
 <link rel="preload" href="./logo.png" as="image">
 
 <style>
-  :root{
-    --brand:#0b63ff; --bg:#f6f7fb; --fg:#111; --muted:#555; --card:#fff; --border:#e6e6ef;
-    --btn:#fff; --btn-border:#dcdce6;
+  :root {
+    --brand:#0b63ff;
+    --bg:#f6f7fb;
+    --fg:#111111;
+    --muted:#555555;
+    --card:#ffffff;
+    --border:#e6e6ef;
+    --btn:#ffffff;
+    --btn-border:#dcdce6;
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
-  :root[data-theme="dark"]{
-    --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
+  :root[data-theme="dark"] {
+    --brand:#5b8dff;
+    --bg:#0f1115;
+    --fg:#e8eaf0;
+    --muted:#a2a8b4;
+    --card:#161922;
+    --border:#2a2f3a;
+    --btn:#1b2030;
+    --btn-border:#2a2f3a;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme]){
-      --brand:#5b8dff; --bg:#0f1115; --fg:#e8eaf0; --muted:#a2a8b4; --card:#161922; --border:#2a2f3a; --btn:#1b2030; --btn-border:#2a2f3a;
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      --brand:#5b8dff;
+      --bg:#0f1115;
+      --fg:#e8eaf0;
+      --muted:#a2a8b4;
+      --card:#161922;
+      --border:#2a2f3a;
+      --btn:#1b2030;
+      --btn-border:#2a2f3a;
     }
   }
-  html,body{height:100%}
-  body{
+
+  html, body { height:100%; }
+  body {
     margin:0;
     background:var(--bg);
     color:var(--fg);
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
-    transition: background-color 0.2s ease, color 0.2s ease;
   }
-  img{max-width:100%;height:auto;display:block}
+  img { max-width:100%; height:auto; display:block; }
 
-  h1,h2,h3{
+  h1, h2, h3 {
     font-family:"Merriweather", Georgia, "Times New Roman", serif;
   }
 
-  header{
+  header {
     position:sticky;
     top:0;
     z-index:5;
     background:var(--brand);
-    color:#fff;
+    color:#ffffff;
     padding:10px 14px;
-    box-shadow:0 2px 12px rgba(0,0,0,.15);
+    box-shadow:0 2px 12px rgba(0,0,0,0.15);
   }
-  header .wrap{
+  header .wrap {
     max-width:1000px;
     margin:0 auto;
     display:flex;
     gap:10px;
     align-items:center;
   }
-  header h1{
+  header h1 {
     margin:0;
     font-size:1rem;
     white-space:nowrap;
   }
-  header .spacer{flex:1}
-  header button.toggle{
+  header .spacer { flex:1; }
+  header button.toggle {
     appearance:none;
-    border:1px solid rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,0.35);
     background:transparent;
-    color:#fff;
+    color:#ffffff;
     border-radius:9px;
     padding:8px 10px;
     cursor:pointer;
     font-weight:600;
   }
-  header a.home{
-    color:#fff;
+  header a.home {
+    color:#ffffff;
     text-decoration:none;
-    border:1px solid rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,0.35);
     border-radius:9px;
     padding:8px 10px;
   }
 
-  .header-home-link{
+  .header-home-link {
     display:flex;
     align-items:center;
     gap:12px;
@@ -92,28 +111,14 @@
     color:inherit;
   }
 
-  main{
+  main {
     max-width:1000px;
     margin:16px auto 40px;
     padding:0 14px;
-    opacity:0;
-    transform:translateY(4px);
-    animation:fadeInUp .22s ease-out forwards;
-  }
-
-  @keyframes fadeInUp{
-    from{
-      opacity:0;
-      transform:translateY(6px);
-    }
-    to{
-      opacity:1;
-      transform:translateY(0);
-    }
   }
 
   /* List view */
-  #search{
+  #search {
     width:100%;
     padding:12px;
     border-radius:10px;
@@ -122,12 +127,12 @@
     color:var(--fg);
     margin-bottom:12px;
   }
-  .grid{
+  .grid {
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
     gap:12px;
   }
-  .card{
+  .card {
     background:var(--card);
     border:1px solid var(--border);
     border-radius:12px;
@@ -138,35 +143,35 @@
     gap:10px;
     transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   }
-  .card:hover{
+  .card:hover {
     transform:translateY(-3px);
     box-shadow:0 6px 18px rgba(0,0,0,0.16);
-    border-color:color-mix(in srgb, var(--brand) 35%, var(--border));
+    border-color:#9dbbfd;
   }
-  .thumb{
+  .thumb {
     width:64px;
     height:64px;
     border-radius:8px;
-    background:#0001;
+    background:#00000011;
     flex:0 0 auto;
     overflow:hidden;
   }
-  .thumb img{
+  .thumb img {
     width:100%;
     height:100%;
     object-fit:cover;
   }
-  .metaWrap{min-width:0}
-  .card h2{
-    margin:.1rem 0 .25rem;
+  .metaWrap { min-width:0; }
+  .card h2 {
+    margin:0.1rem 0 0.25rem;
     font-size:1rem;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
   }
-  .sub{
+  .sub {
     color:var(--muted);
-    font-size:.85rem;
+    font-size:0.85rem;
     margin:0;
     white-space:nowrap;
     overflow:hidden;
@@ -174,7 +179,7 @@
   }
 
   /* Detail view */
-  .detail{
+  .detail {
     background:var(--card);
     border:1px solid var(--border);
     border-radius:14px;
@@ -184,104 +189,61 @@
     gap:16px;
   }
 
-  /* Show full cover (no crop) */
-  .cover{
+  .cover {
     border-radius:12px;
     overflow:hidden;
-    background:#0001;
+    background:#00000011;
     justify-self:center;
     max-width:180px;
   }
-
-  .cover-link{
+  .cover-link {
     display:block;
     position:relative;
     text-decoration:none;
   }
-
-  .cover img{
+  .cover img {
     width:100%;
     height:auto;
     display:block;
     object-fit:contain;
-    transition:transform .15s ease-out;
+    transition:transform 0.15s ease-out;
   }
-
-  .cover-link:hover img{
+  .cover-link:hover img {
     transform:scale(1.03);
   }
-
-  .cover-badge{
+  .cover-badge {
     position:absolute;
     right:6px;
     bottom:6px;
     padding:3px 7px;
     border-radius:999px;
-    font-size:.7rem;
-    background:rgba(0,0,0,.65);
-    color:#fff;
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
+    font-size:0.7rem;
+    background:rgba(0,0,0,0.65);
+    color:#ffffff;
   }
-
-  .cover-link--disabled{
+  .cover-link--disabled {
     cursor:default;
   }
-  .cover-link--disabled:hover img{
+  .cover-link--disabled:hover img {
     transform:none;
   }
-  .cover-badge--disabled{
-    background:rgba(0,0,0,.4);
-    opacity:.8;
+  .cover-badge--disabled {
+    background:rgba(0,0,0,0.4);
+    opacity:0.8;
   }
 
-  .title{
-    margin:.2rem 0 .25rem;
+  .title {
+    margin:0.2rem 0 0.25rem;
     font-size:1.2rem;
     line-height:1.2;
   }
-  .byline{
+  .byline {
     color:var(--muted);
-    font-size:.92rem;
+    font-size:0.92rem;
     margin:0 0 10px;
   }
-  .player-aid-list{
-    display:flex;
-    flex-wrap:wrap;
-    gap:0.5rem;
-    margin:0.5rem 0 0.75rem;
-  }
 
-  .pill-btn{
-    border-radius:999px;
-    border:1px solid var(--btn-border);
-    background:var(--btn);
-    padding:0.25rem 0.75rem;
-    font-size:0.85rem;
-    cursor:pointer;
-  }
-
-  .player-aid-btn[data-active="true"]{
-    border-color:var(--brand);
-    box-shadow:0 0 0 1px color-mix(in srgb, var(--brand) 30%, transparent);
-  }
-
-  .player-aid-viewer{
-    border:1px solid var(--border);
-    border-radius:0.5rem;
-    overflow:hidden;
-    margin-bottom:0.5rem;
-  }
-
-  .player-aid-viewer iframe{
-    width:100%;
-    height:400px;
-    border:none;
-  }
-  
-  /* Actions + buttons */
-  .actions{
+  .actions {
     display:flex;
     flex-direction:column;
     gap:10px;
@@ -289,7 +251,7 @@
   }
 
   .btn,
-  .btnlink{
+  .btnlink {
     display:block;
     width:100%;
     text-align:center;
@@ -303,44 +265,38 @@
     cursor:pointer;
     box-sizing:border-box;
   }
-
-  .btn.primary{
+  .btn.primary {
     background:var(--brand);
-    color:#fff;
+    color:#ffffff;
     border:none;
   }
 
-  .qs,.exp{
+  .qs,
+  .exp {
     margin-top:8px;
     padding:10px;
     border:1px dashed var(--border);
     border-radius:12px;
-    background:color-mix(in oklab, var(--card) 90%, var(--brand) 10%);
+    background:#f0f4ff;
   }
-  .qs pre{
-    white-space:pre-wrap;
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    margin:0;
-  }
-  .exp h3{
-    margin:.2rem 0 .6rem;
+
+  .exp h3 {
+    margin:0.2rem 0 0.6rem;
     font-size:1.05rem;
   }
-  .exp ul{
-    margin:.2rem 0 .2rem 1.1rem;
+  .exp ul {
+    margin:0.2rem 0 0.2rem 1.1rem;
   }
-  .exp a{color:inherit}
 
   /* Expansion details */
-  .expansion{
+  .expansion {
     margin-bottom:8px;
     border-radius:10px;
     border:1px solid var(--border);
     background:var(--card);
     overflow:hidden;
   }
-
-  .expansion summary{
+  .expansion summary {
     cursor:pointer;
     list-style:none;
     font-weight:600;
@@ -350,134 +306,65 @@
     gap:8px;
     position:relative;
   }
-  .expansion summary::-webkit-details-marker{display:none;}
-  .expansion summary::before{
-    content:"▸";
-    font-size:.8rem;
+  .expansion summary::-webkit-details-marker {
+    display:none;
+  }
+  .expansion summary::before {
+    content:">";
+    font-size:0.8rem;
     transform:translateY(1px);
+    margin-right:4px;
   }
-  .expansion[open] summary::before{
-    transform:rotate(90deg) translateY(0);
+  .expansion[open] summary::before {
+    content:"v";
   }
-  .expansion summary:hover{
-    background:color-mix(in oklab, var(--card) 85%, var(--brand) 15%);
+  .expansion summary:hover {
+    background:#e6ecff;
   }
 
-  .expansion-body{
+  .expansion-body {
     padding:8px 12px 10px;
     border-top:1px solid var(--border);
     margin-top:6px;
   }
-
-  .expansion-text-block h4{
-    margin:.2rem 0 .25rem;
-    font-size:.95rem;
+  .expansion-text-block h4 {
+    margin:0.2rem 0 0.25rem;
+    font-size:0.95rem;
   }
-  .expansion-text-block p{
-    margin:0 0 .4rem;
-    font-size:.85rem;
+  .expansion-text-block p {
+    margin:0 0 0.4rem;
+    font-size:0.85rem;
     line-height:1.4;
   }
-
-  /* Player count controls */
-  .playercount-controls {
-    display:flex;
-    flex-wrap:wrap;
-    gap:0.5rem;
-    margin-bottom:0.4rem;
-  }
-
-  /* Glossary list */
-  .glossary {
-    margin:0;
-    padding:0;
-  }
-  .glossary-item {
-    margin-bottom:0.4rem;
-  }
-  .glossary-item dt {
-    font-weight:600;
-    font-size:0.9rem;
-  }
-  .glossary-item dd {
-    margin:0;
-    font-size:0.85rem;
-    color:var(--muted);
-  }
-
-  .expansion-btns{
+  .expansion-btns {
     display:flex;
     flex-direction:column;
     gap:6px;
     margin-top:4px;
   }
-  .expansion-name{
+  .expansion-name {
     font-weight:600;
   }
 
-  /* Expansion artwork */
-  .expansion-art{
+  .expansion-art {
     margin-bottom:8px;
   }
-  .expansion-art img{
+  .expansion-art img {
     width:100%;
     max-width:220px;
     border-radius:8px;
     display:block;
   }
 
-  /* Action link icons */
-  .action-link{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:0.4rem;
-  }
-  .action-link svg{
-    width:1em;
-    height:1em;
-    flex-shrink:0;
+  /* Table notes */
+  #notes-section textarea {
+    font-family:inherit;
+    font-size:0.9rem;
   }
 
-  /* Recently viewed */
-  #recentlyViewed{
-    margin-top:2rem;
-    padding-top:1rem;
-    border-top:1px solid var(--border);
-  }
-  #recentlyViewed h2{
-    font-size:1rem;
-    margin-bottom:0.5rem;
-  }
-  #recentlyViewedList{
-    display:flex;
-    flex-wrap:nowrap;
-    gap:0.75rem;
-    overflow-x:auto;
-    padding-bottom:0.25rem;
-  }
-  .recent-chip{
-    flex:0 0 auto;
-    display:flex;
-    align-items:center;
-    gap:0.4rem;
-    padding:0.25rem 0.6rem;
-    border-radius:999px;
-    background:var(--card);
-    border:1px solid var(--border);
-    font-size:0.85rem;
-    cursor:pointer;
-  }
-  .recent-chip img{
-    width:24px;
-    height:24px;
-    border-radius:4px;
-    object-fit:cover;
-  }
-
-  @media (max-width:840px){
-    .detail{grid-template-columns:1fr}
-    .cover{width:100%}
+  @media (max-width:840px) {
+    .detail { grid-template-columns:1fr; }
+    .cover { width:100%; }
   }
 </style>
 </head>
@@ -491,19 +378,15 @@
 
     <div class="spacer"></div>
 
-    <button id="themeToggle" class="toggle" aria-label="Toggle dark mode">🌙/☀️</button>
+    <button id="themeToggle" class="toggle" aria-label="Toggle dark mode">Dark/Light</button>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
 
 <main>
   <div id="app"><noscript>JavaScript required.</noscript></div>
-
-  <section id="recentlyViewed" aria-label="Recently viewed games" hidden>
-    <h2>Recently Viewed</h2>
-    <div id="recentlyViewedList"></div>
-  </section>
 </main>
+
 <script id="games-json" type="application/json">
 {
   "names": [
@@ -1663,558 +1546,370 @@
 }
 </script>
 
-
 <script>
-(() => {
-  /* theme toggle */
-  const root = document.documentElement;
-  const saved = localStorage.getItem("theme");
+(function() {
+  /* Theme toggle */
+  var root = document.documentElement;
+  var saved = localStorage.getItem("theme");
   if (saved) {
     root.setAttribute("data-theme", saved);
   } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
     root.setAttribute("data-theme", "dark");
   }
-
-  document.getElementById("themeToggle").addEventListener("click", () => {
-    const curr = root.getAttribute("data-theme");
-    const next = curr === "dark" ? "light" : "dark";
-    root.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-  });
-
-  /* BG Stats helpers */
-  const BGSTATS_ID_PREFIX_APP  = 'bgstats://app.bgstatsapp.com/addPlay.html?gameId=';
-  const BGSTATS_ID_PREFIX_WEB  = 'https://bgstats.app/bgg/';
-  const BGSTATS_SLUG_PREFIX_WEB = 'https://bgstats.app/game/';
-  const extractBggId = (urlOrId) => {
-    if (!urlOrId) return '';
-    const m = String(urlOrId).match(/(\d{2,})/);
-    return m ? m[1] : '';
-  };
-  const bgstatsUrl = (slug) => `${BGSTATS_SLUG_PREFIX_WEB}${slug}`;
-
-  /* data */
-  const RAW = JSON.parse(document.getElementById('games-json').textContent);
-  const slugify = s => s.toLowerCase()
-    .replace(/[:’'"]/g,"")
-    .replace(/&/g,"and")
-    .replace(/[^a-z0-9]+/g,"-")
-    .replace(/(^-|-$)/g,"");
-  const qp = n => new URL(location.href).searchParams.get(n)||"";
-  const basePath = () =>
-    location.pathname
-      .replace(/\/index\.html$/,'')
-      .replace(/\/$/,'');
-  const rulebookUrl = s => `${basePath()}/rulebooks/${s}.pdf`;
-  const remindersUrl = s => `${basePath()}/reminders/${s}.html`;
-  function coverUrl(slug){
-    const bp = basePath();
-    return `${bp}/covers/${slug}.webp`;
-  }
-
-  function bggLinkFromId(id) {
-    id = extractBggId(id);
-    return id ? `https://boardgamegeek.com/boardgame/${id}` : "";
-  }
-
-  const DATA = {};
-  (RAW.names || []).forEach(name => {
-    const slug = slugify(name);
-    DATA[slug] = { name, slug, ...(RAW.enrich?.[slug] || {}) };
-  });
-
-  const $app = document.getElementById('app');
-
-  /* Recently viewed helpers */
-  const RECENT_KEY = "bgq_recent";
-
-  function renderRecentlyViewed(list) {
-    const section = document.getElementById("recentlyViewed");
-    const container = document.getElementById("recentlyViewedList");
-    if (!section || !container) return;
-
-    container.innerHTML = "";
-    if (!list || !list.length) {
-      section.hidden = true;
-      return;
-    }
-    section.hidden = false;
-
-    list.forEach(item => {
-      const chip = document.createElement("button");
-      chip.className = "recent-chip";
-      chip.type = "button";
-
-      const img = document.createElement("img");
-      img.src = item.cover;
-      img.alt = item.name + " cover";
-
-      const span = document.createElement("span");
-      span.textContent = item.name;
-
-      chip.append(img, span);
-
-      chip.addEventListener("click", () => {
-        location.hash = "#/game/" + item.slug;
-      });
-
-      container.appendChild(chip);
+  var themeBtn = document.getElementById("themeToggle");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function() {
+      var curr = root.getAttribute("data-theme");
+      var next = curr === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
     });
   }
 
-  function markRecentlyViewed(game) {
-    try {
-      const raw = localStorage.getItem(RECENT_KEY);
-      let list = raw ? JSON.parse(raw) : [];
-
-      list = list.filter(item => item.slug !== game.slug);
-      list.unshift({
-        slug: game.slug,
-        name: game.name,
-        cover: coverUrl(game.slug)
-      });
-
-      if (list.length > 8) list = list.slice(0, 8);
-
-      localStorage.setItem(RECENT_KEY, JSON.stringify(list));
-      renderRecentlyViewed(list);
-    } catch (e) {}
+  /* BG Stats helpers */
+  var BGSTATS_ID_PREFIX_APP  = "bgstats://app.bgstatsapp.com/addPlay.html?gameId=";
+  var BGSTATS_ID_PREFIX_WEB  = "https://bgstats.app/bgg/";
+  var BGSTATS_SLUG_PREFIX_WEB = "https://bgstats.app/game/";
+  function extractBggId(urlOrId) {
+    if (!urlOrId) return "";
+    var m = String(urlOrId).match(/([0-9]{2,})/);
+    return m ? m[1] : "";
+  }
+  function bgstatsUrl(slug) {
+    return BGSTATS_SLUG_PREFIX_WEB + slug;
   }
 
-  (function initRecentOnLoad() {
-    try {
-      const raw = localStorage.getItem(RECENT_KEY);
-      if (raw) renderRecentlyViewed(JSON.parse(raw));
-    } catch (e) {}
-  })();
+  /* Data */
+  var RAW = JSON.parse(document.getElementById("games-json").textContent);
+  function slugify(s) {
+    return s.toLowerCase()
+      .replace(/[:'"]/g,"")
+      .replace(/&/g,"and")
+      .replace(/[^a-z0-9]+/g,"-")
+      .replace(/(^-|-$)/g,"");
+  }
+  function qp(n) {
+    return new URL(window.location.href).searchParams.get(n) || "";
+  }
+  function basePath() {
+    return window.location.pathname
+      .replace(/\/index\.html$/,"")
+      .replace(/\/$/,"");
+  }
+  function rulebookUrl(s) {
+    return basePath() + "/rulebooks/" + s + ".pdf";
+  }
+  function remindersUrl(s) {
+    return basePath() + "/reminders/" + s + ".html";
+  }
+  function coverUrl(slug) {
+    return basePath() + "/covers/" + slug + ".webp";
+  }
+  function bggLinkFromId(id) {
+    id = extractBggId(id);
+    return id ? "https://boardgamegeek.com/boardgame/" + id : "";
+  }
 
-  function listRow(g){
-    const subbits = [g.players, g.time ? `${g.time} min` : null, g.year]
-      .filter(Boolean)
-      .join(" • ");
-    return `
-      <a class="card" href="#/game/${g.slug}">
-        <div class="thumb">
-          <img loading="lazy" src="${coverUrl(g.slug)}" onerror="this.parentNode.style.display='none'">
-        </div>
-        <div class="metaWrap">
-          <h2>${g.name}</h2>
-          <p class="sub">${subbits}</p>
-        </div>
-      </a>`;
+  var DATA = {};
+  (RAW.names || []).forEach(function(name) {
+    var slug = slugify(name);
+    DATA[slug] = Object.assign({ name: name, slug: slug }, (RAW.enrich && RAW.enrich[slug]) || {});
+  });
+
+  var appEl = document.getElementById("app");
+
+  function listRow(g) {
+    var bits = [];
+    if (g.players) bits.push(g.players);
+    if (g.time) bits.push(g.time + " min");
+    if (g.year) bits.push(g.year);
+    var sub = bits.join(" \u2022 ");
+    return (
+      '<a class="card" href="#/game/' + g.slug + '">' +
+        '<div class="thumb">' +
+          '<img loading="lazy" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
+        "</div>" +
+        '<div class="metaWrap">' +
+          "<h2>" + g.name + "</h2>" +
+          '<p class="sub">' + sub + "</p>" +
+        "</div>" +
+      "</a>"
+    );
   }
 
   function renderList() {
-    $app.innerHTML = `
-      <input id="search" placeholder="Search your collection…" aria-label="Search games">
-      <section id="game-grid" class="grid"></section>
-    `;
+    appEl.innerHTML =
+      '<input id="search" placeholder="Search your collection..." aria-label="Search games">' +
+      '<section id="game-grid" class="grid"></section>';
 
-    const $grid = document.getElementById("game-grid");
-    const $search = document.getElementById("search");
+    var grid = document.getElementById("game-grid");
+    var search = document.getElementById("search");
 
-    function updateGrid(filter = "") {
-      const f = filter.toLowerCase();
-      const games = Object.values(DATA)
-        .filter(g => !f || g.name.toLowerCase().includes(f))
-        .sort((a, b) => a.name.localeCompare(b.name));
-
-      $grid.innerHTML = games.map(listRow).join("");
+    function updateGrid(filter) {
+      filter = (filter || "").toLowerCase();
+      var games = Object.keys(DATA)
+        .map(function(k) { return DATA[k]; })
+        .filter(function(g) {
+          return !filter || g.name.toLowerCase().indexOf(filter) !== -1;
+        })
+        .sort(function(a, b) {
+          return a.name.localeCompare(b.name);
+        });
+      grid.innerHTML = games.map(listRow).join("");
     }
 
     updateGrid("");
 
-    $search.addEventListener("input", e => {
+    search.addEventListener("input", function(e) {
       updateGrid(e.target.value);
     });
   }
 
-  function expansionSlug(name){ return slugify(name); }
+  function expansionSlug(name) {
+    return slugify(name);
+  }
 
-  function expansionRulebook(gameSlug, exp){
+  function expansionRulebook(gameSlug, exp) {
     if (exp.rulebook) {
-      const rb = String(exp.rulebook).trim();
+      var rb = String(exp.rulebook).trim();
       if (/^https?:\/\//i.test(rb)) return rb;
-      return rulebookUrl(rb.replace(/\.pdf$/,''));
+      return rulebookUrl(rb.replace(/\.pdf$/,""));
     }
-    const es = expansionSlug(exp.name || "");
-    return rulebookUrl(`${gameSlug}--${es}`.replace(/\.pdf$/,''));
+    var es = expansionSlug(exp.name || "");
+    return rulebookUrl((gameSlug + "--" + es).replace(/\.pdf$/,""));
   }
 
   function expansionCoverUrl(gameSlug, exp) {
-    const bp = basePath();
+    var bp = basePath();
     if (exp.cover) {
-      const c = String(exp.cover).trim();
+      var c = String(exp.cover).trim();
       if (/^https?:\/\//i.test(c)) return c;
       if (/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(c)) {
-        return `${bp}/${c.replace(/^\//,'')}`;
+        return bp + "/" + c.replace(/^\//,"");
       }
       return coverUrl(c);
     }
-    const es = expansionSlug(exp.name || "");
-    return coverUrl(`${gameSlug}--${es}`);
+    var es = expansionSlug(exp.name || "");
+    return coverUrl(gameSlug + "--" + es);
   }
 
-  function renderExpansions(game){
-    let exps = Array.isArray(game.expansions) ? game.expansions : [];
-
-    exps = exps.filter(exp => {
+  function renderExpansions(game) {
+    var exps = Array.isArray(game.expansions) ? game.expansions : [];
+    exps = exps.filter(function(exp) {
       if (!exp || typeof exp !== "object") return false;
-      const name = (exp.name || "").trim();
-      const hasContent = [
+      var name = (exp.name || "").trim();
+      var hasContent = [
         exp.quickStart,
         exp.reminders,
         exp.rulebook,
         exp.youtube,
         exp.bggId,
         exp.cover
-      ].some(v => v && String(v).trim() !== "");
+      ].some(function(v) { return v && String(v).trim() !== ""; });
       return name || hasContent;
     });
-
     if (!exps.length) return "";
 
-    const blocks = exps.map(exp => {
-      const expName = exp.name || "Expansion";
-      const expRulebook = expansionRulebook(game.slug, exp);
-      const cover = expansionCoverUrl(game.slug, exp);
+    var blocks = exps.map(function(exp) {
+      var expName = exp.name || "Expansion";
+      var expRulebook = expansionRulebook(game.slug, exp);
+      var cover = expansionCoverUrl(game.slug, exp);
 
-      const expBggId = extractBggId(exp.bggId || "");
-      const baseBggId = extractBggId(game.bggId || "");
-      const id = expBggId || baseBggId;
+      var expBggId = extractBggId(exp.bggId || "");
+      var baseBggId = extractBggId(game.bggId || "");
+      var id = expBggId || baseBggId;
 
-      const links = {
+      var links = {
         rulebook: expRulebook,
         youtube: exp.youtube || "",
-        bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : "",
-        bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null
+        bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : "",
+        bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null
       };
 
-      const qs  = (exp.quickStart || "").trim();
-      const rem = (exp.reminders  || "").trim();
+      var qs  = (exp.quickStart || "").trim();
+      var rem = (exp.reminders  || "").trim();
 
-      return `
-        <details class="expansion">
-          <summary><span class="expansion-name">${expName}</span></summary>
-          <div class="expansion-body">
-            ${cover ? `<div class="expansion-art">
-              <img src="${cover}" alt="${expName} cover" loading="lazy">
-            </div>` : ""}
-            ${qs ? `<div class="expansion-text-block"><h4>Quick Setup</h4><p>${qs.replace(/\n/g,"<br>")}</p></div>` : ""}
-            ${rem ? `<div class="expansion-text-block"><h4>Quick Reminders</h4><p>${rem.replace(/\n/g,"<br>")}</p></div>` : ""}
-            <div class="expansion-btns">
-              ${links.rulebook ? `
-                <a class="btnlink action-link"
-                   data-check="rulebook"
-                   href="${links.rulebook}"
-                   target="_blank"
-                   rel="noopener">
-                  <svg aria-hidden="true"><use href="#icon-rules"></use></svg>
-                  <span>Rulebook</span>
-                </a>` : ""}
-              ${links.youtube ? `
-                <a class="btnlink action-link"
-                   href="${links.youtube}"
-                   target="_blank"
-                   rel="noopener">
-                  <svg aria-hidden="true"><use href="#icon-play"></use></svg>
-                  <span>How to Play Video</span>
-                </a>` : ""}
-            </div>
-          </div>
-        </details>`;
+      return (
+        '<details class="expansion">' +
+          '<summary><span class="expansion-name">' + expName + "</span></summary>" +
+          '<div class="expansion-body">' +
+            (cover ? (
+              '<div class="expansion-art">' +
+                '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy">' +
+              "</div>"
+            ) : "") +
+            (qs ? (
+              '<div class="expansion-text-block"><h4>Quick Setup</h4><p>' +
+              qs.replace(/\n/g,"<br>") +
+              "</p></div>"
+            ) : "") +
+            (rem ? (
+              '<div class="expansion-text-block"><h4>Quick Reminders</h4><p>' +
+              rem.replace(/\n/g,"<br>") +
+              "</p></div>"
+            ) : "") +
+            '<div class="expansion-btns">' +
+              (links.rulebook ? (
+                '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Rulebook</a>'
+              ) : "") +
+              (links.youtube ? (
+                '<a class="btnlink" href="' + links.youtube + '" target="_blank" rel="noopener">How to Play Video</a>'
+              ) : "") +
+            "</div>" +
+          "</div>" +
+        "</details>"
+      );
     }).join("");
 
-    return `
-      <section id="exp" class="exp">
-        <h3>Expansions</h3>
-        ${blocks}
-      </section>`;
+    return (
+      '<section id="exp" class="exp">' +
+        "<h3>Expansions</h3>" +
+        blocks +
+      "</section>"
+    );
   }
 
-  async function attachRulebookGuards() {
-    const links = document.querySelectorAll('a[data-check="rulebook"]');
-    links.forEach(link => {
-      const url = link.href;
-      if (!url) return;
+  function renderDetail(slug, action) {
+    if (action === void 0) action = "quicksetup";
 
-      link.addEventListener("click", async (e) => {
-        const sameOrigin = url.startsWith(location.origin) || url.startsWith('/');
-        if (!sameOrigin) return;
-
-        e.preventDefault();
-        try {
-          const res = await fetch(url, { method: "HEAD" });
-          if (res.ok) {
-            window.open(url, "_blank", "noopener");
-          } else {
-            alert(`Sorry, this rulebook is not available yet (HTTP ${res.status}).`);
-          }
-        } catch (err) {
-          alert("Sorry, this rulebook could not be loaded. Please try again later.");
-        }
-      }, { once: true });
-    });
-  }
-
-  function renderDetail(slug, action="quicksetup"){
-    const g = DATA[slug];
-    if(!g){
-      $app.innerHTML = `<div class="detail"><p>Game not found: <code>${slug}</code></p></div>`;
+    var g = DATA[slug];
+    if (!g) {
+      appEl.innerHTML = '<div class="detail"><p>Game not found: <code>' + slug + "</code></p></div>";
       return;
     }
-    const subbits = [g.players, g.time ? `${g.time} min` : null, g.year]
-      .filter(Boolean)
-      .join(" • ");
-    const id = extractBggId(g.bggId);
-    const links = {
+
+    var bits = [];
+    if (g.players) bits.push(g.players);
+    if (g.time) bits.push(g.time + " min");
+    if (g.year) bits.push(g.year);
+    var sub = bits.join(" \u2022 ");
+
+    var id = extractBggId(g.bggId);
+    var links = {
       youtube: g.youtube || "",
-      bgstats: id ? `${BGSTATS_ID_PREFIX_WEB}${id}` : bgstatsUrl(slug),
-      bgstatsApp: id ? `${BGSTATS_ID_PREFIX_APP}${id}` : null,
+      bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : bgstatsUrl(slug),
+      bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null,
       reminders: g.reminders || remindersUrl(slug),
       rulebook: g.rulebook
         ? (/^https?:\/\//i.test(String(g.rulebook).trim())
             ? String(g.rulebook).trim()
-            : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,'')))
+            : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,"")))
         : rulebookUrl(slug),
       cover: coverUrl(slug)
     };
 
-    const quickText         = (g.quickStart || "").trim();
-    const remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
-    const playerCountSetup  = (g.playerCountSetup || "").trim();
-    const startingResources = (g.startingResources || "").trim();
-    const turnStructure     = (g.turnStructure || "").trim();
-    const commonMistakes    = (g.commonMistakes || "").trim();
+    var quickText         = (g.quickStart || "").trim();
+    var remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
+    var playerCountSetup  = (g.playerCountSetup || "").trim();
+    var startingResources = (g.startingResources || "").trim();
+    var turnStructure     = (g.turnStructure || "").trim();
+    var commonMistakes    = (g.commonMistakes || "").trim();
 
-    const setupByPlayerCount =
-      g.setupByPlayerCount && typeof g.setupByPlayerCount === "object"
-        ? g.setupByPlayerCount
-        : null;
+    var quickBlocksHtml =
+      '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
+        '<summary><span class="expansion-name">Quick Set Up</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (quickText || "(No quick setup yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
 
-    let playerCountHtmlInner;
-    if (setupByPlayerCount && Object.keys(setupByPlayerCount).length) {
-      const counts = Object.keys(setupByPlayerCount);
-      const first = counts[0];
-      playerCountHtmlInner = `
-        <div class="playercount-controls">
-          ${counts
-            .map(
-              (c) => `
-            <button type="button"
-                    class="pill-btn pc-btn"
-                    data-count="${c}"
-                    ${c === first ? 'data-active="true"' : ""}>
-              ${c} Players
-            </button>`
-            )
-            .join("")}
-        </div>
-        <div class="expansion-text-block">
-          <p id="pc-text">${(setupByPlayerCount[first] || "")
-            .replace(/\n/g, "<br>")}</p>
-        </div>
-      `;
-    } else {
-      playerCountHtmlInner = `
-        <div class="expansion-text-block">
-          <p>${(playerCountSetup || "(No player-count-specific setup yet.)")
-            .replace(/\n/g, "<br>")}</p>
-        </div>
-      `;
-    }
+      '<details class="expansion" id="reminders-block">' +
+        '<summary><span class="expansion-name">Reminders</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (remindersText || "(No reminders yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
 
-    const playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
-    const playerAidSection = playerAids.length ? `
-      <section class="exp" id="player-aids">
-        <details class="expansion" open>
-          <summary><span class="expansion-name">Player Aids (PDF)</span></summary>
-          <div class="expansion-body">
-            <div class="expansion-text-block">
-              <p>Quick reference PDFs for this game. Switch between aids below.</p>
-            </div>
-            <div class="player-aid-list">
-              ${playerAids.map((aid, idx) => `
-                <button type="button"
-                        class="pill-btn player-aid-btn"
-                        data-file="${aid.file}"
-                        ${idx === 0 ? 'data-active="true"' : ''}>
-                  ${aid.label || `Aid ${idx + 1}`}
-                </button>
-              `).join("")}
-            </div>
-            <div class="player-aid-viewer">
-              <iframe
-                id="playerAidFrame"
-                src="${playerAids[0].file}"
-                title="Player Aid for ${g.name}"
-                loading="lazy">
-              </iframe>
-            </div>
-            <p class="expansion-text-block">
-              <a id="openAidLink" href="${playerAids[0].file}" target="_blank" rel="noopener">
-                Open current aid in new tab
-              </a>
-            </p>
-          </div>
-        </details>
-      </section>
-    ` : "";
+      '<details class="expansion" id="playercount-block">' +
+        '<summary><span class="expansion-name">Player Count Setup</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
 
-    // Quick Rules Glossary
-    const rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
-    const rulesGlossaryHtml = rulesGlossary.length
-      ? `
-        <section class="exp" id="rules-glossary">
-          <details class="expansion">
-            <summary><span class="expansion-name">Quick Rules Glossary</span></summary>
-            <div class="expansion-body">
-              <dl class="glossary">
-                ${rulesGlossary
-                  .map(
-                    (item) => `
-                  <div class="glossary-item">
-                    <dt>${item.term}</dt>
-                    <dd>${(item.desc || "").replace(/\n/g, "<br>")}</dd>
-                  </div>`
-                  )
-                  .join("")}
-              </dl>
-            </div>
-          </details>
-        </section>
-      `
-      : "";
+      '<details class="expansion" id="starting-resources-block">' +
+        '<summary><span class="expansion-name">Starting Resources &amp; Setup Checklist</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (startingResources || "(No starting resources/checklist yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
 
-    const quickBlocksHtml = `
-      <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
-        <summary><span class="expansion-name">Quick Set Up</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(quickText || "(No quick setup yet.)").replace(/\n/g,"<br>")}</p>
-          </div>
-        </div>
-      </details>
+      '<details class="expansion" id="turn-structure-block">' +
+        '<summary><span class="expansion-name">Turn Structure / Phases</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (turnStructure || "(No turn structure summary yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
 
-      <details class="expansion" id="reminders-block">
-        <summary><span class="expansion-name">Reminders</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(remindersText || "(No reminders yet.)").replace(/\n/g,"<br>")}</p>
-          </div>
-        </div>
-      </details>
+      '<details class="expansion" id="common-mistakes-block">' +
+        '<summary><span class="expansion-name">Common Mistakes</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (commonMistakes || "(No common mistakes noted yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>";
 
-      <details class="expansion" id="playercount-block">
-        <summary><span class="expansion-name">Player Count Setup</span></summary>
-        <div class="expansion-body">
-          ${playerCountHtmlInner}
-        </div>
-      </details>
+    appEl.innerHTML =
+      '<article class="detail">' +
+        '<figure class="cover">' +
+          '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
+            '<img src="' + links.cover + '" alt="' + g.name + ' cover" loading="lazy">' +
+            '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
+          "</a>" +
+        "</figure>" +
+        "<div>" +
+          '<h2 class="title">' + g.name + "</h2>" +
+          '<p class="byline">' + (sub || "") + "</p>" +
+          '<div class="actions">' +
+            '<section id="qs" class="exp">' +
+              (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
+            "</section>" +
 
-      <details class="expansion" id="starting-resources-block">
-        <summary><span class="expansion-name">Starting Resources & Setup Checklist</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(startingResources || "(No starting resources/checklist yet.)").replace(/\ng,"<br>")}</p>
-          </div>
-        </div>
-      </details>
+            renderExpansions(g) +
 
-      <details class="expansion" id="turn-structure-block">
-        <summary><span class="expansion-name">Turn Structure / Phases</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(turnStructure || "(No turn structure summary yet.)").replace(/\n/g,"<br>")}</p>
-          </div>
-        </div>
-      </details>
+            '<section class="exp" id="notes-section">' +
+              '<details class="expansion">' +
+                '<summary><span class="expansion-name">Table Notes</span></summary>' +
+                '<div class="expansion-body">' +
+                  '<textarea id="notes-' + slug + '" style="width:100%;height:120px;resize:vertical;" placeholder="Your personal notes for this game..."></textarea>' +
+                "</div>" +
+              "</details>" +
+            "</section>" +
 
-      <details class="expansion" id="common-mistakes-block">
-        <summary><span class="expansion-name">Common Mistakes</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(commonMistakes || "(No common mistakes noted yet.)").replace(/\n/g,"<br>")}</p>
-          </div>
-        </div>
-      </details>
-    `;
+            '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
 
-    $app.innerHTML = `
-      <article class="detail">
-        <figure class="cover">
-          <a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">
-            <img src="${links.cover}" alt="${g.name} cover" loading="lazy">
-            <span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG ↗</span>
-          </a>
-        </figure>
-        <div>
-          <h2 class="title">${g.name}</h2>
-          <p class="byline">${subbits || ""}</p>
-          <div class="actions">
-            <section id="qs" class="exp">
-              ${quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>"}
-            </section>
+            '<a class="btnlink" id="btn-bgstats" href="' + links.bgstats + '" target="_blank" rel="noopener">Play Again in BG Stats</a>' +
 
-            ${renderExpansions(g)}
-            ${playerAidSection}
-            ${rulesGlossaryHtml}
+            '<a class="btnlink" id="btn-youtube"' +
+              (links.youtube ? (' href="' + links.youtube + '" target="_blank" rel="noopener"') : "") +
+            ">How to Play Video</a>" +
 
-            <section class="exp" id="notes-section">
-              <details class="expansion">
-                <summary><span class="expansion-name">Table Notes</span></summary>
-                <div class="expansion-body">
-                  <textarea
-                    id="notes-${slug}"
-                    style="width:100%;height:120px;resize:vertical;"
-                    placeholder="Your personal notes for this game…"
-                  ></textarea>
-                </div>
-              </details>
-            </section>
-            
-            <a class="btnlink action-link"
-               data-check="rulebook"
-               href="${links.rulebook}"
-               target="_blank"
-               rel="noopener">
-              <svg aria-hidden="true"><use href="#icon-rules"></use></svg>
-              <span>Open Rulebook</span>
-            </a>
+            '<button class="btn" id="share">Share / Copy Link</button>' +
+          "</div>" +
+        "</div>" +
+      "</article>";
 
-            <a class="btnlink action-link"
-               id="btn-bgstats"
-               href="${links.bgstats}"
-               target="_blank"
-               rel="noopener">
-              <svg aria-hidden="true"><use href="#icon-bgstats"></use></svg>
-              <span>Play Again in BG Stats</span>
-            </a>
-
-            <a class="btnlink action-link"
-               id="btn-youtube"
-               ${links.youtube ? `href="${links.youtube}" target="_blank" rel="noopener"` : ""}>
-              <svg aria-hidden="true"><use href="#icon-play"></use></svg>
-              <span>How to Play Video</span>
-            </a>
-
-            <button class="btn action-link" id="share">
-              <svg aria-hidden="true"><use href="#icon-share"></use></svg>
-              <span>Share / Copy Link</span>
-            </button>
-          </div>
-        </div>
-      </article>`;
-
-    const bggCoverLink = document.getElementById("bggCoverLink");
-    const bggCoverBadge = document.getElementById("bggCoverBadge");
+    /* BGG cover link */
+    var bggCoverLink = document.getElementById("bggCoverLink");
+    var bggCoverBadge = document.getElementById("bggCoverBadge");
     if (bggCoverLink) {
-      const bggUrl = bggLinkFromId(g.bggId);
+      var bggUrl = bggLinkFromId(g.bggId);
       if (bggUrl) {
         bggCoverLink.href = bggUrl;
         bggCoverLink.classList.remove("cover-link--disabled");
         if (bggCoverBadge) {
-          bggCoverBadge.textContent = "BoardGameGeek ↗";
+          bggCoverBadge.textContent = "BoardGameGeek";
           bggCoverBadge.classList.remove("cover-badge--disabled");
         }
       } else {
@@ -2228,156 +1923,110 @@
       }
     }
 
-    if (playerAids.length) {
-      const frame = document.getElementById("playerAidFrame");
-      const openAidLink = document.getElementById("openAidLink");
-      const buttons = Array.from(document.querySelectorAll(".player-aid-btn"));
-
-      if (frame && openAidLink && buttons.length) {
-        buttons.forEach(btn => {
-          btn.addEventListener("click", () => {
-            const file = btn.getAttribute("data-file");
-            if (!file) return;
-
-            frame.src = file;
-            openAidLink.href = file;
-
-            buttons.forEach(b => b.removeAttribute("data-active"));
-            btn.setAttribute("data-active", "true");
+    /* Share */
+    var shareBtn = document.getElementById("share");
+    if (shareBtn) {
+      shareBtn.addEventListener("click", function() {
+        var u = window.location.href;
+        if (navigator.share) {
+          navigator.share({
+            title: g.name,
+            text: "Quick Menu - " + g.name,
+            url: u
+          }).catch(function() {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(u).then(function() {
+            window.alert("Link copied");
+          }).catch(function() {
+            window.prompt("Copy link:", u);
           });
-        });
-      }
+        } else {
+          window.prompt("Copy link:", u);
+        }
+      });
     }
 
-    document.getElementById('share').addEventListener('click', async () => {
-      const u = location.href;
-      try {
-        if (navigator.share) {
-          await navigator.share({title:`${g.name}`, text:`Quick Menu — ${g.name}`, url:u});
-          return;
-        }
-      } catch(e){}
-      try {
-        await navigator.clipboard.writeText(u);
-        alert("Link copied");
-      } catch(e){
-        prompt("Copy link:", u);
-      }
-    });
-
-    // --- Table Notes persistence ---
-    const notesId = `notes_${slug}`;
-    const notesBox = document.getElementById(`notes-${slug}`);
+    /* Table notes persistence */
+    var notesId = "notes_" + slug;
+    var notesBox = document.getElementById("notes-" + slug);
     if (notesBox) {
       notesBox.value = localStorage.getItem(notesId) || "";
-      notesBox.addEventListener("input", () => {
+      notesBox.addEventListener("input", function() {
         localStorage.setItem(notesId, notesBox.value);
       });
     }
 
-    // --- Player-count buttons interactions ---
-    if (setupByPlayerCount && Object.keys(setupByPlayerCount).length) {
-      const pcButtons = Array.from(document.querySelectorAll(".pc-btn"));
-      const pcTextEl = document.getElementById("pc-text");
-      if (pcButtons.length && pcTextEl) {
-        pcButtons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const count = btn.getAttribute("data-count");
-            const text = (setupByPlayerCount[count] || "").replace(/\n/g, "<br>");
-            pcTextEl.innerHTML = text || "(No details for this player count yet.)";
-            pcButtons.forEach((b) => b.removeAttribute("data-active"));
-            btn.setAttribute("data-active", "true");
-          });
-        });
-      }
-    }
-
-    // --- BG Stats "Play Again" deep link with fallback ---
-    const bgbtn = document.getElementById("btn-bgstats");
+    /* BG Stats app-first */
+    var bgbtn = document.getElementById("btn-bgstats");
     if (bgbtn) {
-      bgbtn.addEventListener("click", (e) => {
+      bgbtn.addEventListener("click", function(e) {
         if (!links.bgstatsApp) return;
         e.preventDefault();
-        const appUrl = links.bgstatsApp;
-        const webUrl = links.bgstats;
+        var appUrl = links.bgstatsApp;
+        var webUrl = links.bgstats;
 
-        let fallbackTimer = setTimeout(() => {
+        var timer = setTimeout(function() {
           window.open(webUrl, "_blank", "noopener");
         }, 700);
 
-        const a = document.createElement("a");
+        var a = document.createElement("a");
         a.href = appUrl;
         a.style.display = "none";
         document.body.appendChild(a);
         a.click();
-
-        setTimeout(() => {
+        setTimeout(function() {
           try {
             document.body.removeChild(a);
-          } catch {}
+          } catch (err) {}
+          clearTimeout(timer);
         }, 1200);
       });
     }
-
-    attachRulebookGuards();
-    markRecentlyViewed(g);
-
-    const actionLower = (action || "").toLowerCase();
-    if (actionLower && actionLower !== "quicksetup") {
-      const map = { youtube:"#btn-youtube" };
-      const sel = map[actionLower];
-      if (sel) document.querySelector(sel)?.click();
-    }
   }
 
-  function normalizeIncoming(){
-    const q = qp("game");
-    if (q){
-      const want = q.trim();
-      const slugged = slugify(want);
-      const a = (qp("action") || "quicksetup").toLowerCase();
-      location.replace(`#\/game\/${slugged}?action=${encodeURIComponent(a)}`);
+  function normalizeIncoming() {
+    var q = qp("game");
+    if (q) {
+      var want = q.trim();
+      var slugged = slugify(want);
+      var a = (qp("action") || "quicksetup").toLowerCase();
+      window.location.replace("#/game/" + slugged + "?action=" + encodeURIComponent(a));
       return true;
     }
     return false;
   }
 
-  function parseHash(){
-    const h = location.hash || "#/";
-    const [path,q] = h.slice(2).split("?");
-    const parts = (path || "").split("/");
-    const params = new URLSearchParams(q || "");
-    if (parts[0] === "game" && parts[1])
-      return {route:"detail", slug:parts[1].toLowerCase(), action:(params.get("action") || "quicksetup").toLowerCase()};
-    return {route:"list"};
+  function parseHash() {
+    var h = window.location.hash || "#/";
+    var parts = h.slice(2).split("?");
+    var path = parts[0] || "";
+    var q = parts[1] || "";
+    var pieces = path.split("/");
+    var params = new URLSearchParams(q);
+    if (pieces[0] === "game" && pieces[1]) {
+      return {
+        route: "detail",
+        slug: pieces[1].toLowerCase(),
+        action: (params.get("action") || "quicksetup").toLowerCase()
+      };
+    }
+    return { route:"list" };
   }
 
-  function render(){
+  function render() {
     if (normalizeIncoming()) return;
-    const {route, slug, action} = parseHash();
-    route === "detail" ? renderDetail(slug, action) : renderList();
+    var parsed = parseHash();
+    if (parsed.route === "detail") {
+      renderDetail(parsed.slug, parsed.action);
+    } else {
+      renderList();
+    }
   }
 
   window.addEventListener("hashchange", render);
   document.addEventListener("DOMContentLoaded", render);
 })();
 </script>
-
-<!-- SVG sprite for lightweight icons -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="icon-play" viewBox="0 0 24 24">
-    <path d="M8 5v14l11-7z" />
-  </symbol>
-  <symbol id="icon-rules" viewBox="0 0 24 24">
-    <path d="M6 4h11a2 2 0 0 1 2 2v14l-4-3-4 3-4-3-4 3V6a2 2 0 0 1 2-2z" />
-  </symbol>
-  <symbol id="icon-bgstats" viewBox="0 0 24 24">
-    <path d="M5 19h3V9H5zm5 0h3V5h-3zm5 0h3V12h-3z" />
-  </symbol>
-  <symbol id="icon-share" viewBox="0 0 24 24">
-    <path d="M18 8a3 3 0 1 0-2.8-4H13v2h2.2A3 3 0 0 0 18 8zm-5 2-4-4v3H5v2h4v3zM5 18a3 3 0 1 0 3-3H5z" />
-  </symbol>
-</svg>
 
 </body>
 </html>
