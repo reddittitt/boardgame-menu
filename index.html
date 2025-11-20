@@ -366,6 +366,19 @@
     .detail { grid-template-columns:1fr; }
     .cover { width:100%; }
   }
+  /* Dark mode tuning for section borders/backgrounds */
+:root[data-theme="dark"] .qs,
+:root[data-theme="dark"] .exp,
+:root[data-theme="dark"] .expansion {
+  border-color: var(--border);
+}
+
+/* Optional: darker background in dark mode so they don't glow */
+:root[data-theme="dark"] .qs,
+:root[data-theme="dark"] .exp {
+  background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
+}
+
 </style>
 </head>
 <body>
