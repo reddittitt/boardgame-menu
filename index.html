@@ -697,96 +697,92 @@
   "expansions": []},
   
 "forbidden-island": {
-  "players": "2–4",
+  "players": "2-4",
   "time": "30",
   "year": "2010",
   "bggId": "65244",
   "quickStart": "- Build island grid with 24 tiles.\n- Give each player 2 treasure cards.\n- Set water meter based on difficulty.\n- Place treasures beside island.\n- Assign roles randomly.",
   "startingResources": "- 2 treasure cards.\n- Player pawn.\n- Role card with special ability.",
-  "remindersText": "- On your turn: 3 actions → draw 2 treasure → flood cards.\n- Shore up to prevent sinking.\n- Must collect 4 of each treasure and escape.",
-  "playerCountSetup": "- 2p: Slightly easier; roles matter more.\n- 3–4p: Standard challenge.",
+  "remindersText": "- On your turn: 3 actions -> draw 2 treasure -> flood cards.\n- Shore up to prevent sinking.\n- Must collect 4 of each treasure and escape.",
+  "playerCountSetup": "- 2p: Slightly easier; roles matter more.\n- 3-4p: Standard challenge.",
   "turnStructure": "- 3 actions.\n- Draw 2 treasure cards.\n- Draw flood cards based on Water Level.",
   "commonMistakes": "- Not curing sinks early.\n- Holding too many cards (hand limit 5).\n- Forgetting Water Level increases.",
-"expansions": []},
-  
+  "expansions": []
+},
+
 "foundations-of-metropolis": {
-  "players": "2–4",
-  "time": "30–60",
+  "players": "2-4",
+  "time": "30-60",
   "year": "*",
   "bggId": "",
   "quickStart": "- Lay out main board.\n- Give each player starting resources and cards per rulebook.\n- Shuffle supply/market decks.\n- Place starting buildings.",
   "startingResources": "- Starting coins.\n- Starting resource tokens.\n- Starting hand.",
   "remindersText": "- Core loop is building, upgrading, and managing economy.\n- Most buildings require adjacency or resource payments.\n- Scoring often tied to placement patterns.",
-  "playerCountSetup": "- 2p: remove some market tiles/cards.\n- 3–4p: full board.",
+  "playerCountSetup": "- 2p: remove some market tiles/cards.\n- 3-4p: full board.",
   "turnStructure": "- Take action (build/upgrade/buy).\n- Refresh markets.\n- End of round production.",
   "commonMistakes": "- Building without adjacency.\n- Forgetting production triggers.\n- Overpaying for early upgrades.",
-"expansions": []},
-  
- "heat-pedal-to-the-metal": {
-      "players": "1–6",
-      "time": "45–60",
-      "year": "2022",
+  "expansions": []
+},
 
-      "bggId": "366013",
-      "youtube": "https://www.youtube.com/watch?v=XXXXX",
-      "rulebook": "heat-pedal-to-the-metal",
+"heat-pedal-to-the-metal": {
+  "players": "1-6",
+  "time": "45-60",
+  "year": "2022",
 
-      "quickStart": "Shuffle the Heat cards...\nDeal starting hands...\nSet up the track as shown on the board...",
-      "remindersText": "- You must play exactly 1 card each round.\n- Resolve corners in order.\n- Don’t forget heat in your discard pile.",
-      
-      /* Optional: plain text fallback if you don't want per-player-count buttons */
-      "playerCountSetup": "2–3 players: use side A of the track.\n4–6 players: use side B.",
+  "bggId": "366013",
+  "youtube": "https://www.youtube.com/watch?v=XXXXX",
+  "rulebook": "heat-pedal-to-the-metal",
 
-      /* NEW: dynamic per-player-count setup */
-      "setupByPlayerCount": {
-        "2": "Use the shorter track.\nRemove these upgrade cards...\nUse bots if desired.",
-        "3": "Use the medium track.\nRemove X cards from the upgrade deck.",
-        "4": "Use the full track.\nAll upgrade cards in play."
-      },
+  "quickStart": "Shuffle the Heat cards...\nDeal starting hands...\nSet up the track as shown on the board...",
+  "remindersText": "- You must play exactly 1 card each round.\n- Resolve corners in order.\n- Do not forget heat in your discard pile.",
 
-      "startingResources": "Each player gets:\n- 1 car and matching deck\n- 6 Heat cards into their deck\n- 3 Stress cards\n- 1 player aid",
-      "turnStructure": "1. Select cards\n2. Reveal simultaneously\n3. Move cars\n4. Resolve corners\n5. Clean up",
-      "commonMistakes": "- Forgetting slipstream.\n- Ignoring heat in discard.\n- Taking stress when already in the red.",
+  "playerCountSetup": "2-3 players: use side A of the track.\n4-6 players: use side B.",
 
-      /* Optional: Player aids (PDFs you host) */
-      "playerAids": [
-        { "label": "Base Game Aid", "file": "aids/heat-base.pdf" },
-        { "label": "Heavy Rain Aid", "file": "aids/heat-heavy-rain.pdf" }
-      ],
+  "setupByPlayerCount": {
+    "2": "Use the shorter track.\nRemove these upgrade cards...\nUse bots if desired.",
+    "3": "Use the medium track.\nRemove X cards from the upgrade deck.",
+    "4": "Use the full track.\nAll upgrade cards in play."
+  },
 
-      /* NEW: Quick Rules Glossary */
-      "rulesGlossary": [
-        {
-          "term": "Slipstream",
-          "desc": "If you end your move directly behind another car, move 1 extra space."
-        },
-        {
-          "term": "Heat",
-          "desc": "Heat cards clog your deck but let you push your car faster. You gain them when you brake late or take risks."
-        }
-      ],
+  "startingResources": "Each player gets:\n- 1 car and matching deck\n- 6 Heat cards into their deck\n- 3 Stress cards\n- 1 player aid",
+  "turnStructure": "1. Select cards\n2. Reveal simultaneously\n3. Move cars\n4. Resolve corners\n5. Clean up",
+  "commonMistakes": "- Forgetting slipstream.\n- Ignoring heat in discard.\n- Taking stress when already in the red.",
 
-      /* Expansions for this game */
-      "expansions": [
-        {
-          "name": "Heavy Rain",
-          "cover": "covers/heat--heavy-rain.webp",
-          "quickStart": "Add rain tiles to the track.\nUse the rain side of the weather board.\nShuffle the rain cards into the deck.",
-          "reminders": "- Rain reduces corner speed limits.\n- Some upgrades interact with rain tiles.",
-          "rulebook": "heat--heavy-rain",
-          "youtube": "https://www.youtube.com/watch?v=YYYYY",
-          "bggId": "XXXXXX"
-        },
-        {
-          "name": "Tunnel Vision",
-          "cover": "covers/heat--tunnel-vision.webp",
-          "quickStart": "Use one of the tunnel tracks.\nFollow tunnel setup rules in the expansion.",
-          "reminders": "- Tunnels limit actions in certain sections.",
-          "rulebook": "heat--tunnel-vision"
-        }
-      ]
+  "playerAids": [
+    { "label": "Base Game Aid", "file": "aids/heat-base.pdf" },
+    { "label": "Heavy Rain Aid", "file": "aids/heat-heavy-rain.pdf" }
+  ],
+
+  "rulesGlossary": [
+    {
+      "term": "Slipstream",
+      "desc": "If you end your move directly behind another car, move 1 extra space."
     },
+    {
+      "term": "Heat",
+      "desc": "Heat cards clog your deck but let you push your car faster. You gain them when you brake late or take risks."
+    }
+  ],
 
+  "expansions": [
+    {
+      "name": "Heavy Rain",
+      "cover": "covers/heat--heavy-rain.webp",
+      "quickStart": "Add rain tiles to the track.\nUse the rain side of the weather board.\nShuffle the rain cards into the deck.",
+      "reminders": "- Rain reduces corner speed limits.\n- Some upgrades interact with rain tiles.",
+      "rulebook": "heat--heavy-rain",
+      "youtube": "https://www.youtube.com/watch?v=YYYYY",
+      "bggId": "999999"
+    },
+    {
+      "name": "Tunnel Vision",
+      "cover": "covers/heat--tunnel-vision.webp",
+      "quickStart": "Use one of the tunnel tracks.\nFollow tunnel setup rules in the expansion.",
+      "reminders": "- Tunnels limit actions in certain sections.",
+      "rulebook": "heat--tunnel-vision"
+    }
+  ]
+},
 
 "jaipur": {
   "players": "2",
@@ -799,84 +795,89 @@
   "playerCountSetup": "- 2 players only.",
   "turnStructure": "- Choose 1 action.\n- Refill market.\n- Round ends when 3 goods piles empty.",
   "commonMistakes": "- Forgetting camels refill market first.\n- Selling singletons of high-value goods.\n- Running out of hand space (limit 7).",
-"expansions": []
+  "expansions": []
 },
+
 "kingdomino": {
-  "players": "2–4",
-  "time": "15–30",
+  "players": "2-4",
+  "time": "15-30",
   "year": "2016",
   "bggId": "204583",
-  "quickStart": "- Shuffle dominoes face-down.\n- Draw 4 dominoes and arrange in ascending order.\n- Each player places their king token on a domino to claim.\n- Give each player a 1×1 starting castle tile.",
+  "quickStart": "- Shuffle dominoes face-down.\n- Draw 4 dominoes and arrange in ascending order.\n- Each player places their king token on a domino to claim.\n- Give each player a 1x1 starting castle tile.",
   "startingResources": "- 1 castle tile.\n- King token(s) (2 per player in 2p variant).",
-  "remindersText": "- Must place domino so at least one terrain matches.\n- Grid must stay within 5×5 (7×7 for 'Mighty Duel' variant).\n- Crowns multiply scoring — total terrain squares × crowns.",
-  "playerCountSetup": "- 2 players: use 2 king meeples each; play with a 7×7 grid if desired.\n- 3–4 players: standard 5×5.",
+  "remindersText": "- Must place domino so at least one terrain matches.\n- Grid must stay within 5x5 (7x7 for 'Mighty Duel' variant).\n- Crowns multiply scoring - total terrain squares x crowns.",
+  "playerCountSetup": "- 2 players: use 2 king meeples each; play with a 7x7 grid if desired.\n- 3-4 players: standard 5x5.",
   "turnStructure": "- Choose a domino.\n- Place previously-selected domino.\n- Reveal next row of dominoes.\n- Continue until all dominoes are placed.",
   "commonMistakes": "- Misplacing edge dominoes outside grid.\n- Forgetting final incomplete dominoes score zero.\n- Miscounting crown multipliers.",
-"expansions": []
+  "expansions": []
 },
+
 "kingdomino-origins": {
-  "players": "2–4",
-  "time": "25–45",
+  "players": "2-4",
+  "time": "25-45",
   "year": "2021",
   "bggId": "329438",
   "quickStart": "- Choose game mode (Discovery, Totem, or Tribe).\n- Lay starting volcano tile for each player.\n- Shuffle dominoes; flip 4 for draft.\n- Place fire tokens based on volcano eruptions (later rounds).",
   "startingResources": "- 1 volcano starting tile.\n- Tribe tokens depending on mode.",
   "remindersText": "- Discovery: classic scoring.\n- Totem: earn tokens by majority of terrains.\n- Tribe: collect resources to recruit tribe cards.",
-  "playerCountSetup": "- 2 players: 2 kings each; larger grid.\n- 3–4 players: normal 5×5 layout.",
-  "turnStructure": "- Draft domino.\n- Place previous one.\n- Trigger eruptions → place fire tokens.\n- Continue until all tiles are used.",
+  "playerCountSetup": "- 2 players: 2 kings each; larger grid.\n- 3-4 players: normal 5x5 layout.",
+  "turnStructure": "- Draft domino.\n- Place previous one.\n- Trigger eruptions and place fire tokens.\n- Continue until all tiles are used.",
   "commonMistakes": "- Forgetting eruption placement rules.\n- Misplacing fire tokens.\n- Not accounting for tribe resource needs when drafting.",
-"expansions": []
+  "expansions": []
 },
+
 "monopoly-deal": {
-  "players": "2–5",
+  "players": "2-5",
   "time": "15",
   "year": "2008",
   "bggId": "37904",
   "quickStart": "- Shuffle deck; deal 5 cards.\n- Start with an empty tableau.\n- Draw 2 cards at start of your turn.",
   "startingResources": "- 5 cards.\n- No bank or properties yet.",
-  "remindersText": "- Play up to 3 cards per turn.\n- Properties can be rearranged unless frozen by a hotel/house.\n- Action cards often go to the bank as money.\n- First player to 3 full property sets wins.",
-  "playerCountSetup": "- No component changes.\n- Plays fastest at 2–3 players.",
+  "remindersText": "- Play up to 3 cards per turn.\n- Properties can be rearranged unless frozen by a hotel or house.\n- Action cards often go to the bank as money.\n- First player to 3 full property sets wins.",
+  "playerCountSetup": "- No component changes.\n- Plays fastest at 2-3 players.",
   "turnStructure": "- Draw 2.\n- Play up to 3 cards (money, actions, or properties).\n- Discard down to 7 at end if over limit.",
   "commonMistakes": "- Not realizing rent hits all opponents.\n- Forgetting action cards have monetary value.\n- Misusing Deal Breaker too early.",
-"expansions": []
+  "expansions": []
 },
+
 "moonrakers-titan-edition": {
-  "players": "1–5",
-  "time": "60–120",
+  "players": "1-5",
+  "time": "60-120",
   "year": "2020",
   "bggId": "438924",
   "playerAids": [
-  {
-  "label": "Card Icon Key",
-  "file": "player-aids/moonrakers-key.pdf"
-  }],
-  "quickStart": "- Give ship board + starting deck\n- Give 10 credits\n- Reveal contract row\n- Deal 3 objectives\n- Set prestige target",
-  "startingResources": "- Starting deck\n- 10 credits\n- 3 objectives\n- Ship board",
-  "remindersText": "- Contracts are co-op but reward negotiation\n- Failed contract = hazards but no rewards\n- Thrusters = extra actions\n- Reactors = more plays\n- Draw back to full at end of turn",
-  "playerCountSetup": "- Higher prestige for 2–3p\n- More negotiation at 4–5p\n- Solo uses dedicated rules",
-  "turnStructure": "- Choose: contract OR terminal action\n- Negotiate\n- Play cards\n- Resolve hazards/rewards",
-  "commonMistakes": "- Taking bad deals\n- Not tracking hazards\n- Ignoring objectives\n- Overcommitting without thrusters",
-"expansions": [
+    {
+      "label": "Card Icon Key",
+      "file": "player-aids/moonrakers-key.pdf"
+    }
+  ],
+  "quickStart": "- Give ship board and starting deck.\n- Give 10 credits.\n- Reveal contract row.\n- Deal 3 objectives.\n- Set prestige target.",
+  "startingResources": "- Starting deck.\n- 10 credits.\n- 3 objectives.\n- Ship board.",
+  "remindersText": "- Contracts are cooperative but reward negotiation.\n- Failed contract means hazards but no rewards.\n- Thrusters give extra actions.\n- Reactors allow more card plays.\n- Draw back to full at end of turn.",
+  "playerCountSetup": "- Higher prestige target for 2-3 players.\n- More negotiation at 4-5 players.\n- Solo uses dedicated rules.",
+  "turnStructure": "- Choose: contract or terminal action.\n- Negotiate.\n- Play cards.\n- Resolve hazards and rewards.",
+  "commonMistakes": "- Taking bad deals.\n- Not tracking hazards.\n- Ignoring objectives.\n- Overcommitting without thrusters.",
+  "expansions": [
     {
       "name": "Binding Ties",
-      "quickStart": "- Add relationship boards\n- Shuffle new contracts/objectives",
-      "reminders": "- Partnership bonuses accumulate\n- Encourages repeat teaming",
+      "quickStart": "- Add relationship boards.\n- Shuffle new contracts and objectives.",
+      "reminders": "- Partnership bonuses accumulate.\n- Encourages repeat teaming.",
       "rulebook": "",
       "youtube": "",
       "bggId": ""
     },
     {
       "name": "Overload",
-      "quickStart": "- Add new crew + parts\n- Add new action cards",
-      "reminders": "- Bigger combos, faster engines",
+      "quickStart": "- Add new crew and parts.\n- Add new action cards.",
+      "reminders": "- Bigger combos, faster engines.",
       "rulebook": "",
       "youtube": "",
       "bggId": ""
     },
     {
       "name": "Nomad",
-      "quickStart": "- Add map modules\n- Add Nomad contracts",
-      "reminders": "- Location effects change contract values",
+      "quickStart": "- Add map modules.\n- Add Nomad contracts.",
+      "reminders": "- Location effects change contract values.",
       "rulebook": "",
       "youtube": "",
       "bggId": ""
