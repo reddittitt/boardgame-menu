@@ -2160,6 +2160,18 @@
       }
     });
 
+    // --- Table Notes persistence ---
+const notesId = `notes_${slug}`;
+const notesBox = document.getElementById(`notes-${slug}`);
+if (notesBox) {
+  // Load saved notes
+  notesBox.value = localStorage.getItem(notesId) || "";
+
+  // Save on typing (very lightweight)
+  notesBox.addEventListener("input", () => {
+    localStorage.setItem(notesId, notesBox.value);
+  });
+}
     const bgbtn = document.getElementById('btn-bgstats');
     if (bgbtn) {
       bgbtn.addEventListener('click', (e) => {
