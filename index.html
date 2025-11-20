@@ -189,8 +189,8 @@
     border-radius:12px;
     overflow:hidden;
     background:#0001;
-    justify-self:center;      /* center the cover art in its column */
-    max-width:180px;          /* half-ish of the 260px column */
+    justify-self:center;
+    max-width:180px;
   }
 
   .cover-link{
@@ -203,7 +203,7 @@
     width:100%;
     height:auto;
     display:block;
-    object-fit:contain;       /* show full image, no cropping */
+    object-fit:contain;
     transition:transform .15s ease-out;
   }
 
@@ -228,11 +228,9 @@
   .cover-link--disabled{
     cursor:default;
   }
-
   .cover-link--disabled:hover img{
     transform:none;
   }
-
   .cover-badge--disabled{
     background:rgba(0,0,0,.4);
     opacity:.8;
@@ -332,12 +330,6 @@
     margin:.2rem 0 .2rem 1.1rem;
   }
   .exp a{color:inherit}
-  footer{
-    text-align:center;
-    font-size:.8rem;
-    color:var(--muted);
-    margin-top:16px;
-  }
 
   /* Expansion details */
   .expansion{
@@ -358,21 +350,15 @@
     gap:8px;
     position:relative;
   }
-
-  .expansion summary::-webkit-details-marker{
-    display:none;
-  }
-
+  .expansion summary::-webkit-details-marker{display:none;}
   .expansion summary::before{
     content:"▸";
     font-size:.8rem;
     transform:translateY(1px);
   }
-
   .expansion[open] summary::before{
     transform:rotate(90deg) translateY(0);
   }
-
   .expansion summary:hover{
     background:color-mix(in oklab, var(--card) 85%, var(--brand) 15%);
   }
@@ -394,33 +380,31 @@
   }
 
   /* Player count controls */
-.playercount-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-}
+  .playercount-controls {
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+    margin-bottom:0.4rem;
+  }
 
-/* Glossary list */
-.glossary {
-  margin: 0;
-  padding: 0;
-}
+  /* Glossary list */
+  .glossary {
+    margin:0;
+    padding:0;
+  }
+  .glossary-item {
+    margin-bottom:0.4rem;
+  }
+  .glossary-item dt {
+    font-weight:600;
+    font-size:0.9rem;
+  }
+  .glossary-item dd {
+    margin:0;
+    font-size:0.85rem;
+    color:var(--muted);
+  }
 
-.glossary-item {
-  margin-bottom: 0.4rem;
-}
-
-.glossary-item dt {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.glossary-item dd {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
   .expansion-btns{
     display:flex;
     flex-direction:column;
@@ -520,9 +504,6 @@
     <div id="recentlyViewedList"></div>
   </section>
 </main>
-
-<main id="app"><noscript>JavaScript required.</noscript></main>
-
 <script id="games-json" type="application/json">
 {
   "names": [
@@ -1728,7 +1709,7 @@
   const remindersUrl = s => `${basePath()}/reminders/${s}.html`;
   function coverUrl(slug){
     const bp = basePath();
-    return `${bp}/covers/${slug}.webp`;  // full cover shown (no crop)
+    return `${bp}/covers/${slug}.webp`;
   }
 
   function bggLinkFromId(id) {
@@ -1787,7 +1768,6 @@
       let list = raw ? JSON.parse(raw) : [];
 
       list = list.filter(item => item.slug !== game.slug);
-
       list.unshift({
         slug: game.slug,
         name: game.name,
@@ -1798,17 +1778,13 @@
 
       localStorage.setItem(RECENT_KEY, JSON.stringify(list));
       renderRecentlyViewed(list);
-    } catch (e) {
-      // fail silently if localStorage not available
-    }
+    } catch (e) {}
   }
 
   (function initRecentOnLoad() {
     try {
       const raw = localStorage.getItem(RECENT_KEY);
-      if (raw) {
-        renderRecentlyViewed(JSON.parse(raw));
-      }
+      if (raw) renderRecentlyViewed(JSON.parse(raw));
     } catch (e) {}
   })();
 
@@ -1963,7 +1939,6 @@
       if (!url) return;
 
       link.addEventListener("click", async (e) => {
-        // Let fully external URLs go through (e.g. publisher-hosted PDFs)
         const sameOrigin = url.startsWith(location.origin) || url.startsWith('/');
         if (!sameOrigin) return;
 
@@ -2005,12 +1980,49 @@
       cover: coverUrl(slug)
     };
 
-    const quickText        = (g.quickStart || "").trim();
-    const remindersText    = (g.remindersText && String(g.remindersText).trim()) || "";
-    const playerCountSetup = (g.playerCountSetup || "").trim();
+    const quickText         = (g.quickStart || "").trim();
+    const remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
+    const playerCountSetup  = (g.playerCountSetup || "").trim();
     const startingResources = (g.startingResources || "").trim();
-    const turnStructure    = (g.turnStructure || "").trim();
-    const commonMistakes   = (g.commonMistakes || "").trim();
+    const turnStructure     = (g.turnStructure || "").trim();
+    const commonMistakes    = (g.commonMistakes || "").trim();
+
+    const setupByPlayerCount =
+      g.setupByPlayerCount && typeof g.setupByPlayerCount === "object"
+        ? g.setupByPlayerCount
+        : null;
+
+    let playerCountHtmlInner;
+    if (setupByPlayerCount && Object.keys(setupByPlayerCount).length) {
+      const counts = Object.keys(setupByPlayerCount);
+      const first = counts[0];
+      playerCountHtmlInner = `
+        <div class="playercount-controls">
+          ${counts
+            .map(
+              (c) => `
+            <button type="button"
+                    class="pill-btn pc-btn"
+                    data-count="${c}"
+                    ${c === first ? 'data-active="true"' : ""}>
+              ${c} Players
+            </button>`
+            )
+            .join("")}
+        </div>
+        <div class="expansion-text-block">
+          <p id="pc-text">${(setupByPlayerCount[first] || "")
+            .replace(/\n/g, "<br>")}</p>
+        </div>
+      `;
+    } else {
+      playerCountHtmlInner = `
+        <div class="expansion-text-block">
+          <p>${(playerCountSetup || "(No player-count-specific setup yet.)")
+            .replace(/\n/g, "<br>")}</p>
+        </div>
+      `;
+    }
 
     const playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
     const playerAidSection = playerAids.length ? `
@@ -2050,30 +2062,30 @@
     ` : "";
 
     // Quick Rules Glossary
-const rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
-const rulesGlossaryHtml = rulesGlossary.length
-  ? `
-    <section class="exp" id="rules-glossary">
-      <details class="expansion">
-        <summary><span class="expansion-name">Quick Rules Glossary</span></summary>
-        <div class="expansion-body">
-          <dl class="glossary">
-            ${rulesGlossary
-              .map(
-                (item) => `
-              <div class="glossary-item">
-                <dt>${item.term}</dt>
-                <dd>${(item.desc || "").replace(/\n/g, "<br>")}</dd>
-              </div>`
-              )
-              .join("")}
-          </dl>
-        </div>
-      </details>
-    </section>
-  `
-  : "";
-   
+    const rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
+    const rulesGlossaryHtml = rulesGlossary.length
+      ? `
+        <section class="exp" id="rules-glossary">
+          <details class="expansion">
+            <summary><span class="expansion-name">Quick Rules Glossary</span></summary>
+            <div class="expansion-body">
+              <dl class="glossary">
+                ${rulesGlossary
+                  .map(
+                    (item) => `
+                  <div class="glossary-item">
+                    <dt>${item.term}</dt>
+                    <dd>${(item.desc || "").replace(/\n/g, "<br>")}</dd>
+                  </div>`
+                  )
+                  .join("")}
+              </dl>
+            </div>
+          </details>
+        </section>
+      `
+      : "";
+
     const quickBlocksHtml = `
       <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
         <summary><span class="expansion-name">Quick Set Up</span></summary>
@@ -2093,18 +2105,18 @@ const rulesGlossaryHtml = rulesGlossary.length
         </div>
       </details>
 
-<details class="expansion" id="playercount-block">
-  <summary><span class="expansion-name">Player Count Setup</span></summary>
-  <div class="expansion-body">
-    ${playerCountHtmlInner}
-  </div>
-</details>
+      <details class="expansion" id="playercount-block">
+        <summary><span class="expansion-name">Player Count Setup</span></summary>
+        <div class="expansion-body">
+          ${playerCountHtmlInner}
+        </div>
+      </details>
 
       <details class="expansion" id="starting-resources-block">
         <summary><span class="expansion-name">Starting Resources & Setup Checklist</span></summary>
         <div class="expansion-body">
           <div class="expansion-text-block">
-            <p>${(startingResources || "(No starting resources/checklist yet.)").replace(/\n/g,"<br>")}</p>
+            <p>${(startingResources || "(No starting resources/checklist yet.)").replace(/\n,g,"<br>")}</p>
           </div>
         </div>
       </details>
@@ -2192,8 +2204,7 @@ const rulesGlossaryHtml = rulesGlossary.length
             </button>
           </div>
         </div>
-      </article>
-      <footer>Rulebook path: <code>${links.rulebook}</code></footer>`;
+      </article>`;
 
     const bggCoverLink = document.getElementById("bggCoverLink");
     const bggCoverBadge = document.getElementById("bggCoverBadge");
@@ -2258,10 +2269,7 @@ const rulesGlossaryHtml = rulesGlossary.length
     const notesId = `notes_${slug}`;
     const notesBox = document.getElementById(`notes-${slug}`);
     if (notesBox) {
-      // Load saved notes
       notesBox.value = localStorage.getItem(notesId) || "";
-
-      // Save on typing (very lightweight)
       notesBox.addEventListener("input", () => {
         localStorage.setItem(notesId, notesBox.value);
       });
@@ -2284,53 +2292,34 @@ const rulesGlossaryHtml = rulesGlossary.length
       }
     }
 
-// --- BG Stats "Play Again" deep link with fallback ---
-const bgbtn = document.getElementById("btn-bgstats");
-if (bgbtn) {
-  bgbtn.addEventListener("click", (e) => {
-    if (!links.bgstatsApp) return; // fall back to normal web link
-    e.preventDefault();
-    const appUrl = links.bgstatsApp;
-    const webUrl = links.bgstats;
-
-    let fallbackTimer = setTimeout(() => {
-      window.open(webUrl, "_blank", "noopener");
-    }, 700);
-
-    const a = document.createElement("a");
-    a.href = appUrl;
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-
-    setTimeout(() => {
-      try {
-        document.body.removeChild(a);
-      } catch {}
-    }, 1200);
-  });
-}
-
-    // --- BG Stats deep-link for expansions (unchanged) ---
-    document.querySelectorAll('.expansion-bgstats').forEach(el => {
-      const appUrl = el.dataset.app;
-      const webUrl = el.getAttribute('href');
-      if (!appUrl) return;
-      el.addEventListener('click', (e) => {
+    // --- BG Stats "Play Again" deep link with fallback ---
+    const bgbtn = document.getElementById("btn-bgstats");
+    if (bgbtn) {
+      bgbtn.addEventListener("click", (e) => {
+        if (!links.bgstatsApp) return;
         e.preventDefault();
-        let fallbackTimer = setTimeout(() => { window.open(webUrl, '_blank', 'noopener'); }, 700);
-        const a = document.createElement('a');
+        const appUrl = links.bgstatsApp;
+        const webUrl = links.bgstats;
+
+        let fallbackTimer = setTimeout(() => {
+          window.open(webUrl, "_blank", "noopener");
+        }, 700);
+
+        const a = document.createElement("a");
         a.href = appUrl;
-        a.style.display='none';
+        a.style.display = "none";
         document.body.appendChild(a);
         a.click();
-        setTimeout(()=>{ try{document.body.removeChild(a)}catch{} }, 1200);
+
+        setTimeout(() => {
+          try {
+            document.body.removeChild(a);
+          } catch {}
+        }, 1200);
       });
-    });
+    }
 
-    // --- Rulebook guards / recent / action param ---
     attachRulebookGuards();
-
     markRecentlyViewed(g);
 
     const actionLower = (action || "").toLowerCase();
@@ -2340,7 +2329,6 @@ if (bgbtn) {
       if (sel) document.querySelector(sel)?.click();
     }
   }
-
 
   function normalizeIncoming(){
     const q = qp("game");
