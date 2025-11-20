@@ -392,6 +392,35 @@
     font-size:.85rem;
     line-height:1.4;
   }
+
+  /* Player count controls */
+.playercount-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Glossary list */
+.glossary {
+  margin: 0;
+  padding: 0;
+}
+
+.glossary-item {
+  margin-bottom: 0.4rem;
+}
+
+.glossary-item dt {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.glossary-item dd {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
   .expansion-btns{
     display:flex;
     flex-direction:column;
@@ -1978,7 +2007,32 @@
         </details>
       </section>
     ` : "";
-    
+
+    // Quick Rules Glossary
+const rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
+const rulesGlossaryHtml = rulesGlossary.length
+  ? `
+    <section class="exp" id="rules-glossary">
+      <details class="expansion">
+        <summary><span class="expansion-name">Quick Rules Glossary</span></summary>
+        <div class="expansion-body">
+          <dl class="glossary">
+            ${rulesGlossary
+              .map(
+                (item) => `
+              <div class="glossary-item">
+                <dt>${item.term}</dt>
+                <dd>${(item.desc || "").replace(/\n/g, "<br>")}</dd>
+              </div>`
+              )
+              .join("")}
+          </dl>
+        </div>
+      </details>
+    </section>
+  `
+  : "";
+   
     const quickBlocksHtml = `
       <details class="expansion" id="quick-setup-block" ${quickText ? "open" : ""}>
         <summary><span class="expansion-name">Quick Set Up</span></summary>
@@ -1998,14 +2052,12 @@
         </div>
       </details>
 
-      <details class="expansion" id="playercount-block">
-        <summary><span class="expansion-name">Player Count Setup</span></summary>
-        <div class="expansion-body">
-          <div class="expansion-text-block">
-            <p>${(playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>")}</p>
-          </div>
-        </div>
-      </details>
+<details class="expansion" id="playercount-block">
+  <summary><span class="expansion-name">Player Count Setup</span></summary>
+  <div class="expansion-body">
+    ${playerCountHtmlInner}
+  </div>
+</details>
 
       <details class="expansion" id="starting-resources-block">
         <summary><span class="expansion-name">Starting Resources & Setup Checklist</span></summary>
@@ -2053,6 +2105,7 @@
 
             ${renderExpansions(g)}
             ${playerAidSection}
+            ${rulesGlossaryHtml}
 
             <section class="exp" id="notes-section">
               <details class="expansion">
@@ -2082,7 +2135,7 @@
                target="_blank"
                rel="noopener">
               <svg aria-hidden="true"><use href="#icon-bgstats"></use></svg>
-              <span>BG Stats — Log a Play</span>
+              <span>Play Again in BG Stats</span>
             </a>
 
             <a class="btnlink action-link"
@@ -2161,27 +2214,63 @@
     });
 
     // --- Table Notes persistence ---
-const notesId = `notes_${slug}`;
-const notesBox = document.getElementById(`notes-${slug}`);
-if (notesBox) {
-  // Load saved notes
-  notesBox.value = localStorage.getItem(notesId) || "";
+    const notesId = `notes_${slug}`;
+    const notesBox = document.getElementById(`notes-${slug}`);
+    if (notesBox) {
+      // Load saved notes
+      notesBox.value = localStorage.getItem(notesId) || "";
 
-  // Save on typing (very lightweight)
-  notesBox.addEventListener("input", () => {
-    localStorage.setItem(notesId, notesBox.value);
-  });
-}
-    const bgbtn = document.getElementById('btn-bgstats');
-    if (bgbtn) {
-      bgbtn.addEventListener('click', (e) => {
-        if (links.bgstatsApp) {
-          e.preventDefault();
-          window.location.href = links.bgstatsApp;
-        }
+      // Save on typing (very lightweight)
+      notesBox.addEventListener("input", () => {
+        localStorage.setItem(notesId, notesBox.value);
       });
     }
 
+    // --- Player-count buttons interactions ---
+    if (setupByPlayerCount && Object.keys(setupByPlayerCount).length) {
+      const pcButtons = Array.from(document.querySelectorAll(".pc-btn"));
+      const pcTextEl = document.getElementById("pc-text");
+      if (pcButtons.length && pcTextEl) {
+        pcButtons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const count = btn.getAttribute("data-count");
+            const text = (setupByPlayerCount[count] || "").replace(/\n/g, "<br>");
+            pcTextEl.innerHTML = text || "(No details for this player count yet.)";
+            pcButtons.forEach((b) => b.removeAttribute("data-active"));
+            btn.setAttribute("data-active", "true");
+          });
+        });
+      }
+    }
+
+// --- BG Stats "Play Again" deep link with fallback ---
+const bgbtn = document.getElementById("btn-bgstats");
+if (bgbtn) {
+  bgbtn.addEventListener("click", (e) => {
+    if (!links.bgstatsApp) return; // fall back to normal web link
+    e.preventDefault();
+    const appUrl = links.bgstatsApp;
+    const webUrl = links.bgstats;
+
+    let fallbackTimer = setTimeout(() => {
+      window.open(webUrl, "_blank", "noopener");
+    }, 700);
+
+    const a = document.createElement("a");
+    a.href = appUrl;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+      try {
+        document.body.removeChild(a);
+      } catch {}
+    }, 1200);
+  });
+}
+
+    // --- BG Stats deep-link for expansions (unchanged) ---
     document.querySelectorAll('.expansion-bgstats').forEach(el => {
       const appUrl = el.dataset.app;
       const webUrl = el.getAttribute('href');
@@ -2198,6 +2287,7 @@ if (notesBox) {
       });
     });
 
+    // --- Rulebook guards / recent / action param ---
     attachRulebookGuards();
 
     markRecentlyViewed(g);
@@ -2209,6 +2299,7 @@ if (notesBox) {
       if (sel) document.querySelector(sel)?.click();
     }
   }
+
 
   function normalizeIncoming(){
     const q = qp("game");
