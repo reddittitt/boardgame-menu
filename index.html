@@ -51,6 +51,14 @@
     gap:16px;
   }
 
+  .header-home-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
   /* Show full cover (no crop) */
   .cover{
     border-radius:12px;
@@ -264,13 +272,18 @@
 <body>
 <header>
   <div class="wrap">
-    <img src="./logo.png" alt="BGQuick logo" style="height: 60px;">
-    <h1>Board Game Quick</h1>
+    <a href="#/" class="header-home-link">
+      <img src="./logo.png" alt="BGQuick logo" style="height: 60px;">
+      <h1>Board Game Quick</h1>
+    </a>
+
     <div class="spacer"></div>
+
     <button id="themeToggle" class="toggle" aria-label="Toggle dark mode">🌙/☀️</button>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
+
 
 <main id="app"><noscript>JavaScript required.</noscript></main>
 
