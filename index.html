@@ -355,7 +355,28 @@
     border-radius:8px;
     display:block;
   }
+/* Dark mode tuning for expansion headers */
+:root[data-theme="dark"] .expansion summary {
+  background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
+  color: var(--fg);
+}
 
+/* Keep hover/open state consistent in dark mode */
+:root[data-theme="dark"] .expansion summary:hover,
+:root[data-theme="dark"] .expansion[open] summary {
+  background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
+}
+/* Darken top header bar in dark mode */
+:root[data-theme="dark"] header {
+  background: #050816; /* or use var(--card) if you want it to blend more */
+}
+
+:root[data-theme="dark"] header .wrap h1,
+:root[data-theme="dark"] header .home,
+:root[data-theme="dark"] header .toggle {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
   /* Table notes */
   #notes-section textarea {
     font-family:inherit;
