@@ -858,30 +858,71 @@
   "commonMistakes": "- Building without adjacency.\n- Forgetting production triggers.\n- Overpaying for early upgrades.",
 "expansions": []},
   
-"heat-pedal-to-the-metal": { 
-  "players": "2–6",
-  "time": "45–60", 
-  "year": "2022",
-  "bggId": "366013",
-  "quickStart": "- Give each player: 1 car, dashboard, 12-card deck, 6 Heat, 3 Stress\n- Set gear to 2nd\n- Randomize starting grid\n- Choose track + place corner speeds\n- Shuffle Stress into decks\n- Each player draws 7 cards", "startingResources": "- 12-card deck\n- 6 Heat cubes\n- 3 Stress cards\n- Car miniature + dashboard\n- Gear marker on 2nd gear", 
-  "remindersText": "- Shift only 1 gear unless you pay Heat\n- Heat must be paid when exceeding corner speed\n- Slipstream triggers if ending next to/behind a car\n- Cooldown happens at end of turn\n- Stress flips until total speed is met\n- Draw back to 7 each round", 
-  "playerCountSetup": "- 2p: bots recommended\n- 3–6p: standard setup\n- No components are removed at low counts\n- Track choice does not affect setup", 
-  "turnStructure": "- Shift\n- Play cards\n- Resolve effects\n- Check corners\n- Move\n- Slipstream\n- Cooldown + draw", 
-  "commonMistakes": "- Not paying Heat at corners\n- Forgetting slipstream\n- Miscounting which corner was passed\n- Playing Stress incorrectly\n- Staying in high gear too long", 
-  "expansions": [
-  {
-  "name": "Heavy Rain", 
-  "quickStart": "- Add new tracks (Japan/Mexico)\n- Support 7 players\n- Add weather/road modules\n- Add new upgrade/sponsor/event cards", 
-  "reminders": "- Weather changes corner speeds\n- More technical track layouts\n- Sponsorship cards add between-race powers", 
-  "rulebook": "", 
-  "youtube": "", 
-  "bggId": "410291"}, { 
-  "name": "Tunnel Vision", 
-  "quickStart": "- Add Netherlands/Spain tracks\n- Add tunnel + chicane rules\n- Add Front Wing upgrades\n- Add new event/sponsor cards", 
-  "reminders": "- Tunnels restrict movement options\n- Some corners are extremely tight\n- Front Wing improves slipstream interactions", 
-  "rulebook": "", 
-  "youtube": "", 
-  "bggId": "436904"}]},
+ "heat-pedal-to-the-metal": {
+      "players": "1–6",
+      "time": "45–60",
+      "year": "2022",
+
+      "bggId": "366013",
+      "youtube": "https://www.youtube.com/watch?v=XXXXX",
+      "rulebook": "heat-pedal-to-the-metal",
+
+      "quickStart": "Shuffle the Heat cards...\nDeal starting hands...\nSet up the track as shown on the board...",
+      "remindersText": "- You must play exactly 1 card each round.\n- Resolve corners in order.\n- Don’t forget heat in your discard pile.",
+      
+      /* Optional: plain text fallback if you don't want per-player-count buttons */
+      "playerCountSetup": "2–3 players: use side A of the track.\n4–6 players: use side B.",
+
+      /* NEW: dynamic per-player-count setup */
+      "setupByPlayerCount": {
+        "2": "Use the shorter track.\nRemove these upgrade cards...\nUse bots if desired.",
+        "3": "Use the medium track.\nRemove X cards from the upgrade deck.",
+        "4": "Use the full track.\nAll upgrade cards in play."
+      },
+
+      "startingResources": "Each player gets:\n- 1 car and matching deck\n- 6 Heat cards into their deck\n- 3 Stress cards\n- 1 player aid",
+      "turnStructure": "1. Select cards\n2. Reveal simultaneously\n3. Move cars\n4. Resolve corners\n5. Clean up",
+      "commonMistakes": "- Forgetting slipstream.\n- Ignoring heat in discard.\n- Taking stress when already in the red.",
+
+      /* Optional: Player aids (PDFs you host) */
+      "playerAids": [
+        { "label": "Base Game Aid", "file": "aids/heat-base.pdf" },
+        { "label": "Heavy Rain Aid", "file": "aids/heat-heavy-rain.pdf" }
+      ],
+
+      /* NEW: Quick Rules Glossary */
+      "rulesGlossary": [
+        {
+          "term": "Slipstream",
+          "desc": "If you end your move directly behind another car, move 1 extra space."
+        },
+        {
+          "term": "Heat",
+          "desc": "Heat cards clog your deck but let you push your car faster. You gain them when you brake late or take risks."
+        }
+      ],
+
+      /* Expansions for this game */
+      "expansions": [
+        {
+          "name": "Heavy Rain",
+          "cover": "covers/heat--heavy-rain.webp",
+          "quickStart": "Add rain tiles to the track.\nUse the rain side of the weather board.\nShuffle the rain cards into the deck.",
+          "reminders": "- Rain reduces corner speed limits.\n- Some upgrades interact with rain tiles.",
+          "rulebook": "heat--heavy-rain",
+          "youtube": "https://www.youtube.com/watch?v=YYYYY",
+          "bggId": "XXXXXX"
+        },
+        {
+          "name": "Tunnel Vision",
+          "cover": "covers/heat--tunnel-vision.webp",
+          "quickStart": "Use one of the tunnel tracks.\nFollow tunnel setup rules in the expansion.",
+          "reminders": "- Tunnels limit actions in certain sections.",
+          "rulebook": "heat--tunnel-vision"
+        }
+      ]
+    },
+
 
 "jaipur": {
   "players": "2",
