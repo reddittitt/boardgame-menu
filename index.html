@@ -1783,6 +1783,111 @@
     );
   }
 
+    /* --- Recently viewed helpers --- */
+  var RECENT_KEY = "bgq_recent";
+
+  function renderRecentlyViewed(list) {
+    var section = document.getElementById("recentlyViewed");
+    var container = document.getElementById("recentlyViewedList");
+    if (!section || !container) return;
+
+    container.innerHTML = "";
+    if (!list || !list.length) {
+      section.hidden = true;
+      return;
+    }
+
+    section.hidden = false;
+
+    list.forEach(function(item) {
+      var chip = document.createElement("button");
+      chip.className = "recent-chip";
+      chip.type = "button";
+
+      var img = document.createElement("img");
+      img.src = item.cover;
+      img.alt = item.name + " cover";
+
+      var span = document.createElement("span");
+      span.textContent = item.name;
+
+      chip.appendChild(img);
+      chip.appendChild(span);
+
+      chip.addEventListener("click", function() {
+        window.location.hash = "#/game/" + item.slug;
+      });
+
+      container.appendChild(chip);
+    });
+  }
+
+  function markRecentlyViewed(game) {
+    try {
+      var raw = localStorage.getItem(RECENT_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+
+      // Remove existing entry for this slug
+      list = list.filter(function(item) { return item.slug !== game.slug; });
+
+      // Add to front
+      list.unshift({
+        slug: game.slug,
+        name: game.name,
+        cover: coverUrl(game.slug)
+      });
+
+      if (list.length > 8) list = list.slice(0, 8);
+
+      localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+      renderRecentlyViewed(list);
+    } catch (e) {
+      // Ignore failures
+    }
+  }
+
+  // Initial render of recently viewed on load
+  (function initRecentOnLoad() {
+    try {
+      var raw = localStorage.getItem(RECENT_KEY);
+      if (raw) {
+        renderRecentlyViewed(JSON.parse(raw));
+      }
+    } catch (e) {}
+  })();
+
+  /* --- Rulebook guard: show friendly error instead of 404 --- */
+  function attachRulebookGuards() {
+    var links = document.querySelectorAll('a[data-check="rulebook"]');
+    links.forEach(function(link) {
+      var url = link.href;
+      if (!url) return;
+
+      // Only intercept same-origin PDFs; external links just pass through
+      var sameOrigin = url.indexOf(window.location.origin) === 0 || url.charAt(0) === "/";
+      if (!sameOrigin) return;
+
+      link.addEventListener("click", function handleClick(e) {
+        e.preventDefault();
+
+        fetch(url, { method: "HEAD" })
+          .then(function(res) {
+            if (res.ok) {
+              window.open(url, "_blank", "noopener");
+            } else {
+              window.alert("Sorry, this rulebook has not been uploaded yet.");
+            }
+          })
+          .catch(function() {
+            window.alert("Sorry, this rulebook could not be loaded right now.");
+          });
+
+        // Only run the HEAD check once per link
+        link.removeEventListener("click", handleClick);
+      }, { once: true });
+    });
+  }
+  
   function renderDetail(slug, action) {
     if (action === void 0) action = "quicksetup";
 
@@ -1792,12 +1897,14 @@
       return;
     }
 
+    /* --- Subline bits (players • time • year) --- */
     var bits = [];
     if (g.players) bits.push(g.players);
     if (g.time) bits.push(g.time + " min");
     if (g.year) bits.push(g.year);
     var sub = bits.join(" \u2022 ");
 
+    /* --- Links (BGG, BG Stats, rulebook, cover) --- */
     var id = extractBggId(g.bggId);
     var links = {
       youtube: g.youtube || "",
@@ -1812,6 +1919,7 @@
       cover: coverUrl(slug)
     };
 
+    /* --- Base quick text fields --- */
     var quickText         = (g.quickStart || "").trim();
     var remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
     var playerCountSetup  = (g.playerCountSetup || "").trim();
@@ -1819,6 +1927,124 @@
     var turnStructure     = (g.turnStructure || "").trim();
     var commonMistakes    = (g.commonMistakes || "").trim();
 
+    /* --- Dynamic player-count setup (setupByPlayerCount) --- */
+    var setupByPlayerCount =
+      (g.setupByPlayerCount && typeof g.setupByPlayerCount === "object")
+        ? g.setupByPlayerCount
+        : null;
+    var hasSetupByPlayerCount =
+      setupByPlayerCount && Object.keys(setupByPlayerCount).length > 0;
+
+    var playerCountHtmlInner;
+    if (hasSetupByPlayerCount) {
+      var counts = Object.keys(setupByPlayerCount).sort(function(a, b) {
+        return parseInt(a, 10) - parseInt(b, 10);
+      });
+      var first = counts[0];
+
+      var buttonsHtml = counts.map(function(c) {
+        return (
+          '<button type="button" class="pc-btn" data-count="' + c + '" ' +
+          (c === first ? 'data-active="true"' : "") +
+          ">" + c + "p</button>"
+        );
+      }).join("");
+
+      playerCountHtmlInner =
+        '<div class="playercount-controls">' +
+          buttonsHtml +
+        "</div>" +
+        '<div class="expansion-text-block">' +
+          '<p id="pc-text">' +
+            (setupByPlayerCount[first] || "").replace(/\n/g,"<br>") +
+          "</p>" +
+        "</div>";
+    } else {
+      playerCountHtmlInner =
+        '<div class="expansion-text-block">' +
+          "<p>" +
+            (playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>") +
+          "</p>" +
+        "</div>";
+    }
+
+    /* --- Quick Rules Glossary --- */
+    var rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
+    var rulesGlossaryHtml = "";
+    if (rulesGlossary.length) {
+      var glossaryItems = rulesGlossary.map(function(item) {
+        var term = item.term || "";
+        var desc = (item.desc || "").replace(/\n/g,"<br>");
+        return (
+          '<div class="glossary-item">' +
+            "<dt>" + term + "</dt>" +
+            "<dd>" + desc + "</dd>" +
+          "</div>"
+        );
+      }).join("");
+
+      rulesGlossaryHtml =
+        '<section class="exp" id="rules-glossary">' +
+          '<details class="expansion">' +
+            '<summary><span class="expansion-name">Quick Rules Glossary</span></summary>' +
+            '<div class="expansion-body">' +
+              '<dl class="glossary">' +
+                glossaryItems +
+              "</dl>" +
+            "</div>" +
+          "</details>" +
+        "</section>";
+    }
+
+    /* --- Player Aids (PDFs) --- */
+    var playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
+    var playerAidSection = "";
+    if (playerAids.length) {
+      var buttons = playerAids.map(function(aid, idx) {
+        var label = aid.label || ("Aid " + (idx + 1));
+        return (
+          '<button type="button"' +
+            ' class="pill-btn player-aid-btn"' +
+            ' data-file="' + aid.file + '"' +
+            (idx === 0 ? ' data-active="true"' : "") +
+          ">" +
+            label +
+          "</button>"
+        );
+      }).join("");
+
+      var firstFile = playerAids[0].file;
+
+      playerAidSection =
+        '<section class="exp" id="player-aids">' +
+          '<details class="expansion" open>' +
+            '<summary><span class="expansion-name">Player Aids (PDF)</span></summary>' +
+            '<div class="expansion-body">' +
+              '<div class="expansion-text-block">' +
+                "<p>Quick reference PDFs for this game. Switch between aids below.</p>" +
+              "</div>" +
+              '<div class="player-aid-list">' +
+                buttons +
+              "</div>" +
+              '<div class="player-aid-viewer">' +
+                '<iframe' +
+                  ' id="playerAidFrame"' +
+                  ' src="' + firstFile + '"' +
+                  ' title="Player Aid for ' + g.name + '"' +
+                  ' loading="lazy">' +
+                "</iframe>" +
+              "</div>" +
+              '<p class="expansion-text-block">' +
+                '<a id="openAidLink" href="' + firstFile + '" target="_blank" rel="noopener">' +
+                  "Open current aid in new tab" +
+                "</a>" +
+              "</p>" +
+            "</div>" +
+          "</details>" +
+        "</section>";
+    }
+
+    /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
       '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
         '<summary><span class="expansion-name">Quick Set Up</span></summary>' +
@@ -1841,9 +2067,7 @@
       '<details class="expansion" id="playercount-block">' +
         '<summary><span class="expansion-name">Player Count Setup</span></summary>' +
         '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            "<p>" + (playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>") + "</p>" +
-          "</div>" +
+          playerCountHtmlInner +
         "</div>" +
       "</details>" +
 
@@ -1874,6 +2098,7 @@
         "</div>" +
       "</details>";
 
+    /* --- Main detail markup --- */
     appEl.innerHTML =
       '<article class="detail">' +
         '<figure class="cover">' +
@@ -1891,6 +2116,8 @@
             "</section>" +
 
             renderExpansions(g) +
+            playerAidSection +
+            rulesGlossaryHtml +
 
             '<section class="exp" id="notes-section">' +
               '<details class="expansion">' +
@@ -1901,7 +2128,7 @@
               "</details>" +
             "</section>" +
 
-            '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
+            '<a class="btnlink" data-check="rulebook" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
 
             '<a class="btnlink" id="btn-bgstats" href="' + links.bgstats + '" target="_blank" rel="noopener">BG Stats - Log A Play</a>' +
 
@@ -1914,7 +2141,7 @@
         "</div>" +
       "</article>";
 
-    /* BGG cover link */
+    /* --- BGG cover link --- */
     var bggCoverLink = document.getElementById("bggCoverLink");
     var bggCoverBadge = document.getElementById("bggCoverBadge");
     if (bggCoverLink) {
@@ -1937,7 +2164,7 @@
       }
     }
 
-    /* Share */
+    /* --- Share button --- */
     var shareBtn = document.getElementById("share");
     if (shareBtn) {
       shareBtn.addEventListener("click", function() {
@@ -1960,7 +2187,7 @@
       });
     }
 
-    /* Table notes persistence */
+    /* --- Table notes persistence --- */
     var notesId = "notes_" + slug;
     var notesBox = document.getElementById("notes-" + slug);
     if (notesBox) {
@@ -1970,11 +2197,54 @@
       });
     }
 
-    /* BG Stats app-first */
+    /* --- Player Aids interactions --- */
+    if (playerAids.length) {
+      var frame = document.getElementById("playerAidFrame");
+      var openAidLink = document.getElementById("openAidLink");
+      var buttonsEls = Array.prototype.slice.call(
+        document.querySelectorAll(".player-aid-btn")
+      );
+
+      if (frame && openAidLink && buttonsEls.length) {
+        buttonsEls.forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var file = btn.getAttribute("data-file");
+            if (!file) return;
+
+            frame.src = file;
+            openAidLink.href = file;
+
+            buttonsEls.forEach(function(b) { b.removeAttribute("data-active"); });
+            btn.setAttribute("data-active", "true");
+          });
+        });
+      }
+    }
+
+    /* --- Player-count buttons interactions --- */
+    if (hasSetupByPlayerCount) {
+      var pcButtons = Array.prototype.slice.call(
+        document.querySelectorAll(".pc-btn")
+      );
+      var pcTextEl = document.getElementById("pc-text");
+      if (pcButtons.length && pcTextEl) {
+        pcButtons.forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var count = btn.getAttribute("data-count");
+            var text = (setupByPlayerCount[count] || "").replace(/\n/g,"<br>");
+            pcTextEl.innerHTML = text || "(No details for this player count yet.)";
+            pcButtons.forEach(function(b) { b.removeAttribute("data-active"); });
+            btn.setAttribute("data-active", "true");
+          });
+        });
+      }
+    }
+
+    /* --- BG Stats app-first deep link --- */
     var bgbtn = document.getElementById("btn-bgstats");
     if (bgbtn) {
       bgbtn.addEventListener("click", function(e) {
-        if (!links.bgstatsApp) return;
+        if (!links.bgstatsApp) return; // fall back to normal web link
         e.preventDefault();
         var appUrl = links.bgstatsApp;
         var webUrl = links.bgstats;
@@ -1996,7 +2266,12 @@
         }, 1200);
       });
     }
+
+    /* --- Rulebook guards + recently viewed --- */
+    attachRulebookGuards();
+    markRecentlyViewed(g);
   }
+
 
   function normalizeIncoming() {
     var q = qp("game");
