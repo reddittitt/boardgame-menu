@@ -15,8 +15,8 @@
 <link rel="preload" href="./logo.png" as="image">
 
 <style>
+  /* Base + theming */
   :root {
-    --brand:#0b63ff;
     --bg:#f6f7fb;
     --fg:#111111;
     --muted:#555555;
@@ -24,10 +24,28 @@
     --border:#e6e6ef;
     --btn:#ffffff;
     --btn-border:#dcdce6;
+    --brand:#0b63ff;
+    --accent:var(--brand);
+    --anim-fast:150ms ease-out;
+    --anim-med:220ms ease-out;
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   }
+
+  /* Classic theme */
+  :root[data-theme="classic"] {
+    --bg:#f6f7fb;
+    --fg:#111111;
+    --muted:#555555;
+    --card:#ffffff;
+    --border:#e6e6ef;
+    --btn:#ffffff;
+    --btn-border:#dcdce6;
+    --brand:#0b63ff;
+    --accent:var(--brand);
+  }
+
+  /* Existing dark theme */
   :root[data-theme="dark"] {
-    --brand:#5b8dff;
     --bg:#0f1115;
     --fg:#e8eaf0;
     --muted:#a2a8b4;
@@ -35,18 +53,47 @@
     --border:#2a2f3a;
     --btn:#1b2030;
     --btn-border:#2a2f3a;
+    --brand:#5b8dff;
+    --accent:var(--brand);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-      --brand:#5b8dff;
-      --bg:#0f1115;
-      --fg:#e8eaf0;
-      --muted:#a2a8b4;
-      --card:#161922;
-      --border:#2a2f3a;
-      --btn:#1b2030;
-      --btn-border:#2a2f3a;
-    }
+
+  /* Darkwood – cozy Everdell / wood table vibe */
+  :root[data-theme="darkwood"] {
+    --bg:#15100d;
+    --fg:#f1e7d8;
+    --muted:#c3b49a;
+    --card:#241812;
+    --border:#3a2920;
+    --btn:#2f2018;
+    --btn-border:#3a2920;
+    --brand:#d1a15b;
+    --accent:#e9b66a;
+  }
+
+  /* NeonGrid – sci-fi dashboard vibe */
+  :root[data-theme="neongrid"] {
+    --bg:#020611;
+    --fg:#f4f7ff;
+    --muted:#a4b0ff;
+    --card:#060b18;
+    --border:#19203a;
+    --btn:#071023;
+    --btn-border:#25345c;
+    --brand:#5bf3ff;
+    --accent:#ff7bff;
+  }
+
+  /* Frost – bright minimal */
+  :root[data-theme="frost"] {
+    --bg:#f3f7fb;
+    --fg:#101622;
+    --muted:#657089;
+    --card:#ffffff;
+    --border:#dde5f2;
+    --btn:#ffffff;
+    --btn-border:#d0d9ea;
+    --brand:#2680ff;
+    --accent:#328ef5;
   }
 
   html, body { height:100%; }
@@ -117,6 +164,20 @@
     padding:0 14px;
   }
 
+  /* Micro-animations */
+  .fade-in {
+    opacity:0;
+    transform:translateY(6px);
+    animation:fadeInUp var(--anim-med) forwards;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+
   /* List view */
   #search {
     width:100%;
@@ -141,7 +202,7 @@
     color:inherit;
     display:flex;
     gap:10px;
-    transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    transition:transform var(--anim-fast), box-shadow var(--anim-fast), border-color var(--anim-fast);
   }
   .card:hover {
     transform:translateY(-3px);
@@ -206,7 +267,7 @@
     height:auto;
     display:block;
     object-fit:contain;
-    transition:transform 0.15s ease-out;
+    transition:transform var(--anim-fast);
   }
   .cover-link:hover img {
     transform:scale(1.03);
@@ -236,11 +297,50 @@
     margin:0.2rem 0 0.25rem;
     font-size:1.2rem;
     line-height:1.2;
+    color:var(--accent);
   }
   .byline {
     color:var(--muted);
     font-size:0.92rem;
     margin:0 0 10px;
+  }
+
+  /* Meta bar (players, time, year, rating, weight) */
+  .game-meta-bar {
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+    margin-top:0.25rem;
+    margin-bottom:0.9rem;
+    font-size:0.9rem;
+    color:var(--muted);
+  }
+  .game-meta-item {
+    display:inline-flex;
+    align-items:center;
+    gap:0.3rem;
+  }
+  .game-meta-icon {
+    font-size:0.95em;
+  }
+  .meta-pill {
+    display:inline-flex;
+    align-items:center;
+    gap:0.3rem;
+    padding:0.15rem 0.6rem;
+    border-radius:999px;
+    background:rgba(0,0,0,0.04);
+    font-size:0.78rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .meta-pill--rating {
+    background:rgba(255,215,0,0.16);
+    color:#8a6b00;
+  }
+  .meta-pill--weight {
+    background:rgba(0,0,0,0.04);
   }
 
   .actions {
@@ -264,6 +364,12 @@
     font-weight:700;
     cursor:pointer;
     box-sizing:border-box;
+    transition:background-color var(--anim-fast), border-color var(--anim-fast), transform var(--anim-fast), box-shadow var(--anim-fast);
+  }
+  .btn:hover,
+  .btnlink:hover {
+    transform:translateY(-1px);
+    box-shadow:0 4px 10px rgba(0,0,0,0.12);
   }
   .btn.primary {
     background:var(--brand);
@@ -355,28 +461,80 @@
     border-radius:8px;
     display:block;
   }
-/* Dark mode tuning for expansion headers */
-:root[data-theme="dark"] .expansion summary {
-  background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
-  color: var(--fg);
-}
 
-/* Keep hover/open state consistent in dark mode */
-:root[data-theme="dark"] .expansion summary:hover,
-:root[data-theme="dark"] .expansion[open] summary {
-  background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
-}
-/* Darken top header bar in dark mode */
-:root[data-theme="dark"] header {
-  background: #050816; /* or use var(--card) if you want it to blend more */
-}
+  /* Expansion tags */
+  .expansion-tags {
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.35rem;
+    margin-bottom:0.5rem;
+  }
+  .expansion-tag {
+    padding:0.15rem 0.55rem;
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,0.12);
+    font-size:0.78rem;
+    background:rgba(0,0,0,0.02);
+  }
 
-:root[data-theme="dark"] header .wrap h1,
-:root[data-theme="dark"] header .home,
-:root[data-theme="dark"] header .toggle {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.45);
-}
+  /* Components section */
+  .game-section {
+    margin-top:1.5rem;
+  }
+  .game-section h3 {
+    font-size:0.95rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    font-weight:700;
+    margin-bottom:0.5rem;
+    color:var(--muted);
+  }
+  .components-list {
+    padding-left:1.2rem;
+    margin:0;
+  }
+  .components-list li {
+    margin-bottom:0.2rem;
+    font-size:0.9rem;
+  }
+
+  /* Player aid viewer – show full document */
+  .player-aid-viewer {
+    margin-top:10px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--card);
+    overflow:hidden;
+  }
+  .player-aid-viewer iframe {
+    width:100%;
+    height:70vh;   /* Tall viewport to see the whole PDF page */
+    border:0;
+    display:block;
+  }
+
+  /* Dark mode tuning for expansion headers */
+  :root[data-theme="dark"] .expansion summary {
+    background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
+    color: var(--fg);
+  }
+
+  :root[data-theme="dark"] .expansion summary:hover,
+  :root[data-theme="dark"] .expansion[open] summary {
+    background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
+  }
+
+  :root[data-theme="dark"] header {
+    background: #050816;
+  }
+
+  :root[data-theme="dark"] header .wrap h1,
+  :root[data-theme="dark"] header .home,
+  :root[data-theme="dark"] header .toggle {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.45);
+  }
+
   /* Table notes */
   #notes-section textarea {
     font-family:inherit;
@@ -386,20 +544,22 @@
   @media (max-width:840px) {
     .detail { grid-template-columns:1fr; }
     .cover { width:100%; }
+    .player-aid-viewer iframe {
+      height:60vh; /* Slightly shorter on small screens */
+    }
   }
+
   /* Dark mode tuning for section borders/backgrounds */
-:root[data-theme="dark"] .qs,
-:root[data-theme="dark"] .exp,
-:root[data-theme="dark"] .expansion {
-  border-color: var(--border);
-}
+  :root[data-theme="dark"] .qs,
+  :root[data-theme="dark"] .exp,
+  :root[data-theme="dark"] .expansion {
+    border-color: var(--border);
+  }
 
-/* Optional: darker background in dark mode so they don't glow */
-:root[data-theme="dark"] .qs,
-:root[data-theme="dark"] .exp {
-  background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
-}
-
+  :root[data-theme="dark"] .qs,
+  :root[data-theme="dark"] .exp {
+    background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
+  }
 </style>
 </head>
 <body>
@@ -412,7 +572,7 @@
 
     <div class="spacer"></div>
 
-    <button id="themeToggle" class="toggle" aria-label="Toggle dark mode">Dark/Light</button>
+    <button id="themeToggle" class="toggle" aria-label="Toggle theme">Theme</button>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
@@ -1686,24 +1846,46 @@
   }
 }
 </script>
-
 <script>
 (function() {
-  /* Theme toggle */
-  var root = document.documentElement;
-  var saved = localStorage.getItem("theme");
-  if (saved) {
-    root.setAttribute("data-theme", saved);
-  } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    root.setAttribute("data-theme", "dark");
+  /* --- Service worker registration (instant-load / offline cache) --- */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .catch(function (err) {
+        console.warn("SW registration failed:", err);
+      });
   }
+
+  /* --- Theme cycling: classic → dark → darkwood → neongrid → frost --- */
+  var root = document.documentElement;
+  var THEMES = ["classic", "dark", "darkwood", "neongrid", "frost"];
+
+  function setTheme(theme) {
+    if (THEMES.indexOf(theme) === -1) theme = "classic";
+    root.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (e) {}
+  }
+
+  function initTheme() {
+    var saved = null;
+    try {
+      saved = localStorage.getItem("theme");
+    } catch (e) {}
+    setTheme(saved || "classic");
+  }
+
+  initTheme();
+
   var themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", function() {
-      var curr = root.getAttribute("data-theme");
-      var next = curr === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+      var current = root.getAttribute("data-theme") || "classic";
+      var idx = THEMES.indexOf(current);
+      var next = THEMES[(idx + 1 + THEMES.length) % THEMES.length];
+      setTheme(next);
     });
   }
 
@@ -1721,7 +1903,7 @@
   }
 
   /* Data */
-  var RAW = JSON.parse(document.getElementById("games-json").textContent);
+  var RAW = JSON.parse(document.getElementById("games-json").textContent || "{}") || {};
   function slugify(s) {
     return s.toLowerCase()
       .replace(/[:'"]/g,"")
@@ -1737,27 +1919,61 @@
       .replace(/\/index\.html$/,"")
       .replace(/\/$/,"");
   }
+
+  var DATA = {};
+  (RAW.names || []).forEach(function(name) {
+    var slug = slugify(name);
+    DATA[slug] = Object.assign(
+      { name: name, slug: slug },
+      (RAW.enrich && RAW.enrich[slug]) || {}
+    );
+  });
+
+  function coverUrl(slug) {
+    var bp = basePath();
+    var game = DATA && DATA[slug];
+    if (game) {
+      if (game.coverUrl) {
+        return game.coverUrl;
+      }
+      if (game.cover) {
+        var c = String(game.cover).trim();
+        if (/^https?:\/\//i.test(c)) return c;
+        if (/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(c)) {
+          return bp + "/" + c.replace(/^\//,"");
+        }
+      }
+    }
+    return bp + "/covers/" + slug + ".webp";
+  }
+
   function rulebookUrl(s) {
     return basePath() + "/rulebooks/" + s + ".pdf";
   }
   function remindersUrl(s) {
     return basePath() + "/reminders/" + s + ".html";
   }
-  function coverUrl(slug) {
-    return basePath() + "/covers/" + slug + ".webp";
-  }
   function bggLinkFromId(id) {
     id = extractBggId(id);
     return id ? "https://boardgamegeek.com/boardgame/" + id : "";
   }
 
-  var DATA = {};
-  (RAW.names || []).forEach(function(name) {
-    var slug = slugify(name);
-    DATA[slug] = Object.assign({ name: name, slug: slug }, (RAW.enrich && RAW.enrich[slug]) || {});
-  });
-
   var appEl = document.getElementById("app");
+
+  /* --- Micro-optimization: preload some covers --- */
+  function preloadCovers(limit) {
+    limit = limit || 12;
+    var games = Object.keys(DATA)
+      .map(function (k) { return DATA[k]; })
+      .sort(function (a, b) { return a.name.localeCompare(b.name); })
+      .slice(0, limit);
+
+    games.forEach(function (g) {
+      var img = new Image();
+      img.src = coverUrl(g.slug);
+    });
+  }
+  preloadCovers(16);
 
   function listRow(g) {
     var bits = [];
@@ -1766,7 +1982,7 @@
     if (g.year) bits.push(g.year);
     var sub = bits.join(" \u2022 ");
     return (
-      '<a class="card" href="#/game/' + g.slug + '">' +
+      '<a class="card fade-in" href="#/game/' + g.slug + '">' +
         '<div class="thumb">' +
           '<img loading="lazy" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
         "</div>" +
@@ -1851,6 +2067,18 @@
     });
     if (!exps.length) return "";
 
+    var names = exps
+      .map(function (exp) { return (exp.name || "").trim(); })
+      .filter(function (n) { return !!n; });
+
+    var tagsLine = names.length
+      ? '<div class="expansion-tags">' +
+          names.map(function (n) {
+            return '<span class="expansion-tag">' + n + "</span>";
+          }).join("") +
+        "</div>"
+      : "";
+
     var blocks = exps.map(function(exp) {
       var expName = exp.name || "Expansion";
       var expRulebook = expansionRulebook(game.slug, exp);
@@ -1905,12 +2133,13 @@
     return (
       '<section id="exp" class="exp">' +
         "<h3>Expansions</h3>" +
+        tagsLine +
         blocks +
       "</section>"
     );
   }
 
-    /* --- Recently viewed helpers --- */
+  /* --- Recently viewed helpers --- */
   var RECENT_KEY = "bgq_recent";
 
   function renderRecentlyViewed(list) {
@@ -1954,10 +2183,8 @@
       var raw = localStorage.getItem(RECENT_KEY);
       var list = raw ? JSON.parse(raw) : [];
 
-      // Remove existing entry for this slug
       list = list.filter(function(item) { return item.slug !== game.slug; });
 
-      // Add to front
       list.unshift({
         slug: game.slug,
         name: game.name,
@@ -1973,7 +2200,6 @@
     }
   }
 
-  // Initial render of recently viewed on load
   (function initRecentOnLoad() {
     try {
       var raw = localStorage.getItem(RECENT_KEY);
@@ -1990,7 +2216,6 @@
       var url = link.href;
       if (!url) return;
 
-      // Only intercept same-origin PDFs; external links just pass through
       var sameOrigin = url.indexOf(window.location.origin) === 0 || url.charAt(0) === "/";
       if (!sameOrigin) return;
 
@@ -2009,20 +2234,87 @@
             window.alert("Sorry, this rulebook could not be loaded right now.");
           });
 
-        // Only run the HEAD check once per link
-        link.removeEventListener("click", handleClick);
       }, { once: true });
     });
   }
-  
+
+  /* --- Accent color + meta bar helpers --- */
+  function setGameAccent(game) {
+    var accent = game.themeColor || null;
+    if (accent) {
+      root.style.setProperty("--accent", accent);
+    } else {
+      root.style.setProperty("--accent", "var(--brand)");
+    }
+  }
+
+  function buildMetaBar(game) {
+    function isNum(x) { return typeof x === "number" && !isNaN(x); }
+    var parts = [];
+
+    if (game.players) {
+      parts.push(
+        '<span class="game-meta-item">' +
+          '<span class="game-meta-icon">👥</span>' +
+          "<span>" + game.players + " players</span>" +
+        "</span>"
+      );
+    }
+    if (game.time) {
+      parts.push(
+        '<span class="game-meta-item">' +
+          '<span class="game-meta-icon">⏱</span>' +
+          "<span>" + game.time + " min</span>" +
+        "</span>"
+      );
+    }
+    if (game.year) {
+      parts.push(
+        '<span class="game-meta-item">' +
+          '<span class="game-meta-icon">📅</span>' +
+          "<span>" + game.year + "</span>" +
+        "</span>"
+      );
+    }
+
+    if (isNum(game.weight)) {
+      parts.push(
+        '<span class="game-meta-item meta-pill meta-pill--weight">' +
+          "<span>Weight</span>" +
+          "<span>" + game.weight.toFixed(1) + "/5</span>" +
+        "</span>"
+      );
+    }
+
+    var ratingPill = "";
+    if (isNum(game.bggRating)) {
+      ratingPill =
+        '<span class="meta-pill meta-pill--rating">' +
+          "BGG " + game.bggRating.toFixed(1) +
+          (isNum(game.bggRank) ? " • #" + game.bggRank : "") +
+        "</span>";
+    }
+
+    if (!parts.length && !ratingPill) return "";
+
+    return (
+      '<div class="game-meta-bar">' +
+        parts.join("") +
+        ratingPill +
+      "</div>"
+    );
+  }
+
   function renderDetail(slug, action) {
     if (action === void 0) action = "quicksetup";
 
     var g = DATA[slug];
     if (!g) {
-      appEl.innerHTML = '<div class="detail"><p>Game not found: <code>' + slug + "</code></p></div>";
+      appEl.innerHTML = '<div class="detail fade-in"><p>Game not found: <code>' + slug + "</code></p></div>";
       return;
     }
+
+    setGameAccent(g);
 
     /* --- Subline bits (players • time • year) --- */
     var bits = [];
@@ -2171,6 +2463,20 @@
         "</section>";
     }
 
+    /* --- Components (if provided) --- */
+    var componentsHtml = "";
+    if (Array.isArray(g.components) && g.components.length) {
+      componentsHtml =
+        '<section class="game-section" id="components-section">' +
+          "<h3>Components</h3>" +
+          '<ul class="components-list">' +
+            g.components.map(function (c) {
+              return "<li>" + c + "</li>";
+            }).join("") +
+          "</ul>" +
+        "</section>";
+    }
+
     /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
       '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
@@ -2227,7 +2533,7 @@
 
     /* --- Main detail markup --- */
     appEl.innerHTML =
-      '<article class="detail">' +
+      '<article class="detail fade-in">' +
         '<figure class="cover">' +
           '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
             '<img src="' + links.cover + '" alt="' + g.name + ' cover" loading="lazy">' +
@@ -2237,11 +2543,13 @@
         "<div>" +
           '<h2 class="title">' + g.name + "</h2>" +
           '<p class="byline">' + (sub || "") + "</p>" +
+          buildMetaBar(g) +
           '<div class="actions">' +
             '<section id="qs" class="exp">' +
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
 
+            componentsHtml +
             renderExpansions(g) +
             playerAidSection +
             rulesGlossaryHtml +
@@ -2367,26 +2675,20 @@
       }
     }
 
-   /* --- BG Stats app-only deep link --- */
-var bgbtn = document.getElementById("btn-bgstats");
-if (bgbtn) {
-  bgbtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    // If there's no app deep link, do nothing.
-    // (If you want a web fallback instead, I can show that variant.)
-    if (!links.bgstatsApp) return;
-
-    // Open BG Stats app in the current context – no new tab, no webpage.
-    window.location.href = links.bgstatsApp;
-  });
-}
+    /* --- BG Stats app-only deep link (no blank webpage) --- */
+    var bgbtn = document.getElementById("btn-bgstats");
+    if (bgbtn) {
+      bgbtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (!links.bgstatsApp) return;
+        window.location.href = links.bgstatsApp;
+      });
+    }
 
     /* --- Rulebook guards + recently viewed --- */
     attachRulebookGuards();
     markRecentlyViewed(g);
   }
-
 
   function normalizeIncoming() {
     var q = qp("game");
