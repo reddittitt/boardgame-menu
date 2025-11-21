@@ -2017,81 +2017,81 @@
     return coverUrl(gameSlug + "--" + es);
   }
 
-  function renderExpansions(game) {
-    var exps = Array.isArray(game.expansions) ? game.expansions : [];
-    exps = exps.filter(function(exp) {
-      if (!exp || typeof exp !== "object") return false;
-      var name = (exp.name || "").trim();
-      var hasContent = [
-        exp.quickStart,
-        exp.reminders,
-        exp.rulebook,
-        exp.youtube,
-        exp.bggId,
-        exp.cover
-      ].some(function(v) { return v && String(v).trim() !== ""; });
-      return name || hasContent;
-    });
-    if (!exps.length) return "";
+ function renderExpansions(game) {
+  var exps = Array.isArray(game.expansions) ? game.expansions : [];
+  exps = exps.filter(function(exp) {
+    if (!exp || typeof exp !== "object") return false;
+    var name = (exp.name || "").trim();
+    var hasContent = [
+      exp.quickStart,
+      exp.reminders,
+      exp.rulebook,
+      exp.youtube,
+      exp.bggId,
+      exp.cover
+    ].some(function(v) { return v && String(v).trim() !== ""; });
+    return name || hasContent;
+  });
+  if (!exps.length) return "";
 
-    var blocks = exps.map(function(exp) {
-      var expName = exp.name || "Expansion";
-      var expRulebook = expansionRulebook(game.slug, exp);
-      var cover = expansionCoverUrl(game.slug, exp);
+  var blocks = exps.map(function(exp) {
+    var expName = exp.name || "Expansion";
+    var expRulebook = expansionRulebook(game.slug, exp);
+    var cover = expansionCoverUrl(game.slug, exp);
 
-      var expBggId = extractBggId(exp.bggId || "");
-      var baseBggId = extractBggId(game.bggId || "");
-      var id = expBggId || baseBggId;
+    var expBggId = extractBggId(exp.bggId || "");
+    var baseBggId = extractBggId(game.bggId || "");
+    var id = expBggId || baseBggId;
 
-      var links = {
-        rulebook: expRulebook,
-        youtube: exp.youtube || "",
-        bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : "",
-        bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null
-      };
+    var links = {
+      rulebook: expRulebook,
+      youtube: exp.youtube || "",
+      bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : "",
+      bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null
+    };
 
-      var qs  = (exp.quickStart || "").trim();
-      var rem = (exp.reminders  || "").trim();
-
-      return (
-        '<details class="expansion">' +
-          '<summary><span class="expansion-name">' + expName + "</span></summary>" +
-          '<div class="expansion-body">' +
-            (cover ? (
-              '<div class="expansion-art">' +
-                '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy">' +
-              "</div>"
-            ) : "") +
-            (qs ? (
-              '<div class="expansion-text-block"><h4>Quick Setup</h4><p>' +
-              qs.replace(/\n,g,"<br>") +
-              "</p></div>"
-            ) : "") +
-            (rem ? (
-              '<div class="expansion-text-block"><h4>Quick Reminders</h4><p>' +
-              rem.replace(/\n/g,"<br>") +
-              "</p></div>"
-            ) : "") +
-            '<div class="expansion-btns">' +
-              (links.rulebook ? (
-                '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Rulebook</a>'
-              ) : "") +
-              (links.youtube ? (
-                '<a class="btnlink" href="' + links.youtube + '" target="_blank" rel="noopener">How to Play Video</a>'
-              ) : "") +
-            "</div>" +
-          "</div>" +
-        "</details>"
-      );
-    }).join("");
+    var qs  = (exp.quickStart || "").trim();
+    var rem = (exp.reminders  || "").trim();
 
     return (
-      '<section id="exp" class="exp">' +
-        "<h3>Expansions</h3>" +
-        blocks +
-      "</section>"
+      '<details class="expansion">' +
+        '<summary><span class="expansion-name">' + expName + "</span></summary>" +
+        '<div class="expansion-body">' +
+          (cover ? (
+            '<div class="expansion-art">' +
+              '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy">' +
+            "</div>"
+          ) : "") +
+          (qs ? (
+            '<div class="expansion-text-block"><h4>Quick Setup</h4><p>' +
+            qs.replace(/\n/g, "<br>") +
+            "</p></div>"
+          ) : "") +
+          (rem ? (
+            '<div class="expansion-text-block"><h4>Quick Reminders</h4><p>' +
+            rem.replace(/\n/g, "<br>") +
+            "</p></div>"
+          ) : "") +
+          '<div class="expansion-btns">' +
+            (links.rulebook ? (
+              '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Rulebook</a>'
+            ) : "") +
+            (links.youtube ? (
+              '<a class="btnlink" href="' + links.youtube + '" target="_blank" rel="noopener">How to Play Video</a>'
+            ) : "") +
+          "</div>" +
+        "</div>" +
+      "</details>"
     );
-  }
+  }).join("");
+
+  return (
+    '<section id="exp" class="exp">' +
+      "<h3>Expansions</h3>" +
+      blocks +
+    "</section>"
+  );
+}
 
   /* --- Recently viewed helpers --- */
   var RECENT_KEY = "bgq_recent";
