@@ -531,11 +531,16 @@
     }
   }
 
-  /* Dark mode tuning for section backgrounds */
-  :root[data-theme="dark"] .qs,
-  :root[data-theme="dark"] .exp {
-    background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
-  }
+/* Dark-theme tuning for section backgrounds */
+:root[data-theme="dark"] .qs,
+:root[data-theme="dark"] .exp,
+:root[data-theme="darkwood"] .qs,
+:root[data-theme="darkwood"] .exp,
+:root[data-theme="neongrid"] .qs,
+:root[data-theme="neongrid"] .exp {
+  background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
+}
+
 </style>
 </head>
 <body>
