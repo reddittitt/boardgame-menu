@@ -83,19 +83,6 @@
     --accent:#ff7bff;
   }
 
-  /* Frost – bright minimal */
-  :root[data-theme="frost"] {
-    --bg:#f3f7fb;
-    --fg:#101622;
-    --muted:#657089;
-    --card:#ffffff;
-    --border:#dde5f2;
-    --btn:#ffffff;
-    --btn-border:#d0d9ea;
-    --brand:#2680ff;
-    --accent:#328ef5;
-  }
-
   html, body { height:100%; }
   body {
     margin:0;
@@ -242,7 +229,7 @@
   /* Detail view */
   .detail {
     background:var(--card);
-    border:1px solid var(--border);
+    border:1px solid color-mix(in srgb, var(--accent) 40%, var(--border) 60%);
     border-radius:14px;
     padding:16px;
     display:grid;
@@ -381,7 +368,7 @@
   .exp {
     margin-top:8px;
     padding:10px;
-    border:1px dashed var(--border);
+    border:1px dashed color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
     border-radius:12px;
     background:#f0f4ff;
   }
@@ -398,7 +385,7 @@
   .expansion {
     margin-bottom:8px;
     border-radius:10px;
-    border:1px solid var(--border);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
     background:var(--card);
     overflow:hidden;
   }
@@ -430,7 +417,7 @@
 
   .expansion-body {
     padding:8px 12px 10px;
-    border-top:1px solid var(--border);
+    border-top:1px solid color-mix(in srgb, var(--accent) 30%, var(--border) 70%);
     margin-top:6px;
   }
   .expansion-text-block h4 {
@@ -462,21 +449,6 @@
     display:block;
   }
 
-  /* Expansion tags */
-  .expansion-tags {
-    display:flex;
-    flex-wrap:wrap;
-    gap:0.35rem;
-    margin-bottom:0.5rem;
-  }
-  .expansion-tag {
-    padding:0.15rem 0.55rem;
-    border-radius:999px;
-    border:1px solid rgba(0,0,0,0.12);
-    font-size:0.78rem;
-    background:rgba(0,0,0,0.02);
-  }
-
   /* Components section */
   .game-section {
     margin-top:1.5rem;
@@ -502,13 +474,13 @@
   .player-aid-viewer {
     margin-top:10px;
     border-radius:12px;
-    border:1px solid var(--border);
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
     background:var(--card);
     overflow:hidden;
   }
   .player-aid-viewer iframe {
     width:100%;
-    height:70vh;   /* Tall viewport to see the whole PDF page */
+    height:70vh;
     border:0;
     display:block;
   }
@@ -545,17 +517,11 @@
     .detail { grid-template-columns:1fr; }
     .cover { width:100%; }
     .player-aid-viewer iframe {
-      height:60vh; /* Slightly shorter on small screens */
+      height:60vh;
     }
   }
 
-  /* Dark mode tuning for section borders/backgrounds */
-  :root[data-theme="dark"] .qs,
-  :root[data-theme="dark"] .exp,
-  :root[data-theme="dark"] .expansion {
-    border-color: var(--border);
-  }
-
+  /* Dark mode tuning for section backgrounds */
   :root[data-theme="dark"] .qs,
   :root[data-theme="dark"] .exp {
     background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
@@ -1112,7 +1078,6 @@
   "time": "60–120",
   "year": "2020",
   "bggId": "438924",
-  "youtube": "",
   "playerAids": [{
     "label": "Card Icon Key",
     "file": "player-aids/moonrakers-key.pdf"},
@@ -1124,24 +1089,7 @@
   "playerCountSetup": "- Higher prestige for 2–3p\n- More negotiation at 4–5p\n- Solo uses dedicated rules",
   "turnStructure": "- Choose: contract OR terminal action\n- Negotiate\n- Play cards\n- Resolve hazards/rewards",
   "commonMistakes": "- Taking bad deals\n- Not tracking hazards\n- Ignoring objectives\n- Overcommitting without thrusters",
-  "rulesGlossary": [
-  {
-         "term": "Income",
-         "desc": "Gain coins equal to..."
-       } 
-  ],
-    "components": [
-       "1 game board",
-       "240 cards",
-       "4 player mats"
-  ],
-  "bggRating": 7.7,
-  "bggRank": 1,
-  "weight": 2.46,
 
-  "themeColor": "",
-  "cover": "",
-  "coverUrl": "",
 "expansions": [
     {
       "name": "Binding Ties",
@@ -1864,6 +1812,7 @@
   }
 }
 </script>
+
 <script>
 (function() {
   /* --- Service worker registration (instant-load / offline cache) --- */
@@ -1875,9 +1824,9 @@
       });
   }
 
-  /* --- Theme cycling: classic → dark → darkwood → neongrid → frost --- */
+  /* --- Theme cycling: classic → dark → darkwood → neongrid --- */
   var root = document.documentElement;
-  var THEMES = ["classic", "dark", "darkwood", "neongrid", "frost"];
+  var THEMES = ["classic", "dark", "darkwood", "neongrid"];
 
   function setTheme(theme) {
     if (THEMES.indexOf(theme) === -1) theme = "classic";
@@ -2085,18 +2034,6 @@
     });
     if (!exps.length) return "";
 
-    var names = exps
-      .map(function (exp) { return (exp.name || "").trim(); })
-      .filter(function (n) { return !!n; });
-
-    var tagsLine = names.length
-      ? '<div class="expansion-tags">' +
-          names.map(function (n) {
-            return '<span class="expansion-tag">' + n + "</span>";
-          }).join("") +
-        "</div>"
-      : "";
-
     var blocks = exps.map(function(exp) {
       var expName = exp.name || "Expansion";
       var expRulebook = expansionRulebook(game.slug, exp);
@@ -2127,7 +2064,7 @@
             ) : "") +
             (qs ? (
               '<div class="expansion-text-block"><h4>Quick Setup</h4><p>' +
-              qs.replace(/\n/g,"<br>") +
+              qs.replace(/\n,g,"<br>") +
               "</p></div>"
             ) : "") +
             (rem ? (
@@ -2151,7 +2088,6 @@
     return (
       '<section id="exp" class="exp">' +
         "<h3>Expansions</h3>" +
-        tagsLine +
         blocks +
       "</section>"
     );
