@@ -83,14 +83,14 @@
     --accent:#ff7bff;
   }
 
-  :root[data-theme="darkwood"] header .toggle,
+:root[data-theme="darkwood"] header .toggle,
 :root[data-theme="darkwood"] header .home {
-  border-color: color-mix(in srgb, var(--accent) 70%, transparent 30%);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent 40%);
 }
 
 :root[data-theme="neongrid"] header .toggle,
 :root[data-theme="neongrid"] header .home {
-  border-color: color-mix(in srgb, var(--accent) 80%, transparent 20%);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent 30%);
 }
 
   html, body { height:100%; }
@@ -506,6 +506,19 @@
     background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
   }
 
+  :root[data-theme="darkwood"] .expansion summary,
+:root[data-theme="neongrid"] .expansion summary {
+  background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
+  color: var(--fg);
+}
+
+:root[data-theme="darkwood"] .expansion summary:hover,
+:root[data-theme="darkwood"] .expansion[open] summary,
+:root[data-theme="neongrid"] .expansion summary:hover,
+:root[data-theme="neongrid"] .expansion[open] summary {
+  background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
+}
+  
   :root[data-theme="dark"] header {
     background: #050816;
   }
