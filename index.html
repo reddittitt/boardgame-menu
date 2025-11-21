@@ -360,7 +360,33 @@
   background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
   color: var(--fg);
 }
+.player-aid-viewer {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--card, #fff);
+  overflow: auto;
+  padding: 0.75rem;
+}
 
+/* Image scaling */
+.player-aid-viewer img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Iframe fill */
+.player-aid-viewer iframe {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+  
 /* Keep hover/open state consistent in dark mode */
 :root[data-theme="dark"] .expansion summary:hover,
 :root[data-theme="dark"] .expansion[open] summary {
@@ -1706,7 +1732,27 @@
       localStorage.setItem("theme", next);
     });
   }
+function setPlayerAid(url) {
+    const isImage = /\.(png|jpe?g|webp|gif|svg)$/i.test(url);
+    const img = document.getElementById("playerAidImage");
+    const frame = document.getElementById("playerAidFrame");
 
+    if (!img || !frame) return;
+
+    if (isImage) {
+      frame.style.display = "none";
+      frame.src = "about:blank";
+
+      img.style.display = "block";
+      img.src = url;
+    } else {
+      img.style.display = "none";
+      img.src = "";
+
+      frame.style.display = "block";
+      frame.src = url;
+    }
+  }
   /* BG Stats helpers */
   var BGSTATS_ID_PREFIX_APP  = "bgstats://app.bgstatsapp.com/addPlay.html?gameId=";
   var BGSTATS_ID_PREFIX_WEB  = "https://bgstats.app/bgg/";
@@ -1923,7 +1969,27 @@
       section.hidden = true;
       return;
     }
+ if (firstFile) {
+    setPlayerAid(firstFile);
+    const link = document.getElementById("openAidLink");
+    if (link) link.href = firstFile;
+  }
+    // Add click handlers for each player aid button
+document
+  .querySelectorAll(".player-aid-button")
+  .forEach(btn => {
+    btn.addEventListener("click", () => {
+      const url = btn.dataset.file;
+      if (url) {
+        setPlayerAid(url);
 
+        // keep the "open in new tab" link updated
+        const link = document.getElementById("openAidLink");
+        if (link) link.href = url;
+      }
+    });
+  });
+    
     section.hidden = false;
 
     list.forEach(function(item) {
@@ -2150,22 +2216,29 @@
               '<div class="expansion-text-block">' +
                 "<p>Quick reference PDFs for this game. Switch between aids below.</p>" +
               "</div>" +
-              '<div class="player-aid-list">' +
-                buttons +
-              "</div>" +
-              '<div class="player-aid-viewer">' +
-                '<iframe' +
-                  ' id="playerAidFrame"' +
-                  ' src="' + firstFile + '"' +
-                  ' title="Player Aid for ' + g.name + '"' +
-                  ' loading="lazy">' +
-                "</iframe>" +
-              "</div>" +
-              '<p class="expansion-text-block">' +
-                '<a id="openAidLink" href="' + firstFile + '" target="_blank" rel="noopener">' +
-                  "Open current aid in new tab" +
-                "</a>" +
-              "</p>" +
+               '<div class="player-aid-list">' +
+    buttons +
+  "</div>" +
+  '<div class="player-aid-viewer">' +
+    // Image for PNG/JPG/etc. aids
+    '<img' +
+      ' id="playerAidImage"' +
+      ' alt="Player Aid for ' + g.name + '"' +
+      ' style="display:none;"' +
+    " />" +
+    // Iframe for PDFs/other docs
+    '<iframe' +
+      ' id="playerAidFrame"' +
+      ' title="Player Aid for ' + g.name + '"' +
+      ' loading="lazy"' +
+      ' style="display:none;"' +
+    "></iframe>" +
+  "</div>" +
+  '<p class="expansion-text-block">' +
+    '<a id="openAidLink" href="' + firstFile + '" target="_blank" rel="noopener">' +
+      'Open player aid in new tab' +
+    "</a>" +
+  "</p>"
             "</div>" +
           "</details>" +
         "</section>";
