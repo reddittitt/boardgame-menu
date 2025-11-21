@@ -83,6 +83,16 @@
     --accent:#ff7bff;
   }
 
+  :root[data-theme="darkwood"] header .toggle,
+:root[data-theme="darkwood"] header .home {
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent 30%);
+}
+
+:root[data-theme="neongrid"] header .toggle,
+:root[data-theme="neongrid"] header .home {
+  border-color: color-mix(in srgb, var(--accent) 80%, transparent 20%);
+}
+
   html, body { height:100%; }
   body {
     margin:0;
@@ -191,10 +201,10 @@
     gap:10px;
     transition:transform var(--anim-fast), box-shadow var(--anim-fast), border-color var(--anim-fast);
   }
-  .card:hover {
-    transform:translateY(-3px);
-    box-shadow:0 6px 18px rgba(0,0,0,0.16);
-    border-color:#9dbbfd;
+.card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.16);
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--border) 30%);
   }
   .thumb {
     width:64px;
@@ -2270,13 +2280,6 @@
 
     setGameAccent(g);
 
-    /* --- Subline bits (players • time • year) --- */
-    var bits = [];
-    if (g.players) bits.push(g.players);
-    if (g.time) bits.push(g.time + " min");
-    if (g.year) bits.push(g.year);
-    var sub = bits.join(" \u2022 ");
-
     /* --- Links (BGG, BG Stats, rulebook, cover) --- */
     var id = extractBggId(g.bggId);
     var links = {
@@ -2486,19 +2489,19 @@
       "</details>";
 
     /* --- Main detail markup --- */
-    appEl.innerHTML =
-      '<article class="detail fade-in">' +
-        '<figure class="cover">' +
-          '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
-            '<img src="' + links.cover + '" alt="' + g.name + ' cover" loading="lazy">' +
-            '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
-          "</a>" +
-        "</figure>" +
-        "<div>" +
-          '<h2 class="title">' + g.name + "</h2>" +
-          '<p class="byline">' + (sub || "") + "</p>" +
-          buildMetaBar(g) +
-          '<div class="actions">' +
+appEl.innerHTML =
+  '<article class="detail fade-in">' +
+    '<figure class="cover">' +
+      '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
+        '<img src="' + links.cover + '" alt="' + g.name + ' cover" loading="lazy">' +
+        '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
+      "</a>" +
+    "</figure>" +
+    "<div>" +
+      '<h2 class="title">' + g.name + "</h2>" +
+      buildMetaBar(g) +
+      '<div class="actions">' +
+
             '<section id="qs" class="exp">' +
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
