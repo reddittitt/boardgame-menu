@@ -2367,32 +2367,20 @@
       }
     }
 
-    /* --- BG Stats app-first deep link --- */
-    var bgbtn = document.getElementById("btn-bgstats");
-    if (bgbtn) {
-      bgbtn.addEventListener("click", function(e) {
-        if (!links.bgstatsApp) return; // fall back to normal web link
-        e.preventDefault();
-        var appUrl = links.bgstatsApp;
-        var webUrl = links.bgstats;
+   /* --- BG Stats app-only deep link --- */
+var bgbtn = document.getElementById("btn-bgstats");
+if (bgbtn) {
+  bgbtn.addEventListener("click", function (e) {
+    e.preventDefault();
 
-        var timer = setTimeout(function() {
-          window.open(webUrl, "_blank", "noopener");
-        }, 700);
+    // If there's no app deep link, do nothing.
+    // (If you want a web fallback instead, I can show that variant.)
+    if (!links.bgstatsApp) return;
 
-        var a = document.createElement("a");
-        a.href = appUrl;
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function() {
-          try {
-            document.body.removeChild(a);
-          } catch (err) {}
-          clearTimeout(timer);
-        }, 1200);
-      });
-    }
+    // Open BG Stats app in the current context – no new tab, no webpage.
+    window.location.href = links.bgstatsApp;
+  });
+}
 
     /* --- Rulebook guards + recently viewed --- */
     attachRulebookGuards();
