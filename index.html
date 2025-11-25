@@ -174,47 +174,28 @@
       transform:translateY(0);
     }
   }
-
-/* Make glossary terms match normal section text */
-#rules-glossary .glossary-item strong {
-  font-weight: 600;          /* Matches your expansion section headers */
-  font-size: inherit;        /* Prevents the text from appearing larger */
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-  #rules-glossary .glossary-item p {
-  font-size: inherit;  
-  line-height: inherit;
-  font-weight: 400;     /* Same as other expansion text */
-  margin: 0;
-}
-
-  
-/* Keep glossary spacing tidy, but let expansion-text-block handle fonts */
-.glossary-item {
-  margin-bottom: 0.75rem;
-}
-
-.glossary-item strong {
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-#rules-glossary dt {
-  font-weight: 600;          /* same weight as section titles */
-  margin-bottom: 0.25rem;
-  font-size: 1rem;           /* match your h4 size used in expansions */
-}
-
-#rules-glossary dd {
-  margin: 0;
-  font-weight: 400;
-  font-size: 0.95rem;        /* same as p inside expansion-text-block */
+/* Force glossary text to match other quick sections */
+#rules-glossary .expansion-body {
+  font-size: 0.95rem;      /* adjust this up/down until it visually matches */
   line-height: 1.4;
 }
 
-  /* List view */
+#rules-glossary .glossary-item {
+  margin-bottom: 0.75rem;
+}
+
+#rules-glossary .glossary-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;        /* or 500 if you want it softer */
+}
+
+#rules-glossary .glossary-item p {
+  margin: 0;
+  font-weight: 400;
+}
+
+   /* List view */
   #search {
     width:100%;
     padding:12px;
