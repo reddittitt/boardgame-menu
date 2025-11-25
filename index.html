@@ -2463,8 +2463,9 @@
         "</section>";
     }
 
-    /* --- Quick blocks (setup/reminders/etc.) --- */
+       /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
+      // 1. Quick Set Up
       '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
         '<summary><span class="expansion-name">Quick Set Up</span></summary>' +
         '<div class="expansion-body">' +
@@ -2474,33 +2475,27 @@
         "</div>" +
       "</details>" +
 
-      '<details class="expansion" id="reminders-block">' +
-        '<summary><span class="expansion-name">Reminders</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            "<p>" + (remindersText || "(No reminders yet.)").replace(/\n/g,"<br>") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
+      // 2. Player Count Set Up
       '<details class="expansion" id="playercount-block">' +
-        '<summary><span class="expansion-name">Player Count Setup</span></summary>' +
+        '<summary><span class="expansion-name">Player Count Set Up</span></summary>' +
         '<div class="expansion-body">' +
           playerCountHtmlInner +
         "</div>" +
       "</details>" +
 
+      // 3. Starting Resources
       '<details class="expansion" id="starting-resources-block">' +
-        '<summary><span class="expansion-name">Starting Resources &amp; Setup Checklist</span></summary>' +
+        '<summary><span class="expansion-name">Starting Resources</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
-            "<p>" + (startingResources || "(No starting resources/checklist yet.)").replace(/\n/g,"<br>") + "</p>" +
+            "<p>" + (startingResources || "(No starting resources yet.)").replace(/\n/g,"<br>") + "</p>" +
           "</div>" +
         "</div>" +
       "</details>" +
 
+      // 4. Turn Structure
       '<details class="expansion" id="turn-structure-block">' +
-        '<summary><span class="expansion-name">Turn Structure / Phases</span></summary>' +
+        '<summary><span class="expansion-name">Turn Structure</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
             "<p>" + (turnStructure || "(No turn structure summary yet.)").replace(/\n/g,"<br>") + "</p>" +
@@ -2508,11 +2503,22 @@
         "</div>" +
       "</details>" +
 
+      // 5. Common Mistakes
       '<details class="expansion" id="common-mistakes-block">' +
         '<summary><span class="expansion-name">Common Mistakes</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
             "<p>" + (commonMistakes || "(No common mistakes noted yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
+
+      // Reminders (moved AFTER your 5 core sections)
+      '<details class="expansion" id="reminders-block">' +
+        '<summary><span class="expansion-name">Reminders</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (remindersText || "(No reminders yet.)").replace(/\n/g,"<br>") + "</p>" +
           "</div>" +
         "</div>" +
       "</details>";
