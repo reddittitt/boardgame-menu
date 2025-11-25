@@ -175,6 +175,22 @@
     }
   }
 
+/* Make glossary terms match normal section text */
+#rules-glossary .glossary-item strong {
+  font-weight: 600;          /* Matches your expansion section headers */
+  font-size: inherit;        /* Prevents the text from appearing larger */
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+  #rules-glossary .glossary-item p {
+  font-size: inherit;  
+  line-height: inherit;
+  font-weight: 400;     /* Same as other expansion text */
+  margin: 0;
+}
+
+  
 /* Keep glossary spacing tidy, but let expansion-text-block handle fonts */
 .glossary-item {
   margin-bottom: 0.75rem;
