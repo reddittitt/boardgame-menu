@@ -2325,12 +2325,13 @@
     };
 
     /* --- Base quick text fields --- */
-    var quickText         = (g.quickStart || "").trim();
-    var playerCountSetup  = (g.playerCountSetup || "").trim();
-    var startingResources = (g.startingResources || "").trim();
-    var remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
-    var turnStructure     = (g.turnStructure || "").trim();
-    var commonMistakes    = (g.commonMistakes || "").trim();
+var quickText         = (g.quickStart || "").trim();
+var playerCountSetup  = (g.playerCountSetup || "").trim();
+var startingResources = (g.startingResources || "").trim();
+var remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
+var turnStructure     = (g.turnStructure || "").trim();
+var endGameScoring    = (g.endGameScoring || "").trim();
+var commonMistakes    = (g.commonMistakes || "").trim();
 
     /* --- Dynamic player-count setup (setupByPlayerCount) --- */
     var setupByPlayerCount =
@@ -2463,7 +2464,7 @@
         "</section>";
     }
 
-       /* --- Quick blocks (setup/reminders/etc.) --- */
+        /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
       // 1. Quick Set Up
       '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
@@ -2503,7 +2504,17 @@
         "</div>" +
       "</details>" +
 
-      // 5. Common Mistakes
+      // 5. End Game Scoring
+      '<details class="expansion" id="endgame-scoring-block">' +
+        '<summary><span class="expansion-name">End Game Scoring</span></summary>' +
+        '<div class="expansion-body">' +
+          '<div class="expansion-text-block">' +
+            "<p>" + (endGameScoring || "(No end game scoring notes yet.)").replace(/\n/g,"<br>") + "</p>" +
+          "</div>" +
+        "</div>" +
+      "</details>" +
+
+      // 6. Common Mistakes
       '<details class="expansion" id="common-mistakes-block">' +
         '<summary><span class="expansion-name">Common Mistakes</span></summary>' +
         '<div class="expansion-body">' +
@@ -2513,7 +2524,7 @@
         "</div>" +
       "</details>" +
 
-      // Reminders (moved AFTER your 5 core sections)
+      // 7. Reminders (after the main flow)
       '<details class="expansion" id="reminders-block">' +
         '<summary><span class="expansion-name">Reminders</span></summary>' +
         '<div class="expansion-body">' +
