@@ -175,16 +175,14 @@
     }
   }
 
-  /* Match glossary typography to Quick Setup / Reminders / etc. */
-#rules-glossary .glossary {
-  font-size: 0.95rem;
-  line-height: 1.4;
-  margin: 0;
-  padding: 0;
+/* Keep glossary spacing tidy, but let expansion-text-block handle fonts */
+.glossary-item {
+  margin-bottom: 0.75rem;
 }
 
-#rules-glossary .glossary-item {
-  margin-bottom: 1rem;
+.glossary-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 #rules-glossary dt {
@@ -2400,7 +2398,7 @@ var commonMistakes    = (g.commonMistakes || "").trim();
         "</div>";
     }
 
-    /* --- Quick Rules Glossary --- */
+       /* --- Quick Rules Glossary --- */
     var rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
     var rulesGlossaryHtml = "";
     if (rulesGlossary.length) {
@@ -2408,9 +2406,9 @@ var commonMistakes    = (g.commonMistakes || "").trim();
         var term = item.term || "";
         var desc = (item.desc || "").replace(/\n/g,"<br>");
         return (
-          '<div class="glossary-item">' +
-            "<dt>" + term + "</dt>" +
-            "<dd>" + desc + "</dd>" +
+          '<div class="expansion-text-block glossary-item">' +
+            (term ? ('<strong>' + term + "</strong>") : "") +
+            "<p>" + desc + "</p>" +
           "</div>"
         );
       }).join("");
@@ -2420,9 +2418,7 @@ var commonMistakes    = (g.commonMistakes || "").trim();
           '<details class="expansion">' +
             '<summary><span class="expansion-name">Quick Rules Glossary</span></summary>' +
             '<div class="expansion-body">' +
-              '<dl class="glossary">' +
-                glossaryItems +
-              "</dl>" +
+              glossaryItems +
             "</div>" +
           "</details>" +
         "</section>";
