@@ -174,26 +174,13 @@
       transform:translateY(0);
     }
   }
-/* Force glossary text to match other quick sections */
-#rules-glossary .expansion-body {
-  font-size: 0.95rem;      /* adjust this up/down until it visually matches */
-  line-height: 1.4;
+
+  .expansion-text-block p {
+  margin:0 0 0.4rem;
+  font-size:0.85rem;
+  line-height:1.4;
 }
 
-#rules-glossary .glossary-item {
-  margin-bottom: 0.75rem;
-}
-
-#rules-glossary .glossary-item strong {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: 600;        /* or 500 if you want it softer */
-}
-
-#rules-glossary .glossary-item p {
-  margin: 0;
-  font-weight: 400;
-}
 
    /* List view */
   #search {
@@ -255,6 +242,10 @@
     overflow:hidden;
     text-overflow:ellipsis;
   }
+
+  #rules-glossary .glossary-item {
+  margin-bottom: 0.4rem;
+}
 
   /* Detail view */
   .detail {
@@ -2399,16 +2390,18 @@ var commonMistakes    = (g.commonMistakes || "").trim();
     var rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
     var rulesGlossaryHtml = "";
     if (rulesGlossary.length) {
-      var glossaryItems = rulesGlossary.map(function(item) {
-        var term = item.term || "";
-        var desc = (item.desc || "").replace(/\n/g,"<br>");
-        return (
-          '<div class="expansion-text-block glossary-item">' +
-            (term ? ('<strong>' + term + "</strong>") : "") +
-            "<p>" + desc + "</p>" +
-          "</div>"
-        );
-      }).join("");
+var glossaryItems = rulesGlossary.map(function(item) {
+  var term = (item.term || "").trim();
+  var desc = (item.desc || "").replace(/\n/g,"<br>");
+  return (
+    '<div class="expansion-text-block glossary-item">' +
+      "<p>" +
+        (term ? ("<strong>" + term + ".</strong> ") : "") +
+        desc +
+      "</p>" +
+    "</div>"
+  );
+}).join("");
 
       rulesGlossaryHtml =
         '<section class="exp" id="rules-glossary">' +
