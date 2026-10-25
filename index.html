@@ -1006,30 +1006,64 @@
 },  
   
 "brass-birmingham": {
-                    "players": "2–4", 
-                    "time": "90–150", 
-                    "year": "2018", 
-                    "bggId": "224517",
-                    "youtube": "https://www.youtube.com/watch?v=Lzxf4tfq9as",
-                    "quickStart": "- Give each player 8 starting cards, 17 pounds, and player tokens.\n- Randomize turn order.",
-                    "startingResources": "- 17 pounds.\n- Full deck of industry cards.\n- Player markers.\n- Canal boats.",
-                    "remindersText": "- Every action requires discarding a card.\n- Coal must be connected; iron does not.\n- Overbuild only when rules allow.Empty markets never get beer above them.\n- Draw 8 cards; keep one extra card as your discard slot.\n- Start with income marker on 10 and VP marker on the lowest space.\n- First turn is only 1 action.\n- \"Connected\" is different from \"your network\"; industry cards require building connected to your network.\n- Link tiles must be placed adjacent to your network.\n- Beer for selling does not have to be yours if it is connected.\n- Coal must come from the closest connected source.\n- You may buy coal if connected to the coal market.\n- Iron can be taken from anywhere, even if unconnected.\n- Resources placed on tiles sell to the market if slots are open; coal sells only if connected.\n- Blue half-moon tiles are canal era only; black half-moon are rail era only.\n- Canal era permits only one industry tile per location.\n- No face-down cards in the rail era.\n- Wild cards cannot be used for beer.\n- You may develop up to 2 levels per action.\n- You may overbuild at any time, even if resources remain.\n- Overbuilding does not remove income bonuses.\n- Sell actions can flip multiple tiles.\n- VP is scored at the end of each era; income applies immediately.\n- No income collection on the final turn.\n- Loans move income back 3 levels, not 3 spaces.\n- If unable to repay debt, you must resell industry tiles (not links) for half value.\n- VP is awarded for opponents' flipped industries as well.",
-                    "playerCountSetup": "- Remove cards and place merchantile tiles based on player count.",
-                    "turnStructure": "- Each round: 2 actions per player. First round is 1 action per player.\n- Income + upkeep.\n- Move turn-order based on spending.\n- Era change after canal phase.",
-                    "commonMistakes": "- Confusing iron vs coal requirements.\n- Forgetting to flip tiles when conditions met.\n- Overbuilding illegally.",
-                    "endGameScoring": "VP Scored for tiles flipped.\n Link points scored for all flipped tiles connected to links.",
+  "players": "2–4",
+  "time": "60–120",
+  "year": "2018",
+  "bggId": "224517",
+  "youtube": "https://www.youtube.com/watch?v=Lzxf4tfq9as",
+  "cover": "covers/brass-birmingham.webp",
+  "rulebook": "brass-birmingham",
+  "quickStart": "- Board on either the day or night side. The two sides are only art.\n- Below 4 players, return every card and Merchant tile whose printed count is higher than the player count.\n- Put the Wild Location cards and the Wild Industry cards in two face-up piles. Shuffle the rest face down as the draw deck.\n- Shuffle the Merchant tiles for this count and place one on each Merchant space marked for it. Put 1 beer on each beer space beside a Merchant that was placed.\n- Coal market: a cube on every space except one £1 space, which stays empty. Iron market: a cube on every space except both £1 spaces.\n- Each player takes a mat, £17, one character, that color's links, and industry tiles on the mat (cotton, coal, iron, manufactured goods, pottery, brewery) with the black top half face down.\n- VP marker on 0. Income marker on the 10 space, which is income level £0.\n- Deal 8 hidden cards, then 1 more card face down as that player's discard pile. It is not part of the hand.\n- Shuffle the characters onto the turn-order track in a random order.",
+  "startingResources": "- £17, a hidden hand of 8, and a separate 1-card face-down discard pile.\n- Your link tiles and one full set of industry tiles on your mat. Nothing of yours starts on the map.\n- VP on 0. Income marker on the 10 space (£0).\n- Coal, iron, and beer begin on the markets and the placed Merchants, not with the players.",
+  "playerCountSetup": "- £17 and a hand of 8 at every count. Only the deck, the Merchants, and the number of rounds change.\n- 2 players: no Merchants in Warrington or Nottingham, blue and teal location cards removed, 10 rounds per era.\n- 3 players: no Merchant in Nottingham, teal location cards removed, 9 rounds per era.\n- 4 players: every location card and every Merchant space, 8 rounds per era.",
+  "setupByPlayerCount": {
+    "2": "- Remove every card and Merchant tile marked 3+ or 4+.\n- No Merchant tiles in Warrington or Nottingham, so those cities have no Merchant beer and no sell spaces.\n- Blue and teal location cards are not in the deck. The other location colors stay.\n- Each era lasts 10 rounds. Still £17 and 8 cards each.",
+    "3": "- Remove every card and Merchant tile marked 4+.\n- No Merchant tile in Nottingham.\n- Teal location cards are not in the deck.\n- Each era lasts 9 rounds. Still £17 and 8 cards each.",
+    "4": "- Use every location card and place a Merchant on every Merchant space, including Warrington and Nottingham.\n- Each era lasts 8 rounds. Still £17 and 8 cards each."
+  },
+  "turnStructure": "- Canal Era (1770-1830), then Rail Era (1830-1870). Rounds per era: 8 at 4 players, 9 at 3, 10 at 2.\n- On your turn take 2 actions. In the first Canal Era round only, each player takes 1 action.\n- Each action discards 1 card, and so does each pass. You may repeat an action. Wild cards return to their face-up piles instead of your discard pile.\n- After your turn, draw back to 8 cards. After the deck is empty, the hand just gets smaller.\n- Money spent this round sits on your character tile.\n- End of round: whoever spent the least goes first next round. Equal spends keep their relative order. Return that money to the bank, then take income.\n- Do not take income at the end of the final round of the game. The last Canal Era round still pays income.\n- Negative income is paid to the bank. An era ends after the round in which everyone plays their last card.",
+  "remindersText": "- Build is the only action that needs a specific card. A location card builds any industry in that city, even outside your network. An industry card builds that industry only inside your network.\n- A Wild Location is any city except the two Farm Breweries. A Wild Industry is any industry card, including a Farm Brewery.\n- Your network is a city that holds one of your industries, or a city touching one of your links. Connected means a path of anyone's links.\n- If you have nothing on the board, an industry card may build in any legal city, and any card may place a link on any empty line. A rail still needs coal.\n- Canal Network places 1 canal for £3. Rail Network places 1 rail for £5 plus 1 coal, or 2 rails for £15 plus 1 coal each and 1 beer from a brewery, not from a Merchant. An opponent's beer for the second rail must be connected to that second rail.\n- Develop removes the lowest remaining tile of one or two industries and spends 1 iron per tile. Lightbulb Pottery cannot be developed.\n- Scout discards 3 cards and takes 1 Wild Location plus 1 Wild Industry. You cannot Scout while you already hold a Wild card.\n- Sell flips any number of your cotton, manufactured-goods, and pottery tiles. Each one needs a connection to a Merchant space of that type, plus its beer.\n- Beer: yours needs no connection. An opponent's brewery must connect to the place that needs it. Merchant beer is legal only while selling to that Merchant.\n- Drinking a Merchant's beer also pays its bonus. Gloucester removes 1 lowest mat tile for free (not lightbulb Pottery). Oxford is +2 income spaces. Nottingham and Shrewsbury score their printed VP. Warrington pays £5.\n- Coal from a mine is free and must be the closest connected mine. Market coal needs a connection to a Merchant coal icon, cheapest first, or £8 a cube if the market is empty.\n- Iron comes from any Iron Works, no connection and not necessarily the closest, or from the market with no connection. An empty iron market is £6 a cube.\n- A new coal mine sells cubes onto the market only if it connects to any Merchant space, even an empty one. A new Iron Works always sells. Fill the dearest empty spaces, take that money, and flip the tile if it empties. Cubes never move to the market on a later turn.\n- Flipping a tile moves your income that many spaces, not levels, and income cannot rise above 30. The coal, iron, and beer supply does not run out.\n- Farm Breweries are built only with a Brewery or Wild Industry card. Cannock needs the link to the farm on its left. The farm beside Kidderminster and Worcester is reached by the one link between those cities; do not add a second link.",
+  "commonMistakes": "- A loan is not debt you repay. Discard a card, take £30, and move income back 3 levels (not 3 spaces) onto the highest space of the new level. You cannot go below -10.\n- The half-price tile sale is only for unpaid negative income. Remove your industries, not links, for half their cost rounded down, and stop once the shortfall is covered. Still short: lose 1 VP per £1.\n- You may overbuild any of your own tiles with a higher tile of the same industry, even if cubes remain. Those cubes go back to the supply. An opponent's tile must be coal or iron, and only when no cubes of that resource remain on the board or in its market.\n- Overbuilding removes the old tile from the game. It will not score. Already-gained income and VP stay.\n- You do not score the VP printed on opponents' tiles. Their flipped tiles only add link icons when you score your own links.\n- Canal Era: at most one of your industry tiles in a city. Other players may also have one there. Rail Era: you may build more than one of yours in a city.\n- Do not build a mat slot whose era icon is wrong for the era. The exception is level 1 Pottery, which may be built in the Rail Era. Other level 1 tiles score at the end of the Canal Era and then leave the board.\n- Hands stay hidden in both eras. There is no face-up Rail Era hand.",
+  "endGameScoring": "- End of each era, links first. Each of your links scores 1 VP per link icon on flipped industry tiles in the two cities it joins. Any owner counts. Unflipped tiles do not. Remove the link as you score it.\n- Then score the VP on your own flipped tiles. Unflipped tiles score nothing.\n- After Canal scoring, remove every level 1 industry from the board (leave them on player mats), refill empty beer spaces beside Merchants that are on the board, and shuffle all discard piles into a new deck. Turn each pile's face-down bottom card face up before the shuffle.\n- After Rail scoring, most VP wins. Break ties by highest income, then most money left. Otherwise the tied players share the win.\n- Introductory game: play only the Canal Era, score it normally, then add 1 VP per £4 you hold (maximum 15), VP equal to your income level (a negative level loses VP), and score each level 2 or higher industry tile a second time.",
   "rulesGlossary": [
     {
-      "term": "Your Network: Location contains one or more of your industry tiles.",
-      "desc": ""
+      "term": "Your network",
+      "desc": "A location that contains at least one of your industry tiles, or that is adjacent to at least one of your links. Industry cards can build only in your network. Location cards ignore this."
     },
     {
-      "term": "\n Connected: Able to trace a route of link tiles from any player from one location to another.",
-      "desc": ""
+      "term": "Connected",
+      "desc": "You can trace a route of link tiles, owned by anyone, from one location to the other. Coal, opponent beer, and selling all care about connection. Your own beer and all iron do not."
+    },
+    {
+      "term": "Flipped tile",
+      "desc": "The black top half is showing. Cotton, manufactured goods, and pottery flip on a Sell. Coal, iron, and breweries flip when their last cube or barrel leaves. Flipping scores the printed income spaces immediately. The printed VP waits until the end of the era."
+    },
+    {
+      "term": "Canal and rail icons",
+      "desc": "The icon to the left of a slot on your mat says which era that tile may be built in. A canal-icon slot cannot be built in the Rail Era. A rail-icon slot cannot be built in the Canal Era. Level 1 Pottery is the level-1 tile you may still build in the Rail Era. Build it in the legal era, or Develop it off the mat, to reach the tiles behind it."
+    },
+    {
+      "term": "Overbuilding",
+      "desc": "Replace a tile already in a city with a higher-level tile of the same industry, paying the normal build cost. Yours: any industry, at any time. Theirs: coal or iron only, and only when that resource is gone from every tile and from its market. The replaced tile is removed and will not score."
+    },
+    {
+      "term": "Loan",
+      "desc": "An action. Discard a card, take £30, and drop 3 income levels, not 3 spaces. Park the marker on the highest space of the new level. Illegal if it would go below -10. Loans are never repaid, and income is not worth VP at the end."
+    },
+    {
+      "term": "Merchant beer",
+      "desc": "The barrel beside a Merchant. It can be drunk only as part of a Sell to that Merchant, and drinking it also grants that city's bonus. It cannot pay for a double rail."
+    },
+    {
+      "term": "Farm brewery",
+      "desc": "Two unnamed brewery spaces. Build them only with a Brewery industry card or a Wild Industry card, never a location card. Cannock's farm needs its own link. The farm by Kidderminster and Worcester is connected by the link between those two cities."
+    },
+    {
+      "term": "Link scoring",
+      "desc": "At era end, before industry VP, each of your links scores 1 VP for each link icon on flipped tiles in the two adjacent locations, whoever owns those tiles. Then the link is removed. Your industry VP is scored only from your own flipped tiles."
     }
   ],
-
-"expansions": []
+  "expansions": []
 },
 
 "brass-pittsburgh": {
@@ -4140,12 +4174,15 @@ appEl.innerHTML =
 
   function normalizeIncoming() {
     var q = qp("game");
-    if (q) {
-      var want = q.trim();
-      var slugged = slugify(want);
-      var a = (qp("action") || "quicksetup").toLowerCase();
-      window.location.replace("#/game/" + slugged + "?action=" + encodeURIComponent(a));
-      return true;
+    if (!q) return false;
+    var want = q.trim();
+    var slugged = slugify(want);
+    var a = (qp("action") || "quicksetup").toLowerCase();
+    var hash = "#/game/" + slugged + "?action=" + encodeURIComponent(a);
+    // A hash-only location.replace keeps ?game= on the URL. render() would
+    // then see the query on every pass and never paint the detail view.
+    if (window.location.hash !== hash || window.location.search) {
+      history.replaceState(null, "", window.location.pathname + hash);
     }
     return false;
   }
