@@ -506,6 +506,39 @@
     display:block;
   }
 
+  /* Player-count buttons and expansion toggles share one chip style. */
+  .playercount-controls,
+  .expansion-controls {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:0 0 8px;
+  }
+  .pc-btn,
+  .exp-chip {
+    appearance:none;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    border-radius:999px;
+    padding:6px 12px;
+    font:inherit;
+    font-weight:600;
+    font-size:0.85rem;
+    cursor:pointer;
+  }
+  .pc-btn[data-active="true"],
+  .exp-chip[data-active="true"] {
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#ffffff;
+  }
+  .exp-note {
+    margin:0 0 8px;
+    color:var(--muted);
+    font-size:0.8rem;
+  }
+
   /* Dark mode tuning for expansion headers */
   :root[data-theme="dark"] .expansion summary {
     background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
@@ -695,11 +728,88 @@
     "Welcome to the Moon",
     "Wingspan"
 
+  ,
+    "7 Wonders (Second Edition)",
+    "7 Wonders Dice",
+    "Agent Avenue",
+    "Brick Like This!",
+    "Burgle Bros 2: The Casino Capers",
+    "Burgle Bros.",
+    "Burgle Bros. 3: Future Flip",
+    "Camel Up: The Card Game",
+    "Can't Stop",
+    "Candy Land: Bluey",
+    "Cartographers",
+    "Celestia",
+    "Container",
+    "Cozy Stickerville",
+    "The Crew: Journey to the Ends of the Earth",
+    "The Crew: Mission Deep Sea",
+    "The Crew: The Quest for Planet Nine",
+    "Cryptid",
+    "Flamecraft",
+    "FlipToons",
+    "FlipToons: Season 2",
+    "For Sale Autorama",
+    "The Fox in the Forest",
+    "Got Five!",
+    "Gruntz",
+    "Hanabi",
+    "Hypothetically",
+    "Inkling",
+    "Kinfire Delve: Vainglory's Grotto",
+    "Light Speed: Arena",
+    "The Lord of the Rings: Duel for Middle-earth",
+    "Lost Cities",
+    "Magic Maze Pocket",
+    "Magical Athlete",
+    "Moon Colony Bloodbath",
+    "Moonrakers",
+    "Mythic Mischief Vol. II",
+    "Night at the Zoo",
+    "Oath",
+    "Ostia: Mariner Edition",
+    "A Place for All My Books",
+    "Point City",
+    "Point Galaxy",
+    "Point Salad",
+    "Rebel Princess: Deluxe Edition",
+    "Splendor Duel",
+    "Tacta",
+    "Tag Team",
+    "Targi",
+    "Tenby",
+    "Thunder Road: Ignition",
+    "Thunder Road: Vendetta",
+    "Ticket to Ride: First Journey (U.S.)",
+    "Unicorn Glitterluck: Cloud Stacking",
+    "Unmatched: Battle of Legends, Volume One",
+    "Unmatched: Houdini vs. The Genie",
+    "Wingspan Pocket",
+    "Winnie the Pooh: Serious Detective",
+    "Corps of Discovery Duo",
+    "Corps of Discovery: Ultimate Edition",
+    "Everdell Journeys",
+    "Gather: An Everdell Card Game",
+    "An Infamous Traffic: Second Edition",
+    "Lairs",
+    "Parks Europe",
+    "Ra: The Dice Game",
+    "Tag Team: Arthur's Legacy",
+    "Tag Team: SNK Arcade Legends",
+    "Thunder Road: Vendetta – Maximum Chrome",
+    "Unmatched: Brains and Brawn",
+    "Unmatched: Stars and Stripes",
+    "The Two Towers Trick-Taking Game"
   ],
   "enrich": {
  
-  "7-wonders": { 
-                "players": "3–7", 
+  "7-wonders": {
+  "cover": "covers/7-wonders.webp",
+  "weight": 2.31,
+  "bggRank": 117,
+  "bggRating": 7.54, 
+                "players": "2–7", 
                 "time": "30", 
                 "year": "2010", 
                 "bggId": "68448",
@@ -716,24 +826,13 @@
       "desc": ""},{
       "term": "",
       "desc": ""}],
-"expansions": [{
-
-"name": "Cities",
-                           
-                "quickStart": "- Add black cards into each Age deck.\n- Give each player 6 coins instead of 3.\n- Add Diplomacy and Debt tokens.",
-                "reminders": "- Diplomacy avoids conflict for that Age.\n- Debt must be paid at end of Age; cannot go negative.",
-                "rulebook": "",
-                "youtube": "",
-                "bggId": "108745"},{
-                         
-"name": "Armada",
-                "quickStart": "- Give each player a naval board.\n- Add Island and Armada cards to Age decks.\n- Add naval track cubes.",
-                "reminders": "- Naval combat happens across the whole table.\n- Islands trigger bonuses when discovered.",
-                "rulebook": "",
-                "youtube": "",
-                "bggId": "266192"}]},
+"expansions": [{"name": "Cities", "quickStart": "- Add black cards into each Age deck.\n- Give each player 6 coins instead of 3.\n- Add Diplomacy and Debt tokens.", "reminders": "- Diplomacy avoids conflict for that Age.\n- Debt must be paid at end of Age; cannot go negative.", "rulebook": "", "youtube": "", "bggId": "108745"}, {"name": "Armada", "quickStart": "- Give each player a naval board.\n- Add Island and Armada cards to Age decks.\n- Add naval track cubes.", "reminders": "- Naval combat happens across the whole table.\n- Islands trigger bonuses when discovered.", "rulebook": "", "youtube": "", "bggId": "247315"}]},
   
 "7-wonders-duel": {
+  "cover": "covers/7-wonders-duel.webp",
+  "weight": 2.23,
+  "bggRank": 24,
+  "bggRating": 7.95,
                 "youtube": "https://www.youtube.com/watch?v=SxQkMRUvCJ8",
                 "players": "2", "time": "30", "year": "2015", "bggId": "173346",
                 "quickStart": "- Draft 4 wonders (2 picks each) using the snake method.\n- Place the Age I card pyramid.\n- Each player starts with 7 coins.\n- Place Conflict pawn in the center of the track.",
@@ -758,6 +857,10 @@
                 "bggId": "199786"    }  ]},
   
 "acquire": {
+  "cover": "covers/acquire.webp",
+  "weight": 2.49,
+  "bggRank": 370,
+  "bggRating": 7.13,
           "youtube": "https://www.youtube.com/watch?v=PRQDB7FFaVs",
           "players": "2–6", "time": "90", "year": "1964", "bggId": "5",
           "quickStart": "- Give each player starting money (varies by edition).\n- Place tiles facedown in a draw pool.\n- Each player draws 6 tiles.\n- Prepare stock certificates for all hotel chains.",
@@ -775,8 +878,9 @@
 "expansions": []},
   
 "air-land-and-sea-critters-at-war": {
+  "cover": "covers/air-land-and-sea-critters-at-war.webp",
           "youtube": "https://www.youtube.com/watch?v=MAugPEPLa2k",
-          "players": "2", "time": "20", "year": "2021", "bggId": "304420",
+          "players": "2", "time": "20", "year": "2021", "bggId": "342857",
           "quickStart": "- Shuffle all 18 cards.\n- Deal 6 to each player.\n- Randomly choose 3 theaters to play face up.\n- Place the other 3 facedown as unused.",
           "startingResources": "- 6 starting cards.\n- No other resources.",
           "remindersText": "- You may deploy, flip (if allowed), or withdraw.\n- Ties favor the last player who played a card.\n- Each player’s deck is identical.",
@@ -792,10 +896,14 @@
 "expansions": []},
 
 "altera": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/altera.webp",
+  "weight": 3.0,
+  "bggRank": 12047,
+  "bggRating": 5.56,
+              "players": "1–4", 
+              "time": "60–120", 
+              "year": "2027", 
+              "bggId": "469367",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -813,10 +921,11 @@
 },  
 
 "annulet": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/annulet.webp",
+              "players": "1–4", 
+              "time": "30–60", 
+              "year": "2027", 
+              "bggId": "465617",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -834,9 +943,13 @@
 },
   
 "archduke": {
-            "players": "2–4", 
-            "time": "30–60", 
-            "year": "*", 
+  "cover": "covers/archduke.webp",
+  "weight": 1.27,
+  "bggRank": 7688,
+  "bggRating": 5.65,
+            "players": "2–6", 
+            "time": "15–25", 
+            "year": "2020", 
             "bggId": "332943",
             "youtube": "https://www.youtube.com/watch?v=Ja_SG4yBq54",
             "quickStart": "- Give each player a player board.\n- Shuffle and deal starting cards/resources per rulebook.\n- Set central board/market/offers.\n- Place turn marker and round tracker.",
@@ -855,10 +968,14 @@
 },
 
 "arcs": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/arcs.webp",
+  "weight": 3.45,
+  "bggRank": 106,
+  "bggRating": 7.59,
+              "players": "2–4", 
+              "time": "60–120", 
+              "year": "2024", 
+              "bggId": "359871",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -876,9 +993,13 @@
 },  
   
 "ark-nova": {
+  "cover": "covers/ark-nova.webp",
+  "weight": 3.8,
+  "bggRank": 2,
+  "bggRating": 8.35,
               "youtube": "https://www.youtube.com/watch?v=Vn_UFsjz6jA",
               "players": "1–4",
-              "time": "120–180",
+              "time": "90–150",
               "year": "2021",
               "bggId": "342942",
               "quickStart": "- Give zoo map + action cards\n- Set action cards in slots 1–5\n- Deal starting hand of zoo cards\n- Reveal card display\n- Set conservation projects",
@@ -893,15 +1014,13 @@
                 "desc": ""},{
                 "term": "",
                 "desc": ""}],
-"expansions": [
-       {"name": "Marine Worlds",
-        "quickStart": "- Add sea animals\n- Add new bonuses + final scoring\n- Add new enclosures (if used)",
-        "reminders": "- Sea icons required\n- New scoring tiles add variety",
-        "rulebook": "",
-        "youtube": "https://www.youtube.com/watch?v=3NyZWytjEe8",
-        "bggId": "368966"}]},
+"expansions": [{"name": "Marine Worlds", "bggId": "368966", "setup": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.", "rules": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.", "scoring": "End-game scoring is still the base system: conservation points times appeal points, plus the final-scoring cards.\nThe final-scoring deck now includes Marine Worlds cards.", "quickStart": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.", "reminders": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.", "rulebook": "ark-nova--marine-worlds", "youtube": "https://www.youtube.com/watch?v=3NyZWytjEe8"}]},
 
 "azul": {
+  "cover": "covers/azul.webp",
+  "weight": 1.77,
+  "bggRank": 99,
+  "bggRating": 7.6,
           "players": "2–4", 
           "time": "30–45", 
           "year": "2017", 
@@ -923,10 +1042,14 @@
 },
 
 "azul-duel": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/azul-duel.webp",
+  "weight": 2.28,
+  "bggRank": 1846,
+  "bggRating": 6.32,
+              "players": "2", 
+              "time": "45", 
+              "year": "2025", 
+              "bggId": "431038",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -944,10 +1067,14 @@
 },  
 
 "backgammon": {
+  "cover": "covers/backgammon.webp",
+  "weight": 2.0,
+  "bggRank": 1665,
+  "bggRating": 6.38,
               "players": "2",  
               "time": "30", 
               "year": "*", 
-              "bggId": "11951",
+              "bggId": "2397",
               "youtube": "https://www.youtube.com/watch?v=VOQWJvsI4LE",
               "quickStart": "- Place checkers in standard starting positions.\n- Each player rolls one die; higher die goes first using both dice.\n- Movement direction is opposite for players.",
               "startingResources": "- 15 checkers each.\n- One doubling cube.",
@@ -964,9 +1091,13 @@
   "expansions": []
 },
 "blokus": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
+  "cover": "covers/blokus.webp",
+  "weight": 1.73,
+  "bggRank": 915,
+  "bggRating": 6.71,
+              "players": "2–4", 
+              "time": "30", 
+              "year": "2000", 
               "bggId": "2453",
               "youtube": "",
               "quickStart": "",
@@ -985,10 +1116,14 @@
 },
 
 "bomb-busters": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/bomb-busters.webp",
+  "weight": 2.01,
+  "bggRank": 82,
+  "bggRating": 7.66,
+              "players": "2–5", 
+              "time": "30", 
+              "year": "2024", 
+              "bggId": "413246",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1006,6 +1141,9 @@
 },  
   
 "brass-birmingham": {
+  "weight": 3.86,
+  "bggRank": 1,
+  "bggRating": 8.39,
   "players": "2–4",
   "time": "60–120",
   "year": "2018",
@@ -1067,10 +1205,14 @@
 },
 
 "brass-pittsburgh": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/brass-pittsburgh.webp",
+  "weight": 3.72,
+  "bggRank": 5129,
+  "bggRating": 5.78,
+              "players": "1–4", 
+              "time": "120", 
+              "year": "2027", 
+              "bggId": "452264",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1088,8 +1230,12 @@
 },  
 
 "brink": {
+  "cover": "covers/brink.webp",
+  "weight": 3.27,
+  "bggRank": 3575,
+  "bggRating": 5.95,
       "players": "2–5",
-      "time": "45–90",
+      "time": "60–150",
       "year": "2024",
       "bggId": "415078",
       "quickStart": "- Give each player a faction, player board, and starting deck.\n- Set up map tiles according to scenario.\n- Place starting ships/meeples in home areas.\n- Shuffle market/contract/mission decks as indicated.",
@@ -1111,10 +1257,14 @@
     },
 
 "camel-up": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/camel-up.webp",
+  "weight": 1.5,
+  "bggRank": 653,
+  "bggRating": 6.87,
+              "players": "2–8", 
+              "time": "20–30", 
+              "year": "2014", 
+              "bggId": "153938",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1133,10 +1283,14 @@
 
 
 "caper-europe": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/caper-europe.webp",
+  "weight": 2.11,
+  "bggRank": 526,
+  "bggRating": 6.99,
+              "players": "2", 
+              "time": "25–35", 
+              "year": "2022", 
+              "bggId": "328565",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1155,10 +1309,14 @@
 
 
 "castle-combo": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/castle-combo.webp",
+  "weight": 1.74,
+  "bggRank": 203,
+  "bggRating": 7.36,
+              "players": "2–5", 
+              "time": "10–25", 
+              "year": "2024", 
+              "bggId": "416851",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1177,10 +1335,14 @@
 
 
 "catan": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/catan.webp",
+  "weight": 2.28,
+  "bggRank": 625,
+  "bggRating": 6.9,
+              "players": "3–4", 
+              "time": "60–120", 
+              "year": "1995", 
+              "bggId": "13",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1199,6 +1361,10 @@
 
 
 "century-golem-edition":  {
+  "cover": "covers/century-golem-edition.webp",
+  "weight": 1.72,
+  "bggRank": 281,
+  "bggRating": 7.23,
                           "players": "2–5", 
                           "time": "30–45", 
                           "year": "2017", 
@@ -1219,9 +1385,13 @@
   "expansions": []},
 
 "chess": {
+  "cover": "covers/chess.webp",
+  "weight": 3.64,
+  "bggRank": 466,
+  "bggRating": 7.04,
         "players": "2", 
         "time": "30–60", 
-        "year": "*", 
+        "year": "1475", 
         "bggId": "171",
         "youtube": "https://www.youtube.com/watch?v=OCSbzArwB10",
         "quickStart": "- White moves first.\n- Set pieces in standard arrangement.\n- Pawns forward, rooks in corners, knights next, bishops next, queen on color.",
@@ -1239,6 +1409,10 @@
   "expansions": []},
   
 "chronicles-of-crime": {
+  "cover": "covers/chronicles-of-crime.webp",
+  "weight": 2.06,
+  "bggRank": 364,
+  "bggRating": 7.14,
                       "players": "1–4", 
                       "time": "60–90", 
                       "year": "2018", 
@@ -1259,10 +1433,14 @@
   "expansions": []},
   
 "codenames": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/codenames.webp",
+  "weight": 1.25,
+  "bggRank": 163,
+  "bggRating": 7.43,
+              "players": "2–8", 
+              "time": "15", 
+              "year": "2015", 
+              "bggId": "178900",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1281,10 +1459,14 @@
 
 
 "cover-your-assets": {
+  "cover": "covers/cover-your-assets.webp",
+  "weight": 1.2,
+  "bggRank": 3522,
+  "bggRating": 5.95,
                     "players": "2–6", 
                     "time": "20–40", 
                     "year": "2008", 
-                    "bggId": "48726",
+                    "bggId": "121193",
                     "youtube": "https://www.youtube.com/watch?v=_QD3azlX1M0",
                     "quickStart": "- Shuffle and deal 4 cards to each player.\n- Create a draw pile.\n- Youngest player starts.",
                     "startingResources": "- 4 cards.\n- Empty stack for asset piles.",
@@ -1301,10 +1483,11 @@
   "expansions": []},
 
 "critters-at-war-flies-lies-and-supplies": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/critters-at-war-flies-lies-and-supplies.webp",
+              "players": "2", 
+              "time": "15–30", 
+              "year": "2022", 
+              "bggId": "367807",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1323,10 +1506,14 @@
 
 
   "deep-regrets": {
-              "players": "2-5", 
-              "time": "30 Min Per Player", 
+  "cover": "covers/deep-regrets.webp",
+  "weight": 2.34,
+  "bggRank": 1091,
+  "bggRating": 6.62,
+              "players": "1–5", 
+              "time": "30–150", 
               "year": "2024", 
-              "bggId": "",
+              "bggId": "397931",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1343,7 +1530,11 @@
   "expansions": []
 },
   
-"dune-imperium-uprising": {"players": "1–6", "time": "60–120", "year": "2023", "bggId": "386211",
+"dune-imperium-uprising": {
+  "cover": "covers/dune-imperium-uprising.webp",
+  "weight": 3.53,
+  "bggRank": 5,
+  "bggRating": 8.27,"players": "1–6", "time": "60–120", "year": "2023", "bggId": "397598",
                           "quickStart": "- Give each player leader board + starting deck.\n- Give 1 troop in garrison, 1 water, 1 spice.\n- Shuffle Imperium deck.\n- Place conflict deck: 3 cards per phase.\n- Place starting agents on player boards.",
                           "startingResources": "- 1 troop.\n- 1 water.\n- 1 spice.\n- Starting 10-card deck.",
                           "remindersText": "- Intrigue cards may be used in multiple phases.\n- Combat happens *after* reveals.\n- Some spaces require water.\n- Imperium row is ever-changing — plan around cycling.",
@@ -1358,7 +1549,11 @@
                 "desc": ""}],
   "expansions": []},
   
-"dutch-blitz": {"players": "2–4", "time": "15", "year": "1960", "bggId": "1239",
+"dutch-blitz": {
+  "cover": "covers/dutch-blitz.webp",
+  "weight": 1.26,
+  "bggRank": 1899,
+  "bggRating": 6.3,"players": "2–4", "time": "1–15", "year": "1960", "bggId": "148203",
               "quickStart": "- Each player gets a Blitz pile of 10 cards (face-down).\n- Build Woodpile of 3 cards face-up.\n- Hold remaining cards as Stock pile for flipping.",
               "startingResources": "- 10-card Blitz pile.\n- 3 Woodpile cards.\n- Stock pile.",
               "remindersText": "- Build center piles ascending 1→10, matching color.\n- Speed race: no turns.\n- Blitz cards score double.",
@@ -1375,10 +1570,14 @@
 
   
 "earth": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/earth.webp",
+  "weight": 2.91,
+  "bggRank": 215,
+  "bggRating": 7.35,
+              "players": "1–5", 
+              "time": "45–90", 
+              "year": "2023", 
+              "bggId": "350184",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1397,10 +1596,14 @@
 
 
 "everdell": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/everdell.webp",
+  "weight": 2.84,
+  "bggRank": 47,
+  "bggRating": 7.8,
+              "players": "1–4", 
+              "time": "40–80", 
+              "year": "2018", 
+              "bggId": "199792",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1414,12 +1617,16 @@
                 "desc": ""},{
                 "term": "",
                 "desc": ""}],
-  "expansions": []
+  "expansions": [{"name": "Bellfaire", "bggId": "289057", "setup": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.", "rules": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it.", "scoring": "Garland Award: the player with the most cards of the listed type scores 6, and second place scores 3. A tie at either place means each tied player gets that bonus. You need at least 1 card of that type to qualify.\nMarket trades also give 3 points when you take the trade side.", "quickStart": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.", "reminders": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it."}, {"name": "Pearlbrook", "bggId": "259996", "setup": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.", "rules": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder.", "scoring": "Wonders score the points printed on them.\nAdornments score their printed end-game bonus.\nEach pearl you have left at the end of the game is worth 2 points.", "quickStart": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.", "reminders": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder."}, {"name": "Spirecrest", "bggId": "289056", "setup": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.", "rules": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card.", "scoring": "After you pass, the Traveler may take the expedition. You pay each map tile's cost in the order you charted them, and you may stop early.\nYou only score the map tiles you pay to reach.", "quickStart": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.", "reminders": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card."}, {"name": "Newleaf", "bggId": "332390", "setup": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.", "rules": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location.", "scoring": "A Visitor scores its printed points at the end of the game only if your city meets that card's requirements. Otherwise it scores 0.\nResources that a Visitor calls \"leftover\" can also count for another end-game bonus, such as the Baker.", "quickStart": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.", "reminders": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location."}, {"name": "Mistwood", "bggId": "332397", "setup": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.", "rules": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that.", "scoring": "Legendary cards score as the card they replace, including event requirements.\nPlaying a Legendary against Rugwort gives Rugwort 3 points, and Rugwort then plays 2 cards instead of 1. Nightweave scores from her own scoring cards in that mode.", "quickStart": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.", "reminders": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that."}]
 },  
 
 
   
-"the-fellowship-of-the-ring-trick-taking-game": {"players": "2–5", "time": "20–30", "year": "*", "bggId": "429293",
+"the-fellowship-of-the-ring-trick-taking-game": {
+  "cover": "covers/the-fellowship-of-the-ring-trick-taking-game.webp",
+  "weight": 1.91,
+  "bggRank": 126,
+  "bggRating": 7.53,"players": "1–4", "time": "20", "year": "2024", "bggId": "429293",
                                                 "quickStart": "- Shuffle and deal full hand to players.\n- Reveal “Journey” card/goal if using variants.\n- Determine starting player at random.",
                                                 "startingResources": "- Full hand of cards.\n- Any location/quest cards (if variant used).",
                                                 "remindersText": "- Follow suit when possible.\n- Trump rules depend on scenario/quest.\n- Highest valid card wins trick.",
@@ -1434,7 +1641,11 @@
                 "desc": ""}],
 "expansions": []},
   
-"five-crowns": {"players": "1–7", "time": "20–45", "year": "1996", "bggId": "5011",
+"five-crowns": {
+  "cover": "covers/five-crowns.webp",
+  "weight": 1.21,
+  "bggRank": 4256,
+  "bggRating": 5.86,"players": "1–7", "time": "30", "year": "1996", "bggId": "1472",
                 "quickStart": "- Round 1 starts with 3 cards each, increasing to 13.\n- Turn up the top card of the discard pile.\n- First round: 3s are wild; each round wild matches card count.",
                 "startingResources": "- Starting hand (3–13 depending on round).",
                 "remindersText": "- Goal: form runs and sets, then go out.\n- One draw + one discard each turn.\n- Wilds change every round.\n- You get one extra play after someone goes out.",
@@ -1449,7 +1660,11 @@
                 "desc": ""}],
 "expansions": []},
   
-"fire-tower": { "players": "2–4","time": "15–30", "year": "2019","bggId": "260835",
+"fire-tower": {
+  "cover": "covers/fire-tower.webp",
+  "weight": 1.73,
+  "bggRank": 2010,
+  "bggRating": 6.27, "players": "2–4","time": "15–30", "year": "2019","bggId": "226605",
               "quickStart": "- Place board\n- Place fire at center\n- Give each player 1 tower + matching deck\n- Shuffle decks; draw 5 cards\n- Place wind marker per initial card",
               "startingResources": "- 1 deck of cards\n- 1 tower piece\n- 5 cards in hand",
               "remindersText": "- Fire spreads each turn in direction of wind\n- Firebreaks block fire\n- Water cards extinguish single flames\n- Winds shift often\n- Embers jump when rolling high spread",
@@ -1471,10 +1686,14 @@
               "bggId": "276224"}]},
 
 "flip-7": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/flip-7.webp",
+  "weight": 1.04,
+  "bggRank": 519,
+  "bggRating": 6.99,
+              "players": "3–18", 
+              "time": "20", 
+              "year": "2024", 
+              "bggId": "420087",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1492,8 +1711,12 @@
 },  
 
 
-"for-sale": {"players": "3–6",
-  "time": "20",
+"for-sale": {
+  "cover": "covers/for-sale.webp",
+  "weight": 1.25,
+  "bggRank": 358,
+  "bggRating": 7.14,"players": "3–6",
+  "time": "30",
   "year": "1997",
   "bggId": "172",
   "quickStart": "- Separate property deck (1–30) and checks deck.\n- Each player gets starting money (depends on player count).\n- Start Auction Phase: reveal as many properties as players.",
@@ -1511,6 +1734,7 @@
 "expansions": []},
   
 "forbidden-island": {
+  "cover": "covers/forbidden-island.webp",
   "players": "2–4",
   "time": "30",
   "year": "2010",
@@ -1530,10 +1754,14 @@
 "expansions": []},
   
 "forest-shuffle": {
+  "cover": "covers/forest-shuffle.webp",
+  "weight": 2.22,
+  "bggRank": 150,
+  "bggRating": 7.47,
       "players": "2–5",
       "time": "40–60",
       "year": "2023",
-      "bggId": "377924",
+      "bggId": "391163",
       "quickStart": "- Deal 6 cards to each player.\n- Choose first player.\n- Create central market of face-up cards.\n- Place deck nearby.",
       "startingResources": "- 6 cards.\n- No animals or trees placed initially.",
       "remindersText": "- Trees can host animals.\n- Animals score based on environment icons.\n- Each turn: play a card OR draw 2 cards.",
@@ -1553,9 +1781,13 @@
     },
 
 "foundations-of-metropolis": {
+  "cover": "covers/foundations-of-metropolis.webp",
+  "weight": 2.0,
+  "bggRank": 1255,
+  "bggRating": 6.54,
   "players": "2–4",
-  "time": "30–60",
-  "year": "*",
+  "time": "60",
+  "year": "2024",
   "bggId": "412865",
   "quickStart": "- Lay out main board.\n- Give each player starting resources and cards per rulebook.\n- Shuffle supply/market decks.\n- Place starting buildings.",
   "startingResources": "- Starting coins.\n- Starting resource tokens.\n- Starting hand.",
@@ -1572,10 +1804,14 @@
 "expansions": []},
   
 "a-gest-of-robin-hood": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/a-gest-of-robin-hood.webp",
+  "weight": 3.04,
+  "bggRank": 1407,
+  "bggRating": 6.47,
+              "players": "2", 
+              "time": "45–90", 
+              "year": "2024", 
+              "bggId": "338376",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1594,8 +1830,12 @@
 
 
 "graft": {
-      "players": "2–4",
-      "time": "20–40",
+  "cover": "covers/graft.webp",
+  "weight": 2.0,
+  "bggRank": 6885,
+  "bggRating": 5.68,
+      "players": "3–5",
+      "time": "40",
       "year": "2025",
       "bggId": "445423",
       "quickStart": "- Shuffle the main deck and deal starting hands.\n- Set any central row/market as directed.\n- Give each player their starting influence/energy tokens.",
@@ -1618,6 +1858,10 @@
 
 
 "harmonies": {
+  "cover": "covers/harmonies.webp",
+  "weight": 2.01,
+  "bggRank": 51,
+  "bggRating": 7.78,
       "players": "1–4",
       "time": "30–45",
       "year": "2024",
@@ -1643,10 +1887,14 @@
 
 
 "harvest": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/harvest.webp",
+  "weight": 2.58,
+  "bggRank": 1658,
+  "bggRating": 6.38,
+              "players": "1–4", 
+              "time": "30–60", 
+              "year": "2024", 
+              "bggId": "395623",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1665,8 +1913,12 @@
 
 
 "heat-pedal-to-the-metal": {
+  "cover": "covers/heat-pedal-to-the-metal.webp",
+  "weight": 2.2,
+  "bggRank": 48,
+  "bggRating": 7.79,
   "players": "1-6",
-  "time": "45-60",
+  "time": "30–60",
   "year": "2022",
 
   "bggId": "366013",
@@ -1689,47 +1941,17 @@
     { "label": "Base Game Aid", "file": "aids/heat-base.pdf" },
     { "label": "Heavy Rain Aid", "file": "aids/heat-heavy-rain.pdf" }
   ],
-"expansions": [
-    {
-      "name": "Heavy Rain",
-      "cover": "covers/heat--heavy-rain.webp",
-      "quickStart": "Add rain tiles to the track.\nUse the rain side of the weather board.\nShuffle the rain cards into the deck.",
-      "reminders": "- Rain reduces corner speed limits.\n- Some upgrades interact with rain tiles.",
-      "rulebook": "heat--heavy-rain",
-      "youtube": "https://www.youtube.com/watch?v=YYYYY",
-      "bggId": "410291",
-      "rulesGlossary": [
-        {
-          "term": "Rain Tokens",
-          "desc": "Reduce corner speed limits and increase skidding risk. Corner strategy matters much more."
-        },
-        {
-          "term": "Rain Boards",
-          "desc": "Alternative track boards with wet-weather conditions."
-        },
-        {
-          "term": "Weather Cards",
-          "desc": "Modifiers that apply to entire races, often intensifying rain effects."
-        }
-      ]
-    },
-    {
-      "name": "Tunnel Vision",
-      "cover": "covers/heat--tunnel-vision.webp",
-      "quickStart": "Use one of the tunnel tracks.\nFollow tunnel setup rules in the expansion.",
-      "reminders": "- Tunnels limit actions in certain sections.",
-      "rulebook": "heat--tunnel-vision",
-      "youtube": "",
-      "bggId": ""
-    }
-  ]
+"expansions": [{"name": "Heavy Rain", "bggId": "410291", "setup": "Not a standalone game. Add the Japan and Mexico Grands Prix, the 1964 championship, the Air Intakes upgrades, and the 7th-player set (car, gear pawn, board, basic cards, heat, stress, upgrades, sponsorship, events, scorepad, and track cards).", "rules": "Japan: puddles in front of curves decrease your ability to slow down.\nMexico uses multiple chicanes.\nThis expansion is not a rain-card deck. Weather and road conditions are an advanced module in the base game.", "scoring": "Championship scoring is unchanged: most championship points wins. These races are the 1964 season.", "quickStart": "Not a standalone game. Add the Japan and Mexico Grands Prix, the 1964 championship, the Air Intakes upgrades, and the 7th-player set (car, gear pawn, board, basic cards, heat, stress, upgrades, sponsorship, events, scorepad, and track cards).", "reminders": "Japan: puddles in front of curves decrease your ability to slow down.\nMexico uses multiple chicanes.\nThis expansion is not a rain-card deck. Weather and road conditions are an advanced module in the base game."}, {"name": "Tunnel Vision", "bggId": "436904", "setup": "Add Spain and the Netherlands, the 1965 season, the Front Wing upgrade, and a 7th player.", "rules": "Spain runs through tunnels: you drive a stretch where you cannot see the usual information.\nThe Netherlands is a full-throttle section followed by corners.", "scoring": "Championship scoring is unchanged. These races are the 1965 season.", "quickStart": "Add Spain and the Netherlands, the 1965 season, the Front Wing upgrade, and a 7th player.", "reminders": "Spain runs through tunnels: you drive a stretch where you cannot see the usual information.\nThe Netherlands is a full-throttle section followed by corners."}, {"name": "Rocky Roads", "bggId": "459763", "setup": "Add the South Africa and Germany tracks, plus gravel, chicanes, Aggressive Legends, and extra slipstream.\nThe box also adds stress, heat, sponsorship cards, advanced upgrades 61–66, 1966 event cards, track cards, starting upgrades, and a 7th-player set.", "rules": "A chicane is 2 consecutive corner lines with the same speed limit and at least 1 space between them, marked with blue curbs.\nIf you are not using the Weather and Road Conditions module, treat chicanes as regular corners.\nThe Tight Maneuvers event reduces total slipstream value by 1.", "scoring": "Championship scoring is unchanged. Tight Maneuvers only changes slipstream during that race; it does not add a new end-of-championship scoring category.", "quickStart": "Add the South Africa and Germany tracks, plus gravel, chicanes, Aggressive Legends, and extra slipstream.\nThe box also adds stress, heat, sponsorship cards, advanced upgrades 61–66, 1966 event cards, track cards, starting upgrades, and a 7th-player set.", "reminders": "A chicane is 2 consecutive corner lines with the same speed limit and at least 1 space between them, marked with blue curbs.\nIf you are not using the Weather and Road Conditions module, treat chicanes as regular corners.\nThe Tight Maneuvers event reduces total slipstream value by 1.", "rulebook": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2026/01/HTEX3_EN_HEAT_Rocky_Road_RULES.pdf"}]
 },
 
 "hive-pocket": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/hive-pocket.webp",
+  "weight": 2.2,
+  "bggRating": 7.34,
+              "players": "2", 
+              "time": "20", 
+              "year": "2010", 
+              "bggId": "154597",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1748,10 +1970,14 @@
 
 
 "honors-end": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/honors-end.webp",
+  "weight": 2.5,
+  "bggRank": 13455,
+  "bggRating": 5.55,
+              "players": "1–4", 
+              "time": "90–120", 
+              "year": "2027", 
+              "bggId": "452858",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1770,6 +1996,10 @@
 
 
 "jaipur": {
+  "cover": "covers/jaipur.webp",
+  "weight": 1.46,
+  "bggRank": 204,
+  "bggRating": 7.36,
   "players": "2",
   "time": "30",
   "year": "2009",
@@ -1793,8 +2023,12 @@
 },
   
 "kingdomino": {
+  "cover": "covers/kingdomino.webp",
+  "weight": 1.24,
+  "bggRank": 334,
+  "bggRating": 7.17,
   "players": "2–4",
-  "time": "15–30",
+  "time": "15–25",
   "year": "2016",
   "bggId": "204583",
   "quickStart": "- Shuffle dominoes face-down.\n- Draw 4 dominoes and arrange in ascending order.\n- Each player places their king token on a domino to claim.\n- Give each player a 1×1 starting castle tile.",
@@ -1815,6 +2049,7 @@
 "expansions": []
 },
 "kingdomino-origins": {
+  "cover": "covers/kingdomino-origins.webp",
   "players": "2–4",
   "time": "25–45",
   "year": "2021",
@@ -1839,10 +2074,14 @@
 
   
 "the-two-towers-trick-taking-game": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/the-two-towers-trick-taking-game.webp",
+  "weight": 2.24,
+  "bggRank": 850,
+  "bggRating": 6.74,
+              "players": "1–4", 
+              "time": "20", 
+              "year": "2025", 
+              "bggId": "448271",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1860,10 +2099,14 @@
 },  
 
 "marvel-villainous": {
+  "cover": "covers/marvel-villainous.webp",
+  "weight": 2.7,
+  "bggRank": 2570,
+  "bggRating": 6.13,
       "players": "2–4",
       "time": "40–80",
       "year": "2020",
-      "bggId": "291457",
+      "bggId": "302336",
       "quickStart": "- Give each player a villain board, villain deck, and fate deck.\n- Give 1 reference card and villain mover.\n- Shuffle villain and fate decks separately.\n- Deal villain starting hand as listed on each card.\n- Place power tokens in a shared pool.",
       "startingResources": "- Villain board + mover.\n- Villain deck and fate deck.\n- 4-card starting hand (unless villain says otherwise).\n- 0 power to start (unless villain says otherwise).",
       "remindersText": "- Every villain has a unique objective.\n- Top row = unlocked immediately; bottom row = locked until condition is met.\n- Fate cards target opponents and cover their board with heroes/events.\n- You can only use icons that are not covered by cards.",
@@ -1910,10 +2153,14 @@
 
 
 "men-nefer": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/men-nefer.webp",
+  "weight": 3.69,
+  "bggRank": 477,
+  "bggRating": 7.03,
+              "players": "1–4", 
+              "time": "60–120", 
+              "year": "2024", 
+              "bggId": "404431",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1932,10 +2179,14 @@
 
 
 "money": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/money.webp",
+  "weight": 1.56,
+  "bggRank": 2385,
+  "bggRating": 6.17,
+              "players": "2–5", 
+              "time": "15–30", 
+              "year": "1999", 
+              "bggId": "125",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1954,10 +2205,14 @@
 
 
 "monkey-palace": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/monkey-palace.webp",
+  "weight": 1.99,
+  "bggRank": 1869,
+  "bggRating": 6.31,
+              "players": "2–4", 
+              "time": "45", 
+              "year": "2024", 
+              "bggId": "412911",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -1977,10 +2232,14 @@
 
 
 "monopoly-deal": {
+  "cover": "covers/monopoly-deal.webp",
+  "weight": 1.31,
+  "bggRank": 2703,
+  "bggRating": 6.1,
   "players": "2–5",
   "time": "15",
   "year": "2008",
-  "bggId": "37904",
+  "bggId": "40398",
   "quickStart": "- Shuffle deck; deal 5 cards.\n- Start with an empty tableau.\n- Draw 2 cards at start of your turn.",
   "startingResources": "- 5 cards.\n- No bank or properties yet.",
   "remindersText": "- Play up to 3 cards per turn.\n- Properties can be rearranged unless frozen by a hotel/house.\n- Action cards often go to the bank as money.\n- First player to 3 full property sets wins.",
@@ -2000,6 +2259,9 @@
 },
 
 "moonrakers-titan-edition": {
+  "cover": "covers/moonrakers-titan-edition.webp",
+  "weight": 3.0,
+  "bggRating": 5.66,
   "players": "1–5",
   "time": "60–120",
   "year": "2020",
@@ -2053,8 +2315,12 @@
 },
 
 "moonrollers": {
+  "cover": "covers/moonrollers.webp",
+  "weight": 1.83,
+  "bggRank": 2774,
+  "bggRating": 6.09,
       "players": "2–5",
-      "time": "20–30",
+      "time": "30–45",
       "year": "2024",
       "bggId": "405923",
       "quickStart": "- Give each player their faction board.\n- Give each player their roller die/dice depending on variant.\n- Shuffle objective cards and deal as instructed.\n- Set shared goals and central resource tokens (stars, crystals, etc.).",
@@ -2076,10 +2342,14 @@
     },
 
 "my-lil-everdell": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/my-lil-everdell.webp",
+  "weight": 1.89,
+  "bggRank": 1517,
+  "bggRating": 6.43,
+              "players": "1–4", 
+              "time": "30", 
+              "year": "2022", 
+              "bggId": "375852",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2098,10 +2368,14 @@
 
   
 "mycelia": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/mycelia.webp",
+  "weight": 1.87,
+  "bggRank": 1364,
+  "bggRating": 6.5,
+              "players": "1–4", 
+              "time": "45", 
+              "year": "2023", 
+              "bggId": "392023",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2141,10 +2415,14 @@
 }, 
   
 "new-york-zoo": {
+  "cover": "covers/new-york-zoo.webp",
+  "weight": 1.96,
+  "bggRank": 949,
+  "bggRating": 6.69,
       "players": "1–5",
       "time": "30–60",
       "year": "2020",
-      "bggId": "305049",
+      "bggId": "300877",
       "quickStart": "- Give each player their zoo board.\n- Create the central action track.\n- Place enclosure tiles in piles according to size.\n- Place animal meeples by species in separate pools.\n- Randomly select first player; place the elephant marker.",
       "startingResources": "- 1 zoo board.\n- No starting animals unless playing a special solo rule.\n- Shared pool of animals and enclosures nearby.",
       "remindersText": "- Players move the elephant marker and take either animals or enclosures.\n- Filling an enclosure exactly triggers a breeding event.\n- You must place every animal you take; extras go back.\n- First to fill their zoo board wins immediately.",
@@ -2164,10 +2442,14 @@
     },
 
 "the-old-kings-crown": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/the-old-kings-crown.webp",
+  "weight": 3.7,
+  "bggRank": 430,
+  "bggRating": 7.07,
+              "players": "1–4", 
+              "time": "60–120", 
+              "year": "2025", 
+              "bggId": "357873",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2186,10 +2468,14 @@
 
 
 "onitama": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/onitama.webp",
+  "weight": 1.66,
+  "bggRank": 368,
+  "bggRating": 7.13,
+              "players": "2", 
+              "time": "15–20", 
+              "year": "2014", 
+              "bggId": "160477",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2208,10 +2494,14 @@
 
 
 "paladins-of-the-west-kingdom": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/paladins-of-the-west-kingdom.webp",
+  "weight": 3.7,
+  "bggRank": 83,
+  "bggRating": 7.66,
+              "players": "1–4", 
+              "time": "90–120", 
+              "year": "2019", 
+              "bggId": "266810",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2229,10 +2519,14 @@
 }, 
   
 "pan-am": {
+  "cover": "covers/pan-am.webp",
+  "weight": 2.41,
+  "bggRank": 459,
+  "bggRating": 7.05,
       "players": "2–4",
       "time": "60",
       "year": "2020",
-      "bggId": "318977",
+      "bggId": "303057",
       "quickStart": "- Give each player 5 engineers and their starting money.\n- Shuffle the event deck and reveal the first event.\n- Prepare airport, route, and destination decks.\n- Place Pan Am marker on the timeline at year 1928.\n- Create market for airplanes (Clipper, Cruiser, etc.).",
       "startingResources": "- $12 starting cash.\n- 5 engineers.\n- No starting planes.\n- Player board and income marker at 0.",
       "remindersText": "- Worker placement → bidding → route claiming → Pan Am expansion.\n- Pan Am buys your routes for cash (good!).\n- Income increases as you claim routes and airports.\n- Game ends in 7 rounds; most stock wins.",
@@ -2253,10 +2547,14 @@
 
 
 "pandemic": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/pandemic.webp",
+  "weight": 2.39,
+  "bggRank": 176,
+  "bggRating": 7.4,
+              "players": "2–4", 
+              "time": "45", 
+              "year": "2008", 
+              "bggId": "30549",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2274,8 +2572,12 @@
 }, 
   
 "parks": {
+  "cover": "covers/parks.webp",
+  "weight": 2.13,
+  "bggRank": 183,
+  "bggRating": 7.39,
       "players": "1–5",
-      "time": "40–60",
+      "time": "30–60",
       "year": "2019",
       "bggId": "266524",
       "quickStart": "- Lay out the season deck and reveal the first season.\n- Construct the trail from shuffled trail tiles.\n- Give each player 2 hikers and a canteen.\n- Shuffle gear deck and set up park deck.\n- Place resources (sun, water, forest, mountain, wildlife) nearby.",
@@ -2293,32 +2595,19 @@
   "playerAids": [
     { "label": "", "file": "" },
     { "label": "", "file": "" }],
-"expansions": [
-        {
-          "name": "Nightfall",
-          "quickStart": "- Add new parks, gear, and events.\n- Add camping tiles and campsite actions.\n- Shuffle in updated canteens.",
-          "reminders": "- Campsites provide strong powers.\n- New parks require more wildlife tokens.\n- Night cards change scoring conditions.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "290578"
-        },
-        {
-          "name": "Wildlife",
-          "quickStart": "- Add bison tokens and new park cards.\n- Shuffle wildlife parks into deck.\n- Add gear and canteen updates.",
-          "reminders": "- Bison introduce new scoring patterns.\n- Many actions now chain with wildlife tokens.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "355706"
-        }
-      ]
+"expansions": [{"name": "Nightfall", "bggId": "298729", "setup": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.", "rules": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger.", "scoring": "Visiting parks still scores the points printed on the park cards. Nightfall parks are in that deck, so their printed points and costs are what you score.\nThe Nightfall year card you kept is the one that scores. Base-game year cards are out of the game.", "quickStart": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.", "reminders": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger."}, {"name": "Wildlife", "bggId": "358854", "setup": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.", "rules": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game.", "scoring": "New iconic wildlife parks have a wildlife cost, and you score the points printed on the parks you visit.\nSome parks have an instant action when visited or reserved: gain a canteen, or gain a wildlife token, as printed.", "quickStart": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.", "reminders": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game."}]
     },
 
 
 "parks-second-edition": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/parks-second-edition.webp",
+  "weight": 2.26,
+  "bggRank": 1033,
+  "bggRating": 6.64,
+              "players": "1–5", 
+              "time": "30–60", 
+              "year": "2025", 
+              "bggId": "437306",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2337,8 +2626,12 @@
 
   
 "patchwork": {
+  "cover": "covers/patchwork.webp",
+  "weight": 1.6,
+  "bggRank": 149,
+  "bggRating": 7.47,
       "players": "2",
-      "time": "30",
+      "time": "15–30",
       "year": "2014",
       "bggId": "163412",
       "quickStart": "- Lay out all patches in a circle.\n- Place the neutral pawn before the smallest patch.\n- Give each player: 5 buttons and a quilt board.\n- Determine starting player (usually who crocheted last).",
@@ -2360,8 +2653,12 @@
     },
 
 "pillars-of-fate": {
+  "cover": "covers/pillars-of-fate.webp",
+  "weight": 1.89,
+  "bggRank": 4918,
+  "bggRating": 5.8,
       "players": "2",
-      "time": "40",
+      "time": "30–45",
       "year": "2025",
       "bggId": "440941",
       "quickStart": "- Each player chooses a faction/side.\n- Shuffle and draw starting hand.\n- Set starting health/track values according to the rulebook.\n- Place any central objective tiles/cards.",
@@ -2384,10 +2681,14 @@
 
 
 "play-nine": {
+  "cover": "covers/play-nine.webp",
+  "weight": 1.14,
+  "bggRank": 5245,
+  "bggRating": 5.77,
       "players": "2–6",
-      "time": "30–45",
+      "time": "45",
       "year": "2004",
-      "bggId": "38658",
+      "bggId": "22950",
       "quickStart": "- Shuffle deck and deal 8 cards to each player, face down.\n- Each player reveals any 2 of their cards.\n- Remaining deck in center; discard pile next to it.\n- Lowest score after 9 holes wins.",
       "startingResources": "- 8 face-down cards in a 4×2 grid.\n- 2 cards revealed at start.\n- No starting abilities or special cards.",
       "remindersText": "- On your turn: draw from deck or discard → replace one card.\n- Replaced cards flip face-up.\n- Some cards have special effects (swap, peek, draw again).\n- Round ends when one player flips all cards face-up.",
@@ -2407,6 +2708,10 @@
     },
 
 "project-l": {
+  "cover": "covers/project-l.webp",
+  "weight": 1.56,
+  "bggRank": 389,
+  "bggRating": 7.11,
       "players": "1–4",
       "time": "20–40",
       "year": "2020",
@@ -2447,6 +2752,10 @@
     },
 
 "the-quacks-of-quedlinburg": {
+  "cover": "covers/the-quacks-of-quedlinburg.jpg",
+  "weight": 1.94,
+  "bggRank": 81,
+  "bggRating": 7.66,
       "players": "2–4",
       "time": "45",
       "year": "2018",
@@ -2466,28 +2775,15 @@
   "playerAids": [
     { "label": "", "file": "" },
     { "label": "", "file": "" }],
-"expansions": [
-        {
-          "name": "The Herb Witches",
-          "quickStart": "- Add witch tiles and coins.\n- Add new ingredient books.\n- Each player gets 3 witch powers (bronze/silver/gold).",
-          "reminders": "- Each witch can be used once.\n- Witch powers modify scoring, buying, or mitigation.\n- New ingredients add more combos.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "283963"
-        },
-        {
-          "name": "The Alchemists",
-          "quickStart": "- Add patient boards and alchemist cards.\n- Set cauldron boards beside the pots.\n- Add additional ingredients from expansion.",
-          "reminders": "- Patients create unique scoring conditions.\n- Alchemist abilities modify chip draws and risk.\n- More engine-building each round.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "300351"
-        }
-      ]
+"expansions": [{"name": "The Herb Witches", "bggId": "269259", "setup": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.", "rules": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.", "scoring": "One witch, used during Evaluation if you exploded, lets you take both the victory points and a chip purchase. In the base game an explosion makes you choose one or the other.\nIf you are on the highest-scoring space, you may also roll the bonus die.", "quickStart": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.", "reminders": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.", "rulebook": "the-quacks-of-quedlinburg--the-herb-witches"}, {"name": "The Alchemists", "bggId": "316597", "setup": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.", "rules": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.", "scoring": "The patient card's flask bonus is points, rat movement, or an action, as printed on that card.\nThe essence marker resets to 0 at the start of every round.", "quickStart": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.", "reminders": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.", "rulebook": "the-quacks-of-quedlinburg--the-alchemists"}]
     },
 
 
 "raccoon-tycoon": {
+  "cover": "covers/raccoon-tycoon.webp",
+  "weight": 2.16,
+  "bggRank": 982,
+  "bggRating": 6.67,
       "youtube": "",
       "players": "2–5",
       "time": "60–90",
@@ -2514,6 +2810,7 @@
     }, 
   
 "radlands": {
+  "cover": "covers/radlands.webp",
       "players": "2",
       "time": "20–30",
       "year": "2021",
@@ -2537,8 +2834,12 @@
     },
 
 "rage": {
-      "players": "2–8",
-      "time": "45–60",
+  "cover": "covers/rage.webp",
+  "weight": 1.47,
+  "bggRank": 4942,
+  "bggRating": 5.79,
+      "players": "2–10",
+      "time": "45",
       "year": "1983",
       "bggId": "568",
       "quickStart": "- Shuffle deck; deal hands according to round number.\n- Turn up the top card to reveal trump.\n- Give each player a bidding token or use paper.\n- First player leads any card.",
@@ -2560,10 +2861,14 @@
     },
 
 "ravine": {
+  "cover": "covers/ravine.webp",
+  "weight": 1.14,
+  "bggRank": 4967,
+  "bggRating": 5.79,
       "players": "3–6",
-      "time": "20–60",
+      "time": "15–20",
       "year": "2017",
-      "bggId": "225044",
+      "bggId": "237728",
       "quickStart": "- Shuffle deck and place it face-down.\n- Give each player 4 health.\n- Deal 1 starting card to each player.\n- Place fire and shelter tokens nearby.\n- Reveal first day card to begin.",
       "startingResources": "- 4 health hearts.\n- 1 starting card.\n- No food, no fire, no shelter at start.",
       "remindersText": "- Each day players choose to forage or stay at camp.\n- Playing cards can help or hurt the group.\n- Nights require fire/shelter to prevent health loss.\n- Players who lose all hearts become ghosts.",
@@ -2592,10 +2897,14 @@
     },
 
 "rook": {
+  "cover": "covers/rook.webp",
+  "weight": 1.87,
+  "bggRank": 3166,
+  "bggRating": 6.01,
       "players": "2–6",
-      "time": "30–90",
+      "time": "45",
       "year": "1906",
-      "bggId": "265",
+      "bggId": "1260",
       "quickStart": "- Shuffle deck (remove 1s or Rook depending on variant).\n- Deal equal cards to each player.\n- Determine trump (bidding or fixed variant).\n- Highest bid leads first trick.",
       "startingResources": "- Full hand of cards.\n- Optional Rook card.\n- Score sheet or tracker.",
       "remindersText": "- Must follow suit if you can.\n- Rook card is highest trump in many variants.\n- Tricks won help meet your bid.\n- Overbidding penalties apply.",
@@ -2615,10 +2924,14 @@
     }, 
 
 "root": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/root.webp",
+  "weight": 3.84,
+  "bggRank": 34,
+  "bggRating": 7.88,
+              "players": "2–4", 
+              "time": "60–90", 
+              "year": "2018", 
+              "bggId": "237182",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2636,6 +2949,10 @@
 }, 
   
 "rummikub": {
+  "cover": "covers/rummikub.webp",
+  "weight": 1.71,
+  "bggRank": 1742,
+  "bggRating": 6.35,
       "players": "2–4",
       "time": "60",
       "year": "1977",
@@ -2660,10 +2977,14 @@
 
 
 "sagrada": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/sagrada.webp",
+  "weight": 1.92,
+  "bggRank": 229,
+  "bggRating": 7.33,
+              "players": "1–4", 
+              "time": "45", 
+              "year": "2017", 
+              "bggId": "199561",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2681,10 +3002,14 @@
 }, 
   
 "sail": {
+  "cover": "covers/sail.webp",
+  "weight": 2.21,
+  "bggRank": 947,
+  "bggRating": 6.69,
       "players": "2",
-      "time": "20–30",
+      "time": "20",
       "year": "2023",
-      "bggId": "391181",
+      "bggId": "377470",
       "quickStart": "- Place map tiles to form the course.\n- Shuffle the deck and deal hands.\n- Place boat marker at start.\n- Each round, both players play a card face-down.",
       "startingResources": "- Hand of cards.\n- Boat pawn.\n- Map tiles for route.\n- Damage tokens (if using).",
       "remindersText": "- Cooperative trick-taking.\n- Higher card wins but sails determine movement.\n- Hazards on map apply immediately.\n- Communication is limited (no table talk).",
@@ -2704,6 +3029,10 @@
     },
 
 "scales-of-fate": {
+  "cover": "covers/scales-of-fate.webp",
+  "weight": 2.29,
+  "bggRank": 3182,
+  "bggRating": 6.01,
       "youtube": "",
       "players": "2",
       "time": "30",
@@ -2728,6 +3057,10 @@
     },
 
 "scout": {
+  "cover": "covers/scout.webp",
+  "weight": 1.4,
+  "bggRank": 111,
+  "bggRating": 7.57,
       "youtube": "",
       "players": "2–5",
       "time": "20",
@@ -2752,10 +3085,14 @@
     },
   
 "sequence": {
+  "cover": "covers/sequence.webp",
+  "weight": 1.31,
+  "bggRank": 3326,
+  "bggRating": 5.98,
       "players": "2–12",
       "time": "10–30",
       "year": "1981",
-      "bggId": "2653",
+      "bggId": "2375",
       "quickStart": "- Give each player/team cards based on player count.\n- Place chips in supply.\n- Dead cards are removed.\n- First player plays a card and places a chip on the matching board space.",
       "startingResources": "- Hand of cards.\n- Chip supply.\n- Board in center.",
       "remindersText": "- Goal: make 2 sequences (5 in a row).\n- One-eyed jacks REMOVE chips.\n- Two-eyed jacks are WILD.\n- Blocking is as important as building.",
@@ -2776,10 +3113,14 @@
 
 
 "seti": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/seti.webp",
+  "weight": 3.84,
+  "bggRank": 14,
+  "bggRating": 8.06,
+              "players": "1–4", 
+              "time": "40–160", 
+              "year": "2024", 
+              "bggId": "418059",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2797,6 +3138,10 @@
 }, 
 
 "shallow-regrets": {
+  "cover": "covers/shallow-regrets.webp",
+  "weight": 1.69,
+  "bggRank": 5886,
+  "bggRating": 5.73,
       "youtube": "",
       "players": "2–3",
       "time": "15",
@@ -2821,10 +3166,14 @@
     },
   
 "skip-bo": {
+  "cover": "covers/skip-bo.webp",
+  "weight": 1.19,
+  "bggRank": 13270,
+  "bggRating": 5.55,
       "players": "2–6",
-      "time": "20–45",
+      "time": "20",
       "year": "1967",
-      "bggId": "2105",
+      "bggId": "1269",
       "quickStart": "- Shuffle deck.\n- Deal 30 cards to each player (2–4 players) or 20 cards each (5–6 players).\n- Turn top card of stockpile face-up.\n- Create 4 shared build piles in the center (start empty).",
       "startingResources": "- Personal stockpile (20 or 30 cards depending on count).\n- 5-card hand.\n- 4 discard piles (start empty).",
       "remindersText": "- Build piles go 1 → 12.\n- Skip-Bo acts as wild (can be any number).\n- You may play from hand, discard piles, or top of stockpile.\n- First to empty stockpile wins.",
@@ -2844,8 +3193,12 @@
     },
 
 "sky-team": {
+  "cover": "covers/sky-team.webp",
+  "weight": 2.04,
+  "bggRank": 32,
+  "bggRating": 7.89,
       "players": "2",
-      "time": "20–40",
+      "time": "20",
       "year": "2023",
       "bggId": "373106",
       "quickStart": "- Choose an airport board.\n- Assign dice pools (blue/orange).\n- Set altitude, descent, and approach markers.\n- Place passengers and scenario components.",
@@ -2867,8 +3220,12 @@
     },
 
 "sniper-elite-the-board-game": {
+  "cover": "covers/sniper-elite-the-board-game.webp",
+  "weight": 2.44,
+  "bggRank": 1001,
+  "bggRating": 6.66,
       "players": "1–4",
-      "time": "60–90",
+      "time": "40–70",
       "year": "2021",
       "bggId": "295262",
       "quickStart": "- Choose a map.\n- Sniper takes hidden board + action cubes.\n- Defenders place miniatures in starting zones.\n- Set objective tokens.\n- Give sniper item cards.",
@@ -2891,10 +3248,14 @@
 
 
 "soar": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/soar.webp",
+  "weight": 2.0,
+  "bggRank": 15083,
+  "bggRating": 5.54,
+              "players": "2–5", 
+              "time": "30", 
+              "year": "2026", 
+              "bggId": "464147",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2912,6 +3273,10 @@
 }, 
   
 "splendor": {
+  "cover": "covers/splendor.webp",
+  "weight": 1.77,
+  "bggRank": 244,
+  "bggRating": 7.29,
       "players": "2–4",
       "time": "30",
       "year": "2014",
@@ -2936,10 +3301,14 @@
 
 
 "square-one": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/square-one.webp",
+  "weight": 1.82,
+  "bggRank": 6032,
+  "bggRating": 5.72,
+              "players": "1–4", 
+              "time": "30–50", 
+              "year": "2025", 
+              "bggId": "416232",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -2957,10 +3326,14 @@
 }, 
   
 "star-wars-the-deckbuilding-game": {
+  "cover": "covers/star-wars-the-deckbuilding-game.webp",
+  "weight": 2.05,
+  "bggRank": 211,
+  "bggRating": 7.35,
       "players": "2",
-      "time": "30",
+      "time": "30–90",
       "year": "2023",
-      "bggId": "376353",
+      "bggId": "374173",
       "quickStart": "- Choose faction (Rebel vs Empire).\n- Set up bases according to rules.\n- Each player gets starting deck of 10 cards.\n- Shuffle galaxy deck and reveal row.",
       "startingResources": "- 10-card starter deck.\n- Starting base.\n- No resources or force advantage initially.",
       "remindersText": "- Buy cards from center row using resources.\n- Attack enemy base directly or destroy enemy-aligned cards in row.\n- Force meter shifts based on card abilities.\n- First to destroy 3 bases wins.",
@@ -3002,6 +3375,10 @@
 }, 
 
 "survive-the-island": {
+  "cover": "covers/survive-the-island.webp",
+  "weight": 1.48,
+  "bggRank": 999,
+  "bggRating": 6.66,
       "youtube": "",
       "players": "2–5",
       "time": "45",
@@ -3027,8 +3404,12 @@
 
 
 "tend": {
-      "players": "1–4",
-      "time": "45–90",
+  "cover": "covers/tend.webp",
+  "weight": 3.07,
+  "bggRank": 1323,
+  "bggRating": 6.51,
+      "players": "1–6",
+      "time": "60–90",
       "year": "2024",
       "bggId": "427388",
       "quickStart": "- Give each player a farm board.\n- Shuffle crop/animal/event decks.\n- Deal starting cards/resources as indicated by the rulebook.\n- Place round tracker and any weather/season markers.",
@@ -3051,10 +3432,14 @@
 
   
 "ticket-to-ride": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/ticket-to-ride.webp",
+  "weight": 1.82,
+  "bggRank": 264,
+  "bggRating": 7.26,
+              "players": "2–5", 
+              "time": "30–60", 
+              "year": "2004", 
+              "bggId": "9209",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -3073,8 +3458,12 @@
   
 
 "time-to-panic": {
-      "players": "2–4",
-      "time": "20–40",
+  "cover": "covers/time-to-panic.webp",
+  "weight": 1.5,
+  "bggRank": 8358,
+  "bggRating": 5.63,
+      "players": "1–4",
+      "time": "40",
       "year": "2025",
       "bggId": "445424",
       "quickStart": "- Set up the central board/track according to the scenario.\n- Deal each player a starting hand and any role-specific powers.\n- Place panic/doom/timer markers at their starting values.",
@@ -3097,6 +3486,10 @@
   
  
 "tiny-towns": {
+  "cover": "covers/tiny-towns.webp",
+  "weight": 2.06,
+  "bggRank": 538,
+  "bggRating": 6.98,
               "players": "1-6", 
               "time": "45-60", 
               "year": "2019", 
@@ -3118,10 +3511,14 @@
 }, 
   
 "toy-battle": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/toy-battle.webp",
+  "weight": 1.49,
+  "bggRank": 257,
+  "bggRating": 7.27,
+              "players": "2", 
+              "time": "15", 
+              "year": "2025", 
+              "bggId": "434654",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -3139,10 +3536,14 @@
 }, 
   
 "trio": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/trio.webp",
+  "weight": 1.07,
+  "bggRank": 485,
+  "bggRating": 7.03,
+              "players": "3–6", 
+              "time": "15", 
+              "year": "2021", 
+              "bggId": "352515",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -3160,6 +3561,10 @@
 }, 
   
 "turing-machine": {
+  "cover": "covers/turing-machine.webp",
+  "weight": 2.52,
+  "bggRank": 328,
+  "bggRating": 7.18,
       "youtube": "",
       "players": "1–4",
       "time": "20",
@@ -3186,8 +3591,12 @@
 
   
 "vinhos-deluxe-edition": {
+  "cover": "covers/vinhos-deluxe-edition.webp",
+  "weight": 3.99,
+  "bggRank": 156,
+  "bggRating": 7.44,
       "players": "1–4",
-      "time": "90–150",
+      "time": "90–180",
       "year": "2016",
       "bggId": "175640",
       "quickStart": "- Give each player estate boards and starting money.\n- Place vineyards, wineries, enologists, and farmers.\n- Setup market, fairs, and bank according to chosen mode (2010 or 2016).\n- Place wine quality markers at 0 and barrels in cellars.",
@@ -3209,6 +3618,10 @@
     },
 
 "wandering-towers": {
+  "cover": "covers/wandering-towers.webp",
+  "weight": 1.6,
+  "bggRank": 704,
+  "bggRating": 6.84,
       "youtube": "",
       "players": "1–6",
       "time": "30",
@@ -3237,8 +3650,12 @@
     },
   
 "watergate": {
+  "cover": "covers/watergate.webp",
+  "weight": 2.31,
+  "bggRank": 193,
+  "bggRating": 7.37,
       "players": "2",
-      "time": "30–45",
+      "time": "30–60",
       "year": "2019",
       "bggId": "274364",
       "quickStart": "- Give one player Nixon and one The Editor.\n- Shuffle each faction deck.\n- Place evidence tokens on board randomly.\n- Place initiative and momentum tokens in central row.\n- Nixon starts with initiative.",
@@ -3260,10 +3677,14 @@
     },
 
 "welcome-to-the-moon": {
-              "players": "*", 
-              "time": "*", 
-              "year": "*", 
-              "bggId": "",
+  "cover": "covers/welcome-to-the-moon.webp",
+  "weight": 2.46,
+  "bggRank": 216,
+  "bggRating": 7.35,
+              "players": "1–6", 
+              "time": "25–30", 
+              "year": "2021", 
+              "bggId": "339789",
               "youtube": "",
               "quickStart": "",
               "startingResources": "",
@@ -3281,6 +3702,10 @@
 }, 
   
 "wingspan": {
+  "cover": "covers/wingspan.webp",
+  "weight": 2.48,
+  "bggRank": 38,
+  "bggRating": 7.84,
       "players": "1–5",
       "time": "40–70",
       "year": "2019",
@@ -3300,34 +3725,1348 @@
   "playerAids": [
     { "label": "", "file": "" },
     { "label": "", "file": "" }],
-"expansions": [
-        {
-          "name": "Europe Expansion",
-          "quickStart": "- Shuffle in new Europe birds.\n- Add new round-end goals.\n- Add more purple abilities.",
-          "reminders": "- New abilities trigger at round end or extra times.\n- Slightly increases bird variety.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "279754"
-        },
-        {
-          "name": "Oceania Expansion",
-          "quickStart": "- Replace food dice with nectar dice.\n- Add nectar resource and boards.\n- Shuffle in Oceania birds.",
-          "reminders": "- Nectar counts for end-game scoring.\n- New birds focus on flexible food and chaining.",
-          "rulebook": "",
-          "youtube": "",
-          "bggId": "310399"
-        },
-        {
-          "name": "Asia Expansion",
-          "quickStart": "- Add duet mode for 2 players.\n- Add flock mode for 6–7 players.\n- Shuffle in Asia birds and duet boards.",
-          "reminders": "- Duet tokens score shared objectives.\n- Expands multiplayer options significantly.",
-          "rulebook": "wingspan-asia",
-          "youtube": "",
-          "bggId": "376308"
-        }
-      ]
+"expansions": [{"name": "Europe Expansion", "bggId": "290448", "setup": "Shuffle the Europe bird cards into the bird deck and the Europe bonus cards into the bonus deck.\nMix the new goal tiles in with the base goal tiles.", "rules": "Europe birds can have round-end powers, printed in teal.\nActivate those powers at the end of each round, before the round goal is scored.\nThey are not an extra set of purple powers.", "scoring": "Round goals and end-of-game bird scoring stay the base-game rules.\nResolve teal round-end powers before you score that round's goal.", "quickStart": "Shuffle the Europe bird cards into the bird deck and the Europe bonus cards into the bonus deck.\nMix the new goal tiles in with the base goal tiles.", "reminders": "Europe birds can have round-end powers, printed in teal.\nActivate those powers at the end of each round, before the round goal is scored.\nThey are not an extra set of purple powers."}, {"name": "Oceania Expansion", "bggId": "300580", "setup": "Replace all 5 food dice and all player mats with the Oceania dice and mats.\nAdd nectar to the supply.\nAfter the normal opening (5 cards and 5 food, then keep), each player gains 1 nectar.", "rules": "Nectar is wild when you pay to play a bird, pay an \"any food\" ability, or pay an action upgrade.\nNectar is not wild for a bird ability that lists a specific food, and you cannot trade nectar in the 2:1 conversion.\nSpent nectar goes on that habitat's spent-nectar space. Unused nectar in your supply is discarded at the end of the round (back to the supply, not scored).\nWhen Europe is also in play, end the round in this order: Europe round-end powers, discard unused nectar, score the goal, remove action cubes, refresh the bird tray, then game-end powers if it is round 4 (otherwise pass the first-player token).\nYellow game-end powers happen after all end-of-round steps, in any order, and do not trigger pink once-between-turns powers.", "scoring": "At the end of the game, score nectar spent in each habitat separately.\nMost spent nectar in that habitat scores 5, second-most scores 2. You need at least 1 spent nectar there to score. Ties split the points, rounded down (two players tied for most each get 3).", "quickStart": "Replace all 5 food dice and all player mats with the Oceania dice and mats.\nAdd nectar to the supply.\nAfter the normal opening (5 cards and 5 food, then keep), each player gains 1 nectar.", "reminders": "Nectar is wild when you pay to play a bird, pay an \"any food\" ability, or pay an action upgrade.\nNectar is not wild for a bird ability that lists a specific food, and you cannot trade nectar in the 2:1 conversion.\nSpent nectar goes on that habitat's spent-nectar space. Unused nectar in your supply is discarded at the end of the round (back to the supply, not scored).\nWhen Europe is also in play, end the round in this order: Europe round-end powers, discard unused nectar, score the goal, remove action cubes, refresh the bird tray, then game-end powers if it is round 4 (otherwise pass the first-player token).\nYellow game-end powers happen after all end-of-round steps, in any order, and do not trigger pink once-between-turns powers."}, {"name": "Asia Expansion", "bggId": "366161", "setup": "Asia can be shuffled into the base game, or played as Duet or Flock.\nTo mix it in, shuffle the Asia birds and bonus cards into the base decks (the A in the corner). That adds no new rules unless you also use Duet or Flock.\nDuet is exactly 2 players. Use the Duet map and 4 random red-cornered Duet goal tiles. Each player places 1 Duet token of their color on each of the 15 bird slots.\nFlock is 6 or 7 players and uses the base game's player components. Split into fixed groups of 3+3 or 3+4. Each group has its own bird tray (3 face up) and its own birdfeeder.", "rules": "Duet: when you play a bird, place one of your Duet tokens on the Duet map.\nFlock takes about 2 hours the first time. Two players are active at once. Food, eggs, the bonus deck (except Historian), the standard goal tiles, pink powers, and powers that affect other players are shared. Use the turn-order dial on the 6- or 7-player side. The groups have no other meaning.\nWith Oceania, each Flock birdfeeder is 2 nectar dice and 3 regular dice. The Americas hummingbird module does not scale to Flock's 6 or 7 players.", "scoring": "Duet goals are the red-cornered tiles on the Duet map, scored with the rest of the game.\nFlock uses one shared set of standard goals (not the Duet goals) on the Flock goal board, which is the back of the Duet map. End-of-game bird scoring is otherwise the base game.", "quickStart": "Asia can be shuffled into the base game, or played as Duet or Flock.\nTo mix it in, shuffle the Asia birds and bonus cards into the base decks (the A in the corner). That adds no new rules unless you also use Duet or Flock.\nDuet is exactly 2 players. Use the Duet map and 4 random red-cornered Duet goal tiles. Each player places 1 Duet token of their color on each of the 15 bird slots.\nFlock is 6 or 7 players and uses the base game's player components. Split into fixed groups of 3+3 or 3+4. Each group has its own bird tray (3 face up) and its own birdfeeder.", "reminders": "Duet: when you play a bird, place one of your Duet tokens on the Duet map.\nFlock takes about 2 hours the first time. Two players are active at once. Food, eggs, the bonus deck (except Historian), the standard goal tiles, pink powers, and powers that affect other players are shared. Use the turn-order dial on the 6- or 7-player side. The groups have no other meaning.\nWith Oceania, each Flock birdfeeder is 2 nectar dice and 3 regular dice. The Americas hummingbird module does not scale to Flock's 6 or 7 players."}, {"name": "Americas Expansion", "bggId": "461932", "setup": "Requires the base game (1–5 players) or Wingspan Asia played as a 1–2 player game. It does not require Oceania.\nShuffle in the Americas birds and bonus cards. Set out the hummingbird garden. Do not give anyone the benefit of a starting hummingbird; a hummingbird only counts once you attract it from the garden.\nNectar tokens are included. Nectar arrives through hummingbird cards.", "rules": "The hummingbird module is optional: most of the Americas birds do not use it.\nA hummingbird action triggers when you move up a track onto or past a hummingbird icon, not when you move down.\nActivating a habitat does not require a hummingbird action.\nEmpty hummingbird slots count for powers that count empty slots. Powers that look at the leftmost empty slot ignore hummingbird slots.", "scoring": "Nectar majority scoring is an Oceania rule. The Americas scoresheet does not add it.\nScore hummingbirds and the new goals as printed on those cards and tiles.", "quickStart": "Requires the base game (1–5 players) or Wingspan Asia played as a 1–2 player game. It does not require Oceania.\nShuffle in the Americas birds and bonus cards. Set out the hummingbird garden. Do not give anyone the benefit of a starting hummingbird; a hummingbird only counts once you attract it from the garden.\nNectar tokens are included. Nectar arrives through hummingbird cards.", "reminders": "The hummingbird module is optional: most of the Americas birds do not use it.\nA hummingbird action triggers when you move up a track onto or past a hummingbird icon, not when you move down.\nActivating a habitat does not require a hummingbird action.\nEmpty hummingbird slots count for powers that count empty slots. Powers that look at the leftmost empty slot ignore hummingbird slots."}]
     }
-  }
+  ,
+"7-wonders-second-edition": {
+  "cover": "covers/7-wonders-second-edition.webp",
+  "players": "3–7",
+  "time": "30",
+  "year": "2020",
+  "bggId": "316377",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.37,
+  "bggRank": 192,
+  "weight": 2.27
+},
+"7-wonders-dice": {
+  "cover": "covers/7-wonders-dice.webp",
+  "players": "2–7",
+  "time": "25–30",
+  "year": "2025",
+  "bggId": "446231",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.91,
+  "bggRank": 3877,
+  "weight": 2.51
+},
+"agent-avenue": {
+  "cover": "covers/agent-avenue.webp",
+  "players": "2–4",
+  "time": "10–20",
+  "year": "2024",
+  "bggId": "422732",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.02,
+  "bggRank": 494,
+  "weight": 1.2
+},
+"brick-like-this": {
+  "cover": "covers/brick-like-this.webp",
+  "players": "2–8",
+  "time": "15",
+  "year": "2025",
+  "bggId": "439310",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.73,
+  "bggRank": 5928,
+  "weight": 1.25
+},
+"burgle-bros-2-the-casino-capers": {
+  "cover": "covers/burgle-bros-2-the-casino-capers.webp",
+  "players": "1–4",
+  "time": "45–70",
+  "year": "2021",
+  "bggId": "286537",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.31,
+  "bggRank": 1864,
+  "weight": 2.53
+},
+"burgle-bros": {
+  "cover": "covers/burgle-bros.webp",
+  "players": "1–4",
+  "time": "45–90",
+  "year": "2015",
+  "bggId": "172081",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.07,
+  "bggRank": 431,
+  "weight": 2.31
+},
+"burgle-bros-3-future-flip": {
+  "cover": "covers/burgle-bros-3-future-flip.webp",
+  "players": "1–4",
+  "time": "60–120",
+  "year": "2026",
+  "bggId": "424929",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.6,
+  "bggRank": 9662,
+  "weight": 2.33
+},
+"camel-up-the-card-game": {
+  "cover": "covers/camel-up-the-card-game.webp",
+  "players": "2–6",
+  "time": "30–45",
+  "year": "2023",
+  "bggId": "378848",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.72,
+  "bggRank": 6110,
+  "weight": 2.06
+},
+"cant-stop": {
+  "cover": "covers/cant-stop.webp",
+  "players": "2–4",
+  "time": "30",
+  "year": "1980",
+  "bggId": "41",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.8,
+  "bggRank": 769,
+  "weight": 1.14
+},
+"candy-land-bluey": {
+  "cover": "covers/candy-land-bluey.webp",
+  "players": "2–6",
+  "time": "15",
+  "year": "2024",
+  "bggId": "429874",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0
+},
+"cartographers": {
+  "cover": "covers/cartographers.webp",
+  "players": "1–100",
+  "time": "30–45",
+  "year": "2019",
+  "bggId": "263918",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.38,
+  "bggRank": 185,
+  "weight": 1.89
+},
+"celestia": {
+  "cover": "covers/celestia.webp",
+  "players": "2–6",
+  "time": "30",
+  "year": "2015",
+  "bggId": "175117",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.66,
+  "bggRank": 1006,
+  "weight": 1.32
+},
+"container": {
+  "cover": "covers/container.webp",
+  "players": "3–5",
+  "time": "45–90",
+  "year": "2026",
+  "bggId": "453740",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.55,
+  "bggRank": 1219,
+  "weight": 2.83
+},
+"cozy-stickerville": {
+  "cover": "covers/cozy-stickerville.webp",
+  "players": "1–6",
+  "time": "30",
+  "year": "2026",
+  "bggId": "456440",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.01,
+  "bggRank": 506,
+  "weight": 1.21
+},
+"the-crew-journey-to-the-ends-of-the-earth": {
+  "cover": "covers/the-crew-journey-to-the-ends-of-the-earth.webp",
+  "players": "2–5",
+  "time": "20",
+  "year": "2026",
+  "bggId": "462192",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.9,
+  "bggRank": 3938,
+  "weight": 2.17
+},
+"the-crew-mission-deep-sea": {
+  "cover": "covers/the-crew-mission-deep-sea.webp",
+  "players": "2–5",
+  "time": "20",
+  "year": "2021",
+  "bggId": "324856",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.8,
+  "bggRank": 45,
+  "weight": 2.06
+},
+"the-crew-the-quest-for-planet-nine": {
+  "cover": "covers/the-crew-the-quest-for-planet-nine.webp",
+  "players": "2–5",
+  "time": "20",
+  "year": "2019",
+  "bggId": "284083",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.61,
+  "bggRank": 97,
+  "weight": 1.97
+},
+"cryptid": {
+  "cover": "covers/cryptid.webp",
+  "players": "3–5",
+  "time": "30–50",
+  "year": "2018",
+  "bggId": "246784",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.16,
+  "bggRank": 345,
+  "weight": 2.26
+},
+"flamecraft": {
+  "cover": "covers/flamecraft.webp",
+  "players": "1–5",
+  "time": "60",
+  "year": "2022",
+  "bggId": "336986",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.08,
+  "bggRank": 409,
+  "weight": 2.19
+},
+"fliptoons": {
+  "cover": "covers/fliptoons.webp",
+  "players": "1–4",
+  "time": "15–30",
+  "year": "2025",
+  "bggId": "449185",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.63,
+  "bggRank": 1062,
+  "weight": 1.66
+},
+"fliptoons-season-2": {
+  "cover": "covers/fliptoons-season-2.webp",
+  "players": "1–4",
+  "time": "15–30",
+  "year": "2026",
+  "bggId": "473739",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.99,
+  "bggRank": 3280,
+  "weight": 1.5
+},
+"for-sale-autorama": {
+  "cover": "covers/for-sale-autorama.webp",
+  "players": "3–6",
+  "time": "30–45",
+  "year": "2021",
+  "bggId": "318709",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.85,
+  "bggRank": 4321,
+  "weight": 1.79
+},
+"the-fox-in-the-forest": {
+  "cover": "covers/the-fox-in-the-forest.webp",
+  "players": "2",
+  "time": "30",
+  "year": "2017",
+  "bggId": "221965",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.85,
+  "bggRank": 698,
+  "weight": 1.62
+},
+"got-five": {
+  "cover": "covers/got-five.webp",
+  "players": "2–4",
+  "time": "15",
+  "year": "2026",
+  "bggId": "453526",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.38,
+  "bggRank": 1656,
+  "weight": 1.35
+},
+"gruntz": {
+  "cover": "covers/gruntz.webp",
+  "players": "2",
+  "time": "10–30",
+  "year": "2026",
+  "bggId": "439561",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.71,
+  "bggRank": 6172,
+  "weight": 2.07
+},
+"hanabi": {
+  "cover": "covers/hanabi.webp",
+  "players": "2–5",
+  "time": "25",
+  "year": "2010",
+  "bggId": "98778",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.92,
+  "bggRank": 608,
+  "weight": 1.69
+},
+"hypothetically": {
+  "cover": "covers/hypothetically.webp",
+  "players": "3–6",
+  "time": "20",
+  "year": "2026",
+  "bggId": "474726",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.53,
+  "bggRank": 16466,
+  "weight": 1.0
+},
+"inkling": {
+  "cover": "covers/inkling.webp",
+  "players": "3–6",
+  "time": "20",
+  "year": "2021",
+  "bggId": "324278",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.64,
+  "bggRank": 7835,
+  "weight": 2.12
+},
+"kinfire-delve-vainglorys-grotto": {
+  "cover": "covers/kinfire-delve-vainglorys-grotto.webp",
+  "players": "1–2",
+  "time": "60",
+  "year": "2023",
+  "bggId": "391795",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.69,
+  "bggRank": 934,
+  "weight": 2.19
+},
+"light-speed-arena": {
+  "cover": "covers/light-speed-arena.webp",
+  "players": "1–4",
+  "time": "5–15",
+  "year": "2025",
+  "bggId": "400498",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.33,
+  "bggRank": 1796,
+  "weight": 1.12
+},
+"the-lord-of-the-rings-duel-for-middle-earth": {
+  "cover": "covers/the-lord-of-the-rings-duel-for-middle-earth.webp",
+  "players": "2",
+  "time": "30",
+  "year": "2024",
+  "bggId": "421006",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 8.01,
+  "bggRank": 18,
+  "weight": 2.07
+},
+"lost-cities": {
+  "cover": "covers/lost-cities.webp",
+  "players": "2",
+  "time": "30",
+  "year": "1999",
+  "bggId": "50",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.15,
+  "bggRank": 350,
+  "weight": 1.47
+},
+"magic-maze-pocket": {
+  "cover": "covers/magic-maze-pocket.webp",
+  "players": "2–8",
+  "time": "1–15",
+  "year": "2025",
+  "bggId": "450086",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.59,
+  "bggRank": 9881,
+  "weight": 1.33
+},
+"magical-athlete": {
+  "cover": "covers/magical-athlete.webp",
+  "players": "2–6",
+  "time": "30",
+  "year": "2025",
+  "bggId": "454103",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.24,
+  "bggRank": 274,
+  "weight": 1.19
+},
+"moon-colony-bloodbath": {
+  "cover": "covers/moon-colony-bloodbath.webp",
+  "players": "1–5",
+  "time": "45–90",
+  "year": "2025",
+  "bggId": "425549",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.08,
+  "bggRank": 414,
+  "weight": 2.16
+},
+"moonrakers": {
+  "cover": "covers/moonrakers.webp",
+  "players": "1–5",
+  "time": "60–120",
+  "year": "2020",
+  "bggId": "270239",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.77,
+  "bggRank": 803,
+  "weight": 2.47
+},
+"mythic-mischief-vol-ii": {
+  "cover": "covers/mythic-mischief-vol-ii.webp",
+  "players": "1–4",
+  "time": "45–90",
+  "year": "2024",
+  "bggId": "400617",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.74,
+  "bggRank": 5678,
+  "weight": 2.5
+},
+"night-at-the-zoo": {
+  "cover": "covers/night-at-the-zoo.webp",
+  "players": "1–4",
+  "time": "30",
+  "year": "2026",
+  "bggId": "457412",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.81,
+  "bggRank": 4741,
+  "weight": 2.12
+},
+"oath": {
+  "cover": "covers/oath.webp",
+  "players": "1–6",
+  "time": "45–150",
+  "year": "2021",
+  "bggId": "291572",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.17,
+  "bggRank": 339,
+  "weight": 4.12
+},
+"ostia-mariner-edition": {
+  "cover": "covers/ostia-mariner-edition.webp",
+  "players": "1–4",
+  "time": "100–120",
+  "year": "2026",
+  "bggId": "469388",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.72,
+  "bggRank": 0,
+  "weight": 3.0
+},
+"a-place-for-all-my-books": {
+  "cover": "covers/a-place-for-all-my-books.webp",
+  "players": "1–4",
+  "time": "40–60",
+  "year": "2025",
+  "bggId": "431481",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.31,
+  "bggRank": 1868,
+  "weight": 2.21
+},
+"point-city": {
+  "cover": "covers/point-city.webp",
+  "players": "1–4",
+  "time": "15–30",
+  "year": "2023",
+  "bggId": "368017",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.59,
+  "bggRank": 1143,
+  "weight": 1.7
+},
+"point-galaxy": {
+  "cover": "covers/point-galaxy.webp",
+  "players": "1–5",
+  "time": "15–30",
+  "year": "2025",
+  "bggId": "431998",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.1,
+  "bggRank": 2700,
+  "weight": 1.93
+},
+"point-salad": {
+  "cover": "covers/point-salad.webp",
+  "players": "2–6",
+  "time": "15–30",
+  "year": "2019",
+  "bggId": "274960",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.91,
+  "bggRank": 614,
+  "weight": 1.15
+},
+"rebel-princess-deluxe-edition": {
+  "cover": "covers/rebel-princess-deluxe-edition.webp",
+  "players": "3–6",
+  "time": "45",
+  "year": "2024",
+  "bggId": "418556",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.5,
+  "bggRank": 0,
+  "weight": 1.82
+},
+"splendor-duel": {
+  "cover": "covers/splendor-duel.webp",
+  "players": "2",
+  "time": "30",
+  "year": "2022",
+  "bggId": "364073",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.57,
+  "bggRank": 110,
+  "weight": 2.05
+},
+"tacta": {
+  "cover": "covers/tacta.webp",
+  "players": "2–6",
+  "time": "20",
+  "year": "2025",
+  "bggId": "401636",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.07,
+  "bggRank": 2842,
+  "weight": 1.32
+},
+"tag-team": {
+  "cover": "covers/tag-team.webp",
+  "players": "2",
+  "time": "15",
+  "year": "2025",
+  "bggId": "434906",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.86,
+  "bggRank": 665,
+  "weight": 2.12
+},
+"targi": {
+  "cover": "covers/targi.webp",
+  "players": "2",
+  "time": "60",
+  "year": "2012",
+  "bggId": "118048",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.4,
+  "bggRank": 178,
+  "weight": 2.34
+},
+"tenby": {
+  "cover": "covers/tenby.webp",
+  "players": "1–5",
+  "time": "30–60",
+  "year": "2025",
+  "bggId": "407233",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.39,
+  "bggRank": 1634,
+  "weight": 2.08
+},
+"thunder-road-ignition": {
+  "cover": "covers/thunder-road-ignition.webp",
+  "players": "2–4",
+  "time": "25–45",
+  "year": "2026",
+  "bggId": "464729",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.64,
+  "bggRank": 7916,
+  "weight": 2.25
+},
+"thunder-road-vendetta": {
+  "cover": "covers/thunder-road-vendetta.webp",
+  "players": "2–4",
+  "time": "45–75",
+  "year": "2023",
+  "bggId": "342070",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.33,
+  "bggRank": 223,
+  "weight": 1.95
+},
+"ticket-to-ride-first-journey-u-s": {
+  "cover": "covers/ticket-to-ride-first-journey-u-s.webp",
+  "players": "2–4",
+  "time": "15–30",
+  "year": "2016",
+  "bggId": "205125",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.19,
+  "bggRank": 2311,
+  "weight": 1.37
+},
+"unicorn-glitterluck-cloud-stacking": {
+  "cover": "covers/unicorn-glitterluck-cloud-stacking.webp",
+  "players": "1–4",
+  "time": "15",
+  "year": "2019",
+  "bggId": "269623",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.57,
+  "bggRank": 11182,
+  "weight": 1.0
+},
+"unmatched-battle-of-legends-volume-one": {
+  "cover": "covers/unmatched-battle-of-legends-volume-one.webp",
+  "players": "2–4",
+  "time": "20–40",
+  "year": "2019",
+  "bggId": "274637",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.21,
+  "bggRank": 302,
+  "weight": 1.96
+},
+"unmatched-houdini-vs-the-genie": {
+  "cover": "covers/unmatched-houdini-vs-the-genie.webp",
+  "players": "2",
+  "time": "20",
+  "year": "2022",
+  "bggId": "354544",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.69,
+  "bggRank": 936,
+  "weight": 2.26
+},
+"wingspan-pocket": {
+  "cover": "covers/wingspan-pocket.webp",
+  "players": "1–5",
+  "time": "25–35",
+  "year": "2026",
+  "bggId": "473508",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.59,
+  "bggRank": 1137,
+  "weight": 1.95
+},
+"winnie-the-pooh-serious-detective": {
+  "cover": "covers/winnie-the-pooh-serious-detective.webp",
+  "players": "1–4",
+  "time": "75–90",
+  "year": "2025",
+  "bggId": "449448",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.58,
+  "bggRank": 11010,
+  "weight": 2.2
+},
+"corps-of-discovery-duo": {
+  "cover": "covers/corps-of-discovery-duo.webp",
+  "players": "2",
+  "time": "30–60",
+  "year": "2026",
+  "bggId": "462207",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0
+},
+"corps-of-discovery-ultimate-edition": {
+  "cover": "covers/corps-of-discovery-ultimate-edition.webp",
+  "players": "1–4",
+  "time": "60–90",
+  "year": "2025",
+  "bggId": "444291",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.67,
+  "bggRank": 0,
+  "weight": 2.6
+},
+"everdell-journeys": {
+  "cover": "covers/everdell-journeys.webp",
+  "players": "2–5",
+  "time": "30–60",
+  "year": "2026",
+  "bggId": "468395",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0
+},
+"gather-an-everdell-card-game": {
+  "cover": "covers/gather-an-everdell-card-game.webp",
+  "players": "2–4",
+  "time": "20",
+  "year": "2026",
+  "bggId": "479726",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0
+},
+"an-infamous-traffic-second-edition": {
+  "cover": "covers/an-infamous-traffic-second-edition.webp",
+  "players": "1–5",
+  "time": "",
+  "year": "0",
+  "bggId": "475323",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.6,
+  "bggRank": 9617,
+  "weight": 3.0
+},
+"lairs": {
+  "cover": "covers/lairs.webp",
+  "players": "2",
+  "time": "30–60",
+  "year": "2026",
+  "bggId": "404883",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.15,
+  "bggRank": 2480,
+  "weight": 2.26
+},
+"parks-europe": {
+  "cover": "covers/parks-europe.webp",
+  "players": "1–5",
+  "time": "40–70",
+  "year": "2026",
+  "bggId": "458651",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0,
+  "weight": 2.5
+},
+"ra-the-dice-game": {
+  "cover": "covers/ra-the-dice-game.webp",
+  "players": "2–4",
+  "time": "45",
+  "year": "2009",
+  "bggId": "35503",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.19,
+  "bggRank": 2305,
+  "weight": 1.74
+},
+"tag-team-arthurs-legacy": {
+  "cover": "covers/tag-team-arthurs-legacy.webp",
+  "players": "2",
+  "time": "15–20",
+  "year": "2026",
+  "bggId": "460556",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.59,
+  "bggRank": 10072,
+  "weight": 3.0
+},
+"tag-team-snk-arcade-legends": {
+  "cover": "covers/tag-team-snk-arcade-legends.webp",
+  "players": "2",
+  "time": "15–20",
+  "year": "2027",
+  "bggId": "475489",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRank": 0
+},
+"thunder-road-vendetta-maximum-chrome": {
+  "cover": "covers/thunder-road-vendetta-maximum-chrome.webp",
+  "players": "2–5",
+  "time": "45–75",
+  "year": "2023",
+  "bggId": "355997",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 7.16,
+  "bggRank": 0,
+  "weight": 2.33
+},
+"unmatched-brains-and-brawn": {
+  "cover": "covers/unmatched-brains-and-brawn.webp",
+  "players": "2–3",
+  "time": "20–40",
+  "year": "2023",
+  "bggId": "383467",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 6.3,
+  "bggRank": 1898,
+  "weight": 2.18
+},
+"unmatched-stars-and-stripes": {
+  "cover": "covers/unmatched-stars-and-stripes.webp",
+  "players": "2–4",
+  "time": "20–40",
+  "year": "2026",
+  "bggId": "451527",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "expansions": [],
+  "bggRating": 5.7,
+  "bggRank": 6412,
+  "weight": 2.33
+}
+}
 }
 </script>
 
@@ -3577,7 +5316,7 @@
         '<div class="expansion-body">' +
           (cover ? (
             '<div class="expansion-art">' +
-              '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy">' +
+              '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
             "</div>"
           ) : "") +
           (qs ? (
@@ -3777,6 +5516,38 @@
     );
   }
 
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+  function textToHtml(s) {
+    return escapeHtml(s).replace(/\n/g, "<br>");
+  }
+  function expansionDelta(exp, kind) {
+    if (!exp) return "";
+    if (kind === "setup") return String(exp.setup || exp.quickStart || "").trim();
+    if (kind === "rules") return String(exp.rules || exp.reminders || "").trim();
+    if (kind === "scoring") return String(exp.scoring || "").trim();
+    return "";
+  }
+  function expansionHasDelta(exp) {
+    return !!(expansionDelta(exp, "setup") || expansionDelta(exp, "rules") || expansionDelta(exp, "scoring"));
+  }
+  function composeSection(base, emptyLabel, selected, kind) {
+    var parts = [];
+    if (base) parts.push(textToHtml(base));
+    (selected || []).forEach(function(exp) {
+      var delta = expansionDelta(exp, kind);
+      if (!delta) return;
+      parts.push("<strong>" + escapeHtml(exp.name || "Expansion") + "</strong><br>" + textToHtml(delta));
+    });
+    if (!parts.length) return escapeHtml(emptyLabel);
+    return parts.join("<br><br>");
+  }
+
   function renderDetail(slug, action) {
     if (action === void 0) action = "quicksetup";
 
@@ -3943,14 +5714,31 @@ var glossaryItems = rulesGlossary.map(function(item) {
         "</section>";
     }
 
+        /* --- Expansion toggles (multi-select, like player-count buttons) --- */
+    var namedExpansions = (Array.isArray(g.expansions) ? g.expansions : []).filter(function(exp) {
+      return exp && String(exp.name || "").trim() && expansionHasDelta(exp);
+    });
+    var expansionControlsHtml = "";
+    if (namedExpansions.length) {
+      expansionControlsHtml =
+        '<div class="expansion-controls" id="exp-controls" role="group" aria-label="Expansions in play">' +
+          namedExpansions.map(function(exp, idx) {
+            return '<button type="button" class="exp-chip" data-exp="' + idx + '">' +
+              escapeHtml(exp.name) + "</button>";
+          }).join("") +
+        "</div>" +
+        '<p class="exp-note">Turn an expansion on to add its setup, reminders, and scoring under the base game. Nothing selected keeps the base text.</p>';
+    }
+
         /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
+      expansionControlsHtml +
       // 1. Quick Set Up
       '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
         '<summary><span class="expansion-name">Quick Set Up</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
-            "<p>" + (quickText || "(No quick setup yet.)").replace(/\n/g,"<br>") + "</p>" +
+            '<p id="qs-text">' + composeSection(quickText, "(No quick setup yet.)", [], "setup") + "</p>" +
           "</div>" +
         "</div>" +
       "</details>" +
@@ -3988,7 +5776,7 @@ var glossaryItems = rulesGlossary.map(function(item) {
         '<summary><span class="expansion-name">End Game Scoring</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
-            "<p>" + (endGameScoring || "(No end game scoring notes yet.)").replace(/\n/g,"<br>") + "</p>" +
+            '<p id="scoring-text">' + composeSection(endGameScoring, "(No end game scoring notes yet.)", [], "scoring") + "</p>" +
           "</div>" +
         "</div>" +
       "</details>" +
@@ -4008,7 +5796,7 @@ var glossaryItems = rulesGlossary.map(function(item) {
         '<summary><span class="expansion-name">Reminders</span></summary>' +
         '<div class="expansion-body">' +
           '<div class="expansion-text-block">' +
-            "<p>" + (remindersText || "(No reminders yet.)").replace(/\n/g,"<br>") + "</p>" +
+            '<p id="reminders-text">' + composeSection(remindersText, "(No reminders yet.)", [], "rules") + "</p>" +
           "</div>" +
         "</div>" +
       "</details>";
@@ -4155,6 +5943,39 @@ appEl.innerHTML =
           });
         });
       }
+    }
+
+    /* --- Expansion chips: append setup, reminders, and scoring --- */
+    if (namedExpansions.length) {
+      var expButtons = Array.prototype.slice.call(
+        document.querySelectorAll("#exp-controls .exp-chip")
+      );
+      var qsTextEl = document.getElementById("qs-text");
+      var scoringTextEl = document.getElementById("scoring-text");
+      var remindersTextEl = document.getElementById("reminders-text");
+      function paintExpansions() {
+        var selected = expButtons.filter(function(btn) {
+          return btn.getAttribute("data-active") === "true";
+        }).map(function(btn) {
+          return namedExpansions[parseInt(btn.getAttribute("data-exp"), 10)];
+        });
+        if (qsTextEl) {
+          qsTextEl.innerHTML = composeSection(quickText, "(No quick setup yet.)", selected, "setup");
+        }
+        if (scoringTextEl) {
+          scoringTextEl.innerHTML = composeSection(endGameScoring, "(No end game scoring notes yet.)", selected, "scoring");
+        }
+        if (remindersTextEl) {
+          remindersTextEl.innerHTML = composeSection(remindersText, "(No reminders yet.)", selected, "rules");
+        }
+      }
+      expButtons.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          if (btn.getAttribute("data-active") === "true") btn.removeAttribute("data-active");
+          else btn.setAttribute("data-active", "true");
+          paintExpansions();
+        });
+      });
     }
 
     /* --- BG Stats app-only deep link (no blank webpage) --- */
