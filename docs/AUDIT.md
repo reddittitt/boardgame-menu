@@ -26,7 +26,7 @@ Slug rules, in `slugify`: lower case, strip `:'"`, turn `&` into `and`, everythi
 | `startingResources`, `turnStructure`, `endGameScoring`, `commonMistakes`, `remindersText` | One collapsed `<details>` each. Newlines become `<br>`. |
 | `rulesGlossary[]` | `{term, desc}`. Any non-empty array shows "Quick Rules Glossary", including the 104 games whose only entries are blank. |
 | `components[]` | Optional bullet list. Unused. |
-| `playerAids[]` | `{label, file}` shown in an iframe. A non-empty array always renders, even if `file` is blank. |
+| `playerAids[]` | `{label, file}` left in the data for some games. The detail view does not render it. |
 | `expansions[]` | `{name, quickStart, reminders, rulebook, youtube, bggId, cover}`. Cover and rulebook fall back to `covers/{game}--{expansion-slug}` and `rulebooks/{game}--{expansion-slug}.pdf`. |
 | `bggId` | Cover links to `boardgamegeek.com/boardgame/{id}`. The BG Stats button targets `bgstats://…?gameId={id}`. |
 | `youtube` | "How to Play Video". Omitted href if empty, but the button still renders. |
@@ -34,7 +34,7 @@ Slug rules, in `slugify`: lower case, strip `:'"`, turn `&` into `and`, everythi
 | `rulebook` | Explicit path or absolute URL, else `rulebooks/{slug}.pdf`. The click handler HEAD-checks same-origin PDFs and alerts if they are missing. |
 | `themeColor` | Overrides `--accent` for that game. Unused. |
 
-Personal notes and the last eight games viewed are in `localStorage` only.
+Personal notes are an always-visible box on each game. They auto-save in `localStorage` under `notes_` plus the slug, and they stay on that browser. There is no account. The last eight games viewed are also in `localStorage` only.
 
 ### Routing
 
