@@ -183,14 +183,46 @@
 
 
    /* List view */
+  .search-bar {
+    position:relative;
+    margin-bottom:6px;
+  }
   #search {
     width:100%;
-    padding:12px;
+    padding:14px 84px 14px 14px;
     border-radius:10px;
     border:1px solid var(--border);
     background:var(--card);
     color:var(--fg);
-    margin-bottom:12px;
+    margin:0;
+    font:inherit;
+    font-size:16px;
+    box-sizing:border-box;
+  }
+  #search-clear {
+    position:absolute;
+    right:6px;
+    top:50%;
+    transform:translateY(-50%);
+    min-height:36px;
+    padding:8px 12px;
+    border-radius:8px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .search-count {
+    margin:0 2px 12px;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .empty-note {
+    grid-column:1 / -1;
+    margin:8px 0;
+    color:var(--muted);
   }
   .grid {
     display:grid;
@@ -414,7 +446,9 @@
     cursor:pointer;
     list-style:none;
     font-weight:600;
-    padding:10px 12px;
+    padding:12px 14px;
+    min-height:44px;
+    box-sizing:border-box;
     display:flex;
     align-items:center;
     gap:8px;
@@ -491,27 +525,12 @@
     font-size:0.9rem;
   }
 
-  /* Player aid viewer – show full document */
-  .player-aid-viewer {
-    margin-top:10px;
-    border-radius:12px;
-    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
-    background:var(--card);
-    overflow:hidden;
-  }
-  .player-aid-viewer iframe {
-    width:100%;
-    height:70vh;
-    border:0;
-    display:block;
-  }
-
   /* Player-count buttons and expansion toggles share one chip style. */
   .playercount-controls,
   .expansion-controls {
     display:flex;
     flex-wrap:wrap;
-    gap:6px;
+    gap:8px;
     margin:0 0 8px;
   }
   .pc-btn,
@@ -521,10 +540,11 @@
     background:var(--btn);
     color:inherit;
     border-radius:999px;
-    padding:6px 12px;
+    padding:10px 16px;
+    min-height:44px;
     font:inherit;
     font-weight:600;
-    font-size:0.85rem;
+    font-size:0.95rem;
     cursor:pointer;
   }
   .pc-btn[data-active="true"],
@@ -532,6 +552,10 @@
     background:var(--brand);
     border-color:var(--brand);
     color:#ffffff;
+  }
+  .pc-btn[data-active="true"]::before,
+  .exp-chip[data-active="true"]::before {
+    content:"✓ ";
   }
   .exp-note {
     margin:0 0 8px;
@@ -574,18 +598,69 @@
     border-color: rgba(255, 255, 255, 0.45);
   }
 
-  /* Table notes */
+  /* Sticky back-to-list, sitting just under the header */
+  .detail-nav {
+    position:sticky;
+    top:var(--header-h, 80px);
+    z-index:4;
+    margin:0 0 10px;
+    padding:8px 0;
+    background:color-mix(in srgb, var(--bg) 92%, transparent);
+  }
+  .back-link {
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--card);
+    color:inherit;
+    text-decoration:none;
+    font-weight:700;
+  }
+
+  /* Personal notes — this browser only */
+  .notes-box {
+    margin-top:8px;
+  }
+  .notes-label {
+    display:block;
+    font-family:"Merriweather", Georgia, serif;
+    font-weight:700;
+    font-size:1.05rem;
+    margin:0 0 4px;
+  }
+  .notes-hint {
+    margin:0 0 8px;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
   #notes-section textarea {
+    display:block;
+    width:100%;
+    min-height:140px;
+    box-sizing:border-box;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:inherit;
     font-family:inherit;
-    font-size:0.9rem;
+    font-size:16px;
+    line-height:1.45;
+    resize:vertical;
+  }
+  .notes-status {
+    min-height:1.2em;
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:0.8rem;
   }
 
   @media (max-width:840px) {
     .detail { grid-template-columns:1fr; }
-    .cover { width:100%; }
-    .player-aid-viewer iframe {
-      height:60vh;
-    }
+    .cover { width:100%; max-width:220px; }
   }
 
 /* Dark-theme tuning for section backgrounds */
@@ -808,25 +883,72 @@
   "cover": "covers/7-wonders.webp",
   "weight": 2.31,
   "bggRank": 117,
-  "bggRating": 7.54, 
-                "players": "2–7", 
-                "time": "30", 
-                "year": "2010", 
-                "bggId": "68448",
-                "youtube": "https://www.youtube.com/watch?v=QVLUu7qkLWI",
-                "quickStart": "- Give each player 3 coins.\n- Deal 7 Age I cards to each player.\n- Shuffle Guild cards (purple), draw player count +2, shuffle into Age III.\n- Give each player a Wonder board (A/B side as agreed).",
-                "startingResources": "- Wonder board.\n- 3 coins.\n- 7 starting cards.\n- Any starting resource shown on your wonder.",
-                "remindersText": "- Draft 1 card, play it, pass the remaining hand.\n- You may build, sell for 3 coins, or build a wonder stage.\n- Military resolves at the end of each Age.\n- Resources from neighbors may be purchased.",
-                "playerCountSetup": "- 3p: use only 3-player Age decks.\n- 7p: full decks.\n- No cards removed beyond the printed player icon rules.",
-                "turnStructure": "- Choose a card.\n- Play/Build/Sell.\n- Pass hand.\n- After 6 rounds, resolve Military.\n- Repeat for Age II → Age III.",
-                "commonMistakes": "- Forgetting to check if a card is already built (Free builds via chaining).\n- Thinking resources “carry over” — they do not.\n- Miscounting Military shields.",
-                "endGameScoring": "",
-  "rulesGlossary": [{
-      "term": "",
-      "desc": ""},{
-      "term": "",
-      "desc": ""}],
-"expansions": [{"name": "Cities", "quickStart": "- Add black cards into each Age deck.\n- Give each player 6 coins instead of 3.\n- Add Diplomacy and Debt tokens.", "reminders": "- Diplomacy avoids conflict for that Age.\n- Debt must be paid at end of Age; cannot go negative.", "rulebook": "", "youtube": "", "bggId": "108745"}, {"name": "Armada", "quickStart": "- Give each player a naval board.\n- Add Island and Armada cards to Age decks.\n- Add naval track cubes.", "reminders": "- Naval combat happens across the whole table.\n- Islands trigger bonuses when discovered.", "rulebook": "", "youtube": "", "bggId": "247315"}]},
+  "bggRating": 7.54,
+  "players": "2–7",
+  "time": "30",
+  "year": "2010",
+  "bggId": "68448",
+  "youtube": "https://www.youtube.com/watch?v=QVLUu7qkLWI",
+  "quickStart": "Shuffle the Wonder cards and deal one to each player. That card and its face choose the Wonder board, unless everyone agrees to choose boards.\nEach player starts with 3 coins worth 1. The rest of the coins and the Conflict tokens form the bank.\nFor each Age, keep only the cards whose minimum player count is less than or equal to the number of players. A 4-player game uses the 3+ and 4+ cards.\nAge III guilds: remove the 10 purple cards, secretly keep players + 2, and shuffle those back into Age III. The table is 3 players = 5, 4 = 6, 5 = 7, 6 = 8, 7 = 9.\nDeal 7 Age I cards to each player. Each Age is 6 turns.",
+  "startingResources": "Wonder board, including its starting resource.\n3 coins.\nA hand of 7 cards at the start of the Age.",
+  "remindersText": "Resources are not spent. Brown cards, gray cards, the Wonder's starting resource, and some yellow cards produce every turn for the rest of the game.\nYou may also buy a neighbor's starting resource, brown resource, or gray resource for 2 coins each. You cannot buy their yellow-card or Wonder resources. They cannot refuse, and they can still use that resource themselves this turn. Coins you earn this turn cannot be spent this turn. Some yellow cards drop a neighbor's price from 2 coins to 1.\nYou cannot build two structures with the same name. Wonder stages must be built left to right, and you pay the Wonder's cost, not the card's cost. The card is only a marker and is not a structure.\nA chain lets you build the later card free if you built the named earlier card. You may still pay the resource cost instead.",
+  "playerCountSetup": "Use the player-count buttons. The 2-player game is the Expert Free City variant.",
+  "turnStructure": "Three Ages. At the start of an Age, deal 7 cards.\nEach turn, at the same time: choose 1 card, then build it, build the next Wonder stage, or discard it for 3 coins. Then pass the rest of the hand.\nPass left in Age I, right in Age II, and left in Age III.\nOn the sixth turn you receive 2 cards. Play one. Discard the other with no coins.\nThen compare shields with each neighbor.",
+  "commonMistakes": "Resources do carry. They are not spent when you build, and production never goes away.\nThe sixth card of a hand is discarded. It does not pay 3 coins.\nMilitary is against each neighbor separately. A tie with a neighbor gives no token.\nCoins left over after sets of 3 score nothing. A coin tie at the end of the game is not broken further.",
+  "endGameScoring": "After Age III conflicts, most points wins. Tie: most coins. A tie on coins stays a tie.\nCount in this order.\nMilitary: add Victory and Defeat tokens. The total can be negative. Age I victory is +1, Age II is +3, Age III is +5, and every defeat is -1.\nTreasury: 1 point per full set of 3 coins.\nWonder: the points on the stages you built.\nBlue civilian cards: the points printed on them.\nScience: for each symbol, points equal that count times itself (1, 4, 9, 16, and higher if a guild or Babylon adds symbols). Also 7 points for each set of 3 different symbols. Both methods count.\nYellow cards and purple guilds: the points on those cards.",
+  "rulesGlossary": [
+    {
+      "term": "Production",
+      "desc": "Resources stay in the city. Each symbol can be used once per turn, every turn, for the whole game."
+    },
+    {
+      "term": "Conflict",
+      "desc": "At the end of each Age, compare shields with the neighbor on your left and the neighbor on your right. Equal shields mean no token."
+    },
+    {
+      "term": "Chain",
+      "desc": "A later card with a previous structure's name can be built free if you built that structure."
+    }
+  ],
+  "expansions": [
+    {
+      "name": "Cities",
+      "quickStart": "- Add black cards into each Age deck.\n- Give each player 6 coins instead of 3.\n- Add Diplomacy and Debt tokens.",
+      "reminders": "- Diplomacy avoids conflict for that Age.\n- Debt must be paid at end of Age; cannot go negative.",
+      "rulebook": "",
+      "youtube": "",
+      "bggId": "108745"
+    },
+    {
+      "name": "Armada",
+      "setup": "Follow base setup, then:\nSplit the Armada Age cards into Ages I, II, and III and shuffle each. At 3 players, remove the 5 Armada cards marked 4+. From each Age, keep a number of Armada cards equal to the player count and shuffle them into that Age's base deck. The rest are out.\nSeparate Island cards by level, shuffle each deck, and put them face down in the center.\nEach player puts a Shipyard to the right of their Wonder and one fleet figure of each color on that color's start space.\nAdd the naval tokens, boarding tokens, extra military tokens, and the 6-value coins to the reserves.\nSiracusa is used only with this expansion.",
+      "rules": "Deal 8 cards each Age, so there is one extra turn.\nWhen you build a red, yellow, blue, or green card, or a Wonder stage, you may also pay that fleet's naval cost and move that fleet forward one space. Pay the card or Wonder and the naval cost at the same time. Apply the card or Wonder before the naval effect. A free chain build can still pay for a naval move. A card built free from the discard never allows a naval move.\nThe Wonder symbol on your Shipyard says which fleet a Wonder stage can advance.\nRed is naval strength, yellow is commercial level and taxes, blue is end-game points, and green explores an Island of the level on that space.\nWhen you sell a card, either take 3 coins or advance the yellow fleet one space without paying its naval cost.\nA boarding card gives your Boarding token to the named player. At the end of the Age you also fight that player with the normal military rules, then discard the token.\nTurn order when effects collide: pay costs, advance fleets, apply Age-card effects except losing coins, apply Shipyard effects except losing coins, build from the discard with no naval move, then lose coins.\nOptional teams of 2 in a 4- or 6-player game. Sit next to your teammate. You do not fight your teammate, and a military result gives double the tokens. Naval conflicts stay individual. Each purple card is capped at 10 points. Add the two scores. Tie: most combined coins, then a shared win.\nThese notes are the Repos Armada EN02 booklet. Victory conditions stay the base game.",
+      "scoring": "After each Age's military conflicts, compare naval strength with every player. Count naval symbols on your cards, Shipyard, Islands, and Wonder.\nLast place takes one Naval Defeat token: -1 in Age I, -2 in Age II, -3 in Age III.\nFirst place takes one Naval Victory token: 3, 5, or 7 for Ages I, II, and III.\nSecond place takes one Naval Victory token: 1, 3, or 5.\nA tie for last: each tied player takes a Defeat token for that Age. A tie for first: each tied player takes the second-place Victory token, and nobody takes a second-place token. A tie for second takes nothing. If everyone is tied, nobody takes a token. Some players can receive no token.\nThe blue fleet also scores the points printed on its space. Island cards score what they print. Science can go past the base table: identical symbols score their count times itself.",
+      "quickStart": "Follow base setup, then:\nSplit the Armada Age cards into Ages I, II, and III and shuffle each. At 3 players, remove the 5 Armada cards marked 4+. From each Age, keep a number of Armada cards equal to the player count and shuffle them into that Age's base deck. The rest are out.\nSeparate Island cards by level, shuffle each deck, and put them face down in the center.\nEach player puts a Shipyard to the right of their Wonder and one fleet figure of each color on that color's start space.\nAdd the naval tokens, boarding tokens, extra military tokens, and the 6-value coins to the reserves.\nSiracusa is used only with this expansion.",
+      "reminders": "Deal 8 cards each Age, so there is one extra turn.\nWhen you build a red, yellow, blue, or green card, or a Wonder stage, you may also pay that fleet's naval cost and move that fleet forward one space. Pay the card or Wonder and the naval cost at the same time. Apply the card or Wonder before the naval effect. A free chain build can still pay for a naval move. A card built free from the discard never allows a naval move.\nThe Wonder symbol on your Shipyard says which fleet a Wonder stage can advance.\nRed is naval strength, yellow is commercial level and taxes, blue is end-game points, and green explores an Island of the level on that space.\nWhen you sell a card, either take 3 coins or advance the yellow fleet one space without paying its naval cost.\nA boarding card gives your Boarding token to the named player. At the end of the Age you also fight that player with the normal military rules, then discard the token.\nTurn order when effects collide: pay costs, advance fleets, apply Age-card effects except losing coins, apply Shipyard effects except losing coins, build from the discard with no naval move, then lose coins.\nOptional teams of 2 in a 4- or 6-player game. Sit next to your teammate. You do not fight your teammate, and a military result gives double the tokens. Naval conflicts stay individual. Each purple card is capped at 10 points. Add the two scores. Tie: most combined coins, then a shared win.\nThese notes are the Repos Armada EN02 booklet. Victory conditions stay the base game.",
+      "bggId": "247315",
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-armada/en/7ar-en02-rules-1598904236sa0W2.pdf"
+    },
+    {
+      "name": "Leaders",
+      "setup": "Base setup, except each player starts with 6 coins instead of 3. Add the coins worth 6 to the bank.\nFor first games, deal only from the 34 Standard leaders. Later, shuffle in the 15 Expert leaders. The 6 Cities bonus leaders are used only when Cities is also in the game.\nDeal 4 leaders to each player. Return the rest to the box.\nDraft: each player keeps 1 face down, then passes the rest to the right, until everyone has kept 4.\nRoma and Abu Simbel are used only with this expansion.",
+      "rules": "At the start of each Age, recruit before the Age cards. Choose 1 of your remaining leaders and either pay its coin cost and play it, build a Wonder stage with it, or sell it for 3 coins.\nSome leaders cost 1 coin in Age I, 2 in Age II, and 3 in Age III.\nIn Age III you have 2 leaders left. Play one and return the other to the box. The Night side of Roma keeps the unchosen leader.\nVictory conditions stay the base game.",
+      "scoring": "Score the base game, then add the victory points printed on your recruited leaders.\nScience can exceed the base table. Identical symbols score their count times itself, through 9 identical symbols = 81.",
+      "quickStart": "Base setup, except each player starts with 6 coins instead of 3. Add the coins worth 6 to the bank.\nFor first games, deal only from the 34 Standard leaders. Later, shuffle in the 15 Expert leaders. The 6 Cities bonus leaders are used only when Cities is also in the game.\nDeal 4 leaders to each player. Return the rest to the box.\nDraft: each player keeps 1 face down, then passes the rest to the right, until everyone has kept 4.\nRoma and Abu Simbel are used only with this expansion.",
+      "reminders": "At the start of each Age, recruit before the Age cards. Choose 1 of your remaining leaders and either pay its coin cost and play it, build a Wonder stage with it, or sell it for 3 coins.\nSome leaders cost 1 coin in Age I, 2 in Age II, and 3 in Age III.\nIn Age III you have 2 leaders left. Play one and return the other to the box. The Night side of Roma keeps the unchosen leader.\nVictory conditions stay the base game.",
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-leaders/en/7le-en02-rules-159889321597WYA.pdf"
+    }
+  ],
+  "rulebook": "7-wonders",
+  "setupByPlayerCount": {
+    "2": "Expert variant. The first-edition book suggests playing 3 to 7 players before trying it.\nUse only the 3+ cards. Each player gets a Wonder board, and a third board is the Free City. Place the Border card between the two players.\nEach player gets a 7-card hand. The other 7 cards are a face-down draw pile to the right of the Border card. The player to the left of the Free City adds the Free City card to their hand.\nBoth players and the Free City start with 3 coins.\nEach turn the player holding the Free City card draws the top card, then chooses a card for their own city and a card for the Free City. The other player chooses one card. Play the Free City card, then your own. After the turn, take the stack on the other side of the Border, so the other player runs the Free City next.\nThe Free City cannot discard for 3 coins unless it has no legal build or Wonder stage. A chain, if it has one, must be used. It buys from either neighbor at the normal price.",
+    "3": "Keep only 3+ cards in every Age. Keep 5 random guilds (players + 2) and shuffle them into Age III.",
+    "4": "Keep 3+ and 4+ cards. Keep 6 random guilds.",
+    "5": "Keep 3+, 4+, and 5+ cards. Keep 7 random guilds.",
+    "6": "Keep 3+ through 6+ cards. Keep 8 random guilds.",
+    "7": "Keep every Age card, including 7+. Keep 9 random guilds."
+  }
+},
   
 "7-wonders-duel": {
   "cover": "covers/7-wonders-duel.webp",
@@ -997,24 +1119,38 @@
   "weight": 3.8,
   "bggRank": 2,
   "bggRating": 8.35,
-              "youtube": "https://www.youtube.com/watch?v=Vn_UFsjz6jA",
-              "players": "1–4",
-              "time": "90–150",
-              "year": "2021",
-              "bggId": "342942",
-              "quickStart": "- Give zoo map + action cards\n- Set action cards in slots 1–5\n- Deal starting hand of zoo cards\n- Reveal card display\n- Set conservation projects",
-              "startingResources": "- Zoo map\n- 5 action cards in slots 1–5\n- Starting money\n- 8 cubes\n- Starting cards",
-              "remindersText": "- Used action returns to slot 1\n- Animals require enclosure & icons\n- Association worker availability matters\n- Appeal + conservation crossing triggers game end\n- Reputation limits card snapping",
-              "playerCountSetup": "- Solo uses target scores\n- 2–4p identical setup\n- Advanced maps optional",
-              "turnStructure": "- Choose action card (1–5)\n- Resolve at that strength\n- Move card to slot 1\n- Break when triggered",
-              "commonMistakes": "- Misplacing enclosure sizes\n- Forgetting reputation limits\n- Not planning conservation early\n- Ignoring income timing",
-                  "endGameScoring": "",
-                "rulesGlossary": [{
-                "term": "",
-                "desc": ""},{
-                "term": "",
-                "desc": ""}],
-"expansions": [{"name": "Marine Worlds", "bggId": "368966", "setup": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.", "rules": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.", "scoring": "End-game scoring is still the base system: conservation points times appeal points, plus the final-scoring cards.\nThe final-scoring deck now includes Marine Worlds cards.", "quickStart": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.", "reminders": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.", "rulebook": "ark-nova--marine-worlds", "youtube": "https://www.youtube.com/watch?v=3NyZWytjEe8"}]},
+  "youtube": "https://www.youtube.com/watch?v=Vn_UFsjz6jA",
+  "players": "1–4",
+  "time": "90–150",
+  "year": "2021",
+  "bggId": "342942",
+  "quickStart": "- Give zoo map + action cards\n- Set action cards in slots 1–5\n- Deal starting hand of zoo cards\n- Reveal card display\n- Set conservation projects",
+  "startingResources": "- Zoo map\n- 5 action cards in slots 1–5\n- Starting money\n- 8 cubes\n- Starting cards",
+  "remindersText": "- Used action returns to slot 1\n- Animals require enclosure & icons\n- Association worker availability matters\n- Appeal + conservation crossing triggers game end\n- Reputation limits card snapping",
+  "playerCountSetup": "The buttons are the Capstone setup differences. Solo is not restated here.",
+  "turnStructure": "- Choose action card (1–5)\n- Resolve at that strength\n- Move card to slot 1\n- Break when triggered",
+  "commonMistakes": "- Misplacing enclosure sizes\n- Forgetting reputation limits\n- Not planning conservation early\n- Ignoring income timing",
+  "endGameScoring": "",
+  "rulesGlossary": [],
+  "expansions": [
+    {
+      "name": "Marine Worlds",
+      "bggId": "368966",
+      "setup": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.",
+      "rules": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.",
+      "scoring": "End-game scoring is still the base system: conservation points times appeal points, plus the final-scoring cards.\nThe final-scoring deck now includes Marine Worlds cards.",
+      "quickStart": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.",
+      "reminders": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.",
+      "rulebook": "ark-nova--marine-worlds",
+      "youtube": "https://www.youtube.com/watch?v=3NyZWytjEe8"
+    }
+  ],
+  "setupByPlayerCount": {
+    "2": "Place the Break token on the space for this player count. The 3-player space is the one marked 3. Use the matching space for 2.\nPlace the 3 topmost Base Conservation Project cards face up under the Association board, not 4.\nCover them with 6 tokens of an unused color: the left level of the left card, the middle level of the middle card, and the right level of the right card. Also cover the three spaces in the left column of the donation area. Those spaces are blocked.\nAppeal: the start player begins on 0, and the second player on 1.\nEach player still draws 8 zoo cards and keeps 4, and still takes 25 money.",
+    "3": "Place the Break token on the space marked 3.\nPlace the 3 topmost Base Conservation Project cards face up. Do not use the 2-player covers.\nAppeal starts at 0, 1, and 2 in turn order.",
+    "4": "Place the Break token on the space for 4 players.\nPlace the 4 topmost Base Conservation Project cards face up under the Association board.\nAppeal starts at 0, 1, 2, and 3 in turn order."
+  }
+},
 
 "azul": {
   "cover": "covers/azul.webp",
@@ -1600,24 +1736,71 @@
   "weight": 2.84,
   "bggRank": 47,
   "bggRating": 7.8,
-              "players": "1–4", 
-              "time": "40–80", 
-              "year": "2018", 
-              "bggId": "199792",
-              "youtube": "",
-              "quickStart": "",
-              "startingResources": "",
-              "remindersText": "",
-              "playerCountSetup": "",
-              "turnStructure": "",
-              "commonMistakes": "",
-                "endGameScoring": "",
-                "rulesGlossary": [{
-                "term": "",
-                "desc": ""},{
-                "term": "",
-                "desc": ""}],
-  "expansions": [{"name": "Bellfaire", "bggId": "289057", "setup": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.", "rules": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it.", "scoring": "Garland Award: the player with the most cards of the listed type scores 6, and second place scores 3. A tie at either place means each tied player gets that bonus. You need at least 1 card of that type to qualify.\nMarket trades also give 3 points when you take the trade side.", "quickStart": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.", "reminders": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it."}, {"name": "Pearlbrook", "bggId": "259996", "setup": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.", "rules": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder.", "scoring": "Wonders score the points printed on them.\nAdornments score their printed end-game bonus.\nEach pearl you have left at the end of the game is worth 2 points.", "quickStart": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.", "reminders": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder."}, {"name": "Spirecrest", "bggId": "289056", "setup": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.", "rules": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card.", "scoring": "After you pass, the Traveler may take the expedition. You pay each map tile's cost in the order you charted them, and you may stop early.\nYou only score the map tiles you pay to reach.", "quickStart": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.", "reminders": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card."}, {"name": "Newleaf", "bggId": "332390", "setup": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.", "rules": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location.", "scoring": "A Visitor scores its printed points at the end of the game only if your city meets that card's requirements. Otherwise it scores 0.\nResources that a Visitor calls \"leftover\" can also count for another end-game bonus, such as the Baker.", "quickStart": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.", "reminders": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location."}, {"name": "Mistwood", "bggId": "332397", "setup": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.", "rules": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that.", "scoring": "Legendary cards score as the card they replace, including event requirements.\nPlaying a Legendary against Rugwort gives Rugwort 3 points, and Rugwort then plays 2 cards instead of 1. Nightweave scores from her own scoring cards in that mode.", "quickStart": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.", "reminders": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that."}]
+  "players": "1–4",
+  "time": "40–80",
+  "year": "2018",
+  "bggId": "199792",
+  "youtube": "",
+  "quickStart": "",
+  "startingResources": "",
+  "remindersText": "",
+  "playerCountSetup": "Forest size and opening hands change with the player count. The solo rules are not in the pages used here.",
+  "turnStructure": "",
+  "commonMistakes": "",
+  "endGameScoring": "",
+  "rulesGlossary": [],
+  "expansions": [
+    {
+      "name": "Bellfaire",
+      "bggId": "289057",
+      "setup": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.",
+      "rules": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it.",
+      "scoring": "Garland Award: the player with the most cards of the listed type scores 6, and second place scores 3. A tie at either place means each tied player gets that bonus. You need at least 1 card of that type to qualify.\nMarket trades also give 3 points when you take the trade side.",
+      "quickStart": "Bellfaire is modular. Use any mix of player powers, the Market, the new forest locations, Bellfaire special events, the Flower Festival, and Garland Awards.\nMarket: place the 4 Market tokens on the gain side.\nGarland Awards: shuffle them and reveal 1.\nSpecial events: shuffle them into the base events, or use 2 Bellfaire and 2 base events, or use only the Bellfaire events.\nFlower Festival is an extra basic event.\nPlayer powers: deal each player 2 and keep 1. Do not gain the extra worker when you prepare for spring.",
+      "reminders": "Market: you may have only 1 of your workers there. On the gain side, take that token's resources and cards, then flip it to trade. On the trade side, pay the printed resources and discard the listed cards, gain 3 points and 2 of any resource, then flip it back to gain.\nFlower Festival is achieved like other basic events: 1 card of each of the 5 colors, then place a worker on it."
+    },
+    {
+      "name": "Pearlbrook",
+      "bggId": "259996",
+      "setup": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.",
+      "rules": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder.",
+      "scoring": "Wonders score the points printed on them.\nAdornments score their printed end-game bonus.\nEach pearl you have left at the end of the game is worth 2 points.",
+      "quickStart": "Each player starts with a frog Ambassador and 2 Adornment cards.\nSet out the river board and its 4 River Destinations.\nAdd the Pearlbrook critter and construction cards to the deck.\nPearlbrook is a full expansion. The publisher recommends not combining it with Legends, Extra! Extra!, or Rugwort.",
+      "reminders": "The Ambassador visits a River Destination only if your city meets that location's requirements.\nThe first player to visit a location and reveal it gains 1 pearl immediately, and can gain another pearl if they also meet the revealed card.\nEach Adornment costs 1 pearl to play. It has an immediate ability and an end-game bonus.\nTo build a Wonder, place a worker on its spot and pay the printed resources, pearls, and discarded cards. No card ability can help pay that cost. Take the worker back when you prepare for the season. Only one player can build a given Wonder."
+    },
+    {
+      "name": "Spirecrest",
+      "bggId": "289056",
+      "setup": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.",
+      "rules": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card.",
+      "scoring": "After you pass, the Traveler may take the expedition. You pay each map tile's cost in the order you charted them, and you may stop early.\nYou only score the map tiles you pay to reach.",
+      "quickStart": "Each player starts with a rabbit Traveler on the mountain board, in the Foothills.\nThe trail runs Foothills, Peaks, Ridge, then Expedition.\nWinter is the Foothills, spring the Peaks, summer the Ridge, and autumn the Expedition.",
+      "reminders": "After each Prepare for Season, explore in three steps: chart 1 map tile from the area you are in onto the end of your expedition, reveal 3 Discovery cards from that area and play 1, then move the Traveler forward and reveal that season's weather and map tiles if they are still hidden.\nWeather restricts only the season you are in. Different players can be under different weather at the same time.\nWeather that makes you discard cards happens at the end of your turn. If a card is played for free, you may ignore a weather effect that adds a cost to play a card."
+    },
+    {
+      "name": "Newleaf",
+      "bggId": "332390",
+      "setup": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.",
+      "rules": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location.",
+      "scoring": "A Visitor scores its printed points at the end of the game only if your city meets that card's requirements. Otherwise it scores 0.\nResources that a Visitor calls \"leftover\" can also count for another end-game bonus, such as the Baker.",
+      "quickStart": "Shuffle the Newleaf critter and construction cards into the deck. If you are adding only those cards, remove both Locomotive cards first.\nGive each player 3 golden occupied tokens.\nFor the station, shuffle the Visitor cards, split them, and set out the face-up supply.\nOptional modules: each player may start with a ticket (outbound side up) and a reservation token.\nThe publisher recommends not combining the full Newleaf station with Pearlbrook or Spirecrest.",
+      "reminders": "Newleaf cards with a golden banner take a golden occupied token, not a normal one. You can never use more than 3 golden tokens. If you discard a card that has one, you do not get the token back. The Ever Tree is the exception: a normal occupied token there can still play a Newleaf critter.\nPlace a worker on the Station to gain a Visitor. Discard 1 of the face-up Visitors and keep the other by your city.\nA ticket moves one of your workers to a new legal spot and activates it. It cannot move the frog Ambassador, a big critter, or a worker on a permanent location."
+    },
+    {
+      "name": "Mistwood",
+      "bggId": "332397",
+      "setup": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.",
+      "rules": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that.",
+      "scoring": "Legendary cards score as the card they replace, including event requirements.\nPlaying a Legendary against Rugwort gives Rugwort 3 points, and Rugwort then plays 2 cards instead of 1. Nightweave scores from her own scoring cards in that mode.",
+      "quickStart": "Mistwood is modular. Choose which parts to include before setup.\nThrough Every Season: replace the 8 base Farm cards with the 8 special Farms.\nCorrin Evertail: shuffle the 5 Corrin cards into the deck. These are recommended for experienced players.\nMore Legends: deal each player 1 Legendary Construction and 1 Legendary Critter, and return the rest unseen. They can be mixed with Legends.\nNightweave's Lair is the solo and two-player opponent mode, with its own boards, plot deck, and plan deck.",
+      "reminders": "A special Farm often offers two abilities. Choose only one each time it activates.\nA Corrin construction can play any critter of the shown color for free. A Corrin critter can be played for free by placing an occupied token on a construction of the shown color.\nA Legendary card counts as the card named in its red banner, including for events and for free-critter pairings. It opens one extra city space, can be played even if the city is full, and cannot be discarded or copied. You may not play another copy of the banner card after that."
+    }
+  ],
+  "setupByPlayerCount": {
+    "2": "Use 3 Forest cards. The meadow is 8 cards. The first player draws 5 cards and the second draws 6. Each player starts with 2 workers and puts the other 4 on the Ever Tree: 1 on spring, 1 on summer, and 2 on autumn.",
+    "3": "Use 4 Forest cards. The meadow is 8 cards. Opening hands are 5, then 6, then 7. Workers on the Ever Tree are the same: 1 spring, 1 summer, 2 autumn.",
+    "4": "Use 4 Forest cards. The meadow is 8 cards. Opening hands are 5, 6, 7, and 8. Workers on the Ever Tree are the same: 1 spring, 1 summer, 2 autumn."
+  }
 },  
 
 
@@ -2576,27 +2759,55 @@
   "weight": 2.13,
   "bggRank": 183,
   "bggRating": 7.39,
-      "players": "1–5",
-      "time": "30–60",
-      "year": "2019",
-      "bggId": "266524",
-      "quickStart": "- Lay out the season deck and reveal the first season.\n- Construct the trail from shuffled trail tiles.\n- Give each player 2 hikers and a canteen.\n- Shuffle gear deck and set up park deck.\n- Place resources (sun, water, forest, mountain, wildlife) nearby.",
-      "startingResources": "- 2 hikers.\n- 1 canteen.\n- No starting resources.\n- Trail array built for current season.",
-      "remindersText": "- Move ONE hiker per turn.\n- You cannot land on another hiker unless using the campfire.\n- Parks require specific resources to visit.\n- Wildlife tokens are wild.\n- Season effects modify the trail each round.",
-      "playerCountSetup": "- Trail length scales with player count.\n- Use more tiles for 4–5 players.\n- Solo mode uses the ranger pawn and special rules.",
-      "turnStructure": "- Move 1 hiker down the trail to any tile ahead.\n- Collect the tile’s action/resources.\n- Continue until all hikers reach the trail end.\n- End of season: reset trail, prepare next season.\n- End game after 4 seasons.",
-      "commonMistakes": "- Forgetting to flip campfire to share spaces.\n- Wasting wildlife early instead of saving for big parks.\n- Not planning for end-of-season constraints.\n- Misreading trail tile abilities.",
+  "players": "1–5",
+  "time": "30–60",
+  "year": "2019",
+  "bggId": "266524",
+  "quickStart": "- Lay out the season deck and reveal the first season.\n- Construct the trail from shuffled trail tiles.\n- Give each player 2 hikers and a canteen.\n- Shuffle gear deck and set up park deck.\n- Place resources (sun, water, forest, mountain, wildlife) nearby.",
+  "startingResources": "- 2 hikers.\n- 1 canteen.\n- No starting resources.\n- Trail array built for current season.",
+  "remindersText": "- Move ONE hiker per turn.\n- You cannot land on another hiker unless using the campfire.\n- Parks require specific resources to visit.\n- Wildlife tokens are wild.\n- Season effects modify the trail each round.",
+  "playerCountSetup": "Waterfall is the base-game player-count change. Solo, including the ranger, is not restated here.",
+  "turnStructure": "- Move 1 hiker down the trail to any tile ahead.\n- Collect the tile’s action/resources.\n- Continue until all hikers reach the trail end.\n- End of season: reset trail, prepare next season.\n- End game after 4 seasons.",
+  "commonMistakes": "- Forgetting to flip campfire to share spaces.\n- Wasting wildlife early instead of saving for big parks.\n- Not planning for end-of-season constraints.\n- Misreading trail tile abilities.",
   "endGameScoring": "",
-  "rulesGlossary": [{
-  "term": "",
-  "desc": ""},{
-  "term": "",
-  "desc": ""}],
+  "rulesGlossary": [],
   "playerAids": [
-    { "label": "", "file": "" },
-    { "label": "", "file": "" }],
-"expansions": [{"name": "Nightfall", "bggId": "298729", "setup": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.", "rules": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger.", "scoring": "Visiting parks still scores the points printed on the park cards. Nightfall parks are in that deck, so their printed points and costs are what you score.\nThe Nightfall year card you kept is the one that scores. Base-game year cards are out of the game.", "quickStart": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.", "reminders": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger."}, {"name": "Wildlife", "bggId": "358854", "setup": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.", "rules": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game.", "scoring": "New iconic wildlife parks have a wildlife cost, and you score the points printed on the parks you visit.\nSome parks have an instant action when visited or reserved: gain a canteen, or gain a wildlife token, as printed.", "quickStart": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.", "reminders": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game."}]
+    {
+      "label": "",
+      "file": ""
     },
+    {
+      "label": "",
+      "file": ""
+    }
+  ],
+  "expansions": [
+    {
+      "name": "Nightfall",
+      "bggId": "298729",
+      "setup": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.",
+      "rules": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger.",
+      "scoring": "Visiting parks still scores the points printed on the park cards. Nightfall parks are in that deck, so their printed points and costs are what you score.\nThe Nightfall year card you kept is the one that scores. Base-game year cards are out of the game.",
+      "quickStart": "Shuffle the Nightfall park cards into the park deck and reveal 3 parks.\nEach player starts with 1 wildlife token.\nPlace the campsite board below the trailhead. At 4 or 5 players, flip it to the 4–5 player side.\nAt 5 players, place the specially marked campsite tile. Otherwise return that tile to the box.\nShuffle the remaining campsite tiles, add 3, season side up.\nTents on starred sites: at 1–3 players place 3 tents (one on the site directly before Trail End, then every other site back toward the trailhead). At 4–5 players add one more tent between the two closest to the trailhead.\nReplace the base Year deck with the Nightfall Year deck. The base year cards are not used. Deal 2 year cards, keep 1, and put the other face down on the bottom.",
+      "reminders": "Nightfall year-card discards always go face down on the bottom of the deck.\nOptional variant: use 24 Nightfall parks and 24 base parks, so about half the parks have instant actions.\nSolo uses these same Nightfall changes plus the normal solo ranger."
+    },
+    {
+      "name": "Wildlife",
+      "bggId": "358854",
+      "setup": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.",
+      "rules": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game.",
+      "scoring": "New iconic wildlife parks have a wildlife cost, and you score the points printed on the parks you visit.\nSome parks have an instant action when visited or reserved: gain a canteen, or gain a wildlife token, as printed.",
+      "quickStart": "Shuffle the new canteen, gear, season, and park cards into the matching decks.\nDeal each player 2 canteens and 2 year cards. If Nightfall is also in play, use the Nightfall year cards. Keep 1 canteen face up and 1 year card face down. Put the others on the bottom of their decks.\nIn the base game the year deck is still returned to the box when you are not using Nightfall.\nSeason 1 always uses the PARK/GEAR advanced site. Shuffle all advanced trail sites from the base game and this expansion, place 3 face down by the trailhead for later seasons, and return the rest.\nEach player starts with a wildlife token. The bison meeple starts on the leftmost park.",
+      "reminders": "When you gain a canteen during play, draw 2 and keep 1.\nVisiting the bison's park lets you also take the wildlife action, before or after the visit, but you do have to visit the park. The wildlife token can pay toward that visit if you take the wildlife action first.\nThe bison then moves to the next park to the right, whether or not you took the wildlife action. A new park comes out as usual.\nWhen the bison moves off the rightmost park it returns to the leftmost, and the active player discards an available gear to the bottom and reveals a new one.\nThe bison's park can never be reserved.\nCamera gear: when an action lets you spend a specific resource, the camera may spend any one resource instead, as in the base game."
+    }
+  ],
+  "setupByPlayerCount": {
+    "2": "Return the Waterfall site to the box. It is only added in a 4 or 5 player game.\nBuild the trail from the five basic sites plus one random advanced site. Trail End is not on its solo side.\nDeal two Year cards to each player. Each keeps one and discards the other face down. For a first game, deal one Year card each instead.\nEach player has two hikers and one canteen. The token limit is 12.",
+    "3": "Return the Waterfall site to the box. It is only added in a 4 or 5 player game.\nBuild the trail from the five basic sites plus one random advanced site. Trail End is not on its solo side.\nDeal two Year cards to each player. Each keeps one and discards the other face down. For a first game, deal one Year card each instead.\nEach player has two hikers and one canteen. The token limit is 12.",
+    "4": "Add the Waterfall site to the five basic sites, then add one random advanced site, and build the trail from that deck.\nWaterfall gives 1 Sunshine and 1 Water, and the site says that action is only in 4+ player games.\nDeal two Year cards, keep one. A first game can deal one Year card each instead.\nToken limit is 12. Trail End is not on its solo side.",
+    "5": "Add the Waterfall site to the five basic sites, then add one random advanced site, and build the trail from that deck.\nWaterfall gives 1 Sunshine and 1 Water, and the site says that action is only in 4+ player games.\nDeal two Year cards, keep one. A first game can deal one Year card each instead.\nToken limit is 12. Trail End is not on its solo side."
+  }
+},
 
 
 "parks-second-edition": {
@@ -2756,27 +2967,56 @@
   "weight": 1.94,
   "bggRank": 81,
   "bggRating": 7.66,
-      "players": "2–4",
-      "time": "45",
-      "year": "2018",
-      "bggId": "244521",
-      "quickStart": "- Give each player a pot board and starting bag.\n- Add starting chips: 1 (x1), 2 (x2), 4 (x4), pumpkins, and white chips as per setup.\n- Shuffle fortune teller cards and reveal one per round.\n- Set up ingredient books based on chosen set (A–D).",
-      "startingResources": "- Starter bag with 7 white chips + pumpkin + others per rules.\n- 0 rubies.\n- 0 rat tails in round 1.\n- Droplet at base starting space.",
-      "remindersText": "- Push-your-luck: draw chips until you stop or explode.\n- If you explode, you choose: points OR buy ingredients (not both).\n- Check for rat tails each round.\n- Resolve ingredients in the printed order.",
-      "playerCountSetup": "- No chips removed.\n- Fortune cards scale for all counts.\n- 2-player uses fewer rat tails typically.",
-      "turnStructure": "- Reveal fortune card.\n- Add rat tails.\n- Brew phase: draw chips.\n- Optional stop.\n- Explosion check.\n- Resolve ingredients.\n- Score & buy phase.\n- Move droplet/ruby gains.\n- Clean up.",
-      "commonMistakes": "- Incorrect white chip explosion threshold (7+!).\n- Buying ingredients before scoring.\n- Resolving ingredients out of order.\n- Miscounting rat tails.\n- Using the wrong ingredient book for the set.",
+  "players": "2–4",
+  "time": "45",
+  "year": "2018",
+  "bggId": "244521",
+  "quickStart": "Each player takes a pot with the side that has no test tubes facing up, a bag, a flask on the large trivet, and a rat stone on the small trivet. The droplet starts on 0.\nStarting chips in the bag: 4 white 1-chips, 2 white 2-chips, 1 white 3-chip, 1 orange 1-chip, and 1 green 1-chip.\nOrange and black books are used every game. Use the black-book page for your player count. For a first game use Set 1, the books with one bookmark: green, blue, and red now. Yellow comes out in turn 2 and purple in turn 3.\nThe flame starts on turn 1. The game is 9 turns.",
+  "startingResources": "Bag: 4 white 1-chips, 2 white 2-chips, 1 white 3-chip, 1 orange 1-chip, 1 green 1-chip.\nFlask full. Rat stone on the small trivet. Droplet on 0. No rubies yet.",
+  "remindersText": "- Push-your-luck: draw chips until you stop or explode.\n- If you explode, you choose: points OR buy ingredients (not both).\n- Check for rat tails each round.\n- Resolve ingredients in the printed order.",
+  "playerCountSetup": "The black ingredient book is the player-count change. White-chip explosion is the same at every count: the pot explodes only when white chips total more than 7.",
+  "turnStructure": "- Reveal fortune card.\n- Add rat tails.\n- Brew phase: draw chips.\n- Optional stop.\n- Explosion check.\n- Resolve ingredients.\n- Score & buy phase.\n- Move droplet/ruby gains.\n- Clean up.",
+  "commonMistakes": "Exploding on 7 white. The pot explodes only when the white chips total more than 7. Other colors do not count toward the explosion.\nUsing the flask on the chip that caused the explosion. The flask cannot put that chip back.\nAn exploded pot still places the last chip, but it does not roll the bonus die, and it must choose scoring points or shopping, not both.\nUsing the 2-player black book in a 3- or 4-player game.",
   "endGameScoring": "",
-  "rulesGlossary": [{
-  "term": "",
-  "desc": ""},{
-  "term": "",
-  "desc": ""}],
+  "rulesGlossary": [],
   "playerAids": [
-    { "label": "", "file": "" },
-    { "label": "", "file": "" }],
-"expansions": [{"name": "The Herb Witches", "bggId": "269259", "setup": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.", "rules": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.", "scoring": "One witch, used during Evaluation if you exploded, lets you take both the victory points and a chip purchase. In the base game an explosion makes you choose one or the other.\nIf you are on the highest-scoring space, you may also roll the bonus die.", "quickStart": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.", "reminders": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.", "rulebook": "the-quacks-of-quedlinburg--the-herb-witches"}, {"name": "The Alchemists", "bggId": "316597", "setup": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.", "rules": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.", "scoring": "The patient card's flask bonus is points, rat movement, or an action, as printed on that card.\nThe essence marker resets to 0 at the start of every round.", "quickStart": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.", "reminders": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.", "rulebook": "the-quacks-of-quedlinburg--the-alchemists"}]
+    {
+      "label": "",
+      "file": ""
     },
+    {
+      "label": "",
+      "file": ""
+    }
+  ],
+  "expansions": [
+    {
+      "name": "The Herb Witches",
+      "bggId": "269259",
+      "setup": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.",
+      "rules": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.",
+      "scoring": "One witch, used during Evaluation if you exploded, lets you take both the victory points and a chip purchase. In the base game an explosion makes you choose one or the other.\nIf you are on the highest-scoring space, you may also roll the bonus die.",
+      "quickStart": "You may use ingredient book sets 5 and 6.\nReplace the base pumpkin book with this expansion's pumpkin book and add the orange 6-chips.\nEach player takes 1 witch penny in each of the 3 colors, and puts an overflow bowl in their pot color under the spoon beside the pot.\nReveal 1 herb witch of each of the 3 types beside the score track.\nA 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.",
+      "reminders": "Locoweed is the new ingredient.\nEach herb witch can be used once per game. Pay the matching-color witch penny, and only during the phase printed on that witch.",
+      "rulebook": "the-quacks-of-quedlinburg--the-herb-witches"
+    },
+    {
+      "name": "The Alchemists",
+      "bggId": "316597",
+      "setup": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.",
+      "rules": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.",
+      "scoring": "The patient card's flask bonus is points, rat movement, or an action, as printed on that card.\nThe essence marker resets to 0 at the start of every round.",
+      "quickStart": "Add the essence markers, alchemist's flasks, and patient charts.\nSchmidt recommends combining The Alchemists with the base game.",
+      "reminders": "After Preparation, and before scoring, there is an Essence phase. It is simultaneous, whether or not you exploded.\nThe essence marker starts at 0 every round. Nothing carries forward.\nMove it 1 for each different non-white color in the cauldron, plus 1 if the white chips sum to exactly 7, plus 1 for each immediate neighbor whose cauldron exploded (at most 1 in a 2-player game).\nThe flask position then pays the bonus printed on the patient card.",
+      "rulebook": "the-quacks-of-quedlinburg--the-alchemists"
+    }
+  ],
+  "setupByPlayerCount": {
+    "2": "Use the black book page marked for a 2-player game.\nA black 1-chip costs 10 coins. In Evaluation Phase B, count black chips in the pot. The same number as your opponent: move the droplet 1 space forward. More than your opponent: move the droplet 1 space forward and take 1 ruby.",
+    "3": "Use the black book page for a 3- and 4-player game.\nA black 1-chip costs 10 coins. More black chips than the player on your left or the player on your right: move the droplet 1 space forward. More than both neighbors: move the droplet 1 space forward and take 1 ruby.",
+    "4": "Same black book page as 3 players.\nA black 1-chip costs 10 coins. More black chips than either neighbor: move the droplet 1. More than both neighbors: move the droplet 1 and take 1 ruby."
+  }
+},
 
 
 "raccoon-tycoon": {
@@ -2928,24 +3168,114 @@
   "weight": 3.84,
   "bggRank": 34,
   "bggRating": 7.88,
-              "players": "2–4", 
-              "time": "60–90", 
-              "year": "2018", 
-              "bggId": "237182",
-              "youtube": "",
-              "quickStart": "",
-              "startingResources": "",
-              "remindersText": "",
-              "playerCountSetup": "",
-              "turnStructure": "",
-              "commonMistakes": "",
-                "endGameScoring": "",
-                "rulesGlossary": [{
-                "term": "",
-                "desc": ""},{
-                "term": "",
-                "desc": ""}],
-  "expansions": []
+  "players": "2–4",
+  "time": "60–90",
+  "year": "2018",
+  "bggId": "237182",
+  "youtube": "",
+  "quickStart": "Standard Setup from the Law of Root, October 13, 2025. New players use this. Experienced groups who want variety use Advanced Setup. Five or more corner-start factions must use Advanced Setup.\nAssign factions and the starting player at random. Each player takes the board and the pieces listed on its back.\nScore markers on 0.\nWith two players, remove all four dominance cards. Shuffle. Each player draws 3 cards.\nPut a ruin on each R slot (four).\nItem supply, on the printed spaces: 2 M, 2 B, 1 C, 1 H, 2 S, 2 T, 2 X.\nOverview cards as wanted, and the two battle dice.\nThen each faction sets up in order A, B, C.",
+  "startingResources": "Faction board and the pieces on its back.\n3 cards in Standard Setup.\nScore marker on 0.",
+  "remindersText": "Rule: more warriors plus buildings in the clearing than each other player. Tokens and pawns do not count. A tie means nobody rules.\nMove: any number of your warriors and pawns from one clearing to an adjacent clearing. You must rule the origin, the destination, or both.\nBattle: the defender may play one matching ambush. The attacker may foil it with a matching ambush. Otherwise the ambush deals two hits immediately. Then roll both dice. The attacker uses the higher roll and the defender the lower. Rolled hits cannot exceed your warriors in the clearing. Extra hits are not capped that way. If the defender has no warriors, the attacker deals one extra hit. The side taking hits removes all of its warriors there before any of its buildings or tokens. The attacker scores 1 point per enemy building or token removed.\nCraft: a card beats the Law. The Learning to Play guide loses to the Law. A faction or hireling rule beats a general rule when both cannot be followed.\nBird cards are wild for a suit you choose to spend. If you are forced to give a non-bird suit, you must treat birds as that suit. You cannot spend a non-bird card when a bird card is required.",
+  "playerCountSetup": "Use the buttons. The totals are the Law's viable reach sums.",
+  "turnStructure": "Turns go clockwise. Each turn is Birdsong, then Daylight, then Evening.\nAnything at the start of a phase happens before the rest of that phase. Anything at the end happens after the rest, before the next phase.\nYou cannot interrupt an action unless a card says so.\nThe first player to 30 victory points wins immediately.",
+  "commonMistakes": "Counting tokens or pawns toward rule.\nMoving without ruling the origin or the destination.\nRemoving a building while that side still has warriors in the clearing.\nUsing Advanced Setup's draw of 5, keep 3, during a Standard Setup game. Standard Setup draws 3.\nPlaying the Knaves and the Vagabond in the same game. The Law forbids that.",
+  "endGameScoring": "First to 30 victory points wins immediately, including in the middle of a turn.\nIf several players hit 30 at the same time, the tied player closest clockwise to the current player wins. That includes the current player.\nDominance, during Daylight, if you have at least 10 points: play it, take your marker off the score track, and stop scoring. Mouse, rabbit, or fox: win at the start of your Birdsong if you rule three clearings of that suit. Bird: win at the start of your Birdsong if you rule two opposite corners.\nAnyone scores 1 point for removing an enemy building or token, and the points listed when they craft an item.",
+  "rulesGlossary": [
+    {
+      "term": "Rule",
+      "desc": "More warriors and buildings than every other player in that clearing. Tokens and pawns do not count. A tie is no one's rule."
+    },
+    {
+      "term": "Reach",
+      "desc": "Add the factions' reach. Standard viable totals are 17, 18, 21, 25, and 28 for 2 through 6 players. Any mix of 17 or more is the adventurous option."
+    },
+    {
+      "term": "Dominance",
+      "desc": "An alternate win. You stop scoring. Check it at the start of your Birdsong."
+    }
+  ],
+  "expansions": [
+    {
+      "name": "Riverfolk Expansion",
+      "setup": "Lizard Cult: 25 warriors. Place 4 warriors and 1 garden of the clearing's suit in a corner that is not another player's start, diagonally opposite if you can. Then 1 warrior in each adjacent clearing. Outcast marker on any suit. The other 14 gardens go on the gardens tracks, right to left.\nRiverfolk Company: 15 warriors. Place 4 in any clearings that touch the river. Put 9 trade posts on the tracks. Put 3 warriors in Payments. Put 1 service marker on any space of each Services track.",
+      "rules": "Lizards reveal cards in Daylight for rituals, one ritual per card. Build places a matching garden in a matching clearing you rule. The Score ritual scores the points above the rightmost empty garden of that suit, and it cannot be used for a suit with no garden on the map. Gardens rule their clearings.\nRiverfolk Birdsong: if Payments is empty, place 2 warriors there. If any trade post is on the map, score 1 victory point per 2 funds. Do not count warriors in Payments or Committed. Then move every warrior on the faction board into Funds.\nA service is bought at the start of another player's Birdsong. They buy one service, plus one per clearing where they have pieces and you have a trade post. The price is warriors into Payments. The Vagabond pays by exhausting items, and you place one Riverfolk warrior in Payments per item.\nTwo Vagabonds share the three face-up quests. Do not deal extra quest cards.",
+      "scoring": "Riverfolk score 1 victory point per 2 funds in Birdsong when at least one trade post is on the map. Payments and Committed do not score. They also score the points uncovered when they place a trade post.\nLizards score during the Score ritual, not as a single end-game total. The points are printed above the empty garden space.",
+      "quickStart": "Lizard Cult: 25 warriors. Place 4 warriors and 1 garden of the clearing's suit in a corner that is not another player's start, diagonally opposite if you can. Then 1 warrior in each adjacent clearing. Outcast marker on any suit. The other 14 gardens go on the gardens tracks, right to left.\nRiverfolk Company: 15 warriors. Place 4 in any clearings that touch the river. Put 9 trade posts on the tracks. Put 3 warriors in Payments. Put 1 service marker on any space of each Services track.",
+      "reminders": "Lizards reveal cards in Daylight for rituals, one ritual per card. Build places a matching garden in a matching clearing you rule. The Score ritual scores the points above the rightmost empty garden of that suit, and it cannot be used for a suit with no garden on the map. Gardens rule their clearings.\nRiverfolk Birdsong: if Payments is empty, place 2 warriors there. If any trade post is on the map, score 1 victory point per 2 funds. Do not count warriors in Payments or Committed. Then move every warrior on the faction board into Funds.\nA service is bought at the start of another player's Birdsong. They buy one service, plus one per clearing where they have pieces and you have a trade post. The price is warriors into Payments. The Vagabond pays by exhausting items, and you place one Riverfolk warrior in Payments per item.\nTwo Vagabonds share the three face-up quests. Do not deal extra quest cards."
+    },
+    {
+      "name": "Underworld Expansion",
+      "setup": "Underground Duchy: 20 warriors and 3 tunnels. Place the Burrow board. Place 2 warriors and 1 tunnel in a free corner, diagonally opposite if you can. Place 2 warriors in each adjacent clearing except the Burrow. Put 3 citadels and 3 markets on the building tracks, 9 ministers face up in Unswayed, and 9 crowns on the victory-point spaces.\nCorvid Conspiracy: 15 warriors and 8 plots face down. Place 1 warrior in any clearing of each suit, 3 warriors total.",
+      "rules": "The Burrow is adjacent to every tunnel clearing. The Duchy always rules it. Other players cannot place pieces there or move in.\nDuchy Daylight: up to 2 actions among build, recruit, move, battle, and dig, then each swayed minister once.\nCorvids: only one plot in a clearing. In Birdsong, flip plots in clearings where you have warriors. Score 1 point per face-up plot on the map, including the one you just flipped, then resolve a bomb or extortion. You may recruit once by spending a card.\nDaylight is up to 3 actions: move, plot, battle, or trick. Plot removes 1 warrior, plus 1 more per plot you already placed this turn, from a clearing with no plot, and places a face-down plot. Trick swaps two plots that face the same way.\nExposure: an enemy with pieces there may show a matching card to guess the plot. Wrong, they give you the card. Right, they remove the plot and score 1 point. A raid does not place warriors when it is removed by Exposure.",
+      "scoring": "The Duchy scores the victory points uncovered when they sway a minister.\nCorvids score 1 victory point per face-up plot on the map each time they flip a plot. A correct Exposure guess scores 1 point for the player who removed the plot.",
+      "quickStart": "Underground Duchy: 20 warriors and 3 tunnels. Place the Burrow board. Place 2 warriors and 1 tunnel in a free corner, diagonally opposite if you can. Place 2 warriors in each adjacent clearing except the Burrow. Put 3 citadels and 3 markets on the building tracks, 9 ministers face up in Unswayed, and 9 crowns on the victory-point spaces.\nCorvid Conspiracy: 15 warriors and 8 plots face down. Place 1 warrior in any clearing of each suit, 3 warriors total.",
+      "reminders": "The Burrow is adjacent to every tunnel clearing. The Duchy always rules it. Other players cannot place pieces there or move in.\nDuchy Daylight: up to 2 actions among build, recruit, move, battle, and dig, then each swayed minister once.\nCorvids: only one plot in a clearing. In Birdsong, flip plots in clearings where you have warriors. Score 1 point per face-up plot on the map, including the one you just flipped, then resolve a bomb or extortion. You may recruit once by spending a card.\nDaylight is up to 3 actions: move, plot, battle, or trick. Plot removes 1 warrior, plus 1 more per plot you already placed this turn, from a clearing with no plot, and places a face-down plot. Trick swaps two plots that face the same way.\nExposure: an enemy with pieces there may show a matching card to guess the plot. Wrong, they give you the card. Right, they remove the plot and score 1 point. A raid does not place warriors when it is removed by Exposure."
+    },
+    {
+      "name": "Marauder Expansion",
+      "setup": "Lord of the Hundreds: 20 warriors, the warlord, and 6 strongholds. Place the warlord, 4 warriors, and 1 stronghold in a free corner, diagonally opposite if you can. If the ruin items are not already placed, put the four R items at random under the ruins. Start on the Stubborn mood.\nKeepers in Iron: shuffle the 12 relics face down and place one at random in each forest. Then place the remaining relics at random, as evenly as possible, in forests that do not touch a clearing with your warriors. 15 warriors: 4 in a free corner, diagonally opposite if you can, and 4 in an adjacent clearing on the map edge. Tuck one Faithful Retainer into each Retinue slot. Put the 3 waystations on their spaces.",
+      "rules": "The warlord is a warrior. It cannot be removed outside battle, moved outside the Hundreds' turn, or placed except in setup and Anoint.\nHundreds Evening: Incite, then Oppress, then draw. Oppress scores clearings you rule that contain a Hundreds piece and no enemy pieces.\nWhen the Hundreds craft an item, they may take it and score none of the listed points, or remove it and score the listed points.\nKeepers return relics for the points on the relic. Use the token. This note does not restate the relic values.",
+      "scoring": "Hundreds Oppress, in Evening: 1 point for 1 or 2 clearings, 2 points for 3 or 4, 3 points for 5, and 4 points for 6 or more.\nCrafting an item scores the card's listed points only if the Hundreds remove the item instead of keeping it.",
+      "quickStart": "Lord of the Hundreds: 20 warriors, the warlord, and 6 strongholds. Place the warlord, 4 warriors, and 1 stronghold in a free corner, diagonally opposite if you can. If the ruin items are not already placed, put the four R items at random under the ruins. Start on the Stubborn mood.\nKeepers in Iron: shuffle the 12 relics face down and place one at random in each forest. Then place the remaining relics at random, as evenly as possible, in forests that do not touch a clearing with your warriors. 15 warriors: 4 in a free corner, diagonally opposite if you can, and 4 in an adjacent clearing on the map edge. Tuck one Faithful Retainer into each Retinue slot. Put the 3 waystations on their spaces.",
+      "reminders": "The warlord is a warrior. It cannot be removed outside battle, moved outside the Hundreds' turn, or placed except in setup and Anoint.\nHundreds Evening: Incite, then Oppress, then draw. Oppress scores clearings you rule that contain a Hundreds piece and no enemy pieces.\nWhen the Hundreds craft an item, they may take it and score none of the listed points, or remove it and score the listed points.\nKeepers return relics for the points on the relic. Use the token. This note does not restate the relic values."
+    },
+    {
+      "name": "Homeland Expansion",
+      "setup": "Knaves of the Deepwood cannot be in the same game as the Vagabond. Reach 4.\nKnaves setup: 10 Skunk warriors. Choose 3 Captain cards and take those Captain warriors. Place 1 Captain and 1 Skunk in each of three different forests. Put the 6 items shown on the chosen Captain cards face up in the Stash. Fill each Acclaim slot with 2 acclaim.\nLilypad Diaspora is reach 7 and Twilight Council is reach 4. Set those two up from their faction boards, Law 16.3 and 17.3. Their later setup steps are not copied here.",
+      "rules": "Knaves Evening: score 1 victory point for every 2 Prisoners, and 1 victory point for every 2 acclaim on the map.\nCaptains and Skunks can move through forests and ignore rule. A Captain is hit in battle only after no Skunks remain in that clearing.",
+      "scoring": "Knaves score in Evening: 1 point per 2 Prisoners, and 1 point per 2 acclaim tokens on the map.",
+      "quickStart": "Knaves of the Deepwood cannot be in the same game as the Vagabond. Reach 4.\nKnaves setup: 10 Skunk warriors. Choose 3 Captain cards and take those Captain warriors. Place 1 Captain and 1 Skunk in each of three different forests. Put the 6 items shown on the chosen Captain cards face up in the Stash. Fill each Acclaim slot with 2 acclaim.\nLilypad Diaspora is reach 7 and Twilight Council is reach 4. Set those two up from their faction boards, Law 16.3 and 17.3. Their later setup steps are not copied here.",
+      "reminders": "Knaves Evening: score 1 victory point for every 2 Prisoners, and 1 victory point for every 2 acclaim on the map.\nCaptains and Skunks can move through forests and ignore rule. A Captain is hit in battle only after no Skunks remain in that clearing."
+    },
+    {
+      "name": "Exiles and Partisans Deck",
+      "setup": "Advanced Setup only. The group may replace the entire shared deck with the Exiles and Partisans deck, or with the Squires and Disciples deck.\nDo not mix either deck with the base deck or with each other.",
+      "rules": "Card text beats the Law when they conflict. The chosen deck is the whole shared deck for that game.",
+      "scoring": "No extra end-game scoring. Cards score what they print, including crafted items.",
+      "quickStart": "Advanced Setup only. The group may replace the entire shared deck with the Exiles and Partisans deck, or with the Squires and Disciples deck.\nDo not mix either deck with the base deck or with each other.",
+      "reminders": "Card text beats the Law when they conflict. The chosen deck is the whole shared deck for that game."
+    },
+    {
+      "name": "Squires and Disciples Deck",
+      "setup": "Advanced Setup only. The group may replace the entire shared deck with the Exiles and Partisans deck, or with the Squires and Disciples deck.\nDo not mix either deck with the base deck or with each other.",
+      "rules": "Card text beats the Law when they conflict. The chosen deck is the whole shared deck for that game.",
+      "scoring": "No extra end-game scoring. Cards score what they print, including crafted items.",
+      "quickStart": "Advanced Setup only. The group may replace the entire shared deck with the Exiles and Partisans deck, or with the Squires and Disciples deck.\nDo not mix either deck with the base deck or with each other.",
+      "reminders": "Card text beats the Law when they conflict. The chosen deck is the whole shared deck for that game."
+    },
+    {
+      "name": "Landmarks Pack",
+      "setup": "Optional, in Advanced Setup. Choose 1 or 2 landmarks. Remove any landmark cards you do not want, shuffle the rest, and deal the chosen number.\nThe last player in turn order sets up one landmark as its card says. If you used two, the second-to-last player sets up the other.",
+      "rules": "A landmark cannot be battled, moved, covered, or removed unless that landmark says so.\nLandmarks are not owned and are not enemy pieces. The effect is on the card.",
+      "scoring": "A landmark scores only what its own card says.",
+      "quickStart": "Optional, in Advanced Setup. Choose 1 or 2 landmarks. Remove any landmark cards you do not want, shuffle the rest, and deal the chosen number.\nThe last player in turn order sets up one landmark as its card says. If you used two, the second-to-last player sets up the other.",
+      "reminders": "A landmark cannot be battled, moved, covered, or removed unless that landmark says so.\nLandmarks are not owned and are not enemy pieces. The effect is on the card."
+    },
+    {
+      "name": "Hirelings",
+      "setup": "Use exactly three hirelings. Shuffle the hireling cards, deal three, and return the rest.\nDemote: at 3 players flip 1 random hireling to the D side. At 4 players flip 2. At 5 or more, flip all three.\nStarting with the last player and going counterclockwise, each player sets up one hireling as its card says.\nPut the hireling markers on 4, 8, and 12 on the score track.\nA faction cannot be played if its matching hireling is in the game. The Exile or Brigand hireling removes both the Vagabond and the Knaves.",
+      "rules": "The controller treats hireling pieces as their own only for rule. Hireling pieces are not that player's faction pieces.\nA hireling move or battle uses only the hireling's pieces. The controller does not score when the hireling removes an enemy piece. Removing a hireling building or token can still score.\nWhat each hireling does is on its card. Those pack abilities are not copied here.",
+      "scoring": "Hireling markers sit on 4, 8, and 12. Entering that space is how a player takes a hireling from the supply. The hireling itself does not add an end-game scoring category.",
+      "quickStart": "Use exactly three hirelings. Shuffle the hireling cards, deal three, and return the rest.\nDemote: at 3 players flip 1 random hireling to the D side. At 4 players flip 2. At 5 or more, flip all three.\nStarting with the last player and going counterclockwise, each player sets up one hireling as its card says.\nPut the hireling markers on 4, 8, and 12 on the score track.\nA faction cannot be played if its matching hireling is in the game. The Exile or Brigand hireling removes both the Vagabond and the Knaves.",
+      "reminders": "The controller treats hireling pieces as their own only for rule. Hireling pieces are not that player's faction pieces.\nA hireling move or battle uses only the hireling's pieces. The controller does not score when the hireling removes an enemy piece. Removing a hireling building or token can still score.\nWhat each hireling does is on its card. Those pack abilities are not copied here."
+    },
+    {
+      "name": "Vagabond Pack",
+      "setup": "The Vagabond Pack adds characters. Take the character card. Its starting items and special action are printed on the card and in Law appendix V.",
+      "rules": "Do not invent a second character's items from memory. Read the card. Two Vagabonds still share the three face-up quests and do not get extra quest cards.",
+      "scoring": "Relationship, quest, explore, and infamy scoring stay the Vagabond rules on the character's faction board. This chip does not add a separate end-game total.",
+      "quickStart": "The Vagabond Pack adds characters. Take the character card. Its starting items and special action are printed on the card and in Law appendix V.",
+      "reminders": "Do not invent a second character's items from memory. Read the card. Two Vagabonds still share the three face-up quests and do not get extra quest cards."
+    }
+  ],
+  "rulebook": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+  "setupByPlayerCount": {
+    "2": "Remove all four dominance cards, then each player draws 3. Reach of the two factions must total 17 or more. Marquise 10, Eyrie 7, Vagabond 5 for the first Vagabond and 2 for a second, Riverfolk 5, Alliance 3, Lizards 2. Hundreds 9, Keepers 8, Duchy 8, Lilypad 7, Knaves 4, Twilight Council 4, Corvids 3.",
+    "3": "Do not remove dominance cards. Each player draws 3. Reach total 18 or more.",
+    "4": "Each player draws 3. Reach total 21 or more.",
+    "5": "Each player draws 3. Reach total 25 or more. Five or more corner-start factions must use Advanced Setup.",
+    "6": "Each player draws 3. Reach total 28 or more. Corner-heavy mixes must use Advanced Setup."
+  }
 }, 
   
 "rummikub": {
@@ -3735,17 +4065,54 @@
   "year": "2020",
   "bggId": "316377",
   "youtube": "",
-  "quickStart": "",
-  "startingResources": "",
-  "remindersText": "",
-  "playerCountSetup": "",
-  "turnStructure": "",
-  "commonMistakes": "",
-  "endGameScoring": "",
-  "expansions": [],
+  "quickStart": "Each player takes a random Wonder board and chooses a side. First games should use the Day side. Later games can mix Day and Night, or the group can choose boards.\nEach player starts with 3 coins worth 1. Leftover coins and all Military Conflict tokens go in the center.\nSplit the Age cards into Ages I, II, and III. In each Age, keep cards whose minimum player count is less than or equal to the number of players.\nIn Age III, take the purple cards, keep a number equal to the players + 2, and shuffle those back in. A 5-player game keeps 7 purple cards.\nShuffle each Age deck. Deal 7 cards at the start of the Age.",
+  "startingResources": "Wonder board and its starting resource.\n3 coins.\nA hand of 7 cards at the start of each Age.",
+  "remindersText": "Resources used to build are never lost. Each resource symbol in your city can be used once per turn, every turn.\nYou produce one resource per symbol on your Wonder, brown cards, gray cards, yellow cards, and some Wonder stages.\nYou may buy a neighbor's starting resource, brown resource, or gray resource for 2 coins. You cannot buy their yellow cards or Wonder stages. Spend the coins at the start of the turn. Coins you receive this turn cannot be spent this turn. You cannot buy from a building they constructed this same turn. A neighbor cannot refuse. Both neighbors may buy the same resource.\nYou can never build two cards with the same name. Wonder stages are built left to right and are optional. Pay the stage cost, not the card cost, and tuck the card face down under the stage.\nFrom Age II, a matching chain symbol builds the card free. You may still pay the cost instead.",
+  "playerCountSetup": "Second Edition in this booklet is 3 to 7 players. There is no Free City variant in these rules.",
+  "turnStructure": "Three Ages, 6 turns each. Deal 7 cards.\nChoose a card, then build it, build the next Wonder stage, or sell it for 3 coins. Then pass the hand.\nPass left in Ages I and III, and right in Age II. The direction is also printed on the card backs.\nOn the last turn, play 1 of the 2 cards you receive and discard the other with no coins.\nThen resolve military conflicts.",
+  "commonMistakes": "Resources are not spent. They stay for the whole game.\nThe discarded card on the sixth turn does not give 3 coins.\nA military tie gives nobody a token.\nIdentical science symbols and sets of 3 different symbols both score.",
+  "endGameScoring": "After Age III military, most points wins. Tie: most Treasure. If that is also tied, the tied players share the win.\nWonder: points on built stages.\nTreasure: 1 point per full set of 3 coins.\nMilitary: add Defeat and Victory tokens. The total can be negative. Victories are +1, +3, and +5 by Age. A defeat is -1.\nBlue cards: the points printed on them.\nYellow and purple cards: the points on the cards.\nGreen cards: identical symbols score their count times itself (1, 4, 9, 16, 25, 36). Each set of 3 different symbols scores 7. Add both.",
+  "expansions": [
+    {
+      "name": "Edifice",
+      "setup": "Second Edition setup, plus:\nPut the Debt tokens in the center. Add the extra military tokens and the coins worth 6 to the reserves.\nShuffle the Edifice cards into Ages I, II, and III. Put 1 random Edifice per Age in the center, Project side up. Return the rest.\nFor each Age, take the number of Participation pawns printed on the player-count table in the Edifice rules and put them on that Age's card. This note does not restate that table, because it is a graphic in the booklet.\nUr is used only with this expansion. Carthage can be used with the base game or any expansion.",
+      "rules": "Once per Age, when you build a Wonder stage, you may also pay the Edifice participation cost and take a Participation pawn, if any remain on that Age's card. Pay the Wonder stage and the participation cost together.\nIf several players take the last pawns on the same turn and there are not enough, take extra pawns from the box so each of those players gets one.\nWhen the last pawn is taken, flip the card to Constructed. Everyone with a pawn for it gains the Reward immediately.\nIf any pawn is still on the card at the end of the Age, before military, the project fails. Nobody gains the Reward. A player with no pawn for that Age suffers the Penalty. If you cannot pay the whole Penalty, you lose nothing and instead take that Age's Debt token: -2, -3, or -5.\nA player who has a pawn does not suffer the Penalty.\nWith Armada, a Wonder stage may be a naval build or Edifice participation, not both on the same turn.\nVictory conditions stay the base game.",
+      "scoring": "Score Second Edition as usual, then add the points from Participation pawns and Debt tokens. That line can be negative.\nDebt tokens are worth -2 in Age I, -3 in Age II, and -5 in Age III.",
+      "quickStart": "Second Edition setup, plus:\nPut the Debt tokens in the center. Add the extra military tokens and the coins worth 6 to the reserves.\nShuffle the Edifice cards into Ages I, II, and III. Put 1 random Edifice per Age in the center, Project side up. Return the rest.\nFor each Age, take the number of Participation pawns printed on the player-count table in the Edifice rules and put them on that Age's card. This note does not restate that table, because it is a graphic in the booklet.\nUr is used only with this expansion. Carthage can be used with the base game or any expansion.",
+      "reminders": "Once per Age, when you build a Wonder stage, you may also pay the Edifice participation cost and take a Participation pawn, if any remain on that Age's card. Pay the Wonder stage and the participation cost together.\nIf several players take the last pawns on the same turn and there are not enough, take extra pawns from the box so each of those players gets one.\nWhen the last pawn is taken, flip the card to Constructed. Everyone with a pawn for it gains the Reward immediately.\nIf any pawn is still on the card at the end of the Age, before military, the project fails. Nobody gains the Reward. A player with no pawn for that Age suffers the Penalty. If you cannot pay the whole Penalty, you lose nothing and instead take that Age's Debt token: -2, -3, or -5.\nA player who has a pawn does not suffer the Penalty.\nWith Armada, a Wonder stage may be a naval build or Edifice participation, not both on the same turn.\nVictory conditions stay the base game.",
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-edifice/7wondersedifice-rules-1674052917i7Fhd.pdf"
+    },
+    {
+      "name": "Armada",
+      "setup": "Follow base setup, then:\nSplit the Armada Age cards into Ages I, II, and III and shuffle each. At 3 players, remove the 5 Armada cards marked 4+. From each Age, keep a number of Armada cards equal to the player count and shuffle them into that Age's base deck. The rest are out.\nSeparate Island cards by level, shuffle each deck, and put them face down in the center.\nEach player puts a Shipyard to the right of their Wonder and one fleet figure of each color on that color's start space.\nAdd the naval tokens, boarding tokens, extra military tokens, and the 6-value coins to the reserves.\nSiracusa is used only with this expansion.\nOn the Second Edition page, play this on top of the 2020 base rules. The booklet used here is Repos Armada EN02. A separate Second Edition Armada booklet was not used.",
+      "rules": "Deal 8 cards each Age, so there is one extra turn.\nWhen you build a red, yellow, blue, or green card, or a Wonder stage, you may also pay that fleet's naval cost and move that fleet forward one space. Pay the card or Wonder and the naval cost at the same time. Apply the card or Wonder before the naval effect. A free chain build can still pay for a naval move. A card built free from the discard never allows a naval move.\nThe Wonder symbol on your Shipyard says which fleet a Wonder stage can advance.\nRed is naval strength, yellow is commercial level and taxes, blue is end-game points, and green explores an Island of the level on that space.\nWhen you sell a card, either take 3 coins or advance the yellow fleet one space without paying its naval cost.\nA boarding card gives your Boarding token to the named player. At the end of the Age you also fight that player with the normal military rules, then discard the token.\nTurn order when effects collide: pay costs, advance fleets, apply Age-card effects except losing coins, apply Shipyard effects except losing coins, build from the discard with no naval move, then lose coins.\nOptional teams of 2 in a 4- or 6-player game. Sit next to your teammate. You do not fight your teammate, and a military result gives double the tokens. Naval conflicts stay individual. Each purple card is capped at 10 points. Add the two scores. Tie: most combined coins, then a shared win.\nThese notes are the Repos Armada EN02 booklet. Victory conditions stay the base game.",
+      "scoring": "After each Age's military conflicts, compare naval strength with every player. Count naval symbols on your cards, Shipyard, Islands, and Wonder.\nLast place takes one Naval Defeat token: -1 in Age I, -2 in Age II, -3 in Age III.\nFirst place takes one Naval Victory token: 3, 5, or 7 for Ages I, II, and III.\nSecond place takes one Naval Victory token: 1, 3, or 5.\nA tie for last: each tied player takes a Defeat token for that Age. A tie for first: each tied player takes the second-place Victory token, and nobody takes a second-place token. A tie for second takes nothing. If everyone is tied, nobody takes a token. Some players can receive no token.\nThe blue fleet also scores the points printed on its space. Island cards score what they print. Science can go past the base table: identical symbols score their count times itself.",
+      "quickStart": "Follow base setup, then:\nSplit the Armada Age cards into Ages I, II, and III and shuffle each. At 3 players, remove the 5 Armada cards marked 4+. From each Age, keep a number of Armada cards equal to the player count and shuffle them into that Age's base deck. The rest are out.\nSeparate Island cards by level, shuffle each deck, and put them face down in the center.\nEach player puts a Shipyard to the right of their Wonder and one fleet figure of each color on that color's start space.\nAdd the naval tokens, boarding tokens, extra military tokens, and the 6-value coins to the reserves.\nSiracusa is used only with this expansion.\nOn the Second Edition page, play this on top of the 2020 base rules. The booklet used here is Repos Armada EN02. A separate Second Edition Armada booklet was not used.",
+      "reminders": "Deal 8 cards each Age, so there is one extra turn.\nWhen you build a red, yellow, blue, or green card, or a Wonder stage, you may also pay that fleet's naval cost and move that fleet forward one space. Pay the card or Wonder and the naval cost at the same time. Apply the card or Wonder before the naval effect. A free chain build can still pay for a naval move. A card built free from the discard never allows a naval move.\nThe Wonder symbol on your Shipyard says which fleet a Wonder stage can advance.\nRed is naval strength, yellow is commercial level and taxes, blue is end-game points, and green explores an Island of the level on that space.\nWhen you sell a card, either take 3 coins or advance the yellow fleet one space without paying its naval cost.\nA boarding card gives your Boarding token to the named player. At the end of the Age you also fight that player with the normal military rules, then discard the token.\nTurn order when effects collide: pay costs, advance fleets, apply Age-card effects except losing coins, apply Shipyard effects except losing coins, build from the discard with no naval move, then lose coins.\nOptional teams of 2 in a 4- or 6-player game. Sit next to your teammate. You do not fight your teammate, and a military result gives double the tokens. Naval conflicts stay individual. Each purple card is capped at 10 points. Add the two scores. Tie: most combined coins, then a shared win.\nThese notes are the Repos Armada EN02 booklet. Victory conditions stay the base game.",
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-armada/en/7ar-en02-rules-1598904236sa0W2.pdf"
+    }
+  ],
   "bggRating": 7.37,
   "bggRank": 192,
-  "weight": 2.27
+  "weight": 2.27,
+  "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders/en/sev-en02-rules-1716388903zBEZx.pdf",
+  "setupByPlayerCount": {
+    "3": "Keep only 3+ cards in each Age. Keep 5 random purple guilds (players + 2).",
+    "4": "Keep 3+ and 4+ cards. Keep 6 random guilds.",
+    "5": "Keep 3+, 4+, and 5+ cards. Keep 7 random guilds.",
+    "6": "Keep 3+ through 6+ cards. Keep 8 random guilds.",
+    "7": "Keep every Age card. Keep 9 random guilds."
+  },
+  "rulesGlossary": [
+    {
+      "term": "Day and Night",
+      "desc": "Each Wonder has two faces. The 2020 rules recommend the Day side for first games."
+    },
+    {
+      "term": "Treasure",
+      "desc": "Your coins. At the end, 1 point per 3 coins, and Treasure breaks a points tie."
+    }
+  ]
 },
 "7-wonders-dice": {
   "cover": "covers/7-wonders-dice.webp",
@@ -4037,17 +4404,38 @@
   "year": "2019",
   "bggId": "284083",
   "youtube": "",
-  "quickStart": "",
-  "startingResources": "",
-  "remindersText": "",
-  "playerCountSetup": "",
-  "turnStructure": "",
-  "commonMistakes": "",
-  "endGameScoring": "",
+  "quickStart": "A cooperative trick-taking game of 50 missions. You win or lose together. Missions are in the logbook and can be played in order or picked freely.\nBefore a mission: shuffle the 40 large cards and deal them out evenly. At 3 players one person has one extra card, and that card stays unplayed after the last trick.\nEach player puts a radio token green side up and keeps a reminder card. The distress token starts face down.\nShuffle the 36 task cards. For a task mission, reveal the number of tasks the mission shows. Whoever has the rocket 4 is the commander and chooses a task first. Then everyone else takes tasks clockwise until they are gone. A player can have several, or none.\nThe commander leads the first trick.",
+  "startingResources": "An even share of the 40 cards: 36 color cards, values 1 to 9 in four colors, and 4 rockets, values 1 to 4.\nOne radio communication token, green side up.",
+  "remindersText": "Do not talk about the cards in your hand. If you know it only because of your own cards, you cannot say it.\nEach player may use their radio token once per mission attempt, after tasks are dealt, and only before a trick, never during one. Fail the mission and you may use it again on the next attempt.\nCommander distribution, when the mission shows that symbol: the commander reveals tasks one at a time and each player answers only yes or no. The commander assigns the task and may take it. Tasks must end up even: nobody may have two more tasks than someone else.",
+  "playerCountSetup": "Three, four, and five deal the whole deck. Two players use the variant. Five players add one handover rule from mission 25 on.",
+  "turnStructure": "The leader plays a card. Everyone else plays one card clockwise.\nYou must follow the suit led, including rockets if a rocket was led. If you cannot follow, play anything.\nRockets are trump. In a color trick you may play a rocket only when you cannot follow suit. The highest rocket wins if any were played. Otherwise the highest card of the led suit wins. You do not have to win a trick when you can.\nThe winner of the trick leads the next. Won tricks go face down. You may look only at the trick just won.\nA task is completed when the player who has that task card wins the matching card in a trick.",
+  "commonMistakes": "Talking about what you hold, or signaling during a trick.\nUsing the radio token after a card has been played to the trick.\nForgetting that a rocket wins even when it is the 1, and that a color card off-suit cannot win.\nAt 3 players, playing the last leftover card. It stays unplayed.",
+  "endGameScoring": "There is no points total. The mission is won only if every task is completed as that mission requires, and lost together otherwise.\nLog the attempt. A failed attempt can be tried again.",
   "expansions": [],
   "bggRating": 7.61,
   "bggRank": 97,
-  "weight": 1.97
+  "weight": 1.97,
+  "rulebook": "https://thamesandkosmos.com/manuals/full/691868_Crew_Manual.pdf",
+  "setupByPlayerCount": {
+    "2": "The book prefers 3 or more, and still gives this variant.\nSet the 4 rockets aside. With the other 36 cards, make a row of 7 face down, then a row of 7 face up on top of them.\nShuffle the 4 rockets back into the remaining cards and deal those evenly, 13 each.\nEach player still gets a radio token. Distress starts face down. The task deck is ready.",
+    "3": "Deal the 40 cards as evenly as you can. One player has one extra card. After the last trick, that leftover card is not played.",
+    "4": "Deal the 40 cards evenly. No handover rule.",
+    "5": "Deal evenly. The mission is harder, especially later.\nFrom mission 25 on, missions with a gold frame add one rule: after cards and tasks are dealt, and before the first trick, the crew may move one task card from one player to another. You decide together without talking about your cards. You do not log an extra attempt for using it. The book also allows this rule in missions 27 and 37."
+  },
+  "rulesGlossary": [
+    {
+      "term": "Trump",
+      "desc": "The four rocket cards. They beat every color card. Among rockets, the higher value wins."
+    },
+    {
+      "term": "Commander",
+      "desc": "Whoever was dealt the rocket 4. They pick the first task and lead the first trick."
+    },
+    {
+      "term": "Radio token",
+      "desc": "One communication per player per attempt, before a trick and never during it."
+    }
+  ]
 },
 "cryptid": {
   "cover": "covers/cryptid.webp",
@@ -5220,11 +5608,18 @@
 
   function renderList() {
     appEl.innerHTML =
-      '<input id="search" placeholder="Search your collection..." aria-label="Search games">' +
+      '<div class="search-bar">' +
+        '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
+        '<button type="button" id="search-clear" hidden>Clear</button>' +
+      "</div>" +
+      '<p id="search-count" class="search-count"></p>' +
       '<section id="game-grid" class="grid"></section>';
 
     var grid = document.getElementById("game-grid");
     var search = document.getElementById("search");
+    var clearBtn = document.getElementById("search-clear");
+    var countEl = document.getElementById("search-count");
+    var total = Object.keys(DATA).length;
 
     function updateGrid(filter) {
       filter = (filter || "").toLowerCase();
@@ -5236,7 +5631,17 @@
         .sort(function(a, b) {
           return a.name.localeCompare(b.name);
         });
-      grid.innerHTML = games.map(listRow).join("");
+      if (!games.length) {
+        grid.innerHTML = '<p class="empty-note">No games match that search.</p>';
+      } else {
+        grid.innerHTML = games.map(listRow).join("");
+      }
+      if (countEl) {
+        countEl.textContent = filter
+          ? (games.length + " of " + total + " games")
+          : (total + " games");
+      }
+      if (clearBtn) clearBtn.hidden = !filter;
     }
 
     updateGrid("");
@@ -5244,6 +5649,13 @@
     search.addEventListener("input", function(e) {
       updateGrid(e.target.value);
     });
+    if (clearBtn) {
+      clearBtn.addEventListener("click", function() {
+        search.value = "";
+        updateGrid("");
+        search.focus();
+      });
+    }
   }
 
   function expansionSlug(name) {
@@ -5599,9 +6011,11 @@ var commonMistakes    = (g.commonMistakes || "").trim();
       var first = counts[0];
 
       var buttonsHtml = counts.map(function(c) {
+        var on = c === first;
         return (
           '<button type="button" class="pc-btn" data-count="' + c + '" ' +
-          (c === first ? 'data-active="true"' : "") +
+          'aria-pressed="' + (on ? "true" : "false") + '" ' +
+          (on ? 'data-active="true"' : "") +
           ">" + c + "p</button>"
         );
       }).join("");
@@ -5652,54 +6066,6 @@ var glossaryItems = rulesGlossary.map(function(item) {
         "</section>";
     }
 
-    /* --- Player Aids (PDFs) --- */
-    var playerAids = Array.isArray(g.playerAids) ? g.playerAids : [];
-    var playerAidSection = "";
-    if (playerAids.length) {
-      var buttons = playerAids.map(function(aid, idx) {
-        var label = aid.label || ("Aid " + (idx + 1));
-        return (
-          '<button type="button"' +
-            ' class="pill-btn player-aid-btn"' +
-            ' data-file="' + aid.file + '"' +
-            (idx === 0 ? ' data-active="true"' : "") +
-          ">" +
-            label +
-          "</button>"
-        );
-      }).join("");
-
-      var firstFile = playerAids[0].file;
-
-      playerAidSection =
-        '<section class="exp" id="player-aids">' +
-          '<details class="expansion" open>' +
-            '<summary><span class="expansion-name">Player Aids (PDF)</span></summary>' +
-            '<div class="expansion-body">' +
-              '<div class="expansion-text-block">' +
-                "<p>Quick reference PDFs for this game. Switch between aids below.</p>" +
-              "</div>" +
-              '<div class="player-aid-list">' +
-                buttons +
-              "</div>" +
-              '<div class="player-aid-viewer">' +
-                '<iframe' +
-                  ' id="playerAidFrame"' +
-                  ' src="' + firstFile + '"' +
-                  ' title="Player Aid for ' + g.name + '"' +
-                  ' loading="lazy">' +
-                "</iframe>" +
-              "</div>" +
-              '<p class="expansion-text-block">' +
-                '<a id="openAidLink" href="' + firstFile + '" target="_blank" rel="noopener">' +
-                  "Open current aid in new tab" +
-                "</a>" +
-              "</p>" +
-            "</div>" +
-          "</details>" +
-        "</section>";
-    }
-
     /* --- Components (if provided) --- */
     var componentsHtml = "";
     if (Array.isArray(g.components) && g.components.length) {
@@ -5723,7 +6089,7 @@ var glossaryItems = rulesGlossary.map(function(item) {
       expansionControlsHtml =
         '<div class="expansion-controls" id="exp-controls" role="group" aria-label="Expansions in play">' +
           namedExpansions.map(function(exp, idx) {
-            return '<button type="button" class="exp-chip" data-exp="' + idx + '">' +
+            return '<button type="button" class="exp-chip" data-exp="' + idx + '" aria-pressed="false">' +
               escapeHtml(exp.name) + "</button>";
           }).join("") +
         "</div>" +
@@ -5744,7 +6110,7 @@ var glossaryItems = rulesGlossary.map(function(item) {
       "</details>" +
 
       // 2. Player Count Set Up
-      '<details class="expansion" id="playercount-block">' +
+      '<details class="expansion" id="playercount-block"' + (hasSetupByPlayerCount ? " open" : "") + ">" +
         '<summary><span class="expansion-name">Player Count Set Up</span></summary>' +
         '<div class="expansion-body">' +
           playerCountHtmlInner +
@@ -5802,7 +6168,11 @@ var glossaryItems = rulesGlossary.map(function(item) {
       "</details>";
 
     /* --- Main detail markup --- */
+    syncHeaderOffset();
 appEl.innerHTML =
+  '<nav class="detail-nav" aria-label="Back to the list">' +
+    '<a class="back-link" href="#/">All games</a>' +
+  "</nav>" +
   '<article class="detail fade-in">' +
     '<figure class="cover">' +
       '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
@@ -5819,19 +6189,16 @@ appEl.innerHTML =
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
 
+            '<section class="exp notes-box" id="notes-section">' +
+              '<label class="notes-label" for="notes-' + slug + '">Your notes</label>' +
+              '<p class="notes-hint">Saved on this device only. Private to this browser.</p>' +
+              '<textarea id="notes-' + slug + '" placeholder="House rules, who taught it, what to remember next time..."></textarea>' +
+              '<p class="notes-status" id="notes-status" aria-live="polite"></p>' +
+            "</section>" +
+
             componentsHtml +
             renderExpansions(g) +
-            playerAidSection +
             rulesGlossaryHtml +
-
-            '<section class="exp" id="notes-section">' +
-              '<details class="expansion">' +
-                '<summary><span class="expansion-name">Table Notes</span></summary>' +
-                '<div class="expansion-body">' +
-                  '<textarea id="notes-' + slug + '" style="width:100%;height:120px;resize:vertical;" placeholder="Your personal notes for this game..."></textarea>' +
-                "</div>" +
-              "</details>" +
-            "</section>" +
 
             '<a class="btnlink" data-check="rulebook" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
 
@@ -5892,38 +6259,21 @@ appEl.innerHTML =
       });
     }
 
-    /* --- Table notes persistence --- */
+    /* --- Personal notes, this browser only (key stays notes_<slug>) --- */
     var notesId = "notes_" + slug;
     var notesBox = document.getElementById("notes-" + slug);
+    var notesStatus = document.getElementById("notes-status");
     if (notesBox) {
       notesBox.value = localStorage.getItem(notesId) || "";
+      if (notesStatus && notesBox.value) notesStatus.textContent = "Saved on this device";
       notesBox.addEventListener("input", function() {
-        localStorage.setItem(notesId, notesBox.value);
+        try {
+          localStorage.setItem(notesId, notesBox.value);
+          if (notesStatus) notesStatus.textContent = "Saved on this device";
+        } catch (err) {
+          if (notesStatus) notesStatus.textContent = "Could not save in this browser";
+        }
       });
-    }
-
-    /* --- Player Aids interactions --- */
-    if (playerAids.length) {
-      var frame = document.getElementById("playerAidFrame");
-      var openAidLink = document.getElementById("openAidLink");
-      var buttonsEls = Array.prototype.slice.call(
-        document.querySelectorAll(".player-aid-btn")
-      );
-
-      if (frame && openAidLink && buttonsEls.length) {
-        buttonsEls.forEach(function(btn) {
-          btn.addEventListener("click", function() {
-            var file = btn.getAttribute("data-file");
-            if (!file) return;
-
-            frame.src = file;
-            openAidLink.href = file;
-
-            buttonsEls.forEach(function(b) { b.removeAttribute("data-active"); });
-            btn.setAttribute("data-active", "true");
-          });
-        });
-      }
     }
 
     /* --- Player-count buttons interactions --- */
@@ -5938,8 +6288,12 @@ appEl.innerHTML =
             var count = btn.getAttribute("data-count");
             var text = (setupByPlayerCount[count] || "").replace(/\n/g,"<br>");
             pcTextEl.innerHTML = text || "(No details for this player count yet.)";
-            pcButtons.forEach(function(b) { b.removeAttribute("data-active"); });
+            pcButtons.forEach(function(b) {
+              b.removeAttribute("data-active");
+              b.setAttribute("aria-pressed", "false");
+            });
             btn.setAttribute("data-active", "true");
+            btn.setAttribute("aria-pressed", "true");
           });
         });
       }
@@ -5971,8 +6325,13 @@ appEl.innerHTML =
       }
       expButtons.forEach(function(btn) {
         btn.addEventListener("click", function() {
-          if (btn.getAttribute("data-active") === "true") btn.removeAttribute("data-active");
-          else btn.setAttribute("data-active", "true");
+          if (btn.getAttribute("data-active") === "true") {
+            btn.removeAttribute("data-active");
+            btn.setAttribute("aria-pressed", "false");
+          } else {
+            btn.setAttribute("data-active", "true");
+            btn.setAttribute("aria-pressed", "true");
+          }
           paintExpansions();
         });
       });
@@ -6025,7 +6384,14 @@ appEl.innerHTML =
     return { route:"list" };
   }
 
+  function syncHeaderOffset() {
+    var header = document.querySelector("header");
+    if (!header) return;
+    document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+  }
+
   function render() {
+    syncHeaderOffset();
     if (normalizeIncoming()) return;
     var parsed = parseHash();
     if (parsed.route === "detail") {
@@ -6036,6 +6402,7 @@ appEl.innerHTML =
   }
 
   window.addEventListener("hashchange", render);
+  window.addEventListener("resize", syncHeaderOffset);
   document.addEventListener("DOMContentLoaded", render);
 })();
 </script>
