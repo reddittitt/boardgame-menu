@@ -97,3 +97,30 @@ Left alone because there was no clean official free source, or the source did no
 - 7 Wonders Manneken Pis, Great Wall, Agora, and the other promos. They are not in the owned expansion lists. Duel Pantheon still has no scoring field. Cities was not added to Second Edition.
 - Ark Nova and PARKS solo modes.
 - Flamecraft's full achievement grid, and Heat's advanced modules beyond the chips already on the page.
+
+## Games filled in the second sourced-rules pass
+
+Shells and two thin pages, each from a named free publisher booklet:
+
+- Unmatched: Battle of Legends, Volume One. Restoration Games 2019 PDF. Two players are the base setup. Three and four are team play, and the map has to have four starting spaces.
+- Unmatched: Houdini vs. The Genie. Restoration Games 2022 PDF. This box is 2 players. Team play needs another set. Houdini's boost placement and the secret passages are the set-specific rules.
+- Unmatched: Brains and Brawn. Restoration Games 2023 PDF. Player count is now 2–4. Three is a free-for-all with the three heroes. Four adds a hero. Battlefield items, Spidey-Sense, She-Hulk's discard, and blind boost are from that booklet.
+- Thunder Road: Vendetta. Restoration Games base PDF dated November 2023 on the publisher site, ©2022. The final tile is the fifth tile at 2 players, and the lead tile when someone drops out at 3 or more. Expansions were not added.
+- Thunder Road: Ignition. The 2026 booklet © Restoration Games and IELLO, hosted by IELLO. Two cars win. A second damage token is a pit stop. There is no chopper and no road die.
+- Point City. Alderac ©2023 rulebook, the March 2025 PDF. The buttons are the tier removals and the civic-token counts. Solo is the 2-player deck.
+- The Crew: Mission Deep Sea. Thames & Kosmos UK 691869. Tasks are drawn until the difficulties add up exactly. Sonar is one per player. Submarines are never shown.
+- The Crew: Journey to the Ends of the Earth. Kosmos German booklet for Die Crew: Jagd um die Welt, EAN 4002051687250. Thames & Kosmos lists English item 691866, and that file was not a stable direct link, so the notes follow the Kosmos book. The time marker moves on every task. The crew marker moves only on a success. Communication tokens are a shared pool.
+- Codenames. Czech Games Edition, July 2015. The starting team has 9. Guessing once is required, and one extra guess is allowed.
+- Kingdomino. Blue Orange US 2nd-edition sheet. The old 2-player line said to use a 7 by 7 grid. That size is only The Mighty Duel. The normal 2-player game is 24 dominoes and a 5 by 5 grid.
+- Harmonies. Libellud English PDF. The old page described hexes and biome cards. The booklet uses colored tokens, stacks, and animal cards. Tree and river point tables that are only a diagram were not copied.
+
+## Still deferred after that pass
+
+- Burgle Bros., Burgle Bros 2, and Burgle Bros. 3. Fowers has product pages and FAQs. No Fowers-hosted rulebook PDF was found. Third-party copies were not used.
+- Point Galaxy. Alderac hosts a 2025 PDF, and it has no text layer. It was not transcribed from the pictures.
+- Oath. Leder's resources page does not list a booklet. A 2020 Law of Oath is on the designer's site. That file was not used, because it is a reference law and it may not be the current Leder text.
+- Unmatched: Stars and Stripes. No Restoration Games PDF was found.
+- Thunder Road: Vendetta – Maximum Chrome. Left as a shell. The base game is the Vendetta page. The consolidated expansion book was not rewritten into a second page.
+- Can't Stop, For Sale, and Celestia. No free publisher booklet turned up. Can't Stop stays deferred from the previous pass. For Sale's old bullets were not rewritten without a booklet.
+- Ticket to Ride: First Journey (U.S.). Still no matching Days of Wonder booklet.
+- Arcs. Leder's resources page does not list it. The designer's rules page is a script, and no stable PDF URL was confirmed.
