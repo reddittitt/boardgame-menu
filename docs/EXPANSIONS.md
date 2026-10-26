@@ -124,3 +124,37 @@ Shells and two thin pages, each from a named free publisher booklet:
 - Can't Stop, For Sale, and Celestia. No free publisher booklet turned up. Can't Stop stays deferred from the previous pass. For Sale's old bullets were not rewritten without a booklet.
 - Ticket to Ride: First Journey (U.S.). Still no matching Days of Wonder booklet.
 - Arcs. Leder's resources page does not list it. The designer's rules page is a script, and no stable PDF URL was confirmed.
+
+## Audit pass
+
+Older pages were checked against a named free publisher booklet. Brass: Birmingham, on-device notes (`notes_` plus the slug), and the removed player-aid UI were not edited. Expansion chips on Wingspan, Quacks, Ark Nova, PARKS, and Everdell were not rewritten. Where a player-count button already matched the booklet, that button's numbers were kept.
+
+### Rewritten
+
+- Azul. Plan B Games rulebook, ©2017, the PDF in this repo. Factories are 5, 7, and 9. Tiles move to the wall at the end of the round, one tile from each complete line. The old page said they slide left when the line fills, and that only complete lines score.
+- PARKS. Keymaster Games rulebook, the PDF in this repo. A dealt canteen card, a lit campfire, and the year-card choice replace the old bullet setup. Wildlife is wild for parks and photos, and not for canteens or gear. Solo rangers stay in the booklet.
+- Ark Nova. Capstone Games English rulebook, ©2021 Feuerland, the PDF in this repo. The break, the slot-1 action card, and the scoring-area end replace the old one-line reminders. The 2-, 3-, and 4-player buttons already matched the booklet and were left as written. Solo stays in the booklet.
+- Everdell. Starling Games rulebook, the PDF in this repo. The base page was empty apart from forest size and opening hands, which matched the book. The turn, the city of 15, the hand of 8, and the seasons are filled in. Rugwort stays in the booklet.
+- Wingspan. Stonemaier Games rulebook, ©2019, the image PDF in this repo, read from the pages. Food is paid for bird cards kept, up to 5, and the bonus card is a choice of 1 from 2 with no food cost. The green goals are 5, 2, and 1. The same 5 dice and the same deck are used from 2 through 5 players, so there is still no player-count button. The Automa and the expansion chips were not rewritten.
+- The Quacks of Quedlinburg. North Star Games English rulebook, the PDF in this repo. The starting chips, the explosion above 7, the flask, and the black-book buttons already matched. The turn now follows the Fortune Teller card, the rats from turn 2, and evaluation A through F. An exploded pot still chooses points or shopping.
+- Splendor. Space Cowboys English rules. The ©2014 booklet and the 2024 printing SCSPL01EN agree on the counts. Nobles are players plus 1. Gems are 4, 5, or 7. Gold stays 5. The old line that left every noble in play was wrong. A tie goes to the fewest development cards.
+- Ticket to Ride. Days of Wonder 7201 English rules, ©2004-2024. The North America game was an empty shell. Opening tickets keep at least 2. A later draw keeps at least 1. At 2 or 3 players only one side of a double route is used.
+- SETI: Search for Extraterrestrial Intelligence. Czech Games English rulebook. Five rounds, one main action, and the neutral milestones at 20 and 30. Species sheets and the solo rival stay in the booklet.
+- Point Galaxy. Alderac ©2025 image PDF, transcribed from the pages. The deck cuts are 81, 55, 29, and 3 cards removed. Rockets are 10, 12, 14, and 16. The planet-point table is the one on the scorepad and was not copied off a diagram that did not read cleanly. Solo is the 2-player deck.
+- Unmatched: Stars and Stripes. Restoration Games set rules, ©2026, which were not on the publisher site in the previous pass. The PDF is the set booklet: ruses, Rosie's upgrades, John Henry's track, and Wyatt's showdown. It does not reprint core setup or team play.
+
+### Verified and left in place
+
+- Quacks starting chips, the white-chip explosion above 7, the flask on an exploding chip, and the 2-, 3-, and 4-player black-book buttons.
+- Ark Nova break space, conservation-project row, 2-player covers, appeal by turn order, 25 money, and the draw of 8 cards keeping 4.
+- Everdell forest cards, the meadow of 8, opening hands 5 through 8, and the workers on the Ever Tree.
+- Wingspan's expansion chips, and the decision not to invent a 2-player dice change. The booklet uses 5 dice at every count in the multiplayer game.
+
+### Still deferred
+
+- 7 Wonders Duel. The PDF in this repo is credited to 1jour-1jeu, not Repos. It was not used. A stable Repos file was not retrieved. The old page was not patched from memory. Pantheon was not given a scoring field.
+- Earth. Inside Up links a Google Drive folder, not a stable booklet URL. The page stays a shell.
+- Arcs. Leder's resources page still does not list a booklet.
+- Cascadia. It is not a title in this catalog.
+- Burgle Bros., Burgle Bros 2, Burgle Bros. 3, Oath, Can't Stop, For Sale, Celestia, Ticket to Ride: First Journey (U.S.), and Thunder Road: Vendetta – Maximum Chrome. No new publisher PDF.
+- Ark Nova and PARKS solo modes, and Everdell's Rugwort. They are in the booklets and were not copied onto the page.
