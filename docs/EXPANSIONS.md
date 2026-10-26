@@ -69,3 +69,31 @@ Chips with setup, reminders, and scoring, taken from the publisher booklets:
 - 7 Wonders (Second Edition): Edifice and Armada. The Armada text is the Repos EN02 booklet. A separate Second Edition Armada booklet was not used. Edifice pawn counts are the printed table in that booklet, not restated here.
 
 `setupByPlayerCount` was added for Root, both 7 Wonders editions, Ark Nova, PARKS, Everdell, The Quacks of Quedlinburg, and The Crew: The Quest for Planet Nine. Brass: Birmingham was not edited. Wingspan's player-count diagram did not extract as text, so it was left alone. Heat's hosted PDF is the advanced booklet, and the base track setup was not rewritten.
+
+## Games filled in the sourced-rules pass
+
+Shells rewritten from a named free publisher booklet, plus the Cities chip and the Heat base page:
+
+- 7 Wonders (2010) Cities: setup, reminders, and scoring from the Repos Cities EN02 booklet. Starting coins stay at 3. The old chip said 6 coins and that debt is paid at the end of the Age. Both of those were wrong. Armada and Leaders were not rewritten.
+- Hanabi: R&R Games rules sheet, 2013. Hands are 5 cards at 2–3 players and 4 at 4–5. The multicolor suit stays in the variants.
+- Splendor Duel: Space Cowboys English rulebook, 2022.
+- Lost Cities: Thames & Kosmos 691821, the sixth-expedition edition.
+- Point Salad: Alderac base-game rulebook. The buttons are how many of each veggie stay in the deck.
+- Cryptid: Osprey rulebook, 2018. The separate two-player sheet is not restated.
+- Cartographers: Thunderworks rulebook linked from the product page. Solo is the 1-player button. The sixteen scoring cards are one line each.
+- Flamecraft: Cardboard Alchemy English PDF linked from cardboardalchemy.com. Two players remove 12 artisan dragons. Three players remove 6. Solo is the 1-player button. The achievement grid is not copied.
+- Targi: Thames & Kosmos 691479.
+- The Fox in the Forest: Foxtrot Games rulebook linked from foxtrotgames.com.
+- Heat: Pedal to the Metal base text now follows the Days of Wonder basic booklet (“read this first”). The Open Rulebook button points at that PDF. The file in `rulebooks/` is the advanced booklet and is no longer the button target. Heavy Rain, Tunnel Vision, and Rocky Roads were not rewritten. Adrenaline is one last car at 2–4 players and the two last cars at 5–6.
+
+## Still deferred
+
+Left alone because there was no clean official free source, or the source did not yield a number that should be published:
+
+- Can't Stop. It is not public domain. No publisher-hosted free booklet was found.
+- Ticket to Ride: First Journey (U.S.). The Days of Wonder file that looked like a First Journey booklet is a different game. The guessed U.S. URL returned an HTML placeholder. Europe rules were not copied onto the U.S. page.
+- Wingspan `setupByPlayerCount`. The local PDF is image-only. The birdfeeder dice diagram did not read cleanly. The base page and the expansion chips were not changed.
+- Root hireling abilities and the individual Vagabond Pack characters. They stay on the cards. Lilypad and Twilight stay on the faction boards.
+- 7 Wonders Manneken Pis, Great Wall, Agora, and the other promos. They are not in the owned expansion lists. Duel Pantheon still has no scoring field. Cities was not added to Second Edition.
+- Ark Nova and PARKS solo modes.
+- Flamecraft's full achievement grid, and Heat's advanced modules beyond the chips already on the page.
