@@ -171,3 +171,12 @@ The Fellowship of the Ring mode "The Road Goes Ever On" stays off the chip row. 
 Raccoon Tycoon: The Fat Cat Expansion, and the three Wandering Towers mini-spell rows, still have no rules text.
 
 Earth, Arcs, Burgle Bros., Burgle Bros 2, Oath, Can't Stop, Celestia, For Sale, and Ticket to Ride: First Journey (U.S.) now have base-game text. See `docs/AUDIT.md` for the source of each. Burgle Bros 3 still has no full publisher rulebook. Duel Pantheon still has no scoring field.
+
+## Pass 8
+
+Chips filled from the Repos booklets:
+
+- 7 Wonders Duel: Pantheon. Grand Temples score 5, 12, or 21. Offerings are a one-use discount. Divinity text stays on the cards.
+- 7 Wonders Duel: Agora. This chip was missing. Six chambers. A Senator costs as many coins as the Senators you already have. Controlling all six wins at once. Each controlled chamber is 1, 2, or 3 as printed.
+
+Fat Cat and the Wandering Towers mini-spells are still empty. The other owned expansions named in `docs/AUDIT.md` were not given chips in this pass.
