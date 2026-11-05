@@ -1,6 +1,71 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 16 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 17 is the current rules pass.
+
+## Pass 17
+
+Player-count buttons, worked alphabetically from the games that still had none. A button was added only where the official booklet changes something by count. Setup that is the same at every count was left as written. Notes are paraphrases in the bullet format. Stopped before Moon Colony Bloodbath.
+
+97 pages now have player-count buttons. 82 had them at the start of this pass.
+
+### Buttons added
+
+- 7 Wonders Dice. Repos 7DICE-EN01, ©2025. At two players the barracks face each other, west to east, and the Guild Court needs strictly more spaces than the opponent. From 3 through 7 the barracks face the left and right neighbors, and the Guild Court needs at least as many as each neighbor. The Forum and the board do not change.
+- Agent Avenue. Nerdlab English rulebook, September 2024. Two players each have a meeple and may discard 4 times. Three is one team of 2 against a lone player, who may discard 4 times while each teammate may discard 2. Four is two teams of 2, and each player may discard 2 times. Teammates share one meeple and each play one card.
+- Brick Like This! Dotted Games English rules, ©2025. Two and three players use the kid-friendly game against a 10-minute timer. Three rotate instructor, builder, and observer. Four, six, and eight are teams of 2 in the six-round race. Five and seven give one team 3 players, who rotate the observer role.
+- Can't Stop. © FRED Distribution 2021. Every count is first to 3 columns, with the same 11 markers and the shared runners. The optional extended game in that booklet is 5 columns at 2 players and 4 columns at 3.
+- Deep Regrets. Tettix Angler's Guide, ©2024. The competitive deck is 10 regret cards per player. At 2 players the highest regret total discards their lowest-value mounted fish. At 3, 4, and 5 it is the highest-value mounted fish. Solo and co-op, in the same book, return nine named cards, put every regret on the survey board, and do not require shoals of 13.
+- Earth. Inside Up `Earth Rulebook Web.pdf`. Two through five use the same island, rows, and 4 by 4. Solo is Gaia: the solo side of the board, her deck of 6 played twice, and the 7 VP for whoever ends it. Four players may use the optional 2 versus 2 team board.
+- FlipToons. Thunderworks rulebook. Two, three, and four each take the six-card starter with the skunk. Solo drops the skunk and the pig, discards 20 toon cards (17 easy, 23 hard), and skips the first-player card and the critic's choice. Solo wins on 30 fame in one Check Fame phase.
+- FlipToons: Season 2. Thunderworks rulebook. At 1 and 2 players the 3 and the 15 price cards use the side with the boxed X. At 3 and 4 they stay on the numbered side. Solo drops the firefly, discards 20 toon cards, and skips the first-player card and the critic's choice.
+- For Sale: Autorama. The Autorama rulebook. At 3, remove 6 cards from each deck and start with $28,000. At 4, remove 2 from each deck and start with $28,000. At 5 and 6, remove nothing and start with $20,000.
+- Hypothetically. The Camelot rulebook. The printed range is 2–5, about 30 minutes. The closest guess scores 1, and an exact match scores 3. At 6 or more the two closest score 1 each. At 10 or more the three closest do.
+- Kinfire Delve: Vainglory's Grotto. Incredible Dream English rulebook, ©2023. The opening hand is 8, 7, 6, or 5 cards at 1, 2, 3, or 4 Seekers. Three and four Seekers need another Delve box.
+- Light Speed: Arena. Pegasus English rules. From each fleet, 2 players remove no ships, 3 remove initiative 1, and 4 remove initiatives 1 and 2. Solo is Play Solo in the app. The booklet does not print that fleet.
+- Magic Maze Pocket. Sit Down! English rules, 2025. Each player takes the action card whose corner shows the player count. The four heroes and the scenario deck do not change from 2 through 8.
+- Marvel Villainous. Ravensburger 664509, USe01, ©2020. Power starts at 0, then 1, then 2, and the fourth player also starts at 2. The Fate deck is the common deck plus the Fate deck of each villain in the game. Hands stay at 4.
+- Monkey Palace. Asmodee / Dotted Games US rules. Players take boards 1 onward. Two players stop after board 2, three after board 3, and four use all four. The bricks are the ones pictured on the back of that board.
+
+### No differences
+
+The booklet was opened. Setup, the target, and the variant rules do not change by count, so no button was added.
+
+- 7 Wonders Duel. Repos English rules. Two players only.
+- A Gest of Robin Hood. GMT rules booklet v4. Two asymmetric players. That booklet does not print a solitaire.
+- Air, Land & Sea: Critters at War. The page already records the two-player deal from the image PDF. This pass did not find a second count in that earlier reading, and the local file is still image-only.
+- Archduke. Navigator Creative, ©2020. One deck, four cards, from 2 through 6. A second deck is optional, not a count.
+- Azul Duel. Next Move English rulebook, ©2025. Two players only.
+- Backgammon. The sheet in `rulebooks/`. Two players only.
+- Caper: Europe. Keymaster rulebook, February 2022. Two masterminds.
+- Castle Combo. Catch Up / Asmodee English rules. Two keys and 15 gold at every count. The same decks.
+- Chess. FIDE Laws. Two players.
+- Chronicles of Crime. Lucky Duck image booklet, setup page. One shared board and one phone. Evidence categories and forensic contacts are split among whoever is playing. Nothing is removed.
+- Cozy Stickerville. Unexpected Games English rulebook. The same eight starting stickers, the same year deck, and a shared supply.
+- Critters at War: Flies, Lies & Supplies. Arcane Wonders v3, read from the page image. Two players, six cards each, first to 12.
+- Flip 7. The Op rules. The same deck from 3 players up. A second deck is only for more than 18, and that line stays in Player Count Set Up.
+- Got Five! Blue Orange English rules, 2026. Fewer than 4 players return the unused screens. The draw is the same.
+- Gruntz. Rulebook v5. Two players, three units each.
+- Hive Pocket. Gen42 image sheet. Two players, 13 pieces each.
+- Inkling. Osprey rulebook, 2021. One clue card and eight ink cards at every count from 3 through 6.
+- Jaipur. The local English sheet. Two players only.
+- Lairs. Kids Table base rulebook, ©2025. Two players only.
+- Lost Cities. Thames & Kosmos 691821. Two players. The long game is the other side of the same board, not another count.
+
+### No official booklet
+
+No button was invented.
+
+- A Place for All My Books, Altera, An Infamous Traffic: Second Edition, Annulet, Camel Up: The Card Game, Candy Land: Bluey, Corps of Discovery: Ultimate Edition, Everdell Journeys, Explorers of Navoria, Fractured Sky, Gather: An Everdell Card Game, Honors End, and Magical Athlete. No publisher file was opened.
+- Burgle Bros. 3: Future Flip. The Fowers page is still an FAQ, not a full booklet.
+- Corps of Discovery Duo. The Tabletopia rules link did not open as a readable PDF.
+
+### Rules corrected
+
+- Hypothetically. The page said 3–6 players and 20 minutes. The Camelot rulebook header says 2–5 players and 30 minutes. The scoring line for 6+ and 10+ was already on the turn and matches the book.
+
+### Stopped
+
+Moon Colony Bloodbath is the next title without buttons. It was not opened.
 
 ## Pass 16
 
