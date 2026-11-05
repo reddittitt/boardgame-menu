@@ -340,8 +340,8 @@
   }
   .detail-head {
     display:grid;
-    grid-template-columns:180px minmax(0, 1fr);
-    gap:16px;
+    grid-template-columns:minmax(0, 280px) minmax(0, 1fr);
+    gap:20px;
     align-items:start;
   }
   .detail-body,
@@ -381,16 +381,23 @@
   }
 
   .cover {
+    margin:0;
+    width:100%;
+    max-width:280px;
     border-radius:12px;
     overflow:hidden;
     background:#00000011;
     justify-self:center;
-    max-width:180px;
   }
   .cover-link {
     display:block;
     position:relative;
     text-decoration:none;
+    border-radius:12px;
+  }
+  .cover-link:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:3px;
   }
   .cover img {
     width:100%;
@@ -706,11 +713,15 @@
 
   @media (max-width:840px) {
     .detail-head {
-      grid-template-columns:96px minmax(0, 1fr);
-      gap:10px;
+      grid-template-columns:1fr;
+      justify-items:center;
+      gap:14px;
     }
-    .detail-head .cover { width:96px; max-width:96px; }
-    .cover-badge { display:none; }
+    .detail-head .cover {
+      width:min(70vw, 260px);
+      max-width:260px;
+    }
+    .detail-head-text { width:100%; }
   }
 
 /* Dark-theme tuning for section backgrounds */
@@ -1202,6 +1213,11 @@
     .table-bar-top { flex:1 1 auto; }
     .table-bar .expansion-controls { flex:1 1 auto; }
     .table-bar .exp-note { display:none; }
+    .detail-head {
+      grid-template-columns:150px minmax(0, 1fr);
+      justify-items:start;
+    }
+    .detail-head .cover { width:150px; max-width:150px; }
   }
 
 </style>
@@ -77392,10 +77408,6 @@
   }
   function renderEssentialLinks(game, rulebookHref) {
     var items = [];
-    var bgg = bggLinkFromId(game && game.bggId);
-    if (bgg) {
-      items.push('<a class="essential-link" href="' + escapeHtml(bgg) + '"' + externalAttrs(bgg) + ">BoardGameGeek</a>");
-    }
     if (game && game.rulebook && String(game.rulebook).trim() && rulebookHref) {
       items.push('<a class="essential-link" data-check="rulebook" href="' + escapeHtml(rulebookHref) + '"' + externalAttrs(rulebookHref) + ">Rulebook</a>");
     }
@@ -78549,7 +78561,7 @@
         '<div class="detail-head">' +
           '<figure class="cover">' +
             (bggUrl
-              ? '<a id="bggCoverLink" href="' + escapeHtml(bggUrl) + '" target="_blank" rel="noopener noreferrer" class="cover-link">' +
+              ? '<a id="bggCoverLink" href="' + escapeHtml(bggUrl) + '" target="_blank" rel="noopener noreferrer" class="cover-link" aria-label="View on BoardGameGeek">' +
                   '<img src="' + links.cover + '" alt="' + escapeHtml(g.name) + ' cover" loading="lazy">' +
                   '<span class="cover-badge">BoardGameGeek</span>' +
                 "</a>"
