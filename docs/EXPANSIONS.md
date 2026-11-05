@@ -158,3 +158,16 @@ Older pages were checked against a named free publisher booklet. Brass: Birmingh
 - Cascadia. It is not a title in this catalog.
 - Burgle Bros., Burgle Bros 2, Burgle Bros. 3, Oath, Can't Stop, For Sale, Celestia, Ticket to Ride: First Journey (U.S.), and Thunder Road: Vendetta – Maximum Chrome. No new publisher PDF.
 - Ark Nova and PARKS solo modes, and Everdell's Rugwort. They are in the booklets and were not copied onto the page.
+
+## Pass 7
+
+Chips that already had a name and almost no text now have setup, rules, and scoring from the book in this repo:
+
+- Project L: Ghost Piece and Finesse, including the Finesse ambassador tiles. The base page and the player-count buttons were rewritten in the same pass.
+- Dune: Imperium — Uprising: CHOAM. It is a module in the Uprising book, not a separate box. Rise of Ix is mentioned only where CHOAM tells you to add its contracts.
+
+The Fellowship of the Ring mode "The Road Goes Ever On" stays off the chip row. It is a way to play the same box.
+
+Raccoon Tycoon: The Fat Cat Expansion, and the three Wandering Towers mini-spell rows, still have no rules text.
+
+Earth, Arcs, Burgle Bros., Burgle Bros 2, Oath, Can't Stop, Celestia, For Sale, and Ticket to Ride: First Journey (U.S.) now have base-game text. See `docs/AUDIT.md` for the source of each. Burgle Bros 3 still has no full publisher rulebook. Duel Pantheon still has no scoring field.
