@@ -302,15 +302,56 @@
   margin-bottom: 0.4rem;
 }
 
-  /* Detail view */
+  /* Detail view. Title and player/time sit beside the cover, then the sticky bar. */
   .detail {
     background:var(--card);
     border:1px solid color-mix(in srgb, var(--accent) 40%, var(--border) 60%);
     border-radius:14px;
     padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .detail-head {
     display:grid;
-    grid-template-columns:260px 1fr;
+    grid-template-columns:180px minmax(0, 1fr);
     gap:16px;
+    align-items:start;
+  }
+  .detail-body,
+  .detail-head-text { min-width:0; }
+  .essential-links {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:0;
+  }
+  .essential-link {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:44px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    text-decoration:none;
+    font-weight:700;
+    line-height:1.2;
+    box-sizing:border-box;
+  }
+  .essential-link-channel {
+    font-weight:600;
+    font-size:0.75rem;
+    letter-spacing:0;
+    text-transform:none;
+    color:var(--muted);
+  }
+  .essential-link:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
   }
 
   .cover {
@@ -682,8 +723,12 @@
   }
 
   @media (max-width:840px) {
-    .detail { grid-template-columns:1fr; }
-    .cover { width:100%; max-width:220px; }
+    .detail-head {
+      grid-template-columns:96px minmax(0, 1fr);
+      gap:10px;
+    }
+    .detail-head .cover { width:96px; max-width:96px; }
+    .cover-badge { display:none; }
   }
 
 /* Dark-theme tuning for section backgrounds */
@@ -703,8 +748,10 @@
   }
   .pc-btn:focus-visible,
   .exp-chip:focus-visible,
-  .jump-link:focus-visible,
   .back-link:focus-visible,
+  .aid-open:focus-visible,
+  .aid-link:focus-visible,
+  .aid-lightbox-close:focus-visible,
   .btn:focus-visible,
   .btnlink:focus-visible,
   header .toggle:focus-visible,
@@ -740,34 +787,12 @@
     margin:0;
   }
   .table-bar .expansion-controls,
-  .table-bar .jump-links,
   .table-bar .playercount-controls {
     margin:0;
   }
   .table-bar .exp-note {
     margin:0;
     line-height:1.35;
-  }
-  .jump-links {
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-  .jump-link {
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:44px;
-    min-width:44px;
-    padding:8px 14px;
-    border-radius:999px;
-    border:1px solid var(--btn-border);
-    background:var(--btn);
-    color:var(--fg);
-    font-weight:700;
-    font-size:0.95rem;
-    text-decoration:none;
-    box-sizing:border-box;
   }
   .pc-btn,
   .exp-chip {
@@ -807,6 +832,207 @@
   }
   .scoring-summary-list li {
     margin:0.12rem 0;
+  }
+
+  .play-time-source {
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .play-time-source[hidden] { display:none; }
+
+  #teach-it-slot:empty,
+  #common-mistakes-slot:empty,
+  #first-game-slot:empty,
+  #player-aids-slot:empty {
+    display:none;
+  }
+  .teach-it { margin:0 0 10px; }
+
+  .callout {
+    margin:0 0 10px;
+    padding:10px 12px 10px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    border-left-width:4px;
+    color:var(--fg);
+  }
+  .callout h3 {
+    margin:0 0 0.3rem;
+    font-size:1.02rem;
+    line-height:1.3;
+    color:var(--fg);
+  }
+  .callout .rule-list,
+  .callout p {
+    margin-top:0;
+    margin-bottom:0.35rem;
+  }
+  .callout-mistakes {
+    border-left-color:#b45309;
+    background:color-mix(in srgb, var(--card) 88%, #b45309 12%);
+  }
+  .callout-first {
+    border-left-color:#0f766e;
+    background:color-mix(in srgb, var(--card) 86%, #0f766e 14%);
+  }
+  .mistake-more { margin-top:2px; }
+  .mistake-more > summary {
+    cursor:pointer;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    font-weight:700;
+  }
+
+  .player-aids { margin:0; }
+  .player-aids h3 {
+    margin:0 0 0.45rem;
+    font-size:1.05rem;
+  }
+  .aid-list {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:12px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .aid-card { min-width:0; }
+  .aid-expansion { margin-top:12px; }
+  .aid-group-title {
+    margin:0 0 0.35rem;
+    font-size:0.95rem;
+  }
+  .aid-preview {
+    position:relative;
+    height:180px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:#111;
+  }
+  .aid-preview iframe,
+  .aid-preview img {
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    object-fit:contain;
+    object-position:top center;
+    background:#fff;
+    pointer-events:none;
+  }
+  .aid-open {
+    position:absolute;
+    inset:0;
+    width:100%;
+    min-height:44px;
+    padding:8px;
+    border:0;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    background:linear-gradient(to top, rgba(0,0,0,0.62), rgba(0,0,0,0) 52%);
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .aid-title {
+    margin:6px 0 0;
+    font-weight:700;
+    line-height:1.3;
+  }
+  .aid-note {
+    margin:2px 0 0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .aid-source {
+    display:inline-flex;
+    align-items:center;
+    margin-left:6px;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    color:var(--muted);
+    font-size:0.72rem;
+    font-weight:700;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    vertical-align:middle;
+  }
+  .aid-link {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    min-height:44px;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    text-decoration:none;
+    font-weight:700;
+    box-sizing:border-box;
+  }
+  .aid-link .aid-title { margin:0; }
+  .aid-link .aid-source { margin-left:0; flex:0 0 auto; }
+  .aid-lightbox {
+    width:100vw;
+    height:100dvh;
+    max-width:100vw;
+    max-height:100dvh;
+    margin:0;
+    padding:0;
+    border:0;
+    background:#111;
+    color:#fff;
+    box-sizing:border-box;
+  }
+  .aid-lightbox::backdrop { background:rgba(0,0,0,0.78); }
+  .aid-lightbox-bar {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    background:#1b1b1b;
+  }
+  .aid-lightbox-bar p {
+    flex:1 1 auto;
+    margin:0;
+    font-weight:700;
+    min-width:0;
+  }
+  .aid-lightbox-close {
+    min-width:44px;
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.35);
+    background:transparent;
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .aid-lightbox-stage {
+    height:calc(100dvh - 60px);
+    background:#111;
+  }
+  .aid-lightbox-stage iframe,
+  .aid-lightbox-stage img {
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    object-fit:contain;
+    background:#111;
   }
 
   .rule-body > p,
@@ -850,6 +1076,14 @@
   .rule-expansion > strong {
     display:block;
     margin:0 0 0.3rem;
+  }
+  .exp-turn-cover {
+    display:block;
+    width:120px;
+    max-width:100%;
+    height:auto;
+    margin:0 0 8px;
+    border-radius:8px;
   }
   .rule-details {
     margin:0.35rem 0 0.45rem;
@@ -916,28 +1150,27 @@
   @media (max-width:840px) {
     html { font-size:19px; }
     .table-bar {
-      margin-left:-14px;
-      margin-right:-14px;
+      margin-left:-16px;
+      margin-right:-16px;
       border-radius:0;
       border-left:0;
       border-right:0;
       padding:6px 10px;
     }
     .playercount-controls,
-    .expansion-controls,
-    .jump-links {
+    .expansion-controls {
       flex-wrap:nowrap;
       overflow-x:auto;
       scrollbar-width:none;
     }
     .playercount-controls::-webkit-scrollbar,
-    .expansion-controls::-webkit-scrollbar,
-    .jump-links::-webkit-scrollbar {
+    .expansion-controls::-webkit-scrollbar {
       display:none;
     }
+    .aid-list { grid-template-columns:1fr; }
+    .aid-preview { height:168px; }
     .pc-btn,
     .exp-chip,
-    .jump-link,
     .back-link {
       flex:0 0 auto;
       padding:8px 12px;
@@ -974,7 +1207,6 @@
     }
     .table-bar-top { flex:1 1 auto; }
     .table-bar .expansion-controls { flex:1 1 auto; }
-    .table-bar .jump-links { flex:1 1 auto; }
     .table-bar .exp-note { display:none; }
   }
 
@@ -56587,17 +56819,10 @@
     });
   }
 
-  /* BG Stats helpers */
-  var BGSTATS_ID_PREFIX_APP  = "bgstats://app.bgstatsapp.com/addPlay.html?gameId=";
-  var BGSTATS_ID_PREFIX_WEB  = "https://bgstats.app/bgg/";
-  var BGSTATS_SLUG_PREFIX_WEB = "https://bgstats.app/game/";
   function extractBggId(urlOrId) {
     if (!urlOrId) return "";
     var m = String(urlOrId).match(/([0-9]{2,})/);
     return m ? m[1] : "";
-  }
-  function bgstatsUrl(slug) {
-    return BGSTATS_SLUG_PREFIX_WEB + slug;
   }
 
   /* Data */
@@ -56654,6 +56879,55 @@
   function bggLinkFromId(id) {
     id = extractBggId(id);
     return id ? "https://boardgamegeek.com/boardgame/" + id : "";
+  }
+  function safeLinkUrl(url) {
+    var u = String(url || "").trim();
+    if (!u || /^(javascript|data|vbscript):/i.test(u)) return "";
+    return u;
+  }
+  function externalAttrs(url) {
+    return /^https?:/i.test(url) ? ' target="_blank" rel="noopener noreferrer"' : "";
+  }
+  function howToPlayFrom(game) {
+    var video = game && game.howToPlayVideo;
+    if (video && typeof video === "object") {
+      var url = safeLinkUrl(video.url);
+      if (!url) return null;
+      return {
+        url: url,
+        title: String(video.title || "").trim() || "How to play",
+        channel: String(video.channel || "").trim()
+      };
+    }
+    var legacy = safeLinkUrl(game && game.youtube);
+    if (!legacy) return null;
+    return { url: legacy, title: "How to play", channel: "" };
+  }
+  function renderEssentialLinks(game, rulebookHref) {
+    var items = [];
+    var bgg = bggLinkFromId(game && game.bggId);
+    if (bgg) {
+      items.push('<a class="essential-link" href="' + escapeHtml(bgg) + '"' + externalAttrs(bgg) + ">BoardGameGeek</a>");
+    }
+    if (game && game.rulebook && String(game.rulebook).trim() && rulebookHref) {
+      items.push('<a class="essential-link" data-check="rulebook" href="' + escapeHtml(rulebookHref) + '"' + externalAttrs(rulebookHref) + ">Rulebook</a>");
+    }
+    var stats = safeLinkUrl(game && game.bgStatsUrl);
+    if (stats) {
+      items.push('<a class="essential-link" href="' + escapeHtml(stats) + '"' + externalAttrs(stats) + ">Log a play</a>");
+    }
+    var video = howToPlayFrom(game);
+    if (video) {
+      var channel = video.channel ? '<span class="essential-link-channel">' + escapeHtml(video.channel) + "</span>" : "";
+      items.push(
+        '<a class="essential-link essential-link--video" href="' + escapeHtml(video.url) + '"' + externalAttrs(video.url) + ">" +
+          '<span class="essential-link-title">' + escapeHtml(video.title) + "</span>" +
+          channel +
+        "</a>"
+      );
+    }
+    if (!items.length) return "";
+    return '<nav class="essential-links" aria-label="Game links">' + items.join("") + "</nav>";
   }
 
   var appEl = document.getElementById("app");
@@ -56772,82 +57046,6 @@
     return coverUrl(gameSlug + "--" + es);
   }
 
- function renderExpansions(game) {
-  var exps = Array.isArray(game.expansions) ? game.expansions : [];
-  exps = exps.filter(function(exp) {
-    if (!exp || typeof exp !== "object") return false;
-    var name = (exp.name || "").trim();
-    var hasContent = [
-      exp.quickStart,
-      exp.reminders,
-      exp.rulebook,
-      exp.youtube,
-      exp.bggId,
-      exp.cover
-    ].some(function(v) { return v && String(v).trim() !== ""; });
-    return name || hasContent;
-  });
-  if (!exps.length) return "";
-
-  var blocks = exps.map(function(exp) {
-    var expName = exp.name || "Expansion";
-    var expRulebook = expansionRulebook(game.slug, exp);
-    var cover = expansionCoverUrl(game.slug, exp);
-
-    var expBggId = extractBggId(exp.bggId || "");
-    var baseBggId = extractBggId(game.bggId || "");
-    var id = expBggId || baseBggId;
-
-    var links = {
-      rulebook: expRulebook,
-      youtube: exp.youtube || "",
-      bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : "",
-      bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null
-    };
-
-    var qs = exp.quickStart;
-    var rem = exp.reminders;
-
-    return (
-      '<details class="expansion">' +
-        '<summary><span class="expansion-name">' + expName + "</span></summary>" +
-        '<div class="expansion-body">' +
-          (cover ? (
-            '<div class="expansion-art">' +
-              '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
-            "</div>"
-          ) : "") +
-          (!contentIsEmpty(qs) ? (
-            '<div class="expansion-text-block"><h4>Quick Setup</h4>' +
-            renderRuleContent(qs) +
-            "</div>"
-          ) : "") +
-          (!contentIsEmpty(rem) ? (
-            '<div class="expansion-text-block"><h4>Quick Reminders</h4>' +
-            renderRuleContent(rem) +
-            "</div>"
-          ) : "") +
-          '<div class="expansion-btns">' +
-            (links.rulebook ? (
-              '<a class="btnlink" href="' + links.rulebook + '" target="_blank" rel="noopener">Rulebook</a>'
-            ) : "") +
-            (links.youtube ? (
-              '<a class="btnlink" href="' + links.youtube + '" target="_blank" rel="noopener">How to Play Video</a>'
-            ) : "") +
-          "</div>" +
-        "</div>" +
-      "</details>"
-    );
-  }).join("");
-
-  return (
-    '<section id="exp" class="exp">' +
-      "<h3>Expansions</h3>" +
-      blocks +
-    "</section>"
-  );
-}
-
   /* --- Recently viewed helpers --- */
   var RECENT_KEY = "bgq_recent";
 
@@ -56957,7 +57155,30 @@
     }
   }
 
-  function buildMetaBar(game) {
+  function formatPlayTime(game, count) {
+    var map = game && game.playTimeByPlayerCount;
+    var specific = "";
+    if (map && typeof map === "object" && !Array.isArray(map) && count != null && map[String(count)] != null) {
+      specific = String(map[String(count)]).trim();
+    }
+    if (specific) {
+      var source = game.playTimeSource ? String(game.playTimeSource).trim() : "";
+      return { text: specific, source: source };
+    }
+    if (game && game.time != null && String(game.time).trim()) {
+      var fallback = String(game.time).trim();
+      if (!/\bmin\b/i.test(fallback)) fallback += " min";
+      return { text: fallback, source: "" };
+    }
+    return { text: "", source: "" };
+  }
+  function hasAnyPlayTime(game) {
+    if (game && game.time != null && String(game.time).trim()) return true;
+    var map = game && game.playTimeByPlayerCount;
+    if (!map || typeof map !== "object" || Array.isArray(map)) return false;
+    return Object.keys(map).some(function (k) { return String(map[k] || "").trim(); });
+  }
+  function buildMetaBar(game, count) {
     function isNum(x) { return typeof x === "number" && !isNaN(x); }
     var parts = [];
 
@@ -56965,15 +57186,19 @@
       parts.push(
         '<span class="game-meta-item">' +
           '<span class="game-meta-icon">👥</span>' +
-          "<span>" + game.players + " players</span>" +
+          "<span>" + escapeHtml(game.players) + " players</span>" +
         "</span>"
       );
     }
-    if (game.time) {
+    if (hasAnyPlayTime(game)) {
+      var play = formatPlayTime(game, count);
       parts.push(
-        '<span class="game-meta-item">' +
+        '<span class="game-meta-item" id="play-time"' + (play.text ? "" : " hidden") + ">" +
           '<span class="game-meta-icon">⏱</span>' +
-          "<span>" + game.time + " min</span>" +
+          '<span id="play-time-value">' + escapeHtml(play.text) + "</span>" +
+          '<span class="play-time-source" id="play-time-source"' + (play.source ? "" : " hidden") + ">" +
+            escapeHtml(play.source) +
+          "</span>" +
         "</span>"
       );
     }
@@ -57026,11 +57251,21 @@
   function textToHtml(s) {
     return escapeHtml(s).replace(/\n/g, "<br>");
   }
+  function isCountKeyed(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+    var keys = Object.keys(value);
+    if (!keys.length) return false;
+    if (keys.some(function (k) { return k === "lead" || k === "text" || k === "bullets" || k === "details"; })) return false;
+    return keys.every(function (k) { return /^\d+$/.test(k) || k === "*"; });
+  }
   function contentIsEmpty(value) {
     if (value == null) return true;
     if (typeof value === "string") return !String(value).trim();
     if (Array.isArray(value)) return value.length === 0;
     if (typeof value === "object") {
+      if (isCountKeyed(value)) {
+        return !Object.keys(value).some(function (k) { return !contentIsEmpty(value[k]); });
+      }
       if (value.lead && String(value.lead).trim()) return false;
       if (value.text && String(value.text).trim()) return false;
       if (Array.isArray(value.bullets) && value.bullets.length) return false;
@@ -57044,17 +57279,80 @@
     if (!contentIsEmpty(b)) return b;
     return "";
   }
+  function expansionParts(exp, kind) {
+    if (!exp) return [];
+    var found = [];
+    function add(v) {
+      if (contentIsEmpty(v)) return;
+      var key = JSON.stringify(v);
+      if (found.some(function (p) { return JSON.stringify(p) === key; })) return;
+      found.push(v);
+    }
+    if (kind === "setup") { add(exp.setup); add(exp.quickStart); }
+    else if (kind === "rules") { add(exp.rules); add(exp.reminders); }
+    else if (kind === "scoring") { add(exp.scoring); }
+    return found;
+  }
   function expansionDelta(exp, kind) {
-    if (!exp) return "";
-    if (kind === "setup") return firstFilled(exp.setup, exp.quickStart);
-    if (kind === "rules") return firstFilled(exp.rules, exp.reminders);
-    if (kind === "scoring") return firstFilled(exp.scoring, "");
-    return "";
+    var parts = expansionParts(exp, kind);
+    return parts.length ? parts[0] : "";
+  }
+  var AID_SOURCES = { official: "Official", bgg: "BoardGameGeek", other: "Other" };
+  var AID_TYPES = { pdf: true, image: true, page: true };
+  function normalizeAid(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    var title = String(raw.title || "").trim();
+    var url = String(raw.url || "").trim();
+    var source = String(raw.source || "").trim().toLowerCase();
+    var type = String(raw.type || "").trim().toLowerCase();
+    var note = raw.note == null ? "" : String(raw.note).trim();
+    if (!title || !url || !AID_SOURCES[source] || !AID_TYPES[type]) return null;
+    if (/^(javascript|data|vbscript):/i.test(url)) return null;
+    return { title: title, url: url, source: source, type: type, note: note };
+  }
+  function normalizeAids(list) {
+    if (!Array.isArray(list)) return [];
+    var out = [];
+    list.forEach(function (raw) {
+      var aid = normalizeAid(raw);
+      if (aid) out.push(aid);
+    });
+    return out;
+  }
+  var EXPANSION_MAPPED = {
+    name: 1, bggId: 1, setup: 1, quickStart: 1, rules: 1, reminders: 1, scoring: 1,
+    teachingScript: 1, playerAids: 1, rulebook: 1, youtube: 1, cover: 1
+  };
+  function expansionUnmapped(exp) {
+    if (!exp || typeof exp !== "object") return [];
+    var out = [];
+    Object.keys(exp).forEach(function (key) {
+      if (EXPANSION_MAPPED[key] || contentIsEmpty(exp[key])) return;
+      out.push({ key: key, value: exp[key] });
+    });
+    return out;
+  }
+  function expansionLinks(game, exp) {
+    var links = [];
+    if (!exp) return links;
+    if (exp.rulebook && String(exp.rulebook).trim()) {
+      links.push({ href: expansionRulebook(game && game.slug, exp), label: "Rulebook" });
+    }
+    if (exp.youtube && String(exp.youtube).trim()) {
+      links.push({ href: String(exp.youtube).trim(), label: "How to Play Video" });
+    }
+    var bgg = bggLinkFromId(exp.bggId || "");
+    if (bgg) links.push({ href: bgg, label: "BoardGameGeek" });
+    return links;
   }
   function expansionHasDelta(exp) {
-    return !contentIsEmpty(expansionDelta(exp, "setup")) ||
-      !contentIsEmpty(expansionDelta(exp, "rules")) ||
-      !contentIsEmpty(expansionDelta(exp, "scoring"));
+    return expansionParts(exp, "setup").length > 0 ||
+      expansionParts(exp, "rules").length > 0 ||
+      expansionParts(exp, "scoring").length > 0 ||
+      !contentIsEmpty(exp && exp.teachingScript) ||
+      normalizeAids(exp && exp.playerAids).length > 0 ||
+      expansionUnmapped(exp).length > 0 ||
+      expansionLinks(null, exp).length > 0;
   }
   function isBulletLine(line) {
     return /^(\s*)([-*•])\s+\S/.test(line);
@@ -57243,17 +57541,199 @@
     var baseHtml = renderRuleContent(base);
     if (baseHtml) parts.push(baseHtml);
     (selected || []).forEach(function (exp) {
-      var delta = expansionDelta(exp, kind);
-      if (contentIsEmpty(delta)) return;
-      var deltaHtml = renderRuleContent(delta);
-      if (!deltaHtml) return;
+      var deltas = expansionParts(exp, kind);
+      var inner = deltas.map(function (delta) { return renderRuleContent(delta); }).filter(Boolean).join("");
+      if (!inner) return;
       parts.push(
         '<div class="rule-expansion"><strong>' +
           escapeHtml(exp.name || "Expansion") +
-        "</strong>" + deltaHtml + "</div>"
+        "</strong>" + inner + "</div>"
       );
     });
     if (!parts.length) return '<p class="rule-empty">' + escapeHtml(emptyLabel) + "</p>";
+    return parts.join("");
+  }
+  function renderTeach(game, selected) {
+    var parts = [];
+    var baseHtml = renderRuleContent(game && game.teachingScript);
+    if (baseHtml) parts.push(baseHtml);
+    (selected || []).forEach(function (exp) {
+      if (!exp || contentIsEmpty(exp.teachingScript)) return;
+      var extra = renderRuleContent(exp.teachingScript);
+      if (!extra) return;
+      parts.push(
+        '<div class="rule-expansion"><strong>' +
+          escapeHtml(exp.name || "Expansion") +
+        "</strong>" + extra + "</div>"
+      );
+    });
+    if (!parts.length) return "";
+    return (
+      '<details class="expansion teach-it" id="teach-it">' +
+        '<summary><span class="expansion-name">Teach it</span></summary>' +
+        '<div class="expansion-body"><div class="rule-body" id="teach-it-body">' +
+          parts.join("") +
+        "</div></div>" +
+      "</details>"
+    );
+  }
+  function mistakeParts(value) {
+    if (contentIsEmpty(value)) return null;
+    var intro = "";
+    var items = [];
+    var tail = null;
+    if (typeof value === "string") {
+      var text = String(value).replace(/\r\n/g, "\n").trim();
+      var nonempty = text.split("\n").filter(function (line) { return line.trim(); });
+      if (nonempty.length && nonempty.every(isBulletLine)) items = parseBulletLines(text);
+      else intro = renderProse(text);
+    } else if (Array.isArray(value)) {
+      items = value;
+    } else if (typeof value === "object") {
+      var lead = value.lead ? String(value.lead).trim() : "";
+      var text = value.text ? String(value.text).trim() : "";
+      if (lead || text) {
+        var line = lead && text
+          ? '<strong class="rule-lead">' + escapeHtml(lead) + "</strong> " + textToHtml(text)
+          : (lead ? '<strong class="rule-lead">' + escapeHtml(lead) + "</strong>" : textToHtml(text));
+        intro = "<p>" + line + "</p>";
+      }
+      if (Array.isArray(value.bullets)) items = value.bullets;
+      if (!contentIsEmpty(value.details)) tail = value.details;
+    }
+    if (!intro && !items.length && contentIsEmpty(tail)) return null;
+    return { intro: intro, items: items, tail: tail };
+  }
+  function renderCommonMistakes(value) {
+    var parts = mistakeParts(value);
+    if (!parts) return "";
+    var head = parts.items.slice(0, 3);
+    var rest = parts.items.slice(3);
+    var html = parts.intro;
+    if (head.length) html += renderBulletItems(head);
+    if (rest.length) {
+      var label = "Show " + rest.length + " more";
+      var more = renderBulletItems(rest);
+      if (!contentIsEmpty(parts.tail)) {
+        label = "Show the rest";
+        more += renderDetailsToggle(parts.tail);
+      }
+      html += '<details class="mistake-more"><summary>' + label + "</summary>" + more + "</details>";
+    } else if (!contentIsEmpty(parts.tail)) {
+      html += renderDetailsToggle(parts.tail);
+    }
+    if (!html) return "";
+    return (
+      '<section class="callout callout-mistakes" id="common-mistakes" aria-labelledby="common-mistakes-title">' +
+        '<h3 id="common-mistakes-title">Common mistakes</h3>' +
+        html +
+      "</section>"
+    );
+  }
+  function resolveFirstGame(value, count) {
+    if (contentIsEmpty(value)) return null;
+    if (isCountKeyed(value)) {
+      if (count != null && !contentIsEmpty(value[String(count)])) return value[String(count)];
+      if (!contentIsEmpty(value["*"])) return value["*"];
+      return null;
+    }
+    return value;
+  }
+  function renderFirstGame(value, count) {
+    var inner = renderRuleContent(resolveFirstGame(value, count));
+    if (!inner) return "";
+    return (
+      '<section class="callout callout-first" id="first-game" aria-labelledby="first-game-title">' +
+        '<h3 id="first-game-title">First game? Use this</h3>' +
+        '<div class="callout-body" id="first-game-body">' + inner + "</div>" +
+      "</section>"
+    );
+  }
+  function renderAidCard(aid) {
+    var title = escapeHtml(aid.title);
+    var url = escapeHtml(aid.url);
+    var source = '<span class="aid-source">' + escapeHtml(AID_SOURCES[aid.source] || aid.source) + "</span>";
+    var note = aid.note ? '<p class="aid-note">' + escapeHtml(aid.note) + "</p>" : "";
+    var inline = aid.source === "official" && (aid.type === "pdf" || aid.type === "image");
+    if (!inline) {
+      return (
+        '<li class="aid-card aid-card--link">' +
+          '<a class="aid-link" href="' + url + '" target="_blank" rel="noopener noreferrer">' +
+            '<span class="aid-title">' + title + "</span>" +
+            source +
+          "</a>" +
+          note +
+        "</li>"
+      );
+    }
+    var thumbSrc = aid.type === "pdf" ? url + "#toolbar=0&navpanes=0&view=FitH" : url;
+    var preview = aid.type === "image"
+      ? '<img src="' + url + '" alt="" loading="lazy">'
+      : '<iframe title="" src="' + thumbSrc + '" tabindex="-1" loading="lazy"></iframe>';
+    return (
+      '<li class="aid-card">' +
+        '<div class="aid-preview">' +
+          preview +
+          '<button type="button" class="aid-open" data-url="' + url + '" data-type="' + escapeHtml(aid.type) + '" data-title="' + title + '">Full screen</button>' +
+        "</div>" +
+        '<p class="aid-title">' + title + " " + source + "</p>" +
+        note +
+      "</li>"
+    );
+  }
+  function renderAidGroup(aids, heading) {
+    if (!aids.length) return "";
+    var head = heading ? '<h4 class="aid-group-title">' + escapeHtml(heading) + "</h4>" : "";
+    return head + '<ul class="aid-list">' + aids.map(renderAidCard).join("") + "</ul>";
+  }
+  function renderPlayerAids(game, selected) {
+    var html = renderAidGroup(normalizeAids(game && game.playerAids), "");
+    (selected || []).forEach(function (exp) {
+      var aids = normalizeAids(exp && exp.playerAids);
+      if (!aids.length) return;
+      html += '<div class="aid-expansion">' + renderAidGroup(aids, exp.name || "Expansion") + "</div>";
+    });
+    if (!html) return "";
+    return (
+      '<section class="player-aids" id="player-aids" aria-labelledby="player-aids-title">' +
+        '<h3 id="player-aids-title">Player aids</h3>' +
+        html +
+      "</section>"
+    );
+  }
+  function renderExpansionTurnBlocks(game, selected) {
+    return (selected || []).map(function (exp) {
+      if (!exp) return "";
+      var unmapped = expansionUnmapped(exp);
+      var links = expansionLinks(game, exp);
+      var cover = exp.cover && String(exp.cover).trim() ? expansionCoverUrl(game && game.slug, exp) : "";
+      if (!unmapped.length && !links.length && !cover) return "";
+      var title = unmapped.length
+        ? "Expansion rules: " + (exp.name || "Expansion")
+        : (exp.name || "Expansion");
+      var body = unmapped.map(function (part) {
+        var inner = renderRuleContent(part.value) || "";
+        if (unmapped.length === 1) return inner;
+        return '<div class="expansion-text-block"><h4>' + escapeHtml(part.key) + "</h4>" + inner + "</div>";
+      }).join("");
+      var coverHtml = cover
+        ? '<img class="exp-turn-cover" src="' + escapeHtml(cover) + '" alt="' + escapeHtml((exp.name || "Expansion") + " cover") + '" loading="lazy">'
+        : "";
+      var linkHtml = links.length
+        ? '<div class="expansion-btns">' + links.map(function (link) {
+            return '<a class="btnlink" href="' + escapeHtml(link.href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(link.label) + "</a>";
+          }).join("") + "</div>"
+        : "";
+      return '<div class="rule-expansion"><strong>' + escapeHtml(title) + "</strong>" + coverHtml + body + linkHtml + "</div>";
+    }).join("");
+  }
+  function renderTurnBody(base, game, selected) {
+    var parts = [];
+    var baseHtml = renderRuleContent(base);
+    if (baseHtml) parts.push(baseHtml);
+    var extra = renderExpansionTurnBlocks(game, selected);
+    if (extra) parts.push(extra);
+    if (!parts.length) return '<p class="rule-empty">(No turn structure summary yet.)</p>';
     return parts.join("");
   }
   /* rule-render:end */
@@ -57270,17 +57750,14 @@
     setGameAccent(g);
 
     /* --- Links (BGG, BG Stats, rulebook, cover) --- */
-    var id = extractBggId(g.bggId);
+    var rulebookHref = "";
+    if (g.rulebook && String(g.rulebook).trim()) {
+      var rb = String(g.rulebook).trim();
+      rulebookHref = /^https?:\/\//i.test(rb) ? rb : rulebookUrl(rb.replace(/\.pdf$/, ""));
+    }
+    var bggUrl = bggLinkFromId(g.bggId);
     var links = {
-      youtube: g.youtube || "",
-      bgstats: id ? (BGSTATS_ID_PREFIX_WEB + id) : bgstatsUrl(slug),
-      bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null,
-      reminders: g.reminders || remindersUrl(slug),
-      rulebook: g.rulebook
-        ? (/^https?:\/\//i.test(String(g.rulebook).trim())
-            ? String(g.rulebook).trim()
-            : rulebookUrl(String(g.rulebook).trim().replace(/\.pdf$/,"")))
-        : rulebookUrl(slug),
+      rulebook: rulebookHref,
       cover: coverUrl(slug)
     };
 
@@ -57325,11 +57802,13 @@
 
     var playerButtonsHtml = "";
     var playerCountHtmlInner;
+    var selectedCount = null;
     if (hasSetupByPlayerCount) {
       var counts = Object.keys(setupByPlayerCount).sort(function(a, b) {
         return parseInt(a, 10) - parseInt(b, 10);
       });
       var first = counts[0];
+      selectedCount = first;
       playerButtonsHtml =
         '<div class="playercount-controls" role="group" aria-label="Player count">' +
           counts.map(function(c) {
@@ -57409,29 +57888,10 @@
           }).join("") +
         "</div>";
       expansionNoteHtml =
-        '<p class="exp-note">Turn an expansion on to add its setup, reminders, and scoring under the base game. Nothing selected keeps the base text.</p>';
+        '<p class="exp-note">Turn an expansion on to add its setup, rules, and scoring. Teaching notes, player aids, and any extra rules for that expansion show only while its chip is on.</p>';
     }
 
-    var setupPresent = !contentIsEmpty(quickText) || !contentIsEmpty(playerCountSetup) || hasSetupByPlayerCount || !contentIsEmpty(startingResources) || namedExpansions.some(function(exp) {
-      return !contentIsEmpty(expansionDelta(exp, "setup"));
-    });
-    var turnPresent = !contentIsEmpty(turnStructure);
     var endPresent = !contentIsEmpty(endOfGame);
-    var scoringPresent = !contentIsEmpty(g.scoringSummary) || !contentIsEmpty(endGameScoring) || namedExpansions.some(function(exp) {
-      return !contentIsEmpty(expansionDelta(exp, "scoring"));
-    });
-    var jumps = [];
-    if (setupPresent) jumps.push({ href: "#section-setup", label: "Setup" });
-    if (turnPresent) jumps.push({ href: "#section-turn", label: "Turn" });
-    if (endPresent) jumps.push({ href: "#section-end", label: "End of Game" });
-    if (scoringPresent) jumps.push({ href: "#section-scoring", label: "Scoring" });
-    var jumpHtml = jumps.length
-      ? '<nav class="jump-links" aria-label="On this page">' +
-          jumps.map(function(j) {
-            return '<a class="jump-link" href="' + j.href + '">' + escapeHtml(j.label) + "</a>";
-          }).join("") +
-        "</nav>"
-      : "";
 
     var summaryLines = buildSummaryLines(g, []);
 
@@ -57469,8 +57929,8 @@
         ruleShell(
           "turn-structure-block",
           "Turn Structure",
-          renderRuleContent(turnStructure) || '<p class="rule-empty">(No turn structure summary yet.)</p>',
-          { filled: !contentIsEmpty(turnStructure) }
+          renderTurnBody(turnStructure, g, []),
+          { filled: !contentIsEmpty(turnStructure), bodyId: "turn-text" }
         ) +
       "</div>" +
       endOfGameHtml +
@@ -57482,12 +57942,6 @@
           { filled: !contentIsEmpty(endGameScoring), bodyId: "scoring-text" }
         ) +
       "</div>" +
-        ruleShell(
-          "common-mistakes-block",
-          "Common Mistakes",
-          renderRuleContent(commonMistakes) || '<p class="rule-empty">(No common mistakes noted yet.)</p>',
-          { filled: !contentIsEmpty(commonMistakes) }
-        ) +
         ruleShell(
           "reminders-block",
           "Reminders",
@@ -57503,32 +57957,42 @@
           playerButtonsHtml +
         "</div>" +
         expansionControlsHtml +
-        jumpHtml +
       "</div>";
 
     syncHeaderOffset();
     appEl.innerHTML =
-      tableBarHtml +
-      '<article class="detail fade-in">' +
-        '<figure class="cover">' +
-          '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
-            '<img src="' + links.cover + '" alt="' + escapeHtml(g.name) + ' cover" loading="lazy">' +
-            '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
-          "</a>" +
-        "</figure>" +
-        "<div>" +
-          '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
+      '<article class="detail">' +
+        '<div class="detail-head">' +
+          '<figure class="cover">' +
+            (bggUrl
+              ? '<a id="bggCoverLink" href="' + escapeHtml(bggUrl) + '" target="_blank" rel="noopener noreferrer" class="cover-link">' +
+                  '<img src="' + links.cover + '" alt="' + escapeHtml(g.name) + ' cover" loading="lazy">' +
+                  '<span class="cover-badge">BoardGameGeek</span>' +
+                "</a>"
+              : '<img src="' + links.cover + '" alt="' + escapeHtml(g.name) + ' cover" loading="lazy">') +
+          "</figure>" +
+          '<div class="detail-head-text">' +
+            '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
+            buildMetaBar(g, selectedCount) +
+          "</div>" +
+        "</div>" +
+        renderEssentialLinks(g, rulebookHref) +
+        tableBarHtml +
+        '<div class="detail-body">' +
           '<aside class="scoring-summary" id="scoring-summary" aria-labelledby="scoring-summary-title"' +
             (summaryLines.length ? "" : " hidden") + ">" +
             '<h3 id="scoring-summary-title">How you win</h3>' +
             '<div id="scoring-summary-body">' + renderSummaryHtml(summaryLines) + "</div>" +
           "</aside>" +
-          buildMetaBar(g) +
+          '<div id="teach-it-slot">' + renderTeach(g, []) + "</div>" +
+          '<div id="common-mistakes-slot">' + renderCommonMistakes(commonMistakes) + "</div>" +
+          '<div id="first-game-slot">' + renderFirstGame(g.firstGameSetup, selectedCount) + "</div>" +
           '<div class="actions">' +
             '<section id="qs" class="exp">' +
               expansionNoteHtml +
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
+            '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             '<section class="exp notes-box" id="notes-section">' +
               '<label class="notes-label" for="notes-' + slug + '">Your notes</label>' +
               '<p class="notes-hint">Saved on this device only. Private to this browser.</p>' +
@@ -57536,42 +58000,20 @@
               '<p class="notes-status" id="notes-status" aria-live="polite"></p>' +
             "</section>" +
             componentsHtml +
-            renderExpansions(g) +
             rulesGlossaryHtml +
-            '<a class="btnlink" data-check="rulebook" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
-            '<a class="btnlink" id="btn-bgstats" href="' + links.bgstats + '" target="_blank" rel="noopener">BG Stats - Log A Play</a>' +
-            '<a class="btnlink" id="btn-youtube"' +
-              (links.youtube ? (' href="' + links.youtube + '" target="_blank" rel="noopener"') : "") +
-            ">How to Play Video</a>" +
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
         "</div>" +
+        '<dialog class="aid-lightbox" id="aid-lightbox">' +
+          '<div class="aid-lightbox-bar">' +
+            '<p id="aid-lightbox-title">Player aid</p>' +
+            '<button type="button" class="aid-lightbox-close" id="aid-lightbox-close">Close</button>' +
+          "</div>" +
+          '<div class="aid-lightbox-stage" id="aid-lightbox-stage"></div>' +
+        "</dialog>" +
       "</article>";
 
     requestAnimationFrame(syncHeaderOffset);
-
-    /* --- BGG cover link --- */
-    var bggCoverLink = document.getElementById("bggCoverLink");
-    var bggCoverBadge = document.getElementById("bggCoverBadge");
-    if (bggCoverLink) {
-      var bggUrl = bggLinkFromId(g.bggId);
-      if (bggUrl) {
-        bggCoverLink.href = bggUrl;
-        bggCoverLink.classList.remove("cover-link--disabled");
-        if (bggCoverBadge) {
-          bggCoverBadge.textContent = "BoardGameGeek";
-          bggCoverBadge.classList.remove("cover-badge--disabled");
-        }
-      } else {
-        bggCoverLink.removeAttribute("href");
-        bggCoverLink.style.pointerEvents = "none";
-        bggCoverLink.classList.add("cover-link--disabled");
-        if (bggCoverBadge) {
-          bggCoverBadge.textContent = "No BGG link";
-          bggCoverBadge.classList.add("cover-badge--disabled");
-        }
-      }
-    }
 
     /* --- Share button --- */
     var shareBtn = document.getElementById("share");
@@ -57623,6 +58065,7 @@
         pcButtons.forEach(function(btn) {
           btn.addEventListener("click", function() {
             var count = btn.getAttribute("data-count");
+            selectedCount = count;
             pcTextEl.innerHTML = renderRuleContent(setupByPlayerCount[count]) ||
               '<p class="rule-empty">(No details for this player count yet.)</p>';
             var pcBlock = document.getElementById("playercount-block");
@@ -57633,6 +58076,8 @@
             });
             btn.setAttribute("data-active", "true");
             btn.setAttribute("aria-pressed", "true");
+            paintPlayTime(count);
+            paintFirstGame(count);
           });
         });
       }
@@ -57646,6 +58091,7 @@
       var qsTextEl = document.getElementById("qs-text");
       var scoringTextEl = document.getElementById("scoring-text");
       var remindersTextEl = document.getElementById("reminders-text");
+      var turnTextEl = document.getElementById("turn-text");
       function paintExpansions() {
         var selected = expButtons.filter(function(btn) {
           return btn.getAttribute("data-active") === "true";
@@ -57661,7 +58107,14 @@
         if (remindersTextEl) {
           remindersTextEl.innerHTML = composeSection(remindersText, "(No reminders yet.)", selected, "rules");
         }
+        if (turnTextEl) {
+          turnTextEl.innerHTML = renderTurnBody(turnStructure, g, selected);
+          var turnBlock = document.getElementById("turn-structure-block");
+          if (turnBlock && renderExpansionTurnBlocks(g, selected)) turnBlock.open = true;
+        }
         paintSummary(selected);
+        paintTeach(selected);
+        paintAids(selected);
       }
       function paintSummary(selected) {
         var box = document.getElementById("scoring-summary");
@@ -57685,29 +58138,76 @@
       });
     }
 
-    /* --- Section jumps. Hash anchors would reset the #/game/ route. --- */
-    Array.prototype.forEach.call(document.querySelectorAll(".jump-link"), function(link) {
-      link.addEventListener("click", function(e) {
-        var id = (link.getAttribute("href") || "").slice(1);
-        var el = document.getElementById(id);
-        if (!el) return;
-        e.preventDefault();
-        var details = el.tagName === "DETAILS"
-          ? el
-          : (el.querySelector("details[data-filled='true']") || el.querySelector("details"));
-        if (details) details.open = true;
-        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    function paintPlayTime(count) {
+      var item = document.getElementById("play-time");
+      var valueEl = document.getElementById("play-time-value");
+      var sourceEl = document.getElementById("play-time-source");
+      if (!item || !valueEl) return;
+      var play = formatPlayTime(g, count);
+      valueEl.textContent = play.text;
+      item.hidden = !play.text;
+      if (sourceEl) {
+        sourceEl.textContent = play.source || "";
+        sourceEl.hidden = !play.source;
+      }
+    }
+    function paintFirstGame(count) {
+      var slot = document.getElementById("first-game-slot");
+      if (slot) slot.innerHTML = renderFirstGame(g.firstGameSetup, count);
+    }
+    function paintTeach(selected) {
+      var slot = document.getElementById("teach-it-slot");
+      if (!slot) return;
+      var prev = document.getElementById("teach-it");
+      var wasOpen = !!(prev && prev.open);
+      slot.innerHTML = renderTeach(g, selected);
+      var next = document.getElementById("teach-it");
+      if (next && wasOpen) next.open = true;
+    }
+    function paintAids(selected) {
+      var slot = document.getElementById("player-aids-slot");
+      if (slot) slot.innerHTML = renderPlayerAids(g, selected);
+    }
+    var aidsSlot = document.getElementById("player-aids-slot");
+    var aidDialog = document.getElementById("aid-lightbox");
+    var aidStage = document.getElementById("aid-lightbox-stage");
+    var aidTitle = document.getElementById("aid-lightbox-title");
+    var aidClose = document.getElementById("aid-lightbox-close");
+    var aidLastFocus = null;
+    function openAid(url, type, title) {
+      if (!aidDialog || !aidStage || !url) return;
+      aidLastFocus = document.activeElement;
+      if (aidTitle) aidTitle.textContent = title || "Player aid";
+      if (type === "image") {
+        aidStage.innerHTML = '<img alt="' + escapeHtml(title || "Player aid") + '" src="' + escapeHtml(url) + '">';
+      } else {
+        aidStage.innerHTML = '<iframe title="' + escapeHtml(title || "Player aid") + '" src="' + escapeHtml(url) + '"></iframe>';
+      }
+      if (typeof aidDialog.showModal === "function") aidDialog.showModal();
+      else aidDialog.setAttribute("open", "");
+      if (aidClose) aidClose.focus();
+    }
+    function closeAid() {
+      if (!aidDialog) return;
+      if (typeof aidDialog.close === "function" && aidDialog.open) aidDialog.close();
+      else aidDialog.removeAttribute("open");
+      if (aidStage) aidStage.innerHTML = "";
+      if (aidLastFocus && aidLastFocus.focus) aidLastFocus.focus();
+    }
+    if (aidsSlot) {
+      aidsSlot.addEventListener("click", function (e) {
+        var btn = e.target.closest ? e.target.closest(".aid-open") : null;
+        if (!btn || !aidsSlot.contains(btn)) return;
+        openAid(btn.getAttribute("data-url"), btn.getAttribute("data-type"), btn.getAttribute("data-title"));
       });
-    });
-
-    /* --- BG Stats app-only deep link (no blank webpage) --- */
-    var bgbtn = document.getElementById("btn-bgstats");
-    if (bgbtn) {
-      bgbtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (!links.bgstatsApp) return;
-        window.location.href = links.bgstatsApp;
+    }
+    if (aidClose) aidClose.addEventListener("click", closeAid);
+    if (aidDialog) {
+      aidDialog.addEventListener("click", function (e) {
+        if (e.target === aidDialog) closeAid();
+      });
+      aidDialog.addEventListener("close", function () {
+        if (aidStage) aidStage.innerHTML = "";
       });
     }
 
@@ -57773,7 +58273,30 @@
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() { syncHeaderOffset(); });
   }
-  document.addEventListener("DOMContentLoaded", render);
+  function loadLayoutFixture() {
+    var name = qp("fixture");
+    if (!name || !/^[a-z0-9-]+$/.test(name)) return;
+    fetch(basePath() + "/tests/fixtures/" + name + ".json", { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("missing fixture");
+        return res.json();
+      })
+      .then(function (payload) {
+        var games = payload && payload.games ? payload.games : payload;
+        if (!games || typeof games !== "object") return;
+        Object.keys(games).forEach(function (slug) {
+          var game = games[slug] || {};
+          DATA[slug] = Object.assign({ name: game.name || slug, slug: slug }, game, { slug: slug });
+        });
+        render();
+      })
+      .catch(function () {});
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    render();
+    loadLayoutFixture();
+  });
 })();
 </script>
 

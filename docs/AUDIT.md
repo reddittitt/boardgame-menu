@@ -426,13 +426,16 @@ Slug rules, in `slugify`: lower case, strip `:'"`, turn `&` into `and`, everythi
 | `quickStart` | "Quick Set Up". Opens by default when non-empty. |
 | `setupByPlayerCount` | Object keyed by count (`"2"`, `"3"`, `"4"`). Renders as buttons. If present, it replaces `playerCountSetup` on screen. Nothing used this field before the Brass sample. |
 | `playerCountSetup` | Fallback paragraph when there is no `setupByPlayerCount`. |
-| `startingResources`, `turnStructure`, `endGameScoring`, `commonMistakes`, `remindersText` | One collapsed `<details>` each. Newlines become `<br>`. |
+| `startingResources`, `turnStructure`, `endGameScoring`, `remindersText` | Rule sections. `commonMistakes` is a short list under How you win, not a section at the bottom. |
+| `teachingScript`, `firstGameSetup`, `playTimeByPlayerCount`, `playTimeSource` | Optional. See [CONTENT-FORMAT.md](CONTENT-FORMAT.md). Hidden when empty. |
 | `rulesGlossary[]` | `{term, desc}`. Any non-empty array shows "Quick Rules Glossary", including the 104 games whose only entries are blank. |
 | `components[]` | Optional bullet list. Unused. |
-| `playerAids[]` | `{label, file}` left in the data for some games. The detail view does not render it. |
-| `expansions[]` | `{name, quickStart, reminders, rulebook, youtube, bggId, cover}`. Cover and rulebook fall back to `covers/{game}--{expansion-slug}` and `rulebooks/{game}--{expansion-slug}.pdf`. |
-| `bggId` | Cover links to `boardgamegeek.com/boardgame/{id}`. The BG Stats button targets `bgstats://…?gameId={id}`. |
-| `youtube` | "How to Play Video". Omitted href if empty, but the button still renders. |
+| `playerAids[]` | `{title, url, source, type, note?}`. Older `{label, file}` rows are ignored. The section is omitted when nothing is valid. |
+| `expansions[]` | Chips merge `setup` / `quickStart`, `rules` / `reminders`, `scoring`, `teachingScript`, and `playerAids`. Other text becomes **Expansion rules: &lt;name&gt;** in Turn Structure. There is no bottom Expansions list. |
+| `bggId` | Header link and cover link to `boardgamegeek.com/boardgame/{id}`. Hidden when empty. |
+| `rulebook` | Header link. A URL opens directly. A slug loads `rulebooks/{slug}.pdf`. Hidden when empty. |
+| `bgStatsUrl` | Header "Log a play" link. Hidden when empty. |
+| `howToPlayVideo` | `{url, title, channel}`. Header video link. Hidden when `url` is empty. A legacy `youtube` string is used only when this object is absent. |
 | `cover` / `coverUrl` | Explicit path, else `covers/{slug}.webp`. |
 | `rulebook` | Explicit path or absolute URL, else `rulebooks/{slug}.pdf`. The click handler HEAD-checks same-origin PDFs and alerts if they are missing. |
 | `themeColor` | Overrides `--accent` for that game. Unused. |

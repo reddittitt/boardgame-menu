@@ -1,0 +1,177 @@
+{
+  "games": {
+    "fixture-with-aids": {
+      "name": "Fixture With Aids",
+      "cover": "logo.png",
+      "players": "2–4",
+      "bggId": "230802",
+      "rulebook": "https://example.com/fixture-rulebook.pdf",
+      "bgStatsUrl": "https://bgstats.app/bgg/230802",
+      "howToPlayVideo": {
+        "url": "https://example.com/how-to-play",
+        "title": "How to play the fixture",
+        "channel": "Placeholder Channel"
+      },
+      "time": "45",
+      "year": "2024",
+      "scoringSummary": [
+        "Most points when the last building is placed.",
+        "Tie: most coins."
+      ],
+      "playTimeByPlayerCount": {
+        "2": "30–45 min",
+        "4": "60–90 min"
+      },
+      "playTimeSource": "box",
+      "teachingScript": {
+        "bullets": [
+          { "lead": "Theme", "text": "Placeholder merchants race to finish a route." },
+          { "lead": "Goal", "text": "Most points when the last building is placed." },
+          { "lead": "On your turn", "text": "Build, trade, or sail. One action." },
+          { "lead": "End", "text": "Finish the round someone places a last building. Most points wins." },
+          {
+            "lead": "New players miss",
+            "text": "Trade with the supply, not with another player.",
+            "bullets": [
+              { "text": "A ship already in a port cannot sail again this round." }
+            ]
+          }
+        ]
+      },
+      "commonMistakes": [
+        { "lead": "Trade", "text": "You cannot trade with another player." },
+        { "lead": "Port", "text": "A ship in a port stays there for the round." },
+        { "lead": "Coins", "text": "Leftover coins do not break a tie." },
+        { "lead": "Route", "text": "A route scores only if it touches a city." },
+        { "lead": "Last building", "text": "The game ends at the end of that round, not immediately." }
+      ],
+      "firstGameSetup": {
+        "2": {
+          "bullets": [
+            { "lead": "Starter", "text": "Use the short map and deal 3 cards." }
+          ]
+        },
+        "4": {
+          "bullets": [
+            { "lead": "Starter", "text": "Use the full map and deal 5 cards." }
+          ]
+        }
+      },
+      "quickStart": [
+        { "lead": "Board", "text": "Place the map and the coin supply." }
+      ],
+      "setupByPlayerCount": {
+        "2": [{ "lead": "Cards", "text": "Deal 3 cards." }],
+        "3": [{ "lead": "Cards", "text": "Deal 4 cards." }],
+        "4": [{ "lead": "Cards", "text": "Deal 5 cards." }]
+      },
+      "turnStructure": [
+        { "lead": "Action", "text": "Build, trade, or sail." }
+      ],
+      "endGameScoring": [
+        { "lead": "Buildings", "text": "1 point each." }
+      ],
+      "playerAids": [
+        {
+          "title": "Placeholder turn sheet",
+          "url": "rulebooks/azul.pdf",
+          "source": "official",
+          "type": "pdf",
+          "note": "Fixture only. Not a shipped aid."
+        },
+        {
+          "title": "Placeholder icon chart",
+          "url": "logo.png",
+          "source": "official",
+          "type": "image",
+          "note": "Fixture image."
+        },
+        {
+          "title": "Placeholder publisher page",
+          "url": "https://example.com/publisher-aid",
+          "source": "official",
+          "type": "page"
+        },
+        {
+          "title": "Placeholder BGG file",
+          "url": "https://boardgamegeek.com/boardgame/230802",
+          "source": "bgg",
+          "type": "pdf",
+          "note": "Fan file. Link only."
+        },
+        {
+          "title": "Placeholder community sheet",
+          "url": "https://example.com/fan-sheet",
+          "source": "other",
+          "type": "page"
+        }
+      ],
+      "expansions": [
+        {
+          "name": "Sample Expansion",
+          "bggId": "300580",
+          "setup": [{ "lead": "Add", "text": "the extra board beside the map." }],
+          "quickStart": [{ "lead": "Add", "text": "the extra board beside the map." }],
+          "rules": [{ "lead": "Token", "text": "The token is wild." }],
+          "reminders": [{ "lead": "Token", "text": "The token is wild." }],
+          "scoring": [{ "lead": "Most tokens", "text": "5 points." }],
+          "rulebook": "https://example.com/sample-expansion.pdf",
+          "youtube": "https://example.com/sample-expansion-video",
+          "teachingScript": {
+            "bullets": [
+              { "lead": "Addendum", "text": "Explain the extra board before the first turn." },
+              { "lead": "New players miss", "text": "The extra board scores only at the end." }
+            ]
+          },
+          "playerAids": [
+            {
+              "title": "Expansion reference",
+              "url": "logo.png",
+              "source": "official",
+              "type": "image",
+              "note": "Shows only while the chip is on."
+            }
+          ],
+          "actions": {
+            "bullets": [
+              { "lead": "New action", "text": "Spend a token to peek at the top card." }
+            ]
+          }
+        }
+      ]
+    },
+    "fixture-plain": {
+      "name": "Fixture Plain",
+      "cover": "logo.png",
+      "players": "2–4",
+      "time": "20",
+      "scoringSummary": [
+        "Most points wins."
+      ],
+      "quickStart": [
+        { "lead": "Board", "text": "Place the board." }
+      ],
+      "setupByPlayerCount": {
+        "2": [{ "lead": "Cards", "text": "Deal 2 cards." }],
+        "3": [{ "lead": "Cards", "text": "Deal 3 cards." }]
+      },
+      "turnStructure": [
+        { "lead": "Action", "text": "Play a card." }
+      ],
+      "endGameScoring": [
+        { "lead": "Cards", "text": "1 point each." }
+      ],
+      "commonMistakes": "",
+      "playerAids": [
+        { "label": "Old shape", "file": "aids/should-not-render.pdf" }
+      ],
+      "expansions": [
+        {
+          "name": "Plain Chip",
+          "setup": [{ "lead": "Add", "text": "one spare token." }],
+          "quickStart": [{ "lead": "Add", "text": "one spare token." }]
+        }
+      ]
+    }
+  }
+}
