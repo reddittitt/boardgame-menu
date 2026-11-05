@@ -26,13 +26,13 @@ Counted on the original 184 games. Before is the end of the previous essentials 
 | Essential | Before | After | Still open |
 | --- | ---: | ---: | ---: |
 | BoardGameGeek | 184 | 184 | 0 |
-| Box cover | 183 | 184 | 0 |
-| Play time | 182 | 184 | 0 |
+| Box cover | 184 | 184 | 0 |
+| Play time | 184 | 184 | 0 |
 | Player count | 184 | 184 | 0 |
-| Rulebook | 164 | 170 | 14 |
+| Rulebook | 170 | 170 | 14 |
 | BG Stats | 184 | 184 | 0 |
-| How to play | 127 | 170 | 14 |
-| Rules, four sections in bullets | 163 | 167 | 17 |
+| How to play | 170 | 170 | 14 |
+| Rules, four sections in bullets | 167 | 170 | 14 |
 
 Ra: The Dice Game already had a rulebook field. That Rio Grande URL 404s. It now points at the Internet Archive copy of the same publisher PDF, captured 6 August 2009.
 
@@ -82,7 +82,9 @@ Left unused because the video was a different game or edition: Magic Maze for Ma
 
 `rulesStatus` is `pending` where no rules file exists: Altera, Annulet, Honors End, Square One, Candy Land: Bluey, A Place for All My Books, Corps of Discovery: Ultimate Edition, Everdell Journeys, Gather: An Everdell Card Game, An Infamous Traffic: Second Edition, Parks Europe, and Tag Team: SNK Arcade Legends.
 
-A booklet is linked, and the summary was not written, for My Lil' Everdell (the Starling PDF is images, so the words could not be read), Mythic Mischief, and The Old King's Crown. Those three do not say `pending`.
+My Lil' Everdell, Mythic Mischief, and The Old King's Crown now have setup, the turn, the ending, and scoring from the linked booklets. My Lil' Everdell was read by OCR of the Starling image PDF. Mythic Mischief is the English file. The Old King's Crown is the Eerie Idol English file, copyright 2025.
+
+Another search of the 14 missing teaches and 14 missing rulebooks did not add a link. A file stored under Explorers of Navoria on nastol.io is the rulebook for Townsfolk Wanted!, so it was not used. Publisher, Watch It Played, Gaming Rules!, and Dice Tower hits for the open videos were a different game or edition, or a preview rather than a teach.
 
 Burgle Bros. 3: Future Flip still has no end-of-game line. The FAQ does not say what wins.
 
