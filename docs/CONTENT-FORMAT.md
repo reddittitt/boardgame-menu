@@ -98,17 +98,23 @@ Leave the field off when it does not apply. The page does not render it. On an e
 "rulesStatus": "pending"
 ```
 
-## Owners
+## Mine and group
 
-`owners` is the friend-group copies of that game. Each entry is a first name, or a username when the group list has no first name: Timothy, Cody, John, Ryan, foreigner56.
+`mine` and `group` mark which collection a game belongs to. They are booleans. The game page does not name anyone.
 
-The menu uses it for two filters besides search. **All** is the default and shows every game. **Group** shows games with an `owners` list. **My games** shows games whose owners include Cody, and games already on the menu that have no `owners` list (those are Cody's). A game with an `owners` list that does not include Cody stays out of My games.
+| Field | Meaning |
+| --- | --- |
+| `group: true` | The game is in the group collection. |
+| `mine: true` | The game is in my collection. |
 
-The game page shows one line, `Owned by` plus the names, when the list is set. Leave the field off when the game is not in the group collection.
+Leave a flag off when it does not apply. A game that was already on the menu, and is not in the group collection, has neither flag.
 
 ```json
-"owners": ["Timothy", "Cody"]
+"mine": true,
+"group": true
 ```
+
+The menu uses the flags for two filters besides search. **All** is the default and shows every game. **Group** shows games with `group: true`. **My games** shows games with `mine: true`, and games that have neither flag. A game with `group: true` and no `mine` stays out of My games.
 
 ## Play time by player count
 
