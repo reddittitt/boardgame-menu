@@ -37,7 +37,7 @@ The game page, top to bottom:
 1. Title, with the cover beside it.
 2. Player count and play time.
 3. Essential links: BoardGameGeek, Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty.
-4. Sticky bar: All games, the player-count buttons, and the expansion chips. There are no Setup, Turn, End of Game, or Scoring jump buttons.
+4. Sticky bar: the player-count buttons and the expansion chips. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the sticky bar. There are no Setup, Turn, End of Game, or Scoring jump buttons.
 5. **How you win**.
 6. **Teach it**, collapsed, and only when `teachingScript` has text.
 7. **Common mistakes**, only when `commonMistakes` has text.
@@ -400,4 +400,4 @@ A bare array and a section object can both be the value of a field. Prefer the s
 
 Player-count buttons change Player Count Set Up. They also change the header time when `playTimeByPlayerCount` has that count, and the First game box when `firstGameSetup` is a count map.
 
-The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. Personal notes stay in `localStorage` under `notes_` plus the slug.
+The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.

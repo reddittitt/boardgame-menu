@@ -688,65 +688,21 @@
     border-color: rgba(255, 255, 255, 0.45);
   }
 
-  /* Sticky back-to-list, sitting just under the header */
-  .detail-nav {
-    position:sticky;
-    top:var(--header-h, 80px);
-    z-index:4;
-    margin:0 0 10px;
-    padding:8px 0;
-    background:color-mix(in srgb, var(--bg) 92%, transparent);
-  }
+  /* Back to the list. Not sticky, and not in the player-count bar. */
+  .page-back { margin:0; }
+  .page-back--end { margin-top:20px; }
   .back-link {
     display:inline-flex;
     align-items:center;
     min-height:44px;
-    padding:8px 14px;
-    border-radius:999px;
-    border:1px solid var(--btn-border);
-    background:var(--card);
-    color:inherit;
+    padding:6px 10px 6px 0;
+    border-radius:8px;
+    color:var(--accent);
     text-decoration:none;
     font-weight:700;
+    font-size:0.92rem;
   }
-
-  /* Personal notes — this browser only */
-  .notes-box {
-    margin-top:8px;
-  }
-  .notes-label {
-    display:block;
-    font-family:"Merriweather", Georgia, serif;
-    font-weight:700;
-    font-size:1.05rem;
-    margin:0 0 4px;
-  }
-  .notes-hint {
-    margin:0 0 8px;
-    color:var(--muted);
-    font-size:0.85rem;
-  }
-  #notes-section textarea {
-    display:block;
-    width:100%;
-    min-height:140px;
-    box-sizing:border-box;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:inherit;
-    font-family:inherit;
-    font-size:16px;
-    line-height:1.45;
-    resize:vertical;
-  }
-  .notes-status {
-    min-height:1.2em;
-    margin:6px 0 0;
-    color:var(--muted);
-    font-size:0.8rem;
-  }
+  .back-link:hover { text-decoration:underline; }
 
   @media (max-width:840px) {
     .detail-head {
@@ -904,14 +860,31 @@
     border-left-color:#0f766e;
     background:color-mix(in srgb, var(--card) 86%, #0f766e 14%);
   }
-  .mistake-more { margin-top:2px; }
-  .mistake-more > summary {
-    cursor:pointer;
-    min-height:44px;
+  .show-more { margin-top:2px; }
+  .show-more > .rule-list { margin-bottom:0.15rem; }
+  .show-more-toggle {
     display:flex;
     align-items:center;
+    width:100%;
+    box-sizing:border-box;
+    margin:2px 0 0;
+    min-height:44px;
+    padding:8px 2px;
+    border:0;
+    border-radius:8px;
+    background:transparent;
+    color:var(--accent);
+    font:inherit;
     font-weight:700;
+    text-align:left;
+    cursor:pointer;
   }
+  .show-more-toggle:hover { text-decoration:underline; }
+  .show-more-toggle:focus-visible {
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .show-more-extra[hidden] { display:none; }
 
   .player-aids { margin:0; }
   .player-aids h3 {
@@ -1157,10 +1130,6 @@
   .scoring-summary {
     scroll-margin-top:calc(var(--header-h, 64px) + var(--table-bar-h, 0px) + 8px);
   }
-  #notes-section textarea {
-    font-size:1rem;
-    line-height:1.5;
-  }
   #search {
     font-size:1rem;
   }
@@ -1196,8 +1165,7 @@
     .aid-list { grid-template-columns:1fr; }
     .aid-preview { height:168px; }
     .pc-btn,
-    .exp-chip,
-    .back-link {
+    .exp-chip {
       flex:0 0 auto;
       padding:8px 12px;
       line-height:1.2;
@@ -75244,6 +75212,15 @@
 
   initTheme();
 
+  try {
+    var noteKeys = [];
+    for (var noteIndex = 0; noteIndex < localStorage.length; noteIndex++) {
+      var noteKey = localStorage.key(noteIndex);
+      if (noteKey && noteKey.indexOf("notes_") === 0) noteKeys.push(noteKey);
+    }
+    noteKeys.forEach(function (noteKey) { localStorage.removeItem(noteKey); });
+  } catch (e) {}
+
   var themeBtn = document.getElementById("themeToggle");
   if (themeBtn) {
     themeBtn.addEventListener("click", function() {
@@ -75864,18 +75841,77 @@
     });
     return root;
   }
+  function renderBulletItem(item) {
+    if (typeof item === "string") item = { text: item };
+    var lead = item.lead ? '<strong class="rule-lead">' + escapeHtml(String(item.lead)) + "</strong>" : "";
+    var text = item.text ? escapeHtml(String(item.text)) : "";
+    var line = lead && text ? lead + " " + text : (lead || text);
+    var nested = Array.isArray(item.bullets) && item.bullets.length ? renderBulletItems(item.bullets) : "";
+    var details = !contentIsEmpty(item.details) ? renderDetailsToggle(item.details) : "";
+    return "<li>" + line + nested + details + "</li>";
+  }
   function renderBulletItems(items) {
     if (!items || !items.length) return "";
-    var lis = items.map(function (item) {
-      if (typeof item === "string") item = { text: item };
-      var lead = item.lead ? '<strong class="rule-lead">' + escapeHtml(String(item.lead)) + "</strong>" : "";
-      var text = item.text ? escapeHtml(String(item.text)) : "";
-      var line = lead && text ? lead + " " + text : (lead || text);
-      var nested = Array.isArray(item.bullets) && item.bullets.length ? renderBulletItems(item.bullets) : "";
-      var details = !contentIsEmpty(item.details) ? renderDetailsToggle(item.details) : "";
-      return "<li>" + line + nested + details + "</li>";
-    }).join("");
+    var lis = items.map(renderBulletItem).join("");
     return '<ul class="rule-list">' + lis + "</ul>";
+  }
+  var showMoreSeq = 0;
+  function renderShowMore(items, visibleCount, extraHtml) {
+    items = items || [];
+    var extra = extraHtml || "";
+    var hiddenCount = Math.max(0, items.length - visibleCount);
+    if (!hiddenCount) return renderBulletItems(items) + extra;
+    var listId = "show-more-list-" + (++showMoreSeq);
+    var tailId = extra ? listId + "-rest" : "";
+    var label = extra ? "Show the rest" : ("Show " + hiddenCount + " more");
+    var lis = items.map(function (item, index) {
+      var li = renderBulletItem(item);
+      if (index < visibleCount) return li;
+      return li.replace("<li>", '<li class="show-more-extra" hidden>');
+    }).join("");
+    var tail = extra
+      ? '<div class="show-more-extra" id="' + tailId + '" hidden>' + extra + "</div>"
+      : "";
+    return (
+      '<div class="show-more">' +
+        '<ul class="rule-list" id="' + listId + '">' + lis + "</ul>" +
+        tail +
+        '<button type="button" class="show-more-toggle" aria-expanded="false" aria-controls="' +
+          listId + (tailId ? " " + tailId : "") +
+          '" data-more-label="' + escapeHtml(label) + '" data-less-label="Show less">' +
+          escapeHtml(label) +
+        "</button>" +
+      "</div>"
+    );
+  }
+  function bindShowMore(root) {
+    var scope = root || document;
+    Array.prototype.forEach.call(scope.querySelectorAll(".show-more-toggle"), function (btn) {
+      if (btn.getAttribute("data-bound") === "true") return;
+      btn.setAttribute("data-bound", "true");
+      btn.addEventListener("click", function () {
+        var block = btn.closest(".show-more");
+        if (!block) return;
+        var open = btn.getAttribute("aria-expanded") !== "true";
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.textContent = open
+          ? (btn.getAttribute("data-less-label") || "Show less")
+          : (btn.getAttribute("data-more-label") || "Show more");
+        Array.prototype.forEach.call(block.querySelectorAll(".show-more-extra"), function (el) {
+          if (el.closest(".show-more") !== block) return;
+          if (open) el.removeAttribute("hidden");
+          else el.setAttribute("hidden", "");
+        });
+        if (!open && typeof btn.scrollIntoView === "function") {
+          var rect = btn.getBoundingClientRect();
+          var bar = document.getElementById("table-bar");
+          var topLimit = bar ? bar.getBoundingClientRect().bottom : 0;
+          if (rect.top < topLimit || rect.bottom > window.innerHeight) {
+            btn.scrollIntoView({ block: "nearest" });
+          }
+        }
+      });
+    });
   }
   function renderDetailsToggle(details) {
     if (contentIsEmpty(details)) return "";
@@ -76089,21 +76125,10 @@
   function renderCommonMistakes(value) {
     var parts = mistakeParts(value);
     if (!parts) return "";
-    var head = parts.items.slice(0, 3);
-    var rest = parts.items.slice(3);
     var html = parts.intro;
-    if (head.length) html += renderBulletItems(head);
-    if (rest.length) {
-      var label = "Show " + rest.length + " more";
-      var more = renderBulletItems(rest);
-      if (!contentIsEmpty(parts.tail)) {
-        label = "Show the rest";
-        more += renderDetailsToggle(parts.tail);
-      }
-      html += '<details class="mistake-more"><summary>' + label + "</summary>" + more + "</details>";
-    } else if (!contentIsEmpty(parts.tail)) {
-      html += renderDetailsToggle(parts.tail);
-    }
+    var extra = !contentIsEmpty(parts.tail) ? renderDetailsToggle(parts.tail) : "";
+    if (parts.items.length) html += renderShowMore(parts.items, 3, extra);
+    else if (extra) html += extra;
     if (!html) return "";
     return (
       '<section class="callout callout-mistakes" id="common-mistakes" aria-labelledby="common-mistakes-title">' +
@@ -76432,18 +76457,20 @@
         );
 
     /* --- Main detail markup --- */
-    var tableBarHtml =
-      '<div class="table-bar" id="table-bar">' +
-        '<div class="table-bar-top">' +
-          '<a class="back-link" href="#/">All games</a>' +
-          playerButtonsHtml +
-        "</div>" +
-        expansionControlsHtml +
-      "</div>";
+    var tableBarHtml = "";
+    if (playerButtonsHtml || expansionControlsHtml) {
+      tableBarHtml =
+        '<div class="table-bar" id="table-bar">' +
+          (playerButtonsHtml ? '<div class="table-bar-top">' + playerButtonsHtml + "</div>" : "") +
+          expansionControlsHtml +
+        "</div>";
+    }
+    var backLinkHtml = '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>';
 
     syncHeaderOffset();
     appEl.innerHTML =
       '<article class="detail">' +
+        backLinkHtml +
         '<div class="detail-head">' +
           '<figure class="cover">' +
             (bggUrl
@@ -76475,17 +76502,12 @@
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
-            '<section class="exp notes-box" id="notes-section">' +
-              '<label class="notes-label" for="notes-' + slug + '">Your notes</label>' +
-              '<p class="notes-hint">Saved on this device only. Private to this browser.</p>' +
-              '<textarea id="notes-' + slug + '" placeholder="House rules, who taught it, what to remember next time..."></textarea>' +
-              '<p class="notes-status" id="notes-status" aria-live="polite"></p>' +
-            "</section>" +
             componentsHtml +
             rulesGlossaryHtml +
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
         "</div>" +
+        backLinkHtml.replace("page-back", "page-back page-back--end") +
         '<dialog class="aid-lightbox" id="aid-lightbox">' +
           '<div class="aid-lightbox-bar">' +
             '<p id="aid-lightbox-title">Player aid</p>' +
@@ -76516,23 +76538,6 @@
           });
         } else {
           window.prompt("Copy link:", u);
-        }
-      });
-    }
-
-    /* --- Personal notes, this browser only (key stays notes_<slug>) --- */
-    var notesId = "notes_" + slug;
-    var notesBox = document.getElementById("notes-" + slug);
-    var notesStatus = document.getElementById("notes-status");
-    if (notesBox) {
-      notesBox.value = localStorage.getItem(notesId) || "";
-      if (notesStatus && notesBox.value) notesStatus.textContent = "Saved on this device";
-      notesBox.addEventListener("input", function() {
-        try {
-          localStorage.setItem(notesId, notesBox.value);
-          if (notesStatus) notesStatus.textContent = "Saved on this device";
-        } catch (err) {
-          if (notesStatus) notesStatus.textContent = "Could not save in this browser";
         }
       });
     }
@@ -76694,6 +76699,7 @@
     }
 
     /* --- Rulebook guards + recently viewed --- */
+    bindShowMore(appEl);
     attachRulebookGuards();
     markRecentlyViewed(g);
   }
