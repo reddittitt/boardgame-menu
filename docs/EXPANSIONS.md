@@ -180,3 +180,14 @@ Chips filled from the Repos booklets:
 - 7 Wonders Duel: Agora. This chip was missing. Six chambers. A Senator costs as many coins as the Senators you already have. Controlling all six wins at once. Each controlled chamber is 1, 2, or 3 as printed.
 
 Fat Cat and the Wandering Towers mini-spells are still empty. The other owned expansions named in `docs/AUDIT.md` were not given chips in this pass.
+
+## Pass 9
+
+Chips with setup, rules, and scoring, from the publisher booklets named in `docs/AUDIT.md`:
+
+- Tiny Towns: Fortune, Architects, Villagers, Underground
+- Splendor Duel: The Counterfeiters
+- Finspan: Sharks & Reefs
+- Wandering Towers: Spell Pack
+
+The three numbered mini-spell rows were not filled from that sheet, because the sheet does not assign the six spells to box 1, 2, or 3. Sail: Seafarers, Onitama: Sensei's Path, Tiny Trees, LOTR Duel Allies, Wyrmspan: Dragon Academy, and the Finspan upgrade pack still have no chip. The reason for each is in `docs/AUDIT.md`.

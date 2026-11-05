@@ -1,6 +1,51 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 8 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 9 is the current rules pass.
+
+## Pass 9
+
+Notes are paraphrases. Nothing was copied wholesale. A line at the end of each scoring section, or of an expansion's scoring, names the source. Personal notes stay in `localStorage` under `notes_` plus the slug. The detail view still does not render player aids. No new PDF was added to the repo. Covers were not downloaded.
+
+### Expansion chips
+
+- Tiny Towns: Fortune. Alderac rulebook, the 2025 file on alderac.com, ©2020. A chest holds 4 coins. Two or more buildings in a round, built by spending resources, pay exactly 1 coin. A leftover coin is 1 point, or 2 if Estival Festival was built. Card-by-card powers stay on the cards.
+- Tiny Towns: Architects. Alderac, ©2023. Cabin can replace Cottage. Wild spaces take any resource. Cabin is 2 if fed, and placing it may drop one resource of your choice. Wall is at most 2. The townhouse example in that booklet is 22.
+- Tiny Towns: Villagers. Alderac villager booklet. Three meeples, one in each corner, and two face-up villager cards. A square with a villager and no building is still empty at the end. Solicit stays out unless Fortune is also on.
+- Tiny Towns: Underground. Alderac rules, ©2025. Turf Home can replace Cottage. An Underground square holds one cube another player named, and you cannot build from those cubes alone. Sanctuary scores at most 4.
+- Splendor Duel: The Counterfeiters. Space Cowboys English rules, ©2026, the file linked from the Space Cowboys game page. Four Glassware tokens join the 25. Three Counterfeiter cards sit between the level-3 row and the Victory tile. All 12 Royals are shuffled and 4 are revealed. Two of the new Royals win at 9 prestige in one color, or at 9 crowns.
+- Finspan: Sharks & Reefs. Stonemaier rulebook. Coral caps at 6 in a dive site. Coral is 1 point each. A full reef scores the overlay: 6 blue, 8 purple, 5 green. The replacement scorepad also prints egg or young 1, school 6, and consumed fish 1.
+- Wandering Towers: Spell Pack. Capstone Games sheet, ©2025, hosted by Capstone. Six spells, any mix. The sheet does not say which spells belong to mini-spell box 1, 2, or 3, so those three rows are still empty. The Magic Tower was not in that sheet.
+
+### Older pages
+
+- Foundations of Metropolis. Arcane Wonders `FoM_Rulebook_Final`, the PDF on the publisher site, laid out 12 March 2024. Emerson Matsuuchi. Three years. Coins start at 5 and rise by 1. Cities are 9 by 9, 8 by 8, and 7 by 7. Population bonuses are 4, 7, and 10. Year 3 turns commercial coins into prestige. An empty lot marker after year 3 is 1. The deed icons that name which cards to remove are drawings, so those groups are not renamed.
+
+### Numbers that were only drawings
+
+Read from the pages already in `rulebooks/`.
+
+- Ravine. Stellar Factory sheet. Fire is 1 wood. A spear is 1 wood and 1 stone. A basket is 1 wood and 2 fiber. A shelter is 2 wood, 2 stone, and 2 fiber.
+- Pan Am. Funko booklet. Selling a route pays 5, 9, 12, or 14 dollars for distance 1, 2, 3, or 4. Bid spaces are 0, 2, 4, and 6. Stock sold to pay a bid is the current price minus 2 dollars.
+- Chronicles of Crime. Lucky Duck booklet. A scan, an interrogation, or observing a scene is 5 minutes. Travel is 20 minutes. A second search costs more, and that extra amount is not printed.
+- Air, Land & Sea: Critters at War. Arcane Wonders, 30 March 2021. Both commander cards print the same four rows: 6 cards left scores 2, 4 or 5 scores 3, 2 or 3 scores 4, and 1 scores 6. The letter badges on the component page cover the bottom of those cards, and the in-play photo is smaller. The point column 2, 3, 4, 6 is the clear part. Beginner mode, on the same sheet, is 1 point a battle and first to 3.
+
+### Still open
+
+No official booklet was retrieved for these, so no chip text was invented.
+
+- Sail: Seafarers. Allplay's Sail page links the base rulebook only. A third-party copy of a Seafarers sheet was not used.
+- Onitama: Sensei's Path, and the promo pairs. Arcane Wonders lists 16 animal cards and says the base game is required. It does not say whether those cards replace the base 16 or join them.
+- Tiny Towns: Tiny Trees, and any Lodge pack separate from the Villagers lodge board. The Alderac product page describes Tiny Trees in one sentence and does not host a booklet.
+- The Lord of the Rings: Duel for Middle-earth — Allies. The Repos page lists a rules download. The file itself did not come back from this environment.
+- Wyrmspan: Dragon Academy, and the leftover-item line on the scorepad. Stonemaier's rules page still does not hand out a direct PDF, and the scorepad line was not read as a sentence. The Finspan upgrade pack was not given a chip. No rules booklet for it was retrieved.
+- Bomb Busters Pro Kit, Castle Combo: Out of the Oubliette, Heat: Legends, the Thunder Road extra boxes, Deep Regrets' small expansions, Agent Avenue's expansions, Harmonies Pulse and Crescendo, More Containers, Oath: New Foundations, Night at the Zoo's extras, and the Wingspan promo packs.
+- Ra: The Dice Game. No 25th Century booklet URL was retrieved.
+- Raccoon Tycoon: The Fat Cat Expansion. Still not in the base PDF, and no Fat Cat booklet was retrieved.
+- Wandering Towers: The Magic Tower, and which of the six Spell Pack spells belong in mini-spell boxes 1, 2, and 3.
+- Burgle Bros 3's full printed rulebook. Fowers' page is still an FAQ.
+- Survive: The Island. Left as in pass 7.
+- Older bullet pages that still have no booklet opened here: Dutch Blitz (the publisher PDF returned 403), Fire Tower, Marvel Villainous, Rage, Rummikub, Skip-Bo, Vinhos, Star Wars: The Deckbuilding Game, and Kingdomino Origins.
+- Empty shells that still have no text: Altera, Annulet, Blokus, Brass: Pittsburgh, Caper: Europe, and the rest of the zero-length list from the pass 8 summary. A shell was not filled without a booklet in hand.
 
 ## Pass 8
 
