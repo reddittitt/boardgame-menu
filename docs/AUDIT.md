@@ -1,6 +1,114 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 9 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 10 is the current rules pass.
+
+## Pass 10
+
+New and rewritten text uses the bullet objects in [CONTENT-FORMAT.md](CONTENT-FORMAT.md): a bold lead, a short line, and edge cases under Details. `scoringSummary` is the How you win box. `endOfGame` is when the game stops. Points stay in `endGameScoring`. Personal notes stay in `localStorage` under `notes_` plus the slug. The detail view still does not render player aids. No new PDF was added to the repo.
+
+### Bullet pages
+
+- Dutch Blitz. Dutch Blitz Game Company directions, ©2005, the PDF archived from dutchblitz.com. The live file returned 400 again; the archive.org copy of that same PDF opened. Post piles are the face-up cards: 3 at 3–4 players, 5 at 2. The Blitz pile is 10. The Wood pile is a flip of three. Score is +1 per card in the Dutch piles and −2 per card left in the Blitz pile. First to 75. The old line that called the three face-up cards a Wood pile, and the line that Blitz cards score double, were wrong.
+- Fire Tower. Runaway Parade rulebook, ©2018, Gwen Ruelle and Sam Bryant. Last tower standing. Hands start at 5 and become 6, then 7, as towers burn. The opening wind roll is not repeated each turn. The publisher page does not hand out a stable PDF URL, so the Open Rulebook button still looks for a local file.
+- Marvel Villainous. Ravensburger instructions, ©2020, manual 664509, USe01. Hand of 4. Power starts at 0, 1, 2, and 2. First objective wins. The five objectives are the ones printed in that book. Villain-guide exceptions stay on the guides.
+- Rage. Fundex instruction sheet, the image PDF. Ten rounds, from 10 cards down to 1. An exact bid is 10, or 5 if the bid was zero. Each trick is 1. Bonus Rage is +5. Mad Rage is −5. That sheet's player count is 2–8, replacing 2–10.
+- Rummikub. The 2600 English sheet on rummikub.com. Initial meld is 30. A joker left on a rack is 30. A round is 2, 3, or 4 games at 2, 3, and 4 players. Five and six use the 160-tile XP set in the same sheet.
+- Skip-Bo. Mattel sheet 42050-0920. Stock is 30 cards at 2–4 players and 20 at 5–6. A hand is optional scoring: 25, plus 5 per card left in opponents' stocks, first to 500.
+- Vinhos Deluxe Edition. Eagle-Gryphon Special Vintage 2016 rulebook, ©2016. Six years, two actions a year, one more action after the third fair. The money table is not copied; the book's examples are 3 VP for 6 bagos, 7 for 14, and 18 for both 20 and 25. The file that opened is that 2016 book. Solo and the component layout stay in the reference book. The old reminder that fairs fall in years 3, 5, and 6 was removed.
+- Star Wars: The Deckbuilding Game. Fantasy Flight SWG01, Rebel versus Empire. First to destroy three bases. Opening hands are 5. The 2v2 booklet is not a button on this page.
+- Kingdomino Origins. Blue Orange, ©2021, the PDF already in `rulebooks/`. Discovery mode is the page. Two players build a 7 by 7 with two chiefs. Three and four build a 5 by 5 in 12 turns. Totem and Tribe are the later modes in the same book.
+- Survive: The Island. The PDF in `rulebooks/survive-the-island.pdf`. The game ends when nobody is left to rescue, or when the third volcano is revealed. Two players take two colors. Rafts hold up to 3. Creature-by-creature attacks were not restated. That page of the text layer still does not read cleanly.
+
+### Shells filled
+
+Each of these was an empty shell. The paraphrase is in the bullet fields, and the source line sits in the scoring Details.
+
+- Blokus. Mattel BJV44-Eng.
+- Money! Allplay / Knizia rulebook v18 (2025), the retailer PDF.
+- Brick Like This! Dotted Games English rules.
+- Got Five! Blue Orange English rules (2026).
+- Magic Maze Pocket. Sit Down! English rules (2025).
+- Monkey Palace. Asmodee / Dotted Games US rules. The sheet does not print a player range or a time, so the old meta line was left.
+- Wingspan Pocket. Stonemaier rulebook r14.
+- Paladins of the West Kingdom. Garphill rulebook (2019).
+- Men-Nefer. Ludonova English rulebook (2024).
+- Harvest. Keymaster core rulebook.
+- Mycelia. Ravensburger rules.
+- Toy Battle. Repos English rules (2025).
+- Tag Team, and Tag Team: Arthur's Legacy. Le Scorpion Masqué fight rules (2025). A separate Arthur pamphlet was not posted; the series sheet already walks through that set. SNK Arcade Legends has no rules PDF yet.
+- Gruntz. Rulebook v5, the retailer PDF.
+- Soar. IV Studio rulebook v1.00.
+- Tacta. The Op / USAopoly rules (2025).
+- Brass: Pittsburgh. Roxley English rulebook. Players are 2–4. Time is 60–120 from the Roxley page. This is not the Birmingham book.
+- Caper: Europe. Keymaster rulebook, February 2022.
+- Air, Land & Sea: Critters at War — Flies, Lies & Supplies. Arcane Wonders v3.
+- A Gest of Robin Hood. GMT Rules of Play v4.
+- Mythic Mischief Vol. II. IV Studio rulebook. The base Mythic Mischief page was not filled. The only file that turned up was a 1jour-1jeu copy.
+- PARKS Second Edition. Keymaster rules 1.1. Not a copy of the first-edition page.
+- Star Wars Villainous. Ravensburger EN01 (2022). A different book from Marvel Villainous.
+- Cozy Stickerville. Unexpected Games English rulebook.
+- FlipToons, and FlipToons: Season 2. Thunderworks rulebooks.
+- For Sale Autorama. The Autorama rulebook.
+- Hypothetically. The rulebook PDF.
+- Inkling. Osprey rulebook, John Keyworth, 2021.
+- Kinfire Delve: Vainglory's Grotto. Incredible Dream English rulebook, ©2023.
+- Light Speed: Arena. Tablescope / Pegasus English rules.
+- Moon Colony Bloodbath. Rio Grande rules.
+- Moonrakers. IV Studio Articles of Agreement, Base_Manual_1125.
+- Ostia: Mariner Edition. Crafty Games rules-cfg76001.
+- Rebel Princess: Deluxe Edition. Bezier online rules preview.
+- Tenby. Mighty Boards English rulebook, the retailer PDF.
+- Unicorn Glitterluck: Cloud Stacking. HABA 2012232001.
+- Winnie the Pooh: Serious Detective. The English rules PDF.
+- Corps of Discovery Duo. Off the Page rules on Tabletopia. The Ultimate Edition booklet was not opened.
+- Lairs. Kids Table base rulebook, ©2025.
+- The Two Towers Trick-Taking Game. Office Dog English rulebook, ©2026. Fellowship rules were not copied onto it.
+- Agent Avenue. Nerdlab English rulebook. Division M is the chip. Four Seasons is not.
+- Container. The Container rulebook, retailer PDF. 3–5 players. More Containers is a chip.
+- Deep Regrets. Tettix Angler's Guide. Lamentable Tentacles and Even Deeper Regrets are chips.
+- Thunder Road: Vendetta – Maximum Chrome. Restoration Games Maximum Chrome booklet, ©2022. The base Vendetta page was not rewritten. Big Rig and the Final Five, Carnage at Devil's Run, Choppe Shoppe, Extra Ammo, and German Engineering are chips on the base page, from that same booklet.
+- Night at the Zoo. Capstone WEB v3. Latecomers is the chip, from the Albi English sheet.
+- Ra: The Dice Game. Rio Grande booklet archived 6 August 2009. The page's BGG id 35503 is that game. A 25th Century file was not found. This is not an expansion of Ra.
+
+### Expansion chips
+
+Setup, reminders, and scoring, in the same bullet shape. The first scoring line is what the How you win box adds when the chip is on.
+
+- Sail: Seafarers. Allplay sheet `Sail_Seaferers_Rulebook_v7`. Allplay's own page still links only the base book. The file that opened is that named sheet. Pirate powers and the scenario maps are not on it, so they are not here.
+- Onitama: Sensei's Path. Arcane Wonders product page, and the same 16-card description on the On The Table Games page that names Arcane Wonders. No separate rulebook PDF. The pages say the 16 cards can replace the base deck or be shuffled in with it. The promo pairs still have no play rules.
+- Tiny Towns: Tiny Trees. The AEG rule card (the photographed card) and alderac.com/tiny-towns. Each player places one seed. The Treetops monument is worth 4. The card does not print a number for the grown tree, so that number is not here.
+- The Lord of the Rings: Duel for Middle-earth — Allies. Repos 7DUME-FP EN01, ©2025. Victory conditions stay the base game. Ally effects stay on the player aids.
+- Wyrmspan: Dragon Academy. Stonemaier `Wyr_DA_Rulebook_r10`. Fledglings score 1, 4, or 9 for one, two, or three on your mat.
+- Bomb Busters: The Pro Kit. Pegasus / Cocktail Games English rules v1.0, ©2026. Missions are still won or lost the base way.
+- Castle Combo: Out of the Oubliette. Catch Up Games English rules, 2025. Keys left on Locks join your keys before scoring.
+- Heat: Legends. Days of Wonder rules, ©2026. Player race scoring is unchanged. The booklet lists Sponsorship cards and does not say how they score.
+- Harmonies: Pulse, and Harmonies: Crescendo. Libellud English rules, 2026.
+- Container: More Containers. The More Containers rulebook (Kevin Nesbitt; rules editing Jeff Fraser). The file that opened was a rehost of that book. Gold running out counts as one of the two colors that end the game.
+- Oath: New Foundations. The Buried Giant rules library for that product. The Welcome booklet's component layout is not restated. One game is still not a points total.
+- Night at the Zoo: Latecomers. Albi English rulebook. Turtle, Crocodile, Monkey, and Meerkat. Zoo scores on the tiles are 8, 8, 7, and 6.
+- Agent Avenue: Division M. Nerdlab leaflet. Simple mode adds a win if the opponent's meeple lands on your Division M piece.
+- Deep Regrets: Lamentable Tentacles. The 2-page rules card. The file that opened was a rehost. Even Deeper Regrets is the Tettix Angler's Guide, ©2025, the retailer PDF. A flipped Ambulance adds 10 Regret. Clout is 10, 5, and 0.
+- Thunder Road: Vendetta. Big Rig and the Final Five, Carnage at Devil's Run, Choppe Shoppe, Extra Ammo, and German Engineering, all from the Restoration Games Maximum Chrome booklet, ©2022. The race still ends on the finish line or when only one player has operable road vehicles.
+- Wandering Towers. Mini-spell boxes 1, 2, and 3. Spell text is the Capstone Spell Pack, ©2025. That sheet still does not say which box holds which pair. The assignment used here is the Board Game Barrister listing of those three products: Retrieve a Card and Movement Swap; Close Ravenskeep and Draw 2 Cards; Fill a Potion Bottle and Extra Die Roll. The Magic Tower is the Capstone PDF, ©2025. Five modules. Filling bottles and reaching Ravenskeep still wins. A full witch bottle blocks the end until it is filled.
+
+### Still open
+
+No chip or page text was invented for these.
+
+- Onitama promos Kumo and Sasori, Mejika and Okija, and Steer and Lobster. Arcane Wonders does not publish how a pair enters the Move deck.
+- Agent Avenue: Four Seasons. The Nerdlab BGG file returned 403 again. The shop page names the parts and does not give play rules.
+- Wingspan promo packs. Stonemaier names the six packs. The clarification cards were not opened.
+- Raccoon Tycoon: The Fat Cat Expansion. The BGG rulebook file returned 403 again. No Forbidden Games PDF.
+- Burgle Bros. 3: Future Flip. A full booklet still did not download. The page was not replaced.
+- Fire Tower: Rising Flames, the three Marvel Villainous expansion boxes, the Moonrakers: Titan modules, and Ravine: The Spirits Expansion. They already had a setup line and still have no scoring field. No booklet for them was opened this pass.
+- Empty shells, because no official booklet was opened: Altera (est. May 2027), Annulet (2027 preorder), Honors End (est. February 2027), My Lil' Everdell (the file that turned up was a rehost, not Starling's), Mythic Mischief (only a 1jour-1jeu copy), The Old King's Crown (only a rehost), Square One (the Drive PDF did not download), Camel Up: The Card Game (only a 1jour-1jeu copy), Candy Land: Bluey (no Hasbro sheet for that edition), Magical Athlete (only a rehost), A Place for All My Books, Corps of Discovery: Ultimate Edition, Everdell Journeys, Gather (listed for 2027), An Infamous Traffic: Second Edition (the designer file that opened is marked prototype, dated 6 October 2026, and was not used), Parks Europe (preview only), Tag Team: SNK Arcade Legends (listed for 2027).
+- Explorers of Navoria, Fractured Sky, and Unmatched Adventures: Tales to Amaze. They already had a short paragraph and still have no turn, or no players and time. No new booklet was opened for them.
+
+### Consistency
+
+184 names. 58 pages now have players, time, setup, a turn, an End of Game section, and scoring. 81 pages have player-count buttons. The button keys are whole numbers, except Monopoly Deal (`6+`) and Tend (`7+`). Those two still sort, because the page reads the digits, and the label no longer adds an extra "p" onto a key that is not a plain number.
+
+106 older pages still keep the ending inside End Game Scoring and have no `endOfGame` field, so the End of Game jump does not appear. They were not rewritten in this pass. That is every title not named under "Bullet pages" or "Shells filled" above, other than the empty shells and the three short paragraphs in "Still open."
 
 ## Pass 9
 

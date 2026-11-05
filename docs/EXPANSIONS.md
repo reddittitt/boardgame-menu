@@ -191,3 +191,26 @@ Chips with setup, rules, and scoring, from the publisher booklets named in `docs
 - Wandering Towers: Spell Pack
 
 The three numbered mini-spell rows were not filled from that sheet, because the sheet does not assign the six spells to box 1, 2, or 3. Sail: Seafarers, Onitama: Sensei's Path, Tiny Trees, LOTR Duel Allies, Wyrmspan: Dragon Academy, and the Finspan upgrade pack still have no chip. The reason for each is in `docs/AUDIT.md`.
+
+## Pass 10
+
+Chips with setup, reminders, and scoring, in the bullet format from `docs/CONTENT-FORMAT.md`. Sources are in `docs/AUDIT.md`.
+
+- Sail: Seafarers
+- Onitama: Sensei's Path
+- Tiny Towns: Tiny Trees
+- The Lord of the Rings: Duel for Middle-earth — Allies
+- Wyrmspan: Dragon Academy
+- Bomb Busters: The Pro Kit
+- Castle Combo: Out of the Oubliette
+- Heat: Legends
+- Harmonies: Pulse and Crescendo
+- Container: More Containers
+- Oath: New Foundations
+- Night at the Zoo: Latecomers
+- Agent Avenue: Division M
+- Deep Regrets: Lamentable Tentacles and Even Deeper Regrets
+- Thunder Road: Vendetta: Big Rig and the Final Five, Carnage at Devil's Run, Choppe Shoppe, Extra Ammo, German Engineering
+- Wandering Towers: Mini-Spell Expansion #1, #2, and #3, and The Magic Tower
+
+The Spell Pack sheet still does not say which spell is in which mini box. The box assignment is the Board Game Barrister listing, and the spell text is Capstone's. Fat Cat, the Onitama promo pairs, Agent Avenue: Four Seasons, the Wingspan promo packs, and Burgle Bros 3 still have no rules text.
