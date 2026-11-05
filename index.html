@@ -1259,7 +1259,21 @@
         "5": "Keep 3+, 4+, and 5+ cards. Keep 7 random guilds.",
         "6": "Keep 3+ through 6+ cards. Keep 8 random guilds.",
         "7": "Keep every Age card, including 7+. Keep 9 random guilds."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "When",
+          "text": "Score after the Age III military comparison. There is no earlier end."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most points. Tie: most coins. A tie on coins is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Most points after Age III wins.",
+        "Tie: most coins. A coin tie is shared."
+      ]
     },
     "7-wonders-duel": {
       "cover": "covers/7-wonders-duel.webp",
@@ -1316,7 +1330,26 @@
           "reminders": "A Senator is a card in the structure. You may build it, build a wonder with it, or discard it for coins, as with any age card.\nRecruiting a Senator costs coins equal to the number of Senators you already have. The first is free, the second costs 1, the third costs 2, and so on. Then apply the Senator.\nA Politician gives Senate actions from your blue cards: 1 action with 0 or 1 blue card, 2 actions with 2 or 3, and 3 actions with 4 or more. Each action is Place Influence or Move Influence. Place puts one cube in a chamber of the section printed on that Politician, and flips a face-down decree there. There is no cube limit in a chamber. If you place more than once, you may split the cubes between that section's two chambers. Move shifts one of your cubes to an adjacent chamber. You may move a cube you just placed, and you may move the same cube more than once. With no cubes left in your supply you cannot place.\nA Conspirator lets you do one thing: place a single cube in any chamber, or conspire. Conspire draws two conspiracy cards. Keep one face down and put the other on the top or the bottom of the deck.\nPreparing a conspiracy spends an uncovered card. Tuck that card face down under the conspiracy. The turn ends. The tucked card does nothing else.\nAt the start of a later turn you may trigger one prepared conspiracy, then take a normal turn. Reveal it, apply it, and keep it face up with the age card still underneath. You may hold several, but you trigger only one per turn, and only at the start.\nYou control a chamber when you have strictly more cubes there than the opponent. Move one of your cubes into the control zone. It still counts. Take the decree. A tie controls nothing. Decree effects stay on the tokens.\nA chamber with no decree still scores and still counts toward political supremacy."
         }
       ],
-      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-duel/en/7du-rules-us-15990558193s5I6.pdf"
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/downloads/games/7wonders-duel/en/7du-rules-us-15990558193s5I6.pdf",
+      "endOfGame": [
+        {
+          "lead": "Military",
+          "text": "The conflict pawn reaching the opponent's capital wins at once."
+        },
+        {
+          "lead": "Science",
+          "text": "Six different scientific symbols wins at once."
+        },
+        {
+          "lead": "Otherwise",
+          "text": "Higher score after Age III. Tie: most points on blue civilian cards. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Instant win: opponent's capital, or 6 science symbols.",
+        "Otherwise most points after Age III.",
+        "Tie: most blue civilian points."
+      ]
     },
     "acquire": {
       "cover": "covers/acquire.webp",
@@ -1520,7 +1553,29 @@
         "3": "Leave cards 1 and 7 out of the action deck. Deal a Court row of 4. Cover 2 clusters. No ambition-box resources and no mulligan. The game ends at 30 Power.",
         "4": "Shuffle cards 1 and 7 into the action deck. Deal a Court row of 4. Cover 1 cluster. The game ends at 27 Power. A 7 can seize initiative or declare any ambition."
       },
-      "rulebook": "https://buriedgiant.com/arcs/Arcs_Base_Rulebook.pdf"
+      "rulebook": "https://buriedgiant.com/arcs/Arcs_Base_Rulebook.pdf",
+      "endOfGame": {
+        "text": "Score the declared ambitions at the end of the chapter, then check whether the game ends.",
+        "bullets": [
+          {
+            "lead": "Power",
+            "text": "End if anyone has at least 33 Power at 2 players, 30 at 3, or 27 at 4."
+          },
+          {
+            "lead": "Chapter 5",
+            "text": "Also end if the chapter marker is already on chapter 5."
+          },
+          {
+            "lead": "Winner",
+            "text": "Most Power. A tie goes to the tied player earliest in turn order."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most Power when a chapter ends over the threshold, or after chapter 5.",
+        "Thresholds: 33, 30, and 27 at 2, 3, and 4 players.",
+        "Tie: earliest in turn order."
+      ]
     },
     "ark-nova": {
       "cover": "covers/ark-nova.webp",
@@ -1536,9 +1591,68 @@
       "startingResources": "Map A for a first game, 25 money, a hand of 4 zoo cards from 8 dealt, 2 hidden final-scoring cards, 7 player tokens on the map, and 4 association workers with 1 of them active. Appeal starts at your place in turn order. Conservation and reputation start at the beginning of their tracks.",
       "remindersText": "The strength of an action is the number of its slot, 1 on the left through 5 on the right. After you use it, that card goes to slot 1 and the cards that were left of it slide right.\nYou may spend X-tokens before the action, 1 strength each. You can hold 5. An X-token gained during the action cannot raise that same action. If you do not want the action, you may still move any action card to slot 1 and take 1 X-token, if you have fewer than 5.\nA sponsor or animal can require reputation, icons, or an enclosure. Reputation is not a limit on how many cards you may take from the display.\nThe break happens when the break token reaches the last space. Finish the current turn, then do the break: discard to the hand limit, normally 3, return multiplier, venom, and constriction tokens, bring association workers home and refill the association board, discard the two bottom display cards and refill, take income, and put the break token back on the starting space for this player count.",
       "playerCountSetup": "The buttons are the break space, the conservation-project row, the 2-player covers, and the appeal track. Solo is not restated here.",
-      "turnStructure": "There are no fixed rounds. On your turn, take one action with one action card, at the strength of its slot, then move that card to slot 1.\nBuild, Cards, Animals, Association, and Sponsors are the five cards. The X-token action is the alternative: move a card to slot 1 and take 1 X-token.\nCards, animals, and sponsors can also move the break token. When it reaches the end, that player finishes the turn and everyone takes the break. Play then continues with the next player.",
-      "commonMistakes": "Ending the game the moment appeal and conservation cross. They trigger the end when they are in the same scoring area, or have passed one another. If that happens at the end of your turn, the other players each take one more turn and you do not. If it happens during a break, everyone, including you, takes one more turn.\nPutting the used action card back in the same slot. It returns to slot 1.\nForgetting that a standard enclosure has to be occupied before a kiosk counts it for income. An empty special enclosure still counts.",
-      "endGameScoring": "Add any end-of-game conservation or appeal from your remaining final-scoring cards and from cards with an end-of-game icon. If nobody reached 10 conservation during the game, each player discards one final-scoring card before this.\nYour target number is the lowest appeal value in the scoring area where your conservation marker sits. Victory points are your appeal minus that target. The total can be negative. The highest total wins. A tie goes to the player who supported the most conservation projects, counted by player tokens that have left the left edge of the zoo map. A remaining tie is shared.\nThese notes are the Capstone Games English rulebook, ©2021 Feuerland. Solo is not restated here.",
+      "turnStructure": {
+        "text": "There are no fixed rounds. On your turn, take one action with one action card, at the strength of its slot, then move that card to slot 1.",
+        "bullets": [
+          {
+            "lead": "Five cards",
+            "text": "Build, Cards, Animals, Association, and Sponsors. Strength is the slot number, 1 on the left through 5 on the right. Cards that were left of it slide right."
+          },
+          {
+            "lead": "X-tokens",
+            "text": "You may spend X-tokens before the action, 1 strength each. You can hold 5. An X-token gained during the action cannot raise that same action.",
+            "details": "If you do not want the action, you may still move any action card to slot 1 and take 1 X-token, if you have fewer than 5."
+          },
+          {
+            "lead": "Break",
+            "text": "Cards, Animals, and Sponsors can move the break token. When it reaches the last space, finish the turn, take 1 X-token, and everyone takes the break.",
+            "details": "Ignore any further steps that would have moved it past the end. After the break, put the token back on the starting space for this player count. The break discards down to the hand limit, normally 3, returns multiplier, venom, and constriction tokens, brings association workers home, refills the association board, discards the two bottom display cards and refills, and pays income."
+          }
+        ]
+      },
+      "commonMistakes": [
+        {
+          "lead": "Crossing",
+          "text": "Appeal and conservation end the game when they sit in the same scoring area, or have passed one another.",
+          "details": "At the end of your turn, every other player takes one more turn. During a break, every player, including you, takes one more turn."
+        },
+        {
+          "lead": "Action slot",
+          "text": "The used action card returns to slot 1."
+        },
+        {
+          "lead": "Kiosks",
+          "text": "A standard enclosure has to be occupied before a kiosk counts it for income. An empty special enclosure still counts."
+        },
+        {
+          "lead": "Final-scoring cards",
+          "text": "The first player to reach 10 conservation makes every player discard one final-scoring card immediately.",
+          "details": "If nobody reached 10 before the game ends, each player discards one before final scoring. A reach during the game discards immediately. Missing 10 entirely discards before final scoring."
+        }
+      ],
+      "endGameScoring": {
+        "text": "Add end-of-game conservation or appeal from the final-scoring card you still hold, and from cards with an end-of-game icon.",
+        "bullets": [
+          {
+            "lead": "One card",
+            "text": "The first time a player reaches or passes 10 conservation, every player discards one final-scoring card right then.",
+            "details": "If nobody reached 10 before the game ends, discard one before this scoring. Either way, one card is out before you add the points. A single final-scoring card is worth at most 4 conservation."
+          },
+          {
+            "lead": "Target",
+            "text": "Find the scoring area your conservation marker sits in. The target is the lowest appeal value in that area."
+          },
+          {
+            "lead": "Victory points",
+            "text": "Your appeal minus that target. The total can be negative."
+          },
+          {
+            "lead": "Tie",
+            "text": "Most conservation projects supported, counted by player tokens that have left the left edge of the zoo map. A remaining tie is shared."
+          }
+        ],
+        "details": "Capstone Games English rulebook, ©2021 Feuerland. Solo is not restated here."
+      },
       "rulesGlossary": [
         {
           "term": "X-token",
@@ -1558,10 +1672,49 @@
           "name": "Marine Worlds",
           "bggId": "368966",
           "setup": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.",
-          "rules": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.",
-          "scoring": "End-game scoring is still the base system: conservation points times appeal points, plus the final-scoring cards.\nThe final-scoring deck now includes Marine Worlds cards.",
+          "rules": {
+            "text": "Sea animals need aquariums, the new special enclosure.",
+            "bullets": [
+              {
+                "lead": "University",
+                "text": "The new university gives you one animal icon of your choice."
+              },
+              {
+                "lead": "Reefs",
+                "text": "A reef effect can be collected more than once."
+              }
+            ],
+            "details": "Card-by-card reef text stays on the cards. Capstone / Feuerland Marine Worlds booklet."
+          },
+          "scoring": {
+            "text": "End-game scoring stays the base system.",
+            "bullets": [
+              {
+                "lead": "Formula",
+                "text": "Appeal minus the target number for the scoring area your conservation marker sits in."
+              },
+              {
+                "lead": "Cards",
+                "text": "The final-scoring deck now includes the Marine Worlds cards. The 10-conservation discard is unchanged."
+              }
+            ],
+            "details": "Same formula as the Capstone base rulebook. Marine Worlds adds cards to that deck."
+          },
           "quickStart": "Before setup, add the new special enclosures and special buildings, and the extra kiosks and pavilions, to the supply.\nMix the new bonus tiles, zoo cards, final-scoring cards, and the base conservation project into the matching decks. A wave icon marks expansion cards.\nGeneral setup: put 1 extra random bonus tile behind the \"1 attraction\" space next to reputation space 15. Use the new Association board. Place the new university on that board and the animal-class universities beside it.\nPersonal setup: after you choose a zoo map and before anything else, draft 2 alternate action cards (there are 4 alternates for each of the 5 base actions) and replace those 2 standard action cards. Then place Animals in slot 1 and the other four at random. Use the new counters and animal-shaped markers.",
-          "reminders": "Sea animals need aquariums, the new special enclosure.\nThe new university gives you one animal icon of your choice.\nReef effects can be collected more than once.",
+          "reminders": {
+            "text": "Sea animals need aquariums, the new special enclosure.",
+            "bullets": [
+              {
+                "lead": "University",
+                "text": "The new university gives you one animal icon of your choice."
+              },
+              {
+                "lead": "Reefs",
+                "text": "A reef effect can be collected more than once."
+              }
+            ],
+            "details": "Card-by-card reef text stays on the cards. Capstone / Feuerland Marine Worlds booklet."
+          },
           "rulebook": "ark-nova--marine-worlds",
           "youtube": "https://www.youtube.com/watch?v=3NyZWytjEe8"
         }
@@ -1571,7 +1724,25 @@
         "3": "Place the Break token on the space marked 3.\nPlace the 3 topmost Base Conservation Project cards face up. Do not use the 2-player covers.\nAppeal starts at 0, 1, and 2 in turn order.",
         "4": "Place the Break token on the space for 4 players.\nPlace the 4 topmost Base Conservation Project cards face up under the Association board.\nAppeal starts at 0, 1, 2, and 3 in turn order."
       },
-      "rulebook": "ark-nova"
+      "rulebook": "ark-nova",
+      "endOfGame": {
+        "text": "The game ends when your appeal counter and your conservation counter are in the same scoring area, or have passed one another.",
+        "bullets": [
+          {
+            "lead": "End of your turn",
+            "text": "Every other player takes one more turn."
+          },
+          {
+            "lead": "During a break",
+            "text": "Every player, including you, takes one more turn. Then score."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Appeal minus the target number for your conservation bracket.",
+        "The total can be negative. Highest total wins.",
+        "Tie: most conservation projects supported."
+      ]
     },
     "azul": {
       "cover": "covers/azul.webp",
@@ -1610,7 +1781,26 @@
         "2": "Place 5 factory displays. Fill each with 4 tiles from the bag.",
         "3": "Place 7 factory displays. Fill each with 4 tiles from the bag.",
         "4": "Place 9 factory displays. Fill each with 4 tiles from the bag."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "When",
+          "text": "The game ends right after the wall-tiling phase in which someone completes a horizontal line of 5."
+        },
+        {
+          "lead": "Then",
+          "text": "Score complete rows, columns, and colors. Highest score wins."
+        },
+        {
+          "lead": "Tie",
+          "text": "More complete horizontal lines. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Ends when a horizontal line of 5 is tiled.",
+        "Then rows, columns, and colors. Highest score wins.",
+        "Tie: more complete horizontal lines."
+      ]
     },
     "azul-duel": {
       "cover": "covers/azul-duel.webp",
@@ -1968,10 +2158,113 @@
         "3": "- Remove every card and Merchant tile marked 4+.\n- No Merchant tile in Nottingham.\n- Teal location cards are not in the deck.\n- Each era lasts 9 rounds. Still £17 and 8 cards each.",
         "4": "- Use every location card and place a Merchant on every Merchant space, including Warrington and Nottingham.\n- Each era lasts 8 rounds. Still £17 and 8 cards each."
       },
-      "turnStructure": "- Canal Era (1770-1830), then Rail Era (1830-1870). Rounds per era: 8 at 4 players, 9 at 3, 10 at 2.\n- On your turn take 2 actions. In the first Canal Era round only, each player takes 1 action.\n- Each action discards 1 card, and so does each pass. You may repeat an action. Wild cards return to their face-up piles instead of your discard pile.\n- After your turn, draw back to 8 cards. After the deck is empty, the hand just gets smaller.\n- Money spent this round sits on your character tile.\n- End of round: whoever spent the least goes first next round. Equal spends keep their relative order. Return that money to the bank, then take income.\n- Do not take income at the end of the final round of the game. The last Canal Era round still pays income.\n- Negative income is paid to the bank. An era ends after the round in which everyone plays their last card.",
-      "remindersText": "- Build is the only action that needs a specific card. A location card builds any industry in that city, even outside your network. An industry card builds that industry only inside your network.\n- A Wild Location is any city except the two Farm Breweries. A Wild Industry is any industry card, including a Farm Brewery.\n- Your network is a city that holds one of your industries, or a city touching one of your links. Connected means a path of anyone's links.\n- If you have nothing on the board, an industry card may build in any legal city, and any card may place a link on any empty line. A rail still needs coal.\n- Canal Network places 1 canal for £3. Rail Network places 1 rail for £5 plus 1 coal, or 2 rails for £15 plus 1 coal each and 1 beer from a brewery, not from a Merchant. An opponent's beer for the second rail must be connected to that second rail.\n- Develop removes the lowest remaining tile of one or two industries and spends 1 iron per tile. Lightbulb Pottery cannot be developed.\n- Scout discards 3 cards and takes 1 Wild Location plus 1 Wild Industry. You cannot Scout while you already hold a Wild card.\n- Sell flips any number of your cotton, manufactured-goods, and pottery tiles. Each one needs a connection to a Merchant space of that type, plus its beer.\n- Beer: yours needs no connection. An opponent's brewery must connect to the place that needs it. Merchant beer is legal only while selling to that Merchant.\n- Drinking a Merchant's beer also pays its bonus. Gloucester removes 1 lowest mat tile for free (not lightbulb Pottery). Oxford is +2 income spaces. Nottingham and Shrewsbury score their printed VP. Warrington pays £5.\n- Coal from a mine is free and must be the closest connected mine. Market coal needs a connection to a Merchant coal icon, cheapest first, or £8 a cube if the market is empty.\n- Iron comes from any Iron Works, no connection and not necessarily the closest, or from the market with no connection. An empty iron market is £6 a cube.\n- A new coal mine sells cubes onto the market only if it connects to any Merchant space, even an empty one. A new Iron Works always sells. Fill the dearest empty spaces, take that money, and flip the tile if it empties. Cubes never move to the market on a later turn.\n- Flipping a tile moves your income that many spaces, not levels, and income cannot rise above 30. The coal, iron, and beer supply does not run out.\n- Farm Breweries are built only with a Brewery or Wild Industry card. Cannock needs the link to the farm on its left. The farm beside Kidderminster and Worcester is reached by the one link between those cities; do not add a second link.",
+      "turnStructure": {
+        "text": "Canal Era (1770–1830), then Rail Era (1830–1870). Each era is 10 rounds at 2 players, 9 at 3, and 8 at 4.",
+        "bullets": [
+          {
+            "lead": "Two actions",
+            "text": "Take 2 actions on your turn. You may repeat an action. In the first Canal round only, each player takes 1 action."
+          },
+          {
+            "lead": "Discard",
+            "text": "Each action discards 1 card from your hand, and so does each pass. Then draw back to 8.",
+            "details": "Once the deck is empty, the hand only gets smaller. Wild cards return to their face-up piles instead of your discard. Scout is the exception on the count: discard the action card plus 2 more cards, then take 1 Wild Location and 1 Wild Industry. You cannot Scout while you already hold a Wild card."
+          },
+          {
+            "lead": "Turn order",
+            "text": "Money spent this round sits on your character. Whoever spent the least goes first next round. Equal spends keep their order. Return that money, then take income.",
+            "details": "Negative income is paid to the bank. Do not take income after the final round of the game. The last Canal round still pays income."
+          },
+          {
+            "lead": "Era end",
+            "text": "An era ends after the round in which everyone plays their last card."
+          }
+        ]
+      },
+      "remindersText": [
+        {
+          "lead": "Build",
+          "text": "The only action that needs a specific card. A location card builds any industry in that city, even outside your network. An industry card builds that industry only inside your network."
+        },
+        {
+          "lead": "Wild cards",
+          "text": "A Wild Location is any city. It does not build the two Farm Breweries. A Wild Industry is any industry, including a Farm Brewery."
+        },
+        {
+          "lead": "Network",
+          "text": "Your network is a city that holds one of your industries, or a city touching one of your links. Connected means a path of anyone's links.",
+          "details": "With nothing on the board, an industry card may build in any legal city, and any card may place a link on any empty line. A rail still needs coal."
+        },
+        {
+          "lead": "Canal link",
+          "text": "£3 for 1 canal."
+        },
+        {
+          "lead": "Rail link",
+          "text": "£5 plus 1 coal for 1 rail, or £15 plus 1 coal each and 1 beer for 2 rails.",
+          "details": "The beer comes from a brewery, not a Merchant. An opponent's beer for the second rail must connect to that second rail, after it is placed."
+        },
+        {
+          "lead": "Develop",
+          "text": "Remove the lowest remaining tile of one or two industries and spend 1 iron per tile. Lightbulb Pottery cannot be developed."
+        },
+        {
+          "lead": "Scout",
+          "text": "Discard the action card plus 2 more cards. Take 1 Wild Location and 1 Wild Industry.",
+          "details": "You cannot Scout while a Wild card is already in your hand. Roxley, Scout action."
+        },
+        {
+          "lead": "Sell",
+          "text": "Flip any number of your cotton, manufactured-goods, and pottery tiles. Each one needs a connection to a Merchant of that type, plus its beer."
+        },
+        {
+          "lead": "Beer",
+          "text": "Your own brewery needs no connection. An opponent's brewery must connect to the place that needs it. Merchant beer is legal only while selling to that Merchant."
+        },
+        {
+          "lead": "Merchant beer",
+          "text": "Drinking it also pays its bonus. Gloucester removes 1 lowest mat tile for free, not lightbulb Pottery. Oxford is +2 income spaces. Nottingham and Shrewsbury score their printed VP. Warrington pays £5."
+        },
+        {
+          "lead": "Coal",
+          "text": "A connected mine is free, and it must be the closest one. Market coal needs a connection to a Merchant coal icon, cheapest first.",
+          "details": "An empty coal market is £8 a cube. A new coal mine sells cubes onto the market only if it connects to any Merchant space, even an empty one. Fill the dearest empty spaces, take that money, and flip the tile if it empties. Cubes never move to the market on a later turn."
+        },
+        {
+          "lead": "Iron",
+          "text": "Comes from any Iron Works, with no connection and not necessarily the closest, or from the market with no connection.",
+          "details": "An empty iron market is £6 a cube. A new Iron Works always sells onto the market."
+        },
+        {
+          "lead": "Flip",
+          "text": "Moving income is that many spaces, not levels, and income cannot rise above 30. The coal, iron, and beer supply does not run out."
+        },
+        {
+          "lead": "Farm Breweries",
+          "text": "Built only with a Brewery or Wild Industry card. Cannock needs the link to the farm on its left. The farm beside Kidderminster and Worcester is reached by the one link between those cities."
+        }
+      ],
       "commonMistakes": "- A loan is not debt you repay. Discard a card, take £30, and move income back 3 levels (not 3 spaces) onto the highest space of the new level. You cannot go below -10.\n- The half-price tile sale is only for unpaid negative income. Remove your industries, not links, for half their cost rounded down, and stop once the shortfall is covered. Still short: lose 1 VP per £1.\n- You may overbuild any of your own tiles with a higher tile of the same industry, even if cubes remain. Those cubes go back to the supply. An opponent's tile must be coal or iron, and only when no cubes of that resource remain on the board or in its market.\n- Overbuilding removes the old tile from the game. It will not score. Already-gained income and VP stay.\n- You do not score the VP printed on opponents' tiles. Their flipped tiles only add link icons when you score your own links.\n- Canal Era: at most one of your industry tiles in a city. Other players may also have one there. Rail Era: you may build more than one of yours in a city.\n- Do not build a mat slot whose era icon is wrong for the era. The exception is level 1 Pottery, which may be built in the Rail Era. Other level 1 tiles score at the end of the Canal Era and then leave the board.\n- Hands stay hidden in both eras. There is no face-up Rail Era hand.",
-      "endGameScoring": "- End of each era, links first. Each of your links scores 1 VP per link icon on flipped industry tiles in the two cities it joins. Any owner counts. Unflipped tiles do not. Remove the link as you score it.\n- Then score the VP on your own flipped tiles. Unflipped tiles score nothing.\n- After Canal scoring, remove every level 1 industry from the board (leave them on player mats), refill empty beer spaces beside Merchants that are on the board, and shuffle all discard piles into a new deck. Turn each pile's face-down bottom card face up before the shuffle.\n- After Rail scoring, most VP wins. Break ties by highest income, then most money left. Otherwise the tied players share the win.\n- Introductory game: play only the Canal Era, score it normally, then add 1 VP per £4 you hold (maximum 15), VP equal to your income level (a negative level loses VP), and score each level 2 or higher industry tile a second time.",
+      "endGameScoring": {
+        "text": "At the end of each era, score links first, then flipped tiles.",
+        "bullets": [
+          {
+            "lead": "Links",
+            "text": "Each of your links scores 1 VP per link icon on flipped industry tiles in the two cities it joins. Any owner counts. Remove the link as you score it.",
+            "details": "Unflipped tiles add nothing to that link."
+          },
+          {
+            "lead": "Tiles",
+            "text": "Score the VP on your own flipped tiles. Unflipped tiles score nothing. Opponents' tiles add link icons only, when you score your own links."
+          },
+          {
+            "lead": "After the Canal Era",
+            "text": "Remove every level 1 industry from the board. Leave them on the player mats. Refill empty beer spaces beside Merchants that are on the board. Shuffle every discard into a new deck.",
+            "details": "Turn each pile's face-down bottom card face up before that shuffle. Do not start the Rail Era with a card face down in your discard."
+          }
+        ],
+        "details": "Roxley Brass: Birmingham English rulebook, the current file on the Roxley product page."
+      },
       "rulesGlossary": [
         {
           "term": "Your network",
@@ -2010,7 +2303,26 @@
           "desc": "At era end, before industry VP, each of your links scores 1 VP for each link icon on flipped tiles in the two adjacent locations, whoever owns those tiles. Then the link is removed. Your industry VP is scored only from your own flipped tiles."
         }
       ],
-      "expansions": []
+      "expansions": [],
+      "endOfGame": {
+        "text": "Each era ends after the round in which every player plays their last card. Score that era, then play the Rail Era. The game ends after Rail scoring.",
+        "bullets": [
+          {
+            "lead": "Winner",
+            "text": "Most VP. Break ties by highest income, then most money left. Otherwise the tied players share the win."
+          },
+          {
+            "lead": "Introductory game",
+            "text": "Play only the Canal Era, score it, then add the booklet's extra Canal points.",
+            "details": "1 VP per £4 you hold, maximum 15. VP equal to your income level, and a negative level loses VP. Score each level 2 or higher industry tile a second time."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most VP after the Rail Era wins.",
+        "Tie: highest income, then most money.",
+        "Each era scores links, then your flipped tiles."
+      ]
     },
     "brass-pittsburgh": {
       "cover": "covers/brass-pittsburgh.webp",
@@ -2462,7 +2774,21 @@
       "setupByPlayerCount": {
         "3": "Do not use the white pieces. Each of the three players still places two settlements and two roads as shown and draws resources from the second settlement."
       },
-      "rulebook": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf"
+      "rulebook": "https://www.catan.com/sites/default/files/2025-03/CN3081%20CATAN%E2%80%93The%20Game%20Rulebook%20secure%20%281%29.pdf",
+      "endOfGame": [
+        {
+          "lead": "10",
+          "text": "The first player to reach 10 victory points on their own turn wins."
+        },
+        {
+          "lead": "Reveal",
+          "text": "Victory Point cards you need, including one bought this turn, are revealed once you can reach 10."
+        }
+      ],
+      "scoringSummary": [
+        "First to 10 victory points on your turn.",
+        "Settlements 1, cities 2, Longest Route 2, Largest Army 2, Victory Point cards 1."
+      ]
     },
     "century-golem-edition": {
       "cover": "covers/century-golem-edition.webp",
@@ -3332,7 +3658,33 @@
       "startingResources": "Deal one Island card and one Climate card to each player and return the rest. Deal one personal Ecosystem card as well, and put four Fauna cards and two shared Ecosystem cards on the Fauna board, each on a random side.\n\nEach player chooses one side of their Island, Climate, and personal Ecosystem and places that side face up. Those cards grant different starting resources, abilities, and points. Take the soil amount printed on the chosen Island card.\n\nEach player takes five leaf tokens of one color: four go on the central leaf spaces, and the fifth sits aside to mark the action. No opening hand of Earth cards is dealt in the setup text.",
       "remindersText": "Use the same side of every player board. The back is for other modes, including solo and teams. A simpler game uses the beginner side of the Fauna board.\n\nChoose the first player at random and give them both the first-player token and the active-player token.\n\nFor a more open setup, deal two Island cards, two Climate cards, and two Ecosystem cards for each player to choose from.\n\nIsland and Climate cards sit on the player board. Ecosystem cards are both personal and shared. Fauna cards are only on the Fauna board. Flora, terrain, and events come from the Earth deck.\n\nIf the Earth deck runs out, shuffle the discard to replace it. Do not shuffle personal compost into that deck. If both deck and discard are empty, players can no longer draw or compost from the deck.\n\nEvent cards can be played at times the card allows, including outside the planting action, as printed on the card-information page.\n\nThe same PDF includes a solo opponent, Gaia. This summary is the multiplayer game.",
       "playerCountSetup": "The multiplayer setup printed here is the same from 2 through 5 players. Solo uses the separate Gaia rules in the same PDF.",
-      "turnStructure": "Play proceeds clockwise. The active player chooses one of the four action spaces and puts the active-player token above it. Everyone else puts their fifth leaf on that same action.\n\nPlanting: the active player may plant up to two cards, one at a time, paying each soil cost from their reserve. Only flora and terrain are planted into the tableau. They then draw four Earth cards, keep one, and discard the other three facedown. Those three do not go into the personal compost. Each other player may plant one card by paying its cost, and may also draw one card.\n\nComposting: the active player gains 5 soil into their reserve, then places two cards from the draw pile onto their compost without looking at them. Each other player either gains 2 soil or composts two cards from the draw pile.\n\nWatering: the active player places up to 6 sprouts on their flora that still have empty sprout spaces, then may gain 2 soil. Each other player either places up to 2 sprouts or gains 2 soil. Everyone then activates blue and multicolored abilities.\n\nGrowing: the active player draws four cards into hand, then may place up to 2 growth on flora that still have room. Each other player either draws two cards or places up to 2 growth. Everyone then activates yellow and multicolored abilities.\n\nGreen abilities go with planting and red abilities with composting. A black ability happens as soon as the card is played. A brown ability is an ongoing or end-game effect. If a cost is printed, it must be paid in full; benefits may be taken in part.",
+      "turnStructure": {
+        "text": "Play proceeds clockwise. The active player chooses one of the four actions. Everyone else does the weaker version, then the matching colored abilities fire.",
+        "bullets": [
+          {
+            "lead": "Plant",
+            "text": "The active player may plant up to two cards, one at a time, paying each soil cost. Only flora and terrain are planted. Then draw 4, keep 1, and discard the other 3.",
+            "details": "Those 3 discards go to the shared discard, not your compost. Each other player may plant 1 card, then may draw 1. They may draw even if they planted nothing. They cannot draw before the plant step. Then everyone activates green abilities, tableau from left to right and top to bottom."
+          },
+          {
+            "lead": "Compost",
+            "text": "The active player gains 5 soil, then places 2 cards from the draw pile onto their compost without looking. Each other player either gains 2 soil or composts 2 cards the same way. Then red abilities."
+          },
+          {
+            "lead": "Water",
+            "text": "The active player places up to 6 sprouts on flora that still have empty sprout spaces, then may gain 2 soil. Each other player either places up to 2 sprouts or gains 2 soil. Then blue abilities."
+          },
+          {
+            "lead": "Grow",
+            "text": "The active player draws 4 cards, then may place up to 2 growth on flora that still have room. Each other player either draws 2 cards or places up to 2 growth. Then yellow abilities."
+          },
+          {
+            "lead": "Colors",
+            "text": "Green with planting, red with composting, blue with watering, yellow with growing. A black ability happens when the card is played. A brown ability is ongoing or end-game.",
+            "details": "A printed cost must be paid in full. Benefits may be taken in part. You may skip activations."
+          }
+        ]
+      },
       "commonMistakes": "The three cards you do not keep after a planting draw go to the shared discard, not your compost.\n\nCompost cards from the deck are placed facedown and are not inspected. There is no limit to compost size.\n\nSprouts only sit in empty sprout spaces. Extra growth that will not fit is lost. Growth order matters because abilities can care about it.\n\nDo not score event cards as part of the tableau base. Score them only from the event space.\n\nA fauna claim stays even if you later fall short of its requirement.\n\nConverting sprouts to soil removes 3 sprouts from your flora and gains 2 soil. It is optional when you need soil.",
       "endGameScoring": "The game ends at the end of the round in which any player completes a 16-card tableau. That player puts a leaf on the 7 VP space. Remaining players still take their turns so the round finishes. If several players would finish on the same turn, the active player claims the bonus. If that is not how the tie arose, the tied player closest to the left of the active player, clockwise, claims it.\n\nAfter the round, score in this order: base VP of the Island, the Climate, and every tableau card except events; base VP of cards in the event space, which can be negative; 1 VP per composted card; 1 VP per sprout; 1 VP per trunk, or the canopy completion value instead once the canopy is placed; terrain end-game bonuses; personal and both shared ecosystem objectives; leaf tokens on the Fauna board, including the 7 VP bonus.\n\nMost VP wins. Tiebreakers, in order, are soil in reserve, cards in hand, growth on the tableau, sprouts, then composted cards.\nThese notes follow Inside Up Games, Earth Rulebook Web.pdf, in the publisher Drive folder linked by the Download the Rulebook button on.",
       "rulesGlossary": [
@@ -3358,7 +3710,29 @@
         }
       ],
       "expansions": [],
-      "rulebook": "https://drive.google.com/file/d/1C3FIHT3W_bRL4xmVJjbZncipB_QNhBI5/view"
+      "rulebook": "https://drive.google.com/file/d/1C3FIHT3W_bRL4xmVJjbZncipB_QNhBI5/view",
+      "endOfGame": {
+        "text": "The first player to plant their 16th card ends the game at the end of that round and takes 7 VP.",
+        "bullets": [
+          {
+            "lead": "Round",
+            "text": "Remaining players still take their turns so the round finishes."
+          },
+          {
+            "lead": "Who takes the 7",
+            "text": "If several players would finish on the same turn, the active player claims it. Otherwise the tied player closest clockwise from the active player claims it."
+          },
+          {
+            "lead": "Winner",
+            "text": "Most VP after the end-game scoring order. Ties break on soil in reserve, then cards in hand, growth, sprouts, then compost."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most VP wins, after the round the 16th card is planted.",
+        "That player also takes 7 VP.",
+        "Tie: soil, then hand, growth, sprouts, compost."
+      ]
     },
     "everdell": {
       "cover": "covers/everdell.webp",
@@ -3443,7 +3817,24 @@
         "3": "Use 4 forest cards. The meadow is 8 cards. Opening hands are 5, then 6, then 7. Workers on the Ever Tree are 1 spring, 1 summer, and 2 autumn.\nOnly 1 worker may occupy each forest location. The extra spots marked for a fourth player stay closed.",
         "4": "Use 4 forest cards. The meadow is 8 cards. Opening hands are 5, 6, 7, and 8. Workers on the Ever Tree are 1 spring, 1 summer, and 2 autumn.\nThe extra forest spots are open. You still may not place 2 of your own workers on one forest location."
       },
-      "rulebook": "everdell"
+      "rulebook": "everdell",
+      "endOfGame": {
+        "text": "After autumn, when you cannot or do not want to take another action, you pass.",
+        "bullets": [
+          {
+            "lead": "Others",
+            "text": "A player who has passed cannot be given cards or resources. Everyone else keeps playing until all have passed."
+          },
+          {
+            "lead": "Winner",
+            "text": "Most points. Tie: most events, then most leftover resources."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most points after everyone has passed.",
+        "Tie: most events, then most leftover resources."
+      ]
     },
     "the-fellowship-of-the-ring-trick-taking-game": {
       "cover": "covers/the-fellowship-of-the-ring-trick-taking-game.webp",
@@ -4410,10 +4801,67 @@
           "name": "Rocky Roads",
           "bggId": "459763",
           "setup": "Add the South Africa and Germany tracks, plus gravel, chicanes, Aggressive Legends, and extra slipstream.\nThe box also adds stress, heat, sponsorship cards, advanced upgrades 61–66, 1966 event cards, track cards, starting upgrades, and a 7th-player set.",
-          "rules": "A chicane is 2 consecutive corner lines with the same speed limit and at least 1 space between them, marked with blue curbs.\nIf you are not using the Weather and Road Conditions module, treat chicanes as regular corners.\nThe Tight Maneuvers event reduces total slipstream value by 1.",
-          "scoring": "Championship scoring is unchanged. Tight Maneuvers only changes slipstream during that race; it does not add a new end-of-championship scoring category.",
+          "rules": {
+            "text": "Days of Wonder Rocky Roads rules, ©2026. These are the track rules, not a new way to score the championship.",
+            "bullets": [
+              {
+                "lead": "Gravel",
+                "text": "At the end of your turn, when the played cards are discarded, a car sitting on gravel pays 1 Heat if the engine still has Heat.",
+                "details": "If the engine has no Heat, ignore the gravel."
+              },
+              {
+                "lead": "Chicane",
+                "text": "Two corner lines with the same speed limit and at least one space between them, marked with blue curbs.",
+                "details": "Without the Weather and Road Conditions module, treat a chicane as two ordinary corners. With that module, draw one road-condition token for the chicane. A sector symbol modifies the sector after the chicane. Any other token modifies both corner lines."
+              },
+              {
+                "lead": "Aggressive Legends",
+                "text": "A Legend that starts its turn on a chevron space may cross one extra corner line that round.",
+                "details": "The same chevron rule can be used on the base Great Britain track: mark the space in front of corners whose limit is 6, 5, or 4."
+              },
+              {
+                "lead": "Extra slipstream",
+                "text": "An optional garage or championship symbol. After a slipstream leaves you in a new slipstream position, you may slipstream again.",
+                "details": "Bonuses that apply to slipstream this round also apply to the extra move. The extra move is still slipstream, so it is not speed for a corner. Tight Maneuvers reduces your total slipstream value by 1 for that race."
+              }
+            ]
+          },
+          "scoring": [
+            {
+              "lead": "Championship",
+              "text": "Most championship points still wins. Gravel, chicanes, and extra slipstream do not add a scoring category."
+            },
+            {
+              "lead": "Tight Maneuvers",
+              "text": "That 1966 event only reduces slipstream during its race."
+            }
+          ],
           "quickStart": "Add the South Africa and Germany tracks, plus gravel, chicanes, Aggressive Legends, and extra slipstream.\nThe box also adds stress, heat, sponsorship cards, advanced upgrades 61–66, 1966 event cards, track cards, starting upgrades, and a 7th-player set.",
-          "reminders": "A chicane is 2 consecutive corner lines with the same speed limit and at least 1 space between them, marked with blue curbs.\nIf you are not using the Weather and Road Conditions module, treat chicanes as regular corners.\nThe Tight Maneuvers event reduces total slipstream value by 1.",
+          "reminders": {
+            "text": "Days of Wonder Rocky Roads rules, ©2026. These are the track rules, not a new way to score the championship.",
+            "bullets": [
+              {
+                "lead": "Gravel",
+                "text": "At the end of your turn, when the played cards are discarded, a car sitting on gravel pays 1 Heat if the engine still has Heat.",
+                "details": "If the engine has no Heat, ignore the gravel."
+              },
+              {
+                "lead": "Chicane",
+                "text": "Two corner lines with the same speed limit and at least one space between them, marked with blue curbs.",
+                "details": "Without the Weather and Road Conditions module, treat a chicane as two ordinary corners. With that module, draw one road-condition token for the chicane. A sector symbol modifies the sector after the chicane. Any other token modifies both corner lines."
+              },
+              {
+                "lead": "Aggressive Legends",
+                "text": "A Legend that starts its turn on a chevron space may cross one extra corner line that round.",
+                "details": "The same chevron rule can be used on the base Great Britain track: mark the space in front of corners whose limit is 6, 5, or 4."
+              },
+              {
+                "lead": "Extra slipstream",
+                "text": "An optional garage or championship symbol. After a slipstream leaves you in a new slipstream position, you may slipstream again.",
+                "details": "Bonuses that apply to slipstream this round also apply to the extra move. The extra move is still slipstream, so it is not speed for a corner. Tight Maneuvers reduces your total slipstream value by 1 for that race."
+              }
+            ]
+          },
           "rulebook": "https://cdn.svc.asmodee.net/production-daysofwonder/uploads/2026/01/HTEX3_EN_HEAT_Rocky_Road_RULES.pdf"
         },
         {
@@ -4533,7 +4981,29 @@
         "4": "Only the last car to move each round has Adrenaline.",
         "5": "The two last cars to move each round have Adrenaline. The booklet switches to two cars at 5 or more.",
         "6": "The two last cars to move each round have Adrenaline. Same rule as 5 cars."
-      }
+      },
+      "endOfGame": {
+        "text": "Finish the laps printed on the track. The first car across the line wins.",
+        "bullets": [
+          {
+            "lead": "Same round",
+            "text": "The car farther along the track wins. Side by side, the spot nearer the race line wins."
+          },
+          {
+            "lead": "After the line",
+            "text": "Ignore corner limits and move as far as the cards take you. No slipstream across the line, or past it."
+          },
+          {
+            "lead": "The rest",
+            "text": "A finished car leaves the track for the Hall of Fame. Keep racing until every car finishes. Adrenaline still follows how many cars started."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "First car across the line wins.",
+        "Same round: farther along the track, then nearer the race line.",
+        "Race until every car finishes."
+      ]
     },
     "hive-pocket": {
       "cover": "covers/hive-pocket.webp",
@@ -6284,11 +6754,55 @@
       "youtube": "",
       "quickStart": "Z-Man Games Pandemic rulebook, ©2013. Two to four players, cooperative. The team wins or loses together.\nPut the board out. Place one research station in Atlanta and keep the other five nearby. Sort the 96 disease cubes, 24 of each of blue, yellow, black, and red, into four supplies.\nOutbreaks marker on 0. Cure markers start vial-side up beside the cure indicators.\nInfection rate marker on the leftmost 2. Shuffle the infection cards. Infect three cities with 3 cubes, three with 2, and three with 1, matching each card's color. Those nine cards start the infection discard. The rest are the infection deck. That is 18 cubes.\nSet the six epidemic cards aside. Shuffle the other player cards, the 48 cities and 5 events, and deal the opening hands. Shuffle the seven role cards, deal one face up to each player, and put that pawn in Atlanta. Unused roles leave the game.\nChoose a difficulty and shuffle that many epidemics back in: 4 introductory, 5 standard, or 6 heroic. Split the player deck into that many face-down piles, as even as you can, shuffle one epidemic into each pile, and stack the piles. The player with the highest city population on a card in hand goes first.",
       "startingResources": "A role card, its pawn in Atlanta, a reference card, and an opening hand of city and event cards. The hand size is on the player-count buttons. Nobody starts with a cure.",
-      "remindersText": "A turn is 4 actions, then draw 2 player cards, then infect cities.\nDrive or ferry along a white line. Direct flight discards the city card you move to. Charter flight discards the card of the city you are in and moves anywhere. Shuttle flight moves between research stations.\nBuild a research station by discarding the card of the city you are in. Discover a cure at a research station by discarding 5 city cards of that color. The Scientist needs only 4. Treat disease removes 1 cube, or every cube of that color if it is cured.\nShare knowledge only in the city printed on the card, and only with another player who is there. You may give that card or take it.\nThe hand limit is 7 player cards. Discard down as soon as you are over it. Events are not an action and do not count toward the limit. You do not draw a replacement when you draw an epidemic.\nAn epidemic raises the infection rate one step, infects the bottom infection card with 3 cubes, and shuffles the infection discard onto the top of the infection deck. Two epidemics drawn together are resolved one after the other. An eradicated disease places no new cubes.",
+      "remindersText": [
+        {
+          "lead": "Turn",
+          "text": "Up to 4 actions, then draw 2 player cards, then infect cities."
+        },
+        {
+          "lead": "Move",
+          "text": "Drive or ferry along a white line. A direct flight discards the city card you move to. A charter flight discards the card of the city you are in. A shuttle flight moves between research stations."
+        },
+        {
+          "lead": "Station and cure",
+          "text": "Build a research station by discarding the card of the city you are in. Discover a cure at a research station by discarding 5 city cards of that color. The Scientist needs 4."
+        },
+        {
+          "lead": "Treat",
+          "text": "Remove 1 cube, or every cube of that color if that disease is cured."
+        },
+        {
+          "lead": "Share",
+          "text": "Only in the city printed on the card, and only with another player who is there. You may give that card or take it."
+        },
+        {
+          "lead": "Hand of 7",
+          "text": "Player cards over 7 must be discarded or played down to 7, as soon as you are over the limit.",
+          "details": "Event cards are player cards, so they count toward the 7. Playing an event is not an action, and it can be the way you get back to 7. You do not draw a replacement when you draw an epidemic."
+        },
+        {
+          "lead": "Epidemic",
+          "text": "Raise the infection rate one step, infect the bottom infection card with 3 cubes, and shuffle the infection discard onto the top of the infection deck.",
+          "details": "Two epidemics drawn together are resolved one after the other. An eradicated disease places no new cubes."
+        }
+      ],
       "playerCountSetup": "Opening hands and the epidemic count are separate. Hands are the buttons. Epidemics are 4, 5, or 6 for introductory, standard, or heroic, at any of these player counts.",
       "turnStructure": "On your turn, take up to 4 actions, then draw 2 player cards and resolve any epidemics, then infect. The infection step flips a number of infection cards equal to the current infection rate and places 1 cube of that color on each city, unless the disease is eradicated.\nA cube that would be a fourth cube on a city is an outbreak instead. Move the outbreaks marker up 1 and place 1 cube on each connected city. Chain outbreaks do not return to a city that already outbreaked in this chain.\nA cured disease with no cubes left on the board is eradicated. Flip its marker. You do not have to eradicate anything to win.",
       "commonMistakes": "The cure is discovered by discarding cards at a station. Treating cubes is a separate action, and a cured disease is not automatically gone from the board.\nShare knowledge is only the card that matches the city both players are standing in.\nAn epidemic infects the bottom of the infection deck, then the discard goes on top. It does not go on the bottom.\nThe eighth outbreak, a cube you cannot place because that color's supply is empty, or a player card you cannot draw ends the game as a loss.",
-      "endGameScoring": "The team wins as soon as cures have been discovered for all 4 diseases. Eradication is not required.\nThe team loses if the outbreaks marker reaches 8, if a disease cube is needed and that color's supply is empty, or if a player card is needed and the player deck is empty.\nThese notes are the Z-Man Games English Pandemic rulebook, ©2013, the file linked from the Z-Man product page.",
+      "endGameScoring": {
+        "text": "There is no point total. The team wins or loses together.",
+        "bullets": [
+          {
+            "lead": "Win",
+            "text": "Four cures. Cubes may still be on the board."
+          },
+          {
+            "lead": "Losses",
+            "text": "Eight outbreaks, an empty cube supply of the color you must place, or an empty player deck when a card must be drawn."
+          }
+        ],
+        "details": "Z-Man Games English Pandemic rulebook, ©2013, the file on the Z-Man page."
+      },
       "rulesGlossary": [
         {
           "term": "Cure",
@@ -6309,7 +6823,22 @@
         "2": "Deal 4 player cards to each player before the epidemics are shuffled back in.",
         "3": "Deal 3 player cards to each player before the epidemics are shuffled back in.",
         "4": "Deal 2 player cards to each player before the epidemics are shuffled back in."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "Win",
+          "text": "As soon as cures have been discovered for all 4 diseases. Eradication is not required."
+        },
+        {
+          "lead": "Lose",
+          "text": "The outbreaks marker reaches 8, a cube is needed and that color's supply is empty, or a player card is needed and the player deck is empty."
+        }
+      ],
+      "scoringSummary": [
+        "Cure all 4 diseases. Eradication is not required.",
+        "Lose at 8 outbreaks.",
+        "Also lose if a cube color or the player deck runs out."
+      ]
     },
     "parks": {
       "cover": "covers/parks.webp",
@@ -6377,7 +6906,25 @@
         "4": "Add Waterfall to the five basic sites, then add one random advanced site. Waterfall gives 1 sunshine and 1 water, and that action is only in 4 or more player games.\nTwo year cards, keep one. A first game can deal one. Token limit 12. Trail End is not on its solo side.\nThe first two hikers to buy gear each get 1 sunshine off that purchase.",
         "5": "Same trail as 4 players, including Waterfall.\nTwo year cards, keep one. A first game can deal one. Token limit 12.\nThe first two hikers to buy gear each get 1 sunshine off that purchase."
       },
-      "rulebook": "parks"
+      "rulebook": "parks",
+      "endOfGame": [
+        {
+          "lead": "Four seasons",
+          "text": "The game ends when the fourth season ends, after that season's photo."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most points from visited parks, photos, the year card, and the first-hiker marker."
+        },
+        {
+          "lead": "Tie",
+          "text": "Most parks visited. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Most points after the fourth season.",
+        "Tie: most parks visited."
+      ]
     },
     "parks-second-edition": {
       "cover": "covers/parks-second-edition.webp",
@@ -6745,7 +7292,21 @@
         "3": "Use the black book page for a 3- and 4-player game.\nA black 1-chip costs 10 coins. More black chips than the player on your left or the player on your right: move the droplet 1 space forward. More than both neighbors: move the droplet 1 space forward and take 1 ruby.",
         "4": "Same black book page as 3 players.\nA black 1-chip costs 10 coins. More black chips than either neighbor: move the droplet 1. More than both neighbors: move the droplet 1 and take 1 ruby."
       },
-      "rulebook": "the-quacks-of-quedlinburg"
+      "rulebook": "the-quacks-of-quedlinburg",
+      "endOfGame": [
+        {
+          "lead": "Nine turns",
+          "text": "The scoring marker farthest along the track wins."
+        },
+        {
+          "lead": "Same space",
+          "text": "Whoever filled the pot the most on the last turn. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "After 9 turns, the farthest scoring marker wins.",
+        "Same space: who filled the pot most on the last turn."
+      ]
     },
     "raccoon-tycoon": {
       "cover": "covers/raccoon-tycoon.webp",
@@ -7242,7 +7803,26 @@
         "4": "Each player draws 3. Reach total 21 or more.",
         "5": "Each player draws 3. Reach total 25 or more. Five or more corner-start factions must use Advanced Setup.",
         "6": "Each player draws 3. Reach total 28 or more. Corner-heavy mixes must use Advanced Setup."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "30 points",
+          "text": "The first player to 30 victory points wins immediately, including in the middle of a turn."
+        },
+        {
+          "lead": "Same moment",
+          "text": "If several players hit 30 together, the tied player closest clockwise to the current player wins. That includes the current player."
+        },
+        {
+          "lead": "Dominance",
+          "text": "Played in Daylight with at least 10 points. You stop scoring. Mouse, rabbit, or fox wins at the start of your Birdsong if you rule three clearings of that suit. Bird wins if you rule two opposite corners."
+        }
+      ],
+      "scoringSummary": [
+        "First to 30 victory points wins immediately.",
+        "Same moment: closest clockwise to the current player.",
+        "Dominance is a separate win, checked in Birdsong."
+      ]
     },
     "rummikub": {
       "cover": "covers/rummikub.webp",
@@ -8294,7 +8874,25 @@
         "2": "Reveal 3 nobles. Return 3 of each gem color to the box. Leave all 5 gold. Four face-up developments of each level.",
         "3": "Reveal 4 nobles. Return 2 of each gem color to the box. Leave all 5 gold. Four face-up developments of each level.",
         "4": "Reveal 5 nobles. Use all 7 of each gem and all 5 gold. Four face-up developments of each level."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "Trigger",
+          "text": "A player with 15 or more prestige at the end of their turn starts the end of the game."
+        },
+        {
+          "lead": "Last turns",
+          "text": "Finish the round so everyone has had the same number of turns. The player to the right of the first player takes the last turn."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most prestige. Tie: fewest development cards bought. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Most prestige after the round someone reaches 15.",
+        "Tie: fewest development cards."
+      ]
     },
     "square-one": {
       "cover": "covers/square-one.webp",
@@ -8795,7 +9393,26 @@
         "3": "Same hands as every other count. Only one side of a double route can be claimed.",
         "4": "Both sides of a double route are open. Different players claim them. One player cannot take both.",
         "5": "Both sides of a double route are open, each to a different player."
-      }
+      },
+      "endOfGame": [
+        {
+          "lead": "Trigger",
+          "text": "A player with 0, 1, or 2 trains left at the end of their turn gives every player, including themselves, one more turn."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most points after tickets are revealed."
+        },
+        {
+          "lead": "Tie",
+          "text": "Most completed destination tickets, then the player who has the longest-path card."
+        }
+      ],
+      "scoringSummary": [
+        "Most points after the last round of turns.",
+        "One more turn for everyone once a player has 2 or fewer trains.",
+        "Tie: most completed tickets, then the longest path."
+      ]
     },
     "time-to-panic": {
       "cover": "covers/time-to-panic.webp",
@@ -9905,7 +10522,25 @@
           "reminders": "The hummingbird module is optional: most of the Americas birds do not use it.\nA hummingbird action triggers when you move up a track onto or past a hummingbird icon, not when you move down.\nActivating a habitat does not require a hummingbird action.\nEmpty hummingbird slots count for powers that count empty slots. Powers that look at the leftmost empty slot ignore hummingbird slots."
         }
       ],
-      "rulebook": "wingspan"
+      "rulebook": "wingspan",
+      "endOfGame": {
+        "text": "Four rounds. The game ends when round 4 has been scored.",
+        "bullets": [
+          {
+            "lead": "Winner",
+            "text": "Most points."
+          },
+          {
+            "lead": "Tie",
+            "text": "Most unused food tokens. A remaining tie is shared."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most points after round 4 wins.",
+        "Tie: most unused food.",
+        "Count birds, bonuses, goals, eggs, cached food, and tucked cards."
+      ]
     },
     "7-wonders-second-edition": {
       "cover": "covers/7-wonders-second-edition.webp",
@@ -9961,6 +10596,21 @@
           "term": "Treasure",
           "desc": "Your coins. At the end, 1 point per 3 coins, and Treasure breaks a points tie."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "When",
+          "text": "Score after the Age III military comparison."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most points. Tie: most Treasure. If Treasure is also tied, the win is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Most points after Age III wins.",
+        "Tie: most Treasure.",
+        "A Treasure tie is shared."
       ]
     },
     "7-wonders-dice": {
@@ -11037,6 +11687,21 @@
           "term": "Communication pool",
           "desc": "One token per player, shared. A color card only. Helicopters are never shown."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Stages",
+          "text": "Stage 1 is practice and is not scored. From stage 2, write the result. Lower is better."
+        },
+        {
+          "lead": "Campaign",
+          "text": "After stage 25, cross out your single highest result and add the rest. A sum below 0 is the best ending."
+        }
+      ],
+      "scoringSummary": [
+        "Lower campaign score is better.",
+        "After stage 25, drop your single highest result.",
+        "A sum below 0 is the best ending."
       ]
     },
     "the-crew-mission-deep-sea": {
@@ -11077,6 +11742,20 @@
           "term": "Distress",
           "desc": "Everyone passes one non-submarine card the same way. The logged attempts for that mission go up by 1."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Win",
+          "text": "Every task is complete."
+        },
+        {
+          "lead": "Loss",
+          "text": "The mission is lost as soon as one task fails. Log the attempts. It can be tried again."
+        }
+      ],
+      "scoringSummary": [
+        "No points. Every task complete wins.",
+        "One failed task loses the mission."
       ]
     },
     "the-crew-the-quest-for-planet-nine": {
@@ -11117,6 +11796,20 @@
           "term": "Radio token",
           "desc": "One communication per player per attempt, before a trick and never during it."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Win",
+          "text": "The mission is won only if every task is completed as that mission requires."
+        },
+        {
+          "lead": "Loss",
+          "text": "Anything else is a loss for the whole crew. Log the attempt. A failed attempt can be tried again."
+        }
+      ],
+      "scoringSummary": [
+        "No points. Complete every task on the mission.",
+        "A failed attempt can be tried again."
       ]
     },
     "cryptid": {
@@ -12836,7 +13529,30 @@
           "desc": "The title held by whoever meets the chronicle goal. An Exile flips it to Usurper at the start of their turn."
         }
       ],
-      "rulebook": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf"
+      "rulebook": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+      "endOfGame": {
+        "text": "There is no point total. The Law lists four endings, then the Chronicle is resolved.",
+        "bullets": [
+          {
+            "lead": "Exile, Wake",
+            "text": "Usurper, if you already hold the Oathkeeper title on its Usurper side. Visionary, if a revealed Vision's goal is complete and at least three Visions have been drawn."
+          },
+          {
+            "lead": "Stability",
+            "text": "From the end of round 5, the Chancellor can win the roll if the Chancellor or a Citizen is Oathkeeper. Round 5 needs a 6. Round 6 needs a 5 or 6. Round 7 needs a 3, 4, 5, or 6.",
+            "details": "A Citizen who meets the Successor goal wins instead of the Chancellor."
+          },
+          {
+            "lead": "Round 8",
+            "text": "The game ends. Check Empire-if-Oathkeeper, then Usurper, then Visionary, then Empire. Successor goals replace a Chancellor win when met."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "No points. An Exile wins in Wake as Usurper or Visionary.",
+        "The Chancellor can win a stability roll from round 5.",
+        "Round 8 ends the game in the Law's order."
+      ]
     },
     "ostia-mariner-edition": {
       "cover": "covers/ostia-mariner-edition.webp",
@@ -14068,7 +14784,26 @@
           "desc": "One bonus ticket earned by linking any listed west-coast city to any listed east-coast city. It counts as a completed ticket."
         }
       ],
-      "rulebook": "https://cdn.svc.asmodee.net/staging-daysofwonder/uploads/2024/07/tk_rules_en_2018.pdf"
+      "rulebook": "https://cdn.svc.asmodee.net/staging-daysofwonder/uploads/2024/07/tk_rules_en_2018.pdf",
+      "endOfGame": [
+        {
+          "lead": "Six tickets",
+          "text": "The game ends immediately when a player completes a sixth ticket. That player wins the Golden Ticket."
+        },
+        {
+          "lead": "Last train",
+          "text": "The game also ends if a player places their last train. Then the most completed tickets wins."
+        },
+        {
+          "lead": "Tie",
+          "text": "On the last-train ending, every tied player wins together."
+        }
+      ],
+      "scoringSummary": [
+        "Six completed tickets wins at once.",
+        "Otherwise, most completed tickets when someone places their last train.",
+        "That tie is a shared win."
+      ]
     },
     "unicorn-glitterluck-cloud-stacking": {
       "cover": "covers/unicorn-glitterluck-cloud-stacking.webp",
@@ -14201,6 +14936,20 @@
           "term": "Exhausted",
           "desc": "Your deck is empty. A draw deals 2 damage to each of your fighters. Do not reshuffle."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Duel",
+          "text": "Reduce the opposing hero to 0 health and you win. There is no point total."
+        },
+        {
+          "lead": "Teams",
+          "text": "Both opposing heroes must be defeated. A player whose hero is gone still takes turns while they have a sidekick."
+        }
+      ],
+      "scoringSummary": [
+        "Defeat the opposing hero.",
+        "Teams: defeat both opposing heroes."
       ]
     },
     "unmatched-houdini-vs-the-genie": {
@@ -14238,6 +14987,15 @@
           "term": "Boost bonus",
           "desc": "An effect on some of Houdini's cards. It happens when you discard that card to boost, not when an opponent uses the number."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Duel",
+          "text": "The first player to defeat the opposing hero wins. This box is two players."
+        }
+      ],
+      "scoringSummary": [
+        "Defeat the opposing hero. This set is a two-player duel."
       ]
     },
     "wingspan-pocket": {
@@ -14926,6 +15684,25 @@
           "term": "Blind boost",
           "desc": "Strange reveals the top card and adds its boost. Not a draw. An empty deck adds 0."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Duel",
+          "text": "Defeat the opposing hero."
+        },
+        {
+          "lead": "Free-for-all",
+          "text": "You are out when your hero is defeated, and your sidekick is removed immediately. The last hero left wins."
+        },
+        {
+          "lead": "Teams",
+          "text": "Both heroes of a team must be defeated. A player whose hero is gone still takes turns while their sidekick remains."
+        }
+      ],
+      "scoringSummary": [
+        "Duel: defeat the opposing hero.",
+        "Free-for-all: last hero standing.",
+        "Teams: defeat both opposing heroes."
       ]
     },
     "unmatched-stars-and-stripes": {
@@ -14960,6 +15737,15 @@
           "term": "Track token",
           "desc": "John Henry. Up to 2 in his zone. Your own movement does not count a space that holds one."
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Fight",
+          "text": "This set booklet does not add a points score. The fight ends under the Unmatched rules you are already using, when a hero is defeated."
+        }
+      ],
+      "scoringSummary": [
+        "No points in this set. Defeat the opposing hero."
       ]
     },
     "sea-salt-and-paper": {
@@ -14999,13 +15785,135 @@
       "time": "90",
       "year": "2024",
       "rulebook": "https://stonemaiergames.com/games/wyrmspan/rules-faq/",
-      "quickStart": "Stonemaier Games Wyrmspan, designed by Connie Vogelmann. One to five players, about 90 minutes. It is not compatible with Wingspan.\nEach player takes a mat, an adventurer, 8 markers, and a guild token. The sanctuary starts with the leftmost space of the Crimson Cavern, the Golden Grotto, and the Amethyst Abyss already excavated.\nDraw 3 dragon cards and 3 cave cards. Keep any 4, face up or face down, and discard the other 2 to start the face-up discards. Place starting coins to the left of the mat. The income each round is 6 coins, and the opening coins on the mat's setup are 6 coins and 1 egg.\nPut the round marker on round 1. Shuffle the objective tiles and place 4 at random, each on a random side. Coins, eggs, and resources form the supply. The Dragon Guild board gets each player's guild token on the labeled start space.\nThe dragon-facts book is separate from the rules and is not copied here. Solo cards are in the solo booklet.",
+      "quickStart": {
+        "text": "Stonemaier Games Wyrmspan, designed by Connie Vogelmann. One to five players, about 90 minutes. It is not compatible with Wingspan.",
+        "bullets": [
+          {
+            "lead": "Mats",
+            "text": "Each player takes a mat, an adventurer, 8 markers, and a guild token. The leftmost space of the Crimson Cavern, the Golden Grotto, and the Amethyst Abyss starts excavated."
+          },
+          {
+            "lead": "Hand",
+            "text": "Draw 3 dragon cards and 3 cave cards. Keep any 4. Discard the other 2 face up."
+          },
+          {
+            "lead": "Opening",
+            "text": "6 coins and 1 egg. The same gift, 6 coins and 1 egg, is the income at the start of every later round.",
+            "details": "The egg is gained only if a nest icon can hold it."
+          },
+          {
+            "lead": "Board",
+            "text": "Round marker on 1. Shuffle the objective tiles and place 4 at random, each on a random side. Coins, eggs, and resources form the supply. Guild tokens start on the labeled space."
+          }
+        ],
+        "details": "The dragon-facts book is separate and is not copied here. Solo cards are in the solo booklet."
+      },
       "startingResources": "6 coins, 1 egg, and a hand of 4 cards chosen from 3 dragons and 3 caves. Three cave spaces already excavated.",
-      "remindersText": "A round is several turns, clockwise from the start player, until you pass. You usually pass when the coins are gone or no dragon in hand is worth playing. After you pass you take no more turns that round, and you can still receive shared benefits. Coins, resources, cave cards, dragons, and nested eggs carry over.\nA turn is one action. Pay its cost by putting the coins or eggs on the action.\nExcavate: play a cave card from hand into the leftmost empty space of a cave. Pay 1 coin, plus 1 egg for the third column or 2 eggs for the fourth. A free excavate skips both. You excavate one space per action unless the card says otherwise. The fourth column can also trade any 3 items, resources or cards, for 1 coin. That trade is optional.\nEntice: play a dragon from hand into the leftmost excavated space of a cave, paying the printed cost plus the column cost.\nExplore: pick a cave and move the adventurer from left to right, activating dragons, until you reach the printed end. The adventurer returns to base camp at the end of your turn.\nAt the end of each of your turns, discard down to 9 coins, 9 cards, and 9 resources. Eggs and coins may be returned to the supply if it runs low, and you still track how often you explored each cave this round.\nWhen an ability lets everyone do something, you go first and the others follow clockwise. The display does not refill until the end of the turn, after those choices. Abilities are optional unless they benefit other players. You may refuse an all-players benefit for yourself and you cannot refuse it for them.\nAt the end of a round each player gains 1 card, from the display or the deck, and may keep it or tuck it. A tuck under a hatchling with a tuck ability pays that benefit. The next round pays 6 coins of income. A rare extra coin can arrive after you pass.",
+      "remindersText": [
+        {
+          "lead": "One action",
+          "text": "Pay its cost by putting the coins or eggs on the action."
+        },
+        {
+          "lead": "Excavate",
+          "text": "Play a cave from hand into the leftmost empty space of a cave. Pay 1 coin, plus 1 egg in column 3 or 2 eggs in column 4.",
+          "details": "A free excavate skips both costs. One space per action unless the card says otherwise. Column 4 can also trade any 3 resources or cards for 1 coin. That trade is optional."
+        },
+        {
+          "lead": "Entice",
+          "text": "Play a dragon from hand into the leftmost excavated space of a cave. Pay the printed cost plus the column cost."
+        },
+        {
+          "lead": "Explore",
+          "text": "Pick a cave and move the adventurer from left to right, activating dragons, until you reach the printed end. The adventurer returns to base camp at the end of your turn."
+        },
+        {
+          "lead": "Caps",
+          "text": "At the end of your turn, discard down to 9 coins, 9 cards, and 9 resources.",
+          "details": "Eggs and coins may be returned to the supply if it runs low. You still track how often you explored each cave this round."
+        },
+        {
+          "lead": "Shared abilities",
+          "text": "You go first and the others follow clockwise. The display does not refill until the end of the turn, after those choices.",
+          "details": "Abilities are optional unless they benefit other players. You may refuse an all-players benefit for yourself. You cannot refuse it for them."
+        },
+        {
+          "lead": "Round-end card",
+          "text": "A card when the round ends comes only from a dragon that says so, such as Beckoning Cricketcatcher."
+        }
+      ],
       "playerCountSetup": "One to five players use the same mats. The Dragon Guild tiles include a 4-and-5-player side. Solo is the separate booklet.",
-      "turnStructure": "Four rounds. On each turn, excavate, entice, or explore one cave. Pass to leave the round. After everyone has passed, gain a card, advance the round, and pay income.",
-      "commonMistakes": "The column cost in eggs is part of excavating and enticing, on top of the card. Column 3 is one egg. Column 4 is two.\nPassing does not make you discard your coins. You were advised to spend them because the next income is a fresh 6, and the end-of-turn cap is 9.\nA cave card and a dragon both come from hand. Excavate plays the cave. Entice plays the dragon into a space that is already excavated.\nTied guild places each take the full reward for that place. The next player takes the next place.",
-      "endGameScoring": "Most victory points wins. Count the printed value of dragons, end-of-game abilities, eggs, cached resources, tucked cards, the public objectives, and the Dragon Guild. Guild ties are friendly: each tied player takes that place's full award. The scorepad also pays for leftover coins and leftover items. That conversion is a printed line on the pad and did not read as a clean sentence, so it is not restated here.\nA tied score goes to the most dragons on the player mat.\nThese notes are the Stonemaier Games Wyrmspan rulebook, from the text Stonemaier links on the Wyrmspan rules page. The Open Rulebook button opens that page.",
+      "turnStructure": {
+        "text": "Four rounds. On your turn, excavate, entice, or explore. Then the next player who has not passed.",
+        "bullets": [
+          {
+            "lead": "Pass",
+            "text": "You may pass to leave the round. You take no more turns that round. Coins, resources, caves, dragons, and nested eggs carry over."
+          },
+          {
+            "lead": "Round end",
+            "text": "When everyone has passed: clear the coins and eggs you paid onto the mat, activate once-per-round dragons, then mark this round's objective.",
+            "details": "Once-per-round dragons go in turn order, starting with that round's start player. Objective ties are friendly: tied players each take that place, and the next player takes the next place. A player with none of the item marks all others, for 0."
+          },
+          {
+            "lead": "Next round",
+            "text": "Move the round marker, refresh the display, give each player 6 coins and 1 egg, and pass the start player clockwise.",
+            "details": "Refresh discards the 3 face-up dragons and the 3 face-up caves and deals 3 new of each. The egg is gained only if a nest can hold it. A card at the end of the round comes only from a dragon that says so."
+          }
+        ]
+      },
+      "commonMistakes": [
+        {
+          "lead": "Column eggs",
+          "text": "The column cost is on top of the card. Column 3 is one egg. Column 4 is two. It applies to excavating and to enticing."
+        },
+        {
+          "lead": "Passing",
+          "text": "You do not discard your coins when you pass. The next income is a fresh 6 coins and 1 egg, and the end-of-turn cap is 9."
+        },
+        {
+          "lead": "Which card",
+          "text": "Excavate plays a cave. Entice plays a dragon into a space that is already excavated."
+        },
+        {
+          "lead": "Objectives",
+          "text": "Tied places each take the full reward for that place. The next player takes the next place. A zero marks all others."
+        },
+        {
+          "lead": "Round-end card",
+          "text": "Only a dragon that says so gives a card at the end of the round. It is not paid to the whole table."
+        }
+      ],
+      "endGameScoring": {
+        "text": "Add the categories below. Objective points were marked during the rounds and are counted now.",
+        "bullets": [
+          {
+            "lead": "Guild",
+            "text": "Markers on the Dragon Guild that line up with an end-game benefit."
+          },
+          {
+            "lead": "Dragons",
+            "text": "Printed VP on visible dragons on the mat. Not cards in hand, and not tucked cards."
+          },
+          {
+            "lead": "End-game abilities",
+            "text": "On visible dragons on the mat. Not tucked, and not in hand."
+          },
+          {
+            "lead": "Eggs, cache, tucks",
+            "text": "1 per egg, 1 per cached resource, and 1 per tucked dragon, unless a card says otherwise."
+          },
+          {
+            "lead": "Objectives",
+            "text": "The VP printed on the space your marker occupies. Ties are friendly, so each tied player takes that place's full award."
+          },
+          {
+            "lead": "Leftovers",
+            "text": "1 VP per coin you still have. 1 VP for every 4 other items, mixing resources, dragon cards, and cave cards. Round down."
+          }
+        ],
+        "details": "Stonemaier Wyrmspan rulebook, Wyr_Rulebook_r19, linked from the Wyrmspan rules page."
+      },
       "rulesGlossary": [
         {
           "term": "Excavate",
@@ -15113,6 +16021,25 @@
           },
           "rulebook": "https://images.salsify.com/image/upload/s--Fyb-5fHg--/m59sirqlihezypd1fq48.pdf"
         }
+      ],
+      "endOfGame": [
+        {
+          "lead": "When",
+          "text": "After round 4 is scored, including that round's objective markers."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most victory points."
+        },
+        {
+          "lead": "Tie",
+          "text": "Most visible dragons on the mat, not counting tucked cards. A remaining tie is shared."
+        }
+      ],
+      "scoringSummary": [
+        "Most VP after round 4 wins.",
+        "Tie: most visible dragons on the mat.",
+        "Leftover coins are 1 each. Other leftovers are 1 per 4."
       ]
     },
     "finspan": {
@@ -15124,9 +16051,59 @@
       "startingResources": "A public hand of 5 fish, 2 of them starters, 2 eggs and 1 young already on the mat, and 6 divers.",
       "remindersText": "Each turn you place one available diver and either play a fish or dive a site. You take 6 turns in each of 4 weeks, 24 turns in all.\nPlaying a fish pays its cost and follows its placement. You may cover a shorter fish, by choice or because a cost says so, including a printed forage fish. Forage fish are worth no points on their own. There is no hand limit. Unplayed fish stay face up.\nA dive moves down a site. The site's benefit is once per dive if you have at least one fish there, not once per fish. The first diver to reach the bottom covers the bottom bonus and may use it. Covering it is required. Using it is not.\nEggs, young, and schools share tokens. A young and an egg may sit on the same fish. A school cannot enter or pass a slot that already has a school. Some fish make you remove young, eggs, or schools, or discard cards, as a cost.\nAn all-players benefit can be skipped by the active player and still offered to the others, clockwise.\nWhen the deck empties, shuffle every discard together. The official variant lets each player keep 1 card of their discard out of that shuffle.\nAutoma and the card list stay in the booklet and in Finsearch.",
       "playerCountSetup": "One to five players each take 6 divers and the same opening hand shape. Solo is the automa in the booklet.",
-      "turnStructure": "Four weeks of six turns. At the end of weeks 1, 2, and 3, score that week's achievement, bring the divers home, and pass the first-player token clockwise. On side B, everyone who tied for the most achievement points that week also scores 3, and the tie is friendly.\nWeek 4 is the end of the game. Score the printed points on visible fish, activate any two game-end abilities, and score eggs, young, schools, and the remaining achievements as the sheet lists.",
+      "turnStructure": {
+        "text": "Four weeks. Each player takes 6 turns in a week, one diver each turn.",
+        "bullets": [
+          {
+            "lead": "Turn",
+            "text": "Place one available diver and either play a fish or dive a site."
+          },
+          {
+            "lead": "End of weeks 1–3",
+            "text": "Score that week's achievement, bring the divers home, and pass the first-player token clockwise.",
+            "details": "On side B, everyone who tied for the most points on that week's tile also scores 3. The tie is friendly."
+          },
+          {
+            "lead": "Week 4",
+            "text": "Do not score a fourth achievement. Go straight to the end of the game."
+          }
+        ]
+      },
       "commonMistakes": "The dive-site bonus is once per dive, not once for every fish in the site.\nYou may play a longer fish on top of a shorter one. Forage fish are shorter fish printed on the mat.\nStarter fish and the three other fish begin face up. The hand is public.\nA school cannot move through another school.",
-      "endGameScoring": "Most points wins. Add the printed value of visible fish, the eggs, young, and schools, the achievements, and up to two game-end abilities you choose to activate.\nThese notes are the Stonemaier Games Finspan rulebook, from the text linked on the Finspan rules page. The Open Rulebook button opens that page. Card-by-card powers stay on the cards.",
+      "endGameScoring": {
+        "text": "Add these to the achievement points already written down for weeks 1 through 3.",
+        "bullets": [
+          {
+            "lead": "Bring fish in",
+            "text": "First activate, in any order, game-end abilities that do not themselves award points, including fish that enter play during this step."
+          },
+          {
+            "lead": "Game end",
+            "text": "Then take every yellow game-end score on fish in your ocean, in any order. Skip consumed fish."
+          },
+          {
+            "lead": "Fish",
+            "text": "Printed points on visible fish. Skip consumed fish."
+          },
+          {
+            "lead": "Consumed",
+            "text": "1 point for each consumed fish, cards and forage."
+          },
+          {
+            "lead": "Eggs and young",
+            "text": "1 point each."
+          },
+          {
+            "lead": "Schools",
+            "text": "6 points each."
+          },
+          {
+            "lead": "Tie",
+            "text": "Most fish cards in hand. A remaining tie is shared."
+          }
+        ],
+        "details": "Stonemaier Finspan rulebook, FS_Rulebook_r19, linked from the Finspan rules page. Card powers stay on the cards."
+      },
       "rulesGlossary": [
         {
           "term": "Week",
@@ -15153,6 +16130,20 @@
           "rulebook": "https://images.salsify.com/image/upload/s--DrccmCwd--/n7xytmopdnrlw24fmjof.pdf",
           "youtube": ""
         }
+      ],
+      "endOfGame": {
+        "text": "The game ends when week 4 is complete. Most points wins.",
+        "bullets": [
+          {
+            "lead": "Tie",
+            "text": "Most fish cards still in hand. A remaining tie is shared."
+          }
+        ]
+      },
+      "scoringSummary": [
+        "Most points after week 4 wins.",
+        "Tie: most fish cards in hand.",
+        "Score every game-end ability, not a chosen pair."
       ]
     },
     "explorers-of-navoria": {
