@@ -19,7 +19,7 @@
   :root {
     --bg:#f6f7fb;
     --fg:#111111;
-    --muted:#555555;
+    --muted:#3a3a3a;
     --card:#ffffff;
     --border:#e6e6ef;
     --btn:#ffffff;
@@ -35,7 +35,7 @@
   :root[data-theme="classic"] {
     --bg:#f6f7fb;
     --fg:#111111;
-    --muted:#555555;
+    --muted:#3a3a3a;
     --card:#ffffff;
     --border:#e6e6ef;
     --btn:#ffffff;
@@ -48,7 +48,7 @@
   :root[data-theme="dark"] {
     --bg:#0f1115;
     --fg:#e8eaf0;
-    --muted:#a2a8b4;
+    --muted:#d0d6e0;
     --card:#161922;
     --border:#2a2f3a;
     --btn:#1b2030;
@@ -61,7 +61,7 @@
   :root[data-theme="darkwood"] {
     --bg:#15100d;
     --fg:#f1e7d8;
-    --muted:#c3b49a;
+    --muted:#e4d5be;
     --card:#241812;
     --border:#3a2920;
     --btn:#2f2018;
@@ -74,7 +74,7 @@
   :root[data-theme="neongrid"] {
     --bg:#020611;
     --fg:#f4f7ff;
-    --muted:#a4b0ff;
+    --muted:#d4dcff;
     --card:#060b18;
     --border:#19203a;
     --btn:#071023;
@@ -93,11 +93,13 @@
   border-color: color-mix(in srgb, var(--accent) 70%, transparent 30%);
 }
 
-  html, body { height:100%; }
+  html { font-size:18px; }
+  html, body { min-height:100%; }
   body {
     margin:0;
     background:var(--bg);
     color:var(--fg);
+    line-height:1.55;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }
@@ -122,11 +124,15 @@
     display:flex;
     gap:10px;
     align-items:center;
+    min-width:0;
   }
   header h1 {
     margin:0;
     font-size:1rem;
     white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    min-width:0;
   }
   header .spacer { flex:1; }
   header button.toggle {
@@ -135,24 +141,40 @@
     background:transparent;
     color:#ffffff;
     border-radius:9px;
-    padding:8px 10px;
+    padding:8px 12px;
+    min-height:44px;
+    box-sizing:border-box;
     cursor:pointer;
     font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
   }
   header a.home {
     color:#ffffff;
     text-decoration:none;
     border:1px solid rgba(255,255,255,0.35);
     border-radius:9px;
-    padding:8px 10px;
+    padding:8px 12px;
+    min-height:44px;
+    box-sizing:border-box;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
   }
 
   .header-home-link {
     display:flex;
     align-items:center;
     gap:12px;
+    min-width:0;
     text-decoration:none;
     color:inherit;
+  }
+  .header-logo {
+    height:60px;
+    width:auto;
+    display:block;
   }
 
   main {
@@ -189,6 +211,7 @@
   }
   #search {
     width:100%;
+    min-height:48px;
     padding:14px 84px 14px 14px;
     border-radius:10px;
     border:1px solid var(--border);
@@ -204,7 +227,7 @@
     right:6px;
     top:50%;
     transform:translateY(-50%);
-    min-height:36px;
+    min-height:44px;
     padding:8px 12px;
     border-radius:8px;
     border:1px solid var(--btn-border);
@@ -334,9 +357,9 @@
   }
 
   .title {
-    margin:0.2rem 0 0.25rem;
-    font-size:1.2rem;
-    line-height:1.2;
+    margin:0.2rem 0 0.35rem;
+    font-size:1.45rem;
+    line-height:1.25;
     color:var(--accent);
   }
   .byline {
@@ -673,13 +696,295 @@
   background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
 }
 
+  /* Table reference: bigger type, 44px targets, sticky controls */
+  .btn,
+  .btnlink {
+    min-height:44px;
+  }
+  .pc-btn:focus-visible,
+  .exp-chip:focus-visible,
+  .jump-link:focus-visible,
+  .back-link:focus-visible,
+  .btn:focus-visible,
+  .btnlink:focus-visible,
+  header .toggle:focus-visible,
+  header .home:focus-visible,
+  #search-clear:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
+
+  .table-bar {
+    position:sticky;
+    top:var(--header-h, 72px);
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:0 0 12px;
+    padding:8px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:0 8px 16px -14px rgba(0,0,0,0.55);
+  }
+  .table-bar-top {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .table-bar-top .playercount-controls {
+    flex:1 1 auto;
+    min-width:0;
+    margin:0;
+  }
+  .table-bar .expansion-controls,
+  .table-bar .jump-links,
+  .table-bar .playercount-controls {
+    margin:0;
+  }
+  .table-bar .exp-note {
+    margin:0;
+    line-height:1.35;
+  }
+  .jump-links {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .jump-link {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+    min-width:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:var(--fg);
+    font-weight:700;
+    font-size:0.95rem;
+    text-decoration:none;
+    box-sizing:border-box;
+  }
+  .pc-btn,
+  .exp-chip {
+    min-width:44px;
+    box-sizing:border-box;
+  }
+  .exp-chip {
+    max-width:min(100%, 280px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .scoring-summary {
+    margin:0.15rem 0 0.85rem;
+    padding:10px 12px 10px 14px;
+    border-radius:12px;
+    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
+    border-left:4px solid var(--accent);
+    background:color-mix(in srgb, var(--card) 86%, var(--brand) 14%);
+    color:var(--fg);
+  }
+  .scoring-summary h3 {
+    margin:0 0 0.3rem;
+    font-size:1.02rem;
+    line-height:1.3;
+    color:var(--fg);
+  }
+  .scoring-summary p,
+  .scoring-summary-list {
+    margin:0;
+    font-size:1.02rem;
+    line-height:1.4;
+  }
+  .scoring-summary-list {
+    padding-left:1.15rem;
+  }
+  .scoring-summary-list li {
+    margin:0.12rem 0;
+  }
+
+  .rule-body > p,
+  .expansion-text-block p,
+  .rule-list {
+    font-size:1.0625rem;
+    line-height:1.55;
+  }
+  .rule-body > p,
+  .expansion-text-block p {
+    margin:0 0 0.65rem;
+  }
+  .rule-body > p:last-child,
+  .expansion-text-block p:last-child {
+    margin-bottom:0;
+  }
+  .rule-list {
+    margin:0.1rem 0 0.5rem;
+    padding-left:1.2rem;
+  }
+  .rule-list li {
+    margin:0.18rem 0;
+    padding-left:0.1rem;
+  }
+  .rule-list .rule-list {
+    margin:0.12rem 0 0.15rem;
+    font-size:1em;
+  }
+  .rule-lead {
+    font-weight:700;
+  }
+  .rule-empty {
+    margin:0;
+    color:var(--muted);
+  }
+  .rule-expansion {
+    margin-top:0.85rem;
+    padding-top:0.65rem;
+    border-top:1px dashed color-mix(in srgb, var(--accent) 35%, var(--border) 65%);
+  }
+  .rule-expansion > strong {
+    display:block;
+    margin:0 0 0.3rem;
+  }
+  .rule-details {
+    margin:0.35rem 0 0.45rem;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:color-mix(in srgb, var(--card) 90%, var(--bg) 10%);
+  }
+  .rule-details > summary {
+    cursor:pointer;
+    list-style:none;
+    min-height:44px;
+    padding:8px 12px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-sizing:border-box;
+  }
+  .rule-details > summary::-webkit-details-marker {
+    display:none;
+  }
+  .rule-details > summary::before {
+    content:">";
+    font-size:0.8rem;
+  }
+  .rule-details[open] > summary::before {
+    content:"v";
+  }
+  .rule-details-body {
+    padding:0 12px 10px;
+  }
+  .expansion summary {
+    color:var(--fg);
+    font-size:1.05rem;
+  }
+  .game-section h3 {
+    color:var(--fg);
+  }
+  .components-list li {
+    font-size:1.02rem;
+    line-height:1.45;
+  }
+  .rule-group,
+  .expansion,
+  .scoring-summary {
+    scroll-margin-top:calc(var(--header-h, 64px) + var(--table-bar-h, 0px) + 8px);
+  }
+  #notes-section textarea {
+    font-size:1rem;
+    line-height:1.5;
+  }
+  #search {
+    font-size:1rem;
+  }
+  .meta-pill--rating {
+    color:#5c4300;
+  }
+  :root[data-theme="dark"] .meta-pill--rating,
+  :root[data-theme="darkwood"] .meta-pill--rating,
+  :root[data-theme="neongrid"] .meta-pill--rating {
+    color:#ffe7a3;
+  }
+
+  @media (max-width:840px) {
+    html { font-size:19px; }
+    .table-bar {
+      margin-left:-14px;
+      margin-right:-14px;
+      border-radius:0;
+      border-left:0;
+      border-right:0;
+      padding:6px 10px;
+    }
+    .playercount-controls,
+    .expansion-controls,
+    .jump-links {
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .playercount-controls::-webkit-scrollbar,
+    .expansion-controls::-webkit-scrollbar,
+    .jump-links::-webkit-scrollbar {
+      display:none;
+    }
+    .pc-btn,
+    .exp-chip,
+    .jump-link,
+    .back-link {
+      flex:0 0 auto;
+      padding:8px 12px;
+      line-height:1.2;
+    }
+  }
+  @media (max-width:520px) {
+    header { padding:6px 10px; }
+    header .wrap { gap:8px; }
+    .header-logo { height:44px; }
+    header h1 {
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+  }
+  @media (orientation:landscape) and (max-height:520px) {
+    html { font-size:17px; }
+    header { padding:4px 10px; }
+    .header-logo { height:36px; }
+    main { margin-top:8px; margin-bottom:24px; }
+    .table-bar {
+      flex-direction:row;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:6px;
+      padding:4px 8px;
+    }
+    .table-bar-top { flex:1 1 auto; }
+    .table-bar .expansion-controls { flex:1 1 auto; }
+    .table-bar .jump-links { flex:1 1 auto; }
+    .table-bar .exp-note { display:none; }
+  }
+
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <a href="#/" class="header-home-link">
-      <img src="./logo.png" alt="BGQuick logo" style="height: 60px;">
+      <img src="./logo.png" alt="BGQuick logo" class="header-logo">
       <h1>Board Game Quick</h1>
     </a>
 
@@ -8344,8 +8649,8 @@
       bgstatsApp: id ? (BGSTATS_ID_PREFIX_APP + id) : null
     };
 
-    var qs  = (exp.quickStart || "").trim();
-    var rem = (exp.reminders  || "").trim();
+    var qs = exp.quickStart;
+    var rem = exp.reminders;
 
     return (
       '<details class="expansion">' +
@@ -8356,15 +8661,15 @@
               '<img src="' + cover + '" alt="' + expName + ' cover" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
             "</div>"
           ) : "") +
-          (qs ? (
-            '<div class="expansion-text-block"><h4>Quick Setup</h4><p>' +
-            qs.replace(/\n/g, "<br>") +
-            "</p></div>"
+          (!contentIsEmpty(qs) ? (
+            '<div class="expansion-text-block"><h4>Quick Setup</h4>' +
+            renderRuleContent(qs) +
+            "</div>"
           ) : "") +
-          (rem ? (
-            '<div class="expansion-text-block"><h4>Quick Reminders</h4><p>' +
-            rem.replace(/\n/g, "<br>") +
-            "</p></div>"
+          (!contentIsEmpty(rem) ? (
+            '<div class="expansion-text-block"><h4>Quick Reminders</h4>' +
+            renderRuleContent(rem) +
+            "</div>"
           ) : "") +
           '<div class="expansion-btns">' +
             (links.rulebook ? (
@@ -8553,6 +8858,8 @@
     );
   }
 
+  /* Rule body format: docs/CONTENT-FORMAT.md */
+  /* rule-render:start */
   function escapeHtml(s) {
     return String(s == null ? "" : s)
       .replace(/&/g, "&amp;")
@@ -8563,27 +8870,237 @@
   function textToHtml(s) {
     return escapeHtml(s).replace(/\n/g, "<br>");
   }
+  function contentIsEmpty(value) {
+    if (value == null) return true;
+    if (typeof value === "string") return !String(value).trim();
+    if (Array.isArray(value)) return value.length === 0;
+    if (typeof value === "object") {
+      if (value.lead && String(value.lead).trim()) return false;
+      if (value.text && String(value.text).trim()) return false;
+      if (Array.isArray(value.bullets) && value.bullets.length) return false;
+      if (value.details && !contentIsEmpty(value.details)) return false;
+      return true;
+    }
+    return true;
+  }
+  function firstFilled(a, b) {
+    if (!contentIsEmpty(a)) return a;
+    if (!contentIsEmpty(b)) return b;
+    return "";
+  }
   function expansionDelta(exp, kind) {
     if (!exp) return "";
-    if (kind === "setup") return String(exp.setup || exp.quickStart || "").trim();
-    if (kind === "rules") return String(exp.rules || exp.reminders || "").trim();
-    if (kind === "scoring") return String(exp.scoring || "").trim();
+    if (kind === "setup") return firstFilled(exp.setup, exp.quickStart);
+    if (kind === "rules") return firstFilled(exp.rules, exp.reminders);
+    if (kind === "scoring") return firstFilled(exp.scoring, "");
     return "";
   }
   function expansionHasDelta(exp) {
-    return !!(expansionDelta(exp, "setup") || expansionDelta(exp, "rules") || expansionDelta(exp, "scoring"));
+    return !contentIsEmpty(expansionDelta(exp, "setup")) ||
+      !contentIsEmpty(expansionDelta(exp, "rules")) ||
+      !contentIsEmpty(expansionDelta(exp, "scoring"));
+  }
+  function isBulletLine(line) {
+    return /^(\s*)([-*•])\s+\S/.test(line);
+  }
+  function bulletFromBody(body) {
+    var lead = "";
+    var text = String(body || "").trim();
+    var marked = text.match(/^\*\*([^*]+)\*\*\s*([\s\S]*)$/);
+    if (marked) {
+      lead = marked[1].trim();
+      text = marked[2].trim();
+    }
+    return { lead: lead, text: text, bullets: [] };
+  }
+  function parseBulletLines(text) {
+    var root = [];
+    var stack = [{ indent: -1, items: root }];
+    String(text).split("\n").forEach(function (line) {
+      if (!line.trim()) return;
+      var m = line.match(/^(\s*)([-*•])\s+(.*)$/);
+      if (!m) return;
+      var indent = m[1].replace(/\t/g, "  ").length;
+      var item = bulletFromBody(m[3]);
+      while (stack.length > 1 && indent <= stack[stack.length - 1].indent) stack.pop();
+      stack[stack.length - 1].items.push(item);
+      stack.push({ indent: indent, items: item.bullets });
+    });
+    return root;
+  }
+  function renderBulletItems(items) {
+    if (!items || !items.length) return "";
+    var lis = items.map(function (item) {
+      if (typeof item === "string") item = { text: item };
+      var lead = item.lead ? '<strong class="rule-lead">' + escapeHtml(String(item.lead)) + "</strong>" : "";
+      var text = item.text ? escapeHtml(String(item.text)) : "";
+      var line = lead && text ? lead + " " + text : (lead || text);
+      var nested = Array.isArray(item.bullets) && item.bullets.length ? renderBulletItems(item.bullets) : "";
+      var details = !contentIsEmpty(item.details) ? renderDetailsToggle(item.details) : "";
+      return "<li>" + line + nested + details + "</li>";
+    }).join("");
+    return '<ul class="rule-list">' + lis + "</ul>";
+  }
+  function renderDetailsToggle(details) {
+    if (contentIsEmpty(details)) return "";
+    var inner = renderRuleContent(details);
+    if (!inner) return "";
+    return (
+      '<details class="rule-details">' +
+        "<summary>Details</summary>" +
+        '<div class="rule-details-body">' + inner + "</div>" +
+      "</details>"
+    );
+  }
+  function renderProse(s) {
+    var text = String(s).replace(/\r\n/g, "\n").trim();
+    if (!text) return "";
+    var lines = text.split("\n");
+    var nonempty = lines.filter(function (line) { return line.trim(); });
+    if (nonempty.length && nonempty.every(isBulletLine)) {
+      return renderBulletItems(parseBulletLines(text));
+    }
+    if (!nonempty.some(isBulletLine)) return "<p>" + textToHtml(text) + "</p>";
+    var html = "";
+    var prose = [];
+    var bullets = [];
+    function flushProse() {
+      if (!prose.length) return;
+      var block = prose.join("\n").trim();
+      if (block) html += "<p>" + textToHtml(block) + "</p>";
+      prose = [];
+    }
+    function flushBullets() {
+      if (!bullets.length) return;
+      html += renderBulletItems(parseBulletLines(bullets.join("\n")));
+      bullets = [];
+    }
+    lines.forEach(function (line) {
+      if (!line.trim()) {
+        if (bullets.length) bullets.push("");
+        else if (prose.length) prose.push("");
+        return;
+      }
+      if (isBulletLine(line)) {
+        flushProse();
+        bullets.push(line);
+      } else {
+        flushBullets();
+        prose.push(line);
+      }
+    });
+    flushProse();
+    flushBullets();
+    return html;
+  }
+  function renderRuleContent(value) {
+    if (contentIsEmpty(value)) return "";
+    if (typeof value === "string") return renderProse(value);
+    if (Array.isArray(value)) return renderBulletItems(value);
+    if (typeof value === "object") {
+      var html = "";
+      var lead = value.lead ? String(value.lead).trim() : "";
+      var text = value.text ? String(value.text).trim() : "";
+      if (lead || text) {
+        var line = "";
+        if (lead && text) line = '<strong class="rule-lead">' + escapeHtml(lead) + "</strong> " + textToHtml(text);
+        else if (lead) line = '<strong class="rule-lead">' + escapeHtml(lead) + "</strong>";
+        else line = textToHtml(text);
+        html += "<p>" + line + "</p>";
+      }
+      if (Array.isArray(value.bullets) && value.bullets.length) html += renderBulletItems(value.bullets);
+      if (!contentIsEmpty(value.details)) html += renderDetailsToggle(value.details);
+      return html;
+    }
+    return "";
+  }
+  function summaryLineFromItem(item) {
+    if (!item || typeof item !== "object") return "";
+    var lead = item.lead ? String(item.lead).trim() : "";
+    var text = item.text ? String(item.text).trim() : "";
+    if (lead && text) return lead + " " + text;
+    return lead || text;
+  }
+  function scoringItems(value, limit) {
+    var items = [];
+    function add(line) {
+      line = String(line || "").replace(/\s+/g, " ").trim();
+      if (!line || items.length >= limit) return;
+      items.push(line);
+    }
+    function fromString(s) {
+      String(s).split(/\n/).forEach(function (line) {
+        if (items.length >= limit) return;
+        var t = line.trim();
+        if (!t) return;
+        t = t.replace(/^[-*•]\s+/, "");
+        var marked = t.match(/^\*\*([^*]+)\*\*\s*(.*)$/);
+        if (marked) t = (marked[1].trim() + " " + marked[2].trim()).trim();
+        add(t);
+      });
+    }
+    function walk(v) {
+      if (items.length >= limit || v == null || v === "") return;
+      if (typeof v === "string") { fromString(v); return; }
+      if (Array.isArray(v)) {
+        v.forEach(function (item) {
+          if (items.length >= limit) return;
+          if (typeof item === "string") add(item);
+          else if (item && typeof item === "object") {
+            var line = summaryLineFromItem(item);
+            if (line) add(line);
+            else if (Array.isArray(item.bullets)) walk(item.bullets);
+          }
+        });
+        return;
+      }
+      if (typeof v === "object") {
+        var line = summaryLineFromItem(v);
+        if (line) add(line);
+        if (Array.isArray(v.bullets)) walk(v.bullets);
+      }
+    }
+    walk(value);
+    return items;
+  }
+  function buildSummaryLines(game, selected) {
+    var lines = [];
+    if (game && !contentIsEmpty(game.scoringSummary)) lines = scoringItems(game.scoringSummary, 3);
+    else if (game) lines = scoringItems(game.endGameScoring, 3);
+    (selected || []).forEach(function (exp) {
+      var extra = scoringItems(expansionDelta(exp, "scoring"), 1);
+      if (extra.length) lines.push(String(exp.name || "Expansion") + ": " + extra[0]);
+    });
+    return lines;
+  }
+  function renderSummaryHtml(lines) {
+    if (!lines || !lines.length) return "";
+    if (lines.length === 1) return "<p>" + escapeHtml(lines[0]) + "</p>";
+    return (
+      '<ul class="scoring-summary-list">' +
+      lines.map(function (line) { return "<li>" + escapeHtml(line) + "</li>"; }).join("") +
+      "</ul>"
+    );
   }
   function composeSection(base, emptyLabel, selected, kind) {
     var parts = [];
-    if (base) parts.push(textToHtml(base));
-    (selected || []).forEach(function(exp) {
+    var baseHtml = renderRuleContent(base);
+    if (baseHtml) parts.push(baseHtml);
+    (selected || []).forEach(function (exp) {
       var delta = expansionDelta(exp, kind);
-      if (!delta) return;
-      parts.push("<strong>" + escapeHtml(exp.name || "Expansion") + "</strong><br>" + textToHtml(delta));
+      if (contentIsEmpty(delta)) return;
+      var deltaHtml = renderRuleContent(delta);
+      if (!deltaHtml) return;
+      parts.push(
+        '<div class="rule-expansion"><strong>' +
+          escapeHtml(exp.name || "Expansion") +
+        "</strong>" + deltaHtml + "</div>"
+      );
     });
-    if (!parts.length) return escapeHtml(emptyLabel);
-    return parts.join("<br><br>");
+    if (!parts.length) return '<p class="rule-empty">' + escapeHtml(emptyLabel) + "</p>";
+    return parts.join("");
   }
+  /* rule-render:end */
 
   function renderDetail(slug, action) {
     if (action === void 0) action = "quicksetup";
@@ -8612,73 +9129,88 @@
     };
 
     /* --- Base quick text fields --- */
-var quickText         = (g.quickStart || "").trim();
-var playerCountSetup  = (g.playerCountSetup || "").trim();
-var startingResources = (g.startingResources || "").trim();
-var remindersText     = (g.remindersText && String(g.remindersText).trim()) || "";
-var turnStructure     = (g.turnStructure || "").trim();
-var endGameScoring    = (g.endGameScoring || "").trim();
-var commonMistakes    = (g.commonMistakes || "").trim();
+    var quickText = g.quickStart;
+    var playerCountSetup = g.playerCountSetup;
+    var startingResources = g.startingResources;
+    var remindersText = g.remindersText;
+    var turnStructure = g.turnStructure;
+    var endGameScoring = g.endGameScoring;
+    var commonMistakes = g.commonMistakes;
+    var endOfGame = g.endOfGame;
+
+    function filledAttr(value) {
+      return contentIsEmpty(value) ? "" : ' data-filled="true"';
+    }
+    function openAttr(value) {
+      return contentIsEmpty(value) ? "" : " open";
+    }
+    function ruleShell(id, title, inner, opts) {
+      opts = opts || {};
+      return (
+        '<details class="expansion" id="' + id + '"' +
+          (opts.open ? " open" : "") +
+          (opts.filled ? ' data-filled="true"' : "") + ">" +
+          '<summary><span class="expansion-name">' + escapeHtml(title) + "</span></summary>" +
+          '<div class="expansion-body"><div class="rule-body"' +
+            (opts.bodyId ? ' id="' + opts.bodyId + '"' : "") + ">" +
+            inner +
+          "</div></div>" +
+        "</details>"
+      );
+    }
 
     /* --- Dynamic player-count setup (setupByPlayerCount) --- */
     var setupByPlayerCount =
-      (g.setupByPlayerCount && typeof g.setupByPlayerCount === "object")
+      (g.setupByPlayerCount && typeof g.setupByPlayerCount === "object" && !Array.isArray(g.setupByPlayerCount))
         ? g.setupByPlayerCount
         : null;
     var hasSetupByPlayerCount =
       setupByPlayerCount && Object.keys(setupByPlayerCount).length > 0;
 
+    var playerButtonsHtml = "";
     var playerCountHtmlInner;
     if (hasSetupByPlayerCount) {
       var counts = Object.keys(setupByPlayerCount).sort(function(a, b) {
         return parseInt(a, 10) - parseInt(b, 10);
       });
       var first = counts[0];
-
-      var buttonsHtml = counts.map(function(c) {
-        var on = c === first;
-        return (
-          '<button type="button" class="pc-btn" data-count="' + c + '" ' +
-          'aria-pressed="' + (on ? "true" : "false") + '" ' +
-          (on ? 'data-active="true"' : "") +
-          ">" + c + "p</button>"
-        );
-      }).join("");
-
-      playerCountHtmlInner =
-        '<div class="playercount-controls">' +
-          buttonsHtml +
-        "</div>" +
-        '<div class="expansion-text-block">' +
-          '<p id="pc-text">' +
-            (setupByPlayerCount[first] || "").replace(/\n/g,"<br>") +
-          "</p>" +
+      playerButtonsHtml =
+        '<div class="playercount-controls" role="group" aria-label="Player count">' +
+          counts.map(function(c) {
+            var on = c === first;
+            return (
+              '<button type="button" class="pc-btn" data-count="' + escapeHtml(c) + '" ' +
+              'aria-pressed="' + (on ? "true" : "false") + '" aria-controls="pc-text"' +
+              (on ? ' data-active="true"' : "") +
+              ">" + escapeHtml(c) + "p</button>"
+            );
+          }).join("") +
         "</div>";
+      playerCountHtmlInner =
+        renderRuleContent(setupByPlayerCount[first]) ||
+        '<p class="rule-empty">(No details for this player count yet.)</p>';
     } else {
       playerCountHtmlInner =
-        '<div class="expansion-text-block">' +
-          "<p>" +
-            (playerCountSetup || "(No player-count-specific setup yet.)").replace(/\n/g,"<br>") +
-          "</p>" +
-        "</div>";
+        renderRuleContent(playerCountSetup) ||
+        '<p class="rule-empty">(No player-count-specific setup yet.)</p>';
     }
 
-       /* --- Quick Rules Glossary --- */
+    /* --- Quick Rules Glossary --- */
     var rulesGlossary = Array.isArray(g.rulesGlossary) ? g.rulesGlossary : [];
     var rulesGlossaryHtml = "";
     if (rulesGlossary.length) {
-var glossaryItems = rulesGlossary.map(function(item) {
-  var term = (item.term || "").trim();
-  var desc = (item.desc || "").replace(/\n/g,"<br>");
-  return (
-    '<div class="expansion-text-block glossary-item">' +
-      "<p>" +
-        (term ? ("<strong>" + term + ".</strong> ") : "") +
-        desc +
-      "</p>" +
-    "</div>"
-  );
-}).join("");
+      var glossaryItems = rulesGlossary.map(function(item) {
+        var term = (item.term || "").trim();
+        var desc = item.desc;
+        var label = term ? "<strong>" + escapeHtml(term) + ".</strong> " : "";
+        var body;
+        if (desc == null || typeof desc === "string") {
+          body = "<p>" + label + textToHtml(desc || "") + "</p>";
+        } else {
+          body = (label ? "<p>" + label + "</p>" : "") + renderRuleContent(desc);
+        }
+        return '<div class="expansion-text-block glossary-item">' + body + "</div>";
+      }).join("");
 
       rulesGlossaryHtml =
         '<section class="exp" id="rules-glossary">' +
@@ -8699,144 +9231,168 @@ var glossaryItems = rulesGlossary.map(function(item) {
           "<h3>Components</h3>" +
           '<ul class="components-list">' +
             g.components.map(function (c) {
-              return "<li>" + c + "</li>";
+              return "<li>" + escapeHtml(c) + "</li>";
             }).join("") +
           "</ul>" +
         "</section>";
     }
 
-        /* --- Expansion toggles (multi-select, like player-count buttons) --- */
+    /* --- Expansion toggles (multi-select, like player-count buttons) --- */
     var namedExpansions = (Array.isArray(g.expansions) ? g.expansions : []).filter(function(exp) {
       return exp && String(exp.name || "").trim() && expansionHasDelta(exp);
     });
     var expansionControlsHtml = "";
+    var expansionNoteHtml = "";
     if (namedExpansions.length) {
       expansionControlsHtml =
         '<div class="expansion-controls" id="exp-controls" role="group" aria-label="Expansions in play">' +
           namedExpansions.map(function(exp, idx) {
-            return '<button type="button" class="exp-chip" data-exp="' + idx + '" aria-pressed="false">' +
+            return '<button type="button" class="exp-chip" data-exp="' + idx + '" aria-pressed="false" title="' +
+              escapeHtml(exp.name) + '">' +
               escapeHtml(exp.name) + "</button>";
           }).join("") +
-        "</div>" +
+        "</div>";
+      expansionNoteHtml =
         '<p class="exp-note">Turn an expansion on to add its setup, reminders, and scoring under the base game. Nothing selected keeps the base text.</p>';
     }
 
-        /* --- Quick blocks (setup/reminders/etc.) --- */
+    var setupPresent = !contentIsEmpty(quickText) || !contentIsEmpty(playerCountSetup) || hasSetupByPlayerCount || !contentIsEmpty(startingResources) || namedExpansions.some(function(exp) {
+      return !contentIsEmpty(expansionDelta(exp, "setup"));
+    });
+    var turnPresent = !contentIsEmpty(turnStructure);
+    var endPresent = !contentIsEmpty(endOfGame);
+    var scoringPresent = !contentIsEmpty(g.scoringSummary) || !contentIsEmpty(endGameScoring) || namedExpansions.some(function(exp) {
+      return !contentIsEmpty(expansionDelta(exp, "scoring"));
+    });
+    var jumps = [];
+    if (setupPresent) jumps.push({ href: "#section-setup", label: "Setup" });
+    if (turnPresent) jumps.push({ href: "#section-turn", label: "Turn" });
+    if (endPresent) jumps.push({ href: "#section-end", label: "End of Game" });
+    if (scoringPresent) jumps.push({ href: "#section-scoring", label: "Scoring" });
+    var jumpHtml = jumps.length
+      ? '<nav class="jump-links" aria-label="On this page">' +
+          jumps.map(function(j) {
+            return '<a class="jump-link" href="' + j.href + '">' + escapeHtml(j.label) + "</a>";
+          }).join("") +
+        "</nav>"
+      : "";
+
+    var summaryLines = buildSummaryLines(g, []);
+
+    var endOfGameHtml = "";
+    if (endPresent) {
+      endOfGameHtml =
+        '<div id="section-end" class="rule-group">' +
+          ruleShell("end-of-game-block", "End of Game", renderRuleContent(endOfGame), { open: true, filled: true }) +
+        "</div>";
+    }
+
+    /* --- Quick blocks (setup/reminders/etc.) --- */
     var quickBlocksHtml =
-      expansionControlsHtml +
-      // 1. Quick Set Up
-      '<details class="expansion" id="quick-setup-block"' + (quickText ? " open" : "") + ">" +
-        '<summary><span class="expansion-name">Quick Set Up</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            '<p id="qs-text">' + composeSection(quickText, "(No quick setup yet.)", [], "setup") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
-      // 2. Player Count Set Up
-      '<details class="expansion" id="playercount-block"' + (hasSetupByPlayerCount ? " open" : "") + ">" +
-        '<summary><span class="expansion-name">Player Count Set Up</span></summary>' +
-        '<div class="expansion-body">' +
-          playerCountHtmlInner +
-        "</div>" +
-      "</details>" +
-
-      // 3. Starting Resources
-      '<details class="expansion" id="starting-resources-block">' +
-        '<summary><span class="expansion-name">Starting Resources</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            "<p>" + (startingResources || "(No starting resources yet.)").replace(/\n/g,"<br>") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
-      // 4. Turn Structure
-      '<details class="expansion" id="turn-structure-block">' +
-        '<summary><span class="expansion-name">Turn Structure</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            "<p>" + (turnStructure || "(No turn structure summary yet.)").replace(/\n/g,"<br>") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
-      // 5. End Game Scoring
-      '<details class="expansion" id="endgame-scoring-block">' +
-        '<summary><span class="expansion-name">End Game Scoring</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            '<p id="scoring-text">' + composeSection(endGameScoring, "(No end game scoring notes yet.)", [], "scoring") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
-      // 6. Common Mistakes
-      '<details class="expansion" id="common-mistakes-block">' +
-        '<summary><span class="expansion-name">Common Mistakes</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            "<p>" + (commonMistakes || "(No common mistakes noted yet.)").replace(/\n/g,"<br>") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>" +
-
-      // 7. Reminders (after the main flow)
-      '<details class="expansion" id="reminders-block">' +
-        '<summary><span class="expansion-name">Reminders</span></summary>' +
-        '<div class="expansion-body">' +
-          '<div class="expansion-text-block">' +
-            '<p id="reminders-text">' + composeSection(remindersText, "(No reminders yet.)", [], "rules") + "</p>" +
-          "</div>" +
-        "</div>" +
-      "</details>";
+      '<div id="section-setup" class="rule-group">' +
+        ruleShell(
+          "quick-setup-block",
+          "Quick Set Up",
+          composeSection(quickText, "(No quick setup yet.)", [], "setup"),
+          { open: !contentIsEmpty(quickText), filled: !contentIsEmpty(quickText), bodyId: "qs-text" }
+        ) +
+        ruleShell(
+          "playercount-block",
+          "Player Count Set Up",
+          playerCountHtmlInner,
+          { open: !!hasSetupByPlayerCount, filled: !!hasSetupByPlayerCount || !contentIsEmpty(playerCountSetup), bodyId: "pc-text" }
+        ) +
+        ruleShell(
+          "starting-resources-block",
+          "Starting Resources",
+          renderRuleContent(startingResources) || '<p class="rule-empty">(No starting resources yet.)</p>',
+          { filled: !contentIsEmpty(startingResources) }
+        ) +
+      "</div>" +
+      '<div id="section-turn" class="rule-group">' +
+        ruleShell(
+          "turn-structure-block",
+          "Turn Structure",
+          renderRuleContent(turnStructure) || '<p class="rule-empty">(No turn structure summary yet.)</p>',
+          { filled: !contentIsEmpty(turnStructure) }
+        ) +
+      "</div>" +
+      endOfGameHtml +
+      '<div id="section-scoring" class="rule-group">' +
+        ruleShell(
+          "endgame-scoring-block",
+          "End Game Scoring",
+          composeSection(endGameScoring, "(No end game scoring notes yet.)", [], "scoring"),
+          { filled: !contentIsEmpty(endGameScoring), bodyId: "scoring-text" }
+        ) +
+      "</div>" +
+        ruleShell(
+          "common-mistakes-block",
+          "Common Mistakes",
+          renderRuleContent(commonMistakes) || '<p class="rule-empty">(No common mistakes noted yet.)</p>',
+          { filled: !contentIsEmpty(commonMistakes) }
+        ) +
+        ruleShell(
+          "reminders-block",
+          "Reminders",
+          composeSection(remindersText, "(No reminders yet.)", [], "rules"),
+          { filled: !contentIsEmpty(remindersText), bodyId: "reminders-text" }
+        );
 
     /* --- Main detail markup --- */
-    syncHeaderOffset();
-appEl.innerHTML =
-  '<nav class="detail-nav" aria-label="Back to the list">' +
-    '<a class="back-link" href="#/">All games</a>' +
-  "</nav>" +
-  '<article class="detail fade-in">' +
-    '<figure class="cover">' +
-      '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
-        '<img src="' + links.cover + '" alt="' + g.name + ' cover" loading="lazy">' +
-        '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
-      "</a>" +
-    "</figure>" +
-    "<div>" +
-      '<h2 class="title">' + g.name + "</h2>" +
-      buildMetaBar(g) +
-      '<div class="actions">' +
+    var tableBarHtml =
+      '<div class="table-bar" id="table-bar">' +
+        '<div class="table-bar-top">' +
+          '<a class="back-link" href="#/">All games</a>' +
+          playerButtonsHtml +
+        "</div>" +
+        expansionControlsHtml +
+        jumpHtml +
+      "</div>";
 
+    syncHeaderOffset();
+    appEl.innerHTML =
+      tableBarHtml +
+      '<article class="detail fade-in">' +
+        '<figure class="cover">' +
+          '<a id="bggCoverLink" href="#" target="_blank" rel="noopener" class="cover-link">' +
+            '<img src="' + links.cover + '" alt="' + escapeHtml(g.name) + ' cover" loading="lazy">' +
+            '<span id="bggCoverBadge" class="cover-badge" aria-hidden="true">BGG</span>' +
+          "</a>" +
+        "</figure>" +
+        "<div>" +
+          '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
+          '<aside class="scoring-summary" id="scoring-summary" aria-labelledby="scoring-summary-title"' +
+            (summaryLines.length ? "" : " hidden") + ">" +
+            '<h3 id="scoring-summary-title">How you win</h3>' +
+            '<div id="scoring-summary-body">' + renderSummaryHtml(summaryLines) + "</div>" +
+          "</aside>" +
+          buildMetaBar(g) +
+          '<div class="actions">' +
             '<section id="qs" class="exp">' +
+              expansionNoteHtml +
               (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
             "</section>" +
-
             '<section class="exp notes-box" id="notes-section">' +
               '<label class="notes-label" for="notes-' + slug + '">Your notes</label>' +
               '<p class="notes-hint">Saved on this device only. Private to this browser.</p>' +
               '<textarea id="notes-' + slug + '" placeholder="House rules, who taught it, what to remember next time..."></textarea>' +
               '<p class="notes-status" id="notes-status" aria-live="polite"></p>' +
             "</section>" +
-
             componentsHtml +
             renderExpansions(g) +
             rulesGlossaryHtml +
-
             '<a class="btnlink" data-check="rulebook" href="' + links.rulebook + '" target="_blank" rel="noopener">Open Rulebook</a>' +
-
             '<a class="btnlink" id="btn-bgstats" href="' + links.bgstats + '" target="_blank" rel="noopener">BG Stats - Log A Play</a>' +
-
             '<a class="btnlink" id="btn-youtube"' +
               (links.youtube ? (' href="' + links.youtube + '" target="_blank" rel="noopener"') : "") +
             ">How to Play Video</a>" +
-
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
         "</div>" +
       "</article>";
+
+    requestAnimationFrame(syncHeaderOffset);
 
     /* --- BGG cover link --- */
     var bggCoverLink = document.getElementById("bggCoverLink");
@@ -8911,8 +9467,10 @@ appEl.innerHTML =
         pcButtons.forEach(function(btn) {
           btn.addEventListener("click", function() {
             var count = btn.getAttribute("data-count");
-            var text = (setupByPlayerCount[count] || "").replace(/\n/g,"<br>");
-            pcTextEl.innerHTML = text || "(No details for this player count yet.)";
+            pcTextEl.innerHTML = renderRuleContent(setupByPlayerCount[count]) ||
+              '<p class="rule-empty">(No details for this player count yet.)</p>';
+            var pcBlock = document.getElementById("playercount-block");
+            if (pcBlock) pcBlock.open = true;
             pcButtons.forEach(function(b) {
               b.removeAttribute("data-active");
               b.setAttribute("aria-pressed", "false");
@@ -8947,6 +9505,15 @@ appEl.innerHTML =
         if (remindersTextEl) {
           remindersTextEl.innerHTML = composeSection(remindersText, "(No reminders yet.)", selected, "rules");
         }
+        paintSummary(selected);
+      }
+      function paintSummary(selected) {
+        var box = document.getElementById("scoring-summary");
+        var body = document.getElementById("scoring-summary-body");
+        if (!box || !body) return;
+        var lines = buildSummaryLines(g, selected);
+        body.innerHTML = renderSummaryHtml(lines);
+        box.hidden = !lines.length;
       }
       expButtons.forEach(function(btn) {
         btn.addEventListener("click", function() {
@@ -8961,6 +9528,22 @@ appEl.innerHTML =
         });
       });
     }
+
+    /* --- Section jumps. Hash anchors would reset the #/game/ route. --- */
+    Array.prototype.forEach.call(document.querySelectorAll(".jump-link"), function(link) {
+      link.addEventListener("click", function(e) {
+        var id = (link.getAttribute("href") || "").slice(1);
+        var el = document.getElementById(id);
+        if (!el) return;
+        e.preventDefault();
+        var details = el.tagName === "DETAILS"
+          ? el
+          : (el.querySelector("details[data-filled='true']") || el.querySelector("details"));
+        if (details) details.open = true;
+        var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      });
+    });
 
     /* --- BG Stats app-only deep link (no blank webpage) --- */
     var bgbtn = document.getElementById("btn-bgstats");
@@ -9011,8 +9594,11 @@ appEl.innerHTML =
 
   function syncHeaderOffset() {
     var header = document.querySelector("header");
-    if (!header) return;
-    document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    if (header) {
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    }
+    var bar = document.getElementById("table-bar");
+    document.documentElement.style.setProperty("--table-bar-h", bar ? (bar.offsetHeight + "px") : "0px");
   }
 
   function render() {
@@ -9028,6 +9614,9 @@ appEl.innerHTML =
 
   window.addEventListener("hashchange", render);
   window.addEventListener("resize", syncHeaderOffset);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { syncHeaderOffset(); });
+  }
   document.addEventListener("DOMContentLoaded", render);
 })();
 </script>
