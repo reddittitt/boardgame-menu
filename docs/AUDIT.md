@@ -1,6 +1,45 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 10 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 14 is the current rules pass.
+
+## Pass 14
+
+The listed pages now use the bullet objects in [CONTENT-FORMAT.md](CONTENT-FORMAT.md): a bold lead, a short line, and edge cases under Details. `endOfGame` is when the game stops. Points stay in `endGameScoring`. `scoringSummary` is the How you win box when the first scoring lines are long. Personal notes stay in `localStorage` under `notes_` plus the slug. No new PDF was added to the repo. Cascadia is not a title in this catalog, so it has no page. Brass: Lancashire is not a title either. The Brass pages are Birmingham and Pittsburgh.
+
+### Checked against the publisher book
+
+Setup by player count, the turn, the end trigger, and scoring were read against the official file. A line was changed only where the page and the book disagreed. Notes are paraphrases.
+
+- Brass: Birmingham. Roxley English rulebook, the file in `rulebooks/brass-birmingham.pdf`. £17, a hand of 8, and a 1-card discard. Eras are 8, 9, and 10 rounds at 4, 3, and 2 players. The first Canal round is 1 action. Most VP, then income, then money. No mismatch.
+- Brass: Pittsburgh. Roxley `Brass-P-Rulebook-ENG.pdf`. The old line said to draw back to 8 with each action. The book draws back to 8 only after both actions. Starting resources were blank. The book gives $30, a hand of 8, one extra card as the discard, VP on 0, and income on space 10. Two players use the 2-player side and drop the 3-oil oilfield and the $15 merchant. A second link is an extra $10 plus that link's resources. Unpaid negative income is drink the whiskey, lose 40 VP, and reset income to level 0. Income is skipped only after the last round of the game. Most VP, then the highest income space, then most money.
+- Ark Nova. Capstone English rulebook, ©2021 Feuerland, the file in `rulebooks/ark-nova.pdf`. Appeal starts at 0 and rises with turn order. The 2-player covers and the 3-project row match the book. The game ends when appeal and conservation share a scoring area or have passed. One final-scoring card is out before the points, and one card is worth at most 4 conservation. The tie is the most conservation projects supported, counted by tokens that have left the left edge of the map. No mismatch.
+- Root. Law of Root, October 13, 2025. Standard Setup draws 3. Reach sums are 17, 18, 21, 25, and 28. First to 30. Dominance is 10 points. Item supply is 2 M, 2 B, 1 C, 1 H, 2 S, 2 T, 2 X. No mismatch.
+- Heat: Pedal to the Metal. Days of Wonder basic rules, `ht_rules_EN.pdf`. Hands are 7. Adrenaline is the last car, or the last two when 5 or more started. Cooldown is 3 in 1st and 1 in 2nd. A spin is 1 Stress in 1st or 2nd, and 2 Stress in 3rd or 4th. First across the line after the printed laps. No mismatch.
+- PARKS. Keymaster rulebook, the file in `rulebooks/parks.pdf`. Waterfall is 4 or 5 players. The gear discount is the first buyer at 3 or fewer, and the first two at 4 or more. Token limit 12. Four seasons. Tie is most parks visited. No mismatch.
+- Splendor. Space Cowboys SCSPL01EN, ©2024. Nobles are players plus 1. Gems are 7, 5, and 4 at 4, 3, and 2 players. Gold stays 5. Fifteen prestige. Tie is fewest developments. No mismatch.
+- Splendor Duel. Space Cowboys English rules. 25 tokens: 4 of each gem, 2 Pearls, 3 Gold. Royals at the 3rd and 6th crown. Wins are 20 prestige, 10 crowns, or 10 prestige in one color, at the end of your turn. The end trigger was only inside scoring. It is now its own section. The numbers were already right.
+- Ticket to Ride. Days of Wonder 7201, ©2004-2024. 45 trains, 4 train cards, 3 tickets keeping at least 2. Double routes close at 2 and 3. End at 2 or fewer trains, then one more turn for everyone. Longest path is 10. Tie is most completed tickets, then the longest-path card. No mismatch.
+- Ticket to Ride: First Journey (U.S.). The page was already the Days of Wonder USA sheet. No new mismatch in setup, the turn, the end, or the score.
+- Pandemic. Z-Man English rulebook, ©2013. Hands are 4, 3, and 2. Epidemics are 4, 5, or 6. Eight outbreaks. Four cures. The share line said only the city card. The Researcher may give any city card to a player in the same city, on either player's turn.
+- Unmatched: Battle of Legends, Volume One. Restoration Games 2019. Hand of 5. Younger player on 1. Hand limit 7. An empty deck deals 2 damage and does not reshuffle. Teams need a map with four starts. No mismatch.
+- Unmatched: Houdini vs. The Genie. Restoration Games 2022. This box is 2 players. No mismatch.
+- Unmatched: Brains and Brawn. Restoration Games 2023. Three is a free-for-all. The first-turn attack limit matches the booklet. No mismatch.
+- Unmatched: Stars and Stripes. Restoration Games set rules, ©2026, the image PDF. The set booklet does not reprint core setup. The fighter lines (ruses, upgrades, the track, Wyatt's three effects) match that booklet. No mismatch.
+- Unmatched Adventures: Tales to Amaze. Restoration's product page still has no scenario PDF. No rules were invented.
+- Earth. Inside Up `Earth Rulebook Web.pdf`. A 4 by 4 island. The 16th card ends the round and scores 7. Plant, compost, water, and grow match the action page. Tie is soil, then hand, growth, sprouts, then compost. No mismatch.
+- Arcs. Base Game Rulebook, 23 March 2026. Power ends the game at 33, 30, or 27. Cards 1 and 7 are only in the 4-player deck. Court row is 3 at 2 players and 4 at 3 or 4. No mismatch.
+- Oath. The Law of Oath, 20 October 2020. Favor banks are 3, or 4 at 5 and 6 players. Stability is a 6, then 5–6, then 3–6. Round 8 checks Empire-if-Oathkeeper, Usurper, Visionary, then Empire. A Visionary win needs a revealed Vision and at least three Visions drawn. No mismatch.
+- Explorers of Navoria. Dranda and the World's Edge pre-launch still have no free rulebook. No rules were invented.
+- Wyrmspan. Stonemaier rulebook cited on the page, Wyr_Rulebook_r19. The rules page links a Dropbox folder and does not hand out a single PDF URL. The round-end order, the 6 coins and 1 egg, and the leftover line were left as the previous pass recorded them. No new mismatch was opened from a different file.
+- Finspan. Stonemaier rulebook cited on the page, FS_Rulebook_r19. Four weeks, six turns, a public hand of 5. The rules page does not hand out a direct PDF. No new mismatch was opened from a different file.
+
+Wingspan, Everdell, Quacks, 7 Wonders, 7 Wonders Duel, The Crew, Azul, and Catan were converted only. Their numbers are the ones PR #11 checked.
+
+### Pages converted
+
+7 Wonders, 7 Wonders Duel, Arcs, Ark Nova, Azul, Brass: Birmingham, Brass: Pittsburgh, Catan, Earth, Everdell, Explorers of Navoria, Finspan, Heat: Pedal to the Metal, Oath, Pandemic, PARKS, Root, Splendor, Splendor Duel, The Crew: Journey to the Ends of the Earth, The Crew: Mission Deep Sea, The Crew: The Quest for Planet Nine, The Quacks of Quedlinburg, Ticket to Ride, Ticket to Ride: First Journey (U.S.), Unmatched Adventures: Tales to Amaze, Unmatched: Battle of Legends, Volume One, Unmatched: Brains and Brawn, Unmatched: Houdini vs. The Genie, Unmatched: Stars and Stripes, Wingspan, Wyrmspan.
+
+Expansion chips on those pages were converted with the base game: 7 Wonders Cities, Armada, and Leaders; Duel Pantheon and Agora; Ark Nova Marine Worlds; Everdell Bellfaire, Pearlbrook, Spirecrest, Newleaf, and Mistwood; Heat Heavy Rain, Tunnel Vision, Rocky Roads, and Legends; PARKS Nightfall and Wildlife; Root's expansion rows; Wingspan Europe, Oceania, Asia, and Americas; Wyrmspan Dragon Academy; Finspan Sharks and Reefs; Splendor Duel The Counterfeiters; Quacks The Herb Witches and The Alchemists; Oath New Foundations.
 
 ## Pass 10
 
