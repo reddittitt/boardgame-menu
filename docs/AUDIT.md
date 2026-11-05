@@ -1,6 +1,18 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 14 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 15 is the current rules pass.
+
+## Pass 15
+
+Older pages that were still paragraphs now use the bullet objects in [CONTENT-FORMAT.md](CONTENT-FORMAT.md). A bold lead, one short line, and edge cases under Details. The game-end trigger moved out of End Game Scoring into `endOfGame`, so the End of Game jump shows. Points stay in `endGameScoring`. `scoringSummary` is set when the first scoring lines are not a clear how-you-win. Expansion setup, rules, and scoring text got the same treatment. No rulebook was opened. No number, player count, or sentence was dropped. A line that was already ambiguous was kept as written.
+
+Pass 14's pages were left as that pass wrote them. That is Brass: Birmingham, Brass: Pittsburgh, Ark Nova, Wingspan (and its expansions), Everdell (and its expansions), Root, Heat: Pedal to the Metal, The Quacks of Quedlinburg, PARKS, 7 Wonders, 7 Wonders Duel, the three Crew boxes, Azul, Splendor, Splendor Duel, Ticket to Ride, Ticket to Ride: First Journey (U.S.), Catan, Pandemic, the Unmatched pages, Earth, Arcs, Oath, Explorers of Navoria, Wyrmspan, and Finspan. Cascadia is not in this catalog.
+
+7 Wonders (Second Edition) was still paragraphs, so it was converted here. Pass 14's Armada correction stays: each purple card scores at most 10 in every Armada game, Armada alone deals 8 cards an Age, and with Cities it deals 9. Unpaid taxes or coin losses can be taken as Debt.
+
+Two pages have no end trigger in the text that was already there, so they still have no End of Game section: Burgle Bros. 3: Future Flip (the FAQ does not say the mainframe flip wins) and Fractured Sky (no payout or ending was on the page).
+
+80 pages were converted: 7 Wonders (Second Edition), 7 Wonders Dice, Acquire, Air, Land & Sea: Critters at War, Archduke, Azul Duel, Backgammon, Bomb Busters, Brink, Burgle Bros., Burgle Bros 2: The Casino Capers, Burgle Bros. 3: Future Flip, Camel Up, Can't Stop, Cartographers, Castle Combo, Celestia, Century: Golem Edition, Chess, Chronicles of Crime, Codenames, Cover Your Assets, Cryptid, Dune: Imperium - Uprising, Fire Tower (Rising Flames was still a dash list), Five Crowns, Flamecraft, Flip 7, For Sale, Forest Shuffle, Foundations of Metropolis, Fractured Sky, Graft, Hanabi, Harmonies, Hive Pocket, Jaipur, Kingdomino, Lost Cities, Marvel Villainous (the three expansion chips were still dash lists), Monopoly Deal, Moonrakers: Titan Edition, Moonrollers, New York Zoo, Onitama, Pan Am, Patchwork, Pillars of Fate, Play Nine, Point City, Point Galaxy, Point Salad, Project L, Raccoon Tycoon, Ravine, Rook, Sagrada, Sail, Scales of Fate, Scout, Sea Salt & Paper, Sequence, SETI, Shallow Regrets, Sky Team, Sniper Elite: The Board Game, Targi, Tend, The Fellowship of the Ring Trick-Taking Game, The Fox in the Forest, The Lord of the Rings: Duel for Middle-earth, Thunder Road: Ignition, Thunder Road: Vendetta, Time to Panic, Tiny Towns, Trio, Turing Machine, Wandering Towers, Watergate, and Welcome to the Moon.
 
 ## Pass 14
 
