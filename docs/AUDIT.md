@@ -1,6 +1,35 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 15 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 16 is the current rules pass.
+
+## Pass 16
+
+Pass 15 kept ambiguous lines as written and did not open a booklet. This pass checked those lines against the publisher file. Notes stay paraphrases in the bullet format. A line with no official answer was left as written.
+
+- 7 Wonders Armada, on the first edition page and on Second Edition. Repos EN02. Naval tokens are, by Age: defeat −1, −2, −3; first place 3, 5, 7; second place 1, 3, 5.
+- 7 Wonders (Second Edition), Edifice. Repos Edifice rules. Participation pawns per Age are 2, 3, 3, 4, and 5 at 3, 4, 5, 6, and 7 players.
+- Archduke. Navigator Creative, ©2020, the PDF in `rulebooks/archduke.pdf`. The pictured first turn draws a 2 and swaps it for Peek. Card corners are Peek 12, Swap 11, Give 9, Archduke −3, Eclipse 0 or 13.
+- Azul Duel. Next Move English rulebook, ©2025 Plan B Games. Broken-tile spaces are printed 1, 2, 3, and 4. The totals are −1, −3, −6, and −10. A fifth tile goes to the tower.
+- Bomb Busters. Cocktail Games English rules. A mission is won when every tile stand is empty, and lost on a cut red wire or the detonator on the skull. Extra win and loss rules are on the back of that mission card.
+- Brink. IV Studio rulebook, the PDF in `rulebooks/brink.pdf`. A council pass removes that player from the current voting step only.
+- Codenames. Czech Games Edition, July 2015. The starting team has 8 agent cards plus the double agent, 9 words, and gives the first clue.
+- Dune: Imperium – Uprising. Dire Wolf, ©2023, the PDF in `rulebooks/`. Phase 5 returns agents to their leaders. The worked example on that page says supply. The phase line is the one to play.
+- New York Zoo. Feuerland / Capstone, ©2020, the PDF in `rulebooks/`. A solo loss scores −1 for each uncovered space. The booklet's phrase is "1 minus point."
+- Point City. Alderac ©2023, the March 2025 PDF. The player-count buttons are the tier-removal table. Removed cards go back in the box.
+- Rook. Hasbro sheet ©2008, the PDF in `rulebooks/rook.pdf`. Two players play to 300 and three play to 200. "70 or as high as 100" is the counters in one deal, because three cards out of play may be counters.
+- Scales of Fate. IV Studio rulebook v1.00, the PDF in `rulebooks/`. Penance hits every scorpion (dark) quest in the row or column beside it. Vesper hits every feather (light) quest the same way. Demigods next to those quests gain or lose the printed renown.
+- Scout. Oink Games English ver. 1.1, ©2021, OCR of the image PDF. At two players a scout does not end your turn, and Scout and Show is not used. At three or more, Scout and Show is the once-a-round chip that lets you show immediately after a scout.
+- Sniper Elite: The Board Game. Rebellion Unplugged, ©2022, the PDF in `rulebooks/`. The sniper wins on the second objective. The defenders win on the second wound. The countdown is one check, after the sniper's turn and before the defenders act. The goal page and the ending page name that same moment.
+- Targi. Thames & Kosmos 691479. The fourth raid is the last one: each player pays 1 gold or 3 victory points, and the game ends at once. Earlier raids pay the card, then the robber moves on and Targi are placed.
+- Tend. IV Studio, the PDF in `rulebooks/tend.pdf`. A neighbor lead is 3 points for each filled box you have that the neighbor does not.
+- The Fellowship of the Ring Trick-Taking Game. Office Dog, ©2025, the PDF in `rulebooks/`. Chapter 5: Tom finishes with 2 cards at 3 players or 1 at 4, and the solo refill deck has 12. Chapter 6: Tom finishes with 5 cards. Solo Barrow-wights removes 5 cards, deals Goldberry to 8 with no refill, and the refill deck has 16.
+- Citations that had been cut off were finished from the same files: Burgle Bros. (Skellig German edition; proofreading Lutz Pietschker and Henrik Ströfer), Burgle Bros 2 (English file, questions to fowers.games/burgle2), Can't Stop (© FRED Distribution 2021, linked from the Eagle-Gryphon product page), Sagrada (Floodgate FGG-SA201), Fellowship of the Ring Trick-Taking Game, plus the same kind of cut line on Arcs and Catan.
+
+Left as written, because no official source stated the missing fact:
+
+- Cover Your Assets. Grandpa Beck's Games, the PDF in `rulebooks/`. The 2-player page removes 8 Cabins, 2 Silver, and 1 Gold, deals three piles of 10 and hands of 6, and does not say what the remaining cards do.
+- Burgle Bros. 3: Future Flip. The Fowers FAQ at fowers.games/pages/bb3 still does not say what ends the game. The mainframe can flip early. The FAQ does not call that a win. No `endOfGame` was added.
+- Fractured Sky. fracturedskygame.com did not open. The IV Studio shop page names the box and does not link a rulebook or an ending. No `endOfGame` was added.
 
 ## Pass 15
 
