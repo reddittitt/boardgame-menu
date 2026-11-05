@@ -1,6 +1,57 @@
 # Board Game Quick — architecture audit
 
-Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 17 is the current rules pass.
+Live site: [bgquick.com](http://bgquick.com/). The sections under "How the site is built" are the original snapshot. The catalog is now 184 titles. Pass 18 is the current rules pass.
+
+## Pass 18
+
+Player-count buttons from Moon Colony Bloodbath through the end of the alphabet. A button was added only where the official booklet changes something by count. The page layout and the renderer were not edited. Notes are paraphrases.
+
+112 pages now have player-count buttons. 97 had them at the start of this pass.
+
+### Buttons added
+
+- Moon Colony Bloodbath. Rio Grande rules, the retailer PDF. Two through five use the same start: 4 buildings, 30 people, 4 money, 4 food, and a progress deck of 4 Work and 2 Trouble. Solo adds the Loneliness card. Each time it happens, gain 3 money and lose 3 people for every building you have. Reach the Instruction Manual and you win.
+- Moonrakers, and Moonrakers: Titan Edition. IV Studio Articles of Agreement, Base_Manual_1125. Three, four, and five use 8 contracts and race to 10 prestige. Two players add the mercenary row; only the mission leader may spend contract rewards on it, and the row stays until both have taken a turn. Solo is 10 rounds with that row, then prestige times 10 plus credits, parts, and crew.
+- Mythic Mischief Vol. II. IV Studio rulebook. Two players each place 3 mythics. Three is a team of 2 against one player: the lone player places 3, each teammate places 2, and the team shares one tome color. Four is two teams of 2, each placing 2 mythics. Solo is the Enchanted students and the detention cards.
+- Night at the Zoo. Capstone WEB v3. The draft market is one more tile than the number of players: 3, 4, or 5 at 2, 3, or 4. Solo is Leo, with 3 tiles and the 6 solo tiles. He has no board.
+- Ostia: Mariner Edition. Crafty Games rules-cfg76001. One building per player in each city, and 7 amphoras per player in the main supply. The discovery supply, left to right, is 3/3/2 at 1–2 players, 4/4/4 at 3, and 6/6/4 at 4. At 3, skip a discovery space marked with the three-figure icon.
+- Paladins of the West Kingdom. Garphill rulebook, 2019. Each round reveals one more tavern card than the number of players. The tax supply is the silver icons for that count, in the book’s range of 5 to 8. Solo flips the other board to the AI side, reveals 2 taverns, and uses 1, 3, or 5 King’s Orders for easy, standard, or hard.
+- Parks Second Edition. Keymaster rules 1.1. The campfire starts face down at 1–3 and face up at 4–5. The photo bonus is 3 at 2 players. At 3–5 it is 4 for the most photos and 2 for the second-most, then 1 per photo. Solo is Ranger Teddy, and the photo bonus tile stays in the box. Two players may add Teddy; the normal game does not require him.
+- Rebel Princess: Deluxe Edition. Bezier online rules preview. At 3, remove the 1s, 11s, and 12s. At 4 and 5, remove the 11s and 12s. At 6, use every suited card. Each player keeps 1 of 2 princesses.
+- Star Wars Villainous. Ravensburger EN01, 2022. Credits start at 0, then 1, then 2, and a fourth player also starts at 2. Hands are 4. Each villain keeps their own fate deck.
+- Tenby. Mighty Boards English rulebook. Terraces are players plus 1, piers equal the players, and landmarks are players minus 1. Night cards run from 1 through the player count. Day cards are one more than the players. Solo uses the 2-player market, plus the anchor cards, compass cards, and solo aid.
+- The Two Towers Trick-Taking Game. Office Dog English rulebook, ©2026. Solo is 4 hands of 4, plus a face-up lost card, and you must finish all 4 goals. Two players deal a 3-player hand of 12 and build one hand into the pyramid, using 3-player character sides. Three deals 12. Four deals 9 and uses the 4-player sides of Gimli and Legolas. A chapter line that names 2 players or solo replaces that deal.
+- Thunder Road: Vendetta – Maximum Chrome. Restoration Games booklet, ©2022. On the starting tile, hazards go only on the spaces printed with the player count. At 2, the fifth tile is final if nobody is eliminated. At 3 or more, the lead tile becomes final when one player is out.
+- Tiny Towns. Alderac rulebook. The 4 by 4 grid is the same from 2 through 6. At 2, a Feast Hall is worth 3 to the player with more and 2 to the player with fewer, or 2 each if tied. At 3 or more, a tie with the player on your right is worth 2. Solo removes the Inn, the Bank, Fort Ironweed, and Opaleye’s Watch, and plays from the resource deck.
+- Welcome to the Moon. Blue Cocker English rules. Two through six use the same sheet and the same three piles. Solo is the ASTRA opponent: split the starships into three piles, bury the A, B, and C effects in one of them, draw 3, use 2, and give the last card to ASTRA.
+
+### No differences
+
+The booklet was opened. Nothing in setup, scoring targets, or a variant changes by count.
+
+- Patchwork. The local sheet. Two players.
+- Pillars of Fate. The local sheet. Two players.
+- Play Nine. The local sheet. Eight cards and the same 108-card deck from 2 through 6.
+- Sail. The local sheet. Two players.
+- Scales of Fate. The local sheet. Two players.
+- Sky Team. The local sheet. One pilot and one co-pilot.
+- Tacta. The Op rules. At 6 or fewer, each player takes one 18-card color. Team Up is only for a larger group than that.
+- Thunder Road: Ignition. IELLO English rules, ©2026. The same road, the same pit stops, and a hazard on every hazard space, from 2 through 4.
+- Ticket to Ride: First Journey (U.S.). Days of Wonder USA sheet. Each player takes 20 trains, 4 train cards, and 2 tickets. A player never claims both routes of a double route.
+- Toy Battle. Repos English rules, 2025. Two players. Each rack drops 4 unseen troops.
+- Unicorn Glitterluck: Cloud Stacking. HABA 2012232001. One to four players share the same circle, the same castle, and the same supply.
+- Watergate. The local sheet. Editor and Nixon only.
+- Winnie the Pooh: Serious Detective. The English rules. One to four detectives share a case. Each takes two personal dice. The case deck is not rebuilt for the count.
+
+### No official booklet
+
+No button was invented.
+
+- My Lil Everdell, Mythic Mischief, Parks Europe, Square One, The Old King’s Crown, Tag Team: SNK Arcade Legends, and Unmatched Adventures: Tales to Amaze. No publisher file was opened.
+- Ra: The Dice Game. The Rio Grande file returned 404 again.
+- Wingspan, Wingspan Pocket, and Wyrmspan. The image booklet and the publisher rules pages were not re-opened this pass. The lines already on those pages stay. Wingspan still has no button for 2 through 5. Wyrmspan’s guild side stays in Player Count Set Up.
+- Rage, Ravine, Shallow Regrets, and Unmatched: Stars and Stripes. Image sheets. This pass did not get a clean player-count table from them, so the lines already on those pages stay.
+- Onitama, Splendor Duel, Star Wars: The Deckbuilding Game, Tag Team, Tag Team: Arthur’s Legacy, Targi, The Fox in the Forest, and The Lord of the Rings: Duel for Middle-earth. Each page already says the game is two players. Those booklets were not opened again this pass.
 
 ## Pass 17
 
