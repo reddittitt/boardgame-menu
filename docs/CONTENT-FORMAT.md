@@ -34,9 +34,9 @@ Turning an expansion chip on appends one extra line: the expansion name, then th
 
 The game page, top to bottom:
 
-1. Title, with the cover beside it.
+1. Title, with the cover beside it on a wide screen and above it on a narrow one. The cover keeps its aspect ratio.
 2. Player count and play time.
-3. Essential links: BoardGameGeek, Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty.
+3. Essential links: Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty. BoardGameGeek is the cover, not a separate button.
 4. Sticky bar: the player-count buttons and the expansion chips. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the sticky bar. There are no Setup, Turn, End of Game, or Scoring jump buttons.
 5. **How you win**.
 6. **Teach it**, collapsed, and only when `teachingScript` has text.
@@ -55,7 +55,7 @@ These sit under the player/time line. A missing or blank value leaves that link 
 
 | Link | Field | When it shows |
 | --- | --- | --- |
-| BoardGameGeek | `bggId` | The id is set. The cover links there too. |
+| BoardGameGeek | `bggId` | The id is set. The cover is the link, labeled “View on BoardGameGeek”. There is no separate button. |
 | Rulebook | `rulebook` | The field is set. A full `https://` URL opens directly. A slug loads `rulebooks/{slug}.pdf`. An empty field does not guess a file. |
 | Log a play | `bgStatsUrl` | The URL is set. This is the BG Stats link. |
 | How to play | `howToPlayVideo` | `url` is set. |
