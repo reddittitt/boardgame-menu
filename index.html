@@ -63693,7 +63693,6 @@
       "bggRating": 8.0,
       "bggRank": 69,
       "group": true,
-      "rulesStatus": "pending",
       "rulebook": "https://www.lookout-spiele.de/upload/en_grandaustriahotel.html_GAH_Retail21_Rules_152_EN_WEB.pdf",
       "expansions": [
         {
@@ -63701,7 +63700,271 @@
           "bggId": "320780",
           "rulesStatus": "pending"
         }
-      ]
+      ],
+      "quickStart": {
+        "text": "Lookout Games, Grand Austria Hotel retail rules, ©2022. Simone Luciani and Virginio Gigli. Two to four hoteliers, seven rounds.",
+        "bullets": [
+          {
+            "lead": "Board",
+            "text": "Place the board. The Round marker starts on round 1."
+          },
+          {
+            "lead": "Emperor",
+            "text": "Shuffle the A, B, and C Emperor tiles separately. Place one of each letter face up under the round track. Return the rest."
+          },
+          {
+            "lead": "Objectives",
+            "text": "Do the same with the A, B, and C objective cards, to the left of the round track."
+          },
+          {
+            "lead": "Guests",
+            "text": "Shuffle the guests. Draw five face up into the queue, from right to left."
+          },
+          {
+            "lead": "Action board",
+            "text": "Place it beside the board, with the dustbin nearby."
+          },
+          {
+            "lead": "Supply",
+            "text": "Sort strudel, cake, wine, and coffee. Sort the room tiles by color."
+          },
+          {
+            "lead": "Staff",
+            "text": "Shuffle the staff cards face down."
+          },
+          {
+            "lead": "Order",
+            "text": "Use the turn-order tiles for your player count. The start player takes 1, and seats continue clockwise."
+          },
+          {
+            "lead": "Hotel",
+            "text": "Each player takes a hotel board and six markers in one color."
+          },
+          {
+            "lead": "Money",
+            "text": "One marker starts at 10 krones."
+          },
+          {
+            "lead": "Tracks",
+            "text": "One marker on 0 of the score track, one on 0 of the Emperor track. The other three markers wait for objectives."
+          },
+          {
+            "lead": "Kitchen",
+            "text": "Take one strudel, one cake, one wine, and one coffee into your kitchen."
+          },
+          {
+            "lead": "Hand",
+            "text": "Draw 6 staff cards."
+          },
+          {
+            "lead": "Opening guests",
+            "text": "Starting with the player to the right of the start player and going counter-clockwise, each player takes one guest from the queue for free and seats them. Refill the queue from the left after each pick."
+          },
+          {
+            "lead": "Rooms",
+            "text": "Prepare 3 rooms, vacant side up, starting at the bottom-left space. Later rooms must touch a room already placed, orthogonally. Pay the cost printed at the start of that floor.",
+            "details": "Three rooms on the bottom floor are free."
+          }
+        ]
+      },
+      "firstGameSetup": {
+        "bullets": [
+          {
+            "lead": "Side",
+            "text": "The booklet recommends the night side of the hotel, the four identical room layouts."
+          },
+          {
+            "lead": "Staff",
+            "text": "For a first play, remove every staff card marked A through D, then deal the lettered starter sets: A to the start player, B to the next player clockwise, and so on. Shuffle any leftover lettered sets into the deck."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Krones",
+          "text": "10."
+        },
+        {
+          "lead": "Kitchen",
+          "text": "One strudel, one cake, one wine, and one coffee."
+        },
+        {
+          "lead": "Staff",
+          "text": "Six cards in hand."
+        },
+        {
+          "lead": "Café",
+          "text": "One guest, taken for free during setup."
+        },
+        {
+          "lead": "Rooms",
+          "text": "Three prepared rooms. The bottom floor costs nothing."
+        }
+      ],
+      "turnStructure": {
+        "text": "Seven rounds. At the start of a round the start player rolls every die, sorts them by face, and places them on the matching action.",
+        "bullets": [
+          {
+            "lead": "Who",
+            "text": "The lowest number still showing on a turn-order tile goes next. A player can therefore take two turns in a row."
+          },
+          {
+            "lead": "Turn",
+            "text": "Take a guest if you want, then you must take one die from an action that still has a die.",
+            "details": "Before, between, and after those two steps you may take any number of additional actions. Not in the middle of another action."
+          },
+          {
+            "lead": "Guest",
+            "text": "Pay the cost under that queue space and seat the guest at an empty table. You have three tables. Slide the queue right and draw a new guest on the left.",
+            "details": "At most one guest this way. If every table is full, move a finished guest into a room first, or skip the guest. A guest will not leave until their order is complete."
+          },
+          {
+            "lead": "Strength",
+            "text": "The action’s strength is the number of dice on it. Once per turn you may pay 1 krone to add one virtual die."
+          },
+          {
+            "lead": "Cover",
+            "text": "Take one die from that action and cover the lowest open number on your turn-order tile."
+          },
+          {
+            "lead": "Dishes",
+            "text": "Take strudel and cake equal to the strength. You must take at least as much strudel as cake."
+          },
+          {
+            "lead": "Drinks",
+            "text": "Take wine and coffee equal to the strength. You must take at least as much wine as coffee."
+          },
+          {
+            "lead": "Rooms",
+            "text": "Prepare up to that many rooms, each orthogonally adjacent, color matching the space. Pay the floor’s cost unless it is the bottom floor.",
+            "details": "A room on a printed victory-point space scores those points immediately. You cannot place a room you cannot pay for."
+          },
+          {
+            "lead": "Favor",
+            "text": "Split the strength between krones and steps on the Emperor track, either way."
+          },
+          {
+            "lead": "Staff",
+            "text": "Play exactly one staff card. Its cost is reduced by the strength, to a minimum of 0. Do not draw a replacement."
+          },
+          {
+            "lead": "Imitate",
+            "text": "Pay 1 krone and copy one of the other five actions, at this action’s strength, even if the copied action has no dice. You may still boost that copy for another krone."
+          },
+          {
+            "lead": "Food",
+            "text": "When you gain dishes or drinks you may place them immediately, for free, on matching pictures on your guests. The rest go to the kitchen."
+          },
+          {
+            "lead": "Serve",
+            "text": "For 1 krone, move up to 3 items from the kitchen onto guests. Items already on a guest stay there."
+          },
+          {
+            "lead": "Room a guest",
+            "text": "Once every pictured item is on a guest, you may move them into a vacant room of the same color and flip that room to occupied.",
+            "details": "Green guests may use a room of any color. There are no green rooms. Score the guest’s points, take the printed reward, return the items, and discard the card. Remove the guest before you take a reward that cares about the café."
+          },
+          {
+            "lead": "Group",
+            "text": "Occupying the last room of a same-colored group scores that group once: blue gives points, red gives krones, yellow gives Emperor steps, from the table on the roof."
+          },
+          {
+            "lead": "Pass",
+            "text": "Passing postpones your turn. It does not spend it. Once everyone else has passed or taken both turns, put one die in the dustbin, reroll the rest, and continue from the lowest open number."
+          }
+        ],
+        "details": "Money never goes above 20; extra krones are lost. Emperor steps past 13 score 1 victory point each instead of moving the marker. A guest deck that runs out is reshuffled from the discards."
+      },
+      "endOfGame": [
+        {
+          "lead": "Seven rounds",
+          "text": "A round ends when every player has taken two turns, or, if players kept passing, when no dice are left to reroll."
+        },
+        {
+          "lead": "Emperor",
+          "text": "After rounds 3, 5, and 7, score the Emperor before the next round. The game does not end until the round 7 Emperor scoring and the final scoring after it."
+        },
+        {
+          "lead": "Between rounds",
+          "text": "Pass the turn-order tiles left, turn used once-per-round staff upright, and advance the Round marker. Emperor markers stay where the scoring left them."
+        }
+      ],
+      "endGameScoring": {
+        "text": "After the round 7 Emperor scoring, score the hotel.",
+        "bullets": [
+          {
+            "lead": "Emperor",
+            "text": "On rounds 3, 5, and 7: score the victory points printed under your Emperor space, then retreat 3, 5, or 7 steps, stopping at 0.",
+            "details": "After the retreat, 3 or more takes the reward on the current Emperor tile. 1 or 2 does nothing. 0 takes the penalty. A slash means the left penalty if you can pay all of it, otherwise the right one. You can go below 0 points."
+          },
+          {
+            "lead": "Staff",
+            "text": "Score staff cards with the final-scoring symbol. The appendix lists each card."
+          },
+          {
+            "lead": "Rooms",
+            "text": "An occupied room scores 1, 2, 3, or 4 for the first through fourth floor. A vacant room scores nothing."
+          },
+          {
+            "lead": "Leftovers",
+            "text": "1 point for each dish and drink still in the kitchen, and for each krone. Items sitting on guests do not count."
+          },
+          {
+            "lead": "Stragglers",
+            "text": "Lose 5 points for each guest still in the café."
+          },
+          {
+            "lead": "Tie",
+            "text": "Most points from that leftover step wins the tie."
+          }
+        ],
+        "details": "These notes are Lookout’s Grand Austria Hotel retail rulebook, ©2022. Staff, guest, objective, and Emperor effects are the cards in that appendix, not restated here."
+      },
+      "scoringSummary": [
+        "Most victory points after round 7, the last Emperor scoring, and the final scoring.",
+        "Occupied rooms score by floor. Leftover kitchen items and krones score 1. Each guest still in the café is −5.",
+        "Tie: more points from leftovers."
+      ],
+      "playerCountSetup": {
+        "text": "The dice and the turn-order tiles change with the count. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": [
+          {
+            "lead": "Dice",
+            "text": "Roll 10 dice. Return the rest."
+          },
+          {
+            "lead": "Order",
+            "text": "Use the 2-player turn-order tiles."
+          }
+        ],
+        "3": [
+          {
+            "lead": "Dice",
+            "text": "Roll 12 dice."
+          },
+          {
+            "lead": "Order",
+            "text": "Use the 3-player turn-order tiles."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Dice",
+            "text": "Roll 14 dice."
+          },
+          {
+            "lead": "Order",
+            "text": "Use the 4-player turn-order tiles."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=9u3kocuG_Go",
+        "title": "Grand Austria Hotel - Tutorial & Playthrough",
+        "channel": "Gaming Rules!"
+      }
     },
     "great-western-trail": {
       "bggId": "193738",
@@ -63966,9 +64229,9 @@
       "group": true,
       "rulesStatus": "pending",
       "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=kc9NbmgGyPY",
         "title": "Ice Cool - How To Play",
-        "channel": "Watch It Played",
-        "url": "https://www.youtube.com/watch?v=kc9NbmgGyPY"
+        "channel": "Watch It Played"
       }
     },
     "icecool2": {
@@ -64106,8 +64369,122 @@
       "bggRating": 7.3,
       "bggRank": 1002,
       "group": true,
-      "rulesStatus": "pending",
-      "rulebook": "https://www.arcanewonders.com/wp-content/uploads/2024/09/ito_Rules_V2.pdf"
+      "rulebook": "https://www.arcanewonders.com/wp-content/uploads/2024/09/ito_Rules_V2.pdf",
+      "quickStart": {
+        "text": "Arcane Wonders and Arclight, ito Rules Ver. 1.0, ©2019–2024. Cooperative, suggested for 3 or more, and it plays 2 to 10.",
+        "bullets": [
+          {
+            "lead": "Color",
+            "text": "Each player chooses a color and takes the three Player Cards of that color. Return the rest."
+          },
+          {
+            "lead": "Decks",
+            "text": "Shuffle the Category Cards. Shuffle the Number Cards, 1 through 100."
+          },
+          {
+            "lead": "Zero",
+            "text": "Place the Zero Card in the middle, with room for a row beside it. That row is the Playing Space."
+          },
+          {
+            "lead": "Deal",
+            "text": "Deal one Number Card to each player. Look at your own card only."
+          },
+          {
+            "lead": "Category",
+            "text": "Draw a Category Card. As a group, choose the front or the back."
+          }
+        ],
+        "details": "Family, Everyone, and Action categories can be added or removed for the group. That choice is not a player-count change."
+      },
+      "startingResources": [
+        {
+          "lead": "Player cards",
+          "text": "Three cards of your color, used to mark the numbers you play."
+        },
+        {
+          "lead": "Number",
+          "text": "One secret Number Card."
+        }
+      ],
+      "turnStructure": {
+        "text": "There is no turn order. Everyone works on the same row.",
+        "bullets": [
+          {
+            "lead": "Hint",
+            "text": "Give an example of the category that hints at your number. Closer to zero means a lower number.",
+            "details": [
+              {
+                "lead": "Allowed",
+                "text": "Qualifiers such as very or somewhat. You may change your hint, and ask for advice."
+              },
+              {
+                "lead": "Not allowed",
+                "text": "Numbers, values, or quantities. You may not show the card or say its value."
+              }
+            ]
+          },
+          {
+            "lead": "Place",
+            "text": "Play your Number Card face down into the row: beside zero if you are first, to the right of the previous card, or between two cards."
+          },
+          {
+            "lead": "Mark",
+            "text": "Put one of your Player Cards face up under that Number Card."
+          },
+          {
+            "lead": "Discuss",
+            "text": "The group may reorder the cards until the resolution starts."
+          },
+          {
+            "lead": "Resolve",
+            "text": "From zero, reveal the cards one by one. If they ascend from lowest to highest, everyone wins."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "One round",
+          "text": "The game ends when the row is revealed."
+        },
+        {
+          "lead": "Win",
+          "text": "Everyone wins if the numbers ascend from zero. Any card out of order and the group loses."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "No points",
+          "text": "There is no score. The group wins or loses together."
+        },
+        {
+          "lead": "Challenge",
+          "text": "After a win, shuffle the numbers and deal again. One player gets two Number Cards and must hint at both.",
+          "details": "Each further win adds one more Number Card. Extreme Mode, once everyone has two cards, drops the Player Cards so a card is no longer marked as yours."
+        }
+      ],
+      "scoringSummary": [
+        "Everyone wins if the secret numbers sit in order, lowest to highest, starting from zero."
+      ],
+      "playerCountSetup": [
+        {
+          "lead": "Same deal",
+          "text": "From 2 through 10, each player takes three Player Cards and one secret Number Card."
+        },
+        {
+          "lead": "Suggested",
+          "text": "The sheet suggests the game for 3 or more. Two players use the same rules."
+        }
+      ],
+      "remindersText": [
+        {
+          "lead": "Subjective",
+          "text": "Hints are personal. That is intended."
+        },
+        {
+          "lead": "Until the flip",
+          "text": "The order can still change right up to the resolution."
+        }
+      ]
     },
     "iwo-jima-1945": {
       "bggId": "426669",
@@ -64133,7 +64510,6 @@
       "bggRating": 7.1,
       "bggRank": 656,
       "group": true,
-      "rulesStatus": "pending",
       "rulebook": "https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/59baa2_78a0a418f3b1464e87c0b72b851028ee.pdf",
       "expansions": [
         {
@@ -64141,7 +64517,248 @@
           "bggId": "204807",
           "rulesStatus": "pending"
         }
-      ]
+      ],
+      "quickStart": {
+        "text": "Space Cowboys, Jamaica rules, ©2021. A race around the island for the gold in your holds.",
+        "bullets": [
+          {
+            "lead": "Board",
+            "text": "Place the board. Put the Combat die on the fortress."
+          },
+          {
+            "lead": "Treasures",
+            "text": "Take 9 of the 12 Treasure cards at random, shuffle them, and set them face down beside the Navigation Box. Return the other 3 unseen."
+          },
+          {
+            "lead": "Lairs",
+            "text": "Put the 9 Treasure tokens on the 9 Pirate Lairs."
+          },
+          {
+            "lead": "Ship",
+            "text": "Each player takes a ship, a personal hold board, and the Action deck of their color. Shuffle that deck."
+          },
+          {
+            "lead": "Start",
+            "text": "Every ship starts on Port Royal."
+          },
+          {
+            "lead": "Bank",
+            "text": "Sort gold, food, and gunpowder into the bank."
+          },
+          {
+            "lead": "Holds",
+            "text": "Each player puts 3 Food and 3 Doubloons into two of their holds."
+          },
+          {
+            "lead": "Hand",
+            "text": "Draw 3 Action cards. Hold them so you can see the icons in the upper corners."
+          },
+          {
+            "lead": "Captain",
+            "text": "Give one random player the Compass and the two Action dice."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Cards",
+          "text": "A hand of 3 Action cards, and your color’s deck."
+        },
+        {
+          "lead": "Cargo",
+          "text": "3 Food and 3 Doubloons, in two holds. The other holds start empty."
+        }
+      ],
+      "turnStructure": {
+        "text": "A round is a dice roll, a secret card, then morning and evening.",
+        "bullets": [
+          {
+            "lead": "Dice",
+            "text": "The Captain rolls the two Action dice and, after looking at their three cards, chooses which die is the morning sun and which is the evening moon."
+          },
+          {
+            "lead": "Choose",
+            "text": "Each player secretly chooses one card and places it face down on their discard pile."
+          },
+          {
+            "lead": "Resolve",
+            "text": "The Captain flips and fully resolves the morning action, then the evening action. The other players do the same, in turn.",
+            "details": [
+              {
+                "lead": "Load",
+                "text": "The die says how many tokens go into one empty hold. You cannot load a hold that already holds something."
+              },
+              {
+                "lead": "Full",
+                "text": "With no empty hold, empty one hold back to the bank. You may not dump the type you are about to load."
+              },
+              {
+                "lead": "Already full of it",
+                "text": "If every hold already contains that type, the load is ignored."
+              },
+              {
+                "lead": "Move",
+                "text": "The die is how many spaces you must move, forward or backward."
+              },
+              {
+                "lead": "Two moves",
+                "text": "You cannot pay a space, dodge a battle, or skip a payment between two movement actions. Pay with what you already hold."
+              }
+            ]
+          },
+          {
+            "lead": "Pay",
+            "text": "You pay only when the ship stops. A port costs the doubloons on its pin. A sea space costs one Food per white square. A Pirate Lair is free.",
+            "details": "Choose which holds you pay from. A space is paid once, when you land on it."
+          },
+          {
+            "lead": "Shortage",
+            "text": "If you cannot pay, pay what you can and roll the Shortage die: circle back to the next port, square to the next sea, skull to the next lair, star stays put.",
+            "details": "You never pay for the space a Shortage moves you to. A Shortage cannot take you back past Port Royal. At a fork, you choose the way back. A battle can still happen at the end of that move."
+          },
+          {
+            "lead": "Combat",
+            "text": "Stopping on a space with an opponent’s ship starts a battle before anything else. No battle can happen in Port Royal.",
+            "details": [
+              {
+                "lead": "Firepower",
+                "text": "Attacker, then defender, spends any gunpowder and rolls the Combat die. Add them."
+              },
+              {
+                "lead": "Star",
+                "text": "A star wins immediately. An attacker’s star gives the defender no roll. A defender’s star wins anyway. Spent gunpowder is not returned."
+              },
+              {
+                "lead": "Tie",
+                "text": "Nothing happens."
+              },
+              {
+                "lead": "Winner",
+                "text": "Steal one hold (loading rules apply), steal one Treasure face up or face down, or give the loser a Cursed Treasure."
+              },
+              {
+                "lead": "Crowd",
+                "text": "If several ships share the space, fight one opponent you choose."
+              }
+            ]
+          },
+          {
+            "lead": "Lair",
+            "text": "Stopping on a lair that still has its token discards the token and draws a Treasure beside your holds.",
+            "details": "Power cards stay face up: Morgan’s Map holds 4 cards, Saran’s Sabre forces a reroll that must be accepted and cannot add gunpowder, Lady Beth adds 2 to your Combat die, and the 6th Hold is an extra hold. Scoring treasures, from +3 to +7, and cursed treasures, from −2 to −4, stay face down until the end."
+          },
+          {
+            "lead": "Draw",
+            "text": "After everyone has acted, draw back to 3 cards. The Compass passes to the left."
+          }
+        ],
+        "details": "When your draw pile is empty and you must draw, shuffle your discard pile."
+      },
+      "endOfGame": [
+        {
+          "lead": "Port Royal",
+          "text": "The moment a ship reaches Port Royal, it stops. Any remaining evening action is ignored. Finish the round, then score."
+        },
+        {
+          "lead": "Winner",
+          "text": "Highest score wins. A tie goes to the ship farther along the race. A further tie shares the win."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "Space",
+          "text": "The white number of the space your ship is on."
+        },
+        {
+          "lead": "Early",
+          "text": "Ending on the space marked −5, or on any space before it, costs 5 points."
+        },
+        {
+          "lead": "Gold",
+          "text": "Add the Doubloons in your holds."
+        },
+        {
+          "lead": "Treasures",
+          "text": "Add scoring treasures and subtract cursed treasures. They are revealed now."
+        }
+      ],
+      "scoringSummary": [
+        "Highest score when a ship reaches Port Royal and the round finishes.",
+        "Space number, plus doubloons, plus treasures. The −5 space, and anything before it, costs 5.",
+        "Tie: the ship farther along the race."
+      ],
+      "playerCountSetup": {
+        "text": "Two players add the Ghost Ship. Three through six race without it. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": {
+          "text": "The two-player game in the Space Cowboys booklet. The round is the same except for the Ghost Ship.",
+          "bullets": [
+            {
+              "lead": "Ghost Ship",
+              "text": "The black ship starts on Port Royal with the two players. Give it a 5-hold board."
+            },
+            {
+              "lead": "Cargo",
+              "text": "Put 5 Doubloons in one of its holds and 3 Doubloons in another."
+            },
+            {
+              "lead": "Lady Beth",
+              "text": "Take Lady Beth from the Treasure deck and place it face up beside the Ghost Ship. It adds 2 to the Ghost Ship’s Combat rolls. Players cannot steal that card."
+            },
+            {
+              "lead": "Turns",
+              "text": "The Captain takes both actions, then the other player, then the Captain moves the Ghost Ship twice using the Action dice."
+            },
+            {
+              "lead": "Direction",
+              "text": "If the Ghost Ship alone leads, it must move backward. If it alone is last, it must move forward. Otherwise the Captain chooses, and may even ram their own ship."
+            },
+            {
+              "lead": "Pay",
+              "text": "The Ghost Ship never pays for a space. On a lair it takes the treasure, face down. Players may not look at it."
+            },
+            {
+              "lead": "Fights",
+              "text": "The other player rolls and decides for the Ghost Ship. Gold it steals is loaded. Anything else is thrown overboard. It may steal treasures and never gives one."
+            }
+          ],
+          "details": "The booklet says the Ghost Ship can also be added, by choice, to a game with fewer than 6. It is not required at 3, 4, or 5, and it tends to create more Shortages."
+        },
+        "3": [
+          {
+            "lead": "Ships",
+            "text": "Three players. No Ghost Ship."
+          },
+          {
+            "lead": "Colors",
+            "text": "Each player uses their own Action deck, ship, and hold board."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Ships",
+            "text": "Four players. No Ghost Ship."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Ships",
+            "text": "Five players. No Ghost Ship."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Ships",
+            "text": "Six players, every color. No Ghost Ship."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=qtXG9Xukd1Q",
+        "title": "How to play Jamaica",
+        "channel": "The Dice Tower"
+      }
     },
     "jenga-maker": {
       "bggId": "360740",
@@ -64192,7 +64809,170 @@
       "bggRating": 7.3,
       "bggRank": 626,
       "group": true,
-      "rulesStatus": "pending"
+      "quickStart": {
+        "text": "Next Move, Junk Art English rules. Jay Cormier and Sen-Foong Lim. A world tour of stacking for 2 to 6.",
+        "bullets": [
+          {
+            "lead": "Base",
+            "text": "Each player takes one wooden base and chooses which side sits on the table."
+          },
+          {
+            "lead": "Deck",
+            "text": "Shuffle the Junk Art cards. Leave the Cactus cards and the Special Star card out. They belong to certain cities."
+          },
+          {
+            "lead": "Supply",
+            "text": "Spread the junk pieces in the middle. Set the fan tokens and the tape measure aside."
+          },
+          {
+            "lead": "Start",
+            "text": "The player who last visited an art exhibition takes the Start player card, for the first city only.",
+            "details": "After that, the fewest fans leads. A tie passes the start to the next player clockwise."
+          },
+          {
+            "lead": "Tour",
+            "text": "Remove Nashville, and remove every city that does not list your player count. Shuffle the rest and deal 3 face up in a line. Left to right is the tour.",
+            "details": "The booklet’s first-game tour is Philadelphia, then Monaco, then Paris. You may play any number of cities. Nashville needs a copy of Flick ’em Up and is set aside."
+          },
+          {
+            "lead": "City",
+            "text": "Read that city’s rules before you place anything. They override the universal rules when they conflict."
+          }
+        ]
+      },
+      "turnStructure": {
+        "text": "Each city changes the turn. These placing rules apply in every city unless that city says otherwise.",
+        "bullets": [
+          {
+            "lead": "Active piece",
+            "text": "The piece you pick up is your active piece."
+          },
+          {
+            "lead": "Hands",
+            "text": "You may use one or two hands. You may hold your own base."
+          },
+          {
+            "lead": "Where",
+            "text": "The active piece may go anywhere on your base or structure, as long as it does not touch the table."
+          },
+          {
+            "lead": "Nudge",
+            "text": "You may use the active piece to move other pieces, if they stay in contact with the structure the whole time."
+          },
+          {
+            "lead": "Drop",
+            "text": "If you drop the active piece, or it falls off immediately, you may pick it up and place it again."
+          },
+          {
+            "lead": "Several",
+            "text": "If a turn gives you more than one piece, place them one at a time."
+          },
+          {
+            "lead": "Fallen",
+            "text": "A piece that touches the table is set aside by the owner of that structure, as one of their fallen pieces.",
+            "details": "If you knock pieces off anyone’s structure, you keep those fallen pieces. You may not touch another player’s structure."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "Last city",
+          "text": "When the last city of the tour is finished, the game ends."
+        },
+        {
+          "lead": "Fans",
+          "text": "The most fans wins."
+        },
+        {
+          "lead": "Tie",
+          "text": "Whoever gained the most fans in the last city wins. If that is still tied, those players share the win or play a final Monaco."
+        },
+        {
+          "lead": "Other ties",
+          "text": "A tie inside a city is friendly: each tied player receives the full fans for that place."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "City by city",
+          "text": "Each city prints how its fans are awarded. Keep fans from earlier cities."
+        },
+        {
+          "lead": "Exhibition",
+          "text": "A city ends on its own condition. The universal end is that the exhibition also ends if every Junk Art card has been played."
+        },
+        {
+          "lead": "Still place",
+          "text": "Unless the city says otherwise, you still place your active piece when the exhibition ends."
+        },
+        {
+          "lead": "Height",
+          "text": "Most cities care about the tallest structure. Use the tape measure when it is close."
+        }
+      ],
+      "scoringSummary": [
+        "Most fans after the last city wins.",
+        "A tie goes to whoever gained the most fans in that last city."
+      ],
+      "playerCountSetup": {
+        "text": "The tour drops cities that do not list your count. Nashville is always out unless you own Flick ’em Up. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": [
+          {
+            "lead": "Remove",
+            "text": "Nashville, and Amsterdam. Amsterdam is 3 to 6."
+          },
+          {
+            "lead": "Gujarat",
+            "text": "Gujarat stays. It is 2 to 4."
+          },
+          {
+            "lead": "Philadelphia",
+            "text": "With two players, give the other player 2 cards instead of passing one card to each neighbor."
+          }
+        ],
+        "3": [
+          {
+            "lead": "Remove",
+            "text": "Nashville only. Amsterdam and Gujarat both allow 3."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Remove",
+            "text": "Nashville only. Amsterdam and Gujarat both allow 4."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Remove",
+            "text": "Nashville and Gujarat. Gujarat is 2 to 4. Amsterdam stays."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Remove",
+            "text": "Nashville and Gujarat. Amsterdam stays."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=ZFSbykbwFKo",
+        "title": "How to play Junk Art · Ludonova",
+        "channel": "Ludonova"
+      },
+      "remindersText": [
+        {
+          "lead": "City wins",
+          "text": "If a city rule conflicts with the universal rules, follow the city for that exhibition only."
+        },
+        {
+          "lead": "Not a puzzle",
+          "text": "Not every piece is meant to fit another."
+        }
+      ],
+      "rulebook": "https://cdn.svc.asmodee.net/production-nextmove/uploads/sites/4/2024/06/EN-JunkArt-rules_compressed.pdf"
     },
     "just-one": {
       "bggId": "254640",
@@ -64205,8 +64985,211 @@
       "bggRating": 7.6,
       "bggRank": 160,
       "group": true,
-      "rulesStatus": "pending",
-      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/games/justone/NEW/jo-en02-rules-mkt-1749635213L3H57.pdf"
+      "rulebook": "https://cdn.svc.asmodee.net/production-rprod/storage/games/justone/NEW/jo-en02-rules-mkt-1749635213L3H57.pdf",
+      "quickStart": {
+        "text": "Repos Production, Just One rules jo-en02, ©2025. A cooperative word game for 3 to 7.",
+        "bullets": [
+          {
+            "lead": "Easels",
+            "text": "Give each player an easel, an erasable pencil of the same color, and one cloth."
+          },
+          {
+            "lead": "Deck",
+            "text": "Shuffle the cards and take 13 at random. That facedown deck is the game."
+          },
+          {
+            "lead": "Active player",
+            "text": "Choose the first active player at random."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Easel",
+          "text": "One easel, one pencil, and one cloth."
+        },
+        {
+          "lead": "Deck",
+          "text": "No cards are dealt. The active player draws the mystery card on their turn."
+        }
+      ],
+      "turnStructure": {
+        "text": "The deck of 13 is played one card at a time. Each round has five phases.",
+        "bullets": [
+          {
+            "lead": "Mystery word",
+            "text": "The active player puts the top card on their easel without looking, then names a number from 1 to 5. That word is the mystery.",
+            "details": "If the other players do not know that word, they may ask for a different number."
+          },
+          {
+            "lead": "Write",
+            "text": "Everyone except the active player secretly writes one clue. It must be a single word.",
+            "details": [
+              {
+                "lead": "Valid",
+                "text": "A compound word, a proper noun, a number, an onomatopoeia, an acronym, or a special character counts as one word."
+              },
+              {
+                "lead": "Invalid",
+                "text": "The mystery word in another language, a word in the same family, a made-up word, or a homophone of the mystery word."
+              }
+            ]
+          },
+          {
+            "lead": "Compare",
+            "text": "The active player closes their eyes. Reveal the clues. Cancel any identical or invalid clue by laying that easel down.",
+            "details": [
+              {
+                "lead": "Identical",
+                "text": "The same word, words in the same family, singular and plural of the same word, or the same word with a spelling mistake."
+              },
+              {
+                "lead": "All canceled",
+                "text": "If every clue is canceled, put the card in the box and skip straight to the end of the round. There is no guess."
+              }
+            ]
+          },
+          {
+            "lead": "Guess",
+            "text": "The active player opens their eyes and makes one guess, or passes.",
+            "details": [
+              {
+                "lead": "Correct",
+                "text": "The round is won. Place the card face up beside the deck."
+              },
+              {
+                "lead": "Pass",
+                "text": "The round is lost. Put the card in the box."
+              },
+              {
+                "lead": "Wrong",
+                "text": "The round is lost twice. Put this card and the top card of the deck in the box.",
+                "details": "If the deck is empty, remove a previously won card if you have one."
+              }
+            ]
+          },
+          {
+            "lead": "Next",
+            "text": "Erase the clues. The player to the left becomes the active player."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "Deck",
+          "text": "The game ends when the deck of 13 cards is empty."
+        },
+        {
+          "lead": "Score",
+          "text": "Count the cards you won and compare that total to the level table."
+        }
+      ],
+      "endGameScoring": {
+        "text": "One shared score. There is no player who finishes ahead of the others.",
+        "bullets": [
+          {
+            "lead": "0–3",
+            "text": "Eek… What happened?"
+          },
+          {
+            "lead": "4–6",
+            "text": "Not bad. You could certainly do better."
+          },
+          {
+            "lead": "7–8",
+            "text": "Average. It’s a good start. Try again!"
+          },
+          {
+            "lead": "9–10",
+            "text": "Good. A first step towards glory?"
+          },
+          {
+            "lead": "11",
+            "text": "Very good! You should be proud!"
+          },
+          {
+            "lead": "12",
+            "text": "Impressive! You are almost champions!"
+          },
+          {
+            "lead": "13",
+            "text": "Incredible! A perfect score!"
+          }
+        ],
+        "details": "These notes are Repos Production Just One, jo-en02, ©2025."
+      },
+      "scoringSummary": [
+        "After 13 cards, count the cards the group won.",
+        "A pass loses that card. A wrong guess also loses the next card.",
+        "13 won cards is a perfect score."
+      ],
+      "playerCountSetup": {
+        "text": "Three and four players write two clues each. Five, six, and seven write one. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "3": {
+          "text": "The 3- and 4-player variant in the Repos booklet.",
+          "bullets": [
+            {
+              "lead": "Easels",
+              "text": "Each player takes two easels, except the active player, who takes one to hold the card."
+            },
+            {
+              "lead": "Clues",
+              "text": "On each easel, write a different clue. You give two clues instead of one."
+            },
+            {
+              "lead": "Deck",
+              "text": "The deck is still 13 cards, and the rest of the round is unchanged."
+            }
+          ]
+        },
+        "4": {
+          "text": "Same variant as three players.",
+          "bullets": [
+            {
+              "lead": "Easels",
+              "text": "Each player takes two easels, except the active player, who takes one to hold the card."
+            },
+            {
+              "lead": "Clues",
+              "text": "Write a different clue on each easel."
+            }
+          ]
+        },
+        "5": {
+          "text": "The base game.",
+          "bullets": [
+            {
+              "lead": "One clue",
+              "text": "Each player except the active player writes one clue on one easel."
+            }
+          ]
+        },
+        "6": {
+          "text": "The base game.",
+          "bullets": [
+            {
+              "lead": "One clue",
+              "text": "Each player except the active player writes one clue on one easel."
+            }
+          ]
+        },
+        "7": {
+          "text": "The base game. The box has seven easels.",
+          "bullets": [
+            {
+              "lead": "One clue",
+              "text": "Each player except the active player writes one clue on one easel."
+            }
+          ]
+        }
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=4ulLmUQ7omU",
+        "title": "Learn to Play Just One from Repos Productions!",
+        "channel": "Asmodee North America"
+      }
     },
     "kalah": {
       "bggId": "2448",
@@ -64317,7 +65300,6 @@
       "bggRating": 7.1,
       "bggRank": 512,
       "group": true,
-      "rulesStatus": "pending",
       "rulebook": "https://iellogames.com/wp-content/uploads/2021/10/KOT_Rules_EN_11-2023_Light.pdf",
       "expansions": [
         {
@@ -64354,6 +65336,201 @@
           "name": "King of Tokyo: Power Up!",
           "bggId": "127067",
           "rulesStatus": "pending"
+        }
+      ],
+      "quickStart": {
+        "text": "IELLO, King of Tokyo rules, November 2023 light edition. Richard Garfield. Two to six monsters.",
+        "bullets": [
+          {
+            "lead": "Monster",
+            "text": "Each player takes a monster board and figure. Set Life to 10 and Victory Points to 0."
+          },
+          {
+            "lead": "Board",
+            "text": "Put Tokyo in the middle."
+          },
+          {
+            "lead": "Cards",
+            "text": "Shuffle the Power cards. Deal three face up beside the board."
+          },
+          {
+            "lead": "Energy",
+            "text": "The Energy cubes form a pool. The tokens sit nearby."
+          },
+          {
+            "lead": "Dice",
+            "text": "The six black dice start in the middle. Set the green dice aside. Some cards let you roll them."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Life",
+          "text": "10."
+        },
+        {
+          "lead": "Victory points",
+          "text": "0."
+        },
+        {
+          "lead": "Energy",
+          "text": "None, until you roll the energy face."
+        }
+      ],
+      "turnStructure": {
+        "text": "Whoever rolls the most claws on the six black dice goes first. A tie is rerolled until one player has more claws. Then play passes left.",
+        "bullets": [
+          {
+            "lead": "Roll",
+            "text": "Roll the six black dice up to three times. After a roll you may set any dice aside and reroll the rest."
+          },
+          {
+            "lead": "Resolve",
+            "text": "Resolve every symbol from the final roll, in any order.",
+            "details": [
+              {
+                "lead": "1, 2, and 3",
+                "text": "Three of a kind scores that many victory points. Each extra die of that face scores 1 more."
+              },
+              {
+                "lead": "Energy",
+                "text": "Gain one Energy cube per energy face. Keep them until you spend them."
+              },
+              {
+                "lead": "Hearts",
+                "text": "Each heart heals 1 Life if you are outside Tokyo. Hearts do nothing while you are in Tokyo."
+              },
+              {
+                "lead": "Claws",
+                "text": "Each claw deals 1 damage to every monster that is not where you are.",
+                "details": "Monsters in Tokyo City and Tokyo Bay do not wound each other. Claws from inside Tokyo hit everyone outside, and claws from outside hit everyone in Tokyo."
+              }
+            ]
+          },
+          {
+            "lead": "Yield",
+            "text": "A monster may leave Tokyo only after losing Life to claws. The damage still happens. Then they step out."
+          },
+          {
+            "lead": "Enter",
+            "text": "If Tokyo is empty at this step, you must enter Tokyo City and gain 1 victory point. Nobody starts the game in Tokyo, so the first player enters on their first turn.",
+            "details": "With 5 or 6 players, if Tokyo City is full and Tokyo Bay is empty, you must enter the Bay instead. Both zones count as in Tokyo. Once only four or fewer monsters remain, leave the Bay at once, moving into the City if the City is empty."
+          },
+          {
+            "lead": "Buy",
+            "text": "You may buy any of the three face-up cards by spending Energy equal to its cost. Replace a bought card at once. New cards can be bought immediately.",
+            "details": "Spend 2 Energy to sweep all three cards away and reveal three new ones. You may keep buying or sweeping while you can pay."
+          },
+          {
+            "lead": "Pass",
+            "text": "Some cards happen at the end of the turn. Then pass the dice left."
+          }
+        ],
+        "details": "Starting your turn already in Tokyo scores 2 victory points, before you roll."
+      },
+      "endOfGame": [
+        {
+          "lead": "End of a turn",
+          "text": "The game ends at the end of a turn if a monster has reached 20 victory points, or if only one monster has Life left."
+        },
+        {
+          "lead": "Winner",
+          "text": "The monster who reached 20, or the last monster left alive, is crowned King of Tokyo."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "During the game",
+          "text": "Victory points are scored as you play. There is no separate final tally."
+        },
+        {
+          "lead": "Dice",
+          "text": "Three 1s, 2s, or 3s score that number, plus 1 for each extra matching die."
+        },
+        {
+          "lead": "Tokyo",
+          "text": "1 victory point when you enter. 2 if you begin your turn there."
+        },
+        {
+          "lead": "Elimination",
+          "text": "A monster at 0 Life is out. Cards and Energy are discarded. The last monster standing wins even below 20."
+        }
+      ],
+      "scoringSummary": [
+        "At the end of a turn, 20 victory points or the last monster alive wins.",
+        "Score three-of-a-kind 1s, 2s, and 3s as you roll. Entering Tokyo is 1. Starting there is 2."
+      ],
+      "playerCountSetup": {
+        "text": "Two to four use Tokyo City only. Five and six also use Tokyo Bay. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": {
+          "text": "Tokyo City only.",
+          "bullets": [
+            {
+              "lead": "Board",
+              "text": "Use Tokyo City. Leave Tokyo Bay empty."
+            },
+            {
+              "lead": "Recommended variant",
+              "text": "The booklet recommends a 2-player change, and says every other rule stays. Entering Tokyo gains 1 Energy instead of 1 victory point. Beginning your turn in Tokyo gains 1 victory point instead of 2."
+            }
+          ]
+        },
+        "3": [
+          {
+            "lead": "Board",
+            "text": "Use Tokyo City only."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Board",
+            "text": "Use Tokyo City only."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Board",
+            "text": "Use Tokyo City and Tokyo Bay."
+          },
+          {
+            "lead": "Both",
+            "text": "A monster in either zone is in Tokyo. They do not wound each other."
+          },
+          {
+            "lead": "Shrink",
+            "text": "If the game falls to four or fewer monsters, Tokyo Bay is abandoned."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Board",
+            "text": "Use Tokyo City and Tokyo Bay."
+          },
+          {
+            "lead": "Shrink",
+            "text": "If the game falls to four or fewer monsters, Tokyo Bay is abandoned."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=DjfsX847nb0",
+        "title": "King of Tokyo - How To Play",
+        "channel": "IELLO Games"
+      },
+      "remindersText": [
+        {
+          "lead": "Hearts in Tokyo",
+          "text": "You cannot heal while you are in Tokyo."
+        },
+        {
+          "lead": "Yield",
+          "text": "You may leave only after claws hit you, and you still take that damage."
+        },
+        {
+          "lead": "Same zone",
+          "text": "City and Bay do not smash each other."
         }
       ]
     },
@@ -64432,7 +65609,122 @@
       "bggRating": 6.5,
       "bggRank": 1991,
       "group": true,
-      "rulesStatus": "pending"
+      "rulebook": "https://blog.amigo-spiele.de/content/ap/rule/01907-GB-AmigoRule.pdf",
+      "quickStart": {
+        "text": "AMIGO, L.L.A.M.A. English rules, version 1.1, ©2019. Reiner Knizia. Two to six players.",
+        "bullets": [
+          {
+            "lead": "Deal",
+            "text": "Shuffle and deal 6 cards to each player. The rest are the face-down draw pile."
+          },
+          {
+            "lead": "Discard",
+            "text": "Turn the top card face up. That starts the discard pile."
+          },
+          {
+            "lead": "Tokens",
+            "text": "Set the white 1-point tokens and the black 10-point tokens where everyone can reach them."
+          },
+          {
+            "lead": "Start",
+            "text": "The youngest player goes first."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Hand",
+          "text": "Six cards."
+        },
+        {
+          "lead": "Points",
+          "text": "No tokens yet."
+        }
+      ],
+      "turnStructure": {
+        "text": "On your turn, take one action. Then the player to your left goes.",
+        "bullets": [
+          {
+            "lead": "Play",
+            "text": "Play one card onto the discard pile: the same value as the top card, or exactly one higher.",
+            "details": [
+              {
+                "lead": "Llama",
+                "text": "A llama may be played on a 6 or on a llama."
+              },
+              {
+                "lead": "After a llama",
+                "text": "On a llama you may play another llama or a 1."
+              }
+            ]
+          },
+          {
+            "lead": "Draw",
+            "text": "Draw one card. You cannot also play a card this turn.",
+            "details": "If the draw pile is empty, do not reshuffle. Drawing is no longer an action."
+          },
+          {
+            "lead": "Quit",
+            "text": "Place your hand face down in front of you and leave the round."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "Round",
+          "text": "A round ends immediately when one player has played every card, or when every player has quit."
+        },
+        {
+          "lead": "Last one in",
+          "text": "If everyone else has quit, the remaining player continues, but may no longer draw. The worked example ends the round once that player cannot play another card."
+        },
+        {
+          "lead": "Game",
+          "text": "Keep playing rounds until a player has 40 or more points. Fewest points wins. A tie shares the win."
+        }
+      ],
+      "endGameScoring": {
+        "text": "Cards still in hand or face down in front of you score. Each value counts once.",
+        "bullets": [
+          {
+            "lead": "Numbers",
+            "text": "A value scores its number once. Two 4s are 4 points, not 8."
+          },
+          {
+            "lead": "Llamas",
+            "text": "All of your llamas together are 10 points, not 10 each."
+          },
+          {
+            "lead": "Tokens",
+            "text": "Take white 1s and black 10s for that total. You may swap them for change at any time."
+          },
+          {
+            "lead": "Clear",
+            "text": "If you played every card, return one token you already have, either a 1 or a 10."
+          },
+          {
+            "lead": "Next",
+            "text": "Shuffle, deal 6 again, and flip a new discard. The last player who took a turn starts."
+          }
+        ],
+        "details": "These notes are AMIGO L.L.A.M.A., version 1.1."
+      },
+      "scoringSummary": [
+        "Fewest points when someone reaches 40 or more.",
+        "Each leftover value scores once. All of your llamas are 10 together.",
+        "Playing out your hand lets you return one token."
+      ],
+      "playerCountSetup": [
+        {
+          "lead": "Same deal",
+          "text": "From 2 through 6, each player is dealt 6 cards. Nothing is removed for the count."
+        }
+      ],
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=IwENVOKtSv4",
+        "title": "LLAMA How To Play",
+        "channel": "AMIGOGames"
+      }
     },
     "labyrinth": {
       "bggId": "1219",
@@ -65012,8 +66304,135 @@
       "bggRating": 6.9,
       "bggRank": 1453,
       "group": true,
-      "rulesStatus": "pending",
-      "rulebook": "https://cdn.shopify.com/s/files/1/0143/6178/8473/files/Mountain-Goats_Papersheet_A.pdf?v=1600284638"
+      "rulebook": "https://cdn.shopify.com/s/files/1/0143/6178/8473/files/Mountain-Goats_Papersheet_A.pdf?v=1600284638",
+      "quickStart": {
+        "text": "BoardGameTables.com, Mountain Goats papersheet. A 20-minute race for 2 to 4.",
+        "bullets": [
+          {
+            "lead": "Mountains",
+            "text": "Lay the 18 mountain cards out in the printed shape. Six columns, numbered 5 through 10."
+          },
+          {
+            "lead": "Tokens",
+            "text": "Stack the point tokens at the top of their mountain: 5s through 10s.",
+            "details": "The supply is 12×5, 11×6, 10×7, 9×8, 8×9, and 7×10."
+          },
+          {
+            "lead": "Bonus",
+            "text": "Lay out the bonus tokens, 15, 12, 9, and 6."
+          },
+          {
+            "lead": "Goats",
+            "text": "Each player places one of their goats at the foot of each mountain."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Goats",
+          "text": "Six goats, one at the foot of each mountain."
+        },
+        {
+          "lead": "Points",
+          "text": "No point tokens yet."
+        }
+      ],
+      "turnStructure": [
+        {
+          "lead": "Roll",
+          "text": "Roll the four dice. If you rolled more than one 1, keep one 1 and turn every other 1 to any face you want."
+        },
+        {
+          "lead": "Group",
+          "text": "Split the dice into groups. A group may be any number of dice. Each group is one number, a single face or a sum."
+        },
+        {
+          "lead": "Move",
+          "text": "For each group that totals 5 through 10, move your goat one space up that mountain. Any other total moves nothing."
+        },
+        {
+          "lead": "Top",
+          "text": "Goats may share a space, except the top. Moving onto the top takes one point token from that mountain, if any remain, and sends a goat already there back to the foot.",
+          "details": "If your goat is already on top, that group claims one point token from the mountain instead of moving."
+        },
+        {
+          "lead": "Pass",
+          "text": "Pass the dice to the left."
+        }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Trigger",
+          "text": "When every bonus token has been claimed, or when three mountains have no point tokens left, finish the round so every player has had the same number of turns."
+        },
+        {
+          "lead": "Winner",
+          "text": "Most points wins."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "Mountain tokens",
+          "text": "Add the point tokens you took from the mountains."
+        },
+        {
+          "lead": "Bonus",
+          "text": "A set of one token from each of the six mountains claims the highest bonus still out. Further sets claim the next bonuses."
+        },
+        {
+          "lead": "Tie",
+          "text": "Most goats on mountain tops. If still tied, the tied player with a goat on the higher-numbered mountain."
+        }
+      ],
+      "scoringSummary": [
+        "Most points wins, after equal turns.",
+        "Tie: most goats on the tops, then a goat on the higher mountain."
+      ],
+      "playerCountSetup": {
+        "text": "Two and three players remove point tokens before the start. Four uses every token. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": [
+          {
+            "lead": "Tokens",
+            "text": "Remove two point tokens from each mountain."
+          },
+          {
+            "lead": "Goats",
+            "text": "Each player still places one goat at the foot of each mountain."
+          }
+        ],
+        "3": [
+          {
+            "lead": "Tokens",
+            "text": "Remove one point token from each mountain."
+          },
+          {
+            "lead": "Goats",
+            "text": "Each player still places one goat at the foot of each mountain."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Tokens",
+            "text": "Use every point token. Remove none."
+          },
+          {
+            "lead": "Goats",
+            "text": "Each player places one goat at the foot of each mountain."
+          }
+        ]
+      },
+      "remindersText": [
+        {
+          "lead": "One step",
+          "text": "A group moves a goat one space, however many dice are in the group."
+        },
+        {
+          "lead": "Already there",
+          "text": "A group aimed at a goat that is already on top takes one token and does not move it."
+        }
+      ]
     },
     "moving-wild": {
       "bggId": "423270",
@@ -65144,8 +66563,214 @@
       "bggRating": 7.2,
       "bggRank": 468,
       "group": true,
-      "rulesStatus": "pending",
-      "rulebook": "https://cdn.svc.asmodee.net/production-libellud/uploads/2025/11/MYST_REFRESH_RULES_EN-1.pdf"
+      "rulebook": "https://cdn.svc.asmodee.net/production-libellud/uploads/2025/11/MYST_REFRESH_RULES_EN-1.pdf",
+      "quickStart": {
+        "text": "Libellud, Mysterium refresh rules, MYST_REFRESH_RULES_EN. One ghost, and everyone else is a psychic. Cooperative.",
+        "bullets": [
+          {
+            "lead": "Roles",
+            "text": "One player is the ghost and sits behind the screen. The others are psychics."
+          },
+          {
+            "lead": "Screen",
+            "text": "The ghost sets the screen so the psychics cannot see behind it, and places the Vision deck face down there."
+          },
+          {
+            "lead": "Candles",
+            "text": "The three Candle markers start on top of the screen. They last the whole game, including the finale."
+          },
+          {
+            "lead": "Boards",
+            "text": "Set out the Character, Location, Object, and Final Progress boards."
+          },
+          {
+            "lead": "Colors",
+            "text": "Each psychic takes one color: the envelope, the Psychic token, and the Intuition pawn on the Character board."
+          },
+          {
+            "lead": "Clock",
+            "text": "One psychic takes the Pocket Watch and sets it to the first hour."
+          },
+          {
+            "lead": "Cards",
+            "text": "For a first game, use the green-back Character set. Spread the 8 psychic Character cards by that board.",
+            "details": "Later games may mix the numbered backs. Take the ghost cards that match the psychic cards you used."
+          },
+          {
+            "lead": "Secrets",
+            "text": "The ghost takes the matching ghost cards and, for each psychic, places one at random in that color’s slot. The rest go back unseen."
+          },
+          {
+            "lead": "Repeat",
+            "text": "Do the same for Locations, then Objects."
+          },
+          {
+            "lead": "Hand",
+            "text": "The ghost draws a hand of 7 Vision cards."
+          }
+        ]
+      },
+      "turnStructure": {
+        "text": "A round is the ghost’s visions, the psychics’ guess, then a knock for yes or no.",
+        "bullets": [
+          {
+            "lead": "Vision",
+            "text": "The ghost must show the card for the board that psychic is on: Character, then Location, then Object.",
+            "details": "Choose up to 7 Vision cards for one shared idea. Themes, objects, layout, and color are all fair. There is no wrong association."
+          },
+          {
+            "lead": "Envelope",
+            "text": "Put those cards in that psychic’s envelope and hand it over. Draw back to 7."
+          },
+          {
+            "lead": "Candle",
+            "text": "Discard one Candle to discard up to 7 cards from hand and draw that many replacements."
+          },
+          {
+            "lead": "Talk",
+            "text": "Psychics may start as soon as the first envelope arrives. They may show their cards and help each other.",
+            "details": "The ghost may listen and may not gesture, comment, or answer except with visions."
+          },
+          {
+            "lead": "Pawn",
+            "text": "Place your Intuition pawn on the card you will guess. You may move it until everyone is ready."
+          },
+          {
+            "lead": "Knock",
+            "text": "Each psychic asks. The ghost knocks once for yes and twice for no."
+          },
+          {
+            "lead": "Yes",
+            "text": "Move the pawn to the next board, in order Character, Location, Object, Final. Put the card in your envelope, return the visions, and the ghost discards them."
+          },
+          {
+            "lead": "No",
+            "text": "Return the pawn to the board it started the round on, put the visions back in the envelope, and return the envelope to the ghost."
+          },
+          {
+            "lead": "Clock",
+            "text": "If anyone is not yet on the Final board, advance the watch one hour. The seventh hour with someone still unfinished is a loss."
+          },
+          {
+            "lead": "Next vision",
+            "text": "A psychic who missed does not get a fresh vision. The ghost adds at least one card and may discard cards from the old vision.",
+            "details": "A psychic already on the Final board gets no vision and helps the others."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "Finale",
+          "text": "When every Intuition pawn is on the Final board, stop the investigation and reveal the culprit. This can happen before the seventh hour."
+        },
+        {
+          "lead": "Lose",
+          "text": "If the watch is already on the seventh hour and a trail is unfinished, everyone loses."
+        }
+      ],
+      "endGameScoring": {
+        "text": "There is no point total. The group wins or loses together.",
+        "bullets": [
+          {
+            "lead": "Culprit",
+            "text": "The ghost shuffles the Psychic tokens, draws one in secret, and places it face down on the Final board. That color’s trail is the culprit."
+          },
+          {
+            "lead": "Show",
+            "text": "Return the progress boards and leftover psychic cards to the box. Each psychic lays their trail out, with the envelope beside it."
+          },
+          {
+            "lead": "Last vision",
+            "text": "The ghost chooses exactly 3 Vision cards: one for the culprit’s Character, one for the Location, and one for the Object. Shuffle those three and hand them over. Candles may still be spent."
+          },
+          {
+            "lead": "Agree",
+            "text": "The psychics must name one trail. Without a consensus, the majority decides."
+          },
+          {
+            "lead": "Win",
+            "text": "If that trail is the culprit’s, everyone wins."
+          },
+          {
+            "lead": "Lose",
+            "text": "Any other trail and everyone loses."
+          }
+        ],
+        "details": "These notes are the Libellud Mysterium refresh rules."
+      },
+      "scoringSummary": [
+        "Win together by naming the culprit’s trail.",
+        "Every psychic needs a character, a location, and an object before the clock passes seven."
+      ],
+      "playerCountSetup": {
+        "text": "Three players is the booklet’s variant: two colors each, played as four psychics. Every other count is one color per psychic. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "2": [
+          {
+            "lead": "Ghost",
+            "text": "One player is the ghost."
+          },
+          {
+            "lead": "Psychics",
+            "text": "Each other player is one psychic and takes one color."
+          }
+        ],
+        "3": [
+          {
+            "lead": "Two colors",
+            "text": "Each psychic chooses two colors and takes both sets of components."
+          },
+          {
+            "lead": "As four",
+            "text": "Play as if four psychics were at the table. The ghost still gives each color its own trail."
+          },
+          {
+            "lead": "Clock",
+            "text": "One psychic still keeps the Pocket Watch."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Ghost",
+            "text": "One player is the ghost."
+          },
+          {
+            "lead": "Psychics",
+            "text": "Each other player is one psychic and takes one color."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Ghost",
+            "text": "One player is the ghost."
+          },
+          {
+            "lead": "Psychics",
+            "text": "Each other player is one psychic and takes one color."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Ghost",
+            "text": "One player is the ghost."
+          },
+          {
+            "lead": "Psychics",
+            "text": "Each other player is one psychic and takes one color."
+          }
+        ],
+        "7": [
+          {
+            "lead": "Ghost",
+            "text": "One player is the ghost."
+          },
+          {
+            "lead": "Psychics",
+            "text": "Each other player is one psychic and takes one color."
+          }
+        ]
+      }
     },
     "near-and-far": {
       "bggId": "195421",
@@ -65267,7 +66892,134 @@
       "bggRating": 7.1,
       "bggRank": 565,
       "group": true,
-      "rulesStatus": "pending"
+      "rulebook": "https://blog.amigo-spiele.de/content/ap/rule/02455-GB-AmigoRule.pdf",
+      "quickStart": {
+        "text": "AMIGO, No Thanks! English rules 02455. Thorsten Gimmler. The base game, 3 to 7 players.",
+        "bullets": [
+          {
+            "lead": "Cards",
+            "text": "Shuffle the 33 number cards, values 3 through 35. Set 9 aside without looking. The other 24 are a face-down deck."
+          },
+          {
+            "lead": "Special cards",
+            "text": "This printing also has 22 special cards. Return them to the box. They are the expansion, not the base game."
+          },
+          {
+            "lead": "Counters",
+            "text": "Give out the counters for your player count. Put the rest back in the box."
+          },
+          {
+            "lead": "Secret",
+            "text": "Keep your counters hidden for the whole game."
+          },
+          {
+            "lead": "Start",
+            "text": "The player who most recently said “No thanks!” reveals the first card."
+          }
+        ]
+      },
+      "turnStructure": [
+        {
+          "lead": "Offer",
+          "text": "Reveal the top card face up beside the deck, or decide on the card already there."
+        },
+        {
+          "lead": "Take",
+          "text": "Take the card into your display and take every counter on it. Then reveal the next card and decide again.",
+          "details": "Your turn does not end when you take a card."
+        },
+        {
+          "lead": "Refuse",
+          "text": "Place one of your counters on the card. The player to your left must then take it or refuse it. Your turn ends."
+        },
+        {
+          "lead": "No counters",
+          "text": "If it is your turn and you have no counters, you must take the card."
+        },
+        {
+          "lead": "Chain",
+          "text": "Directly consecutive values are one chain. Stack them with the lowest on top, and keep every value visible."
+        }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Last card",
+          "text": "The game ends when a player takes the last card from the middle of the table."
+        },
+        {
+          "lead": "Winner",
+          "text": "Fewest points wins. The total can be positive if your counters outnumber the cards. A tie shares the win."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "Singles",
+          "text": "A card that is not in a chain scores its face value, as negative points."
+        },
+        {
+          "lead": "Chain",
+          "text": "A chain of consecutive numbers scores only the lowest value in the chain."
+        },
+        {
+          "lead": "Counters",
+          "text": "Each counter you have left subtracts 1 point."
+        }
+      ],
+      "scoringSummary": [
+        "Fewest points when the last card is taken.",
+        "A chain scores only its lowest card. Each leftover counter subtracts 1.",
+        "A tie shares the win."
+      ],
+      "playerCountSetup": {
+        "text": "Only the counters change. The deck is 24 cards at every count. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "3": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Counters",
+            "text": "9 each."
+          }
+        ],
+        "7": [
+          {
+            "lead": "Counters",
+            "text": "7 each."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=F4c_U3CQ7RM",
+        "title": "NO THANKS! - How to Play by AMIGO Games",
+        "channel": "AMIGOGames"
+      },
+      "remindersText": [
+        {
+          "lead": "Hidden",
+          "text": "Counters stay secret, including the ones you pick up off a card."
+        },
+        {
+          "lead": "Must take",
+          "text": "With no counters on your turn, you cannot refuse."
+        }
+      ]
     },
     "nocturne": {
       "bggId": "393175",
