@@ -400,4 +400,4 @@ A bare array and a section object can both be the value of a field. Prefer the s
 
 Player-count buttons change Player Count Set Up. They also change the header time when `playTimeByPlayerCount` has that count, and the First game box when `firstGameSetup` is a count map.
 
-The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. Personal notes stay in `localStorage` under `notes_` plus the slug.
+The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.
