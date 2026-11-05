@@ -63,7 +63,7 @@ These sit under the player/time line. A missing or blank value leaves that link 
 `bgStatsUrl` is a string. Use the page you want opened, including a `bgstats://` app link if that is the one you mean.
 
 ```json
-"bgStatsUrl": "https://bgstats.app/bgg/68448"
+"bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=68448"
 ```
 
 `howToPlayVideo` is an object:
@@ -83,6 +83,32 @@ These sit under the player/time line. A missing or blank value leaves that link 
 ```
 
 If `howToPlayVideo` is absent, a non-empty `youtube` string still renders as How to play. Once `howToPlayVideo` is set, that object is what the page uses, and an empty `url` hides the link.
+
+## Rules status
+
+`rulesStatus` marks a base game, or an expansion, whose rules text is not written yet.
+
+| Value | Meaning |
+| --- | --- |
+| `"pending"` | Essentials are filled. Rules sections are intentionally empty so a later batch can find the entry and fill them. |
+
+Leave the field off when it does not apply. The page does not render it. On an expansion it is not a rules section and it does not add an "Expansion rules" block.
+
+```json
+"rulesStatus": "pending"
+```
+
+## Owners
+
+`owners` is the friend-group copies of that game. Each entry is a first name, or a username when the group list has no first name: Timothy, Cody, John, Ryan, foreigner56.
+
+The menu uses it for two filters besides search. **All** is the default and shows every game. **Group** shows games with an `owners` list. **My games** shows games whose owners include Cody, and games already on the menu that have no `owners` list (those are Cody's). A game with an `owners` list that does not include Cody stays out of My games.
+
+The game page shows one line, `Owned by` plus the names, when the list is set. Leave the field off when the game is not in the group collection.
+
+```json
+"owners": ["Timothy", "Cody"]
+```
 
 ## Play time by player count
 
@@ -234,6 +260,7 @@ There is no separate Expansions list at the bottom of the page. Chips still merg
 | `playerAids` | Player aids, under the expansion name |
 | `rulebook`, `youtube`, `bggId` | Links in the Turn section, under the expansion name |
 | `cover` | A small image in that same Turn block, when the field is set |
+| `rulesStatus` | Not shown. `"pending"` means the chip has no rules text yet. |
 | Any other non-empty text field | **Expansion rules: &lt;name&gt;** inside Turn Structure |
 
 `name` is the chip label. Use a new field for rules that are not setup or scoring, such as a new action or a new card type. Put the bullet format on that field. The Turn block is titled `Expansion rules: ` plus the expansion name, and it disappears when the chip is off.

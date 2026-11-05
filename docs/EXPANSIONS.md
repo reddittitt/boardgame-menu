@@ -214,3 +214,12 @@ Chips with setup, reminders, and scoring, in the bullet format from `docs/CONTEN
 - Wandering Towers: Mini-Spell Expansion #1, #2, and #3, and The Magic Tower
 
 The Spell Pack sheet still does not say which spell is in which mini box. The box assignment is the Board Game Barrister listing, and the spell text is Capstone's. Fat Cat, the Onitama promo pairs, Agent Avenue: Four Seasons, the Wingspan promo packs, and Burgle Bros 3 still have no rules text.
+
+## Group collection orphans
+
+These owned expansions have no parent base game on the menu, so they are not chips. BoardGameGeek's "expands" link was checked when the collection export left the parent blank. The parent still is not a base game on the site.
+
+- Champions of Midgard: Jarl Edition, The Dark Mountains, Valhalla, and the Polyhedral Dice Promo Tiles. They expand Champions of Midgard, which is not on the menu.
+- Rolling Realms: Trickerion Promo Pack. It expands Rolling Realms, which is not on the menu.
+- Santorini: Hiding in the Underworld, Seasons of Chaos, Soaring over Olympus, and Tides of Poseidon. They expand Santorini: Second Edition, which is not on the menu.
+- Suburbia: Con Tiles. It expands Suburbia, not Suburbia: Collector's Edition.
