@@ -65609,7 +65609,122 @@
       "bggRating": 6.5,
       "bggRank": 1991,
       "group": true,
-      "rulesStatus": "pending"
+      "rulebook": "https://blog.amigo-spiele.de/content/ap/rule/01907-GB-AmigoRule.pdf",
+      "quickStart": {
+        "text": "AMIGO, L.L.A.M.A. English rules, version 1.1, ©2019. Reiner Knizia. Two to six players.",
+        "bullets": [
+          {
+            "lead": "Deal",
+            "text": "Shuffle and deal 6 cards to each player. The rest are the face-down draw pile."
+          },
+          {
+            "lead": "Discard",
+            "text": "Turn the top card face up. That starts the discard pile."
+          },
+          {
+            "lead": "Tokens",
+            "text": "Set the white 1-point tokens and the black 10-point tokens where everyone can reach them."
+          },
+          {
+            "lead": "Start",
+            "text": "The youngest player goes first."
+          }
+        ]
+      },
+      "startingResources": [
+        {
+          "lead": "Hand",
+          "text": "Six cards."
+        },
+        {
+          "lead": "Points",
+          "text": "No tokens yet."
+        }
+      ],
+      "turnStructure": {
+        "text": "On your turn, take one action. Then the player to your left goes.",
+        "bullets": [
+          {
+            "lead": "Play",
+            "text": "Play one card onto the discard pile: the same value as the top card, or exactly one higher.",
+            "details": [
+              {
+                "lead": "Llama",
+                "text": "A llama may be played on a 6 or on a llama."
+              },
+              {
+                "lead": "After a llama",
+                "text": "On a llama you may play another llama or a 1."
+              }
+            ]
+          },
+          {
+            "lead": "Draw",
+            "text": "Draw one card. You cannot also play a card this turn.",
+            "details": "If the draw pile is empty, do not reshuffle. Drawing is no longer an action."
+          },
+          {
+            "lead": "Quit",
+            "text": "Place your hand face down in front of you and leave the round."
+          }
+        ]
+      },
+      "endOfGame": [
+        {
+          "lead": "Round",
+          "text": "A round ends immediately when one player has played every card, or when every player has quit."
+        },
+        {
+          "lead": "Last one in",
+          "text": "If everyone else has quit, the remaining player continues, but may no longer draw. The worked example ends the round once that player cannot play another card."
+        },
+        {
+          "lead": "Game",
+          "text": "Keep playing rounds until a player has 40 or more points. Fewest points wins. A tie shares the win."
+        }
+      ],
+      "endGameScoring": {
+        "text": "Cards still in hand or face down in front of you score. Each value counts once.",
+        "bullets": [
+          {
+            "lead": "Numbers",
+            "text": "A value scores its number once. Two 4s are 4 points, not 8."
+          },
+          {
+            "lead": "Llamas",
+            "text": "All of your llamas together are 10 points, not 10 each."
+          },
+          {
+            "lead": "Tokens",
+            "text": "Take white 1s and black 10s for that total. You may swap them for change at any time."
+          },
+          {
+            "lead": "Clear",
+            "text": "If you played every card, return one token you already have, either a 1 or a 10."
+          },
+          {
+            "lead": "Next",
+            "text": "Shuffle, deal 6 again, and flip a new discard. The last player who took a turn starts."
+          }
+        ],
+        "details": "These notes are AMIGO L.L.A.M.A., version 1.1."
+      },
+      "scoringSummary": [
+        "Fewest points when someone reaches 40 or more.",
+        "Each leftover value scores once. All of your llamas are 10 together.",
+        "Playing out your hand lets you return one token."
+      ],
+      "playerCountSetup": [
+        {
+          "lead": "Same deal",
+          "text": "From 2 through 6, each player is dealt 6 cards. Nothing is removed for the count."
+        }
+      ],
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=IwENVOKtSv4",
+        "title": "LLAMA How To Play",
+        "channel": "AMIGOGames"
+      }
     },
     "labyrinth": {
       "bggId": "1219",
@@ -66777,7 +66892,134 @@
       "bggRating": 7.1,
       "bggRank": 565,
       "group": true,
-      "rulesStatus": "pending"
+      "rulebook": "https://blog.amigo-spiele.de/content/ap/rule/02455-GB-AmigoRule.pdf",
+      "quickStart": {
+        "text": "AMIGO, No Thanks! English rules 02455. Thorsten Gimmler. The base game, 3 to 7 players.",
+        "bullets": [
+          {
+            "lead": "Cards",
+            "text": "Shuffle the 33 number cards, values 3 through 35. Set 9 aside without looking. The other 24 are a face-down deck."
+          },
+          {
+            "lead": "Special cards",
+            "text": "This printing also has 22 special cards. Return them to the box. They are the expansion, not the base game."
+          },
+          {
+            "lead": "Counters",
+            "text": "Give out the counters for your player count. Put the rest back in the box."
+          },
+          {
+            "lead": "Secret",
+            "text": "Keep your counters hidden for the whole game."
+          },
+          {
+            "lead": "Start",
+            "text": "The player who most recently said “No thanks!” reveals the first card."
+          }
+        ]
+      },
+      "turnStructure": [
+        {
+          "lead": "Offer",
+          "text": "Reveal the top card face up beside the deck, or decide on the card already there."
+        },
+        {
+          "lead": "Take",
+          "text": "Take the card into your display and take every counter on it. Then reveal the next card and decide again.",
+          "details": "Your turn does not end when you take a card."
+        },
+        {
+          "lead": "Refuse",
+          "text": "Place one of your counters on the card. The player to your left must then take it or refuse it. Your turn ends."
+        },
+        {
+          "lead": "No counters",
+          "text": "If it is your turn and you have no counters, you must take the card."
+        },
+        {
+          "lead": "Chain",
+          "text": "Directly consecutive values are one chain. Stack them with the lowest on top, and keep every value visible."
+        }
+      ],
+      "endOfGame": [
+        {
+          "lead": "Last card",
+          "text": "The game ends when a player takes the last card from the middle of the table."
+        },
+        {
+          "lead": "Winner",
+          "text": "Fewest points wins. The total can be positive if your counters outnumber the cards. A tie shares the win."
+        }
+      ],
+      "endGameScoring": [
+        {
+          "lead": "Singles",
+          "text": "A card that is not in a chain scores its face value, as negative points."
+        },
+        {
+          "lead": "Chain",
+          "text": "A chain of consecutive numbers scores only the lowest value in the chain."
+        },
+        {
+          "lead": "Counters",
+          "text": "Each counter you have left subtracts 1 point."
+        }
+      ],
+      "scoringSummary": [
+        "Fewest points when the last card is taken.",
+        "A chain scores only its lowest card. Each leftover counter subtracts 1.",
+        "A tie shares the win."
+      ],
+      "playerCountSetup": {
+        "text": "Only the counters change. The deck is 24 cards at every count. Use the buttons."
+      },
+      "setupByPlayerCount": {
+        "3": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "4": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "5": [
+          {
+            "lead": "Counters",
+            "text": "11 each."
+          }
+        ],
+        "6": [
+          {
+            "lead": "Counters",
+            "text": "9 each."
+          }
+        ],
+        "7": [
+          {
+            "lead": "Counters",
+            "text": "7 each."
+          }
+        ]
+      },
+      "howToPlayVideo": {
+        "url": "https://www.youtube.com/watch?v=F4c_U3CQ7RM",
+        "title": "NO THANKS! - How to Play by AMIGO Games",
+        "channel": "AMIGOGames"
+      },
+      "remindersText": [
+        {
+          "lead": "Hidden",
+          "text": "Counters stay secret, including the ones you pick up off a card."
+        },
+        {
+          "lead": "Must take",
+          "text": "With no counters on your turn, you cannot refuse."
+        }
+      ]
     },
     "nocturne": {
       "bggId": "393175",
