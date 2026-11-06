@@ -1,0 +1,426 @@
+#!/usr/bin/env python3
+"""Build small per-game rulebook search indexes.
+
+Reads each game's `rulebook` field from index.html. A slug is the uploaded
+file rulebooks/<slug>.pdf. An https URL is the PDF the game page already
+opens; it is downloaded for this run and not saved.
+
+Pages come from pdftotext. A page with almost no text is treated as an image
+and read with tesseract. Wingspan's uploaded PDF has no text layer, so every
+page is OCR. Heat's field is the Days of Wonder basic-rules PDF. The file
+rulebooks/heat-pedal-to-the-metal.pdf is the advanced booklet and is not indexed.
+
+Writes rulebooks/index/<slug>.json and refreshes rulebooks/index/manifest.json
+from the JSON files in that directory.
+
+Usage:
+  scripts/build-rulebook-index
+  scripts/build-rulebook-index wingspan root
+"""
+
+from __future__ import annotations
+
+import html
+import json
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import urllib.request
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+INDEX_DIR = ROOT / "rulebooks" / "index"
+GAMES_JSON_MARKER = '<script id="games-json" type="application/json">'
+
+DEFAULT_SLUGS = (
+    "wingspan",
+    "brass-birmingham",
+    "heat-pedal-to-the-metal",
+    "ark-nova",
+    "root",
+)
+
+# A page with fewer letters than this is image-only (or a cover) and is OCR'd.
+MIN_PAGE_LETTERS = 40
+MIN_LINE_LETTERS = 4
+MIN_LETTER_RATIO = 0.4
+MAX_LINE_CHARS = 200
+OCR_DPI = 200
+OCR_MIN_WORD_CONF = 45
+OCR_MIN_LINE_CONF = 60
+
+SMOKE_QUERIES = {
+    "wingspan": "tuck",
+    "brass-birmingham": "canal",
+    "heat-pedal-to-the-metal": "stress",
+    "ark-nova": "sponsor",
+    "root": "rule",
+}
+
+
+def die(message: str) -> None:
+    print(f"build-rulebook-index: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def require_tools() -> None:
+    missing = [name for name in ("pdftotext", "pdfinfo", "pdftoppm", "tesseract") if not shutil.which(name)]
+    if missing:
+        die("missing tools: " + ", ".join(missing) + ". Install poppler-utils and tesseract-ocr.")
+
+
+def load_enrich() -> dict:
+    html = (ROOT / "index.html").read_text(encoding="utf-8")
+    start = html.find(GAMES_JSON_MARKER)
+    if start < 0:
+        die("games-json script was not found in index.html")
+    start = html.find(">", start) + 1
+    end = html.find("</script>", start)
+    if end < 0:
+        die("games-json script was not closed")
+    try:
+        data = json.loads(html[start:end])
+    except json.JSONDecodeError as exc:
+        die(f"games-json is not valid JSON ({exc})")
+    enrich = data.get("enrich")
+    if not isinstance(enrich, dict):
+        die("games-json has no enrich object")
+    return enrich
+
+
+def page_count(pdf: Path) -> int:
+    proc = subprocess.run(
+        ["pdfinfo", str(pdf)],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    match = re.search(r"^Pages:\s+(\d+)\s*$", proc.stdout, re.M)
+    if not match:
+        die(f"pdfinfo did not report a page count for {pdf}")
+    return int(match.group(1))
+
+
+def pdftotext_pages(pdf: Path, count: int) -> list[str]:
+    """One string per page, with each visual line in reading order.
+
+    bbox-layout keeps columns apart. Plain -layout joins every column on a
+    row into one long line, which makes a bad snippet.
+    """
+    proc = subprocess.run(
+        ["pdftotext", "-bbox-layout", "-enc", "UTF-8", str(pdf), "-"],
+        check=True,
+        capture_output=True,
+        timeout=180,
+    )
+    text = proc.stdout.decode("utf-8", errors="replace")
+    page_xml = re.findall(r"<page\b[^>]*>.*?</page>", text, re.S)
+    chunks: list[str] = []
+    for xml in page_xml:
+        raw_lines = []
+        for line_xml in re.findall(r"<line\b[^>]*>(.*?)</line>", xml, re.S):
+            words = re.findall(r"<word\b[^>]*>(.*?)</word>", line_xml, re.S)
+            if not words:
+                continue
+            raw_lines.append(html.unescape(" ".join(words)))
+        chunks.append("\n".join(raw_lines))
+    if len(chunks) < count:
+        chunks.extend([""] * (count - len(chunks)))
+    elif len(chunks) > count:
+        chunks = chunks[:count]
+    return chunks
+
+
+def letter_count(text: str) -> int:
+    return sum(ch.isalpha() for ch in text)
+
+
+def normalize_line(text: str) -> str:
+    text = (
+        text.replace("\u00ad", "")
+        .replace("\u00a0", " ")
+        .replace("\u200b", "")
+        .replace("\u2011", "-")
+    )
+    text = re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"^[\u2022\u25cf\u25aa\u25e6]+\s*", "", text)
+    # Display titles are often tracked out one letter at a time: "G O A L".
+    text = re.sub(
+        r"\b(?:[A-Za-z] ){3,}[A-Za-z]\b",
+        lambda match: match.group(0).replace(" ", ""),
+        text,
+    )
+    return text.strip()
+
+
+def usable_line(text: str) -> bool:
+    letters = letter_count(text)
+    if letters < MIN_LINE_LETTERS:
+        return False
+    if letters / len(text) < MIN_LETTER_RATIO:
+        return False
+    return True
+
+
+def split_long_line(text: str) -> list[str]:
+    if len(text) <= MAX_LINE_CHARS:
+        return [text]
+    parts: list[str] = []
+    rest = text
+    while len(rest) > MAX_LINE_CHARS:
+        cut = rest.rfind(" ", 0, MAX_LINE_CHARS + 1)
+        if cut < 40:
+            cut = MAX_LINE_CHARS
+        parts.append(rest[:cut].strip())
+        rest = rest[cut:].strip()
+    if rest:
+        parts.append(rest)
+    return [part for part in parts if usable_line(part)]
+
+
+def dehyphenate(lines: list[str]) -> list[str]:
+    """Join a line-break hyphen onto the next line's first word."""
+    items = list(lines)
+    index = 0
+    while index < len(items) - 1:
+        line = items[index]
+        nxt = items[index + 1]
+        if re.search(r"[A-Za-z]-$", line):
+            match = re.match(r"^([a-z]{2,})([.,;:]?)(?:\s+(.*))?$", nxt)
+            if match:
+                items[index] = line[:-1] + match.group(1) + (match.group(2) or "")
+                items[index + 1] = (match.group(3) or "").strip()
+        index += 1
+    return [line for line in items if line]
+
+
+def clean_lines(raw_lines: list[str]) -> list[str]:
+    normalized = [normalize_line(line) for line in raw_lines]
+    normalized = [line for line in normalized if line]
+    normalized = dehyphenate(normalized)
+    cleaned: list[str] = []
+    for line in normalized:
+        for part in split_long_line(line):
+            if not usable_line(part):
+                continue
+            if cleaned and cleaned[-1] == part:
+                continue
+            cleaned.append(part)
+    return cleaned
+
+
+def lines_from_pdftotext(chunk: str) -> list[str]:
+    return clean_lines(chunk.splitlines())
+
+
+def ocr_image(image: Path) -> list[str]:
+    try:
+        proc = subprocess.run(
+            ["tesseract", str(image), "stdout", "-l", "eng", "--oem", "1", "--psm", "6", "tsv"],
+            check=True,
+            capture_output=True,
+            timeout=45,
+        )
+    except subprocess.TimeoutExpired:
+        print(f"  ocr timed out on {image.name}", file=sys.stderr)
+        return []
+    raw = proc.stdout.decode("utf-8", errors="replace")
+    groups: dict[tuple[int, int, int], list[tuple[float, int, str]]] = {}
+    for row in raw.splitlines()[1:]:
+        cols = row.split("\t")
+        if len(cols) < 12 or cols[0] != "5":
+            continue
+        word = cols[11].strip()
+        if not word:
+            continue
+        try:
+            conf = float(cols[10])
+        except ValueError:
+            continue
+        if conf < OCR_MIN_WORD_CONF:
+            continue
+        key = (int(cols[2]), int(cols[3]), int(cols[4]))
+        groups.setdefault(key, []).append((conf, int(cols[5]), word))
+    raw_lines: list[str] = []
+    for key in sorted(groups):
+        words = sorted(groups[key], key=lambda item: item[1])
+        average = sum(item[0] for item in words) / len(words)
+        if average < OCR_MIN_LINE_CONF:
+            continue
+        raw_lines.append(" ".join(item[2] for item in words))
+    return clean_lines(raw_lines)
+
+
+def render_pages(pdf: Path, pages: list[int], work: Path) -> dict[int, Path]:
+    if not pages:
+        return {}
+    start, end = min(pages), max(pages)
+    prefix = work / "ocr"
+    subprocess.run(
+        [
+            "pdftoppm",
+            "-png",
+            "-r",
+            str(OCR_DPI),
+            "-f",
+            str(start),
+            "-l",
+            str(end),
+            str(pdf),
+            str(prefix),
+        ],
+        check=True,
+        timeout=300,
+    )
+    images: dict[int, Path] = {}
+    for path in work.glob("ocr-*.png"):
+        images[int(path.stem.rsplit("-", 1)[-1])] = path
+    missing = [page for page in pages if page not in images]
+    if missing:
+        die(f"pdftoppm did not render pages {missing} of {pdf.name}")
+    return images
+
+
+def ocr_pages(pdf: Path, pages: list[int], work: Path) -> dict[int, list[str]]:
+    images = render_pages(pdf, pages, work)
+    found: dict[int, list[str]] = {}
+    # One page at a time. Several tesseract processes at once stall on these
+    # illustrated pages instead of sharing the machine.
+    for page in pages:
+        found[page] = ocr_image(images[page])
+        print(f"  ocr page {page}: {len(found[page])} lines", file=sys.stderr)
+    return found
+
+
+def download(url: str, dest: Path) -> None:
+    request = urllib.request.Request(url, headers={"User-Agent": "bgquick-rulebook-index/1.0"})
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            dest.write_bytes(response.read())
+    except Exception as exc:  # noqa: BLE001 - surface the URL and reason together
+        die(f"could not download {url} ({exc})")
+
+
+def resolve_source(slug: str, game: dict) -> str | Path:
+    rulebook = str(game.get("rulebook") or "").strip()
+    if not rulebook:
+        die(f"{slug} has no rulebook field")
+    if slug == "heat-pedal-to-the-metal":
+        # The uploaded heat-pedal-to-the-metal.pdf is the advanced booklet.
+        # The game page links to the basic rules, and that is the file to index.
+        if not re.match(r"https?://", rulebook, re.I):
+            die(
+                "Heat's rulebook field is not the basic-rules URL. "
+                "Refusing to index rulebooks/heat-pedal-to-the-metal.pdf (advanced booklet)."
+            )
+        if "heat-pedal-to-the-metal.pdf" in rulebook:
+            die("Heat's rulebook field points at the advanced booklet, not the basic rules.")
+    if re.match(r"https?://", rulebook, re.I):
+        return rulebook
+    file_slug = rulebook[:-4] if rulebook.lower().endswith(".pdf") else rulebook
+    path = ROOT / "rulebooks" / f"{file_slug}.pdf"
+    if not path.is_file():
+        die(f"{slug} rulebook {rulebook!r} is not a file at {path}")
+    return path
+
+
+def materialize(source: str | Path, work: Path) -> Path:
+    if isinstance(source, Path):
+        return source
+    dest = work / "source.pdf"
+    print(f"  download {source}", file=sys.stderr)
+    download(source, dest)
+    return dest
+
+
+def build_slug(slug: str, enrich: dict) -> dict:
+    game = enrich.get(slug)
+    if not isinstance(game, dict):
+        die(f"{slug} is not in the catalog")
+    source = resolve_source(slug, game)
+    print(f"{slug}: {source}", file=sys.stderr)
+    with tempfile.TemporaryDirectory(prefix=f"rb-{slug}-") as tmp_name:
+        work = Path(tmp_name)
+        pdf = materialize(source, work)
+        count = page_count(pdf)
+        chunks = pdftotext_pages(pdf, count)
+        ocr_needed = [index + 1 for index, chunk in enumerate(chunks) if letter_count(chunk) < MIN_PAGE_LETTERS]
+        if ocr_needed:
+            print(f"  image-only pages: {ocr_needed}", file=sys.stderr)
+            ocr = ocr_pages(pdf, ocr_needed, work)
+        else:
+            ocr = {}
+        pages = []
+        for index, chunk in enumerate(chunks):
+            page = index + 1
+            if page in ocr and ocr[page]:
+                lines = ocr[page]
+            else:
+                lines = lines_from_pdftotext(chunk)
+            if lines:
+                pages.append({"page": page, "lines": lines})
+    return {"slug": slug, "pages": pages}
+
+
+def write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def refresh_manifest() -> list[str]:
+    slugs = sorted(
+        path.stem
+        for path in INDEX_DIR.glob("*.json")
+        if path.name != "manifest.json"
+    )
+    write_json(INDEX_DIR / "manifest.json", {"games": slugs})
+    return slugs
+
+
+def smoke(slug: str, payload: dict) -> None:
+    query = SMOKE_QUERIES.get(slug)
+    if not query:
+        return
+    needle = query.lower()
+    hits = 0
+    for page in payload["pages"]:
+        for line in page["lines"]:
+            if needle in line.lower():
+                hits += 1
+    print(f"  smoke {query!r}: {hits} lines", file=sys.stderr)
+    if hits == 0:
+        print(f"  warning: {slug} has no line containing {query!r}", file=sys.stderr)
+
+
+def parse_args(argv: list[str]) -> list[str]:
+    slugs = argv[1:]
+    if not slugs:
+        return list(DEFAULT_SLUGS)
+    bad = [slug for slug in slugs if not re.fullmatch(r"[a-z0-9-]+", slug)]
+    if bad:
+        die("slugs must be lowercase letters, numbers, and hyphens: " + ", ".join(bad))
+    return slugs
+
+
+def main(argv: list[str]) -> None:
+    require_tools()
+    slugs = parse_args(argv)
+    enrich = load_enrich()
+    for slug in slugs:
+        payload = build_slug(slug, enrich)
+        lines = sum(len(page["lines"]) for page in payload["pages"])
+        destination = INDEX_DIR / f"{slug}.json"
+        write_json(destination, payload)
+        print(f"  wrote {destination.relative_to(ROOT)} ({len(payload['pages'])} pages, {lines} lines)", file=sys.stderr)
+        smoke(slug, payload)
+    manifest = refresh_manifest()
+    print("manifest: " + ", ".join(manifest), file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main(sys.argv)

@@ -380,6 +380,80 @@
     outline-offset:2px;
   }
 
+  /* Rulebook search. Shown only for games with rulebooks/index/<slug>.json. */
+  .rulebook-search {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:0;
+  }
+  .rulebook-search label {
+    font-weight:700;
+    font-size:0.95rem;
+  }
+  .rulebook-search input {
+    width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--fg);
+    font:inherit;
+    font-size:16px;
+    box-sizing:border-box;
+  }
+  .rulebook-search input:focus-visible,
+  .rulebook-hit:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
+  .rulebook-search-status {
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+    min-height:0;
+  }
+  .rulebook-search-status:empty { display:none; }
+  .rulebook-search-results {
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .rulebook-search-results:empty { display:none; }
+  .rulebook-hit {
+    display:grid;
+    grid-template-columns:auto minmax(0, 1fr);
+    gap:10px;
+    align-items:baseline;
+    padding:8px 10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--bg);
+    color:inherit;
+    text-decoration:none;
+    line-height:1.35;
+  }
+  .rulebook-hit:hover { border-color:var(--accent); }
+  .rulebook-hit-page {
+    font-weight:700;
+    color:var(--accent);
+    white-space:nowrap;
+  }
+  .rulebook-hit-text {
+    min-width:0;
+    font-size:0.92rem;
+  }
+  .rulebook-hit mark {
+    background:color-mix(in srgb, var(--accent) 38%, transparent);
+    color:inherit;
+    padding:0 0.12em;
+    border-radius:3px;
+  }
+
   .cover {
     margin:0;
     width:100%;
@@ -96655,6 +96729,7 @@
   }
 
   function renderList() {
+    detailSlug = "";
     appEl.innerHTML =
       '<div class="search-bar">' +
         '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
@@ -96837,6 +96912,199 @@
       }
     } catch (e) {}
   })();
+
+  /* --- Rulebook search (index is fetched only when the box is used) --- */
+  var detailSlug = "";
+  var rulebookManifestPromise = null;
+
+  function loadRulebookManifest() {
+    if (!rulebookManifestPromise) {
+      rulebookManifestPromise = fetch(basePath() + "/rulebooks/index/manifest.json")
+        .then(function (res) {
+          if (!res.ok) throw new Error("manifest");
+          return res.json();
+        })
+        .then(function (data) {
+          var list = data && Array.isArray(data.games) ? data.games : [];
+          return list.map(function (s) { return String(s); });
+        })
+        .catch(function () { return []; });
+    }
+    return rulebookManifestPromise;
+  }
+
+  function rulebookPageHref(href, page) {
+    return String(href || "").split("#")[0] + "#page=" + page;
+  }
+
+  function clipAround(text, query, maxLen) {
+    var clean = String(text || "").replace(/\s+/g, " ").trim();
+    var q = String(query || "").trim().replace(/\s+/g, " ");
+    if (clean.length <= maxLen) return clean;
+    var at = q ? clean.toLowerCase().indexOf(q.toLowerCase()) : 0;
+    if (at < 0) at = 0;
+    var pad = Math.max(24, Math.floor((maxLen - q.length) / 2));
+    var start = Math.max(0, at - pad);
+    var end = Math.min(clean.length, start + maxLen);
+    if (end - start < maxLen) start = Math.max(0, end - maxLen);
+    if (start > 0) {
+      var space = clean.indexOf(" ", start);
+      if (space !== -1 && space < start + 24) start = space + 1;
+    }
+    if (end < clean.length) {
+      var spaceEnd = clean.lastIndexOf(" ", end);
+      if (spaceEnd > start + 40) end = spaceEnd;
+    }
+    var out = clean.slice(start, end).trim();
+    if (start > 0) out = "\u2026" + out;
+    if (end < clean.length) out = out + "\u2026";
+    return out;
+  }
+
+  function rulebookSnippet(lines, index, query) {
+    var line = String(lines[index] || "").replace(/\s+/g, " ").trim();
+    var next = String(lines[index + 1] || "").replace(/\s+/g, " ").trim();
+    var text = line;
+    if (next && line.length < 50) text = (line + " " + next).trim();
+    return clipAround(text, query, 180);
+  }
+
+  function highlightQuery(text, query) {
+    var escaped = escapeHtml(text);
+    var q = String(query || "").trim().replace(/\s+/g, " ");
+    if (!q) return escaped;
+    var pattern = escapeHtml(q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return escaped.replace(new RegExp(pattern, "gi"), function (match) {
+      return "<mark>" + match + "</mark>";
+    });
+  }
+
+  function searchRulebookIndex(index, query) {
+    var q = String(query || "").trim().replace(/\s+/g, " ").toLowerCase();
+    var found = [];
+    if (q.length < 2) return { query: q, total: 0, hits: [] };
+    var pages = (index && index.pages) || [];
+    for (var p = 0; p < pages.length; p++) {
+      var lines = pages[p].lines || [];
+      for (var i = 0; i < lines.length; i++) {
+        if (String(lines[i]).toLowerCase().indexOf(q) === -1) continue;
+        var pageNum = parseInt(pages[p].page, 10);
+        if (!pageNum) continue;
+        found.push({
+          page: pageNum,
+          text: rulebookSnippet(lines, i, query)
+        });
+      }
+    }
+    return { query: q, total: found.length, hits: found.slice(0, 20) };
+  }
+
+  function bindRulebookSearch(section, slug, rulebookHref) {
+    var input = section.querySelector("input");
+    var status = section.querySelector(".rulebook-search-status");
+    var list = section.querySelector(".rulebook-search-results");
+    var indexPromise = null;
+    var indexData = null;
+    var timer = 0;
+
+    function ensureIndex() {
+      if (!indexPromise) {
+        indexPromise = fetch(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json")
+          .then(function (res) {
+            if (!res.ok) throw new Error("index");
+            return res.json();
+          })
+          .then(function (data) {
+            indexData = data;
+            return data;
+          });
+      }
+      return indexPromise;
+    }
+
+    function paint(message, hits) {
+      status.textContent = message || "";
+      list.innerHTML = "";
+      (hits || []).forEach(function (hit) {
+        var li = document.createElement("li");
+        var link = document.createElement("a");
+        link.className = "rulebook-hit";
+        link.href = rulebookPageHref(rulebookHref, hit.page);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        var page = document.createElement("span");
+        page.className = "rulebook-hit-page";
+        page.textContent = "Page " + hit.page;
+        var text = document.createElement("span");
+        text.className = "rulebook-hit-text";
+        text.innerHTML = highlightQuery(hit.text, input.value);
+        link.appendChild(page);
+        link.appendChild(text);
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+    }
+
+    function run() {
+      var raw = input.value;
+      var q = raw.trim().replace(/\s+/g, " ");
+      if (q.length < 2) {
+        paint(q ? "Type at least 2 letters." : "", []);
+        return;
+      }
+      if (!indexData) paint("Loading the rulebook index\u2026", []);
+      ensureIndex().then(function (data) {
+        if (detailSlug !== slug || input.value !== raw) return;
+        var result = searchRulebookIndex(data, raw);
+        var message;
+        if (!result.total) message = "No matches.";
+        else if (result.total > result.hits.length) {
+          message = "Showing " + result.hits.length + " of " + result.total + " matches.";
+        } else {
+          message = result.total === 1 ? "1 match." : result.total + " matches.";
+        }
+        paint(message, result.hits);
+      }).catch(function () {
+        if (detailSlug !== slug) return;
+        paint("The rulebook index could not be loaded.", []);
+      });
+    }
+
+    input.addEventListener("focus", function () {
+      ensureIndex().catch(function () {});
+    });
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      timer = setTimeout(run, 120);
+    });
+  }
+
+  function mountRulebookSearch(game, rulebookHref) {
+    var slug = game && game.slug;
+    if (!slug || !rulebookHref) return;
+    loadRulebookManifest().then(function (games) {
+      if (detailSlug !== slug) return;
+      if (!games || games.indexOf(slug) === -1) return;
+      var detail = appEl.querySelector(".detail");
+      if (!detail || detail.querySelector(".rulebook-search")) return;
+      var section = document.createElement("section");
+      section.className = "rulebook-search";
+      section.setAttribute("aria-label", "Search rulebook");
+      section.innerHTML =
+        '<label for="rulebook-search-input">Search rulebook</label>' +
+        '<input id="rulebook-search-input" type="search" placeholder="Word or phrase from the rulebook" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+        '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
+        '<ul class="rulebook-search-results"></ul>';
+      var links = detail.querySelector(".essential-links");
+      if (links) links.insertAdjacentElement("afterend", section);
+      else {
+        var head = detail.querySelector(".detail-head");
+        if (head) head.insertAdjacentElement("afterend", section);
+        else detail.insertBefore(section, detail.firstChild);
+      }
+      bindRulebookSearch(section, slug, rulebookHref);
+    });
+  }
 
   /* --- Rulebook guard: show friendly error instead of 404 --- */
   function attachRulebookGuards() {
@@ -97510,6 +97778,7 @@
   /* rule-render:end */
 
   function renderDetail(slug, action) {
+    detailSlug = "";
     if (action === void 0) action = "quicksetup";
 
     var g = DATA[slug];
@@ -97517,6 +97786,7 @@
       appEl.innerHTML = '<div class="detail fade-in"><p>Game not found: <code>' + slug + "</code></p></div>";
       return;
     }
+    detailSlug = slug;
 
     setGameAccent(g);
 
@@ -97966,6 +98236,7 @@
     bindShowMore(appEl);
     attachRulebookGuards();
     markRecentlyViewed(g);
+    mountRulebookSearch(g, rulebookHref);
   }
 
   function normalizeIncoming() {
