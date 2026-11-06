@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Board Game Quick</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
 
@@ -103,7 +103,9 @@
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }
-  img { max-width:100%; height:auto; display:block; }
+  img, video, svg { max-width:100%; height:auto; }
+  img { display:block; }
+  iframe, embed, object { max-width:100%; }
 
   h1, h2, h3 {
     font-family:"Merriweather", Georgia, "Times New Roman", serif;
@@ -356,7 +358,9 @@
     display:inline-flex;
     align-items:center;
     justify-content:center;
+    flex-wrap:wrap;
     gap:6px;
+    max-width:100%;
     min-height:44px;
     padding:8px 12px;
     border-radius:999px;
@@ -368,12 +372,14 @@
     line-height:1.2;
     box-sizing:border-box;
   }
+  .essential-link-title { min-width:0; }
   .essential-link-channel {
     font-weight:600;
     font-size:0.75rem;
     letter-spacing:0;
     text-transform:none;
     color:var(--muted);
+    white-space:nowrap;
   }
   .essential-link:focus-visible {
     outline:3px solid var(--brand);
@@ -703,6 +709,8 @@
     flex-wrap:wrap;
     gap:8px;
     margin:0 0 8px;
+    min-width:0;
+    max-width:100%;
   }
   .pc-btn,
   .exp-chip {
@@ -837,16 +845,20 @@
     gap:8px;
     margin:0 0 12px;
     padding:8px;
+    min-width:0;
     background:var(--bg);
     border:1px solid var(--border);
     border-radius:14px;
     box-shadow:0 8px 16px -14px rgba(0,0,0,0.55);
+    box-sizing:border-box;
   }
   .table-bar-top {
     display:flex;
+    flex-wrap:wrap;
     align-items:center;
     gap:8px;
     min-width:0;
+    max-width:100%;
   }
   .table-bar-top .playercount-controls {
     flex:1 1 auto;
@@ -1065,7 +1077,7 @@
     font-weight:700;
     box-sizing:border-box;
   }
-  .aid-link .aid-title { margin:0; }
+  .aid-link .aid-title { margin:0; min-width:0; }
   .aid-link .aid-source { margin-left:0; flex:0 0 auto; }
   .aid-lightbox {
     width:100vw;
@@ -1124,6 +1136,43 @@
   .rule-list {
     font-size:1.0625rem;
     line-height:1.55;
+  }
+  .rule-body,
+  .expansion-body,
+  .expansion-text-block,
+  .callout,
+  .scoring-summary,
+  .rulebook-search,
+  .rulebook-hit,
+  .essential-links,
+  .detail-head,
+  .detail-head-text,
+  .aid-link {
+    min-width:0;
+  }
+  .rule-body,
+  .expansion-text-block,
+  .rule-list,
+  .rulebook-hit-text,
+  .scoring-summary,
+  .callout,
+  .components-list,
+  .exp-note,
+  .aid-title,
+  .aid-note,
+  .title {
+    overflow-wrap:anywhere;
+  }
+  .table-scroll {
+    display:block;
+    max-width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .table-scroll > table {
+    width:max-content;
+    max-width:none;
+    border-collapse:collapse;
   }
   .rule-body > p,
   .expansion-text-block p {
@@ -1236,22 +1285,18 @@
       border-left:0;
       border-right:0;
       padding:6px 10px;
+      overflow-x:auto;
     }
     .playercount-controls,
     .expansion-controls {
-      flex-wrap:nowrap;
-      overflow-x:auto;
-      scrollbar-width:none;
-    }
-    .playercount-controls::-webkit-scrollbar,
-    .expansion-controls::-webkit-scrollbar {
-      display:none;
+      flex-wrap:wrap;
     }
     .aid-list { grid-template-columns:1fr; }
     .aid-preview { height:168px; }
     .pc-btn,
     .exp-chip {
-      flex:0 0 auto;
+      flex:0 1 auto;
+      max-width:100%;
       padding:8px 12px;
       line-height:1.2;
     }
@@ -1292,6 +1337,43 @@
       justify-items:start;
     }
     .detail-head .cover { width:150px; max-width:150px; }
+  }
+
+  /* Phone: readable type, and no page-level horizontal scroll. */
+  @media (max-width:600px) {
+    html { font-size:15px; }
+    .title { font-size:1.35rem; }
+    .exp h3,
+    .scoring-summary h3,
+    .callout h3,
+    .player-aids h3,
+    .expansion summary,
+    .game-section h3,
+    .aid-group-title {
+      font-size:1.12rem;
+    }
+    .rule-body > p,
+    .expansion-text-block p,
+    .rule-list,
+    .components-list li,
+    .scoring-summary p,
+    .scoring-summary-list {
+      font-size:16px;
+      line-height:1.5;
+    }
+    .card h2 { font-size:1.05rem; }
+    header .wrap,
+    .header-home-link,
+    .cover,
+    .detail-head .cover {
+      max-width:100%;
+      min-width:0;
+    }
+    .grid {
+      grid-template-columns:repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+    }
+    /* clip keeps a stray wide child off the page without turning html/body into a scrollport. hidden would unstick the header and the player bar. */
+    html, body { overflow-x:clip; }
   }
 
 </style>
@@ -106174,6 +106256,18 @@
   }
   /* rule-render:end */
 
+  function wrapWideTables(root) {
+    var scope = root && root.querySelectorAll ? root : document;
+    Array.prototype.forEach.call(scope.querySelectorAll("table"), function (table) {
+      var parent = table.parentElement;
+      if (!parent || parent.classList.contains("table-scroll")) return;
+      var wrap = document.createElement("div");
+      wrap.className = "table-scroll";
+      parent.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    });
+  }
+
   function renderDetail(slug, action) {
     detailSlug = "";
     if (action === void 0) action = "quicksetup";
@@ -106497,6 +106591,7 @@
             selectedCount = count;
             pcTextEl.innerHTML = renderRuleContent(setupByPlayerCount[count]) ||
               '<p class="rule-empty">(No details for this player count yet.)</p>';
+            wrapWideTables(pcTextEl);
             var pcBlock = document.getElementById("playercount-block");
             if (pcBlock) pcBlock.open = true;
             pcButtons.forEach(function(b) {
@@ -106594,6 +106689,7 @@
       paintSummary(selected);
       paintTeach(selected);
       paintAids(selected);
+      wrapWideTables(appEl);
     }
     expButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -106700,6 +106796,7 @@
 
     /* --- Rulebook guards + recently viewed --- */
     bindShowMore(appEl);
+    wrapWideTables(appEl);
     attachRulebookGuards();
     markRecentlyViewed(g);
     mountRulebookSearch(g, rulebookHref);
