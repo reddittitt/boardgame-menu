@@ -24267,7 +24267,9 @@
             "tip": "Lure reaches across any open distance, so you do not have to stand next to the target.",
             "reference": {
               "label": "Rulebook p. 43",
-              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=43"
+              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=43",
+              "renderUrl": "rulebooks/mythic-mischief-abilities.pdf",
+              "renderPage": 1
             }
           }
         },
@@ -24320,7 +24322,9 @@
             "tip": "Trap stops that mythic's own Move. A shove from someone else still moves them.",
             "reference": {
               "label": "Rulebook p. 45",
-              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=45"
+              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=45",
+              "renderUrl": "rulebooks/mythic-mischief-abilities.pdf",
+              "renderPage": 2
             }
           }
         },
@@ -24373,7 +24377,9 @@
             "tip": "Decay does nothing until an enemy steps on it.",
             "reference": {
               "label": "Rulebook p. 47",
-              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=47"
+              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=47",
+              "renderUrl": "rulebooks/mythic-mischief-abilities.pdf",
+              "renderPage": 3
             }
           }
         },
@@ -24426,7 +24432,9 @@
             "tip": "The portals are doors for your mythics and your allies.",
             "reference": {
               "label": "Rulebook p. 49",
-              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=49"
+              "url": "https://cdn.1j1ju.com/medias/7e/cf/03-mythic-mischief-rulebook.pdf#page=49",
+              "renderUrl": "rulebooks/mythic-mischief-abilities.pdf",
+              "renderPage": 4
             }
           }
         }
@@ -106733,6 +106741,11 @@
     });
     return pdfJsLoader;
   }
+  function aidAssetUrl(url) {
+    if (!url) return "";
+    if (/^https?:\/\//i.test(url)) return url;
+    return basePath() + "/" + String(url).replace(/^\//, "");
+  }
   function aidSheetSpec(ch) {
     var ref = (ch.aid && ch.aid.reference) || {};
     var full = String(ref.url || "").trim();
@@ -106740,20 +106753,22 @@
     var fileUrl = hashAt >= 0 ? full.slice(0, hashAt) : full;
     var hash = hashAt >= 0 ? full.slice(hashAt) : "";
     var pageMatch = hash.match(/page=(\d+)/i);
-    var page = pageMatch ? parseInt(pageMatch[1], 10) : 1;
-    // The Dropbox share link redirects without CORS, and Chrome will not draw it
-    // in a frame. The same file is served, with CORS, from Dropbox's file host.
-    var renderUrl = fileUrl.replace(/^https:\/\/www\.dropbox\.com\//, "https://dl.dropboxusercontent.com/");
-    var embed = renderUrl !== fileUrl ? renderUrl : fileUrl;
+    var linkedPage = pageMatch ? parseInt(pageMatch[1], 10) : 1;
+    var renderPage = parseInt(ref.renderPage, 10);
+    if (!renderPage) renderPage = linkedPage;
+    // Phones ignore #page= inside an embedded PDF and show the cover.
+    // Draw the page with PDF.js instead. Dropbox share links redirect
+    // without CORS; the same file is readable from Dropbox's file host.
+    var explicit = String(ref.renderUrl || "").trim();
+    var renderUrl = explicit || fileUrl.replace(/^https:\/\/www\.dropbox\.com\//, "https://dl.dropboxusercontent.com/");
     return {
       name: ch.name,
       label: String(ref.label || "Rulebook"),
       link: full,
       fileUrl: fileUrl,
       renderUrl: renderUrl,
-      page: page,
-      crop: String(ref.crop || ""),
-      iframeSrc: embed + "#page=" + page + "&toolbar=0&navpanes=0&view=FitH"
+      page: renderPage,
+      crop: String(ref.crop || "")
     };
   }
   function loadRulebookPdf(renderUrl, onProgress) {
@@ -106773,32 +106788,6 @@
     }
     return rulebookPdfCache[renderUrl];
   }
-  function fillAidIframe(node, spec) {
-    node.className = "character-aid-viewport character-aid-viewport--pdf";
-    node.innerHTML = "";
-    var width = Math.min(520, node.clientWidth || 360);
-    node.style.height = Math.round(width * 556.58 / 358.16) + "px";
-    var frame = document.createElement("iframe");
-    frame.title = spec.name + " abilities, official rulebook";
-    frame.style.display = "block";
-    frame.style.width = "100%";
-    frame.style.height = "100%";
-    frame.style.border = "0";
-    frame.style.background = "#fff";
-    node.appendChild(frame);
-    frame.src = spec.iframeSrc;
-    var caption = node.parentElement && node.parentElement.querySelector("figcaption");
-    if (caption && !caption.querySelector(".character-aid-zoom")) {
-      var button = document.createElement("button");
-      button.type = "button";
-      button.className = "character-aid-zoom";
-      button.setAttribute("data-type", "pdf");
-      button.setAttribute("data-url", spec.iframeSrc);
-      button.setAttribute("data-title", spec.name);
-      button.textContent = "Full page";
-      caption.appendChild(button);
-    }
-  }
   function mountAidCanvas(node, spec) {
     node.className = "character-aid-viewport character-aid-viewport--note";
     node.innerHTML = '<p class="character-aid-status">Loading the rulebook page…</p>';
@@ -106809,7 +106798,8 @@
       var pct = Math.max(0, Math.min(100, Math.round(100 * progress.loaded / progress.total)));
       status.textContent = "Loading the rulebook… " + pct + "%";
     }
-    loadRulebookPdf(spec.renderUrl, paintProgress).then(function (pdf) {
+    var pdfUrl = aidAssetUrl(spec.renderUrl);
+    loadRulebookPdf(pdfUrl, paintProgress).then(function (pdf) {
       if (!node.isConnected) return;
       return pdf.getPage(spec.page).then(function (page) {
         if (!node.isConnected) return;
@@ -106845,22 +106835,22 @@
       });
     }).catch(function () {
       if (!node.isConnected) return;
-      fillAidIframe(node, spec);
+      node.className = "character-aid-viewport character-aid-viewport--note";
+      node.innerHTML = '<p class="character-aid-status">This abilities page could not be drawn here. Open it with the link below, or use the text version.</p>';
+      var card = node.closest ? node.closest(".character-aid") : null;
+      var details = card && card.querySelector(".character-aid-text");
+      if (details) details.open = true;
     });
   }
   function mountCharacterAidSheets(root) {
     if (!root) return;
     Array.prototype.forEach.call(root.querySelectorAll("[data-aid-sheet]"), function (node) {
-      var spec = {
+      mountAidCanvas(node, {
         name: node.getAttribute("data-aid-name") || "Faction",
         renderUrl: node.getAttribute("data-aid-render") || "",
-        fileUrl: node.getAttribute("data-aid-file") || "",
         page: parseInt(node.getAttribute("data-aid-page"), 10) || 1,
-        crop: node.getAttribute("data-aid-crop") || "",
-        iframeSrc: node.getAttribute("data-aid-iframe") || ""
-      };
-      if (spec.renderUrl && spec.renderUrl !== spec.fileUrl) mountAidCanvas(node, spec);
-      else fillAidIframe(node, spec);
+        crop: node.getAttribute("data-aid-crop") || ""
+      });
     });
   }
   function renderCharacterAidCard(ch) {
@@ -106879,7 +106869,6 @@
             ' data-aid-render="' + escapeHtml(spec.renderUrl) + '"' +
             ' data-aid-page="' + spec.page + '"' +
             ' data-aid-crop="' + escapeHtml(spec.crop) + '"' +
-            ' data-aid-iframe="' + escapeHtml(spec.iframeSrc) + '"' +
           "></div>" +
           '<figcaption><a class="character-aid-ref" href="' + escapeHtml(spec.link) + '" target="_blank" rel="noopener noreferrer">' +
             escapeHtml(spec.label) +
@@ -106910,7 +106899,7 @@
     return (
       '<section class="character-aids" id="character-aids" aria-labelledby="character-aids-title">' +
         '<h3 id="character-aids-title">Character aids</h3>' +
-        '<p class="character-aids-note">The picture is that faction\'s page in the official rulebook, shown from the file this page already links. Text version is a short paraphrase.</p>' +
+        '<p class="character-aids-note">The picture is that faction\'s abilities page from the official rulebook. The link opens that page in the booklet. Text version is a short paraphrase.</p>' +
         '<ul class="character-aid-list">' + aided.map(renderCharacterAidCard).join("") + "</ul>" +
       "</section>"
     );
