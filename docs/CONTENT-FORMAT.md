@@ -36,17 +36,53 @@ The game page, top to bottom:
 
 1. Title, with the cover beside it on a wide screen and above it on a narrow one. The cover keeps its aspect ratio.
 2. Player count and play time.
-3. Action row: Rulebook, How to play, Teach it, Log a play, then extra official files. A button is omitted when that game does not have it. Teach it opens `#/game/<slug>/teach` and the link carries the current player count and selected expansions and sides. Extra files come from `extraEssentials`. BoardGameGeek is the cover, not a separate button.
+3. Action row: Rulebook, How to play, Teach it, Log a play, then extra official files. The buttons share one height and, on a phone, one width per row. The How to play control shows the words How to play. The video title and channel stay in the accessible name. A button is omitted when that game does not have it. Teach it opens `#/game/<slug>/teach` and the link carries the current player count, setup variant, and selected expansions and sides. Extra files come from `extraEssentials`. BoardGameGeek is the cover, not a separate button.
 4. Chip row: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). The row scrolls away with the page. The site header stays put. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the chip row.
 5. **How you win**.
 6. **Common mistakes**, only when `commonMistakes` has text.
 7. **First game? Use this**, only when `firstGameSetup` has text for the selected count.
-8. Three chapters, each omitted when it has nothing to say: **Set up** (shared setup, then the selected player count, then starting resources), **On your turn** (turn structure, then reminders), and **End of the game** (when it ends, then scoring). Set up is teal, On your turn uses the game accent, and End of the game is gold. The accent comes from the cover when the image can be read, and otherwise from a hue derived from the slug.
+8. Three chapters, each omitted when it has nothing to say: **Set up** (the chosen setup variant, then the shared setup, then the selected player count, then starting resources), **On your turn** (turn structure, then reminders), and **End of the game** (when it ends, then scoring). Set up is teal, On your turn uses the game accent, and End of the game is gold. The accent comes from the cover when the image can be read, and otherwise from a hue derived from the slug. A game with two or more `setupVariants` shows those choices as chips at the top of Set up. One setup shows no chips.
 9. **Player aids**, only when at least one aid is on the page.
 
 An empty field leaves no heading, placeholder, or gap. Common mistakes, First game, and Player aids do not render when empty. The three chapters do not show a placeholder line.
 
 `endOfGame` is optional. It is the trigger: when the game stops, who takes a last turn, what is an instant win. Put points in `endGameScoring`, not here.
+
+## Setup variants
+
+Optional `setupVariants`. Use it when the same game has two or more named setups and the page already states both. A single setup stays in `quickStart` and shows no chips.
+
+```json
+"setupVariants": [
+  {
+    "id": "standard",
+    "label": "Standard setup",
+    "recommended": true,
+    "setup": {
+      "bullets": [
+        { "lead": "Draw", "text": "Each player draws 3." }
+      ]
+    }
+  },
+  {
+    "id": "advanced",
+    "label": "Advanced setup",
+    "requiredWhen": { "cornerStarts": 5 },
+    "requiredNote": "Five or more factions at this table start in a corner. Use Advanced setup.",
+    "setup": {
+      "bullets": [
+        { "lead": "Draw", "text": "Each player draws 5 and keeps 3." }
+      ]
+    }
+  }
+]
+```
+
+`id` is the value stored for the session and sent on the Teach it link as `setup`. `label` is the chip. `recommended` is the default. `setup` is the same bullet format as `quickStart`. The chip swaps only that block. Shared `quickStart` steps, the player-count block, starting resources, and a selected character's setup stay on the page.
+
+`requiredWhen.cornerStarts` counts selected characters whose own setup text places pieces in a corner. At that count the named variant is selected and the other chips are unavailable. `requiredNote` is the sentence shown when that happens. Leave `requiredWhen` off when the choice is always free.
+
+The choice is kept with the player count and the selected chips for the session. It is not a separate sticky bar.
 
 ## Header links
 
