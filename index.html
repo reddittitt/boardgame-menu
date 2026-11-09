@@ -1056,6 +1056,116 @@
     overflow-wrap:anywhere;
   }
   .character-aid-ref:hover { text-decoration:underline; }
+  .character-aid-sheet {
+    margin:0.35rem 0 0.15rem;
+  }
+  .character-aid-sheet figcaption {
+    margin:0;
+  }
+  .character-aid-viewport {
+    position:relative;
+    width:100%;
+    min-width:0;
+    margin:0 0 0.15rem;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:#fff;
+  }
+  .character-aid-viewport.character-aid-viewport--pdf {
+    overflow:visible;
+    border-radius:0;
+    max-width:520px;
+    aspect-ratio:358.16 / 556.58;
+  }
+  .character-aid-viewport canvas {
+    display:block;
+    width:100%;
+    height:auto;
+    background:#fff;
+  }
+  .character-aid-viewport--pdf iframe {
+    display:block;
+    width:100%;
+    height:100%;
+    border:0;
+    background:#fff;
+  }
+  .character-aid-sheet figcaption {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+  }
+  .character-aid-sheet .character-aid-zoom {
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .character-aid-viewport .character-aid-zoom {
+    position:absolute;
+    inset:0;
+    width:100%;
+    min-height:0;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:inherit;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-end;
+    cursor:pointer;
+  }
+  .character-aid-viewport .character-aid-zoom span {
+    margin:8px;
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    background:rgba(17,17,17,0.82);
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+  }
+  .character-aid-pending {
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+    background:#fff;
+    z-index:1;
+  }
+  .character-aid-status {
+    margin:0;
+    padding:14px 12px;
+    font-size:1rem;
+    line-height:1.45;
+  }
+  .character-aid-text {
+    margin-top:4px;
+  }
+  .aid-lightbox-stage {
+    overflow:auto;
+  }
+  .aid-lightbox-stage img.aid-zoom-img {
+    width:auto;
+    max-width:none;
+    height:auto;
+    max-height:none;
+    min-width:100%;
+    margin:0 auto;
+    object-fit:unset;
+    background:#fff;
+  }
   .aid-list {
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
@@ -1432,7 +1542,8 @@
     .scoring-summary-list,
     .character-aid p,
     .character-aid .rule-list,
-    .character-aids-note {
+    .character-aids-note,
+    .character-aid-status {
       font-size:16px;
       line-height:1.5;
     }
@@ -52864,7 +52975,8 @@
             "tip": "Glide and Perch are free of the Move die, and one turn can do both.",
             "reference": {
               "label": "Rulebook printed p. 43",
-              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=22"
+              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=22",
+              "crop": "right"
             }
           }
         },
@@ -52917,7 +53029,8 @@
             "tip": "The ring's two-space shove waits until the start of your next turn.",
             "reference": {
               "label": "Rulebook printed p. 45",
-              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=23"
+              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=23",
+              "crop": "right"
             }
           }
         },
@@ -52970,7 +53083,8 @@
             "tip": "Fling goes sideways, not forward. Full Moon is what lets that fling cross a hedge.",
             "reference": {
               "label": "Rulebook printed p. 47",
-              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=24"
+              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=24",
+              "crop": "right"
             }
           }
         },
@@ -53027,7 +53141,8 @@
             "tip": "Burrow skips the first square, so a hedge directly ahead is not a wall.",
             "reference": {
               "label": "Rulebook printed p. 49",
-              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=25"
+              "url": "https://www.dropbox.com/scl/fi/g1v65ulsxsqapwta3yal7/MMVol2_RulebookSpread_9-7-23.pdf?rlkey=jfw9xido14o7na9244344er70&dl=1#page=25",
+              "crop": "right"
             }
           }
         }
@@ -106598,27 +106713,193 @@
     if (String(aid.tip || "").trim()) return true;
     return !!(aid.reference && String(aid.reference.url || "").trim());
   }
+  var PDFJS_SRC = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+  var PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  var pdfJsLoader = null;
+  var rulebookPdfCache = {};
+  var rulebookPdfProgress = {};
+  function loadPdfJs() {
+    if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+    if (pdfJsLoader) return pdfJsLoader;
+    pdfJsLoader = new Promise(function (resolve, reject) {
+      var script = document.createElement("script");
+      script.src = PDFJS_SRC;
+      script.onload = function () {
+        if (!window.pdfjsLib) reject(new Error("pdf.js missing"));
+        else resolve(window.pdfjsLib);
+      };
+      script.onerror = function () { reject(new Error("pdf.js failed to load")); };
+      document.head.appendChild(script);
+    });
+    return pdfJsLoader;
+  }
+  function aidSheetSpec(ch) {
+    var ref = (ch.aid && ch.aid.reference) || {};
+    var full = String(ref.url || "").trim();
+    var hashAt = full.indexOf("#");
+    var fileUrl = hashAt >= 0 ? full.slice(0, hashAt) : full;
+    var hash = hashAt >= 0 ? full.slice(hashAt) : "";
+    var pageMatch = hash.match(/page=(\d+)/i);
+    var page = pageMatch ? parseInt(pageMatch[1], 10) : 1;
+    // The Dropbox share link redirects without CORS, and Chrome will not draw it
+    // in a frame. The same file is served, with CORS, from Dropbox's file host.
+    var renderUrl = fileUrl.replace(/^https:\/\/www\.dropbox\.com\//, "https://dl.dropboxusercontent.com/");
+    var embed = renderUrl !== fileUrl ? renderUrl : fileUrl;
+    return {
+      name: ch.name,
+      label: String(ref.label || "Rulebook"),
+      link: full,
+      fileUrl: fileUrl,
+      renderUrl: renderUrl,
+      page: page,
+      crop: String(ref.crop || ""),
+      iframeSrc: embed + "#page=" + page + "&toolbar=0&navpanes=0&view=FitH"
+    };
+  }
+  function loadRulebookPdf(renderUrl, onProgress) {
+    if (onProgress) (rulebookPdfProgress[renderUrl] = rulebookPdfProgress[renderUrl] || []).push(onProgress);
+    if (!rulebookPdfCache[renderUrl]) {
+      rulebookPdfCache[renderUrl] = loadPdfJs().then(function (lib) {
+        lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+        var task = lib.getDocument({ url: renderUrl, disableAutoFetch: true, rangeChunkSize: 65536 });
+        task.onProgress = function (progress) {
+          (rulebookPdfProgress[renderUrl] || []).forEach(function (fn) { fn(progress); });
+        };
+        return task.promise;
+      }).catch(function (err) {
+        delete rulebookPdfCache[renderUrl];
+        throw err;
+      });
+    }
+    return rulebookPdfCache[renderUrl];
+  }
+  function fillAidIframe(node, spec) {
+    node.className = "character-aid-viewport character-aid-viewport--pdf";
+    node.innerHTML = "";
+    var width = Math.min(520, node.clientWidth || 360);
+    node.style.height = Math.round(width * 556.58 / 358.16) + "px";
+    var frame = document.createElement("iframe");
+    frame.title = spec.name + " abilities, official rulebook";
+    frame.style.display = "block";
+    frame.style.width = "100%";
+    frame.style.height = "100%";
+    frame.style.border = "0";
+    frame.style.background = "#fff";
+    node.appendChild(frame);
+    frame.src = spec.iframeSrc;
+    var caption = node.parentElement && node.parentElement.querySelector("figcaption");
+    if (caption && !caption.querySelector(".character-aid-zoom")) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "character-aid-zoom";
+      button.setAttribute("data-type", "pdf");
+      button.setAttribute("data-url", spec.iframeSrc);
+      button.setAttribute("data-title", spec.name);
+      button.textContent = "Full page";
+      caption.appendChild(button);
+    }
+  }
+  function mountAidCanvas(node, spec) {
+    node.className = "character-aid-viewport character-aid-viewport--note";
+    node.innerHTML = '<p class="character-aid-status">Loading the rulebook page…</p>';
+    function paintProgress(progress) {
+      if (!node.isConnected || !progress || !progress.total) return;
+      var status = node.querySelector(".character-aid-status");
+      if (!status) return;
+      var pct = Math.max(0, Math.min(100, Math.round(100 * progress.loaded / progress.total)));
+      status.textContent = "Loading the rulebook… " + pct + "%";
+    }
+    loadRulebookPdf(spec.renderUrl, paintProgress).then(function (pdf) {
+      if (!node.isConnected) return;
+      return pdf.getPage(spec.page).then(function (page) {
+        if (!node.isConnected) return;
+        var unscaled = page.getViewport({ scale: 1 });
+        var cssWidth = node.clientWidth || 320;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var shown = spec.crop === "right" ? unscaled.width / 2 : unscaled.width;
+        var scale = Math.min(1400, Math.max(shown, Math.round(cssWidth * dpr))) / shown;
+        var viewport = page.getViewport({ scale: scale });
+        var full = document.createElement("canvas");
+        full.width = Math.floor(viewport.width);
+        full.height = Math.floor(viewport.height);
+        return page.render({ canvasContext: full.getContext("2d"), viewport: viewport }).promise.then(function () {
+          if (!node.isConnected) return;
+          var sx = spec.crop === "right" ? Math.floor(full.width / 2) : 0;
+          var canvas = document.createElement("canvas");
+          canvas.width = full.width - sx;
+          canvas.height = full.height;
+          canvas.setAttribute("role", "img");
+          canvas.setAttribute("aria-label", spec.name + " abilities, official rulebook");
+          canvas.getContext("2d").drawImage(full, sx, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+          node.className = "character-aid-viewport";
+          node.innerHTML = "";
+          node.appendChild(canvas);
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "character-aid-zoom";
+          button.setAttribute("data-type", "canvas");
+          button.setAttribute("data-title", spec.name);
+          button.innerHTML = "<span>Full page</span>";
+          node.appendChild(button);
+        });
+      });
+    }).catch(function () {
+      if (!node.isConnected) return;
+      fillAidIframe(node, spec);
+    });
+  }
+  function mountCharacterAidSheets(root) {
+    if (!root) return;
+    Array.prototype.forEach.call(root.querySelectorAll("[data-aid-sheet]"), function (node) {
+      var spec = {
+        name: node.getAttribute("data-aid-name") || "Faction",
+        renderUrl: node.getAttribute("data-aid-render") || "",
+        fileUrl: node.getAttribute("data-aid-file") || "",
+        page: parseInt(node.getAttribute("data-aid-page"), 10) || 1,
+        crop: node.getAttribute("data-aid-crop") || "",
+        iframeSrc: node.getAttribute("data-aid-iframe") || ""
+      };
+      if (spec.renderUrl && spec.renderUrl !== spec.fileUrl) mountAidCanvas(node, spec);
+      else fillAidIframe(node, spec);
+    });
+  }
   function renderCharacterAidCard(ch) {
     var aid = ch.aid || {};
+    var spec = aidSheetSpec(ch);
     var overview = String(ch.overview || "").replace(/\s+/g, " ").trim();
     var tip = String(aid.tip || "").replace(/\s+/g, " ").trim();
     var parts = ['<h4 class="character-aid-name">' + escapeHtml(ch.name) + "</h4>"];
     if (overview) parts.push('<p class="character-aid-overview">' + escapeHtml(overview) + "</p>");
+    if (spec.fileUrl) {
+      parts.push(
+        '<figure class="character-aid-sheet">' +
+          '<div class="character-aid-viewport" data-aid-sheet="1"' +
+            ' data-aid-name="' + escapeHtml(spec.name) + '"' +
+            ' data-aid-file="' + escapeHtml(spec.fileUrl) + '"' +
+            ' data-aid-render="' + escapeHtml(spec.renderUrl) + '"' +
+            ' data-aid-page="' + spec.page + '"' +
+            ' data-aid-crop="' + escapeHtml(spec.crop) + '"' +
+            ' data-aid-iframe="' + escapeHtml(spec.iframeSrc) + '"' +
+          "></div>" +
+          '<figcaption><a class="character-aid-ref" href="' + escapeHtml(spec.link) + '" target="_blank" rel="noopener noreferrer">' +
+            escapeHtml(spec.label) +
+          "</a></figcaption>" +
+        "</figure>"
+      );
+    }
     function block(title, value) {
       var inner = renderRuleContent(value);
       if (!inner) return "";
       return '<h5 class="character-aid-label">' + escapeHtml(title) + "</h5>" + inner;
     }
-    parts.push(block("Setup", aid.setup));
-    parts.push(block("Actions", aid.actions));
-    parts.push(block("Abilities", aid.abilities));
-    if (tip) parts.push('<p class="character-aid-tip"><strong class="rule-lead">Tip.</strong> ' + escapeHtml(tip) + "</p>");
-    var ref = aid.reference;
-    if (ref && String(ref.url || "").trim()) {
+    var text = block("Setup", aid.setup) + block("Actions", aid.actions) + block("Abilities", aid.abilities);
+    if (tip) text += '<p class="character-aid-tip"><strong class="rule-lead">Tip.</strong> ' + escapeHtml(tip) + "</p>";
+    if (text) {
       parts.push(
-        '<a class="character-aid-ref" href="' + escapeHtml(ref.url) + '" target="_blank" rel="noopener noreferrer">' +
-          escapeHtml(ref.label || "Rulebook") +
-        "</a>"
+        '<details class="rule-details character-aid-text">' +
+          "<summary>Text version</summary>" +
+          '<div class="rule-details-body">' + text + "</div>" +
+        "</details>"
       );
     }
     return '<li class="character-aid">' + parts.join("") + "</li>";
@@ -106629,7 +106910,7 @@
     return (
       '<section class="character-aids" id="character-aids" aria-labelledby="character-aids-title">' +
         '<h3 id="character-aids-title">Character aids</h3>' +
-        '<p class="character-aids-note">Short paraphrase of that faction. The link opens the rulebook page the lines came from.</p>' +
+        '<p class="character-aids-note">The picture is that faction\'s page in the official rulebook, shown from the file this page already links. Text version is a short paraphrase.</p>' +
         '<ul class="character-aid-list">' + aided.map(renderCharacterAidCard).join("") + "</ul>" +
       "</section>"
     );
@@ -107327,6 +107608,7 @@
       var slot = document.getElementById("character-aids-slot");
       if (!slot) return;
       slot.innerHTML = renderCharacterAidSection(chars);
+      mountCharacterAidSheets(slot);
     }
     var aidsSlot = document.getElementById("player-aids-slot");
     var aidDialog = document.getElementById("aid-lightbox");
@@ -107334,6 +107616,11 @@
     var aidTitle = document.getElementById("aid-lightbox-title");
     var aidClose = document.getElementById("aid-lightbox-close");
     var aidLastFocus = null;
+    function showAidDialog() {
+      if (typeof aidDialog.showModal === "function") aidDialog.showModal();
+      else aidDialog.setAttribute("open", "");
+      if (aidClose) aidClose.focus();
+    }
     function openAid(url, type, title) {
       if (!aidDialog || !aidStage || !url) return;
       aidLastFocus = document.activeElement;
@@ -107343,9 +107630,19 @@
       } else {
         aidStage.innerHTML = '<iframe title="' + escapeHtml(title || "Player aid") + '" src="' + escapeHtml(url) + '"></iframe>';
       }
-      if (typeof aidDialog.showModal === "function") aidDialog.showModal();
-      else aidDialog.setAttribute("open", "");
-      if (aidClose) aidClose.focus();
+      showAidDialog();
+    }
+    function openAidCanvas(canvas, title) {
+      if (!aidDialog || !aidStage || !canvas) return;
+      aidLastFocus = document.activeElement;
+      if (aidTitle) aidTitle.textContent = title || "Player aid";
+      aidStage.innerHTML = "";
+      var img = document.createElement("img");
+      img.className = "aid-zoom-img";
+      img.alt = title ? title + " abilities, official rulebook" : "Player aid";
+      img.src = canvas.toDataURL("image/jpeg", 0.92);
+      aidStage.appendChild(img);
+      showAidDialog();
     }
     function closeAid() {
       if (!aidDialog) return;
@@ -107359,6 +107656,19 @@
         var btn = e.target.closest ? e.target.closest(".aid-open") : null;
         if (!btn || !aidsSlot.contains(btn)) return;
         openAid(btn.getAttribute("data-url"), btn.getAttribute("data-type"), btn.getAttribute("data-title"));
+      });
+    }
+    var charAidSlot = document.getElementById("character-aids-slot");
+    if (charAidSlot) {
+      charAidSlot.addEventListener("click", function (e) {
+        var btn = e.target.closest ? e.target.closest(".character-aid-zoom") : null;
+        if (!btn || !charAidSlot.contains(btn)) return;
+        if (btn.getAttribute("data-type") === "canvas") {
+          var canvas = btn.parentElement && btn.parentElement.querySelector("canvas");
+          if (canvas) openAidCanvas(canvas, btn.getAttribute("data-title"));
+          return;
+        }
+        openAid(btn.getAttribute("data-url"), btn.getAttribute("data-type") || "pdf", btn.getAttribute("data-title"));
       });
     }
     if (aidClose) aidClose.addEventListener("click", closeAid);
