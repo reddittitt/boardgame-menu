@@ -465,113 +465,6 @@
     border-radius:3px;
   }
 
-  /* Highlighted rulebook page. Native viewers keep #page= and ignore a search term. */
-  .rulebook-viewer {
-    width:100vw;
-    height:100dvh;
-    max-width:100vw;
-    max-height:100dvh;
-    margin:0;
-    padding:0;
-    border:0;
-    background:#111;
-    color:#fff;
-    display:flex;
-    flex-direction:column;
-    box-sizing:border-box;
-  }
-  .rulebook-viewer::backdrop { background:rgba(0,0,0,0.78); }
-  .rulebook-viewer-bar {
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px;
-    background:#1b1b1b;
-    flex:0 0 auto;
-  }
-  .rulebook-viewer-title {
-    flex:1 1 auto;
-    min-width:0;
-    margin:0;
-    font-weight:700;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .rulebook-viewer-close {
-    flex:0 0 auto;
-    min-height:44px;
-    padding:8px 16px;
-    border-radius:999px;
-    border:0;
-    background:var(--brand);
-    color:#fff;
-    font:inherit;
-    font-weight:700;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    box-sizing:border-box;
-  }
-  .rulebook-viewer-note {
-    margin:0;
-    padding:8px 12px;
-    background:#2c2412;
-    color:#ffe7a3;
-    font-size:0.95rem;
-    line-height:1.4;
-    flex:0 0 auto;
-  }
-  .rulebook-viewer-note:empty { display:none; }
-  .rulebook-viewer-note--ok {
-    background:#16301c;
-    color:#dff8d8;
-  }
-  .rulebook-viewer-stage {
-    flex:1 1 auto;
-    min-height:0;
-    overflow:auto;
-    background:#2a2a2a;
-    padding:12px 12px 28px;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior:contain;
-  }
-  .rulebook-viewer-loading {
-    margin:28px 12px;
-    text-align:center;
-    color:#f2f2f2;
-  }
-  .rulebook-viewer-loading[hidden] { display:none; }
-  .rulebook-viewer-sheet {
-    position:relative;
-    margin:0 auto;
-    background:#fff;
-    box-shadow:0 8px 28px rgba(0,0,0,0.35);
-  }
-  .rulebook-viewer-sheet[hidden] { display:none; }
-  .rulebook-viewer-sheet canvas {
-    display:block;
-    width:100%;
-    height:100%;
-  }
-  .rulebook-viewer-highlights {
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-  }
-  .rulebook-hl {
-    position:absolute;
-    background:rgba(255, 214, 0, 0.55);
-    border-radius:2px;
-  }
-  .rulebook-hl--focus {
-    background:rgba(255, 145, 0, 0.72);
-    outline:2px solid #9a3412;
-    outline-offset:1px;
-    z-index:1;
-  }
-
   .cover {
     margin:0;
     width:100%;
@@ -1573,6 +1466,8 @@
   .rulebook-viewer-stage {
     height:calc(100dvh - 60px - env(safe-area-inset-top, 0px));
     background:#111;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
   }
   .rulebook-viewer-stage iframe {
     width:100%;
@@ -1580,6 +1475,51 @@
     border:0;
     display:block;
     background:#111;
+  }
+  .rulebook-viewer-note {
+    margin:0;
+    padding:8px 12px;
+    background:#2c2412;
+    color:#ffe7a3;
+    font-size:0.95rem;
+    line-height:1.4;
+  }
+  .rulebook-viewer-note--ok {
+    background:#16301c;
+    color:#dff8d8;
+  }
+  .rulebook-viewer-loading {
+    margin:28px 12px;
+    text-align:center;
+    color:#f2f2f2;
+  }
+  .rulebook-viewer-sheet {
+    position:relative;
+    margin:12px auto 28px;
+    background:#fff;
+    box-shadow:0 8px 28px rgba(0,0,0,0.35);
+  }
+  .rulebook-viewer-sheet[hidden] { display:none; }
+  .rulebook-viewer-sheet canvas {
+    display:block;
+    width:100%;
+    height:100%;
+  }
+  .rulebook-viewer-highlights {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+  .rulebook-hl {
+    position:absolute;
+    background:rgba(255, 214, 0, 0.55);
+    border-radius:2px;
+  }
+  .rulebook-hl--focus {
+    background:rgba(255, 145, 0, 0.72);
+    outline:2px solid #9a3412;
+    outline-offset:1px;
+    z-index:1;
   }
 
   .rule-body > p,
@@ -107336,8 +107276,18 @@
     return boxes;
   }
 
-  var rulebookViewer = null;
   var rulebookViewerToken = 0;
+  var highlightJob = {
+    renderTask: null,
+    progressFn: null,
+    progressUrl: "",
+    opts: null,
+    drawnKey: "",
+    note: null,
+    loading: null,
+    sheet: null,
+    stage: null
+  };
 
   function letterCount(text) {
     var n = 0;
@@ -107356,100 +107306,18 @@
     if (at >= 0) list.splice(at, 1);
   }
 
-  function ensureRulebookViewer() {
-    if (rulebookViewer) return rulebookViewer;
-    var dialog = document.createElement("dialog");
-    dialog.className = "rulebook-viewer";
-    dialog.setAttribute("aria-labelledby", "rulebook-viewer-title");
-    var bar = document.createElement("div");
-    bar.className = "rulebook-viewer-bar";
-    var title = document.createElement("p");
-    title.className = "rulebook-viewer-title";
-    title.id = "rulebook-viewer-title";
-    var closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "rulebook-viewer-close";
-    closeBtn.textContent = "Back";
-    closeBtn.setAttribute("aria-label", "Back to the game");
-    bar.appendChild(title);
-    bar.appendChild(closeBtn);
-    var note = document.createElement("p");
-    note.className = "rulebook-viewer-note";
-    note.setAttribute("role", "status");
-    var stage = document.createElement("div");
-    stage.className = "rulebook-viewer-stage";
-    var loading = document.createElement("p");
-    loading.className = "rulebook-viewer-loading";
-    loading.hidden = true;
-    var sheet = document.createElement("div");
-    sheet.className = "rulebook-viewer-sheet";
-    sheet.hidden = true;
-    stage.appendChild(loading);
-    stage.appendChild(sheet);
-    dialog.appendChild(bar);
-    dialog.appendChild(note);
-    dialog.appendChild(stage);
-    document.body.appendChild(dialog);
-    var state = {
-      dialog: dialog,
-      title: title,
-      closeBtn: closeBtn,
-      note: note,
-      stage: stage,
-      loading: loading,
-      sheet: sheet,
-      renderTask: null,
-      progressFn: null,
-      progressUrl: "",
-      opener: null,
-      opts: null,
-      drawnKey: "",
-      resizeTimer: 0
-    };
-    closeBtn.addEventListener("click", function () { closeRulebookViewer(); });
-    dialog.addEventListener("close", function () { closeRulebookViewer({ focus: false }); });
-    dialog.addEventListener("cancel", function () { closeRulebookViewer({ focus: false }); });
-    window.addEventListener("resize", function () {
-      if (!rulebookViewer || !rulebookViewer.dialog.open || !rulebookViewer.opts) return;
-      clearTimeout(rulebookViewer.resizeTimer);
-      rulebookViewer.resizeTimer = setTimeout(function () {
-        if (!rulebookViewer || !rulebookViewer.dialog.open) return;
-        if (rulebookViewer.renderTask) {
-          try { rulebookViewer.renderTask.cancel(); } catch (err) {}
-          rulebookViewer.renderTask = null;
-        }
-        rulebookViewer.token = ++rulebookViewerToken;
-        drawRulebookHighlight(rulebookViewer, rulebookViewer.token);
-      }, 160);
-    });
-    rulebookViewer = state;
-    return state;
-  }
-
-  function closeRulebookViewer(opts) {
-    opts = opts || {};
+  function cancelRulebookHighlight() {
     rulebookViewerToken++;
-    var state = rulebookViewer;
-    if (!state) return;
-    if (state.renderTask) {
-      try { state.renderTask.cancel(); } catch (err) {}
-      state.renderTask = null;
+    if (highlightJob.renderTask) {
+      try { highlightJob.renderTask.cancel(); } catch (err) {}
+      highlightJob.renderTask = null;
     }
-    if (state.progressFn) {
-      unwatchRulebookProgress(state.progressUrl, state.progressFn);
-      state.progressFn = null;
+    if (highlightJob.progressFn) {
+      unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
+      highlightJob.progressFn = null;
     }
-    state.drawnKey = "";
-    state.sheet.hidden = true;
-    state.sheet.innerHTML = "";
-    state.loading.hidden = true;
-    var opener = state.opener;
-    state.opener = null;
-    if (state.dialog.open) {
-      if (typeof state.dialog.close === "function") state.dialog.close();
-      else state.dialog.removeAttribute("open");
-    }
-    if (opts.focus !== false && opener && opener.isConnected && opener.focus) opener.focus();
+    highlightJob.opts = null;
+    highlightJob.drawnKey = "";
   }
 
   function rulebookViewerWidth(stage) {
@@ -107472,46 +107340,47 @@
     return el;
   }
 
-  function drawRulebookHighlight(state, token, attempt) {
-    var opts = state.opts;
-    if (!opts || token !== rulebookViewerToken) return;
-    var cssWidth = rulebookViewerWidth(state.stage);
+  function drawRulebookHighlight(token, attempt) {
+    var opts = highlightJob.opts;
+    var stage = highlightJob.stage;
+    if (!opts || !stage || token !== rulebookViewerToken) return;
+    var cssWidth = rulebookViewerWidth(stage);
     if (cssWidth < 80 && attempt !== 1) {
       requestAnimationFrame(function () {
         if (token !== rulebookViewerToken) return;
-        drawRulebookHighlight(state, token, 1);
+        drawRulebookHighlight(token, 1);
       });
       return;
     }
     var key = [opts.url, opts.page, Math.round(cssWidth), opts.query, opts.snippet].join("|");
-    if (key === state.drawnKey && state.sheet.querySelector("canvas")) return;
-    if (state.progressFn) {
-      unwatchRulebookProgress(state.progressUrl, state.progressFn);
-      state.progressFn = null;
+    if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
+    if (highlightJob.progressFn) {
+      unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
+      highlightJob.progressFn = null;
     }
     var onProgress = function (progress) {
       if (token !== rulebookViewerToken || !progress || !progress.total) return;
       var pct = Math.max(0, Math.min(100, Math.round(100 * progress.loaded / progress.total)));
       var line = "Opening page " + opts.page + "\u2026 " + pct + "%";
-      state.loading.textContent = line;
-      state.note.textContent = line;
+      if (highlightJob.loading) highlightJob.loading.textContent = line;
+      if (highlightJob.note) highlightJob.note.textContent = line;
     };
-    state.progressFn = onProgress;
-    state.progressUrl = opts.url;
-    state.loading.hidden = false;
-    state.note.className = "rulebook-viewer-note";
+    highlightJob.progressFn = onProgress;
+    highlightJob.progressUrl = opts.url;
     loadRulebookPdf(opts.url, onProgress).then(function (pdf) {
       if (token !== rulebookViewerToken) return null;
       var pageNum = parseInt(opts.page, 10);
       if (!pageNum || pageNum < 1 || pageNum > pdf.numPages) throw new Error("page");
       return pdf.getPage(pageNum).then(function (page) {
         if (token !== rulebookViewerToken) return null;
+        var sheet = highlightJob.sheet;
+        if (!sheet) return null;
         var unscaled = page.getViewport({ scale: 1 });
         var viewport = page.getViewport({ scale: cssWidth / unscaled.width });
-        state.sheet.hidden = false;
-        state.sheet.innerHTML = "";
-        state.sheet.style.width = Math.floor(viewport.width) + "px";
-        state.sheet.style.height = Math.floor(viewport.height) + "px";
+        sheet.hidden = false;
+        sheet.innerHTML = "";
+        sheet.style.width = Math.floor(viewport.width) + "px";
+        sheet.style.height = Math.floor(viewport.height) + "px";
         var canvas = document.createElement("canvas");
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width = Math.floor(viewport.width * dpr);
@@ -107521,13 +107390,14 @@
         var layer = document.createElement("div");
         layer.className = "rulebook-viewer-highlights";
         layer.setAttribute("aria-hidden", "true");
-        state.sheet.appendChild(canvas);
-        state.sheet.appendChild(layer);
+        sheet.appendChild(canvas);
+        sheet.appendChild(layer);
+        if (highlightJob.loading) highlightJob.loading.hidden = true;
         var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
         var task = page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport, transform: transform });
-        state.renderTask = task;
+        highlightJob.renderTask = task;
         return task.promise.then(function () {
-          if (state.renderTask === task) state.renderTask = null;
+          if (highlightJob.renderTask === task) highlightJob.renderTask = null;
           if (token !== rulebookViewerToken) return null;
           return page.getTextContent().then(function (textContent) {
             if (token !== rulebookViewerToken) return null;
@@ -107540,63 +107410,77 @@
               var el = placeHighlightBox(layer, box);
               if (box.focus) focusEl = el;
             });
-            state.loading.hidden = true;
-            state.drawnKey = key;
+            highlightJob.drawnKey = key;
             var shown = quoteQuery(opts.query);
-            state.note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
-            if (boxes.length === 1) state.note.textContent = "Highlighted " + shown + " on this page.";
-            else if (boxes.length) state.note.textContent = "Highlighted " + boxes.length + " matches for " + shown + ". The orange one is the result you opened.";
-            else if (letterCount(built.raw) < 40) state.note.textContent = "This page has no selectable text, so " + shown + " could not be highlighted.";
-            else state.note.textContent = shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
+            if (highlightJob.note) {
+              highlightJob.note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
+              if (boxes.length === 1) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
+              else if (boxes.length) highlightJob.note.textContent = "Highlighted " + boxes.length + " matches for " + shown + ". The orange one is the result you opened.";
+              else if (letterCount(built.raw) < 40) highlightJob.note.textContent = "This page has no selectable text, so " + shown + " could not be highlighted.";
+              else highlightJob.note.textContent = shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
+            }
             if (focusEl || layer.firstChild) {
               var mark = focusEl || layer.firstChild;
-              var stageRect = state.stage.getBoundingClientRect();
+              var stageRect = stage.getBoundingClientRect();
               var markRect = mark.getBoundingClientRect();
-              state.stage.scrollTop += (markRect.top + markRect.height / 2) - (stageRect.top + stageRect.height / 2);
+              stage.scrollTop += (markRect.top + markRect.height / 2) - (stageRect.top + stageRect.height / 2);
             }
           });
         });
       });
     }).catch(function () {
       if (token !== rulebookViewerToken) return;
-      state.renderTask = null;
-      state.sheet.hidden = true;
-      state.loading.hidden = true;
-      state.note.className = "rulebook-viewer-note";
-      state.note.textContent = "This rulebook could not be drawn here, so the match could not be highlighted.";
+      highlightJob.renderTask = null;
+      if (highlightJob.sheet) highlightJob.sheet.hidden = true;
+      if (highlightJob.loading) highlightJob.loading.hidden = true;
+      if (highlightJob.note) {
+        highlightJob.note.className = "rulebook-viewer-note";
+        highlightJob.note.textContent = "This rulebook could not be drawn here, so the match could not be highlighted.";
+      }
     }).then(function () {
-      if (state.progressFn === onProgress) {
+      if (highlightJob.progressFn === onProgress) {
         unwatchRulebookProgress(opts.url, onProgress);
-        state.progressFn = null;
+        highlightJob.progressFn = null;
       }
     });
   }
 
   function openRulebookHighlight(opts) {
-    var state = ensureRulebookViewer();
-    var token = ++rulebookViewerToken;
-    state.token = token;
-    state.opts = opts;
-    state.opener = opts.opener || null;
-    state.drawnKey = "";
-    state.title.textContent = "Page " + opts.page;
-    state.note.className = "rulebook-viewer-note";
-    state.note.textContent = "Opening page " + opts.page + "\u2026";
-    state.loading.hidden = false;
-    state.loading.textContent = "Opening page " + opts.page + "\u2026";
-    state.sheet.hidden = true;
-    state.sheet.innerHTML = "";
-    if (state.renderTask) {
-      try { state.renderTask.cancel(); } catch (err) {}
-      state.renderTask = null;
-    }
-    if (typeof state.dialog.showModal === "function") {
-      if (!state.dialog.open) state.dialog.showModal();
-    } else state.dialog.setAttribute("open", "");
-    state.closeBtn.focus();
+    var dialog = document.getElementById("rulebook-viewer");
+    var stage = document.getElementById("rulebook-viewer-stage");
+    var title = document.getElementById("rulebook-viewer-title");
+    var closeBtn = document.getElementById("rulebook-viewer-close");
+    if (!dialog || !stage || !opts) return;
+    cancelRulebookHighlight();
+    var token = rulebookViewerToken;
+    highlightJob.opts = opts;
+    highlightJob.drawnKey = "";
+    highlightJob.stage = stage;
+    if (title) title.textContent = "Page " + opts.page;
+    stage.innerHTML = "";
+    var note = document.createElement("p");
+    note.className = "rulebook-viewer-note";
+    note.setAttribute("role", "status");
+    note.textContent = "Opening page " + opts.page + "\u2026";
+    var loading = document.createElement("p");
+    loading.className = "rulebook-viewer-loading";
+    loading.textContent = note.textContent;
+    var sheet = document.createElement("div");
+    sheet.className = "rulebook-viewer-sheet";
+    sheet.hidden = true;
+    stage.appendChild(note);
+    stage.appendChild(loading);
+    stage.appendChild(sheet);
+    highlightJob.note = note;
+    highlightJob.loading = loading;
+    highlightJob.sheet = sheet;
+    if (typeof dialog.showModal === "function") {
+      if (!dialog.open) dialog.showModal();
+    } else dialog.setAttribute("open", "");
+    if (closeBtn) closeBtn.focus();
     requestAnimationFrame(function () {
       if (token !== rulebookViewerToken) return;
-      drawRulebookHighlight(state, token);
+      drawRulebookHighlight(token);
     });
   }
 
@@ -107628,19 +107512,12 @@
       list.innerHTML = "";
       (hits || []).forEach(function (hit) {
         var li = document.createElement("li");
-        var link = document.createElement("button");
-        link.type = "button";
+        var link = document.createElement("a");
         link.className = "rulebook-hit";
+        link.href = String(rulebookHref || "").split("#")[0] + "#page=" + hit.page;
+        link.setAttribute("data-query", String(input.value || ""));
+        link.setAttribute("data-snippet", hit.text);
         link.title = "Show page " + hit.page + " with the match highlighted";
-        link.addEventListener("click", function () {
-          openRulebookHighlight({
-            url: String(rulebookHref || "").split("#")[0],
-            page: hit.page,
-            query: input.value,
-            snippet: hit.text,
-            opener: link
-          });
-        });
         var page = document.createElement("span");
         page.className = "rulebook-hit-page";
         page.textContent = "Page " + hit.page;
@@ -107736,6 +107613,7 @@
     var stage = document.getElementById("rulebook-viewer-stage");
     var titleEl = document.getElementById("rulebook-viewer-title");
     if (!dialog || !stage || !url) return;
+    cancelRulebookHighlight();
     if (titleEl) titleEl.textContent = title || "Rulebook";
     stage.innerHTML = "";
     var frame = document.createElement("iframe");
@@ -107751,6 +107629,7 @@
     var dialog = document.getElementById("rulebook-viewer");
     var stage = document.getElementById("rulebook-viewer-stage");
     if (!dialog) return;
+    cancelRulebookHighlight();
     if (typeof dialog.close === "function" && dialog.open) dialog.close();
     else dialog.removeAttribute("open");
     if (stage) stage.innerHTML = "";
@@ -107784,6 +107663,16 @@
     if (!isRulebookAnchor(link)) return;
     e.preventDefault();
     rulebookLastFocus = link;
+    if (link.classList.contains("rulebook-hit")) {
+      var pageMatch = String(link.hash || "").match(/page=(\d+)/i);
+      openRulebookHighlight({
+        url: link.href.split("#")[0],
+        page: pageMatch ? parseInt(pageMatch[1], 10) : 0,
+        query: link.getAttribute("data-query") || "",
+        snippet: link.getAttribute("data-snippet") || ""
+      });
+      return;
+    }
     showRulebook(link.href, rulebookLinkTitle(link));
   }, true);
   function attachRulebookGuards() {
@@ -107796,8 +107685,22 @@
     if (dialog && !dialog.dataset.bound) {
       dialog.dataset.bound = "1";
       dialog.addEventListener("close", function () {
+        cancelRulebookHighlight();
         var stage = document.getElementById("rulebook-viewer-stage");
         if (stage) stage.innerHTML = "";
+      });
+      window.addEventListener("resize", function () {
+        if (!highlightJob.opts || !dialog.open) return;
+        clearTimeout(highlightJob.resizeTimer);
+        highlightJob.resizeTimer = setTimeout(function () {
+          if (!highlightJob.opts || !dialog.open) return;
+          if (highlightJob.renderTask) {
+            try { highlightJob.renderTask.cancel(); } catch (err) {}
+            highlightJob.renderTask = null;
+          }
+          highlightJob.drawnKey = "";
+          drawRulebookHighlight(++rulebookViewerToken);
+        }, 160);
       });
       dialog.addEventListener("click", function (e) {
         if (e.target === dialog) closeRulebookViewer();
@@ -110003,7 +109906,6 @@
   }
 
   function render() {
-    closeRulebookViewer({ focus: false });
     tableBarApi = null;
     closeRulebookViewer();
     syncHeaderOffset();
