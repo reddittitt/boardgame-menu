@@ -1440,9 +1440,66 @@
   }
   .rulebook-viewer-close:focus-visible,
   .rulebook-viewer-fit button:focus-visible,
-  .rulebook-viewer-step:focus-visible {
+  .rulebook-viewer-step:focus-visible,
+  .rulebook-viewer-find input:focus-visible,
+  .rulebook-viewer-find button:focus-visible {
     outline:3px solid #fff;
     outline-offset:2px;
+  }
+  .rulebook-viewer-find {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px;
+    padding:0 8px 8px;
+    background:#1b1b1b;
+  }
+  .rulebook-viewer-find[hidden] { display:none; }
+  .rulebook-viewer-find input {
+    flex:1 1 12rem;
+    min-width:0;
+    min-height:44px;
+    margin:0;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.45);
+    background:#111;
+    color:#fff;
+    font:inherit;
+    font-size:max(1rem, 16px);
+  }
+  .rulebook-viewer-find input::placeholder { color:rgba(255,255,255,0.62); }
+  .rulebook-viewer-find-count {
+    flex:1 1 auto;
+    margin:0;
+    min-width:4.75rem;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-weight:700;
+    line-height:1.2;
+  }
+  .rulebook-viewer-find-count:empty { display:none; }
+  .rulebook-viewer-find button {
+    flex:1 1 6.5rem;
+    min-height:44px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.45);
+    background:transparent;
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .rulebook-viewer-find button:disabled {
+    opacity:0.35;
+    cursor:default;
+  }
+  @media (max-width:560px) {
+    .rulebook-viewer-find input { flex-basis:100%; }
   }
   .rulebook-viewer-nav {
     display:flex;
@@ -1687,6 +1744,7 @@
   /* Floor at 16px. iOS Safari zooms the page when a focused field is smaller. */
   #search,
   .rulebook-search input,
+  #rulebook-viewer-find-input,
   textarea {
     font-size:max(1rem, 16px);
   }
@@ -2224,6 +2282,7 @@
   /* Typed fields stay at least 16px so a phone does not zoom on focus. */
   :root[data-look="hig"] #search,
   :root[data-look="hig"] .rulebook-search input,
+  :root[data-look="hig"] #rulebook-viewer-find-input,
   :root[data-look="hig"] textarea {
     font-size:max(1rem, 16px);
   }
@@ -2257,6 +2316,12 @@
       <button type="button" id="rulebook-fit-page" aria-pressed="false">Fit page</button>
     </div>
     <button type="button" class="rulebook-viewer-close" id="rulebook-viewer-close">Close</button>
+  </div>
+  <div class="rulebook-viewer-find" id="rulebook-viewer-find" hidden>
+    <input id="rulebook-viewer-find-input" type="search" placeholder="Find in this rulebook" aria-label="Find in this rulebook" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+    <button type="button" id="rulebook-viewer-find-prev" disabled>Previous</button>
+    <p class="rulebook-viewer-find-count" id="rulebook-viewer-find-count" role="status" aria-live="polite" aria-atomic="true"></p>
+    <button type="button" id="rulebook-viewer-find-next" disabled>Next</button>
   </div>
   <div class="rulebook-viewer-nav" id="rulebook-viewer-nav" hidden>
     <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-prev">Previous</button>
@@ -111326,6 +111391,7 @@
 
   function cancelRulebookHighlight() {
     rulebookViewerToken++;
+    resetRulebookFind();
     if (highlightJob.renderTask) {
       try { highlightJob.renderTask.cancel(); } catch (err) {}
       highlightJob.renderTask = null;
@@ -111344,6 +111410,9 @@
       highlightJob.pageObserver = null;
     }
     highlightJob.refit = null;
+    highlightJob.drawSlot = null;
+    highlightJob.onSlotDrawn = null;
+    highlightJob.tourQuery = "";
     updateRulebookMatchNav();
   }
 
@@ -111380,6 +111449,394 @@
     }
   }
 
+  /* Find runs on the PDF that is open, including words missing from the page index. */
+  var rulebookFind = {
+    query: "",
+    generation: 0,
+    matches: [],
+    index: -1,
+    pdf: null,
+    mode: "",
+    text: {},
+    textPromises: {},
+    scanning: false,
+    timer: 0
+  };
+
+  function cleanFindQuery(query) {
+    return String(query || "").trim().replace(/\s+/g, " ");
+  }
+
+  function resetRulebookFind() {
+    rulebookFind.generation++;
+    clearTimeout(rulebookFind.timer);
+    rulebookFind.query = "";
+    rulebookFind.matches = [];
+    rulebookFind.index = -1;
+    rulebookFind.pdf = null;
+    rulebookFind.mode = "";
+    rulebookFind.text = {};
+    rulebookFind.textPromises = {};
+    rulebookFind.scanning = false;
+    var bar = document.getElementById("rulebook-viewer-find");
+    var input = document.getElementById("rulebook-viewer-find-input");
+    var count = document.getElementById("rulebook-viewer-find-count");
+    var prev = document.getElementById("rulebook-viewer-find-prev");
+    var next = document.getElementById("rulebook-viewer-find-next");
+    if (bar) bar.hidden = true;
+    if (input) input.value = "";
+    if (count) count.textContent = "";
+    if (prev) prev.disabled = true;
+    if (next) next.disabled = true;
+  }
+
+  function updateRulebookFindChrome(forcedText) {
+    var count = document.getElementById("rulebook-viewer-find-count");
+    var text = forcedText;
+    if (text == null) {
+      var total = rulebookFind.matches.length;
+      if (rulebookFind.scanning) text = "Searching\u2026";
+      else if (!rulebookFind.query) text = "";
+      else if (!total) text = "No matches";
+      else text = (rulebookFind.index + 1) + " of " + total;
+    }
+    if (count) {
+      count.textContent = text;
+      count.setAttribute("aria-busy", rulebookFind.scanning ? "true" : "false");
+    }
+    var prev = document.getElementById("rulebook-viewer-find-prev");
+    var next = document.getElementById("rulebook-viewer-find-next");
+    var n = rulebookFind.matches.length;
+    var i = rulebookFind.index;
+    if (prev) prev.disabled = !(n && i > 0);
+    if (next) next.disabled = !(n && i >= 0 && i < n - 1);
+  }
+
+  function ensureRulebookPageText(pdf, pageNum) {
+    var hit = rulebookFind.text[pageNum];
+    if (hit) return Promise.resolve(hit);
+    if (rulebookFind.textPromises[pageNum]) return rulebookFind.textPromises[pageNum];
+    rulebookFind.textPromises[pageNum] = pdf.getPage(pageNum).then(function (page) {
+      return page.getTextContent().then(function (textContent) {
+        var built = textRunsFromItems(textContent.items);
+        built.styles = textContent.styles || null;
+        rulebookFind.text[pageNum] = built;
+        return built;
+      });
+    });
+    return rulebookFind.textPromises[pageNum];
+  }
+
+  function findIndexForAnchor(anchor) {
+    if (!anchor || !rulebookFind.matches.length) return -1;
+    var page = parseInt(anchor.page, 10);
+    var nth = anchor.nthOnPage;
+    var built = rulebookFind.text[page];
+    if (built && anchor.snippet && rulebookFind.query) {
+      var found = searchMatchRanges(built.raw, rulebookFind.query);
+      var focus = snippetFocusIndex(built.raw, found.ranges, anchor.snippet);
+      if (focus >= 0) nth = focus;
+    }
+    var first = -1;
+    var exact = -1;
+    for (var i = 0; i < rulebookFind.matches.length; i++) {
+      if (rulebookFind.matches[i].page !== page) continue;
+      if (first < 0) first = i;
+      if (typeof nth === "number" && rulebookFind.matches[i].nthOnPage === nth) exact = i;
+    }
+    if (exact >= 0) return exact;
+    return first;
+  }
+
+  function scrollStageTo(stage, el) {
+    if (!stage || !el) return;
+    var stageRect = stage.getBoundingClientRect();
+    var markRect = el.getBoundingClientRect();
+    stage.scrollTop += (markRect.top + markRect.height / 2) - (stageRect.top + stageRect.height / 2);
+    var leftDelta = (markRect.left + markRect.width / 2) - (stageRect.left + stageRect.width / 2);
+    if (Math.abs(leftDelta) > 24) stage.scrollLeft += leftDelta;
+  }
+
+  function paintFindLayer(layer, built, viewport, nthOnPage) {
+    layer.innerHTML = "";
+    var found = searchMatchRanges(built.raw, rulebookFind.query);
+    var focus = typeof nthOnPage === "number" ? nthOnPage : -1;
+    var boxes = highlightBoxes(built.runs, found.ranges, focus, viewport, built.styles);
+    var focusEl = null;
+    boxes.forEach(function (box) {
+      var el = placeHighlightBox(layer, box);
+      if (box.focus) focusEl = el;
+    });
+    return focusEl;
+  }
+
+  function clearDocumentFindMarks() {
+    var stage = document.getElementById("rulebook-viewer-stage");
+    if (!stage) return;
+    var layers = stage.querySelectorAll(".rulebook-viewer-highlights");
+    for (var i = 0; i < layers.length; i++) layers[i].innerHTML = "";
+  }
+
+  function paintDocumentPage(pageNum, scroll) {
+    var stage = document.getElementById("rulebook-viewer-stage");
+    var slot = stage && stage.querySelector('.rulebook-viewer-sheet[data-page="' + pageNum + '"]');
+    if (!slot || slot.getAttribute("data-drawn") !== "1" || !rulebookFind.pdf) return Promise.resolve();
+    var gen = rulebookFind.generation;
+    var query = rulebookFind.query;
+    return rulebookFind.pdf.getPage(pageNum).then(function (page) {
+      if (gen !== rulebookFind.generation || !slot.isConnected) return;
+      var unscaled = page.getViewport({ scale: 1 });
+      var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
+      return ensureRulebookPageText(rulebookFind.pdf, pageNum).then(function (built) {
+        if (gen !== rulebookFind.generation || !slot.isConnected) return;
+        var layer = slot.querySelector(".rulebook-viewer-highlights");
+        if (!layer) {
+          layer = document.createElement("div");
+          layer.className = "rulebook-viewer-highlights";
+          layer.setAttribute("aria-hidden", "true");
+          slot.appendChild(layer);
+        }
+        if (!query || query.length < 2) {
+          layer.innerHTML = "";
+          return;
+        }
+        var current = rulebookFind.matches[rulebookFind.index];
+        var nth = current && current.page === pageNum ? current.nthOnPage : -1;
+        var focusEl = paintFindLayer(layer, built, viewport, nth);
+        if (scroll && focusEl) scrollStageTo(stage, focusEl);
+      });
+    }).catch(function () {});
+  }
+
+  function revealDocumentFind(match) {
+    var stage = document.getElementById("rulebook-viewer-stage");
+    if (!stage || !match) return;
+    var drawn = stage.querySelectorAll(".rulebook-viewer-sheet[data-drawn='1']");
+    for (var i = 0; i < drawn.length; i++) {
+      var pageNum = parseInt(drawn[i].getAttribute("data-page"), 10);
+      if (pageNum !== match.page) paintDocumentPage(pageNum, false);
+    }
+    var slot = stage.querySelector('.rulebook-viewer-sheet[data-page="' + match.page + '"]');
+    if (!slot) return;
+    var draw = highlightJob.drawSlot;
+    Promise.resolve(draw ? draw(slot) : null).then(function () {
+      if (rulebookFind.matches[rulebookFind.index] !== match) return;
+      return paintDocumentPage(match.page, true);
+    });
+  }
+
+  function revealHighlightFind(match) {
+    var opts = highlightJob.opts;
+    var stage = highlightJob.stage;
+    var sheet = highlightJob.sheet;
+    if (!opts || !stage || !sheet || !match) return;
+    var title = document.getElementById("rulebook-viewer-title");
+    if (title) title.textContent = "Page " + match.page;
+    var samePage = !!(highlightJob.pageReady && opts.page === match.page && sheet.querySelector("canvas") && !sheet.hidden);
+    opts.page = match.page;
+    opts.query = rulebookFind.query;
+    opts.nthOnPage = match.nthOnPage;
+    opts.snippet = "";
+    if (!samePage || !rulebookFind.pdf) {
+      highlightJob.pageReady = false;
+      highlightJob.drawnKey = "";
+      if (highlightJob.renderTask) {
+        try { highlightJob.renderTask.cancel(); } catch (err) {}
+        highlightJob.renderTask = null;
+      }
+      sheet.hidden = true;
+      sheet.innerHTML = "";
+      if (highlightJob.loading) {
+        highlightJob.loading.hidden = false;
+        highlightJob.loading.textContent = "Opening page " + match.page + "\u2026";
+      }
+      if (highlightJob.note) {
+        highlightJob.note.className = "rulebook-viewer-note";
+        highlightJob.note.textContent = "Opening page " + match.page + "\u2026";
+      }
+      drawRulebookHighlight(++rulebookViewerToken);
+      return;
+    }
+    var built = rulebookFind.text[match.page];
+    var layer = sheet.querySelector(".rulebook-viewer-highlights");
+    if (!built || !layer) {
+      highlightJob.drawnKey = "";
+      drawRulebookHighlight(++rulebookViewerToken);
+      return;
+    }
+    var gen = rulebookFind.generation;
+    rulebookFind.pdf.getPage(match.page).then(function (page) {
+      if (gen !== rulebookFind.generation) return;
+      if (!highlightJob.opts || highlightJob.opts.page !== match.page) return;
+      var unscaled = page.getViewport({ scale: 1 });
+      var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
+      var focusEl = paintFindLayer(layer, built, viewport, match.nthOnPage);
+      if (focusEl) scrollStageTo(stage, focusEl);
+      highlightJob.drawnKey = "";
+      if (highlightJob.note) {
+        highlightJob.note.className = "rulebook-viewer-note" + (focusEl ? " rulebook-viewer-note--ok" : "");
+        highlightJob.note.textContent = focusEl
+          ? "Highlighted " + quoteQuery(rulebookFind.query) + " on this page."
+          : quoteQuery(rulebookFind.query) + " was not in this page\u2019s selectable text, so it could not be highlighted.";
+      }
+    }).catch(function () {});
+  }
+
+  function revealRulebookFindMatch() {
+    var match = rulebookFind.matches[rulebookFind.index];
+    if (rulebookFind.mode === "document") {
+      if (!match) {
+        clearDocumentFindMarks();
+        return;
+      }
+      revealDocumentFind(match);
+      return;
+    }
+    if (rulebookFind.mode === "highlight" && match) revealHighlightFind(match);
+  }
+
+  function restoreTourHighlight() {
+    var opts = highlightJob.opts;
+    var tour = highlightJob.tour;
+    if (!opts || !tour || rulebookFind.mode !== "highlight") return;
+    var stop = tour[highlightJob.tourIndex] || tour[0];
+    if (!stop) return;
+    opts.query = highlightJob.tourQuery || opts.query;
+    opts.page = stop.page;
+    opts.snippet = stop.snippet || "";
+    opts.nthOnPage = stop.nthOnPage;
+    var title = document.getElementById("rulebook-viewer-title");
+    if (title) title.textContent = "Page " + stop.page;
+    highlightJob.pageReady = false;
+    highlightJob.drawnKey = "";
+    if (highlightJob.renderTask) {
+      try { highlightJob.renderTask.cancel(); } catch (err) {}
+      highlightJob.renderTask = null;
+    }
+    if (highlightJob.sheet) {
+      highlightJob.sheet.hidden = true;
+      highlightJob.sheet.innerHTML = "";
+    }
+    if (highlightJob.loading) {
+      highlightJob.loading.hidden = false;
+      highlightJob.loading.textContent = "Opening page " + stop.page + "\u2026";
+    }
+    drawRulebookHighlight(++rulebookViewerToken);
+  }
+
+  function syncRulebookFindToTour() {
+    if (rulebookFind.mode !== "highlight" || rulebookFind.scanning) return;
+    var tourQuery = cleanFindQuery(highlightJob.tourQuery);
+    if (!tourQuery || rulebookFind.query !== tourQuery) return;
+    var stop = highlightJob.tour && highlightJob.tour[highlightJob.tourIndex];
+    if (!stop) return;
+    var idx = findIndexForAnchor(stop);
+    if (idx < 0) return;
+    rulebookFind.index = idx;
+    updateRulebookFindChrome();
+  }
+
+  function startRulebookFind(query, anchor) {
+    var q = cleanFindQuery(query);
+    rulebookFind.query = q;
+    rulebookFind.matches = [];
+    rulebookFind.index = -1;
+    rulebookFind.scanning = false;
+    clearTimeout(rulebookFind.timer);
+    var gen = ++rulebookFind.generation;
+    if (q.length < 2) {
+      updateRulebookFindChrome(q ? "Type at least 2 letters." : "");
+      if (rulebookFind.mode === "document") clearDocumentFindMarks();
+      if (rulebookFind.mode === "highlight" && !q) {
+        var shown = highlightJob.opts && highlightJob.opts.query;
+        var tourQ = cleanFindQuery(highlightJob.tourQuery);
+        if ((shown && cleanFindQuery(shown) !== tourQ) || (highlightJob.opts && highlightJob.opts.snippet === "" && tourQ)) {
+          restoreTourHighlight();
+        }
+      }
+      return;
+    }
+    if (rulebookFind.mode === "document") clearDocumentFindMarks();
+    rulebookFind.scanning = true;
+    updateRulebookFindChrome("Searching\u2026");
+    var pdf = rulebookFind.pdf;
+    if (!pdf) {
+      rulebookFind.scanning = false;
+      updateRulebookFindChrome("No matches");
+      return;
+    }
+    var found = [];
+    var nextPage = 1;
+    var pending = 0;
+    var finished = false;
+    function finish() {
+      if (finished || gen !== rulebookFind.generation) return;
+      finished = true;
+      rulebookFind.scanning = false;
+      found.sort(function (a, b) { return a.page - b.page || a.nthOnPage - b.nthOnPage; });
+      rulebookFind.matches = found;
+      var anchorNow = anchor;
+      if (anchor && rulebookFind.mode === "highlight" && highlightJob.tour) {
+        var stopNow = highlightJob.tour[highlightJob.tourIndex];
+        if (stopNow && cleanFindQuery(highlightJob.tourQuery) === q) anchorNow = stopNow;
+      }
+      var idx = anchorNow ? findIndexForAnchor(anchorNow) : 0;
+      rulebookFind.index = found.length ? (idx < 0 ? 0 : idx) : -1;
+      updateRulebookFindChrome();
+      revealRulebookFindMatch();
+    }
+    function pump() {
+      if (gen !== rulebookFind.generation) return;
+      if (nextPage > pdf.numPages && pending === 0) {
+        finish();
+        return;
+      }
+      while (pending < 4 && nextPage <= pdf.numPages) {
+        pending++;
+        (function (n) {
+          ensureRulebookPageText(pdf, n).then(function (built) {
+            pending--;
+            if (gen !== rulebookFind.generation) return;
+            var ranges = searchMatchRanges(built.raw, q).ranges;
+            for (var i = 0; i < ranges.length; i++) found.push({ page: n, nthOnPage: i });
+            pump();
+          }).catch(function () {
+            pending--;
+            if (gen !== rulebookFind.generation) return;
+            pump();
+          });
+        })(nextPage);
+        nextPage++;
+      }
+    }
+    pump();
+  }
+
+  function stepRulebookFind(delta) {
+    var n = rulebookFind.matches.length;
+    if (!n || rulebookFind.scanning) return;
+    var next = rulebookFind.index + delta;
+    if (next < 0 || next >= n) return;
+    rulebookFind.index = next;
+    updateRulebookFindChrome();
+    revealRulebookFindMatch();
+  }
+
+  function armRulebookFind(pdf, mode, query, anchor) {
+    if (!pdf) return;
+    rulebookFind.pdf = pdf;
+    rulebookFind.mode = mode;
+    rulebookFind.text = {};
+    rulebookFind.textPromises = {};
+    var bar = document.getElementById("rulebook-viewer-find");
+    var input = document.getElementById("rulebook-viewer-find-input");
+    if (bar) bar.hidden = false;
+    var q = cleanFindQuery(query);
+    if (input) input.value = q;
+    updateRulebookMatchNav();
+    startRulebookFind(q, anchor || null);
+  }
+
   function quoteQuery(query) {
     return "\u201c" + String(query || "").trim().replace(/\s+/g, " ") + "\u201d";
   }
@@ -111407,7 +111864,7 @@
       });
       return;
     }
-    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.nthOnPage].join("|");
+    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.query, opts.nthOnPage].join("|");
     if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
     if (highlightJob.progressFn) {
       unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
@@ -111507,10 +111964,12 @@
     var prev = document.getElementById("rulebook-viewer-prev");
     var next = document.getElementById("rulebook-viewer-next");
     var dialog = document.getElementById("rulebook-viewer");
+    var findBar = document.getElementById("rulebook-viewer-find");
+    var findOn = !!(findBar && !findBar.hidden);
     var tour = highlightJob.tour;
     var on = !!(tour && tour.length && highlightJob.opts);
-    if (nav) nav.hidden = !on;
-    if (dialog) dialog.classList.toggle("rulebook-viewer--matches", on);
+    if (nav) nav.hidden = findOn || !on;
+    if (dialog) dialog.classList.toggle("rulebook-viewer--matches", on && !findOn);
     if (!on) return;
     var index = highlightJob.tourIndex;
     if (index < 0) index = 0;
@@ -111544,11 +112003,14 @@
     if (!tour || !opts || index < 0 || index >= tour.length) return;
     var stop = tour[index];
     var previous = tour[highlightJob.tourIndex];
-    var samePage = !!(previous && previous.page === stop.page && highlightJob.pageReady && opts.page === stop.page);
+    var tourQuery = highlightJob.tourQuery || opts.query || "";
+    var samePage = !!(previous && previous.page === stop.page && highlightJob.pageReady && opts.page === stop.page && opts.snippet === stop.snippet && (opts.query || "") === tourQuery);
     highlightJob.tourIndex = index;
     opts.page = stop.page;
     opts.snippet = stop.snippet;
     opts.nthOnPage = stop.nthOnPage;
+    opts.query = tourQuery;
+    syncRulebookFindToTour();
     var title = document.getElementById("rulebook-viewer-title");
     if (title) title.textContent = "Page " + stop.page;
     updateRulebookMatchNav();
@@ -111594,6 +112056,7 @@
     if (index < 0 || index >= tour.length) index = 0;
     highlightJob.tour = tour;
     highlightJob.tourIndex = index;
+    highlightJob.tourQuery = opts.query || "";
     highlightJob.opts = {
       url: opts.url,
       page: tour[index].page,
@@ -111630,6 +112093,15 @@
     requestAnimationFrame(function () {
       if (token !== rulebookViewerToken) return;
       drawRulebookHighlight(token);
+    });
+    loadRulebookPdf(opts.url).then(function (pdf) {
+      if (!highlightJob.opts || highlightJob.opts.url !== opts.url) return;
+      var stop = tour[highlightJob.tourIndex] || tour[index];
+      armRulebookFind(pdf, "highlight", opts.query || "", stop || null);
+    }).catch(function () {
+      if (!highlightJob.opts || highlightJob.opts.url !== opts.url) return;
+      var bar = document.getElementById("rulebook-viewer-find");
+      if (bar) bar.hidden = true;
     });
   }
 
@@ -111787,6 +112259,7 @@
     rulebookLastFocus = null;
   }
   function rulebookFallback(note, url) {
+    resetRulebookFind();
     note.hidden = false;
     note.className = "rulebook-viewer-note";
     note.textContent = "This rulebook could not be drawn in the app. ";
@@ -111846,14 +112319,15 @@
       }
       if (titleEl) titleEl.textContent = label + " \u00b7 1 / " + pdf.numPages;
       function drawSlot(slot) {
-        if (!slot) return;
-        if (slot.getAttribute("data-drawn") === "1" && slot.getAttribute("data-fit") === rulebookFitMode) return;
-        if (token !== rulebookViewerToken) return;
+        if (!slot) return Promise.resolve();
+        if (slot.getAttribute("data-drawn") === "1" && slot.getAttribute("data-fit") === rulebookFitMode) return Promise.resolve();
+        if (slot._drawPromise && slot.getAttribute("data-drawing") === "1") return slot._drawPromise;
+        if (token !== rulebookViewerToken) return Promise.resolve();
         var epoch = rulebookFitEpoch;
         var mode = rulebookFitMode;
         slot.setAttribute("data-drawing", "1");
         var pageNum = parseInt(slot.getAttribute("data-page"), 10);
-        pdf.getPage(pageNum).then(function (page) {
+        slot._drawPromise = pdf.getPage(pageNum).then(function (page) {
           if (token !== rulebookViewerToken || epoch !== rulebookFitEpoch || !slot.isConnected) return;
           var unscaled = page.getViewport({ scale: 1 });
           var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
@@ -111880,16 +112354,26 @@
             slot.setAttribute("data-drawn", "1");
             slot.setAttribute("data-fit", mode);
             slot.removeAttribute("data-drawing");
+            if (highlightJob.onSlotDrawn) highlightJob.onSlotDrawn(slot, pageNum);
           });
         }).catch(function () {
           if (epoch === rulebookFitEpoch) slot.removeAttribute("data-drawing");
         });
+        return slot._drawPromise;
       }
+      highlightJob.drawSlot = drawSlot;
+      highlightJob.onSlotDrawn = function (slot, pageNum) {
+        if (rulebookFind.mode !== "document" || rulebookFind.scanning) return;
+        if (!rulebookFind.query || rulebookFind.query.length < 2) return;
+        paintDocumentPage(pageNum, false);
+      };
+      armRulebookFind(pdf, "document", "", null);
       highlightJob.refit = function () {
         if (token !== rulebookViewerToken) return;
         slots.forEach(function (slot) {
           slot.removeAttribute("data-drawn");
           slot.removeAttribute("data-drawing");
+          slot._drawPromise = null;
         });
         var view = stage.getBoundingClientRect();
         slots.forEach(function (slot) {
@@ -112010,6 +112494,31 @@
     if (nextBtn && !nextBtn.dataset.bound) {
       nextBtn.dataset.bound = "1";
       nextBtn.addEventListener("click", function () { showTourStop(highlightJob.tourIndex + 1); });
+    }
+    var findInput = document.getElementById("rulebook-viewer-find-input");
+    var findPrev = document.getElementById("rulebook-viewer-find-prev");
+    var findNext = document.getElementById("rulebook-viewer-find-next");
+    if (findInput && !findInput.dataset.bound) {
+      findInput.dataset.bound = "1";
+      findInput.addEventListener("input", function () {
+        var value = findInput.value;
+        clearTimeout(rulebookFind.timer);
+        rulebookFind.timer = setTimeout(function () { startRulebookFind(value, null); }, 160);
+      });
+      findInput.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        if (rulebookFind.scanning) return;
+        stepRulebookFind(e.shiftKey ? -1 : 1);
+      });
+    }
+    if (findPrev && !findPrev.dataset.bound) {
+      findPrev.dataset.bound = "1";
+      findPrev.addEventListener("click", function () { stepRulebookFind(-1); });
+    }
+    if (findNext && !findNext.dataset.bound) {
+      findNext.dataset.bound = "1";
+      findNext.addEventListener("click", function () { stepRulebookFind(1); });
     }
     if (dialog && !dialog.dataset.bound) {
       dialog.dataset.bound = "1";
