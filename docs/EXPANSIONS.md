@@ -4,7 +4,7 @@ The detail view can add an expansion on top of the base game. Nothing is selecte
 
 ## What the player sees
 
-If a game's `expansions` list has at least one named entry with text, a link, or a player aid, the page shows toggle chips in the sticky bar. The chips match the player-count buttons. A player can turn on more than one.
+If a game's `expansions` list has at least one named entry with text, a link, or a player aid, the page shows toggle chips in the chip row. The chips match the player-count buttons. A player can turn on more than one. The row scrolls away with the page.
 
 Eight or more chips sit in one disclosure labeled Expansions. The summary shows how many are inside, or the selected names once any are on. Root is the exception to that single disclosure: the shared Hirelings chip and the four hireling packs (Homeland, Marauder, Riverfolk, and Underworld) are nested in a Hirelings disclosure. The box expansions, decks, Landmarks Pack, and Vagabond Pack stay beside it. Those hireling packs are different products and are not removed.
 
