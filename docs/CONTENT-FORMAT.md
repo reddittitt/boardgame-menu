@@ -36,7 +36,7 @@ The game page, top to bottom:
 
 1. Title, with the cover beside it on a wide screen and above it on a narrow one. The cover keeps its aspect ratio.
 2. Player count and play time.
-3. Essential links: Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty. BoardGameGeek is the cover, not a separate button.
+3. Essential links: Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty. Extra official files from `extraEssentials` sit in that same row, and only when the game has them. BoardGameGeek is the cover, not a separate button.
 4. Sticky bar: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the sticky bar. There are no Setup, Turn, End of Game, or Scoring jump buttons.
 5. **How you win**.
 6. **Teach it**, collapsed, and only when `teachingScript` has text.
@@ -85,6 +85,26 @@ The [BG Stats linking page](https://www.bgstatsapp.com/support/push-plays-to-bg-
 ```
 
 If `howToPlayVideo` is absent, a non-empty `youtube` string still renders as How to play. Once `howToPlayVideo` is set, that object is what the page uses, and an empty `url` hides the link.
+
+`extraEssentials` is optional. Use it for another official file besides the main rulebook: an archive, almanac, appendix, learn-to-play, rules reference, or law. Leave the field off when the game has a single rulebook. Nothing extra is rendered in that case.
+
+Each entry is an object:
+
+| Field | Required | What it is |
+| --- | --- | --- |
+| `label` | yes, or the link is hidden | Link text. `title` is also accepted. |
+| `url` | yes, or the link is hidden | Official file or page. |
+| `kind` | no | `"rulebook"` gives the link the same treatment as the Rulebook link. |
+
+```json
+"extraEssentials": [
+  {
+    "label": "Archive",
+    "url": "https://example.com/archive.pdf",
+    "kind": "rulebook"
+  }
+]
+```
 
 ## Rules status
 
