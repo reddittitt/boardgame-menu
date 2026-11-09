@@ -436,13 +436,17 @@
     grid-template-columns:auto minmax(0, 1fr);
     gap:10px;
     align-items:baseline;
+    width:100%;
     padding:8px 10px;
     border:1px solid var(--border);
     border-radius:10px;
     background:var(--bg);
     color:inherit;
+    font:inherit;
+    text-align:left;
     text-decoration:none;
     line-height:1.35;
+    cursor:pointer;
   }
   .rulebook-hit:hover { border-color:var(--accent); }
   .rulebook-hit-page {
@@ -494,28 +498,21 @@
     text-overflow:ellipsis;
     white-space:nowrap;
   }
-  .rulebook-viewer-pdf,
   .rulebook-viewer-close {
     flex:0 0 auto;
     min-height:44px;
-    padding:8px 14px;
+    padding:8px 16px;
     border-radius:999px;
-    border:1px solid rgba(255,255,255,0.35);
-    background:transparent;
+    border:0;
+    background:var(--brand);
     color:#fff;
     font:inherit;
     font-weight:700;
-    text-decoration:none;
     display:inline-flex;
     align-items:center;
     justify-content:center;
     cursor:pointer;
     box-sizing:border-box;
-  }
-  .rulebook-viewer-pdf {
-    background:var(--brand);
-    border-color:transparent;
-    color:#fff;
   }
   .rulebook-viewer-note {
     margin:0;
@@ -945,7 +942,6 @@
   .aid-link:focus-visible,
   .aid-lightbox-close:focus-visible,
   .rulebook-viewer-close:focus-visible,
-  .rulebook-viewer-pdf:focus-visible,
   .btn:focus-visible,
   .btnlink:focus-visible,
   header .toggle:focus-visible,
@@ -107004,10 +107000,6 @@
     return rulebookManifestPromise;
   }
 
-  function rulebookPageHref(href, page) {
-    return String(href || "").split("#")[0] + "#page=" + page;
-  }
-
   function clipAround(text, query, maxLen) {
     var clean = String(text || "").replace(/\s+/g, " ").trim();
     var q = String(query || "").trim().replace(/\s+/g, " ");
@@ -107312,17 +107304,12 @@
     var title = document.createElement("p");
     title.className = "rulebook-viewer-title";
     title.id = "rulebook-viewer-title";
-    var pdfLink = document.createElement("a");
-    pdfLink.className = "rulebook-viewer-pdf";
-    pdfLink.target = "_blank";
-    pdfLink.rel = "noopener noreferrer";
-    pdfLink.textContent = "Open PDF";
     var closeBtn = document.createElement("button");
     closeBtn.type = "button";
     closeBtn.className = "rulebook-viewer-close";
-    closeBtn.textContent = "Close";
+    closeBtn.textContent = "Back";
+    closeBtn.setAttribute("aria-label", "Back to the game");
     bar.appendChild(title);
-    bar.appendChild(pdfLink);
     bar.appendChild(closeBtn);
     var note = document.createElement("p");
     note.className = "rulebook-viewer-note";
@@ -107344,7 +107331,6 @@
     var state = {
       dialog: dialog,
       title: title,
-      pdfLink: pdfLink,
       closeBtn: closeBtn,
       note: note,
       stage: stage,
@@ -107515,7 +107501,7 @@
       state.sheet.hidden = true;
       state.loading.hidden = true;
       state.note.className = "rulebook-viewer-note";
-      state.note.textContent = "This rulebook could not be drawn here, so the match could not be highlighted. Open the PDF to see the page.";
+      state.note.textContent = "This rulebook could not be drawn here, so the match could not be highlighted.";
     }).then(function () {
       if (state.progressFn === onProgress) {
         unwatchRulebookProgress(opts.url, onProgress);
@@ -107532,7 +107518,6 @@
     state.opener = opts.opener || null;
     state.drawnKey = "";
     state.title.textContent = "Page " + opts.page;
-    state.pdfLink.href = opts.pdfHref || opts.url;
     state.note.className = "rulebook-viewer-note";
     state.note.textContent = "Opening page " + opts.page + "\u2026";
     state.loading.hidden = false;
@@ -107581,18 +107566,13 @@
       list.innerHTML = "";
       (hits || []).forEach(function (hit) {
         var li = document.createElement("li");
-        var link = document.createElement("a");
+        var link = document.createElement("button");
+        link.type = "button";
         link.className = "rulebook-hit";
-        link.href = rulebookPageHref(rulebookHref, hit.page);
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.title = "Open page " + hit.page + " with the match highlighted";
-        link.addEventListener("click", function (event) {
-          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          event.preventDefault();
+        link.title = "Show page " + hit.page + " with the match highlighted";
+        link.addEventListener("click", function () {
           openRulebookHighlight({
-            url: link.href.split("#")[0],
-            pdfHref: link.href,
+            url: String(rulebookHref || "").split("#")[0],
             page: hit.page,
             query: input.value,
             snippet: hit.text,
