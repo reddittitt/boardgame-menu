@@ -77,6 +77,8 @@ The Vagabond is one faction. Starting items for each Vagabond character are the 
 
 Spirits from the Setup box on each spirit panel, plus the core rulebook's step that follows it: flip the panel and place the remaining Presence on the dashed circles of the Presence tracks. The play-style line is the first sentence of the Play Style box on that panel.
 
+Each of those spirits also has a `teachingScript` built only from that play-style line and that setup box. Growth and innate powers stay on the panel. Branch & Claw and Horizons have a short expansion script from the text already on the page. Jagged Earth, Nature Incarnate, and the two promo packs do not: those booklets are not paraphrased here.
+
 Base game: Lightning's Swift Strike, River Surges in Sunlight, Vital Strength of the Earth, Shadows Flicker Like Flame, A Spread of Rampant Green, Thunderspeaker, Ocean's Hungry Grasp, Bringer of Dreams and Nightmares.
 
 Grouped under that expansion, and selectable before the chip is on:
@@ -92,11 +94,14 @@ Grouped under that expansion, and selectable before the chip is on:
 
 Branch & Claw's own setup changes are the setup changes in that expansion's rulebook. Horizons is compatible with the core game; that sentence is the Horizons rulebook. The other new chips are there so their spirits can be turned on. Their spirit setup is the panel, not a second copy of the expansion booklet.
 
+## Teaching scripts
+
+Root, Unmatched, and Mythic Mischief have a shared teach plus a script on every side already on the page. Unmatched also has a script on each set chip. Mythic Mischief has one on Vol. II. Spirit Island's shared teach, Branch & Claw, Horizons, and each spirit script use only the text already stored for that panel or that expansion. Jagged Earth, Nature Incarnate, and the two promo packs have no expansion script.
+
 ## Not filled in this pass
 
 These games have asymmetric sides and can use the same `characters` array later. They are not implemented here.
 
-- Unmatched. Each hero is a different fighter. Sets already on the menu include Battle of Legends Volume One, Houdini vs. The Genie, Brains and Brawn, and Stars and Stripes.
 - Vast. Each role is a different game inside the same box. The Crystal Caverns and The Mysterious Manor are the two lines.
 - Oath. The Chancellor and the exiles do not play the same game.
 - Arcs. The campaign gives players different fates. The base game on the menu does not have a character row yet.
