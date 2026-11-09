@@ -339,6 +339,7 @@
     display:flex;
     flex-direction:column;
     gap:12px;
+    overflow-anchor:none;
   }
   .detail-head {
     display:grid;
@@ -823,6 +824,7 @@
   }
   .pc-btn:focus-visible,
   .exp-chip:focus-visible,
+  .table-bar-summary:focus-visible,
   .back-link:focus-visible,
   .character-aid-ref:focus-visible,
   .aid-open:focus-visible,
@@ -867,12 +869,109 @@
     margin:0;
   }
   .table-bar .expansion-controls,
-  .table-bar .playercount-controls {
+  .table-bar .playercount-controls,
+  .table-bar .chip-groups {
     margin:0;
+  }
+  .chip-groups {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:0;
+    max-width:100%;
+  }
+  .table-bar .chip-groups { flex:1 1 100%; }
+  .chip-group {
+    min-width:0;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:color-mix(in srgb, var(--card) 90%, var(--bg) 10%);
+  }
+  .chip-group > .chip-group-summary {
+    list-style:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-height:44px;
+    padding:8px 12px;
+    box-sizing:border-box;
+    font-weight:700;
+  }
+  .chip-group > .chip-group-summary::-webkit-details-marker { display:none; }
+  .chip-group > .chip-group-summary::before {
+    content:">";
+    flex:0 0 auto;
+    font-size:0.8rem;
+  }
+  .chip-group[open] > .chip-group-summary::before { content:"v"; }
+  .chip-group-title { flex:0 0 auto; }
+  .chip-group-selected {
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-weight:600;
+    font-size:0.85rem;
+    color:var(--muted);
+  }
+  .chip-group[data-selected="true"] {
+    border-color:color-mix(in srgb, var(--brand) 55%, var(--border) 45%);
+  }
+  .chip-group[data-selected="true"] > .chip-group-summary .chip-group-selected {
+    color:var(--fg);
+  }
+  .chip-group-chips {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:0 10px 10px;
+    min-width:0;
   }
   .table-bar .exp-note {
     margin:0;
     line-height:1.35;
+  }
+  /* Collapsed while reading the aid: the long faction row (and a tall
+     expansion row, when it still covers the aid) is replaced by one line. */
+  .table-bar.is-collapsed #char-controls,
+  .table-bar.is-collapsed-expansions #exp-controls,
+  .table-bar.is-collapsed-players .table-bar-top {
+    display:none;
+  }
+  .table-bar-summary {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    max-width:100%;
+    min-height:44px;
+    margin:0;
+    padding:8px 12px;
+    box-sizing:border-box;
+    border:1px solid var(--btn-border);
+    border-radius:12px;
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:700;
+    text-align:left;
+    cursor:pointer;
+  }
+  .table-bar-summary[hidden] { display:none; }
+  .table-bar-summary-text {
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .table-bar-summary-action {
+    flex:0 0 auto;
+    color:var(--accent);
+    font-size:0.85rem;
+    font-weight:700;
   }
   .pc-btn,
   .exp-chip {
@@ -1512,6 +1611,7 @@
     .table-bar-top { flex:1 1 auto; }
     .table-bar .expansion-controls { flex:1 1 auto; }
     .table-bar .exp-note { display:none; }
+    .table-bar-summary { flex:1 1 180px; width:auto; }
     .detail-head {
       grid-template-columns:150px minmax(0, 1fr);
       justify-items:start;
@@ -107460,16 +107560,58 @@
     });
   }
   function characterExpansionName(ch) {
-    return String((ch && ch.expansion) || "").trim();
+    return String((ch && (ch.expansion || ch.ruleset)) || "").trim();
   }
-  function visibleCharacters(game, selected) {
-    var on = {};
-    (selected || []).forEach(function (exp) {
-      if (exp && exp.name) on[String(exp.name).trim()] = true;
-    });
-    return characterList(game).filter(function (ch) {
-      var need = characterExpansionName(ch);
-      return !need || !!on[need];
+  /* Every side stays in the selector. Choosing one turns its expansion on. */
+  function visibleCharacters(game) {
+    return characterList(game);
+  }
+  function chipGroupLabel(name) {
+    var raw = String(name || "").trim();
+    if (!raw) return "Base game";
+    if (/^horizons of spirit island$/i.test(raw)) return "Horizons";
+    return raw.replace(/^Spirit Island:\s*/i, "").replace(/\s+Expansion$/i, "");
+  }
+  function isHirelingProduct(name) {
+    return /hireling/i.test(String(name || ""));
+  }
+  function chipSelectionText(names, total) {
+    if (!names.length) return total ? String(total) : "";
+    if (names.length <= 2) return names.join(", ");
+    return names.length + " on";
+  }
+  function chipGroupHtml(title, buttonsHtml, opts) {
+    opts = opts || {};
+    var selectedText = opts.selectedText || "";
+    return '<details class="chip-group"' + (opts.open ? " open" : "") +
+      ' data-group="' + escapeHtml(title) + '"' +
+      (opts.selected ? ' data-selected="true"' : "") + ">" +
+      '<summary class="chip-group-summary">' +
+        '<span class="chip-group-title">' + escapeHtml(title) + "</span>" +
+        '<span class="chip-group-selected">' + escapeHtml(selectedText) + "</span>" +
+      "</summary>" +
+      '<div class="chip-group-chips">' + buttonsHtml + "</div>" +
+    "</details>";
+  }
+  function refreshChipGroups(root) {
+    if (!root || !root.querySelectorAll) return;
+    Array.prototype.forEach.call(root.querySelectorAll("details.chip-group"), function (group) {
+      var box = group.querySelector(".chip-group-chips");
+      var names = [];
+      var total = 0;
+      if (box) {
+        Array.prototype.forEach.call(box.children, function (el) {
+          if (!el.classList || !el.classList.contains("exp-chip")) return;
+          total += 1;
+          if (el.getAttribute("data-active") === "true") {
+            names.push((el.textContent || "").replace(/\s+/g, " ").trim());
+          }
+        });
+      }
+      var el = group.querySelector(".chip-group-selected");
+      if (el) el.textContent = chipSelectionText(names, total);
+      if (names.length) group.setAttribute("data-selected", "true");
+      else group.removeAttribute("data-selected");
     });
   }
   function renderCharacterBlocks(chars) {
@@ -108013,16 +108155,56 @@
     var expansionControlsHtml = "";
     var expansionNoteHtml = "";
     if (namedExpansions.length) {
-      expansionControlsHtml =
-        '<div class="expansion-controls" id="exp-controls" role="group" aria-label="Expansions in play">' +
-          namedExpansions.map(function(exp, idx) {
-            var on = !!presetOn[String(exp.name || "").trim()];
-            return '<button type="button" class="exp-chip" data-exp="' + idx + '" aria-pressed="' +
-              (on ? "true" : "false") + '" title="' + escapeHtml(exp.name) + '"' +
-              (on ? ' data-active="true"' : "") + ">" +
-              escapeHtml(exp.name) + "</button>";
-          }).join("") +
-        "</div>";
+      var expChipHtml = function (exp, idx) {
+        var on = !!presetOn[String(exp.name || "").trim()];
+        return '<button type="button" class="exp-chip" data-exp="' + idx + '" aria-pressed="' +
+          (on ? "true" : "false") + '" title="' + escapeHtml(exp.name) + '"' +
+          (on ? ' data-active="true"' : "") + ">" +
+          escapeHtml(exp.name) + "</button>";
+      }
+      var hireItems = [];
+      var restItems = [];
+      namedExpansions.forEach(function (exp, idx) {
+        (isHirelingProduct(exp.name) ? hireItems : restItems).push({ exp: exp, idx: idx });
+      });
+      if (hireItems.length >= 2) {
+        var looseHtml = restItems.length
+          ? '<div class="expansion-controls">' + restItems.map(function (item) {
+              return expChipHtml(item.exp, item.idx);
+            }).join("") + "</div>"
+          : "";
+        var hireOn = hireItems.filter(function (item) {
+          return !!presetOn[String(item.exp.name || "").trim()];
+        }).map(function (item) { return item.exp.name; });
+        expansionControlsHtml =
+          '<div class="chip-groups" id="exp-controls" role="group" aria-label="Expansions in play">' +
+            looseHtml +
+            chipGroupHtml("Hirelings", hireItems.map(function (item) {
+              return expChipHtml(item.exp, item.idx);
+            }).join(""), {
+              open: false,
+              selected: hireOn.length > 0,
+              selectedText: chipSelectionText(hireOn, hireItems.length)
+            }) +
+          "</div>";
+      } else if (namedExpansions.length >= 8) {
+        var expOn = namedExpansions.filter(function (exp) {
+          return !!presetOn[String(exp.name || "").trim()];
+        }).map(function (exp) { return exp.name; });
+        expansionControlsHtml =
+          '<div class="chip-groups" id="exp-controls" role="group" aria-label="Expansions in play">' +
+            chipGroupHtml("Expansions", namedExpansions.map(expChipHtml).join(""), {
+              open: false,
+              selected: expOn.length > 0,
+              selectedText: chipSelectionText(expOn, namedExpansions.length)
+            }) +
+          "</div>";
+      } else {
+        expansionControlsHtml =
+          '<div class="expansion-controls" id="exp-controls" role="group" aria-label="Expansions in play">' +
+            namedExpansions.map(expChipHtml).join("") +
+          "</div>";
+      }
       expansionNoteHtml =
         '<p class="exp-note">Turn an expansion on to add its setup, rules, and scoring. Teaching notes, player aids, and any extra rules for that expansion show only while its chip is on.</p>';
     }
@@ -108030,7 +108212,7 @@
       var anyAid = characterList(g).some(characterHasAid);
       var anyPlain = characterList(g).some(function (ch) { return !characterHasAid(ch); });
       var expansionCharNote = characterList(g).some(function (ch) { return characterExpansionName(ch); })
-        ? " A character from an expansion shows up only while that expansion is on."
+        ? " Choosing one from an expansion turns that expansion on. Turning the expansion off clears those characters."
         : "";
       if (anyPlain) {
         expansionNoteHtml +=
@@ -108109,10 +108291,14 @@
     }
     var tableBarHtml = "";
     if (playerButtonsHtml || expansionControlsHtml || characterControlsHtml) {
+      var tableBarSummaryHtml = (expansionControlsHtml || characterControlsHtml)
+        ? '<button type="button" class="table-bar-summary" id="table-bar-summary" hidden></button>'
+        : "";
       tableBarHtml =
         '<div class="table-bar" id="table-bar">' +
           (playerButtonsHtml ? '<div class="table-bar-top">' + playerButtonsHtml + "</div>" : "") +
           expansionControlsHtml +
+          tableBarSummaryHtml +
           characterControlsHtml +
         "</div>";
     }
@@ -108253,10 +108439,17 @@
         return expansionParts(exp, "setup").length > 0;
       });
     }
+    function charChipHtml(ch) {
+      var on = !!activeCharacterNames[ch.name];
+      return '<button type="button" class="exp-chip char-chip" data-char="' + escapeHtml(ch.name) +
+        '" aria-pressed="' + (on ? "true" : "false") + '"' +
+        (on ? ' data-active="true"' : "") +
+        ' title="' + escapeHtml(ch.name) + '">' + escapeHtml(ch.name) + "</button>";
+    }
     function paintCharacterRow() {
       var slot = document.getElementById("char-controls");
       if (!slot) return;
-      var visible = visibleCharacters(g, selectedExpansions());
+      var visible = visibleCharacters(g);
       var allowed = {};
       visible.forEach(function (ch) { allowed[ch.name] = true; });
       Object.keys(activeCharacterNames).forEach(function (name) {
@@ -108268,13 +108461,58 @@
         return;
       }
       slot.hidden = false;
-      slot.innerHTML = visible.map(function (ch) {
-        var on = !!activeCharacterNames[ch.name];
-        return '<button type="button" class="exp-chip char-chip" data-char="' + escapeHtml(ch.name) +
-          '" aria-pressed="' + (on ? "true" : "false") + '"' +
-          (on ? ' data-active="true"' : "") +
-          ' title="' + escapeHtml(ch.name) + '">' + escapeHtml(ch.name) + "</button>";
-      }).join("");
+      var wasOpen = {};
+      var seenGroup = false;
+      Array.prototype.forEach.call(slot.querySelectorAll("details.chip-group"), function (group) {
+        seenGroup = true;
+        wasOpen[group.getAttribute("data-group")] = group.open;
+      });
+      function groupIsOpen(title, defaultOpen) {
+        if (seenGroup && Object.prototype.hasOwnProperty.call(wasOpen, title)) return !!wasOpen[title];
+        return !!defaultOpen;
+      }
+      var buckets = {};
+      var bucketOrder = [];
+      visible.forEach(function (ch) {
+        var key = characterExpansionName(ch);
+        if (!buckets[key]) {
+          buckets[key] = [];
+          bucketOrder.push(key);
+        }
+        buckets[key].push(ch);
+      });
+      var linkedKeys = bucketOrder.filter(Boolean);
+      var useGroups = linkedKeys.length >= 1 && bucketOrder.length >= 2;
+      var useSingle = !useGroups && visible.length >= 10;
+      function groupBlock(title, list, defaultOpen) {
+        var onNames = list.filter(function (ch) { return !!activeCharacterNames[ch.name]; }).map(function (ch) {
+          return ch.name;
+        });
+        return chipGroupHtml(title, list.map(charChipHtml).join(""), {
+          open: groupIsOpen(title, defaultOpen),
+          selected: onNames.length > 0,
+          selectedText: chipSelectionText(onNames, list.length)
+        });
+      }
+      if (useGroups) {
+        var keys = [];
+        if (buckets[""]) keys.push("");
+        bucketOrder.forEach(function (key) {
+          if (key) keys.push(key);
+        });
+        slot.className = "chip-groups";
+        slot.innerHTML = keys.map(function (key) {
+          return groupBlock(key ? chipGroupLabel(key) : "Base game", buckets[key], !key);
+        }).join("");
+      } else if (useSingle) {
+        var label = slot.getAttribute("aria-label") || "Characters";
+        slot.className = "chip-groups";
+        slot.innerHTML = groupBlock(label, visible, false);
+      } else {
+        slot.className = "expansion-controls";
+        slot.innerHTML = visible.map(charChipHtml).join("");
+      }
+      refreshChipGroups(document.getElementById("exp-controls"));
     }
     function paintSummary(selected) {
       var box = document.getElementById("scoring-summary");
@@ -108311,9 +108549,7 @@
       paintTeach(selected);
       paintAids(selected);
       wrapWideTables(appEl);
-    }
-    function characterRuleset(ch) {
-      return String((ch && ch.ruleset) || "").trim();
+      if (barState) syncTableBarCollapse(!!barState.collapsed);
     }
     expButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -108322,8 +108558,9 @@
           btn.removeAttribute("data-active");
           btn.setAttribute("aria-pressed", "false");
           if (exp) {
+            var turnedOff = String(exp.name || "").trim();
             characterList(g).forEach(function (ch) {
-              if (characterRuleset(ch) === String(exp.name || "").trim()) delete activeCharacterNames[ch.name];
+              if (characterExpansionName(ch) === turnedOff) delete activeCharacterNames[ch.name];
             });
           }
         } else {
@@ -108343,11 +108580,11 @@
         if (activeCharacterNames[name]) delete activeCharacterNames[name];
         else activeCharacterNames[name] = true;
         var chosenNow = characterList(g).filter(function (ch) { return ch.name === name; })[0];
-        var ruleset = characterRuleset(chosenNow);
-        if (ruleset && activeCharacterNames[name]) {
+        var linked = characterExpansionName(chosenNow);
+        if (linked && activeCharacterNames[name]) {
           expButtons.forEach(function (chip) {
             var exp = namedExpansions[parseInt(chip.getAttribute("data-exp"), 10)];
-            if (exp && String(exp.name || "").trim() === ruleset) {
+            if (exp && String(exp.name || "").trim() === linked) {
               chip.setAttribute("data-active", "true");
               chip.setAttribute("aria-pressed", "true");
             }
@@ -108358,13 +108595,242 @@
           var chosen = selectedCharacters().filter(function (ch) { return ch.name === name; })[0];
           if (chosen && characterHasAid(chosen)) {
             var aidBox = document.getElementById("character-aids");
-            if (aidBox && aidBox.scrollIntoView) aidBox.scrollIntoView({ block: "start" });
+            if (aidBox) revealCharacterAid(aidBox);
           } else {
             var qsBlock = document.getElementById("quick-setup-block");
             if (qsBlock) qsBlock.open = true;
           }
         }
       });
+    }
+    /* The faction row is inside the sticky bar. Once that bar is stuck and the
+       reader moves toward the aid, fold the long rows into one tappable line. */
+    var barState = {
+      lastY: window.scrollY || 0,
+      collapsed: false,
+      holdOpen: false,
+      plan: null,
+      ignoreScroll: false,
+      width: window.innerWidth
+    };
+    function readingRoom() {
+      var shortSide = Math.min(window.innerWidth, window.innerHeight);
+      if (shortSide <= 500) return Math.round(window.innerHeight * 0.42);
+      return Math.min(280, Math.round(window.innerHeight * 0.34));
+    }
+    function contentRoomBelowBar() {
+      var bar = document.getElementById("table-bar");
+      var header = document.querySelector("header");
+      if (!bar) return window.innerHeight;
+      var headerH = header ? header.offsetHeight : 0;
+      return window.innerHeight - headerH - bar.offsetHeight;
+    }
+    function measureCollapsePlan() {
+      var chars = document.getElementById("char-controls");
+      var exps = document.getElementById("exp-controls");
+      var hasChars = !!(chars && !chars.hidden && chars.children.length);
+      var charH = hasChars ? chars.offsetHeight : 0;
+      var expH = exps && !exps.hidden ? exps.offsetHeight : 0;
+      var pc = document.querySelector("#table-bar .playercount-controls");
+      var pcH = pc ? pc.offsetHeight : 0;
+      var room = contentRoomBelowBar();
+      var need = readingRoom();
+      var collapseChars = hasChars && charH >= 80;
+      var roomWithoutChars = room + (collapseChars ? charH : 0);
+      var narrow = Math.min(window.innerWidth, window.innerHeight) <= 500;
+      var collapseExps = !!(hasChars && expH >= 80 && (roomWithoutChars < need || (narrow && expH >= 150)));
+      var roomAfter = roomWithoutChars + (collapseExps ? expH : 0) - ((collapseChars || collapseExps) ? 48 : 0);
+      var collapsePc = !!((collapseChars || collapseExps) && pcH >= 100 && roomAfter < Math.min(220, Math.round(window.innerHeight * 0.34)));
+      if (!collapseChars && !collapseExps && !collapsePc) return null;
+      return { collapseChars: collapseChars, collapseExps: collapseExps, collapsePc: collapsePc };
+    }
+    function chipNames(selector) {
+      return Array.prototype.map.call(document.querySelectorAll(selector), function (btn) {
+        return (btn.textContent || "").replace(/\s+/g, " ").trim();
+      }).filter(Boolean);
+    }
+    function summaryLabel(names, emptyLabel, compactCount) {
+      if (!names.length) return emptyLabel;
+      if (names.length <= 2) return names.join(", ");
+      if (compactCount) return names.length + " " + compactCount;
+      return names[0] + ", " + names[1] + " +" + (names.length - 2);
+    }
+    function fillTableBarSummary(plan) {
+      var summary = document.getElementById("table-bar-summary");
+      if (!summary) return;
+      var parts = [];
+      if (plan.collapsePc) {
+        var pc = document.querySelector("#table-bar .pc-btn[data-active='true']");
+        if (pc) parts.push((pc.textContent || "").replace(/\s+/g, " ").trim());
+      }
+      if (plan.collapseExps) {
+        var expOn = chipNames("#exp-controls .exp-chip[data-active='true']");
+        if (expOn.length) parts.push(summaryLabel(expOn, "Expansions", "expansions"));
+        else if (!plan.collapseChars) parts.push("Expansions");
+      }
+      if (plan.collapseChars) {
+        var charSlot = document.getElementById("char-controls");
+        var label = (charSlot && charSlot.getAttribute("aria-label")) || "Characters";
+        var charOn = chipNames("#char-controls .char-chip[data-active='true']");
+        if (charOn.length) parts.push(summaryLabel(charOn, label, ""));
+        else if (!parts.length) parts.push(plan.collapseExps ? label + " and expansions" : label);
+        else parts.push(label);
+      }
+      var text = parts.join(" · ") || "Show list";
+      var chosen = false;
+      if (plan.collapseChars && document.querySelector("#char-controls .char-chip[data-active='true']")) chosen = true;
+      if (plan.collapseExps && document.querySelector("#exp-controls .exp-chip[data-active='true']")) chosen = true;
+      var action = chosen ? "Change" : "Show";
+      summary.innerHTML =
+        '<span class="table-bar-summary-text">' + escapeHtml(text) + "</span>" +
+        '<span class="table-bar-summary-action">' + action + "</span>";
+      var controls = [];
+      if (plan.collapseExps) controls.push("exp-controls");
+      if (plan.collapseChars) controls.push("char-controls");
+      if (controls.length) summary.setAttribute("aria-controls", controls.join(" "));
+      summary.setAttribute("aria-expanded", "false");
+      summary.setAttribute("aria-label", action + " " + text);
+    }
+    function applyCollapseClasses(plan) {
+      var bar = document.getElementById("table-bar");
+      if (!bar) return;
+      bar.classList.toggle("is-collapsed", !!(plan && plan.collapseChars));
+      bar.classList.toggle("is-collapsed-expansions", !!(plan && plan.collapseExps));
+      bar.classList.toggle("is-collapsed-players", !!(plan && plan.collapsePc));
+    }
+    function layoutTop(el) {
+      var y = 0;
+      var node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      return y;
+    }
+    function stickScrollFloor() {
+      var bar = document.getElementById("table-bar");
+      var header = document.querySelector("header");
+      if (!bar || !header || !barState.collapsed) return;
+      var minY = Math.max(0, layoutTop(bar) - header.offsetHeight);
+      var y = window.scrollY || 0;
+      if (y > 12 && y < minY) window.scrollTo(0, minY);
+    }
+    function syncTableBarCollapse(forceMeasure) {
+      var bar = document.getElementById("table-bar");
+      var summary = document.getElementById("table-bar-summary");
+      if (!bar || !summary) {
+        syncHeaderOffset();
+        return;
+      }
+      var prevIgnore = barState.ignoreScroll;
+      barState.ignoreScroll = true;
+      if (!barState.collapsed) {
+        applyCollapseClasses(null);
+        summary.hidden = true;
+        summary.innerHTML = "";
+        barState.plan = null;
+      } else {
+        if (forceMeasure || !barState.plan) {
+          applyCollapseClasses(null);
+          summary.hidden = true;
+          barState.plan = measureCollapsePlan();
+        }
+        if (!barState.plan) {
+          barState.collapsed = false;
+          summary.hidden = true;
+        } else {
+          applyCollapseClasses(barState.plan);
+          summary.hidden = false;
+          fillTableBarSummary(barState.plan);
+          stickScrollFloor();
+        }
+      }
+      barState.lastY = window.scrollY || 0;
+      barState.ignoreScroll = prevIgnore;
+      syncHeaderOffset();
+    }
+    function barIsNearTop() {
+      if ((window.scrollY || 0) <= 12) return true;
+      var bar = document.getElementById("table-bar");
+      var header = document.querySelector("header");
+      if (!bar || !header) return true;
+      return bar.getBoundingClientRect().top > header.offsetHeight + 2;
+    }
+    function onTableBarScroll() {
+      var y = window.scrollY || 0;
+      var delta = y - barState.lastY;
+      barState.lastY = y;
+      if (barState.ignoreScroll) return;
+      if (!document.getElementById("char-controls")) return;
+      if (barIsNearTop()) {
+        if (barState.collapsed || barState.holdOpen) {
+          barState.holdOpen = false;
+          barState.collapsed = false;
+          syncTableBarCollapse(true);
+        }
+        return;
+      }
+      if (barState.holdOpen) {
+        if (delta > 18) {
+          barState.holdOpen = false;
+          barState.collapsed = true;
+          syncTableBarCollapse(true);
+        }
+        return;
+      }
+      if (delta > 8 && !barState.collapsed) {
+        barState.collapsed = true;
+        syncTableBarCollapse(true);
+      }
+    }
+    function revealCharacterAid(el) {
+      barState.holdOpen = false;
+      barState.collapsed = true;
+      syncTableBarCollapse(true);
+      barState.ignoreScroll = true;
+      requestAnimationFrame(function () {
+        syncHeaderOffset();
+        if (el && el.scrollIntoView) el.scrollIntoView({ block: "start" });
+        barState.lastY = window.scrollY || 0;
+        requestAnimationFrame(function () {
+          barState.ignoreScroll = false;
+          barState.lastY = window.scrollY || 0;
+          if (barIsNearTop()) {
+            barState.collapsed = false;
+            syncTableBarCollapse(true);
+          }
+        });
+      });
+    }
+    function onTableBarResize() {
+      var width = window.innerWidth;
+      if (width === barState.width) {
+        syncHeaderOffset();
+        return;
+      }
+      barState.width = width;
+      syncTableBarCollapse(true);
+    }
+    var summaryBtn = document.getElementById("table-bar-summary");
+    if (summaryBtn) {
+      summaryBtn.addEventListener("click", function () {
+        barState.holdOpen = true;
+        barState.collapsed = false;
+        barState.plan = null;
+        syncTableBarCollapse(true);
+      });
+    }
+    tableBarApi = {
+      onScroll: onTableBarScroll,
+      onResize: onTableBarResize
+    };
+    var barEl = document.getElementById("table-bar");
+    if (barEl) {
+      barEl.addEventListener("toggle", function (e) {
+        var target = e.target;
+        if (!target || !target.classList || !target.classList.contains("chip-group")) return;
+        if (!barState.collapsed) syncHeaderOffset();
+      }, true);
     }
     if (characterList(g).length) paintSections();
 
@@ -108535,6 +109001,8 @@
     return { route:"list" };
   }
 
+  var tableBarApi = null;
+
   function syncHeaderOffset() {
     var header = document.querySelector("header");
     if (header) {
@@ -108545,6 +109013,7 @@
   }
 
   function render() {
+    tableBarApi = null;
     syncHeaderOffset();
     if (normalizeIncoming()) return;
     var parsed = parseHash();
@@ -108567,7 +109036,13 @@
   }
 
   window.addEventListener("hashchange", render);
-  window.addEventListener("resize", syncHeaderOffset);
+  window.addEventListener("scroll", function () {
+    if (tableBarApi) tableBarApi.onScroll();
+  }, { passive: true });
+  window.addEventListener("resize", function () {
+    syncHeaderOffset();
+    if (tableBarApi) tableBarApi.onResize();
+  });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() { syncHeaderOffset(); });
   }
