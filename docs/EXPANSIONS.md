@@ -12,15 +12,15 @@ There is no Expansions list at the bottom of the page. Turning a chip on merges 
 
 | Chip field | Also accepted | Where it shows |
 | --- | --- | --- |
-| `setup` | `quickStart`, shown once when the two values are the same | Quick Set Up |
-| `rules` | `reminders`, shown once when the two values are the same | Reminders |
-| `scoring` | — | End Game Scoring |
+| `setup` | `quickStart`, shown once when the two values are the same | Set up |
+| `rules` | `reminders`, shown once when the two values are the same | On your turn, under Reminders |
+| `scoring` | — | End of the game, under Scoring |
 | `teachingScript` | — | Teach it. A count map follows the player-count button. |
 | `playerAids` | — | Player aids |
-| `rulebook`, `youtube`, `bggId`, `cover` | — | Turn Structure, under the expansion name |
-| Any other non-empty field | — | Turn Structure, as **Expansion rules: &lt;name&gt;** |
+| `rulebook`, `youtube`, `bggId`, `cover` | — | On your turn, under the expansion name |
+| Any other non-empty field | — | On your turn, as **Expansion rules: &lt;name&gt;** |
 
-`scoring` is not copied from `reminders`. An expansion with only a reminder changes Reminders and Quick Set Up, and leaves scoring alone. The field shapes are in `docs/CONTENT-FORMAT.md`.
+`scoring` is not copied from `reminders`. An expansion with only a reminder changes the Reminders block inside On your turn, and Set up, and leaves scoring alone. The field shapes are in `docs/CONTENT-FORMAT.md`.
 
 ## Record shape
 

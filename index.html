@@ -746,8 +746,8 @@
   }
   .pc-btn[data-active="true"],
   .exp-chip[data-active="true"] {
-    background:var(--brand);
-    border-color:var(--brand);
+    background:var(--accent);
+    border-color:var(--accent);
     color:#ffffff;
   }
   .exp-note {
@@ -1365,6 +1365,8 @@
     background:#111;
     color:#fff;
     box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
   }
   .rulebook-viewer::backdrop { background:rgba(0,0,0,0.78); }
   .rulebook-viewer-bar {
@@ -1383,19 +1385,33 @@
     text-overflow:ellipsis;
     white-space:nowrap;
   }
+  .rulebook-viewer-fit {
+    display:flex;
+    gap:4px;
+    flex:0 0 auto;
+  }
+  .rulebook-viewer-fit button,
   .rulebook-viewer-close {
-    min-width:44px;
     min-height:44px;
-    padding:8px 14px;
+    padding:8px 12px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,0.45);
-    background:#fff;
-    color:#111;
+    background:transparent;
+    color:#fff;
     font:inherit;
     font-weight:700;
     cursor:pointer;
   }
+  .rulebook-viewer-fit button[aria-pressed="true"],
+  .rulebook-viewer-close {
+    background:#fff;
+    color:#111;
+  }
+  .rulebook-viewer-close {
+    min-width:44px;
+  }
   .rulebook-viewer-close:focus-visible,
+  .rulebook-viewer-fit button:focus-visible,
   .rulebook-viewer-step:focus-visible {
     outline:3px solid #fff;
     outline-offset:2px;
@@ -1433,13 +1449,11 @@
     white-space:nowrap;
   }
   .rulebook-viewer-stage {
-    height:calc(100dvh - 60px - env(safe-area-inset-top, 0px));
+    flex:1 1 auto;
+    min-height:0;
     background:#111;
     overflow:auto;
     -webkit-overflow-scrolling:touch;
-  }
-  .rulebook-viewer--matches .rulebook-viewer-stage {
-    height:calc(100dvh - 124px - env(safe-area-inset-top, 0px));
   }
   .rulebook-viewer-stage iframe {
     width:100%;
@@ -1564,9 +1578,17 @@
     margin:0.12rem 0 0.15rem;
     font-size:1em;
   }
-  .rule-lead {
+  .rule-lead,
+  .chapter-label {
     font-weight:700;
   }
+  .chapter-label {
+    margin:0.85rem 0 0.3rem;
+    font-size:0.95rem;
+    font-family:inherit;
+  }
+  .chapter-slot[hidden] { display:none; }
+  .rule-chapter[hidden] { display:none; }
   .rule-empty {
     margin:0;
     color:var(--muted);
@@ -1994,7 +2016,90 @@
   :root[data-look="hig"] .pc-btn[data-active="true"]::before,
   :root[data-look="hig"] .exp-chip[data-active="true"]::before {
     content:"";
-    background:var(--brand);
+    background:var(--accent);
+  }
+  :root[data-look="hig"] .detail .essential-link {
+    background:color-mix(in srgb, var(--accent) 16%, var(--card));
+    border-color:color-mix(in srgb, var(--accent) 52%, var(--hig-sep));
+    color:var(--fg);
+  }
+  :root[data-look="hig"] .detail .essential-link-channel {
+    color:var(--accent-ink, var(--accent));
+  }
+  :root[data-look="hig"] .detail .scoring-summary {
+    background:color-mix(in srgb, var(--accent) 12%, var(--card));
+    border-color:color-mix(in srgb, var(--accent) 34%, var(--hig-sep));
+    border-left-width:4px;
+    border-left-color:var(--accent);
+  }
+  :root[data-look="hig"] .detail .scoring-summary h3 {
+    color:var(--accent-ink, var(--accent));
+  }
+  :root[data-look="hig"] .detail .callout-mistakes {
+    background:color-mix(in srgb, #d97706 14%, var(--card));
+    border-color:color-mix(in srgb, #d97706 38%, var(--hig-sep));
+    border-left-width:4px;
+    border-left-color:#d97706;
+  }
+  :root[data-look="hig"] .detail .callout-mistakes h3 {
+    color:#92400e;
+  }
+  :root[data-look="hig"] .rule-chapter {
+    border-left-width:4px;
+  }
+  :root[data-look="hig"] .rule-chapter--setup {
+    background:color-mix(in srgb, #0f766e 12%, var(--card));
+    border-color:color-mix(in srgb, #0f766e 40%, var(--hig-sep));
+    border-left-color:#0f766e;
+  }
+  :root[data-look="hig"] .rule-chapter--setup > summary {
+    color:#0f5c56;
+  }
+  :root[data-look="hig"] .rule-chapter--turn {
+    background:color-mix(in srgb, var(--accent) 13%, var(--card));
+    border-color:color-mix(in srgb, var(--accent) 40%, var(--hig-sep));
+    border-left-color:var(--accent);
+  }
+  :root[data-look="hig"] .rule-chapter--turn > summary {
+    color:var(--accent-ink, var(--accent));
+  }
+  :root[data-look="hig"] .rule-chapter--end {
+    background:color-mix(in srgb, #d97706 14%, var(--card));
+    border-color:color-mix(in srgb, #d97706 42%, var(--hig-sep));
+    border-left-color:#d97706;
+  }
+  :root[data-look="hig"] .rule-chapter--end > summary {
+    color:#92400e;
+  }
+  :root[data-look="hig"][data-theme="dark"] .detail .callout-mistakes,
+  :root[data-look="hig"][data-theme="darkwood"] .detail .callout-mistakes,
+  :root[data-look="hig"][data-theme="neongrid"] .detail .callout-mistakes,
+  :root[data-look="hig"][data-theme="dark"] .rule-chapter--end,
+  :root[data-look="hig"][data-theme="darkwood"] .rule-chapter--end,
+  :root[data-look="hig"][data-theme="neongrid"] .rule-chapter--end {
+    background:color-mix(in srgb, #fbbf24 16%, var(--card));
+    border-color:color-mix(in srgb, #fbbf24 45%, var(--border));
+    border-left-color:#fbbf24;
+  }
+  :root[data-look="hig"][data-theme="dark"] .detail .callout-mistakes h3,
+  :root[data-look="hig"][data-theme="darkwood"] .detail .callout-mistakes h3,
+  :root[data-look="hig"][data-theme="neongrid"] .detail .callout-mistakes h3,
+  :root[data-look="hig"][data-theme="dark"] .rule-chapter--end > summary,
+  :root[data-look="hig"][data-theme="darkwood"] .rule-chapter--end > summary,
+  :root[data-look="hig"][data-theme="neongrid"] .rule-chapter--end > summary {
+    color:#fcd34d;
+  }
+  :root[data-look="hig"][data-theme="dark"] .rule-chapter--setup,
+  :root[data-look="hig"][data-theme="darkwood"] .rule-chapter--setup,
+  :root[data-look="hig"][data-theme="neongrid"] .rule-chapter--setup {
+    background:color-mix(in srgb, #2dd4bf 16%, var(--card));
+    border-color:color-mix(in srgb, #2dd4bf 42%, var(--border));
+    border-left-color:#5eead4;
+  }
+  :root[data-look="hig"][data-theme="dark"] .rule-chapter--setup > summary,
+  :root[data-look="hig"][data-theme="darkwood"] .rule-chapter--setup > summary,
+  :root[data-look="hig"][data-theme="neongrid"] .rule-chapter--setup > summary {
+    color:#99f6e4;
   }
   :root[data-look="hig"] .playercount-controls,
   :root[data-look="hig"] .expansion-controls,
@@ -2114,6 +2219,10 @@
 <dialog class="rulebook-viewer" id="rulebook-viewer" aria-labelledby="rulebook-viewer-title">
   <div class="rulebook-viewer-bar">
     <p id="rulebook-viewer-title">Rulebook</p>
+    <div class="rulebook-viewer-fit" role="group" aria-label="Page fit">
+      <button type="button" id="rulebook-fit-width" aria-pressed="true">Fit width</button>
+      <button type="button" id="rulebook-fit-page" aria-pressed="false">Fit page</button>
+    </div>
     <button type="button" class="rulebook-viewer-close" id="rulebook-viewer-close">Close</button>
   </div>
   <div class="rulebook-viewer-nav" id="rulebook-viewer-nav" hidden>
@@ -109099,6 +109208,7 @@
     try {
       localStorage.setItem("theme", theme);
     } catch (e) {}
+    if (liveAccent) applyAccentHsl(liveAccent.h, liveAccent.s);
   }
 
   function initTheme() {
@@ -109230,19 +109340,37 @@
       "</a>"
     );
   }
-  function renderEssentialLinks(game, rulebookHref) {
+  function teachQueryString(state) {
+    var params = new URLSearchParams();
+    if (state && state.count != null && String(state.count) !== "") params.set("count", String(state.count));
+    (state && state.exps || []).forEach(function (name) {
+      if (name) params.append("exps", name);
+    });
+    (state && state.chars || []).forEach(function (name) {
+      if (name) params.append("chars", name);
+    });
+    return params.toString();
+  }
+  function teachHref(slug, state) {
+    var q = teachQueryString(state);
+    return "#/game/" + slug + "/teach" + (q ? "?" + q : "");
+  }
+  function renderEssentialLinks(game, rulebookHref, teachHrefValue) {
     var items = [];
     if (game && game.rulebook && String(game.rulebook).trim() && rulebookHref) {
       var rulebookLabel = String(game.rulebookLabel || "").trim() || "Rulebook";
       items.push(renderEssentialLink(rulebookHref, rulebookLabel, { rulebook: true }));
+    }
+    var video = howToPlayFrom(game);
+    if (video) items.push(renderEssentialVideo(video));
+    if (teachHrefValue) {
+      items.push('<a class="essential-link teach-open" id="teach-link" href="' + escapeHtml(teachHrefValue) + '">Teach it</a>');
     }
     var stats = safeLinkUrl(game && game.bgStatsUrl);
     if (stats) {
       var statsLabel = String((game && game.bgStatsLabel) || "").trim() || "Log a play";
       items.push(renderEssentialLink(stats, statsLabel));
     }
-    var video = howToPlayFrom(game);
-    if (video) items.push(renderEssentialVideo(video));
     var extras = game && Array.isArray(game.extraEssentials) ? game.extraEssentials : [];
     extras.forEach(function (item) {
       if (!item || typeof item !== "object") return;
@@ -109309,6 +109437,7 @@
 
   function renderList() {
     detailSlug = "";
+    clearGameAccent();
     appEl.innerHTML =
       '<div class="search-bar">' +
         '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
@@ -109909,14 +110038,41 @@
       highlightJob.pageObserver.disconnect();
       highlightJob.pageObserver = null;
     }
+    highlightJob.refit = null;
     updateRulebookMatchNav();
   }
 
+  var rulebookFitMode = "width";
+  var rulebookFitEpoch = 0;
   function rulebookViewerWidth(stage) {
     var width = (stage && stage.clientWidth) || window.innerWidth || 360;
     var fit = Math.floor(width - 12);
     if (fit < 1) fit = Math.floor(width) || 320;
     return Math.min(fit, 960);
+  }
+  function rulebookFitScale(stage, unscaled) {
+    var availW = rulebookViewerWidth(stage);
+    var scaleW = unscaled.width ? availW / unscaled.width : 1;
+    if (rulebookFitMode !== "page") return scaleW;
+    var availH = Math.max(120, (stage && stage.clientHeight) || window.innerHeight || 480);
+    var scaleH = unscaled.height ? availH / unscaled.height : scaleW;
+    return Math.min(scaleW, scaleH);
+  }
+  function syncRulebookFitButtons() {
+    var widthBtn = document.getElementById("rulebook-fit-width");
+    var pageBtn = document.getElementById("rulebook-fit-page");
+    if (widthBtn) widthBtn.setAttribute("aria-pressed", rulebookFitMode === "width" ? "true" : "false");
+    if (pageBtn) pageBtn.setAttribute("aria-pressed", rulebookFitMode === "page" ? "true" : "false");
+  }
+  function applyRulebookFit(mode) {
+    rulebookFitMode = mode === "page" ? "page" : "width";
+    rulebookFitEpoch++;
+    syncRulebookFitButtons();
+    if (typeof highlightJob.refit === "function") highlightJob.refit();
+    else if (highlightJob.opts && highlightJob.stage) {
+      highlightJob.drawnKey = "";
+      drawRulebookHighlight(rulebookViewerToken);
+    }
   }
 
   function quoteQuery(query) {
@@ -109946,7 +110102,7 @@
       });
       return;
     }
-    var key = [opts.url, opts.page, Math.round(cssWidth), opts.nthOnPage].join("|");
+    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.nthOnPage].join("|");
     if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
     if (highlightJob.progressFn) {
       unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
@@ -109970,7 +110126,7 @@
         var sheet = highlightJob.sheet;
         if (!sheet) return null;
         var unscaled = page.getViewport({ scale: 1 });
-        var viewport = page.getViewport({ scale: cssWidth / unscaled.width });
+        var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
         sheet.hidden = false;
         sheet.innerHTML = "";
         sheet.style.width = Math.floor(viewport.width) + "px";
@@ -110385,15 +110541,17 @@
       }
       if (titleEl) titleEl.textContent = label + " \u00b7 1 / " + pdf.numPages;
       function drawSlot(slot) {
-        if (!slot || slot.getAttribute("data-drawn") === "1" || slot.getAttribute("data-drawing") === "1") return;
+        if (!slot) return;
+        if (slot.getAttribute("data-drawn") === "1" && slot.getAttribute("data-fit") === rulebookFitMode) return;
         if (token !== rulebookViewerToken) return;
+        var epoch = rulebookFitEpoch;
+        var mode = rulebookFitMode;
         slot.setAttribute("data-drawing", "1");
         var pageNum = parseInt(slot.getAttribute("data-page"), 10);
         pdf.getPage(pageNum).then(function (page) {
-          if (token !== rulebookViewerToken || !slot.isConnected) return;
+          if (token !== rulebookViewerToken || epoch !== rulebookFitEpoch || !slot.isConnected) return;
           var unscaled = page.getViewport({ scale: 1 });
-          var fit = rulebookViewerWidth(stage);
-          var viewport = page.getViewport({ scale: fit / unscaled.width });
+          var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
           slot.style.width = Math.floor(viewport.width) + "px";
           slot.style.height = Math.floor(viewport.height) + "px";
           slot.style.minHeight = "0";
@@ -110413,13 +110571,27 @@
             viewport: viewport,
             transform: transform
           }).promise.then(function () {
-            if (token !== rulebookViewerToken) return;
+            if (token !== rulebookViewerToken || epoch !== rulebookFitEpoch) return;
             slot.setAttribute("data-drawn", "1");
+            slot.setAttribute("data-fit", mode);
+            slot.removeAttribute("data-drawing");
           });
         }).catch(function () {
-          slot.removeAttribute("data-drawing");
+          if (epoch === rulebookFitEpoch) slot.removeAttribute("data-drawing");
         });
       }
+      highlightJob.refit = function () {
+        if (token !== rulebookViewerToken) return;
+        slots.forEach(function (slot) {
+          slot.removeAttribute("data-drawn");
+          slot.removeAttribute("data-drawing");
+        });
+        var view = stage.getBoundingClientRect();
+        slots.forEach(function (slot) {
+          var rect = slot.getBoundingClientRect();
+          if (rect.bottom > view.top - 400 && rect.top < view.bottom + 800) drawSlot(slot);
+        });
+      };
       if (window.IntersectionObserver) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
@@ -110513,6 +110685,17 @@
       closeBtn.dataset.bound = "1";
       closeBtn.addEventListener("click", closeRulebookViewer);
     }
+    var fitWidthBtn = document.getElementById("rulebook-fit-width");
+    var fitPageBtn = document.getElementById("rulebook-fit-page");
+    if (fitWidthBtn && !fitWidthBtn.dataset.bound) {
+      fitWidthBtn.dataset.bound = "1";
+      fitWidthBtn.addEventListener("click", function () { applyRulebookFit("width"); });
+    }
+    if (fitPageBtn && !fitPageBtn.dataset.bound) {
+      fitPageBtn.dataset.bound = "1";
+      fitPageBtn.addEventListener("click", function () { applyRulebookFit("page"); });
+    }
+    syncRulebookFitButtons();
     var prevBtn = document.getElementById("rulebook-viewer-prev");
     var nextBtn = document.getElementById("rulebook-viewer-next");
     if (prevBtn && !prevBtn.dataset.bound) {
@@ -110550,13 +110733,182 @@
   }
 
   /* --- Accent color + meta bar helpers --- */
-  function setGameAccent(game) {
-    var accent = game.themeColor || null;
-    if (accent) {
-      root.style.setProperty("--accent", accent);
-    } else {
-      root.style.setProperty("--accent", "var(--brand)");
+  var accentMemory = {};
+  var accentSlug = "";
+  var liveAccent = null;
+  function themeIsDark() {
+    var theme = root.getAttribute("data-theme") || "";
+    return theme === "dark" || theme === "darkwood" || theme === "neongrid";
+  }
+  function hashHue(slug) {
+    var hues = [18, 200, 130, 265, 332, 188, 48, 152, 288, 230, 78, 207];
+    var n = 0;
+    var text = String(slug || "");
+    for (var i = 0; i < text.length; i++) n = (n * 33 + text.charCodeAt(i)) >>> 0;
+    return hues[n % hues.length];
+  }
+  function hslToRgb(h, s, l) {
+    s = s / 100;
+    l = l / 100;
+    var c = (1 - Math.abs(2 * l - 1)) * s;
+    var hp = ((h % 360) + 360) % 360 / 60;
+    var x = c * (1 - Math.abs(hp % 2 - 1));
+    var r = 0;
+    var g = 0;
+    var b = 0;
+    if (hp < 1) { r = c; g = x; }
+    else if (hp < 2) { r = x; g = c; }
+    else if (hp < 3) { g = c; b = x; }
+    else if (hp < 4) { g = x; b = c; }
+    else if (hp < 5) { r = x; b = c; }
+    else { r = c; b = x; }
+    var m = l - c / 2;
+    return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+  }
+  function channelLum(v) {
+    v = v / 255;
+    return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  }
+  function relLum(rgb) {
+    return 0.2126 * channelLum(rgb[0]) + 0.7152 * channelLum(rgb[1]) + 0.0722 * channelLum(rgb[2]);
+  }
+  function contrastRatio(a, b) {
+    var la = relLum(a);
+    var lb = relLum(b);
+    var hi = Math.max(la, lb);
+    var lo = Math.min(la, lb);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+  function hslCss(h, s, l) {
+    return "hsl(" + Math.round(h) + " " + Math.round(s) + "% " + Math.round(l) + "%)";
+  }
+  function applyAccentHsl(h, s) {
+    s = Math.max(55, Math.min(86, s));
+    var l = 46;
+    var rgb = hslToRgb(h, s, l);
+    while (contrastRatio(rgb, [255, 255, 255]) < 4.5 && l > 28) {
+      l -= 1;
+      rgb = hslToRgb(h, s, l);
     }
+    var dark = themeIsDark();
+    var inkL = dark ? 76 : 28;
+    var ink = hslToRgb(h, Math.min(s, 72), inkL);
+    var paper = dark ? [28, 28, 30] : [255, 255, 255];
+    if (dark) {
+      while (contrastRatio(ink, paper) < 4.5 && inkL < 90) {
+        inkL += 2;
+        ink = hslToRgb(h, Math.min(s, 72), inkL);
+      }
+    }
+    liveAccent = { h: h, s: s };
+    root.style.setProperty("--accent", hslCss(h, s, l));
+    root.style.setProperty("--accent-ink", hslCss(h, Math.min(s, 72), inkL));
+  }
+  function clearGameAccent() {
+    accentSlug = "";
+    liveAccent = null;
+    root.style.setProperty("--accent", "var(--brand)");
+    root.style.removeProperty("--accent-ink");
+  }
+  function rgbToHsl(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+    var max = Math.max(r, g, b);
+    var min = Math.min(r, g, b);
+    var l = (max + min) / 2;
+    var d = max - min;
+    if (!d) return { h: 0, s: 0, l: l };
+    var s = d / (1 - Math.abs(2 * l - 1));
+    var h = 0;
+    if (max === r) h = ((g - b) / d) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+    return { h: h, s: s, l: l };
+  }
+  function vibrantFromImage(img) {
+    var canvas = document.createElement("canvas");
+    var size = 40;
+    canvas.width = size;
+    canvas.height = size;
+    var ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0, size, size);
+    var data;
+    try { data = ctx.getImageData(0, 0, size, size).data; }
+    catch (err) { return null; }
+    var bins = [];
+    for (var i = 0; i < 24; i++) bins.push({ w: 0, x: 0, y: 0, s: 0 });
+    for (var p = 0; p < data.length; p += 4) {
+      if (data[p + 3] < 200) continue;
+      var hsl = rgbToHsl(data[p], data[p + 1], data[p + 2]);
+      if (hsl.s < 0.28) continue;
+      if (hsl.l < 0.14 || hsl.l > 0.86) continue;
+      var weight = hsl.s * hsl.s * (1 - Math.abs(hsl.l - 0.5));
+      if (weight <= 0) continue;
+      var bin = Math.round(hsl.h / 15) % 24;
+      var rad = hsl.h * Math.PI / 180;
+      bins[bin].w += weight;
+      bins[bin].x += Math.cos(rad) * weight;
+      bins[bin].y += Math.sin(rad) * weight;
+      bins[bin].s += hsl.s * weight;
+    }
+    var best = 0;
+    for (var b = 1; b < bins.length; b++) if (bins[b].w > bins[best].w) best = b;
+    if (bins[best].w < 0.35) return null;
+    var hue = Math.atan2(bins[best].y, bins[best].x) * 180 / Math.PI;
+    if (hue < 0) hue += 360;
+    var sat = bins[best].s / bins[best].w;
+    sat = Math.min(0.86, Math.max(0.55, sat * 1.2));
+    return { h: hue, s: sat * 100 };
+  }
+  function rememberCoverAccent(slug, picked) {
+    accentMemory[slug] = picked;
+    if (accentSlug === slug) applyAccentHsl(picked.h, picked.s);
+  }
+  function loadCoverAccent(game) {
+    var slug = game.slug;
+    var cached = accentMemory[slug];
+    if (cached && cached.fromCover) {
+      applyAccentHsl(cached.h, cached.s);
+      return;
+    }
+    var img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function () {
+      var picked = vibrantFromImage(img);
+      if (!picked) {
+        rememberCoverAccent(slug, { h: hashHue(slug), s: 64, fromCover: false });
+        return;
+      }
+      picked.fromCover = true;
+      rememberCoverAccent(slug, picked);
+    };
+    img.onerror = function () {
+      rememberCoverAccent(slug, { h: hashHue(slug), s: 64, fromCover: false });
+    };
+    img.src = coverUrl(slug);
+  }
+  function setGameAccent(game) {
+    var accent = game && game.themeColor;
+    if (!game) {
+      clearGameAccent();
+      return;
+    }
+    if (accent) {
+      accentSlug = game.slug;
+      liveAccent = null;
+      root.style.setProperty("--accent", accent);
+      root.style.setProperty("--accent-ink", accent);
+      return;
+    }
+    accentSlug = game.slug;
+    var cached = accentMemory[game.slug];
+    if (cached) applyAccentHsl(cached.h, cached.s);
+    else applyAccentHsl(hashHue(game.slug), 64);
+    loadCoverAccent(game);
   }
 
   function formatPlayTime(game, count) {
@@ -111016,7 +111368,10 @@
         "</strong>" + inner + "</div>"
       );
     });
-    if (!parts.length) return '<p class="rule-empty">' + escapeHtml(emptyLabel) + "</p>";
+    if (!parts.length) {
+      if (!emptyLabel) return "";
+      return '<p class="rule-empty">' + escapeHtml(emptyLabel) + "</p>";
+    }
     return parts.join("");
   }
   function characterList(game) {
@@ -111357,9 +111712,9 @@
     });
     return parts.join("");
   }
-  function renderTeachLink(game) {
+  function renderTeachLink(game, state) {
     if (!gameHasTeach(game)) return "";
-    return '<a class="btnlink teach-open" href="#/game/' + game.slug + '/teach">Teach it</a>';
+    return '<a class="essential-link teach-open" id="teach-link" href="' + escapeHtml(teachHref(game.slug, state || {})) + '">Teach it</a>';
   }
   function mistakeParts(value) {
     if (contentIsEmpty(value)) return null;
@@ -111506,7 +111861,7 @@
     if (baseHtml) parts.push(baseHtml);
     var extra = renderExpansionTurnBlocks(game, selected);
     if (extra) parts.push(extra);
-    if (!parts.length) return '<p class="rule-empty">(No turn structure summary yet.)</p>';
+    if (!parts.length) return "";
     return parts.join("");
   }
   /* rule-render:end */
@@ -111612,13 +111967,9 @@
             );
           }).join("") +
         "</div>";
-      playerCountHtmlInner =
-        renderRuleContent(setupByPlayerCount[first]) ||
-        '<p class="rule-empty">(No details for this player count yet.)</p>';
+      playerCountHtmlInner = renderRuleContent(setupByPlayerCount[first]) || "";
     } else {
-      playerCountHtmlInner =
-        renderRuleContent(playerCountSetup) ||
-        '<p class="rule-empty">(No player-count-specific setup yet.)</p>';
+      playerCountHtmlInner = renderRuleContent(playerCountSetup) || "";
     }
 
     /* --- Quick Rules Glossary --- */
@@ -111731,7 +112082,7 @@
         : "";
       if (anyPlain) {
         expansionNoteHtml +=
-          '<p class="exp-note">Turn on a character to add that character\'s setup under Quick Set Up.' + expansionCharNote + "</p>";
+          '<p class="exp-note">Turn on a character to add that character\'s setup under Set up.' + expansionCharNote + "</p>";
       }
       if (anyAid) {
         expansionNoteHtml +=
@@ -111743,63 +112094,38 @@
       }
     }
 
-    var endPresent = !contentIsEmpty(endOfGame);
-
     var summaryLines = buildSummaryLines(g, []);
 
-    var endOfGameHtml = "";
-    if (endPresent) {
-      endOfGameHtml =
-        '<div id="section-end" class="rule-group">' +
-          ruleShell("end-of-game-block", "End of Game", renderRuleContent(endOfGame), { open: true, filled: true }) +
-        "</div>";
+    function chapterSlot(id, html, label) {
+      if (!html) return '<div class="chapter-slot" id="' + id + '" hidden></div>';
+      var head = label ? '<h4 class="chapter-label">' + escapeHtml(label) + "</h4>" : "";
+      return '<div class="chapter-slot" id="' + id + '">' + head + html + "</div>";
     }
-
-    /* --- Quick blocks (setup/reminders/etc.) --- */
+    function chapterShell(id, title, inner) {
+      var has = /class="chapter-slot" id="[^"]+">/.test(inner);
+      var kind = id === "setup-chapter" ? "setup" : (id === "turn-chapter" ? "turn" : (id === "end-chapter" ? "end" : ""));
+      return (
+        '<details class="expansion rule-chapter' + (kind ? " rule-chapter--" + kind : "") + '" id="' + id + '"' + (has ? " open" : " hidden") + ">" +
+          '<summary><span class="expansion-name">' + escapeHtml(title) + "</span></summary>" +
+          '<div class="expansion-body"><div class="rule-body">' + inner + "</div></div>" +
+        "</details>"
+      );
+    }
+    var setupResourcesHtml = renderRuleContent(startingResources) || "";
     var quickBlocksHtml =
-      '<div id="section-setup" class="rule-group">' +
-        ruleShell(
-          "quick-setup-block",
-          "Quick Set Up",
-          composeSection(quickText, "(No quick setup yet.)", [], "setup"),
-          { open: !contentIsEmpty(quickText), filled: !contentIsEmpty(quickText), bodyId: "qs-text" }
-        ) +
-        ruleShell(
-          "playercount-block",
-          "Player Count Set Up",
-          playerCountHtmlInner,
-          { open: !!hasSetupByPlayerCount, filled: !!hasSetupByPlayerCount || !contentIsEmpty(playerCountSetup), bodyId: "pc-text" }
-        ) +
-        ruleShell(
-          "starting-resources-block",
-          "Starting Resources",
-          renderRuleContent(startingResources) || '<p class="rule-empty">(No starting resources yet.)</p>',
-          { filled: !contentIsEmpty(startingResources) }
-        ) +
-      "</div>" +
-      '<div id="section-turn" class="rule-group">' +
-        ruleShell(
-          "turn-structure-block",
-          "Turn Structure",
-          renderTurnBody(turnStructure, g, []),
-          { filled: !contentIsEmpty(turnStructure), bodyId: "turn-text" }
-        ) +
-      "</div>" +
-      endOfGameHtml +
-      '<div id="section-scoring" class="rule-group">' +
-        ruleShell(
-          "endgame-scoring-block",
-          "End Game Scoring",
-          composeSection(endGameScoring, "(No end game scoring notes yet.)", [], "scoring"),
-          { filled: !contentIsEmpty(endGameScoring), bodyId: "scoring-text" }
-        ) +
-      "</div>" +
-        ruleShell(
-          "reminders-block",
-          "Reminders",
-          composeSection(remindersText, "(No reminders yet.)", [], "rules"),
-          { filled: !contentIsEmpty(remindersText), bodyId: "reminders-text" }
-        );
+      chapterShell("setup-chapter", "Set up",
+        chapterSlot("qs-text", composeSection(quickText, "", [], "setup")) +
+        chapterSlot("pc-text", playerCountHtmlInner) +
+        chapterSlot("resources-text", setupResourcesHtml, "Starting resources")
+      ) +
+      chapterShell("turn-chapter", "On your turn",
+        chapterSlot("turn-text", renderTurnBody(turnStructure, g, [])) +
+        chapterSlot("reminders-text", composeSection(remindersText, "", [], "rules"), "Reminders")
+      ) +
+      chapterShell("end-chapter", "End of the game",
+        chapterSlot("end-text", renderRuleContent(endOfGame) || "") +
+        chapterSlot("scoring-text", composeSection(endGameScoring, "", [], "scoring"), "Scoring")
+      );
 
     /* --- Main detail markup --- */
     var characterControlsHtml = "";
@@ -111840,7 +112166,11 @@
             buildMetaBar(g, selectedCount) +
           "</div>" +
         "</div>" +
-        renderEssentialLinks(g, rulebookHref) +
+        renderEssentialLinks(g, rulebookHref, gameHasTeach(g) ? teachHref(g.slug, {
+          count: selectedCount,
+          exps: Object.keys(presetOn).filter(function (name) { return presetOn[name]; }),
+          chars: []
+        }) : "") +
         tableBarHtml +
         '<div class="detail-body">' +
           characterAidSlotHtml +
@@ -111849,14 +112179,11 @@
             '<h3 id="scoring-summary-title">How you win</h3>' +
             '<div id="scoring-summary-body">' + renderSummaryHtml(summaryLines) + "</div>" +
           "</aside>" +
-          '<div id="teach-it-slot">' + renderTeachLink(g) + "</div>" +
           '<div id="common-mistakes-slot">' + renderCommonMistakes(commonMistakes) + "</div>" +
           '<div id="first-game-slot">' + renderFirstGame(g.firstGameSetup, selectedCount) + "</div>" +
           '<div class="actions">' +
-            '<section id="qs" class="exp">' +
-              expansionNoteHtml +
-              (quickBlocksHtml || "<p>(No quick setup/reminders yet.)</p>") +
-            "</section>" +
+            (expansionNoteHtml ? '<div class="rules-notes">' + expansionNoteHtml + "</div>" : "") +
+            quickBlocksHtml +
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             componentsHtml +
             rulesGlossaryHtml +
@@ -111909,11 +112236,9 @@
           btn.addEventListener("click", function() {
             var count = btn.getAttribute("data-count");
             selectedCount = count;
-            pcTextEl.innerHTML = renderRuleContent(setupByPlayerCount[count]) ||
-              '<p class="rule-empty">(No details for this player count yet.)</p>';
+            paintSlot("pc-text", renderRuleContent(setupByPlayerCount[count]) || "");
             wrapWideTables(pcTextEl);
-            var pcBlock = document.getElementById("playercount-block");
-            if (pcBlock) pcBlock.open = true;
+            refreshChapters();
             pcButtons.forEach(function(b) {
               b.removeAttribute("data-active");
               b.setAttribute("aria-pressed", "false");
@@ -111933,10 +112258,6 @@
     var expButtons = namedExpansions.length ? Array.prototype.slice.call(
       document.querySelectorAll("#exp-controls .exp-chip")
     ) : [];
-    var qsTextEl = document.getElementById("qs-text");
-    var scoringTextEl = document.getElementById("scoring-text");
-    var remindersTextEl = document.getElementById("reminders-text");
-    var turnTextEl = document.getElementById("turn-text");
     var activeCharacterNames = {};
     function selectedExpansions() {
       return expButtons.filter(function (btn) {
@@ -112039,32 +112360,58 @@
       body.innerHTML = renderSummaryHtml(lines);
       box.hidden = !lines.length;
     }
+    function paintSlot(id, html, label) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      if (!html) {
+        el.hidden = true;
+        el.innerHTML = "";
+        return;
+      }
+      var head = label ? '<h4 class="chapter-label">' + escapeHtml(label) + "</h4>" : "";
+      el.hidden = false;
+      el.innerHTML = head + html;
+    }
+    function refreshChapters() {
+      ["setup-chapter", "turn-chapter", "end-chapter"].forEach(function (id) {
+        var chapter = document.getElementById(id);
+        if (!chapter) return;
+        var any = false;
+        Array.prototype.forEach.call(chapter.querySelectorAll(".chapter-slot"), function (slot) {
+          if (!slot.hidden && String(slot.textContent || "").trim()) any = true;
+        });
+        chapter.hidden = !any;
+        if (any) chapter.open = true;
+      });
+    }
+    function currentTeachState() {
+      var chars = [];
+      Object.keys(activeCharacterNames).forEach(function (name) {
+        if (activeCharacterNames[name]) chars.push(name);
+      });
+      return {
+        count: selectedCount,
+        exps: selectedExpansions().map(function (exp) { return exp && exp.name; }).filter(Boolean),
+        chars: chars
+      };
+    }
     function paintSections() {
       var selected = selectedExpansions();
       paintCharacterRow();
-      if (qsTextEl) {
-        var chars = selectedCharacters();
-        var setupChars = chars.filter(function (ch) { return !characterHasAid(ch); });
-        var setupHtml = composeSection(quickText, "(No quick setup yet.)", selected, "setup");
-        var charHtml = renderCharacterBlocks(setupChars);
-        if (charHtml && !setupHasBody(selected)) qsTextEl.innerHTML = charHtml;
-        else qsTextEl.innerHTML = setupHtml + charHtml;
-      }
-      paintCharacterAids(selectedCharacters());
-      if (scoringTextEl) {
-        scoringTextEl.innerHTML = composeSection(endGameScoring, "(No end game scoring notes yet.)", selected, "scoring");
-      }
-      if (remindersTextEl) {
-        remindersTextEl.innerHTML = composeSection(remindersText, "(No reminders yet.)", selected, "rules");
-      }
-      if (turnTextEl) {
-        turnTextEl.innerHTML = renderTurnBody(turnStructure, g, selected);
-        var turnBlock = document.getElementById("turn-structure-block");
-        if (turnBlock && renderExpansionTurnBlocks(g, selected)) turnBlock.open = true;
-      }
+      var chars = selectedCharacters();
+      var setupChars = chars.filter(function (ch) { return !characterHasAid(ch); });
+      var setupHtml = composeSection(quickText, "", selected, "setup");
+      var charHtml = renderCharacterBlocks(setupChars);
+      if (charHtml && !setupHasBody(selected)) paintSlot("qs-text", charHtml);
+      else paintSlot("qs-text", setupHtml + charHtml);
+      paintCharacterAids(chars);
+      paintSlot("scoring-text", composeSection(endGameScoring, "", selected, "scoring"), "Scoring");
+      paintSlot("reminders-text", composeSection(remindersText, "", selected, "rules"), "Reminders");
+      paintSlot("turn-text", renderTurnBody(turnStructure, g, selected));
       paintSummary(selected);
       paintTeach();
       paintAids(selected);
+      refreshChapters();
       wrapWideTables(appEl);
       savePlayMemory();
     }
@@ -112111,8 +112458,11 @@
         if (activeCharacterNames[name]) {
           var chosen = selectedCharacters().filter(function (ch) { return ch.name === name; })[0];
           if (!chosen || !characterHasAid(chosen)) {
-            var qsBlock = document.getElementById("quick-setup-block");
-            if (qsBlock) qsBlock.open = true;
+            var setupChapter = document.getElementById("setup-chapter");
+            if (setupChapter) {
+              setupChapter.hidden = false;
+              setupChapter.open = true;
+            }
           }
         }
       });
@@ -112159,9 +112509,9 @@
       });
       var rememberedText = document.getElementById("pc-text");
       if (rememberedText && setupByPlayerCount && !contentIsEmpty(setupByPlayerCount[String(selectedCount)])) {
-        rememberedText.innerHTML = renderRuleContent(setupByPlayerCount[String(selectedCount)]) ||
-          '<p class="rule-empty">(No details for this player count yet.)</p>';
+        paintSlot("pc-text", renderRuleContent(setupByPlayerCount[String(selectedCount)]) || "");
         wrapWideTables(rememberedText);
+        refreshChapters();
       }
       paintPlayTime(selectedCount);
       paintFirstGame(selectedCount);
@@ -112186,9 +112536,9 @@
       if (slot) slot.innerHTML = renderFirstGame(g.firstGameSetup, count);
     }
     function paintTeach() {
-      var slot = document.getElementById("teach-it-slot");
-      if (!slot) return;
-      slot.innerHTML = renderTeachLink(g);
+      var link = document.getElementById("teach-link");
+      if (!link) return;
+      link.setAttribute("href", teachHref(g.slug, currentTeachState()));
     }
     function paintAids(selected) {
       var slot = document.getElementById("player-aids-slot");
@@ -112322,7 +112672,17 @@
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
       if ((pieces[2] || "").toLowerCase() === "teach") {
-        return { route: "teach", slug: routed.slug, expansions: routed.expansions };
+        return {
+          route: "teach",
+          slug: routed.slug,
+          expansions: routed.expansions,
+          teachQuery: {
+            has: params.has("count") || params.has("exps") || params.has("chars"),
+            count: params.get("count"),
+            exps: params.getAll("exps"),
+            chars: params.getAll("chars")
+          }
+        };
       }
       return {
         route: "detail",
@@ -112336,7 +112696,7 @@
 
   var playMemory = {};
 
-  function renderTeachPage(slug) {
+  function renderTeachPage(slug, query) {
     detailSlug = slug;
     var g = DATA[slug];
     if (!g) {
@@ -112344,6 +112704,7 @@
       return;
     }
     setGameAccent(g);
+    query = query || {};
     var mem = playMemory[slug] || {};
     var counts = [];
     if (g.setupByPlayerCount && typeof g.setupByPlayerCount === "object" && !Array.isArray(g.setupByPlayerCount)) {
@@ -112351,11 +112712,17 @@
         return parseInt(a, 10) - parseInt(b, 10);
       });
     }
-    var count = mem.count != null && counts.indexOf(String(mem.count)) !== -1 ? String(mem.count) : (counts[0] || null);
+    var useUrl = !!query.has;
+    var countSource = useUrl ? query.count : mem.count;
+    var count = countSource != null && counts.indexOf(String(countSource)) !== -1
+      ? String(countSource)
+      : (counts[0] || null);
+    var expSource = useUrl ? (query.exps || []) : (mem.exps && mem.exps.length ? mem.exps : (query.routeExps || []));
+    var charSource = useUrl ? (query.chars || []) : (mem.chars || []);
     var expOn = {};
-    (mem.exps || []).forEach(function (name) { expOn[name] = true; });
+    expSource.forEach(function (name) { if (name) expOn[name] = true; });
     var charOn = {};
-    (mem.chars || []).forEach(function (name) { charOn[name] = true; });
+    charSource.forEach(function (name) { if (name) charOn[name] = true; });
     var named = (Array.isArray(g.expansions) ? g.expansions : []).filter(function (exp) {
       return exp && String(exp.name || "").trim() && expansionHasDelta(exp);
     });
@@ -112367,11 +112734,17 @@
       return chars.filter(function (ch) { return !!charOn[ch.name]; });
     }
     function save() {
-      playMemory[slug] = {
+      var state = {
         count: count,
         exps: selectedExps().map(function (exp) { return exp.name; }),
         chars: selectedChars().map(function (ch) { return ch.name; })
       };
+      playMemory[slug] = state;
+      var href = teachHref(slug, state);
+      var next = window.location.pathname + window.location.search + href;
+      if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
+        history.replaceState(null, "", next);
+      }
     }
     function paint() {
       save();
@@ -112483,7 +112856,7 @@
     var parsed = parseHash();
     if (parsed.route === "teach") {
       scrollPageToTop();
-      renderTeachPage(parsed.slug);
+      renderTeachPage(parsed.slug, Object.assign({ routeExps: parsed.expansions || [] }, parsed.teachQuery || {}));
       requestAnimationFrame(scrollPageToTop);
     } else if (parsed.route === "detail") {
       scrollPageToTop();

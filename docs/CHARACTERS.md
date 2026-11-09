@@ -4,9 +4,9 @@ Some games give each player a different side. Those sides are `characters` on th
 
 That row is ordinary page content. It scrolls off the screen as you read further down, and scrolling back up shows the same open lists with the same chips still selected. Nothing from the row stays pinned over the player aid.
 
-Nothing is selected when the page opens. Turning a chip on adds that character under Quick Set Up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on. If the character has `teachingScript`, the same chip adds those notes under Teach it, and turning it off removes them.
+Nothing is selected when the page opens. Turning a chip on adds that character under Set up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on. If the character has `teachingScript`, the Teach it link includes that side, and turning it off removes it from the link.
 
-Every character stays in the selector, including sides from an expansion. Long lists are grouped: base game, then one group per expansion, with the selected names or a count on a closed group. A list with no expansion split and at least 10 sides sits in one disclosure named with `charactersLabel`. Choosing a side whose `expansion` or `ruleset` matches an expansion chip turns that chip on, so its setup, rules, and scoring still fold in. Turning that chip off clears the sides that belong to it and removes them from Quick Set Up and from the player aid. It does not remove them from the selector.
+Every character stays in the selector, including sides from an expansion. Long lists are grouped: base game, then one group per expansion, with the selected names or a count on a closed group. A list with no expansion split and at least 10 sides sits in one disclosure named with `charactersLabel`. Choosing a side whose `expansion` or `ruleset` matches an expansion chip turns that chip on, so its setup, rules, and scoring still fold in. Turning that chip off clears the sides that belong to it and removes them from Set up and from the player aid. It does not remove them from the selector.
 
 ## Record shape
 
@@ -41,7 +41,7 @@ Every character stays in the selector, including sides from an expansion. Long l
 
 | Field | Required | What it is |
 | --- | --- | --- |
-| `name` | yes | Chip label, and the heading in Quick Set Up. |
+| `name` | yes | Chip label, and the heading in Set up. |
 | `overview` | no | One line on how this side plays or scores. Shown above the setup steps. |
 | `setup` | no | Setup steps. Same bullet format as a rules section. |
 | `teachingScript` | no | Spoken teach notes. Same bullet format as a rules section, including a count map. Shown under Teach it while the chip is on. |
