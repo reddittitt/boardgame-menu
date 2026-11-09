@@ -184,6 +184,10 @@ Suggested order inside the bullets: theme or goal, what you do on a turn, how th
 
 An expansion may set its own `teachingScript`. That addendum is appended under the expansion name, and only while its chip is on. If the base field is empty, the Teach it toggle appears only when such a chip is on.
 
+A character may set `teachingScript` in the same shape. It is appended under that character's name, after any selected expansion, and only while its chip is on. Turning the chip off removes it.
+
+To follow the player-count buttons, use a count map. `"*"` is the shared script, read at every count. The entry for the selected count is added with that button: before `"*"` on the base script, and after the shared text on a character or an expansion. If `"*"` is absent, the map works like First game. The selected count is used, and `"*"` is only the fallback.
+
 ## Common mistakes
 
 `commonMistakes` is the existing field. Do not rename it and do not rewrite the sentences for this layout. The page shows it under Teach it, above the rules, as its own list. The first 3 items are visible. The rest sit under **Show N more**. A section-level `details` block stays available. An empty string or empty list renders nothing.
@@ -328,8 +332,9 @@ Any of these may be a string, a bullet array, or a section object:
 - `endGameScoring`
 - `commonMistakes`
 - `remindersText`
-- `teachingScript`
+- `teachingScript` (or each value in a `teachingScript` count map)
 - `firstGameSetup` (or each value in a `firstGameSetup` count map)
+- a character's `teachingScript`
 - an expansion's `setup`, `rules`, `scoring`, `quickStart`, `reminders`, `teachingScript`, and any extra rules field
 
 `rulesGlossary` entries stay `{ "term", "desc" }`. `desc` may be a string or the bullet format below.
@@ -420,6 +425,6 @@ A bare array and a section object can both be the value of a field. Prefer the s
 
 ## What stays put
 
-Player-count buttons change Player Count Set Up. They also change the header time when `playTimeByPlayerCount` has that count, and the First game box when `firstGameSetup` is a count map.
+Player-count buttons change Player Count Set Up. They also change the header time when `playTimeByPlayerCount` has that count, the First game box when `firstGameSetup` is a count map, and Teach it when `teachingScript` is a count map.
 
 The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.

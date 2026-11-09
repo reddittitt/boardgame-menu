@@ -4,7 +4,7 @@ Some games give each player a different side. Those sides are `characters` on th
 
 The chip lists stay open while you scroll through them, including the last faction, spirit, or hireling pack. They collapse to one line only after that whole list has scrolled above the header, so the player aid is not stuck underneath it. The height and opacity ease closed without moving the text you are reading, and opening the lists plays that motion backward. Tapping that line, or scrolling back to the top, opens the full lists again. If the expansion chips still cover the aid after the character row is hidden, those collapse into the same line. The player-count buttons stay visible unless that row itself is tall enough to cover the aid.
 
-Nothing is selected when the page opens. Turning a chip on adds that character under Quick Set Up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on.
+Nothing is selected when the page opens. Turning a chip on adds that character under Quick Set Up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on. If the character has `teachingScript`, the same chip adds those notes under Teach it, and turning it off removes them.
 
 Every character stays in the selector, including sides from an expansion. Long lists are grouped: base game, then one group per expansion, with the selected names or a count on a closed group. A list with no expansion split and at least 10 sides sits in one disclosure named with `charactersLabel`. Choosing a side whose `expansion` or `ruleset` matches an expansion chip turns that chip on, so its setup, rules, and scoring still fold in. Turning that chip off clears the sides that belong to it and removes them from Quick Set Up and from the player aid. It does not remove them from the selector.
 
@@ -44,6 +44,7 @@ Every character stays in the selector, including sides from an expansion. Long l
 | `name` | yes | Chip label, and the heading in Quick Set Up. |
 | `overview` | no | One line on how this side plays or scores. Shown above the setup steps. |
 | `setup` | no | Setup steps. Same bullet format as a rules section. |
+| `teachingScript` | no | Spoken teach notes. Same bullet format as a rules section, including a count map. Shown under Teach it while the chip is on. |
 | `expansion` | no | Exact `name` of an expansion chip. Omit it for a side that is in the base game. `ruleset` is read the same way when `expansion` is empty. |
 | `aid` | no | Player aid for this side. Shown only while its chip is on. |
 

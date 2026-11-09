@@ -15,7 +15,7 @@ There is no Expansions list at the bottom of the page. Turning a chip on merges 
 | `setup` | `quickStart`, shown once when the two values are the same | Quick Set Up |
 | `rules` | `reminders`, shown once when the two values are the same | Reminders |
 | `scoring` | — | End Game Scoring |
-| `teachingScript` | — | Teach it |
+| `teachingScript` | — | Teach it. A count map follows the player-count button. |
 | `playerAids` | — | Player aids |
 | `rulebook`, `youtube`, `bggId`, `cover` | — | Turn Structure, under the expansion name |
 | Any other non-empty field | — | Turn Structure, as **Expansion rules: &lt;name&gt;** |
