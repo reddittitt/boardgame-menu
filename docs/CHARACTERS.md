@@ -43,8 +43,11 @@ A character with no `expansion` is always in the row. A character whose `expansi
 | `overview` | no | One line on how this side plays or scores. Shown above the setup steps. |
 | `setup` | no | Setup steps. Same bullet format as a rules section. |
 | `expansion` | no | Exact `name` of an expansion chip. Omit it for a side that is in the base game. |
+| `aid` | no | Player aid for this side. Shown only while its chip is on. |
 
 `overview` is one sentence. `setup` is only the steps for putting that side on the table. Shared setup stays on the base game.
+
+`aid` holds a short paraphrase (`setup`, `actions`, `abilities`, `tip`) and, when the official PDF has that side's page, a `reference`. The card draws that page with PDF.js. It does not embed the PDF, because phones ignore `#page=` in an embedded viewer and show the cover. `reference.url` is the official file at the right page. `reference.renderUrl` and `reference.renderPage` are a same-origin extract of only those pages, used when the official host blocks a cross-origin read. `reference.crop` may be `right`. If the linked rulebooks have no page for that side, leave `reference` off and keep the paraphrase.
 
 The text comes from the publisher's rules. Do not fill a character from a summary site, a teaching video, or a guess. If the official setup is printed on a panel or a card and is not in the booklet, say so in the source note for that game and transcribe the panel.
 
