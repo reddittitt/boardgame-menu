@@ -2,9 +2,11 @@
 
 Some games give each player a different side. Those sides are `characters` on the game: a faction, a spirit, or any other asymmetric side. The page shows them as a multi-select chip row in the sticky bar, in the same style as the player-count buttons and the expansion chips.
 
+Scrolling down toward the player aid collapses that chip row so the aid is not stuck underneath it. A one-line summary of the selected sides stays in the bar; tapping it, or scrolling back to the top, opens the full row again. If the expansion chips still cover the aid after the character row is hidden, those collapse into the same line. The player-count buttons stay visible unless that row itself is tall enough to cover the aid.
+
 Nothing is selected when the page opens. Turning a chip on adds that character under Quick Set Up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on.
 
-A character with no `expansion` is always in the row. A character whose `expansion` matches an expansion chip's `name` appears only while that chip is on. Turning the expansion off removes the character from the row and from Quick Set Up.
+Every character stays in the selector, including sides from an expansion. Long lists are grouped: base game, then one group per expansion, with the selected names or a count on a closed group. A list with no expansion split and at least 10 sides sits in one disclosure named with `charactersLabel`. Choosing a side whose `expansion` or `ruleset` matches an expansion chip turns that chip on, so its setup, rules, and scoring still fold in. Turning that chip off clears the sides that belong to it and removes them from Quick Set Up and from the player aid. It does not remove them from the selector.
 
 ## Record shape
 
@@ -42,7 +44,7 @@ A character with no `expansion` is always in the row. A character whose `expansi
 | `name` | yes | Chip label, and the heading in Quick Set Up. |
 | `overview` | no | One line on how this side plays or scores. Shown above the setup steps. |
 | `setup` | no | Setup steps. Same bullet format as a rules section. |
-| `expansion` | no | Exact `name` of an expansion chip. Omit it for a side that is in the base game. |
+| `expansion` | no | Exact `name` of an expansion chip. Omit it for a side that is in the base game. `ruleset` is read the same way when `expansion` is empty. |
 | `aid` | no | Player aid for this side. Shown only while its chip is on. |
 
 `overview` is one sentence. `setup` is only the steps for putting that side on the table. Shared setup stays on the base game.
@@ -57,9 +59,9 @@ The text comes from the publisher's rules. Do not fill a character from a summar
 
 Factions from the Law of Root, October 13, 2025. The Law is the source when it disagrees with a Learn to Play booklet.
 
-Base game, always in the row: Marquise de Cat, Eyrie Dynasties, Woodland Alliance, Vagabond.
+Base game: Marquise de Cat, Eyrie Dynasties, Woodland Alliance, Vagabond.
 
-Shown only with that expansion chip on:
+Grouped under that expansion, and selectable before the chip is on:
 
 | Expansion chip | Factions |
 | --- | --- |
@@ -74,9 +76,9 @@ The Vagabond is one faction. Starting items for each Vagabond character are the 
 
 Spirits from the Setup box on each spirit panel, plus the core rulebook's step that follows it: flip the panel and place the remaining Presence on the dashed circles of the Presence tracks. The play-style line is the first sentence of the Play Style box on that panel.
 
-Base game, always in the row: Lightning's Swift Strike, River Surges in Sunlight, Vital Strength of the Earth, Shadows Flicker Like Flame, A Spread of Rampant Green, Thunderspeaker, Ocean's Hungry Grasp, Bringer of Dreams and Nightmares.
+Base game: Lightning's Swift Strike, River Surges in Sunlight, Vital Strength of the Earth, Shadows Flicker Like Flame, A Spread of Rampant Green, Thunderspeaker, Ocean's Hungry Grasp, Bringer of Dreams and Nightmares.
 
-Shown only with that expansion chip on:
+Grouped under that expansion, and selectable before the chip is on:
 
 | Expansion chip | Spirits |
 | --- | --- |
