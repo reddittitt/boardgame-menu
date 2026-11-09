@@ -840,9 +840,9 @@
   }
 
   .table-bar {
-    position:sticky;
-    top:var(--header-h, 72px);
+    position:relative;
     z-index:4;
+    scroll-margin-top:var(--header-h, 72px);
     display:flex;
     flex-direction:column;
     gap:8px;
@@ -854,6 +854,14 @@
     border-radius:14px;
     box-shadow:0 8px 16px -14px rgba(0,0,0,0.55);
     box-sizing:border-box;
+  }
+  /* Sticky only after the lists have scrolled away. While they are open,
+     the bar stays in normal flow so the last chip can be reached. */
+  .table-bar.is-collapsed,
+  .table-bar.is-collapsed-expansions,
+  .table-bar.is-collapsed-players {
+    position:sticky;
+    top:var(--header-h, 72px);
   }
   .table-bar-top {
     display:flex;
@@ -108603,14 +108611,15 @@
         }
       });
     }
-    /* The faction row is inside the sticky bar. Once that bar is stuck and the
-       reader moves toward the aid, fold the long rows into one tappable line. */
+    /* The chip lists scroll with the page. Fold them only after the last
+       chip has moved above the header, then keep a one-line summary stuck. */
     var barState = {
       lastY: window.scrollY || 0,
       collapsed: false,
       holdOpen: false,
       plan: null,
       ignoreScroll: false,
+      skipPast: false,
       width: window.innerWidth
     };
     function readingRoom() {
@@ -108756,32 +108765,62 @@
       if (!bar || !header) return true;
       return bar.getBoundingClientRect().top > header.offsetHeight + 2;
     }
+    function chipListsBottom() {
+      var bottom = null;
+      ["exp-controls", "char-controls"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el || el.hidden) return;
+        if (window.getComputedStyle(el).display === "none") return;
+        var rect = el.getBoundingClientRect();
+        if (rect.height < 1) return;
+        if (bottom == null || rect.bottom > bottom) bottom = rect.bottom;
+      });
+      return bottom;
+    }
+    function scrolledPastLists() {
+      var header = document.querySelector("header");
+      var bottom = chipListsBottom();
+      if (!header || bottom == null) return false;
+      return bottom <= header.getBoundingClientRect().bottom + 1;
+    }
+    function placeContentBelowBar() {
+      var bar = document.getElementById("table-bar");
+      var header = document.querySelector("header");
+      var marker = bar && bar.nextElementSibling;
+      if (!bar || !header || !marker) return;
+      var desired = header.getBoundingClientRect().bottom + bar.offsetHeight + 8;
+      var delta = marker.getBoundingClientRect().top - desired;
+      if (Math.abs(delta) > 2) window.scrollBy(0, delta);
+    }
+    function collapsePastLists() {
+      if (barState.collapsed || !scrolledPastLists()) return;
+      barState.holdOpen = false;
+      barState.collapsed = true;
+      var prevIgnore = barState.ignoreScroll;
+      barState.ignoreScroll = true;
+      syncTableBarCollapse(true);
+      if (barState.collapsed) placeContentBelowBar();
+      else barState.skipPast = true;
+      barState.lastY = window.scrollY || 0;
+      barState.ignoreScroll = prevIgnore;
+    }
     function onTableBarScroll() {
       var y = window.scrollY || 0;
-      var delta = y - barState.lastY;
       barState.lastY = y;
       if (barState.ignoreScroll) return;
       if (!document.getElementById("char-controls")) return;
+      if (!scrolledPastLists()) barState.skipPast = false;
       if (barIsNearTop()) {
         if (barState.collapsed || barState.holdOpen) {
           barState.holdOpen = false;
           barState.collapsed = false;
+          barState.skipPast = false;
           syncTableBarCollapse(true);
         }
         return;
       }
-      if (barState.holdOpen) {
-        if (delta > 18) {
-          barState.holdOpen = false;
-          barState.collapsed = true;
-          syncTableBarCollapse(true);
-        }
-        return;
-      }
-      if (delta > 8 && !barState.collapsed) {
-        barState.collapsed = true;
-        syncTableBarCollapse(true);
-      }
+      if (barState.skipPast) return;
+      collapsePastLists();
     }
     function revealCharacterAid(el) {
       barState.holdOpen = false;
@@ -108816,8 +108855,14 @@
       summaryBtn.addEventListener("click", function () {
         barState.holdOpen = true;
         barState.collapsed = false;
+        barState.skipPast = false;
         barState.plan = null;
+        barState.ignoreScroll = true;
         syncTableBarCollapse(true);
+        var bar = document.getElementById("table-bar");
+        if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: "start" });
+        barState.lastY = window.scrollY || 0;
+        barState.ignoreScroll = false;
       });
     }
     tableBarApi = {

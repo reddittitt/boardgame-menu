@@ -2,7 +2,7 @@
 
 Some games give each player a different side. Those sides are `characters` on the game: a faction, a spirit, or any other asymmetric side. The page shows them as a multi-select chip row in the sticky bar, in the same style as the player-count buttons and the expansion chips.
 
-Scrolling down toward the player aid collapses that chip row so the aid is not stuck underneath it. A one-line summary of the selected sides stays in the bar; tapping it, or scrolling back to the top, opens the full row again. If the expansion chips still cover the aid after the character row is hidden, those collapse into the same line. The player-count buttons stay visible unless that row itself is tall enough to cover the aid.
+The chip lists stay open while you scroll through them, including the last faction, spirit, or hireling pack. They collapse to one line only after that whole list has scrolled above the header, so the player aid is not stuck underneath it. Tapping that line, or scrolling back to the top, opens the full lists again. If the expansion chips still cover the aid after the character row is hidden, those collapse into the same line. The player-count buttons stay visible unless that row itself is tall enough to cover the aid.
 
 Nothing is selected when the page opens. Turning a chip on adds that character under Quick Set Up: the character's name, one line on how it plays or scores, then its setup steps. Turning the chip off removes that block. More than one character can be on.
 
