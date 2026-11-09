@@ -1383,6 +1383,7 @@
   }
 
   .rulebook-viewer {
+    display:none;
     width:100vw;
     height:100dvh;
     max-width:100vw;
@@ -1393,8 +1394,13 @@
     background:#111;
     color:#fff;
     box-sizing:border-box;
-    display:flex;
     flex-direction:column;
+  }
+  .rulebook-viewer[open] {
+    display:flex;
+    position:fixed;
+    inset:0;
+    z-index:20;
   }
   .rulebook-viewer::backdrop { background:rgba(0,0,0,0.78); }
   .rulebook-viewer-bar {
