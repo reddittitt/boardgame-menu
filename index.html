@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-look="hig">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -837,6 +837,7 @@
     gap:8px;
     margin:0 0 12px;
     padding:8px;
+    overflow-anchor:none;
     min-width:0;
     background:var(--bg);
     border:1px solid var(--border);
@@ -933,6 +934,12 @@
   /* After the fold animation, take the closed lists out of the bar. */
   .table-bar [data-folded="true"] {
     display:none !important;
+  }
+  .table-bar .is-folding {
+    transition:height 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .table-bar .is-folding { transition:none; }
   }
   .table-bar-summary {
     display:flex;
@@ -1510,9 +1517,14 @@
     text-align:center;
     color:#f2f2f2;
   }
+  .rulebook-pages {
+    width:100%;
+    box-sizing:border-box;
+  }
   .rulebook-viewer-sheet {
     position:relative;
-    margin:12px auto 28px;
+    margin:0 auto 12px;
+    max-width:100%;
     background:#fff;
     box-shadow:0 8px 28px rgba(0,0,0,0.35);
   }
@@ -1868,7 +1880,7 @@
     -webkit-tap-highlight-color:transparent;
   }
 
-  /* Opt-in test appearance. Turn it on from the header. Not an Apple product. */
+  /* Site appearance. System font, grouped surfaces, hairline separators. Not an Apple product. */
   :root[data-look="hig"] {
     --bg:#f2f2f7;
     --fg:#1c1c1e;
@@ -1939,10 +1951,15 @@
     font-weight:400;
     border-radius:8px;
   }
-  :root[data-look="hig"] #lookToggle[aria-pressed="true"] {
-    background:var(--brand);
-    color:#ffffff;
-    font-weight:600;
+  :root[data-look="hig"] .card {
+    border-radius:12px;
+    border:1px solid var(--hig-sep);
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .card:hover {
+    transform:none;
+    box-shadow:none;
+    border-color:var(--hig-sep);
   }
   :root[data-look="hig"] .header-logo { height:36px; }
   :root[data-look="hig"] main { margin-top:8px; margin-bottom:28px; }
@@ -2111,7 +2128,15 @@
     :root[data-look="hig"] .qs,
     :root[data-look="hig"] .exp { padding:8px 10px; }
   }
-  /* Typed fields stay at least 16px in every look, including the test appearance. */
+  .teach-open { margin:0 0 10px; }
+  .teach-page .byline { margin-top:0; }
+  .teach-script {
+    background:var(--card);
+    border:1px solid var(--hig-sep);
+    border-radius:12px;
+    padding:12px 14px;
+  }
+  /* Typed fields stay at least 16px so a phone does not zoom on focus. */
   :root[data-look="hig"] #search,
   :root[data-look="hig"] .rulebook-search input,
   :root[data-look="hig"] textarea {
@@ -2131,7 +2156,6 @@
     <div class="spacer"></div>
 
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
-    <button id="lookToggle" class="toggle" type="button" aria-pressed="false" aria-label="New look off. Turn on the test appearance.">New look</button>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
@@ -107833,30 +107857,7 @@
     });
   }
 
-  /* Opt-in test appearance. Classic stays the default. */
-  var lookBtn = document.getElementById("lookToggle");
-  function setLook(on) {
-    if (on) root.setAttribute("data-look", "hig");
-    else root.removeAttribute("data-look");
-    if (lookBtn) {
-      lookBtn.setAttribute("aria-pressed", on ? "true" : "false");
-      lookBtn.setAttribute("aria-label", on
-        ? "New look on. Turn off the test appearance."
-        : "New look off. Turn on the test appearance.");
-    }
-    try { localStorage.setItem("look", on ? "hig" : "classic"); } catch (e) {}
-  }
-  function initLook() {
-    var saved = null;
-    try { saved = localStorage.getItem("look"); } catch (e) {}
-    setLook(saved === "hig");
-  }
-  initLook();
-  if (lookBtn) {
-    lookBtn.addEventListener("click", function () {
-      setLook(root.getAttribute("data-look") !== "hig");
-    });
-  }
+  try { localStorage.removeItem("look"); } catch (e) {}
 
   function extractBggId(urlOrId) {
     if (!urlOrId) return "";
@@ -108631,12 +108632,18 @@
     highlightJob.tour = null;
     highlightJob.tourIndex = 0;
     highlightJob.pageReady = false;
+    if (highlightJob.pageObserver) {
+      highlightJob.pageObserver.disconnect();
+      highlightJob.pageObserver = null;
+    }
     updateRulebookMatchNav();
   }
 
   function rulebookViewerWidth(stage) {
     var width = (stage && stage.clientWidth) || window.innerWidth || 360;
-    return Math.max(200, Math.min(width - 24, 920));
+    var fit = Math.floor(width - 12);
+    if (fit < 1) fit = Math.floor(width) || 320;
+    return Math.min(fit, 960);
   }
 
   function quoteQuery(query) {
@@ -109045,17 +109052,153 @@
     if (rulebookLastFocus && rulebookLastFocus.focus) rulebookLastFocus.focus();
     rulebookLastFocus = null;
   }
+  function rulebookFallback(note, url) {
+    note.hidden = false;
+    note.className = "rulebook-viewer-note";
+    note.textContent = "This rulebook could not be drawn in the app. ";
+    var link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Open the official file";
+    note.appendChild(link);
+  }
+  function openRulebookDocument(url, title) {
+    var dialog = document.getElementById("rulebook-viewer");
+    var stage = document.getElementById("rulebook-viewer-stage");
+    var titleEl = document.getElementById("rulebook-viewer-title");
+    var closeBtn = document.getElementById("rulebook-viewer-close");
+    if (!dialog || !stage || !url) return;
+    cancelRulebookHighlight();
+    var token = rulebookViewerToken;
+    var label = title || "Rulebook";
+    if (titleEl) titleEl.textContent = label;
+    stage.innerHTML = "";
+    var note = document.createElement("p");
+    note.className = "rulebook-viewer-note";
+    note.setAttribute("role", "status");
+    note.textContent = "Opening the rulebook\u2026";
+    var pages = document.createElement("div");
+    pages.className = "rulebook-pages";
+    stage.appendChild(note);
+    stage.appendChild(pages);
+    if (typeof dialog.showModal === "function") {
+      if (!dialog.open) dialog.showModal();
+    } else dialog.setAttribute("open", "");
+    if (closeBtn) closeBtn.focus();
+    function onBookProgress(progress) {
+      if (token !== rulebookViewerToken || !progress || !progress.total) return;
+      var pct = Math.max(0, Math.min(100, Math.round(100 * progress.loaded / progress.total)));
+      note.textContent = "Opening the rulebook\u2026 " + pct + "%";
+    }
+    function stopBookProgress() {
+      unwatchRulebookProgress(url, onBookProgress);
+    }
+    loadRulebookPdf(url, onBookProgress).then(function (pdf) {
+      stopBookProgress();
+      if (token !== rulebookViewerToken) return;
+      note.hidden = true;
+      var slots = [];
+      for (var i = 1; i <= pdf.numPages; i++) {
+        var slot = document.createElement("section");
+        slot.className = "rulebook-viewer-sheet";
+        slot.setAttribute("data-page", String(i));
+        var guess = rulebookViewerWidth(stage);
+        slot.style.width = guess + "px";
+        slot.style.minHeight = Math.round(guess * 1.3) + "px";
+        slot.setAttribute("aria-label", "Page " + i + " of " + pdf.numPages);
+        pages.appendChild(slot);
+        slots.push(slot);
+      }
+      if (titleEl) titleEl.textContent = label + " \u00b7 1 / " + pdf.numPages;
+      function drawSlot(slot) {
+        if (!slot || slot.getAttribute("data-drawn") === "1" || slot.getAttribute("data-drawing") === "1") return;
+        if (token !== rulebookViewerToken) return;
+        slot.setAttribute("data-drawing", "1");
+        var pageNum = parseInt(slot.getAttribute("data-page"), 10);
+        pdf.getPage(pageNum).then(function (page) {
+          if (token !== rulebookViewerToken || !slot.isConnected) return;
+          var unscaled = page.getViewport({ scale: 1 });
+          var fit = rulebookViewerWidth(stage);
+          var viewport = page.getViewport({ scale: fit / unscaled.width });
+          slot.style.width = Math.floor(viewport.width) + "px";
+          slot.style.height = Math.floor(viewport.height) + "px";
+          slot.style.minHeight = "0";
+          slot.innerHTML = "";
+          var canvas = document.createElement("canvas");
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.floor(viewport.width * dpr);
+          canvas.height = Math.floor(viewport.height * dpr);
+          canvas.style.width = "100%";
+          canvas.style.height = "100%";
+          canvas.setAttribute("role", "img");
+          canvas.setAttribute("aria-label", "Rulebook page " + pageNum + " of " + pdf.numPages);
+          slot.appendChild(canvas);
+          var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
+          return page.render({
+            canvasContext: canvas.getContext("2d"),
+            viewport: viewport,
+            transform: transform
+          }).promise.then(function () {
+            if (token !== rulebookViewerToken) return;
+            slot.setAttribute("data-drawn", "1");
+          });
+        }).catch(function () {
+          slot.removeAttribute("data-drawing");
+        });
+      }
+      if (window.IntersectionObserver) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) drawSlot(entry.target);
+          });
+        }, { root: stage, rootMargin: "1400px 0px" });
+        slots.forEach(function (slot) { io.observe(slot); });
+        highlightJob.pageObserver = io;
+      } else {
+        slots.forEach(drawSlot);
+      }
+      drawSlot(slots[0]);
+      if (slots[1]) drawSlot(slots[1]);
+      if (slots[2]) drawSlot(slots[2]);
+      stage.addEventListener("scroll", function onBookScroll() {
+        if (token !== rulebookViewerToken) {
+          stage.removeEventListener("scroll", onBookScroll);
+          return;
+        }
+        var found = 1;
+        var edge = stage.getBoundingClientRect().top + 96;
+        for (var n = 0; n < slots.length; n++) {
+          if (slots[n].getBoundingClientRect().bottom >= edge) {
+            found = n + 1;
+            break;
+          }
+        }
+        if (titleEl) titleEl.textContent = label + " \u00b7 " + found + " / " + pdf.numPages;
+      });
+    }).catch(function () {
+      stopBookProgress();
+      if (token !== rulebookViewerToken) return;
+      rulebookFallback(note, url);
+    });
+  }
   function showRulebook(url, title) {
-    var same = url.indexOf(window.location.origin) === 0;
-    if (!same) {
+    var pdf = pdfTargetUrl(url);
+    if (!pdf) {
       openRulebookViewer(url, title);
       return;
     }
-    fetch(url.split("#")[0], { method: "HEAD" }).then(function (res) {
-      if (res.ok) openRulebookViewer(url, title);
+    var file = pdf.split("#")[0];
+    var same = file.indexOf(window.location.origin) === 0;
+    if (!same) {
+      openRulebookDocument(file, title);
+      return;
+    }
+    fetch(file, { method: "HEAD" }).then(function (res) {
+      if (res.ok) openRulebookDocument(file, title);
       else window.alert("Sorry, this rulebook has not been uploaded yet.");
     }).catch(function () {
-      window.alert("Sorry, this rulebook could not be loaded right now.");
+      openRulebookDocument(file, title);
     });
   }
   function rulebookLinkTitle(link) {
@@ -109912,7 +110055,20 @@
       "</strong>" + inner + "</div>"
     );
   }
-  function renderTeach(game, selected, count, characters) {
+  function gameHasTeach(game) {
+    if (!game) return false;
+    if (!contentIsEmpty(game.teachingScript)) return true;
+    var exps = Array.isArray(game.expansions) ? game.expansions : [];
+    for (var i = 0; i < exps.length; i++) {
+      if (exps[i] && !contentIsEmpty(exps[i].teachingScript)) return true;
+    }
+    var chars = characterList(game);
+    for (var j = 0; j < chars.length; j++) {
+      if (!contentIsEmpty(chars[j].teachingScript)) return true;
+    }
+    return false;
+  }
+  function renderTeachBody(game, selected, count, characters) {
     var parts = [];
     var baseHtml = renderTeachBlock(game && game.teachingScript, count, "", true);
     if (baseHtml) parts.push(baseHtml);
@@ -109926,15 +110082,11 @@
       var extra = renderTeachBlock(ch.teachingScript, count, ch.name || "Faction", false);
       if (extra) parts.push(extra);
     });
-    if (!parts.length) return "";
-    return (
-      '<details class="expansion teach-it" id="teach-it">' +
-        '<summary><span class="expansion-name">Teach it</span></summary>' +
-        '<div class="expansion-body"><div class="rule-body" id="teach-it-body">' +
-          parts.join("") +
-        "</div></div>" +
-      "</details>"
-    );
+    return parts.join("");
+  }
+  function renderTeachLink(game) {
+    if (!gameHasTeach(game)) return "";
+    return '<a class="btnlink teach-open" href="#/game/' + game.slug + '/teach">Teach it</a>';
   }
   function mistakeParts(value) {
     if (contentIsEmpty(value)) return null;
@@ -110428,7 +110580,7 @@
             '<h3 id="scoring-summary-title">How you win</h3>' +
             '<div id="scoring-summary-body">' + renderSummaryHtml(summaryLines) + "</div>" +
           "</aside>" +
-          '<div id="teach-it-slot">' + renderTeach(g, [], selectedCount, []) + "</div>" +
+          '<div id="teach-it-slot">' + renderTeachLink(g) + "</div>" +
           '<div id="common-mistakes-slot">' + renderCommonMistakes(commonMistakes) + "</div>" +
           '<div id="first-game-slot">' + renderFirstGame(g.firstGameSetup, selectedCount) + "</div>" +
           '<div class="actions">' +
@@ -110502,6 +110654,7 @@
             paintPlayTime(count);
             paintFirstGame(count);
             paintTeach();
+            savePlayMemory();
           });
         });
       }
@@ -110644,6 +110797,7 @@
       paintTeach();
       paintAids(selected);
       wrapWideTables(appEl);
+      savePlayMemory();
       if (barState && !barState.animating) syncTableBarCollapse(!!barState.collapsed, false);
     }
     expButtons.forEach(function (btn) {
@@ -110688,10 +110842,7 @@
         paintSections();
         if (activeCharacterNames[name]) {
           var chosen = selectedCharacters().filter(function (ch) { return ch.name === name; })[0];
-          if (chosen && characterHasAid(chosen)) {
-            var aidBox = document.getElementById("character-aids");
-            if (aidBox) revealCharacterAid(aidBox);
-          } else {
+          if (!chosen || !characterHasAid(chosen)) {
             var qsBlock = document.getElementById("quick-setup-block");
             if (qsBlock) qsBlock.open = true;
           }
@@ -110792,7 +110943,7 @@
       summary.setAttribute("aria-expanded", "false");
       summary.setAttribute("aria-label", action + " " + text);
     }
-    var FOLD_MS = 250;
+    var FOLD_MS = 280;
     function applyCollapseClasses(plan) {
       var bar = document.getElementById("table-bar");
       if (!bar) return;
@@ -110887,10 +111038,9 @@
     }
     function animateCollapse(plan, token) {
       var bar = document.getElementById("table-bar");
-      var header = document.querySelector("header");
       var summary = document.getElementById("table-bar-summary");
       var hiding = listsToFold(plan);
-      if (!bar || !header || !summary) {
+      if (!bar || !summary) {
         instantApplyPlan(plan);
         finishMotion();
         return;
@@ -110915,47 +111065,41 @@
       summary.style.visibility = "";
       summary.style.height = "0px";
       summary.style.opacity = "0";
-      var fromH = hiding.map(function (el) { return el.getBoundingClientRect().height; });
       var marker = bar.nextElementSibling;
-      var headerBottom = header.getBoundingClientRect().bottom;
-      var anchorTop = marker ? marker.getBoundingClientRect().top : headerBottom;
-      var finalBarH = collapsedBarHeight(plan, summaryTarget);
-      var start = performance.now();
       barState.animating = true;
       barState.ignoreScroll = true;
-      function holdContent(e) {
-        if (!marker || !marker.isConnected) return;
-        // The lists are already above the fold. Shrink them without chasing
-        // the bar, and ease the text down only enough to clear the short bar.
-        var desired = anchorTop + ((headerBottom + finalBarH + 8) - anchorTop) * e;
-        var delta = marker.getBoundingClientRect().top - desired;
-        if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
-      }
-      function frame(now) {
-        if (token !== barState.foldToken || !bar.isConnected) return;
-        var t = Math.min(1, (now - start) / FOLD_MS);
-        var e = easeInOut(t);
-        hiding.forEach(function (el, i) {
-          el.style.height = (fromH[i] * (1 - e)) + "px";
-          el.style.opacity = String(1 - e);
+      hiding.forEach(function (el) { el.classList.add("is-folding"); });
+      summary.classList.add("is-folding");
+      // One height transition. No per-frame scrolling. A single correction
+      // after the bar pins keeps the text under it from jumping.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (token !== barState.foldToken || !bar.isConnected) return;
+          hiding.forEach(function (el) {
+            el.style.height = "0px";
+            el.style.opacity = "0";
+          });
+          summary.style.height = summaryTarget + "px";
+          summary.style.opacity = "1";
         });
-        summary.style.height = (summaryTarget * e) + "px";
-        summary.style.opacity = String(Math.min(1, e * 1.15));
-        holdContent(e);
-        if (t < 1) requestAnimationFrame(frame);
-        else {
-          hiding.forEach(function (el) { markFolded(el, true); });
-          clearFoldStyles(summary);
-          summary.hidden = false;
-          var topBefore = bar.getBoundingClientRect().top;
-          applyCollapseClasses(plan);
-          var jumped = bar.getBoundingClientRect().top - topBefore;
-          if (Math.abs(jumped) > 1) window.scrollBy(0, jumped);
-          holdContent(1);
-          finishMotion();
+      });
+      window.setTimeout(function () {
+        if (token !== barState.foldToken || !bar.isConnected) return;
+        hiding.forEach(function (el) {
+          el.classList.remove("is-folding");
+          markFolded(el, true);
+        });
+        summary.classList.remove("is-folding");
+        clearFoldStyles(summary);
+        summary.hidden = false;
+        var markerTop = marker && marker.isConnected ? marker.getBoundingClientRect().top : 0;
+        applyCollapseClasses(plan);
+        if (marker && marker.isConnected) {
+          var shift = marker.getBoundingClientRect().top - markerTop;
+          if (Math.abs(shift) > 1) window.scrollBy(0, shift);
         }
-      }
-      requestAnimationFrame(frame);
+        finishMotion();
+      }, FOLD_MS + 40);
     }
     function collapsedBarHeight(plan, summaryTarget) {
       var bar = document.getElementById("table-bar");
@@ -111009,13 +111153,6 @@
         el.style.height = fromH[i] + "px";
       });
       if (bar) bar.offsetHeight;
-      var growth = 0;
-      targets.forEach(function (h, i) { growth += Math.max(0, h - fromH[i]); });
-      var expandMs = Math.max(320, Math.min(900, Math.round(280 + growth * 0.28)));
-      function expandEase(t) {
-        if (growth > 480) return t;
-        return easeInOut(t);
-      }
       var summaryFrom = 0;
       if (summary && !summary.hidden) {
         summaryFrom = parseFloat(summary.style.height);
@@ -111024,32 +111161,36 @@
         summary.style.height = summaryFrom + "px";
         if (!summary.style.opacity) summary.style.opacity = "1";
       }
-      var start = performance.now();
       barState.animating = true;
       barState.ignoreScroll = true;
-      function frame(now) {
-        if (token !== barState.foldToken || !bar || !bar.isConnected) return;
-        var t = Math.min(1, (now - start) / expandMs);
-        var e = expandEase(t);
-        showing.forEach(function (el, i) {
-          el.style.height = (fromH[i] + (targets[i] - fromH[i]) * e) + "px";
-          el.style.opacity = String(fromOpacity[i] + (1 - fromOpacity[i]) * e);
-        });
-        if (summary && summaryFrom) {
-          summary.style.height = (summaryFrom * (1 - e)) + "px";
-          summary.style.opacity = String(1 - e);
-        }
-        if (t < 1) requestAnimationFrame(frame);
-        else {
-          showing.forEach(function (el) { markFolded(el, false); });
-          if (summary) {
-            markFolded(summary, false);
-            summary.hidden = true;
+      showing.forEach(function (el) { el.classList.add("is-folding"); });
+      if (summary && summaryFrom) summary.classList.add("is-folding");
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          if (token !== barState.foldToken || !bar || !bar.isConnected) return;
+          showing.forEach(function (el, i) {
+            el.style.height = targets[i] + "px";
+            el.style.opacity = "1";
+          });
+          if (summary && summaryFrom) {
+            summary.style.height = "0px";
+            summary.style.opacity = "0";
           }
-          finishMotion();
+        });
+      });
+      window.setTimeout(function () {
+        if (token !== barState.foldToken || !bar || !bar.isConnected) return;
+        showing.forEach(function (el) {
+          el.classList.remove("is-folding");
+          markFolded(el, false);
+        });
+        if (summary) {
+          summary.classList.remove("is-folding");
+          markFolded(summary, false);
+          summary.hidden = true;
         }
-      }
-      requestAnimationFrame(frame);
+        finishMotion();
+      }, FOLD_MS + 40);
     }
     function layoutTop(el) {
       var y = 0;
@@ -111242,7 +111383,56 @@
         if (!barState.collapsed) syncHeaderOffset();
       }, true);
     }
-    if (characterList(g).length) paintSections();
+    function savePlayMemory() {
+      var chars = [];
+      Object.keys(activeCharacterNames).forEach(function (name) {
+        if (activeCharacterNames[name]) chars.push(name);
+      });
+      playMemory[slug] = {
+        count: selectedCount,
+        exps: selectedExpansions().map(function (exp) { return exp && exp.name; }).filter(Boolean),
+        chars: chars
+      };
+    }
+    var remembered = playMemory[slug];
+    if (remembered) {
+      if (remembered.count != null) selectedCount = String(remembered.count);
+      (remembered.chars || []).forEach(function (name) { activeCharacterNames[name] = true; });
+      if (remembered.exps) {
+        var expOn = {};
+        remembered.exps.forEach(function (name) { expOn[name] = true; });
+        expButtons.forEach(function (btn) {
+          var exp = namedExpansions[parseInt(btn.getAttribute("data-exp"), 10)];
+          var active = !!(exp && expOn[exp.name]);
+          if (active) {
+            btn.setAttribute("data-active", "true");
+            btn.setAttribute("aria-pressed", "true");
+          } else {
+            btn.removeAttribute("data-active");
+            btn.setAttribute("aria-pressed", "false");
+          }
+        });
+      }
+      Array.prototype.forEach.call(document.querySelectorAll(".pc-btn"), function (btn) {
+        var on = btn.getAttribute("data-count") === String(selectedCount);
+        if (on) {
+          btn.setAttribute("data-active", "true");
+          btn.setAttribute("aria-pressed", "true");
+        } else {
+          btn.removeAttribute("data-active");
+          btn.setAttribute("aria-pressed", "false");
+        }
+      });
+      var rememberedText = document.getElementById("pc-text");
+      if (rememberedText && setupByPlayerCount && !contentIsEmpty(setupByPlayerCount[String(selectedCount)])) {
+        rememberedText.innerHTML = renderRuleContent(setupByPlayerCount[String(selectedCount)]) ||
+          '<p class="rule-empty">(No details for this player count yet.)</p>';
+        wrapWideTables(rememberedText);
+      }
+      paintPlayTime(selectedCount);
+      paintFirstGame(selectedCount);
+    }
+    if (characterList(g).length || remembered) paintSections();
 
     function paintPlayTime(count) {
       var item = document.getElementById("play-time");
@@ -111264,13 +111454,7 @@
     function paintTeach() {
       var slot = document.getElementById("teach-it-slot");
       if (!slot) return;
-      var prev = document.getElementById("teach-it");
-      var wasOpen = !!(prev && prev.open);
-      var exps = typeof selectedExpansions === "function" ? selectedExpansions() : [];
-      var chars = typeof selectedCharacters === "function" ? selectedCharacters() : [];
-      slot.innerHTML = renderTeach(g, exps, selectedCount, chars);
-      var next = document.getElementById("teach-it");
-      if (next && wasOpen) next.open = true;
+      slot.innerHTML = renderTeachLink(g);
     }
     function paintAids(selected) {
       var slot = document.getElementById("player-aids-slot");
@@ -111403,6 +111587,9 @@
     var params = new URLSearchParams(q);
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
+      if ((pieces[2] || "").toLowerCase() === "teach") {
+        return { route: "teach", slug: routed.slug, expansions: routed.expansions };
+      }
       return {
         route: "detail",
         slug: routed.slug,
@@ -111414,6 +111601,132 @@
   }
 
   var tableBarApi = null;
+  var playMemory = {};
+
+  function renderTeachPage(slug) {
+    detailSlug = slug;
+    var g = DATA[slug];
+    if (!g) {
+      appEl.innerHTML = '<div class="detail fade-in"><p>Game not found: <code>' + escapeHtml(slug) + "</code></p></div>";
+      return;
+    }
+    setGameAccent(g);
+    var mem = playMemory[slug] || {};
+    var counts = [];
+    if (g.setupByPlayerCount && typeof g.setupByPlayerCount === "object" && !Array.isArray(g.setupByPlayerCount)) {
+      counts = Object.keys(g.setupByPlayerCount).sort(function (a, b) {
+        return parseInt(a, 10) - parseInt(b, 10);
+      });
+    }
+    var count = mem.count != null && counts.indexOf(String(mem.count)) !== -1 ? String(mem.count) : (counts[0] || null);
+    var expOn = {};
+    (mem.exps || []).forEach(function (name) { expOn[name] = true; });
+    var charOn = {};
+    (mem.chars || []).forEach(function (name) { charOn[name] = true; });
+    var named = (Array.isArray(g.expansions) ? g.expansions : []).filter(function (exp) {
+      return exp && String(exp.name || "").trim() && expansionHasDelta(exp);
+    });
+    var chars = characterList(g);
+    function selectedExps() {
+      return named.filter(function (exp) { return !!expOn[exp.name]; });
+    }
+    function selectedChars() {
+      return chars.filter(function (ch) { return !!charOn[ch.name]; });
+    }
+    function save() {
+      playMemory[slug] = {
+        count: count,
+        exps: selectedExps().map(function (exp) { return exp.name; }),
+        chars: selectedChars().map(function (ch) { return ch.name; })
+      };
+    }
+    function paint() {
+      save();
+      var body = document.getElementById("teach-script");
+      if (!body) return;
+      var html = renderTeachBody(g, selectedExps(), count, selectedChars());
+      body.innerHTML = html || '<p class="rule-empty">No teaching script for this selection yet.</p>';
+      wrapWideTables(body);
+    }
+    function chipButton(cls, attr, value, label, on) {
+      return '<button type="button" class="' + cls + '" ' + attr + '="' + escapeHtml(value) + '"' +
+        (on ? ' data-active="true" aria-pressed="true"' : ' aria-pressed="false"') + ">" +
+        escapeHtml(label) + "</button>";
+    }
+    var pcHtml = counts.map(function (c) {
+      return chipButton("pc-btn", "data-count", c, /^\d+$/.test(c) ? c + "p" : c, c === count);
+    }).join("");
+    var expHtml = named.map(function (exp, idx) {
+      return chipButton("exp-chip", "data-exp", String(idx), exp.name, !!expOn[exp.name]);
+    }).join("");
+    var charHtml = chars.map(function (ch) {
+      return chipButton("exp-chip char-chip", "data-char", ch.name, ch.name, !!charOn[ch.name]);
+    }).join("");
+    var controls = "";
+    if (pcHtml || expHtml || charHtml) {
+      controls =
+        '<div class="table-bar">' +
+          (pcHtml ? '<div class="playercount-controls" role="group" aria-label="Player count">' + pcHtml + "</div>" : "") +
+          (expHtml ? '<div class="expansion-controls" role="group" aria-label="Expansions in play">' + expHtml + "</div>" : "") +
+          (charHtml ? '<div class="expansion-controls" role="group" aria-label="' + escapeHtml(String(g.charactersLabel || "Factions")) + '">' + charHtml + "</div>" : "") +
+        "</div>";
+    }
+    appEl.innerHTML =
+      '<article class="detail teach-page">' +
+        '<p class="page-back"><a class="back-link" href="#/game/' + slug + '">\u2190 ' + escapeHtml(g.name) + "</a></p>" +
+        '<h2 class="title">Teach it</h2>' +
+        '<p class="byline">' + escapeHtml(g.name) + "</p>" +
+        controls +
+        '<div class="teach-script rule-body" id="teach-script"></div>' +
+      "</article>";
+    paint();
+    var page = appEl.querySelector(".teach-page");
+    if (!page) return;
+    page.addEventListener("click", function (e) {
+      var pc = e.target.closest ? e.target.closest(".pc-btn") : null;
+      if (pc && page.contains(pc)) {
+        count = pc.getAttribute("data-count");
+        Array.prototype.forEach.call(page.querySelectorAll(".pc-btn"), function (btn) {
+          var on = btn === pc;
+          if (on) btn.setAttribute("data-active", "true");
+          else btn.removeAttribute("data-active");
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        paint();
+        return;
+      }
+      var expBtn = e.target.closest ? e.target.closest(".exp-chip[data-exp]") : null;
+      if (expBtn && page.contains(expBtn)) {
+        var exp = named[parseInt(expBtn.getAttribute("data-exp"), 10)];
+        if (!exp) return;
+        if (expOn[exp.name]) {
+          delete expOn[exp.name];
+          expBtn.removeAttribute("data-active");
+          expBtn.setAttribute("aria-pressed", "false");
+        } else {
+          expOn[exp.name] = true;
+          expBtn.setAttribute("data-active", "true");
+          expBtn.setAttribute("aria-pressed", "true");
+        }
+        paint();
+        return;
+      }
+      var chBtn = e.target.closest ? e.target.closest(".char-chip") : null;
+      if (chBtn && page.contains(chBtn)) {
+        var name = chBtn.getAttribute("data-char");
+        if (charOn[name]) {
+          delete charOn[name];
+          chBtn.removeAttribute("data-active");
+          chBtn.setAttribute("aria-pressed", "false");
+        } else {
+          charOn[name] = true;
+          chBtn.setAttribute("data-active", "true");
+          chBtn.setAttribute("aria-pressed", "true");
+        }
+        paint();
+      }
+    });
+  }
 
   function syncHeaderOffset() {
     var header = document.querySelector("header");
@@ -111438,7 +111751,11 @@
     syncHeaderOffset();
     if (normalizeIncoming()) return;
     var parsed = parseHash();
-    if (parsed.route === "detail") {
+    if (parsed.route === "teach") {
+      scrollPageToTop();
+      renderTeachPage(parsed.slug);
+      requestAnimationFrame(scrollPageToTop);
+    } else if (parsed.route === "detail") {
       scrollPageToTop();
       var requested = ((window.location.hash || "").replace(/^#\/game\//, "").split("?")[0] || "").toLowerCase();
       var canon = SLUG_ALIASES[requested];
