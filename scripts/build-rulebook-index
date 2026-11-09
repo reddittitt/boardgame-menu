@@ -295,13 +295,41 @@ def ocr_pages(pdf: Path, pages: list[int], work: Path) -> dict[int, list[str]]:
     return found
 
 
+# Some publishers reject the short agent string, and a Dropbox share link
+# with dl=0 returns an HTML preview of the same PDF. Try the page URL first.
+USER_AGENTS = (
+    "bgquick-rulebook-index/1.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
+)
+
+
+def candidate_urls(url: str) -> list[str]:
+    urls = [url]
+    if "dropbox.com" in url.lower() and "dl=0" in url:
+        urls.append(url.replace("dl=0", "dl=1"))
+    return urls
+
+
 def download(url: str, dest: Path) -> None:
-    request = urllib.request.Request(url, headers={"User-Agent": "bgquick-rulebook-index/1.0"})
-    try:
-        with urllib.request.urlopen(request, timeout=120) as response:
-            dest.write_bytes(response.read())
-    except Exception as exc:  # noqa: BLE001 - surface the URL and reason together
-        die(f"could not download {url} ({exc})")
+    errors: list[str] = []
+    for candidate in candidate_urls(url):
+        for agent in USER_AGENTS:
+            request = urllib.request.Request(
+                candidate,
+                headers={"User-Agent": agent, "Accept": "application/pdf,*/*"},
+            )
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    data = response.read()
+            except Exception as exc:  # noqa: BLE001 - try the next fetch, then report them together
+                errors.append(f"{candidate} ({exc})")
+                continue
+            if data[:5] == b"%PDF-":
+                dest.write_bytes(data)
+                return
+            errors.append(f"{candidate} (response was not a PDF)")
+    detail = "; ".join(errors[-4:]) if errors else "no response"
+    die(f"could not download {url} ({detail})")
 
 
 def resolve_source(slug: str, game: dict) -> str | Path:

@@ -1,0 +1,420 @@
+{
+  "slug": "no-thanks",
+  "pages": [
+    {
+      "page": 1,
+      "lines": [
+        "8 and up",
+        "3–7 players",
+        "Thorsten Gimmler",
+        "about 20 minutes",
+        "Oliver Freudenreich",
+        "The Idea of the Game",
+        "“No Thanks!” – that’s exactly what you want to",
+        "say when you’re offered a card. However, to get",
+        "away with it, you’ll need to have some counters",
+        "left. But if you don’t use a counter, you’ll get",
+        "stuck with the card and gain negative points!",
+        "Who will use their counters most cleverly?"
+      ]
+    },
+    {
+      "page": 2,
+      "lines": [
+        "Components",
+        "33 number cards with",
+        "values from 3–35",
+        "55 counters",
+        "22 special cards",
+        "(only for the expansion)",
+        "Setup",
+        "For the base game, shuffle the 33 number",
+        "cards and set aside 9 cards without looking",
+        "at them. You won’t be using these cards for",
+        "this game. Place the remaining 24 cards in",
+        "the middle of the table in a face-down deck.",
+        "(Return the special cards to the box.)"
+      ]
+    },
+    {
+      "page": 3,
+      "lines": [
+        "Then, give the following number of counters",
+        "to each player:",
+        "11 if you are 3–5 players",
+        "9 if you are 6 players",
+        "7 if you are 7 players",
+        "Any remaining counters go back in the box.",
+        "Keep the number of counters you have secret",
+        "from the other players for the whole game!",
+        "Playing the Game",
+        "The player who has said “No thanks!” most",
+        "recently starts the game. On your turn, reveal",
+        "the top card of the deck and place it next to",
+        "the deck, face up."
+      ]
+    },
+    {
+      "page": 4,
+      "lines": [
+        "You now have a choice:",
+        "Either take the card and place it face up",
+        "in front of you to start your display.",
+        "Refuse to take the card by placing 1 of",
+        "your counters on it.",
+        "If you decide to take the face-up card, you",
+        "get all the counters that are currently on it.",
+        "Then you reveal the next card of the deck and",
+        "face the same decision: taking or refusing the",
+        "new card.",
+        "If you refuse to take the card, the player to",
+        "your left is up and must decide to either place",
+        "a counter on the card to refuse taking it, or to",
+        "take the card and put it in their display. Keep",
+        "playing in a clockwise direction. If several",
+        "players each refuse to take the card, counters",
+        "will start to collect on it.",
+        "Your turn only ends when you refuse to take",
+        "a card and place a counter on it."
+      ]
+    },
+    {
+      "page": 5,
+      "lines": [
+        "Felix reveals the top",
+        "card of the deck. It",
+        "shows the value 11.",
+        "He doesn’t want the",
+        "card, so he places 1 of",
+        "his counters on it and",
+        "refuses it.",
+        "Beate is up next. She",
+        "doesn’t want the card",
+        "either, so she also",
+        "refuses it and places a",
+        "counter on it.",
+        "Lisa would rather save",
+        "her counters for later,",
+        "so she doesn’t refuse",
+        "the card. She takes",
+        "the 11 and places it in",
+        "front of herself, face",
+        "up. The 2 counters on",
+        "it go into her secret",
+        "supply."
+      ]
+    },
+    {
+      "page": 6,
+      "lines": [
+        "Now it’s Lisa’s turn to",
+        "reveal a new card from",
+        "the face-down deck.",
+        "It shows the value 26.",
+        "Lisa could immediately",
+        "take the card, but she",
+        "refuses it and places 1",
+        "of her counters on it.",
+        "This ends her turn.",
+        "Over the course of the game, you’ll refuse to",
+        "take higher-value cards more and more often.",
+        "This means that a card can stay on the table",
+        "for several rounds and accumulate a number",
+        "of counters before someone finally takes it.",
+        "Felix, Beate, and Lisa",
+        "have each refused the",
+        "26 card several times,",
+        "but now Lisa decides",
+        "to take it, because",
+        "there are already 9",
+        "counters on the card."
+      ]
+    },
+    {
+      "page": 7,
+      "lines": [
+        "Cards and Counters",
+        "Having many counters is great because it",
+        "allows you to refuse cards. Also, each counter",
+        "is worth 1 point at the end of the game. If",
+        "it’s your turn and you’re out of counters, you",
+        "must take the card from the table.",
+        "Each card you have in front of you is worth as",
+        "many negative points as its value: a 6 is worth",
+        "6 negative points, a 21 counts 21 negative",
+        "points, and so on.",
+        "Lisa has 4 cards in front of her. At the end of",
+        "the game, these cards are worth 47 negative",
+        "points in total."
+      ]
+    },
+    {
+      "page": 8,
+      "lines": [
+        "If you manage to create number chains with",
+        "directly consecutive values, you get fewer",
+        "negative points. Number chains only count",
+        "as many negative points as the lowest value",
+        "in the whole chain. For example, a 15 and a",
+        "16 together would only earn you 15 negative",
+        "points.",
+        "Place cards that belong to a number chain on",
+        "top of each other, so the lowest number is",
+        "showing on top. The values of all cards must",
+        "remain visible to all players, though.",
+        "At this point, Felix has the 13 and a number",
+        "chain of 15 and 16 in front of him. The",
+        "number chain means that he doesn’t have",
+        "44 negative points (13+15+16), but only 28"
+      ]
+    },
+    {
+      "page": 9,
+      "lines": [
+        "If Felix manages to get the 14 later in the",
+        "game, he can create a number chain from",
+        "13 to 16, so his cards would only earn him 13",
+        "negative points in total!",
+        "The End of the Game",
+        "The game ends when a player takes the last",
+        "card from the middle of the table. Add together",
+        "the number of points in your display:",
+        "the values of single cards and the lowest",
+        "values in your number chains. These are your",
+        "negative points. Deduct 1 point from this",
+        "total for each counter you have left."
+      ]
+    },
+    {
+      "page": 10,
+      "lines": [
+        "The player with the fewest negative points",
+        "(or even the most positive points) wins the",
+        "game!",
+        "If there is a tie, all players involved in it share",
+        "the victory.",
+        "At the end of the game, Felix has 2 single",
+        "cards and 2 number chains in front of him.",
+        "This earns him 48 negative points (3 + 7 + 13 +",
+        "25 = 48). He deducts points for his 8 remaining",
+        "counters. His final result is 40 negative points"
+      ]
+    },
+    {
+      "page": 11,
+      "lines": [
+        "Expansion",
+        "If you’ve already played several rounds of No",
+        "Thanks!, this expansion gives you a bit more",
+        "variety. In addition to the usual number cards,",
+        "you’ll now play with green and pink special",
+        "cards. Green special cards allow you to take",
+        "strong actions at certain moments, while pink",
+        "special cards can ruin your plans and have a",
+        "negative impact on your total points.",
+        "Setup",
+        "Shuffle the 16 pink special cards in with the",
+        "33 base game number cards. Then put aside",
+        "9 of these cards without looking at them.",
+        "Shuffle the 16 green special cards separately",
+        "and put 7 of them back in the box without",
+        "looking at them. Then shuffle the remaining",
+        "9 green cards into the deck with the pink",
+        "special cards and the base game cards."
+      ]
+    },
+    {
+      "page": 12,
+      "lines": [
+        "You’ll be able to recognize the green special",
+        "cards in the deck by their green backs, while",
+        "the pink special cards have the same backs as",
+        "the normal number cards.",
+        "Playing the Game",
+        "The base game rules apply as usual. If you",
+        "reveal a pink special card, you can either take",
+        "it or refuse it by putting a counter on it. If",
+        "you take the card, you still get all counters",
+        "currently on it.",
+        "Green special cards tend to be beneficial for",
+        "you, so in these cases, you’ll outbid each other",
+        "to get the card instead of trying to refuse it.",
+        "If you decide not to put a counter on a green",
+        "special card, you don’t get the card, but you do",
+        "take the counters that are currently on it. The",
+        "card itself goes to the player on your right (i.e.,",
+        "the last person to have placed a counter on the",
+        "card). The player who received the counters",
+        "reveals the next card and takes their turn."
+      ]
+    },
+    {
+      "page": 13,
+      "lines": [
+        "If you reveal a green special card and decide",
+        "not to put a counter on it, it’s still the player",
+        "to your right who receives the card. Then you",
+        "reveal the next card.",
+        "The Special Cards",
+        "Activate your special cards according to their",
+        "icons:",
+        "Cards with this icon go in your display. You’ll",
+        "activate them at the end of the game.",
+        "Cards with this icon also go in your display, but",
+        "you may activate them at any point during the",
+        "game. Once you’ve activated them, discard",
+        "them.",
+        "These cards are activated immediately when",
+        "you take them. Then they are discarded."
+      ]
+    },
+    {
+      "page": 14,
+      "lines": [
+        "Green Special Cards",
+        "Bonus points",
+        "These cards earn you the number",
+        "of points indicated at the end of",
+        "the game. Count them against your negative",
+        "points when determining your points total.",
+        "Wild card",
+        "The wild card represents any one",
+        "number. You can wait until the end",
+        "of the game before you decide which number",
+        "that is. The wild card is especially helpful for",
+        "connecting number chains.",
+        "Note: The wild card can only represent a",
+        "number from 3 to 35."
+      ]
+    },
+    {
+      "page": 15,
+      "lines": [
+        "1 positive point per card",
+        "You receive 1 positive point for each",
+        "card in your display at the end of the",
+        "game. Any pink or green special cards that you",
+        "haven’t discarded, including this card itself,",
+        "count towards this, too.",
+        "Skip one card and don’t bid",
+        "Discard this card at the start of a",
+        "bidding round or while the bidding",
+        "is still going on to quit the bidding round.",
+        "While the number or special card in question",
+        "remains in the middle of the table, you’re not",
+        "bidding. Only when the next card is revealed",
+        "do you start taking turns again as usual.",
+        "Note: If you use this card to avoid bidding on",
+        "a green special card, you can’t receive that",
+        "green card, either."
+      ]
+    },
+    {
+      "page": 16,
+      "lines": [
+        "Look at the 9 set-aside cards",
+        "With this card, you can gain information",
+        "about the cards that aren’t",
+        "used in this game.",
+        "Note: You may not look at the 7 green special",
+        "cards you’ve put back in the box.",
+        "Immediately give any 1 card from",
+        "your display to the player on your",
+        "left",
+        "If you have at least 1 card in your display, you",
+        "must carry out this action. If you only have",
+        "a green special card, you must pass it on. If",
+        "you don’t have any cards, skip the action and",
+        "discard this special card."
+      ]
+    },
+    {
+      "page": 17,
+      "lines": [
+        "Immediately remove any 1 card",
+        "from your display",
+        "If you have at least 1 card in your",
+        "display, you must carry out this action. If you",
+        "only have a green special card, you must",
+        "remove it. If you don’t have any cards, skip",
+        "the action and discard this special card.",
+        "Double the value of your counters",
+        "Any counters you have left at the",
+        "end of the game count double",
+        "the number of points. If you have any other",
+        "special cards affecting the value of your",
+        "counters, activate this card first."
+      ]
+    },
+    {
+      "page": 18,
+      "lines": [
+        "Pink Special Cards",
+        "Take the first face-down card with",
+        "a pink X from the deck",
+        "If the deck’s top card has a green X,",
+        "take the first card under it that has a pink X on",
+        "its back. If the deck is empty or only consists of",
+        "green cards, take the top one from the 9 setaside",
+        "cards.",
+        "Counters are negative points",
+        "Any counters you have left at the",
+        "end of the game count 1 negative",
+        "point each instead of 1 positive point.",
+        "Note: If you also have the green card that",
+        "doubles the value of your counters at the end",
+        "of the game, each of your counters is worth 2",
+        "negative points!"
+      ]
+    },
+    {
+      "page": 19,
+      "lines": [
+        "Halve the value of your counters",
+        "Any counters you have left at the",
+        "end of the game are only worth",
+        "half the number of points. If you have an odd",
+        "number of counters, round down. If you have",
+        "any other special cards affecting the value of",
+        "your counters, activate this card first.",
+        "Note: If you also have the green special card",
+        "that doubles the value of your counters at the",
+        "end of the game, the two cards cancel each",
+        "other out.",
+        "Your highest number card counts",
+        "double",
+        "Double the number of negative",
+        "points for your highest number card. If it’s",
+        "part of a number chain, the lowest card in",
+        "that chain counts double instead."
+      ]
+    },
+    {
+      "page": 20,
+      "lines": [
+        "The number 40",
+        "This card works like a number card.",
+        "At the end of the game, it counts as",
+        "40 negative points.",
+        "Note: If you also have the pink special card",
+        "that makes your highest number card count",
+        "double, this card is worth 80 negative points!",
+        "1 negative point per card",
+        "You receive 1 negative point for",
+        "each card in your display at the end",
+        "of the game. Any pink or green special cards",
+        "that you haven’t discarded, including this",
+        "card itself, count towards this, too.",
+        "Note: If you also have the green special card",
+        "that gives you 1 positive point per card at the",
+        "end of the game, the two cards cancel each",
+        "other out.",
+        "spaß –",
+        "© AMIGO Spiel + Freizeit GmbH, D-63128 Dietzenbach, 2024",
+        "verpa",
+        "astikfr",
+        "Version 1.0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "slug": "sequence",
+  "pages": [
+    {
+      "page": 1,
+      "lines": [
+        "INSTRUCTIONS"
+      ]
+    },
+    {
+      "page": 2,
+      "lines": [
+        "Instructions",
+        "CONTENTS",
+        "Gameboard • 50 green chips",
+        "104 Sequence cards",
+        "35 red chips",
+        "50 blue chips",
+        "Instruction manual",
+        "OBJECT OF THE GAME",
+        "To be the first player or team to score 2 sequences.",
+        "A sequence is an unbroken horizontal, vertical or diagonal line of",
+        "5 chips of the same colour.",
+        "For 3 players or 3 teams, one sequence wins the game.",
+        "SET UP",
+        "The game is played individually for up to 3 players. Beyond 3, divide",
+        "players evenly into 2 or 3 teams. Team members must alternate their",
+        "physical positions around the playing surface.",
+        "Players / teams choose their colour and take the corresponding",
+        "chips. With 2 teams or 2 players, use the blue and green chips.Each",
+        "team picks a card. The team with the highest card starts the game. In",
+        "case of a draw, pick again.",
+        "Deal cards according to the number of players:",
+        "For 2 players:",
+        "For 3 or 4 players:",
+        "For 6 players:",
+        "For 8 or 9 players:",
+        "For 10 or 12 players:",
+        "7 cards each",
+        "6 cards each",
+        "5 cards each",
+        "4 cards each",
+        "3 cards each",
+        "The remaining cards constitute the deck.",
+        "PLAYING THE GAME",
+        "On their turn, players select one of their cards and place it face-up in",
+        "front of them. They then take a chip in their colour and place it on a",
+        "free space on the board that matches the card.",
+        "Example: If the card is the King of Hearts, place a chip on one of the",
+        "2 King of Hearts squares on the board (if available).",
+        "Be careful! If you fail to take a card before the next player makes a",
+        "move AND draws their card, you lose the right to take a card and",
+        "must finish the game with one less card.",
+        "The game continues clockwise."
+      ]
+    },
+    {
+      "page": 3,
+      "lines": [
+        "Joker spaces: the spaces in the four corners of the board act as",
+        "Jokers. These spaces count as a chip in your color and can be used",
+        "by all players at the same time. This means you only need four chips",
+        "to complete a Sequence.",
+        "With the exception of the Jacks, each card appears twice on the board.",
+        "Jacks are cards with specific powers that, when played, allow you to",
+        "take advantage in the game.",
+        "There are two types of Jack: One-eyed Jacks and Two-eyed Jacks.",
+        "Two-eyed Jacks are",
+        "wild: They allow you",
+        "to play a chip on",
+        "any open space on",
+        "the game board.",
+        "One-eyed Jacks",
+        "have a very useful",
+        "power: They allow",
+        "you to remove any",
+        "of your opponents",
+        "chip from the board",
+        "(without replacing it).",
+        "Note: A completed Sequence is considered protected. No chip",
+        "can be removed.",
+        "If you have an unplayable card in your hand, you can discard and",
+        "replace it, before playing your turn.",
+        "END OF THE GAME",
+        "2 players or 2 teams: The first player or team to score 2 sequences",
+        "of 5 chips wins the game.",
+        "3 players or 3 teams: The first player or team that scores 1 sequence",
+        "of 5 chips wins the game.",
+        "NOTES",
+        "- 2 intersecting sequences of the same colour can",
+        "share a common chip.",
+        "- Players may not consult each other about their cards unless",
+        "otherwise agreed at the beginning of the game."
+      ]
+    },
+    {
+      "page": 4,
+      "lines": [
+        "— INSTRUCTIONS —"
+      ]
+    }
+  ]
+}
