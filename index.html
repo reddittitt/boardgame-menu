@@ -334,7 +334,7 @@
   margin-bottom: 0.4rem;
 }
 
-  /* Detail view. Title and player/time sit beside the cover, then the sticky bar. */
+  /* Detail view. Title and player/time sit beside the cover, then the chip row. */
   .detail {
     background:var(--card);
     border:1px solid var(--border);
@@ -774,7 +774,7 @@
     border-color: rgba(255, 255, 255, 0.45);
   }
 
-  /* Back to the list. Not sticky, and not in the player-count bar. */
+  /* Back to the list. It scrolls with the page, and it is not in the chip row. */
   .page-back { margin:0; }
   .page-back--end { margin-top:20px; }
   .back-link {
@@ -805,14 +805,13 @@
 
 /* Section cards use the theme card color. No brand wash when a block is open. */
 
-  /* Table reference: bigger type, 44px targets, sticky controls */
+  /* Table reference: bigger type and 44px targets. The chip row scrolls away. */
   .btn,
   .btnlink {
     min-height:44px;
   }
   .pc-btn:focus-visible,
   .exp-chip:focus-visible,
-  .table-bar-summary:focus-visible,
   .back-link:focus-visible,
   .character-aid-ref:focus-visible,
   .aid-open:focus-visible,
@@ -844,14 +843,6 @@
     border-radius:14px;
     box-shadow:0 8px 16px -14px rgba(0,0,0,0.55);
     box-sizing:border-box;
-  }
-  /* Sticky only after the lists have scrolled away. While they are open,
-     the bar stays in normal flow so the last chip can be reached. */
-  .table-bar.is-collapsed,
-  .table-bar.is-collapsed-expansions,
-  .table-bar.is-collapsed-players {
-    position:sticky;
-    top:var(--header-h, 72px);
   }
   .table-bar-top {
     display:flex;
@@ -930,49 +921,6 @@
   .table-bar .exp-note {
     margin:0;
     line-height:1.35;
-  }
-  /* After the fold animation, take the closed lists out of the bar. */
-  .table-bar [data-folded="true"] {
-    display:none !important;
-  }
-  .table-bar .is-folding {
-    transition:height 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
-  }
-  @media (prefers-reduced-motion:reduce) {
-    .table-bar .is-folding { transition:none; }
-  }
-  .table-bar-summary {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    width:100%;
-    max-width:100%;
-    min-height:44px;
-    margin:0;
-    padding:8px 12px;
-    box-sizing:border-box;
-    border:1px solid var(--btn-border);
-    border-radius:12px;
-    background:var(--btn);
-    color:inherit;
-    font:inherit;
-    font-weight:700;
-    text-align:left;
-    cursor:pointer;
-  }
-  .table-bar-summary[hidden] { display:none; }
-  .table-bar-summary-text {
-    flex:1 1 auto;
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .table-bar-summary-action {
-    flex:0 0 auto;
-    color:var(--accent);
-    font-size:0.85rem;
-    font-weight:700;
   }
   .pc-btn,
   .exp-chip {
@@ -1092,7 +1040,7 @@
   .character-aids {
     margin:0 0 12px;
     min-width:0;
-    scroll-margin-top:calc(var(--header-h, 64px) + var(--table-bar-h, 0px) + 8px);
+    scroll-margin-top:calc(var(--header-h, 64px) + 8px);
   }
   .character-aids h3 {
     margin:0 0 0.2rem;
@@ -1684,7 +1632,7 @@
   .rule-group,
   .expansion,
   .scoring-summary {
-    scroll-margin-top:calc(var(--header-h, 64px) + var(--table-bar-h, 0px) + 8px);
+    scroll-margin-top:calc(var(--header-h, 64px) + 8px);
   }
   /* Floor at 16px. iOS Safari zooms the page when a focused field is smaller. */
   #search,
@@ -1762,7 +1710,6 @@
     .table-bar-top { flex:1 1 auto; }
     .table-bar .expansion-controls { flex:1 1 auto; }
     .table-bar .exp-note { display:none; }
-    .table-bar-summary { flex:1 1 180px; width:auto; }
     .detail-head {
       grid-template-columns:150px minmax(0, 1fr);
       justify-items:start;
@@ -110537,14 +110484,10 @@
     }
     var tableBarHtml = "";
     if (playerButtonsHtml || expansionControlsHtml || characterControlsHtml) {
-      var tableBarSummaryHtml = (expansionControlsHtml || characterControlsHtml)
-        ? '<button type="button" class="table-bar-summary" id="table-bar-summary" hidden></button>'
-        : "";
       tableBarHtml =
         '<div class="table-bar" id="table-bar">' +
           (playerButtonsHtml ? '<div class="table-bar-top">' + playerButtonsHtml + "</div>" : "") +
           expansionControlsHtml +
-          tableBarSummaryHtml +
           characterControlsHtml +
         "</div>";
     }
@@ -110798,7 +110741,6 @@
       paintAids(selected);
       wrapWideTables(appEl);
       savePlayMemory();
-      if (barState && !barState.animating) syncTableBarCollapse(!!barState.collapsed, false);
     }
     expButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -110848,540 +110790,6 @@
           }
         }
       });
-    }
-    /* The chip lists scroll with the page. Fold them only after the last
-       chip has moved above the header, then keep a one-line summary stuck. */
-    var barState = {
-      lastY: window.scrollY || 0,
-      collapsed: false,
-      holdOpen: false,
-      plan: null,
-      ignoreScroll: false,
-      skipPast: false,
-      animating: false,
-      foldToken: 0,
-      revealAid: null,
-      width: window.innerWidth
-    };
-    function readingRoom() {
-      var shortSide = Math.min(window.innerWidth, window.innerHeight);
-      if (shortSide <= 500) return Math.round(window.innerHeight * 0.42);
-      return Math.min(280, Math.round(window.innerHeight * 0.34));
-    }
-    function contentRoomBelowBar() {
-      var bar = document.getElementById("table-bar");
-      var header = document.querySelector("header");
-      if (!bar) return window.innerHeight;
-      var headerH = header ? header.offsetHeight : 0;
-      return window.innerHeight - headerH - bar.offsetHeight;
-    }
-    function measureCollapsePlan() {
-      var chars = document.getElementById("char-controls");
-      var exps = document.getElementById("exp-controls");
-      var hasChars = !!(chars && !chars.hidden && chars.children.length);
-      var charH = hasChars ? chars.offsetHeight : 0;
-      var expH = exps && !exps.hidden ? exps.offsetHeight : 0;
-      var pc = document.querySelector("#table-bar .playercount-controls");
-      var pcH = pc ? pc.offsetHeight : 0;
-      var room = contentRoomBelowBar();
-      var need = readingRoom();
-      var collapseChars = hasChars && charH >= 80;
-      var roomWithoutChars = room + (collapseChars ? charH : 0);
-      // Fold a multi-line expansion row with the factions. Leaving it up makes
-      // the stuck bar hundreds of pixels tall and shoves the page.
-      var collapseExps = !!(collapseChars && expH >= 80);
-      if (!collapseExps && hasChars && expH >= 80 && roomWithoutChars < need) collapseExps = true;
-      var roomAfter = roomWithoutChars + (collapseExps ? expH : 0) - ((collapseChars || collapseExps) ? 48 : 0);
-      var collapsePc = !!((collapseChars || collapseExps) && pcH >= 100 && roomAfter < Math.min(220, Math.round(window.innerHeight * 0.34)));
-      if (!collapseChars && !collapseExps && !collapsePc) return null;
-      return { collapseChars: collapseChars, collapseExps: collapseExps, collapsePc: collapsePc };
-    }
-    function chipNames(selector) {
-      return Array.prototype.map.call(document.querySelectorAll(selector), function (btn) {
-        return (btn.textContent || "").replace(/\s+/g, " ").trim();
-      }).filter(Boolean);
-    }
-    function summaryLabel(names, emptyLabel, compactCount) {
-      if (!names.length) return emptyLabel;
-      if (names.length <= 2) return names.join(", ");
-      if (compactCount) return names.length + " " + compactCount;
-      return names[0] + ", " + names[1] + " +" + (names.length - 2);
-    }
-    function fillTableBarSummary(plan) {
-      var summary = document.getElementById("table-bar-summary");
-      if (!summary) return;
-      var parts = [];
-      if (plan.collapsePc) {
-        var pc = document.querySelector("#table-bar .pc-btn[data-active='true']");
-        if (pc) parts.push((pc.textContent || "").replace(/\s+/g, " ").trim());
-      }
-      if (plan.collapseExps) {
-        var expOn = chipNames("#exp-controls .exp-chip[data-active='true']");
-        if (expOn.length) parts.push(summaryLabel(expOn, "Expansions", "expansions"));
-        else if (!plan.collapseChars) parts.push("Expansions");
-      }
-      if (plan.collapseChars) {
-        var charSlot = document.getElementById("char-controls");
-        var label = (charSlot && charSlot.getAttribute("aria-label")) || "Characters";
-        var charOn = chipNames("#char-controls .char-chip[data-active='true']");
-        if (charOn.length) parts.push(summaryLabel(charOn, label, ""));
-        else if (!parts.length) parts.push(plan.collapseExps ? label + " and expansions" : label);
-        else parts.push(label);
-      }
-      var text = parts.join(" · ") || "Show list";
-      var chosen = false;
-      if (plan.collapseChars && document.querySelector("#char-controls .char-chip[data-active='true']")) chosen = true;
-      if (plan.collapseExps && document.querySelector("#exp-controls .exp-chip[data-active='true']")) chosen = true;
-      var action = chosen ? "Change" : "Show";
-      summary.innerHTML =
-        '<span class="table-bar-summary-text">' + escapeHtml(text) + "</span>" +
-        '<span class="table-bar-summary-action">' + action + "</span>";
-      var controls = [];
-      if (plan.collapseExps) controls.push("exp-controls");
-      if (plan.collapseChars) controls.push("char-controls");
-      if (controls.length) summary.setAttribute("aria-controls", controls.join(" "));
-      summary.setAttribute("aria-expanded", "false");
-      summary.setAttribute("aria-label", action + " " + text);
-    }
-    var FOLD_MS = 280;
-    function applyCollapseClasses(plan) {
-      var bar = document.getElementById("table-bar");
-      if (!bar) return;
-      bar.classList.toggle("is-collapsed", !!(plan && plan.collapseChars));
-      bar.classList.toggle("is-collapsed-expansions", !!(plan && plan.collapseExps));
-      bar.classList.toggle("is-collapsed-players", !!(plan && plan.collapsePc));
-    }
-    function foldableElements() {
-      return {
-        chars: document.getElementById("char-controls"),
-        exps: document.getElementById("exp-controls"),
-        pc: document.querySelector("#table-bar .table-bar-top"),
-        summary: document.getElementById("table-bar-summary")
-      };
-    }
-    function clearFoldStyles(el) {
-      if (!el) return;
-      el.style.height = "";
-      el.style.opacity = "";
-      el.style.overflow = "";
-      el.style.boxSizing = "";
-      el.style.minHeight = "";
-      el.style.flex = "";
-      el.style.pointerEvents = "";
-    }
-    function markFolded(el, folded) {
-      if (!el) return;
-      clearFoldStyles(el);
-      if (folded) el.setAttribute("data-folded", "true");
-      else el.removeAttribute("data-folded");
-    }
-    function listsToFold(plan) {
-      var els = foldableElements();
-      var list = [];
-      if (plan && plan.collapseChars && els.chars) list.push(els.chars);
-      if (plan && plan.collapseExps && els.exps) list.push(els.exps);
-      if (plan && plan.collapsePc && els.pc) list.push(els.pc);
-      return list;
-    }
-    function prefersReducedMotion() {
-      return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-    }
-    function easeInOut(t) {
-      return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-    }
-    function lockFoldBox(el) {
-      el.style.boxSizing = "border-box";
-      el.style.minHeight = "0";
-      el.style.flex = "0 0 auto";
-      el.style.overflow = "hidden";
-      el.style.pointerEvents = "none";
-    }
-    function prepareForMeasure() {
-      var bar = document.getElementById("table-bar");
-      var els = foldableElements();
-      applyCollapseClasses(null);
-      [els.chars, els.exps, els.pc, els.summary].forEach(function (el) {
-        markFolded(el, false);
-      });
-      if (els.summary) els.summary.hidden = true;
-      if (bar) bar.offsetHeight;
-    }
-    function instantClearBar() {
-      var els = foldableElements();
-      applyCollapseClasses(null);
-      [els.chars, els.exps, els.pc].forEach(function (el) { markFolded(el, false); });
-      if (els.summary) {
-        markFolded(els.summary, false);
-        els.summary.hidden = true;
-        els.summary.innerHTML = "";
-      }
-    }
-    function instantApplyPlan(plan) {
-      var els = foldableElements();
-      listsToFold(plan).forEach(function (el) { markFolded(el, true); });
-      [els.chars, els.exps, els.pc].forEach(function (el) {
-        if (el && listsToFold(plan).indexOf(el) < 0) markFolded(el, false);
-      });
-      if (els.summary) {
-        markFolded(els.summary, false);
-        els.summary.hidden = false;
-      }
-      applyCollapseClasses(plan);
-      stickScrollFloor();
-      syncHeaderOffset();
-    }
-    function finishMotion() {
-      barState.animating = false;
-      barState.ignoreScroll = false;
-      barState.lastY = window.scrollY || 0;
-      syncHeaderOffset();
-    }
-    function animateCollapse(plan, token) {
-      var bar = document.getElementById("table-bar");
-      var summary = document.getElementById("table-bar-summary");
-      var hiding = listsToFold(plan);
-      if (!bar || !summary) {
-        instantApplyPlan(plan);
-        finishMotion();
-        return;
-      }
-      hiding.forEach(function (el) {
-        lockFoldBox(el);
-        el.style.height = el.offsetHeight + "px";
-        el.style.opacity = "1";
-      });
-      summary.hidden = false;
-      lockFoldBox(summary);
-      summary.style.position = "absolute";
-      summary.style.left = "0";
-      summary.style.right = "0";
-      summary.style.visibility = "hidden";
-      summary.style.height = "auto";
-      summary.style.opacity = "0";
-      var summaryTarget = summary.offsetHeight || 44;
-      summary.style.position = "";
-      summary.style.left = "";
-      summary.style.right = "";
-      summary.style.visibility = "";
-      summary.style.height = "0px";
-      summary.style.opacity = "0";
-      var marker = bar.nextElementSibling;
-      barState.animating = true;
-      barState.ignoreScroll = true;
-      hiding.forEach(function (el) { el.classList.add("is-folding"); });
-      summary.classList.add("is-folding");
-      // One height transition. No per-frame scrolling. A single correction
-      // after the bar pins keeps the text under it from jumping.
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          if (token !== barState.foldToken || !bar.isConnected) return;
-          hiding.forEach(function (el) {
-            el.style.height = "0px";
-            el.style.opacity = "0";
-          });
-          summary.style.height = summaryTarget + "px";
-          summary.style.opacity = "1";
-        });
-      });
-      window.setTimeout(function () {
-        if (token !== barState.foldToken || !bar.isConnected) return;
-        hiding.forEach(function (el) {
-          el.classList.remove("is-folding");
-          markFolded(el, true);
-        });
-        summary.classList.remove("is-folding");
-        clearFoldStyles(summary);
-        summary.hidden = false;
-        var markerTop = marker && marker.isConnected ? marker.getBoundingClientRect().top : 0;
-        applyCollapseClasses(plan);
-        if (marker && marker.isConnected) {
-          var shift = marker.getBoundingClientRect().top - markerTop;
-          if (Math.abs(shift) > 1) window.scrollBy(0, shift);
-        }
-        finishMotion();
-      }, FOLD_MS + 40);
-    }
-    function collapsedBarHeight(plan, summaryTarget) {
-      var bar = document.getElementById("table-bar");
-      var els = foldableElements();
-      var cs = bar ? window.getComputedStyle(bar) : null;
-      var pad = cs ? (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0) : 0;
-      var gap = cs ? (parseFloat(cs.rowGap || cs.gap) || 0) : 0;
-      var h = pad;
-      var n = 0;
-      function add(el) {
-        if (!el) return;
-        h += el.getBoundingClientRect().height;
-        n += 1;
-      }
-      if (!plan.collapsePc) add(els.pc);
-      if (!plan.collapseExps) add(els.exps);
-      h += summaryTarget;
-      n += 1;
-      if (!plan.collapseChars) add(els.chars);
-      if (n > 1) h += gap * (n - 1);
-      return h;
-    }
-    function animateExpand(token) {
-      var bar = document.getElementById("table-bar");
-      var els = foldableElements();
-      var summary = els.summary;
-      var showing = [els.chars, els.exps, els.pc].filter(function (el) {
-        return el && (el.getAttribute("data-folded") === "true" || el.style.height);
-      });
-      applyCollapseClasses(null);
-      var fromH = showing.map(function (el) {
-        if (el.getAttribute("data-folded") === "true") return 0;
-        var h = parseFloat(el.style.height);
-        return isNaN(h) ? el.getBoundingClientRect().height : h;
-      });
-      var fromOpacity = showing.map(function (el) {
-        var o = parseFloat(el.style.opacity);
-        return isNaN(o) ? (fromH[showing.indexOf(el)] ? 1 : 0) : o;
-      });
-      showing.forEach(function (el, i) {
-        el.removeAttribute("data-folded");
-        lockFoldBox(el);
-        el.style.height = fromH[i] + "px";
-        el.style.opacity = String(fromOpacity[i]);
-      });
-      var targets = showing.map(function (el) {
-        el.style.height = "auto";
-        return el.offsetHeight;
-      });
-      showing.forEach(function (el, i) {
-        el.style.height = fromH[i] + "px";
-      });
-      if (bar) bar.offsetHeight;
-      var summaryFrom = 0;
-      if (summary && !summary.hidden) {
-        summaryFrom = parseFloat(summary.style.height);
-        if (isNaN(summaryFrom)) summaryFrom = summary.getBoundingClientRect().height;
-        lockFoldBox(summary);
-        summary.style.height = summaryFrom + "px";
-        if (!summary.style.opacity) summary.style.opacity = "1";
-      }
-      barState.animating = true;
-      barState.ignoreScroll = true;
-      showing.forEach(function (el) { el.classList.add("is-folding"); });
-      if (summary && summaryFrom) summary.classList.add("is-folding");
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          if (token !== barState.foldToken || !bar || !bar.isConnected) return;
-          showing.forEach(function (el, i) {
-            el.style.height = targets[i] + "px";
-            el.style.opacity = "1";
-          });
-          if (summary && summaryFrom) {
-            summary.style.height = "0px";
-            summary.style.opacity = "0";
-          }
-        });
-      });
-      window.setTimeout(function () {
-        if (token !== barState.foldToken || !bar || !bar.isConnected) return;
-        showing.forEach(function (el) {
-          el.classList.remove("is-folding");
-          markFolded(el, false);
-        });
-        if (summary) {
-          summary.classList.remove("is-folding");
-          markFolded(summary, false);
-          summary.hidden = true;
-        }
-        finishMotion();
-      }, FOLD_MS + 40);
-    }
-    function layoutTop(el) {
-      var y = 0;
-      var node = el;
-      while (node) {
-        y += node.offsetTop || 0;
-        node = node.offsetParent;
-      }
-      return y;
-    }
-    function stickScrollFloor() {
-      var bar = document.getElementById("table-bar");
-      var header = document.querySelector("header");
-      if (!bar || !header || !barState.collapsed) return;
-      var minY = Math.max(0, layoutTop(bar) - header.offsetHeight);
-      var y = window.scrollY || 0;
-      if (y > 12 && y < minY) window.scrollTo(0, minY);
-    }
-    function barVisuallyFolded() {
-      var bar = document.getElementById("table-bar");
-      if (!bar) return false;
-      if (bar.classList.contains("is-collapsed") || bar.classList.contains("is-collapsed-expansions") || bar.classList.contains("is-collapsed-players")) return true;
-      return !!bar.querySelector("[data-folded='true']");
-    }
-    function syncTableBarCollapse(forceMeasure, animate) {
-      var bar = document.getElementById("table-bar");
-      var summary = document.getElementById("table-bar-summary");
-      if (!bar || !summary) {
-        syncHeaderOffset();
-        return;
-      }
-      barState.foldToken = (barState.foldToken || 0) + 1;
-      var token = barState.foldToken;
-      var motion = !!animate && !prefersReducedMotion();
-      if (!barState.collapsed) {
-        if (motion && barVisuallyFolded()) {
-          animateExpand(token);
-          return;
-        }
-        instantClearBar();
-        barState.animating = false;
-        barState.ignoreScroll = false;
-        barState.lastY = window.scrollY || 0;
-        syncHeaderOffset();
-        return;
-      }
-      prepareForMeasure();
-      if (forceMeasure || !barState.plan) barState.plan = measureCollapsePlan();
-      if (!barState.plan) {
-        barState.collapsed = false;
-        barState.skipPast = true;
-        instantClearBar();
-        barState.animating = false;
-        barState.ignoreScroll = false;
-        barState.lastY = window.scrollY || 0;
-        syncHeaderOffset();
-        return;
-      }
-      fillTableBarSummary(barState.plan);
-      if (motion) animateCollapse(barState.plan, token);
-      else {
-        instantApplyPlan(barState.plan);
-        if (barState.revealAid && barState.revealAid.scrollIntoView) {
-          barState.revealAid.scrollIntoView({ block: "start" });
-          barState.revealAid = null;
-        }
-        barState.animating = false;
-        barState.ignoreScroll = false;
-        barState.lastY = window.scrollY || 0;
-        syncHeaderOffset();
-      }
-    }
-    function barIsNearTop() {
-      if ((window.scrollY || 0) <= 12) return true;
-      var bar = document.getElementById("table-bar");
-      var header = document.querySelector("header");
-      if (!bar || !header) return true;
-      return bar.getBoundingClientRect().top > header.offsetHeight + 2;
-    }
-    function chipListsBottom() {
-      var bottom = null;
-      ["exp-controls", "char-controls"].forEach(function (id) {
-        var el = document.getElementById(id);
-        if (!el || el.hidden) return;
-        if (window.getComputedStyle(el).display === "none") return;
-        var rect = el.getBoundingClientRect();
-        if (rect.height < 1) return;
-        if (bottom == null || rect.bottom > bottom) bottom = rect.bottom;
-      });
-      return bottom;
-    }
-    function scrolledPastLists() {
-      var header = document.querySelector("header");
-      var bottom = chipListsBottom();
-      if (!header || bottom == null) return false;
-      return bottom <= header.getBoundingClientRect().bottom + 1;
-    }
-    function placeContentBelowBar() {
-      var bar = document.getElementById("table-bar");
-      var header = document.querySelector("header");
-      var marker = bar && bar.nextElementSibling;
-      if (!bar || !header || !marker) return;
-      var desired = header.getBoundingClientRect().bottom + bar.offsetHeight + 8;
-      var delta = marker.getBoundingClientRect().top - desired;
-      if (Math.abs(delta) > 2) window.scrollBy(0, delta);
-    }
-    function collapsePastLists() {
-      if (barState.collapsed || barState.animating || !scrolledPastLists()) return;
-      barState.holdOpen = false;
-      barState.collapsed = true;
-      syncTableBarCollapse(true, true);
-    }
-    function onTableBarScroll() {
-      var y = window.scrollY || 0;
-      barState.lastY = y;
-      if (barState.ignoreScroll || barState.animating) return;
-      if (!document.getElementById("char-controls")) return;
-      if (!scrolledPastLists()) barState.skipPast = false;
-      if (barIsNearTop()) {
-        if (barState.collapsed || barState.holdOpen) {
-          barState.holdOpen = false;
-          barState.collapsed = false;
-          barState.skipPast = false;
-          syncTableBarCollapse(false, true);
-        }
-        return;
-      }
-      if (barState.skipPast) return;
-      collapsePastLists();
-    }
-    function revealCharacterAid(el) {
-      barState.holdOpen = false;
-      barState.collapsed = true;
-      barState.revealAid = el || null;
-      syncTableBarCollapse(true, true);
-    }
-    function onTableBarResize() {
-      var width = window.innerWidth;
-      if (width === barState.width) {
-        syncHeaderOffset();
-        return;
-      }
-      barState.width = width;
-      syncTableBarCollapse(true, false);
-    }
-    var summaryBtn = document.getElementById("table-bar-summary");
-    if (summaryBtn) {
-      summaryBtn.addEventListener("click", function () {
-        var bar = document.getElementById("table-bar");
-        var headerEl = document.querySelector("header");
-        barState.holdOpen = true;
-        barState.collapsed = false;
-        barState.skipPast = false;
-        barState.plan = null;
-        barState.ignoreScroll = true;
-        function beginExpand() {
-          syncTableBarCollapse(false, true);
-        }
-        var headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
-        // Sticky position lies about where the lists live. Use the document position.
-        var docTop = bar ? layoutTop(bar) : 0;
-        var listsAreAbove = docTop + 24 < (window.scrollY || 0) + headerBottom;
-        if (bar && listsAreAbove && !prefersReducedMotion()) {
-          var targetY = Math.max(0, docTop - headerBottom);
-          window.scrollTo({ top: targetY, behavior: "smooth" });
-          var started = false;
-          function startOnce() {
-            if (started) return;
-            started = true;
-            window.removeEventListener("scrollend", startOnce);
-            beginExpand();
-          }
-          window.addEventListener("scrollend", startOnce);
-          setTimeout(startOnce, 800);
-        } else {
-          if (bar && listsAreAbove) window.scrollTo(0, Math.max(0, docTop - headerBottom));
-          beginExpand();
-        }
-      });
-    }
-    tableBarApi = {
-      onScroll: onTableBarScroll,
-      onResize: onTableBarResize
-    };
-    var barEl = document.getElementById("table-bar");
-    if (barEl) {
-      barEl.addEventListener("toggle", function (e) {
-        var target = e.target;
-        if (!target || !target.classList || !target.classList.contains("chip-group")) return;
-        if (!barState.collapsed) syncHeaderOffset();
-      }, true);
     }
     function savePlayMemory() {
       var chars = [];
@@ -111600,7 +111008,6 @@
     return { route:"list" };
   }
 
-  var tableBarApi = null;
   var playMemory = {};
 
   function renderTeachPage(slug) {
@@ -111733,8 +111140,6 @@
     if (header) {
       document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
     }
-    var bar = document.getElementById("table-bar");
-    document.documentElement.style.setProperty("--table-bar-h", bar ? (bar.offsetHeight + "px") : "0px");
   }
 
   function scrollPageToTop() {
@@ -111746,7 +111151,6 @@
   }
 
   function render() {
-    tableBarApi = null;
     closeRulebookViewer();
     syncHeaderOffset();
     if (normalizeIncoming()) return;
@@ -111776,12 +111180,8 @@
   }
 
   window.addEventListener("hashchange", render);
-  window.addEventListener("scroll", function () {
-    if (tableBarApi) tableBarApi.onScroll();
-  }, { passive: true });
   window.addEventListener("resize", function () {
     syncHeaderOffset();
-    if (tableBarApi) tableBarApi.onResize();
   });
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function() { syncHeaderOffset(); });

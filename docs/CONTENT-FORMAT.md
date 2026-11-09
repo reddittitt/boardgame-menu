@@ -6,7 +6,7 @@ This file is the format that pass should write. Do not invent a second shape.
 
 ## Scoring summary
 
-The box under the sticky bar is **How you win**. It reads the base game, then one line from each selected expansion.
+The box under the chip row is **How you win**. It reads the base game, then one line from each selected expansion.
 
 1. If `scoringSummary` is set, the box uses that and ignores `endGameScoring`.
 2. Otherwise it uses the first 3 scoring items in `endGameScoring`.
@@ -37,7 +37,7 @@ The game page, top to bottom:
 1. Title, with the cover beside it on a wide screen and above it on a narrow one. The cover keeps its aspect ratio.
 2. Player count and play time.
 3. Essential links: Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty. Extra official files from `extraEssentials` sit in that same row, and only when the game has them. BoardGameGeek is the cover, not a separate button.
-4. Sticky bar: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the sticky bar. There are no Setup, Turn, End of Game, or Scoring jump buttons.
+4. Chip row: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). The row scrolls away with the page. The site header stays put. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the chip row. There are no Setup, Turn, End of Game, or Scoring jump buttons.
 5. **How you win**.
 6. **Teach it**, collapsed, and only when `teachingScript` has text.
 7. **Common mistakes**, only when `commonMistakes` has text.
