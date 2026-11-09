@@ -503,6 +503,29 @@
     padding:0 0.12em;
     border-radius:3px;
   }
+  .rulebook-ref {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+    min-width:44px;
+    margin:0 0 0 6px;
+    padding:0 10px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:transparent;
+    color:var(--accent);
+    font-size:0.85rem;
+    font-weight:700;
+    line-height:1;
+    text-decoration:none;
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  .rulebook-ref:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
 
   .cover {
     margin:0;
@@ -33749,11 +33772,13 @@
           },
           {
             "lead": "Put a ruin",
-            "text": "on each R slot (four)."
+            "text": "on each slot marked R (four).",
+            "source": { "page": 5, "query": "Place Ruins", "label": "5.1.4" }
           },
           {
             "lead": "Item supply",
-            "text": "On the printed spaces: 2 M, 2 B, 1 C, 1 H, 2 S, 2 T, 2 X."
+            "text": "On the printed spaces: 2 boots (M), 2 bags (B), 1 crossbow (C), 1 hammer (H), 2 swords (S), 2 tea (T), and 2 coins (X).",
+            "source": { "page": 5, "query": "Form Item Supply", "label": "5.1.5" }
           },
           {
             "lead": "Overview cards as wanted",
@@ -33761,7 +33786,8 @@
           },
           {
             "lead": "Then each faction",
-            "text": "sets up in order A, B, C."
+            "text": "sets up in the printed order A, then B, then C.",
+            "source": { "page": 5, "query": "Set Up Factions", "label": "5.1.7" }
           }
         ]
       },
@@ -33782,7 +33808,8 @@
               },
               {
                 "lead": "Cards",
-                "text": "Shuffle the deck. Each player draws 3."
+                "text": "Shuffle the deck. Each player draws 3.",
+                "source": { "page": 5, "query": "draws three cards", "label": "5.1.3" }
               },
               {
                 "lead": "Leave in the box",
@@ -33808,7 +33835,8 @@
               },
               {
                 "lead": "Cards",
-                "text": "Shuffle the deck. Each player draws 5 and keeps 3."
+                "text": "Shuffle the deck. Each player draws 5 and keeps 3.",
+                "source": { "page": 23, "query": "draws five cards", "label": "A.7" }
               },
               {
                 "lead": "Optional pieces",
@@ -35997,11 +36025,11 @@
               },
               {
                 "lead": "Ruins",
-                "text": "Take the 4 ruins and the B, M, H, and S items marked R. Place one item under each ruin, shuffle each stack, and return each stack to an empty ruin slot."
+                "text": "Take the 4 ruins and the bag (B), boot (M), hammer (H), and sword (S) marked R. Place one item under each ruin, shuffle each stack, and return each stack to an empty ruin slot."
               },
               {
                 "lead": "Items",
-                "text": "Take the items marked S listed on the character card. T, X, and B go face up on their tracks. Other listed items go face up in the Satchel. Return any remaining S items to the box."
+                "text": "Take the starting items the character card marks with S. Tea (T), coins (X), and bags (B) go face up on their tracks. Other listed items go face up in the Satchel. Return any remaining starting items to the box."
               },
               {
                 "lead": "Relationships",
@@ -36026,11 +36054,11 @@
                 },
                 {
                   "lead": "Ruins",
-                  "text": "Take the 4 ruins and the B, M, H, and S items marked R. Place one item under each ruin, shuffle each stack, and return each stack to an empty ruin slot."
+                  "text": "Take the 4 ruins and the bag (B), boot (M), hammer (H), and sword (S) marked R. Place one item under each ruin, shuffle each stack, and return each stack to an empty ruin slot."
                 },
                 {
                   "lead": "Items",
-                  "text": "Take the items marked S listed on the character card. T, X, and B go face up on their tracks. Other listed items go face up in the Satchel. Return any remaining S items to the box."
+                  "text": "Take the starting items the character card marks with S. Tea (T), coins (X), and bags (B) go face up on their tracks. Other listed items go face up in the Satchel. Return any remaining starting items to the box."
                 },
                 {
                   "lead": "Relationships",
@@ -37179,7 +37207,8 @@
           "bullets": [
             {
               "lead": "Remove all four dominance cards",
-              "text": "Do this before the shuffle."
+              "text": "Do this before the shuffle.",
+              "source": { "page": 5, "query": "remove all four dominance", "label": "5.1.3" }
             },
             {
               "lead": "Reach of the two",
@@ -112857,7 +112886,7 @@
     if (!link || !link.href) return false;
     if (link.closest && link.closest("#rulebook-viewer")) return false;
     if (link.getAttribute("data-check") === "rulebook") return true;
-    if (link.classList && link.classList.contains("rulebook-hit")) return true;
+    if (link.classList && (link.classList.contains("rulebook-hit") || link.classList.contains("rulebook-ref"))) return true;
     return !!pdfTargetUrl(link.getAttribute("href") || link.href);
   }
   function openRulebookViewer(url, title) {
@@ -113079,7 +113108,7 @@
     if (!isRulebookAnchor(link)) return;
     e.preventDefault();
     rulebookLastFocus = link;
-    if (link.classList.contains("rulebook-hit")) {
+    if (link.classList.contains("rulebook-hit") || link.classList.contains("rulebook-ref")) {
       var pageMatch = String(link.hash || "").match(/page=(\d+)/i);
       var pageNum = pageMatch ? parseInt(pageMatch[1], 10) : 0;
       var snippet = link.getAttribute("data-snippet") || "";
@@ -113585,6 +113614,31 @@
     });
     return root;
   }
+  function currentRulebookHref() {
+    var g = DATA[detailSlug];
+    if (!g || !g.rulebook) return "";
+    var rb = String(g.rulebook).trim();
+    if (!rb) return "";
+    return /^https?:\/\//i.test(rb) ? rb : rulebookUrl(rb.replace(/\.pdf$/, ""));
+  }
+  function renderRulebookRef(item) {
+    var source = item && item.source;
+    if (!source || source.page == null || source.page === "") return "";
+    var page = parseInt(source.page, 10);
+    if (!page || page < 1) return "";
+    var href = currentRulebookHref();
+    if (!href) return "";
+    var query = String(source.query || "").trim();
+    var snippet = String(source.snippet || query).trim();
+    var label = String(source.label || ("p. " + page)).trim();
+    return ' <a class="rulebook-ref" href="' + escapeHtml(href) + "#page=" + page + '"' +
+      ' data-page="' + page + '"' +
+      ' data-query="' + escapeHtml(query) + '"' +
+      ' data-snippet="' + escapeHtml(snippet) + '"' +
+      ' title="Open this part of the rulebook"' +
+      ' aria-label="Open rulebook ' + escapeHtml(label) + '">' +
+      escapeHtml(label) + "</a>";
+  }
   function renderBulletItem(item) {
     if (typeof item === "string") item = { text: item };
     var lead = item.lead ? '<strong class="rule-lead">' + escapeHtml(String(item.lead)) + "</strong>" : "";
@@ -113592,7 +113646,7 @@
     var line = lead && text ? lead + " " + text : (lead || text);
     var nested = Array.isArray(item.bullets) && item.bullets.length ? renderBulletItems(item.bullets) : "";
     var details = !contentIsEmpty(item.details) ? renderDetailsToggle(item.details) : "";
-    return "<li>" + line + nested + details + "</li>";
+    return "<li>" + line + renderRulebookRef(item) + nested + details + "</li>";
   }
   function renderBulletItems(items) {
     if (!items || !items.length) return "";

@@ -400,6 +400,30 @@ A section may be an array of items. Each item is an object:
 | `lead` | no | Bold label in front of `text`. One space is inserted between them. Put a colon in the lead if you want one. |
 | `bullets` | no | Nested items, same shape. |
 | `details` | no | Collapsed under a **Details** toggle. A string, an item array, or a section object. |
+| `source` | no | A verified deep link into the official rulebook. See below. |
+
+## Abbreviations
+
+Write the words a player needs. Do not leave a letter, icon initial, or jargon code that only makes sense after reading the rulebook. If the book also uses a short label, put the full name first and the short label in parentheses: `2 boots (M)`. Printed set names, board sides, and setup letters stay when the sentence says what they are (`structure A, B, C, or D`, `the printed setup order A, then B, then C`).
+
+## Rulebook links
+
+Optional `source` on a bullet. The page draws a small control after the line. Tapping it opens the in-app rulebook viewer on that page and highlights the passage. Leave `source` off when the game has no official PDF the viewer can open, or when the page or heading was not checked against that PDF. Do not invent a page number or a section name.
+
+| Field | Required | What it is |
+| --- | --- | --- |
+| `page` | yes | 1-based page in that game's `rulebook` PDF. |
+| `query` | no | Words that appear on that page, used to highlight the passage. |
+| `snippet` | no | A longer quote from that page when `query` matches more than once. Defaults to `query`. |
+| `label` | no | The control's text. Defaults to `p. ` plus the page. Use the book's own section number when you have checked it. |
+
+```json
+{
+  "lead": "Item supply",
+  "text": "On the printed spaces: 2 boots (M) and 2 bags (B).",
+  "source": { "page": 5, "query": "Form Item Supply", "label": "5.1.5" }
+}
+```
 
 ```json
 "endGameScoring": [
