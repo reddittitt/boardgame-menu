@@ -126,6 +126,7 @@
     max-width:1000px;
     margin:0 auto;
     display:flex;
+    flex-wrap:wrap;
     gap:10px;
     align-items:center;
     min-width:0;
@@ -336,7 +337,7 @@
   /* Detail view. Title and player/time sit beside the cover, then the sticky bar. */
   .detail {
     background:var(--card);
-    border:1px solid color-mix(in srgb, var(--accent) 40%, var(--border) 60%);
+    border:1px solid var(--border);
     border-radius:14px;
     padding:16px;
     display:flex;
@@ -420,7 +421,8 @@
     box-sizing:border-box;
   }
   .rulebook-search input:focus-visible,
-  .rulebook-hit:focus-visible {
+  .rulebook-hit:focus-visible,
+  #search:focus-visible {
     outline:3px solid var(--brand);
     outline-offset:2px;
   }
@@ -612,9 +614,9 @@
   .exp {
     margin-top:8px;
     padding:10px;
-    border:1px dashed color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
+    border:1px solid var(--border);
     border-radius:12px;
-    background:#f0f4ff;
+    background:var(--card);
   }
 
   .exp h3 {
@@ -629,7 +631,7 @@
   .expansion {
     margin-bottom:8px;
     border-radius:10px;
-    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
+    border:1px solid var(--border);
     background:var(--card);
     overflow:hidden;
   }
@@ -657,13 +659,15 @@
   .expansion[open] summary::before {
     content:"v";
   }
-  .expansion summary:hover {
-    background:#e6ecff;
+  @media (hover:hover) and (pointer:fine) {
+    .expansion summary:hover {
+      background:color-mix(in srgb, var(--fg) 5%, transparent);
+    }
   }
 
   .expansion-body {
     padding:8px 12px 10px;
-    border-top:1px solid color-mix(in srgb, var(--accent) 30%, var(--border) 70%);
+    border-top:1px solid var(--border);
     margin-top:6px;
   }
   .expansion-text-block h4 {
@@ -746,39 +750,18 @@
     border-color:var(--brand);
     color:#ffffff;
   }
-  .pc-btn[data-active="true"]::before,
-  .exp-chip[data-active="true"]::before {
-    content:"✓ ";
-  }
   .exp-note {
     margin:0 0 8px;
     color:var(--muted);
     font-size:0.8rem;
   }
 
-  /* Dark mode tuning for expansion headers */
-  :root[data-theme="dark"] .expansion summary {
-    background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
+  /* Dark mode tuning for expansion headers. Open and hover stay neutral. */
+  :root[data-theme="dark"] .expansion summary,
+  :root[data-theme="darkwood"] .expansion summary,
+  :root[data-theme="neongrid"] .expansion summary {
     color: var(--fg);
   }
-
-  :root[data-theme="dark"] .expansion summary:hover,
-  :root[data-theme="dark"] .expansion[open] summary {
-    background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
-  }
-
-  :root[data-theme="darkwood"] .expansion summary,
-:root[data-theme="neongrid"] .expansion summary {
-  background: color-mix(in srgb, var(--card) 90%, var(--brand) 10%);
-  color: var(--fg);
-}
-
-:root[data-theme="darkwood"] .expansion summary:hover,
-:root[data-theme="darkwood"] .expansion[open] summary,
-:root[data-theme="neongrid"] .expansion summary:hover,
-:root[data-theme="neongrid"] .expansion[open] summary {
-  background: color-mix(in srgb, var(--card) 85%, var(--brand) 15%);
-}
   
   :root[data-theme="dark"] header {
     background: #050816;
@@ -820,15 +803,7 @@
     .detail-head-text { width:100%; }
   }
 
-/* Dark-theme tuning for section backgrounds */
-:root[data-theme="dark"] .qs,
-:root[data-theme="dark"] .exp,
-:root[data-theme="darkwood"] .qs,
-:root[data-theme="darkwood"] .exp,
-:root[data-theme="neongrid"] .qs,
-:root[data-theme="neongrid"] .exp {
-  background: color-mix(in srgb, var(--card) 92%, var(--brand) 8%);
-}
+/* Section cards use the theme card color. No brand wash when a block is open. */
 
   /* Table reference: bigger type, 44px targets, sticky controls */
   .btn,
@@ -1008,9 +983,8 @@
     margin:0.15rem 0 0.85rem;
     padding:10px 12px 10px 14px;
     border-radius:12px;
-    border:1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
-    border-left:4px solid var(--accent);
-    background:color-mix(in srgb, var(--card) 86%, var(--brand) 14%);
+    border:1px solid var(--border);
+    background:var(--card);
     color:var(--fg);
   }
   .scoring-summary h3 {
@@ -1136,8 +1110,6 @@
     padding:10px 12px 12px;
     border-radius:12px;
     border:1px solid var(--border);
-    border-left-width:4px;
-    border-left-color:var(--accent);
     background:var(--card);
     box-sizing:border-box;
   }
@@ -1642,7 +1614,7 @@
   .rule-expansion {
     margin-top:0.85rem;
     padding-top:0.65rem;
-    border-top:1px dashed color-mix(in srgb, var(--accent) 35%, var(--border) 65%);
+    border-top:1px solid var(--border);
   }
   .rule-expansion > strong {
     display:block;
@@ -1702,8 +1674,11 @@
   .scoring-summary {
     scroll-margin-top:calc(var(--header-h, 64px) + var(--table-bar-h, 0px) + 8px);
   }
-  #search {
-    font-size:1rem;
+  /* Floor at 16px. iOS Safari zooms the page when a focused field is smaller. */
+  #search,
+  .rulebook-search input,
+  textarea {
+    font-size:max(1rem, 16px);
   }
   .meta-pill--rating {
     color:#5c4300;
@@ -1741,7 +1716,12 @@
   }
   @media (max-width:520px) {
     header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
-    header .wrap { gap:8px; }
+    header .wrap { gap:6px; }
+    header button.toggle,
+    header a.home {
+      padding:6px 8px;
+      font-size:0.92rem;
+    }
     .header-logo { height:44px; }
     header h1 {
       position:absolute;
@@ -1821,6 +1801,323 @@
     main, .detail, .table-bar, .essential-links { overflow-x:clip; max-width:100%; }
   }
 
+  /* Whole sections stay quiet when focused, opened, or targeted.
+     Keyboard users still get a ring on the summary itself, inset so it
+     does not draw a box around the open block. Fields keep their own rings. */
+  .detail:focus,
+  .detail:focus-visible,
+  .expansion:focus,
+  .expansion:focus-visible,
+  .rule-details:focus,
+  .rule-details:focus-visible,
+  .scoring-summary:focus,
+  .scoring-summary:focus-visible,
+  .callout:focus,
+  .callout:focus-visible,
+  .qs:focus,
+  .qs:focus-visible,
+  .exp:focus,
+  .exp:focus-visible,
+  .teach-it:focus,
+  .teach-it:focus-visible,
+  .rule-group:focus,
+  .rule-group:focus-visible,
+  .character-aids:focus,
+  .character-aids:focus-visible,
+  .character-aid:focus,
+  .character-aid:focus-visible,
+  .player-aids:focus,
+  .player-aids:focus-visible,
+  .game-section:focus,
+  .game-section:focus-visible,
+  .chip-group:focus,
+  .chip-group:focus-visible,
+  .table-bar:focus,
+  .table-bar:focus-visible,
+  .expansion:target,
+  .rule-details:target,
+  .scoring-summary:target,
+  .callout:target,
+  .qs:target,
+  .exp:target,
+  .rule-group:target,
+  .expansion > summary:focus,
+  .rule-details > summary:focus,
+  .chip-group > .chip-group-summary:focus {
+    outline:none;
+  }
+  .expansion > summary:focus-visible,
+  .rule-details > summary:focus-visible,
+  .chip-group > .chip-group-summary:focus-visible {
+    outline:2px solid color-mix(in srgb, var(--fg) 55%, transparent);
+    outline-offset:-3px;
+  }
+  .detail,
+  .expansion,
+  .expansion > summary,
+  .rule-details,
+  .rule-details > summary,
+  .chip-group > .chip-group-summary,
+  .scoring-summary,
+  .callout,
+  .qs,
+  .exp,
+  .rule-group,
+  .character-aid,
+  .table-bar {
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* Opt-in test appearance. Turn it on from the header. Not an Apple product. */
+  :root[data-look="hig"] {
+    --bg:#f2f2f7;
+    --fg:#1c1c1e;
+    --muted:#636366;
+    --card:#ffffff;
+    --border:rgba(60, 60, 67, 0.18);
+    --btn:#ffffff;
+    --btn-border:rgba(60, 60, 67, 0.22);
+    --brand:#007aff;
+    --accent:#007aff;
+    --hig-fill:rgba(118, 118, 128, 0.12);
+    --hig-sep:rgba(60, 60, 67, 0.29);
+    --hig-header:rgba(242, 242, 247, 0.9);
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  }
+  :root[data-look="hig"][data-theme="dark"],
+  :root[data-look="hig"][data-theme="darkwood"],
+  :root[data-look="hig"][data-theme="neongrid"] {
+    --bg:#000000;
+    --fg:#f2f2f7;
+    --muted:#98989d;
+    --card:#1c1c1e;
+    --border:rgba(84, 84, 88, 0.65);
+    --btn:#2c2c2e;
+    --btn-border:rgba(84, 84, 88, 0.65);
+    --brand:#0a84ff;
+    --accent:#0a84ff;
+    --hig-fill:rgba(118, 118, 128, 0.24);
+    --hig-sep:rgba(84, 84, 88, 0.65);
+    --hig-header:rgba(28, 28, 30, 0.88);
+  }
+  :root[data-look="hig"] body {
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+    letter-spacing:-0.011em;
+    line-height:1.35;
+  }
+  :root[data-look="hig"] h1,
+  :root[data-look="hig"] h2,
+  :root[data-look="hig"] h3,
+  :root[data-look="hig"] .title {
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:-0.02em;
+  }
+  :root[data-look="hig"] header {
+    background:var(--hig-header);
+    color:var(--fg);
+    box-shadow:none;
+    border-bottom:1px solid var(--hig-sep);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    padding-top:max(6px, env(safe-area-inset-top));
+    padding-right:max(12px, env(safe-area-inset-right));
+    padding-bottom:6px;
+    padding-left:max(12px, env(safe-area-inset-left));
+  }
+  :root[data-look="hig"] header .wrap h1,
+  :root[data-look="hig"] header .home,
+  :root[data-look="hig"] header .toggle,
+  :root[data-look="hig"] .header-home-link {
+    color:var(--fg);
+    border-color:transparent;
+  }
+  :root[data-look="hig"] header .toggle,
+  :root[data-look="hig"] header .home {
+    background:transparent;
+    color:var(--brand);
+    font-weight:400;
+    border-radius:8px;
+  }
+  :root[data-look="hig"] #lookToggle[aria-pressed="true"] {
+    background:var(--brand);
+    color:#ffffff;
+    font-weight:600;
+  }
+  :root[data-look="hig"] .header-logo { height:36px; }
+  :root[data-look="hig"] main { margin-top:8px; margin-bottom:28px; }
+  :root[data-look="hig"] .detail {
+    background:transparent;
+    border:0;
+    border-radius:0;
+    padding:0;
+    gap:10px;
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .title { color:var(--fg); }
+  :root[data-look="hig"] .scoring-summary,
+  :root[data-look="hig"] .callout,
+  :root[data-look="hig"] .callout-mistakes,
+  :root[data-look="hig"] .callout-first,
+  :root[data-look="hig"] .expansion,
+  :root[data-look="hig"] .qs,
+  :root[data-look="hig"] .exp,
+  :root[data-look="hig"] .table-bar,
+  :root[data-look="hig"] .character-aid,
+  :root[data-look="hig"] .rule-details,
+  :root[data-look="hig"] .chip-group,
+  :root[data-look="hig"] .essential-link,
+  :root[data-look="hig"] .btn,
+  :root[data-look="hig"] .btnlink,
+  :root[data-look="hig"] .rulebook-search input,
+  :root[data-look="hig"] #search {
+    background:var(--card);
+    border:1px solid var(--hig-sep);
+    border-radius:12px;
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .scoring-summary,
+  :root[data-look="hig"] .callout,
+  :root[data-look="hig"] .character-aid {
+    border-left-width:1px;
+    border-left-color:var(--hig-sep);
+  }
+  :root[data-look="hig"] .table-bar { box-shadow:none; }
+  :root[data-look="hig"] .btn:hover,
+  :root[data-look="hig"] .btnlink:hover {
+    transform:none;
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .cover,
+  :root[data-look="hig"] .cover-link { border-radius:12px; }
+  /* Visible chip is the ::before pill. The button stays a 44px target.
+     ::before is empty in both states, so selecting a chip does not change its width. */
+  :root[data-look="hig"] .pc-btn,
+  :root[data-look="hig"] .exp-chip {
+    position:relative;
+    z-index:0;
+    background:transparent;
+    border:0;
+    color:var(--fg);
+    font-weight:500;
+    border-radius:999px;
+    box-shadow:none;
+    min-height:44px;
+    min-width:44px;
+    padding:0 12px;
+    font-size:15px;
+    line-height:1.15;
+  }
+  :root[data-look="hig"] .pc-btn::before,
+  :root[data-look="hig"] .exp-chip::before {
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:0;
+    right:0;
+    top:50%;
+    height:32px;
+    transform:translateY(-50%);
+    border-radius:999px;
+    background:var(--hig-fill);
+  }
+  :root[data-look="hig"] .pc-btn[data-active="true"],
+  :root[data-look="hig"] .exp-chip[data-active="true"] {
+    background:transparent;
+    border-color:transparent;
+    color:#ffffff;
+  }
+  :root[data-look="hig"] .pc-btn[data-active="true"]::before,
+  :root[data-look="hig"] .exp-chip[data-active="true"]::before {
+    content:"";
+    background:var(--brand);
+  }
+  :root[data-look="hig"] .playercount-controls,
+  :root[data-look="hig"] .expansion-controls,
+  :root[data-look="hig"] .chip-group-chips {
+    gap:4px 8px;
+  }
+  @supports (corner-shape:squircle) {
+    :root[data-look="hig"] .scoring-summary,
+    :root[data-look="hig"] .callout,
+    :root[data-look="hig"] .expansion,
+    :root[data-look="hig"] .table-bar,
+    :root[data-look="hig"] .essential-link,
+    :root[data-look="hig"] .btn,
+    :root[data-look="hig"] .btnlink,
+    :root[data-look="hig"] .chip-group,
+    :root[data-look="hig"] .character-aid,
+    :root[data-look="hig"] .cover,
+    :root[data-look="hig"] .qs,
+    :root[data-look="hig"] .exp {
+      corner-shape:squircle;
+    }
+  }
+  @media (max-width:840px) {
+    :root[data-look="hig"] { font-size:16px; }
+    :root[data-look="hig"] .title { font-size:1.3rem; }
+    :root[data-look="hig"] .detail-head { gap:10px; }
+    :root[data-look="hig"] .detail-head .cover {
+      width:min(46vw, 168px);
+      max-width:168px;
+    }
+    :root[data-look="hig"] .rule-body > p,
+    :root[data-look="hig"] .expansion-text-block p,
+    :root[data-look="hig"] .rule-list,
+    :root[data-look="hig"] .components-list li,
+    :root[data-look="hig"] .scoring-summary p,
+    :root[data-look="hig"] .scoring-summary-list,
+    :root[data-look="hig"] .character-aid p,
+    :root[data-look="hig"] .character-aid .rule-list,
+    :root[data-look="hig"] .character-aids-note,
+    :root[data-look="hig"] .callout .rule-list,
+    :root[data-look="hig"] .callout p {
+      font-size:17px;
+      line-height:1.35;
+    }
+    :root[data-look="hig"] .exp-note,
+    :root[data-look="hig"] .byline,
+    :root[data-look="hig"] .game-meta-bar,
+    :root[data-look="hig"] .meta-pill,
+    :root[data-look="hig"] .essential-link-channel,
+    :root[data-look="hig"] .search-count,
+    :root[data-look="hig"] .rulebook-search-status,
+    :root[data-look="hig"] .rulebook-hit-text,
+    :root[data-look="hig"] .character-aid-label {
+      font-size:13px;
+    }
+    :root[data-look="hig"] .scoring-summary h3,
+    :root[data-look="hig"] .callout h3,
+    :root[data-look="hig"] .expansion summary,
+    :root[data-look="hig"] .exp h3,
+    :root[data-look="hig"] .player-aids h3,
+    :root[data-look="hig"] .character-aids h3,
+    :root[data-look="hig"] .game-section h3 {
+      font-size:17px;
+    }
+    :root[data-look="hig"] .table-bar { padding:6px 8px; gap:6px; }
+    :root[data-look="hig"] .essential-link,
+    :root[data-look="hig"] .btn,
+    :root[data-look="hig"] .btnlink { padding:8px 12px; }
+    :root[data-look="hig"] .pc-btn,
+    :root[data-look="hig"] .exp-chip {
+      font-size:15px;
+      padding:0 11px;
+    }
+    :root[data-look="hig"] .header-logo { height:32px; }
+    :root[data-look="hig"] main { margin-top:6px; }
+    :root[data-look="hig"] .scoring-summary,
+    :root[data-look="hig"] .callout,
+    :root[data-look="hig"] .qs,
+    :root[data-look="hig"] .exp { padding:8px 10px; }
+  }
+  /* Typed fields stay at least 16px in every look, including the test appearance. */
+  :root[data-look="hig"] #search,
+  :root[data-look="hig"] .rulebook-search input,
+  :root[data-look="hig"] textarea {
+    font-size:max(1rem, 16px);
+  }
+
 </style>
 </head>
 <body>
@@ -1833,7 +2130,8 @@
 
     <div class="spacer"></div>
 
-    <button id="themeToggle" class="toggle" aria-label="Toggle theme">Theme</button>
+    <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
+    <button id="lookToggle" class="toggle" type="button" aria-pressed="false" aria-label="New look off. Turn on the test appearance.">New look</button>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
@@ -106743,6 +107041,31 @@
       var idx = THEMES.indexOf(current);
       var next = THEMES[(idx + 1 + THEMES.length) % THEMES.length];
       setTheme(next);
+    });
+  }
+
+  /* Opt-in test appearance. Classic stays the default. */
+  var lookBtn = document.getElementById("lookToggle");
+  function setLook(on) {
+    if (on) root.setAttribute("data-look", "hig");
+    else root.removeAttribute("data-look");
+    if (lookBtn) {
+      lookBtn.setAttribute("aria-pressed", on ? "true" : "false");
+      lookBtn.setAttribute("aria-label", on
+        ? "New look on. Turn off the test appearance."
+        : "New look off. Turn on the test appearance.");
+    }
+    try { localStorage.setItem("look", on ? "hig" : "classic"); } catch (e) {}
+  }
+  function initLook() {
+    var saved = null;
+    try { saved = localStorage.getItem("look"); } catch (e) {}
+    setLook(saved === "hig");
+  }
+  initLook();
+  if (lookBtn) {
+    lookBtn.addEventListener("click", function () {
+      setLook(root.getAttribute("data-look") !== "hig");
     });
   }
 
