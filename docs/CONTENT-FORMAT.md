@@ -408,7 +408,7 @@ Write the words a player needs. Do not leave a letter, icon initial, or jargon c
 
 ## Rulebook links
 
-Optional `source` on a bullet. The page draws a small control after the line. Tapping it opens the in-app rulebook viewer on that page and highlights the passage. Leave `source` off when the game has no official PDF the viewer can open, or when the page or heading was not checked against that PDF. Do not invent a page number or a section name.
+Optional `source` on a bullet. The page draws a small control after the line. Tapping it opens the in-app rulebook viewer, scrolls to that step, and marks the step. The heading you searched for is the darker mark. The rest of the step stays inside the same outline, so a phone does not land on a bare page. Leave `source` off when the game has no official PDF the viewer can open, or when the page or heading was not checked against that PDF. Do not invent a page number or a section name.
 
 | Field | Required | What it is |
 | --- | --- | --- |

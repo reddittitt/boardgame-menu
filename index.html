@@ -1600,7 +1600,7 @@
   .rulebook-viewer-sheet {
     position:relative;
     margin:0 auto 12px;
-    max-width:100%;
+    max-width:none;
     background:#fff;
     box-shadow:0 8px 28px rgba(0,0,0,0.35);
   }
@@ -1620,11 +1620,18 @@
     background:rgba(255, 214, 0, 0.55);
     border-radius:2px;
   }
+  .rulebook-hl--section {
+    background:rgba(255, 176, 0, 0.34);
+    outline:3px solid #c2410c;
+    outline-offset:0;
+    border-radius:4px;
+    z-index:0;
+  }
   .rulebook-hl--focus {
-    background:rgba(255, 145, 0, 0.72);
-    outline:2px solid #9a3412;
+    background:rgba(255, 90, 0, 0.8);
+    outline:2px solid #7c2d12;
     outline-offset:1px;
-    z-index:1;
+    z-index:2;
   }
 
   .rule-body > p,
@@ -112500,6 +112507,128 @@
     return "\u201c" + String(query || "").trim().replace(/\s+/g, " ") + "\u201d";
   }
 
+  function expandToSection(raw, range) {
+    var start = range.start;
+    var end = range.end;
+    var before = String(raw || "").slice(0, start);
+    var re = /(?:\d+\.\d+(?:\.\d+)?|[A-Z]\.\d+)\s+Step\s+\d+/gi;
+    var found = null;
+    var match;
+    while ((match = re.exec(before))) found = match;
+    if (found && start - found.index < 900) start = found.index;
+    var after = String(raw || "").slice(end);
+    var next = after.search(/\n\s*(?:\d+\.\d+(?:\.\d+)?|[A-Z]\.\d+)\b/);
+    if (next >= 0 && next < 1600) end = end + next;
+    if (end <= start) return range;
+    return { start: start, end: end };
+  }
+
+  function sectionPdfSpan(runs, range) {
+    var starts = [];
+    (runs || []).forEach(function (run) {
+      if (!run || run.end <= range.start || run.start >= range.end) return;
+      var transform = run.item && run.item.transform ? run.item.transform : [1, 0, 0, 1, 0, 0];
+      starts.push({ x: transform[4], width: run.item && run.item.width ? run.item.width : 0, font: run.item && run.item.height ? run.item.height : 0 });
+    });
+    if (!starts.length) return { width: 0, font: 0 };
+    var minX = starts[0].x;
+    var font = 0;
+    starts.forEach(function (item) {
+      if (item.x < minX) minX = item.x;
+      if (item.font > font) font = item.font;
+    });
+    var maxX = minX;
+    starts.forEach(function (item) {
+      if (item.x > minX + 320) return;
+      var right = Math.min(item.x + item.width, minX + 320);
+      if (right > maxX) maxX = right;
+    });
+    return { width: maxX > minX ? maxX - minX : 0, font: font };
+  }
+
+  function markSectionScale(stage, unscaled, span, fitScale) {
+    var avail = rulebookViewerWidth(stage);
+    var byWidth = span.width > 40 ? (avail - 8) / span.width : fitScale;
+    var font = span.font > 2 ? span.font : 9;
+    var byText = 18 / font;
+    var scale = Math.max(fitScale, Math.min(byWidth, byText, fitScale * 2.8));
+    if (!(scale > 0)) return fitScale;
+    return scale;
+  }
+
+  function bandFromBoxes(boxes, anchorLeft) {
+    if (!boxes || !boxes.length) return null;
+    var origin = typeof anchorLeft === "number" ? anchorLeft : boxes[0].left;
+    var rows = [];
+    boxes.slice().sort(function (a, b) {
+      return a.top - b.top || a.left - b.left;
+    }).forEach(function (box) {
+      var row = rows.length ? rows[rows.length - 1] : null;
+      if (!row || Math.abs(box.top - row[0].top) > 7) rows.push([box]);
+      else row.push(box);
+    });
+    var edge = Infinity;
+    rows.forEach(function (row) {
+      if (row[0].left <= origin + 8 && row[0].left < edge) edge = row[0].left;
+    });
+    if (!isFinite(edge)) edge = origin;
+    var kept = [];
+    rows.forEach(function (row) {
+      row.sort(function (a, b) { return a.left - b.left; });
+      if (Math.abs(row[0].left - edge) > 36) return;
+      var right = row[0].left + row[0].width;
+      kept.push(row[0]);
+      for (var i = 1; i < row.length; i++) {
+        if (row[i].left - edge > 230 || row[i].left - right > 22) break;
+        kept.push(row[i]);
+        if (row[i].left + row[i].width > right) right = row[i].left + row[i].width;
+      }
+    });
+    if (kept.length < 2) kept = boxes;
+    var minL = Infinity;
+    var minT = Infinity;
+    var maxR = -Infinity;
+    var maxB = -Infinity;
+    kept.forEach(function (box) {
+      var right = Math.min(box.left + box.width, edge + 340);
+      minL = Math.min(minL, box.left);
+      minT = Math.min(minT, box.top);
+      maxR = Math.max(maxR, right);
+      maxB = Math.max(maxB, box.top + box.height);
+    });
+    var width = maxR - minL;
+    var height = maxB - minT;
+    if (!(width > 8 && height > 8)) return null;
+    return {
+      left: minL - 4,
+      top: minT - 3,
+      width: width + 8,
+      height: height + 6
+    };
+  }
+
+  function placeSectionBand(layer, box) {
+    var el = document.createElement("div");
+    el.className = "rulebook-hl rulebook-hl--section";
+    el.style.left = box.left + "px";
+    el.style.top = box.top + "px";
+    el.style.width = box.width + "px";
+    el.style.height = box.height + "px";
+    if (layer.firstChild) layer.insertBefore(el, layer.firstChild);
+    else layer.appendChild(el);
+    return el;
+  }
+
+  function scrollMarkIntoView(stage, el) {
+    if (!stage || !el) return;
+    var stageRect = stage.getBoundingClientRect();
+    var markRect = el.getBoundingClientRect();
+    stage.scrollTop += markRect.top - stageRect.top - 14;
+    stage.scrollLeft += markRect.left - stageRect.left - 10;
+    if (stage.scrollTop < 0) stage.scrollTop = 0;
+    if (stage.scrollLeft < 0) stage.scrollLeft = 0;
+  }
+
   function placeHighlightBox(layer, box) {
     var el = document.createElement("div");
     el.className = "rulebook-hl" + (box.focus ? " rulebook-hl--focus" : "");
@@ -112523,7 +112652,7 @@
       });
       return;
     }
-    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.query, opts.nthOnPage].join("|");
+    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.query, opts.nthOnPage, opts.markSection ? "section" : ""].join("|");
     if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
     if (highlightJob.progressFn) {
       unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
@@ -112546,56 +112675,73 @@
         if (token !== rulebookViewerToken) return null;
         var sheet = highlightJob.sheet;
         if (!sheet) return null;
-        var unscaled = page.getViewport({ scale: 1 });
-        var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
-        sheet.hidden = false;
-        sheet.innerHTML = "";
-        sheet.style.width = Math.floor(viewport.width) + "px";
-        sheet.style.height = Math.floor(viewport.height) + "px";
-        var canvas = document.createElement("canvas");
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.floor(viewport.width * dpr);
-        canvas.height = Math.floor(viewport.height * dpr);
-        canvas.setAttribute("role", "img");
-        canvas.setAttribute("aria-label", "Rulebook page " + pageNum);
-        var layer = document.createElement("div");
-        layer.className = "rulebook-viewer-highlights";
-        layer.setAttribute("aria-hidden", "true");
-        sheet.appendChild(canvas);
-        sheet.appendChild(layer);
-        if (highlightJob.loading) highlightJob.loading.hidden = true;
-        var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
-        var task = page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport, transform: transform });
-        highlightJob.renderTask = task;
-        return task.promise.then(function () {
-          if (highlightJob.renderTask === task) highlightJob.renderTask = null;
-          if (token !== rulebookViewerToken) return null;
-          return page.getTextContent().then(function (textContent) {
+        return page.getTextContent().then(function (textContent) {
+          if (token !== rulebookViewerToken || !sheet) return null;
+          var built = textRunsFromItems(textContent.items);
+          var found = searchMatchRanges(built.raw, opts.query);
+          var focus = -1;
+          if (found.ranges.length) {
+            if (typeof opts.nthOnPage === "number") focus = opts.nthOnPage;
+            else focus = snippetFocusIndex(built.raw, found.ranges, opts.snippet);
+            if (focus < 0 || focus >= found.ranges.length) focus = 0;
+          }
+          var unscaled = page.getViewport({ scale: 1 });
+          var scale = rulebookFitScale(stage, unscaled);
+          var sectionRange = null;
+          if (opts.markSection && focus >= 0 && found.ranges[focus]) {
+            sectionRange = expandToSection(built.raw, found.ranges[focus]);
+            scale = markSectionScale(stage, unscaled, sectionPdfSpan(built.runs, sectionRange), scale);
+          }
+          var viewport = page.getViewport({ scale: scale });
+          sheet.hidden = false;
+          sheet.innerHTML = "";
+          sheet.style.width = Math.floor(viewport.width) + "px";
+          sheet.style.height = Math.floor(viewport.height) + "px";
+          var canvas = document.createElement("canvas");
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.floor(viewport.width * dpr);
+          canvas.height = Math.floor(viewport.height * dpr);
+          canvas.setAttribute("role", "img");
+          canvas.setAttribute("aria-label", "Rulebook page " + pageNum);
+          var layer = document.createElement("div");
+          layer.className = "rulebook-viewer-highlights";
+          layer.setAttribute("aria-hidden", "true");
+          sheet.appendChild(canvas);
+          sheet.appendChild(layer);
+          if (highlightJob.loading) highlightJob.loading.hidden = true;
+          var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
+          var task = page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport, transform: transform });
+          highlightJob.renderTask = task;
+          return task.promise.then(function () {
+            if (highlightJob.renderTask === task) highlightJob.renderTask = null;
             if (token !== rulebookViewerToken) return null;
-            var built = textRunsFromItems(textContent.items);
-            var found = searchMatchRanges(built.raw, opts.query);
-            var focus = -1;
-            if (found.ranges.length) {
-              if (typeof opts.nthOnPage === "number") focus = opts.nthOnPage;
-              else focus = snippetFocusIndex(built.raw, found.ranges, opts.snippet);
-              if (focus < 0 || focus >= found.ranges.length) focus = 0;
-            }
             var boxes = highlightBoxes(built.runs, found.ranges, focus, viewport, textContent.styles);
             var focusEl = null;
             boxes.forEach(function (box) {
               var el = placeHighlightBox(layer, box);
               if (box.focus) focusEl = el;
             });
+            var bandEl = null;
+            if (sectionRange) {
+              var sectionBoxes = highlightBoxes(built.runs, [sectionRange], 0, viewport, textContent.styles);
+              var anchorLeft = focusEl ? parseFloat(focusEl.style.left) : null;
+              var band = bandFromBoxes(sectionBoxes, anchorLeft);
+              if (band && band.height > 12) {
+                bandEl = placeSectionBand(layer, band);
+              }
+            }
             highlightJob.drawnKey = key;
             highlightJob.pageReady = true;
             var shown = quoteQuery(opts.query);
             if (highlightJob.note) {
               highlightJob.note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
-              if (boxes.length) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
+              if (opts.markSection && (bandEl || boxes.length)) highlightJob.note.textContent = "Marked " + shown + " on this page.";
+              else if (boxes.length) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
               else if (letterCount(built.raw) < 40) highlightJob.note.textContent = "This page has no selectable text, so " + shown + " could not be highlighted.";
               else highlightJob.note.textContent = shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
             }
-            setHighlightFocus(focus);
+            if (opts.markSection) scrollMarkIntoView(stage, bandEl || focusEl);
+            else setHighlightFocus(focus);
           });
         });
       });
@@ -112721,7 +112867,8 @@
       page: tour[index].page,
       query: opts.query,
       snippet: tour[index].snippet,
-      nthOnPage: tour[index].nthOnPage
+      nthOnPage: tour[index].nthOnPage,
+      markSection: !!opts.markSection
     };
     highlightJob.drawnKey = "";
     highlightJob.pageReady = false;
@@ -113120,7 +113267,8 @@
         query: link.getAttribute("data-query") || "",
         snippet: snippet,
         tour: tour,
-        tourIndex: tour.length ? tourStartIndex(tour, pageNum, snippet) : 0
+        tourIndex: tour.length ? tourStartIndex(tour, pageNum, snippet) : 0,
+        markSection: link.classList.contains("rulebook-ref")
       });
       return;
     }
