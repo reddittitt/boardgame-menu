@@ -112058,8 +112058,13 @@
     return n;
   }
 
+  function rulebookReadableUrl(url) {
+    // A www.dropbox.com share link redirects without CORS. The same file
+    // answers from Dropbox's file host, which the viewer can read.
+    return String(url || "").replace(/^https:\/\/www\.dropbox\.com\//i, "https://dl.dropboxusercontent.com/");
+  }
   function unwatchRulebookProgress(url, fn) {
-    var list = rulebookPdfProgress[url];
+    var list = rulebookPdfProgress[rulebookReadableUrl(url)];
     if (!list || !fn) return;
     var at = list.indexOf(fn);
     if (at >= 0) list.splice(at, 1);
@@ -114034,6 +114039,7 @@
     };
   }
   function loadRulebookPdf(renderUrl, onProgress) {
+    renderUrl = rulebookReadableUrl(renderUrl);
     if (onProgress) (rulebookPdfProgress[renderUrl] = rulebookPdfProgress[renderUrl] || []).push(onProgress);
     if (!rulebookPdfCache[renderUrl]) {
       rulebookPdfCache[renderUrl] = loadPdfJs().then(function (lib) {
