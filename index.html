@@ -357,23 +357,31 @@
   .detail-body,
   .detail-head-text { min-width:0; }
   .essential-links {
-    display:flex;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
     gap:8px;
     margin:0;
     min-width:0;
     max-width:100%;
   }
+  @media (min-width:720px) {
+    .essential-links {
+      grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));
+    }
+  }
+  .setup-variant-btn:disabled { opacity:0.45; }
   .essential-link {
-    display:inline-flex;
+    display:flex;
     align-items:center;
     justify-content:center;
-    flex-wrap:wrap;
     gap:6px;
+    width:100%;
     min-width:0;
     max-width:100%;
+    height:44px;
     min-height:44px;
-    padding:8px 12px;
+    margin:0;
+    padding:0 12px;
     border-radius:999px;
     border:1px solid var(--btn-border);
     background:var(--btn);
@@ -382,8 +390,28 @@
     font-weight:700;
     line-height:1.2;
     box-sizing:border-box;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
-  .essential-link-title { min-width:0; overflow-wrap:anywhere; }
+  .essential-links .teach-open { margin:0; }
+  .essential-link-title {
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .u-hidden-text {
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0, 0, 0, 0);
+    white-space:nowrap;
+    border:0;
+  }
   .essential-link-channel {
     font-weight:600;
     font-size:0.75rem;
@@ -2168,6 +2196,11 @@
     :root[data-look="hig"] .essential-link,
     :root[data-look="hig"] .btn,
     :root[data-look="hig"] .btnlink { padding:8px 12px; }
+    :root[data-look="hig"] .essential-link {
+      height:44px;
+      min-height:44px;
+      padding:0 12px;
+    }
     :root[data-look="hig"] .pc-btn,
     :root[data-look="hig"] .exp-chip {
       font-size:15px;
@@ -32982,44 +33015,12 @@
       "quickStart": {
         "bullets": [
           {
-            "lead": "Standard Setup from the Law",
-            "text": "of Root, October 13, 2025."
-          },
-          {
-            "lead": "New",
-            "text": "players use this."
-          },
-          {
-            "lead": "Experienced groups who",
-            "text": "want variety use Advanced Setup."
-          },
-          {
-            "lead": "Five or more",
-            "text": "corner-start factions must use Advanced Setup."
-          },
-          {
-            "lead": "Assign factions and the starting",
-            "text": "player at random."
-          },
-          {
             "lead": "Each player takes",
             "text": "the board and the pieces listed on its back."
           },
           {
             "lead": "Markers",
             "text": "Score markers on 0."
-          },
-          {
-            "lead": "With two players",
-            "text": "Remove all four dominance cards."
-          },
-          {
-            "lead": "Shuffle",
-            "text": "Shuffle."
-          },
-          {
-            "lead": "Each",
-            "text": "player draws 3 cards."
           },
           {
             "lead": "Put a ruin",
@@ -33039,6 +33040,63 @@
           }
         ]
       },
+      "setupVariants": [
+        {
+          "id": "standard",
+          "label": "Standard setup",
+          "recommended": true,
+          "setup": {
+            "bullets": [
+              {
+                "lead": "Law of Root",
+                "text": "October 13, 2025. New players use this."
+              },
+              {
+                "lead": "Assign",
+                "text": "factions and the starting player at random."
+              },
+              {
+                "lead": "Cards",
+                "text": "After the player-count line, shuffle. Each player draws 3."
+              },
+              {
+                "lead": "Leave in the box",
+                "text": "Hirelings, landmarks, and a replacement deck stay in the box. Those belong to Advanced Setup."
+              },
+              {
+                "lead": "Corners",
+                "text": "Five or more corner-start factions must use Advanced Setup."
+              }
+            ]
+          }
+        },
+        {
+          "id": "advanced",
+          "label": "Advanced setup",
+          "requiredWhen": { "cornerStarts": 5 },
+          "requiredNote": "Five or more factions at this table start in a corner. The Law of Root requires Advanced Setup.",
+          "setup": {
+            "bullets": [
+              {
+                "lead": "Law of Root",
+                "text": "October 13, 2025. Experienced groups who want variety use this."
+              },
+              {
+                "lead": "Cards",
+                "text": "After the player-count line, shuffle. Each player draws 5 and keeps 3."
+              },
+              {
+                "lead": "Two players",
+                "text": "The dominance cards still come out before the shuffle."
+              },
+              {
+                "lead": "Optional pieces",
+                "text": "Hirelings, landmarks, and a replacement deck are set up when their chips are on."
+              }
+            ]
+          }
+        }
+      ],
       "startingResources": {
         "bullets": [
           {
@@ -33046,8 +33104,8 @@
             "text": "board and the pieces on its back."
           },
           {
-            "lead": "3",
-            "text": "cards in Standard Setup."
+            "lead": "Cards",
+            "text": "The draw is in the setup you chose."
           },
           {
             "lead": "Marker",
@@ -36448,7 +36506,7 @@
           "bullets": [
             {
               "lead": "Remove all four dominance cards",
-              "text": "Then each player draws 3."
+              "text": "Do this before the shuffle."
             },
             {
               "lead": "Reach of the two",
@@ -36471,10 +36529,6 @@
               "text": "dominance cards."
             },
             {
-              "lead": "Each",
-              "text": "player draws 3."
-            },
-            {
               "lead": "Reach",
               "text": "total 18 or more."
             }
@@ -36483,10 +36537,6 @@
         "4": {
           "bullets": [
             {
-              "lead": "Each",
-              "text": "player draws 3."
-            },
-            {
               "lead": "Reach",
               "text": "total 21 or more."
             }
@@ -36494,10 +36544,6 @@
         },
         "5": {
           "bullets": [
-            {
-              "lead": "Each",
-              "text": "player draws 3."
-            },
             {
               "lead": "Reach",
               "text": "total 25 or more."
@@ -36510,10 +36556,6 @@
         },
         "6": {
           "bullets": [
-            {
-              "lead": "Each",
-              "text": "player draws 3."
-            },
             {
               "lead": "Reach",
               "text": "total 28 or more."
@@ -110588,17 +110630,24 @@
     return '<a class="essential-link" href="' + escapeHtml(href) + '"' + check + externalAttrs(href) + ">" + escapeHtml(label) + "</a>";
   }
   function renderEssentialVideo(video) {
-    var channel = video.channel ? '<span class="essential-link-channel">' + escapeHtml(video.channel) + "</span>" : "";
+    var title = String((video && video.title) || "").trim();
+    var channel = String((video && video.channel) || "").trim();
+    var accessible = title && title !== "How to play" ? title : "How to play";
+    if (channel) accessible += ", " + channel;
+    var extra = title && title !== "How to play"
+      ? '<span class="u-hidden-text">' + escapeHtml(title + (channel ? ", " + channel : "")) + "</span>"
+      : "";
     return (
-      '<a class="essential-link essential-link--video" href="' + escapeHtml(video.url) + '"' + externalAttrs(video.url) + ">" +
-        '<span class="essential-link-title">' + escapeHtml(video.title) + "</span>" +
-        channel +
+      '<a class="essential-link essential-link--video" href="' + escapeHtml(video.url) + '" aria-label="' + escapeHtml(accessible) + '"' + externalAttrs(video.url) + ">" +
+        '<span class="essential-link-title">How to play</span>' +
+        extra +
       "</a>"
     );
   }
   function teachQueryString(state) {
     var params = new URLSearchParams();
     if (state && state.count != null && String(state.count) !== "") params.set("count", String(state.count));
+    if (state && state.setup) params.set("setup", String(state.setup));
     (state && state.exps || []).forEach(function (name) {
       if (name) params.append("exps", name);
     });
@@ -112610,6 +112659,43 @@
       "</ul>"
     );
   }
+  function setupVariantList(game) {
+    var list = game && game.setupVariants;
+    if (!Array.isArray(list)) return [];
+    return list.filter(function (variant) {
+      return variant && String(variant.id || "").trim() && String(variant.label || "").trim() && !contentIsEmpty(variant.setup);
+    });
+  }
+  function factionStartsInCorner(ch) {
+    var blob = "";
+    try { blob = JSON.stringify((ch && ch.setup) || ""); } catch (err) { blob = ""; }
+    return /corner/i.test(blob);
+  }
+  function variantIsRequired(variant, chars) {
+    var need = variant && variant.requiredWhen && variant.requiredWhen.cornerStarts;
+    if (!need) return false;
+    var found = (chars || []).filter(factionStartsInCorner).length;
+    return found >= need;
+  }
+  function chooseSetupVariant(game, preferredId, chars) {
+    var list = setupVariantList(game);
+    if (list.length < 2) return null;
+    var required = null;
+    list.forEach(function (variant) {
+      if (variantIsRequired(variant, chars)) required = variant;
+    });
+    if (required) return required;
+    var found = null;
+    list.forEach(function (variant) {
+      if (String(variant.id) === String(preferredId || "")) found = variant;
+    });
+    if (found) return found;
+    var recommended = null;
+    list.forEach(function (variant) {
+      if (variant.recommended && !recommended) recommended = variant;
+    });
+    return recommended || list[0];
+  }
   function composeSection(base, emptyLabel, selected, kind) {
     var parts = [];
     var baseHtml = renderRuleContent(base);
@@ -113368,8 +113454,44 @@
       );
     }
     var setupResourcesHtml = renderRuleContent(startingResources) || "";
+    var selectedSetupId = (playMemory[slug] && playMemory[slug].setup) || "";
+    if (!selectedSetupId) {
+      try {
+        selectedSetupId = new URLSearchParams((window.location.hash || "").split("?")[1] || "").get("setup") || "";
+      } catch (err) { selectedSetupId = ""; }
+    }
+    var setupSeedChars = [];
+    if (playMemory[slug] && playMemory[slug].chars) {
+      setupSeedChars = characterList(g).filter(function (ch) {
+        return playMemory[slug].chars.indexOf(ch.name) !== -1;
+      });
+    }
+    var initialSetupVariant = chooseSetupVariant(g, selectedSetupId, setupSeedChars);
+    selectedSetupId = initialSetupVariant ? initialSetupVariant.id : "";
+    function setupVariantChrome(activeId, chars) {
+      var list = setupVariantList(g);
+      if (list.length < 2) return "";
+      var buttons = list.map(function (variant) {
+        var on = variant.id === activeId;
+        var blocked = list.some(function (other) {
+          return other.id !== variant.id && variantIsRequired(other, chars);
+        });
+        return '<button type="button" class="pc-btn setup-variant-btn" data-setup="' + escapeHtml(variant.id) + '"' +
+          (on ? ' data-active="true" aria-pressed="true"' : ' aria-pressed="false"') +
+          (blocked && !on ? " disabled" : "") + ">" + escapeHtml(variant.label) + "</button>";
+      }).join("");
+      var note = "";
+      list.forEach(function (variant) {
+        if (variant.requiredNote && variantIsRequired(variant, chars)) note = String(variant.requiredNote);
+      });
+      return '<div class="playercount-controls setup-variant-controls" id="setup-variant-controls" role="group" aria-label="Setup">' +
+        buttons + "</div>" +
+        '<p class="exp-note" id="setup-variant-note"' + (note ? "" : " hidden") + ">" + escapeHtml(note) + "</p>";
+    }
     var quickBlocksHtml =
       chapterShell("setup-chapter", "Set up",
+        setupVariantChrome(selectedSetupId, setupSeedChars) +
+        chapterSlot("qs-variant", initialSetupVariant ? renderRuleContent(initialSetupVariant.setup) : "") +
         chapterSlot("qs-text", composeSection(quickText, "", [], "setup")) +
         chapterSlot("pc-text", playerCountHtmlInner) +
         chapterSlot("resources-text", setupResourcesHtml, "Starting resources")
@@ -113478,6 +113600,16 @@
         } else {
           window.prompt("Copy link:", u);
         }
+      });
+    }
+
+    var setupVariantControls = document.getElementById("setup-variant-controls");
+    if (setupVariantControls) {
+      setupVariantControls.addEventListener("click", function (e) {
+        var btn = e.target.closest ? e.target.closest(".setup-variant-btn") : null;
+        if (!btn || !setupVariantControls.contains(btn) || btn.disabled) return;
+        selectedSetupId = btn.getAttribute("data-setup") || "";
+        paintSections();
       });
     }
 
@@ -113648,13 +113780,48 @@
       return {
         count: selectedCount,
         exps: selectedExpansions().map(function (exp) { return exp && exp.name; }).filter(Boolean),
-        chars: chars
+        chars: chars,
+        setup: selectedSetupId || ""
       };
+    }
+    function paintSetupVariants(chars) {
+      if (setupVariantList(g).length < 2) return;
+      var chosen = chooseSetupVariant(g, selectedSetupId, chars);
+      selectedSetupId = chosen ? chosen.id : "";
+      paintSlot("qs-variant", chosen ? renderRuleContent(chosen.setup) : "");
+      var controls = document.getElementById("setup-variant-controls");
+      if (controls) {
+        Array.prototype.forEach.call(controls.querySelectorAll(".setup-variant-btn"), function (btn) {
+          var id = btn.getAttribute("data-setup");
+          var on = id === selectedSetupId;
+          var blocked = setupVariantList(g).some(function (other) {
+            return other.id !== id && variantIsRequired(other, chars);
+          });
+          if (on) {
+            btn.setAttribute("data-active", "true");
+            btn.setAttribute("aria-pressed", "true");
+          } else {
+            btn.removeAttribute("data-active");
+            btn.setAttribute("aria-pressed", "false");
+          }
+          btn.disabled = !!(blocked && !on);
+        });
+      }
+      var noteEl = document.getElementById("setup-variant-note");
+      if (noteEl) {
+        var note = "";
+        setupVariantList(g).forEach(function (variant) {
+          if (variant.requiredNote && variantIsRequired(variant, chars)) note = String(variant.requiredNote);
+        });
+        noteEl.hidden = !note;
+        noteEl.textContent = note;
+      }
     }
     function paintSections() {
       var selected = selectedExpansions();
       paintCharacterRow();
       var chars = selectedCharacters();
+      paintSetupVariants(chars);
       var setupChars = chars.filter(function (ch) { return !characterHasAid(ch); });
       var setupHtml = composeSection(quickText, "", selected, "setup");
       var charHtml = renderCharacterBlocks(setupChars);
@@ -113731,7 +113898,8 @@
       playMemory[slug] = {
         count: selectedCount,
         exps: selectedExpansions().map(function (exp) { return exp && exp.name; }).filter(Boolean),
-        chars: chars
+        chars: chars,
+        setup: selectedSetupId || ""
       };
     }
     var remembered = playMemory[slug];
@@ -113933,10 +114101,11 @@
           slug: routed.slug,
           expansions: routed.expansions,
           teachQuery: {
-            has: params.has("count") || params.has("exps") || params.has("chars"),
+            has: params.has("count") || params.has("exps") || params.has("chars") || params.has("setup"),
             count: params.get("count"),
             exps: params.getAll("exps"),
-            chars: params.getAll("chars")
+            chars: params.getAll("chars"),
+            setup: params.get("setup") || ""
           }
         };
       }
@@ -113975,6 +114144,7 @@
       : (counts[0] || null);
     var expSource = useUrl ? (query.exps || []) : (mem.exps && mem.exps.length ? mem.exps : (query.routeExps || []));
     var charSource = useUrl ? (query.chars || []) : (mem.chars || []);
+    var setupId = (useUrl ? query.setup : "") || mem.setup || "";
     var expOn = {};
     expSource.forEach(function (name) { if (name) expOn[name] = true; });
     var charOn = {};
@@ -113993,7 +114163,8 @@
       var state = {
         count: count,
         exps: selectedExps().map(function (exp) { return exp.name; }),
-        chars: selectedChars().map(function (ch) { return ch.name; })
+        chars: selectedChars().map(function (ch) { return ch.name; }),
+        setup: setupId || ""
       };
       playMemory[slug] = state;
       var href = teachHref(slug, state);
