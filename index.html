@@ -1459,15 +1459,51 @@
     font-weight:700;
     cursor:pointer;
   }
-  .rulebook-viewer-close:focus-visible {
+  .rulebook-viewer-close:focus-visible,
+  .rulebook-viewer-step:focus-visible {
     outline:3px solid #fff;
     outline-offset:2px;
+  }
+  .rulebook-viewer-nav {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px;
+    background:#141414;
+  }
+  .rulebook-viewer-nav[hidden] { display:none; }
+  .rulebook-viewer-step {
+    flex:1 1 0;
+    min-height:44px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.45);
+    background:transparent;
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .rulebook-viewer-step:disabled {
+    opacity:0.35;
+    cursor:default;
+  }
+  .rulebook-viewer-pos {
+    flex:0 0 auto;
+    margin:0;
+    min-width:4.5em;
+    text-align:center;
+    font-weight:700;
+    white-space:nowrap;
   }
   .rulebook-viewer-stage {
     height:calc(100dvh - 60px - env(safe-area-inset-top, 0px));
     background:#111;
     overflow:auto;
     -webkit-overflow-scrolling:touch;
+  }
+  .rulebook-viewer--matches .rulebook-viewer-stage {
+    height:calc(100dvh - 124px - env(safe-area-inset-top, 0px));
   }
   .rulebook-viewer-stage iframe {
     width:100%;
@@ -1801,6 +1837,11 @@
   <div class="rulebook-viewer-bar">
     <p id="rulebook-viewer-title">Rulebook</p>
     <button type="button" class="rulebook-viewer-close" id="rulebook-viewer-close">Close</button>
+  </div>
+  <div class="rulebook-viewer-nav" id="rulebook-viewer-nav" hidden>
+    <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-prev">Previous</button>
+    <p class="rulebook-viewer-pos" id="rulebook-viewer-pos" role="status"></p>
+    <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-next">Next</button>
   </div>
   <div class="rulebook-viewer-stage" id="rulebook-viewer-stage"></div>
 </dialog>
@@ -107144,6 +107185,71 @@
     return { query: q, total: found.length, hits: found.slice(0, 20) };
   }
 
+  function clipAroundAt(clean, at, matchLen, maxLen) {
+    clean = String(clean || "");
+    if (clean.length <= maxLen) return clean;
+    if (!(at >= 0)) at = 0;
+    var pad = Math.max(24, Math.floor((maxLen - matchLen) / 2));
+    var start = Math.max(0, at - pad);
+    var end = Math.min(clean.length, start + maxLen);
+    if (end - start < maxLen) start = Math.max(0, end - maxLen);
+    if (start > 0) {
+      var space = clean.indexOf(" ", start);
+      if (space !== -1 && space < start + 24 && space < at) start = space + 1;
+    }
+    if (end < clean.length) {
+      var spaceEnd = clean.lastIndexOf(" ", end);
+      if (spaceEnd > start + 40 && spaceEnd > at + matchLen) end = spaceEnd;
+    }
+    var out = clean.slice(start, end).trim();
+    if (start > 0) out = "\u2026" + out;
+    if (end < clean.length) out = out + "\u2026";
+    return out;
+  }
+
+  /* Every instance of the query, in reading order. The result list stays capped at 20. */
+  function rulebookMatchTour(index, query) {
+    var needle = String(query || "").trim().replace(/\s+/g, " ").toLowerCase();
+    var stops = [];
+    if (needle.length < 2) return stops;
+    var pages = (index && index.pages) || [];
+    for (var p = 0; p < pages.length; p++) {
+      var pageNum = parseInt(pages[p].page, 10);
+      if (!pageNum) continue;
+      var lines = pages[p].lines || [];
+      var nthOnPage = 0;
+      for (var i = 0; i < lines.length; i++) {
+        var clean = String(lines[i] || "").replace(/\s+/g, " ").trim();
+        var lower = clean.toLowerCase();
+        var from = 0;
+        while (from <= lower.length - needle.length) {
+          var at = lower.indexOf(needle, from);
+          if (at < 0) break;
+          stops.push({
+            page: pageNum,
+            snippet: clipAroundAt(clean, at, needle.length, 180),
+            nthOnPage: nthOnPage
+          });
+          nthOnPage += 1;
+          from = at + needle.length;
+        }
+      }
+    }
+    return stops;
+  }
+
+  function tourStartIndex(stops, page, snippet) {
+    var want = foldSearchText(String(snippet || "").replace(/^\u2026|\u2026$/g, "").trim()).folded;
+    var firstOnPage = -1;
+    for (var i = 0; i < stops.length; i++) {
+      if (stops[i].page !== page) continue;
+      if (firstOnPage < 0) firstOnPage = i;
+      var got = foldSearchText(String(stops[i].snippet || "").replace(/^\u2026|\u2026$/g, "").trim()).folded;
+      if (want && (got.indexOf(want) !== -1 || want.indexOf(got) !== -1)) return i;
+    }
+    return firstOnPage < 0 ? 0 : firstOnPage;
+  }
+
   /* Native PDF apps honor #page= and ignore a search term, so the page is drawn here. */
   function foldSearchChar(ch) {
     if (ch === "\u00ad" || ch === "\u200b" || ch === "\ufeff") return "";
@@ -107366,7 +107472,10 @@
     note: null,
     loading: null,
     sheet: null,
-    stage: null
+    stage: null,
+    tour: null,
+    tourIndex: 0,
+    pageReady: false
   };
 
   function letterCount(text) {
@@ -107398,6 +107507,10 @@
     }
     highlightJob.opts = null;
     highlightJob.drawnKey = "";
+    highlightJob.tour = null;
+    highlightJob.tourIndex = 0;
+    highlightJob.pageReady = false;
+    updateRulebookMatchNav();
   }
 
   function rulebookViewerWidth(stage) {
@@ -107432,7 +107545,7 @@
       });
       return;
     }
-    var key = [opts.url, opts.page, Math.round(cssWidth), opts.query, opts.snippet].join("|");
+    var key = [opts.url, opts.page, Math.round(cssWidth), opts.nthOnPage].join("|");
     if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
     if (highlightJob.progressFn) {
       unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
@@ -107483,7 +107596,12 @@
             if (token !== rulebookViewerToken) return null;
             var built = textRunsFromItems(textContent.items);
             var found = searchMatchRanges(built.raw, opts.query);
-            var focus = snippetFocusIndex(built.raw, found.ranges, opts.snippet);
+            var focus = -1;
+            if (found.ranges.length) {
+              if (typeof opts.nthOnPage === "number") focus = opts.nthOnPage;
+              else focus = snippetFocusIndex(built.raw, found.ranges, opts.snippet);
+              if (focus < 0 || focus >= found.ranges.length) focus = 0;
+            }
             var boxes = highlightBoxes(built.runs, found.ranges, focus, viewport, textContent.styles);
             var focusEl = null;
             boxes.forEach(function (box) {
@@ -107491,26 +107609,22 @@
               if (box.focus) focusEl = el;
             });
             highlightJob.drawnKey = key;
+            highlightJob.pageReady = true;
             var shown = quoteQuery(opts.query);
             if (highlightJob.note) {
               highlightJob.note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
-              if (boxes.length === 1) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
-              else if (boxes.length) highlightJob.note.textContent = "Highlighted " + boxes.length + " matches for " + shown + ". The orange one is the result you opened.";
+              if (boxes.length) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
               else if (letterCount(built.raw) < 40) highlightJob.note.textContent = "This page has no selectable text, so " + shown + " could not be highlighted.";
               else highlightJob.note.textContent = shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
             }
-            if (focusEl || layer.firstChild) {
-              var mark = focusEl || layer.firstChild;
-              var stageRect = stage.getBoundingClientRect();
-              var markRect = mark.getBoundingClientRect();
-              stage.scrollTop += (markRect.top + markRect.height / 2) - (stageRect.top + stageRect.height / 2);
-            }
+            setHighlightFocus(focus);
           });
         });
       });
     }).catch(function () {
       if (token !== rulebookViewerToken) return;
       highlightJob.renderTask = null;
+      highlightJob.pageReady = true;
       if (highlightJob.sheet) highlightJob.sheet.hidden = true;
       if (highlightJob.loading) highlightJob.loading.hidden = true;
       if (highlightJob.note) {
@@ -107525,6 +107639,82 @@
     });
   }
 
+  function updateRulebookMatchNav() {
+    var nav = document.getElementById("rulebook-viewer-nav");
+    var pos = document.getElementById("rulebook-viewer-pos");
+    var prev = document.getElementById("rulebook-viewer-prev");
+    var next = document.getElementById("rulebook-viewer-next");
+    var dialog = document.getElementById("rulebook-viewer");
+    var tour = highlightJob.tour;
+    var on = !!(tour && tour.length && highlightJob.opts);
+    if (nav) nav.hidden = !on;
+    if (dialog) dialog.classList.toggle("rulebook-viewer--matches", on);
+    if (!on) return;
+    var index = highlightJob.tourIndex;
+    if (index < 0) index = 0;
+    if (index >= tour.length) index = tour.length - 1;
+    if (pos) pos.textContent = (index + 1) + " of " + tour.length;
+    if (prev) prev.disabled = index <= 0;
+    if (next) next.disabled = index >= tour.length - 1;
+  }
+
+  function setHighlightFocus(index) {
+    var sheet = highlightJob.sheet;
+    var stage = highlightJob.stage;
+    if (!sheet) return;
+    var marks = sheet.querySelectorAll(".rulebook-hl");
+    var focusEl = null;
+    for (var i = 0; i < marks.length; i++) {
+      var on = i === index;
+      if (on) marks[i].classList.add("rulebook-hl--focus");
+      else marks[i].classList.remove("rulebook-hl--focus");
+      if (on) focusEl = marks[i];
+    }
+    if (!focusEl || !stage) return;
+    var stageRect = stage.getBoundingClientRect();
+    var markRect = focusEl.getBoundingClientRect();
+    stage.scrollTop += (markRect.top + markRect.height / 2) - (stageRect.top + stageRect.height / 2);
+  }
+
+  function showTourStop(index) {
+    var tour = highlightJob.tour;
+    var opts = highlightJob.opts;
+    if (!tour || !opts || index < 0 || index >= tour.length) return;
+    var stop = tour[index];
+    var previous = tour[highlightJob.tourIndex];
+    var samePage = !!(previous && previous.page === stop.page && highlightJob.pageReady && opts.page === stop.page);
+    highlightJob.tourIndex = index;
+    opts.page = stop.page;
+    opts.snippet = stop.snippet;
+    opts.nthOnPage = stop.nthOnPage;
+    var title = document.getElementById("rulebook-viewer-title");
+    if (title) title.textContent = "Page " + stop.page;
+    updateRulebookMatchNav();
+    if (samePage) {
+      setHighlightFocus(stop.nthOnPage);
+      return;
+    }
+    highlightJob.pageReady = false;
+    highlightJob.drawnKey = "";
+    if (highlightJob.renderTask) {
+      try { highlightJob.renderTask.cancel(); } catch (err) {}
+      highlightJob.renderTask = null;
+    }
+    if (highlightJob.sheet) {
+      highlightJob.sheet.hidden = true;
+      highlightJob.sheet.innerHTML = "";
+    }
+    if (highlightJob.loading) {
+      highlightJob.loading.hidden = false;
+      highlightJob.loading.textContent = "Opening page " + stop.page + "\u2026";
+    }
+    if (highlightJob.note) {
+      highlightJob.note.className = "rulebook-viewer-note";
+      highlightJob.note.textContent = "Opening page " + stop.page + "\u2026";
+    }
+    drawRulebookHighlight(++rulebookViewerToken);
+  }
+
   function openRulebookHighlight(opts) {
     var dialog = document.getElementById("rulebook-viewer");
     var stage = document.getElementById("rulebook-viewer-stage");
@@ -107533,15 +107723,31 @@
     if (!dialog || !stage || !opts) return;
     cancelRulebookHighlight();
     var token = rulebookViewerToken;
-    highlightJob.opts = opts;
+    var tour = opts.tour && opts.tour.length ? opts.tour : [{
+      page: opts.page,
+      snippet: opts.snippet || "",
+      nthOnPage: 0
+    }];
+    var index = opts.tourIndex || 0;
+    if (index < 0 || index >= tour.length) index = 0;
+    highlightJob.tour = tour;
+    highlightJob.tourIndex = index;
+    highlightJob.opts = {
+      url: opts.url,
+      page: tour[index].page,
+      query: opts.query,
+      snippet: tour[index].snippet,
+      nthOnPage: tour[index].nthOnPage
+    };
     highlightJob.drawnKey = "";
+    highlightJob.pageReady = false;
     highlightJob.stage = stage;
-    if (title) title.textContent = "Page " + opts.page;
+    if (title) title.textContent = "Page " + highlightJob.opts.page;
     stage.innerHTML = "";
     var note = document.createElement("p");
     note.className = "rulebook-viewer-note";
     note.setAttribute("role", "status");
-    note.textContent = "Opening page " + opts.page + "\u2026";
+    note.textContent = "Opening page " + highlightJob.opts.page + "\u2026";
     var loading = document.createElement("p");
     loading.className = "rulebook-viewer-loading";
     loading.textContent = note.textContent;
@@ -107554,6 +107760,7 @@
     highlightJob.note = note;
     highlightJob.loading = loading;
     highlightJob.sheet = sheet;
+    updateRulebookMatchNav();
     if (typeof dialog.showModal === "function") {
       if (!dialog.open) dialog.showModal();
     } else dialog.setAttribute("open", "");
@@ -107621,6 +107828,7 @@
       if (!indexData) paint("Loading the rulebook index\u2026", []);
       ensureIndex().then(function (data) {
         if (detailSlug !== slug || input.value !== raw) return;
+        section._rulebookTour = rulebookMatchTour(data, raw);
         var result = searchRulebookIndex(data, raw);
         var message;
         if (!result.total) message = "No matches.";
@@ -107745,11 +107953,17 @@
     rulebookLastFocus = link;
     if (link.classList.contains("rulebook-hit")) {
       var pageMatch = String(link.hash || "").match(/page=(\d+)/i);
+      var pageNum = pageMatch ? parseInt(pageMatch[1], 10) : 0;
+      var snippet = link.getAttribute("data-snippet") || "";
+      var section = link.closest ? link.closest(".rulebook-search") : null;
+      var tour = section && section._rulebookTour ? section._rulebookTour : [];
       openRulebookHighlight({
         url: link.href.split("#")[0],
-        page: pageMatch ? parseInt(pageMatch[1], 10) : 0,
+        page: pageNum,
         query: link.getAttribute("data-query") || "",
-        snippet: link.getAttribute("data-snippet") || ""
+        snippet: snippet,
+        tour: tour,
+        tourIndex: tour.length ? tourStartIndex(tour, pageNum, snippet) : 0
       });
       return;
     }
@@ -107761,6 +107975,16 @@
     if (closeBtn && !closeBtn.dataset.bound) {
       closeBtn.dataset.bound = "1";
       closeBtn.addEventListener("click", closeRulebookViewer);
+    }
+    var prevBtn = document.getElementById("rulebook-viewer-prev");
+    var nextBtn = document.getElementById("rulebook-viewer-next");
+    if (prevBtn && !prevBtn.dataset.bound) {
+      prevBtn.dataset.bound = "1";
+      prevBtn.addEventListener("click", function () { showTourStop(highlightJob.tourIndex - 1); });
+    }
+    if (nextBtn && !nextBtn.dataset.bound) {
+      nextBtn.dataset.bound = "1";
+      nextBtn.addEventListener("click", function () { showTourStop(highlightJob.tourIndex + 1); });
     }
     if (dialog && !dialog.dataset.bound) {
       dialog.dataset.bound = "1";

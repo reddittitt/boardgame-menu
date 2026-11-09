@@ -2,7 +2,7 @@
 
 A game page can search its official rulebook. The box is shown only when that game is listed in `rulebooks/index/manifest.json`. The index itself is fetched the first time the box is used, so the game list does not load it.
 
-Typing a word or phrase shows up to 20 short snippets, about one or two lines each, with the query highlighted in the list. A plain click opens that page in the rulebook viewer and highlights the query on the page. Close returns to the game. The result does not send the window to the PDF file. The page does not paste the book. A scanned page with no selectable text is shown without a highlight, and the viewer says so.
+Typing a word or phrase shows up to 20 short snippets, about one or two lines each, with the query highlighted in the list. A plain click opens that page in the rulebook viewer and highlights the query on the page. Previous and Next step through every instance of that search, on the same page or a later one, and the viewer shows which instance this is, such as 2 of 8. Close returns to the game. The result does not send the window to the PDF file. The page does not paste the book. A scanned page with no selectable text is shown without a highlight, and the viewer says so. Next still leaves that page for the following instance.
 
 ## What the script reads
 
