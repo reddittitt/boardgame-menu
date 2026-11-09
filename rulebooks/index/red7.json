@@ -1,0 +1,162 @@
+{
+  "slug": "red7",
+  "pages": [
+    {
+      "page": 1,
+      "lines": [
+        "Created by Carl Chudyk & Chris Cieslik",
+        "Graphic Design by Alanna Cervenak",
+        "Playtested by Lindsay Garside & Kat Dutton",
+        "Inspired by 7Deck by Andrew Greene & Denis Moskowitz",
+        "Rules v1.0",
+        "The rules of Red are simple, have the best card! But Red is just one of seven games you’ll be playing. If you’re not winning",
+        "the current game at the end of your turn, you’re out -- and the last person standing wins the round.",
+        "The deck is 49 cards, numbered 1-7 in each of the seven rainbow colors. A 7 is always higher than a 6, but for cards of",
+        "the same number, a Red is the highest and Violet the lowest, in order (Red, Orange, Yellow, Green, Blue, Indigo, Violet).",
+        "To play Red, deal out a seven card hand to each player, and then deal one more card face up in front of each player",
+        "to start their palette. Start a discard pile with the You are Playing Red card. The top card of the discard pile determines",
+        "what the rules are. The player with the highest card is currently the best at Red, and the player to their left goes first.",
+        "On your turn you can do either or both of two things. You can play a card from your hand to your palette, or discard",
+        "a card from your hand to change the game to its color. You cannot discard a card if you would not be the best at its",
+        "rule afterward (see below).",
+        "If you cannot be the best by the end of your turn, you are out of the round. Take your palette into your hand and",
+        "place it face down in front of you. If you’re ever the last player left, you win the round!",
+        "You are winning a game if your palette contains the most cards that meet its rule out of any player. Ignore the other",
+        "cards in your palette. If you have the same number of cards as another player that meet the rule, whomever has the",
+        "single highest card in the group (including color order) is winning. Examples are below for each rule. One card is always",
+        "enough for any of the rules.",
+        "GAME",
+        "PALETTE RULE",
+        "HIGHEST CARD",
+        "ORANGE",
+        "CARDS OF ONE NUMBER",
+        "YELLOW",
+        "CARDS OF ONE COLOR",
+        "GREEN",
+        "MOST EVEN CARDS",
+        "BLUE",
+        "CARDS OF ALL DIFFERENT COLORS",
+        "INDIGO",
+        "CARDS THAT FORM A RUN (I.E. 4 5 6)",
+        "VIOLET",
+        "MOST CARDS BELOW 4",
+        "www.asmadigames.com",
+        "@AsmadiGames",
+        "EXAMPLE",
+        "facebook.com/AsmadiGames"
+      ]
+    },
+    {
+      "page": 2,
+      "lines": [
+        "Created by Carl Chudyk & Chris Cieslik",
+        "Graphic Design by Alanna Cervenak",
+        "Playtested by Lindsay Garside & Kat Dutton",
+        "Inspired by 7Deck by Andrew Greene & Denis Moskowitz",
+        "Rules v1.0",
+        "Once you’ve played Red a few times, you might be ready for some advanced rules, and scoring between rounds!",
+        "We present to you: ADVANCED RED!",
+        "Advanced Red has two additional rules.",
+        "You cannot discard a card that is lower than the number of cards in your palette. This means changing",
+        "the rules becomes harder as the round goes on, and you will need to plan out more strategically how",
+        "you proceed.",
+        "The winner of a round scores points. Take all the cards used to win with the last rule (For example, for",
+        "Most Different colors, score your highest card of each color), and place the underneath your reference",
+        "card. The next hand is dealt out without these cards, as they are now your score pile. Cards are worth",
+        "their face value in points, and the first to (40, 35, 30) with (2, 3, 4) players wins! If there are not enough",
+        "cards to deal out a new hand, the game is over and the highest score wins.",
+        "POINTS TO WIN",
+        "2 PLAYERS: 40 POINTS",
+        "3 PLAYERS: 35 POINTS",
+        "4 PLAYERS: 30 POINTS",
+        "COLOR SCORE",
+        "REFERENCE CARD",
+        "SCORED CARDS",
+        "Optional Action Rule:",
+        "You might also notice that the four odd numbers have icons in their corners. These are an optional rule for actions, meant",
+        "for experienced Red players. They can be mixed with either Basic or Advanced Red. If playing with these actions, when",
+        "you play a 1, 3, 5, or 7 to your palette (not discard), you *must* perform that card’s action.",
+        "Discard another card from your palette. It must be a legal discard, as it becomes the new",
+        "rule. This means you must be winning the new color’s game, and if playing Advanced Red,",
+        "it must be at least as high as the number of cards remaining in your palette.",
+        "Play another card from your hand to your palette. You can still discard, even after playing",
+        "multiple cards.",
+        "Draw a card from the deck. If it is empty, nothing happens.",
+        "Take a card from another player’s palette, and place it face down on top of the draw",
+        "deck.",
+        "www.asmadigames.com",
+        "@AsmadiGames",
+        "facebook.com/AsmadiGames"
+      ]
+    },
+    {
+      "page": 3,
+      "lines": [
+        "fe) og &",
+        "n o fe Zoos 2",
+        "x Lips C"
+      ]
+    },
+    {
+      "page": 4,
+      "lines": [
+        "= Ale ae",
+        "a 2 i z Z",
+        "veé G",
+        "ALS Oo fe fe)",
+        "fe) Al? :",
+        "ape 5 |S",
+        "Z = |Z Ale"
+      ]
+    },
+    {
+      "page": 5,
+      "lines": [
+        "re) zo <",
+        "o oO a Oo",
+        "o a Oo a Oo",
+        "Veé G 9"
+      ]
+    },
+    {
+      "page": 6,
+      "lines": [
+        "Sa fo =",
+        "3 Sale 4",
+        "fe) mad",
+        "3 mia ~ g",
+        "a 5 a By q"
+      ]
+    },
+    {
+      "page": 7,
+      "lines": [
+        "< OE fe}",
+        "ate g",
+        "fo) n Oo n",
+        "< OE ris fe}",
+        "g aie",
+        "° m 9 m oO ry",
+        "GY « GY «",
+        "a as na",
+        "ee m ee m ee m",
+        "> ba 5S b"
+      ]
+    },
+    {
+      "page": 8,
+      "lines": [
+        "7 & HIGH RED HIGH RED",
+        "< ORANGE ORANGE",
+        "INDIGO INDIGO",
+        "g L \\ow VIOLET LOW VIOLET",
+        "HIGH RED HIGH RED",
+        "ORANGE ORANGE",
+        "YOU ARE PLAYING RED.",
+        "HIGHEST CARD WINS.",
+        "INDIGO INDIGO",
+        "LOW VIOLET LOW VIOLET"
+      ]
+    }
+  ]
+}

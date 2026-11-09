@@ -17,6 +17,8 @@ Search results open that same PDF. Page numbers are the PDF's own page numbers.
 
 Each page is read with `pdftotext`, keeping each column's lines separate. A page with almost no text is treated as an image and read with `tesseract`, one page at a time. The index stores a page number and the text lines from that page.
 
+The download uses the `rulebook` URL as-is. A Dropbox link that returns an HTML preview (`dl=0`) is fetched again with `dl=1` so the index is built from that same PDF. If a host rejects the short agent string, the script tries once more with a browser agent. The game page still opens the original link.
+
 ### Wingspan and Heat
 
 Wingspan's uploaded PDF has no text layer. Every page is OCR.
