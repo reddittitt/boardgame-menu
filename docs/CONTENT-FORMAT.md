@@ -36,16 +36,15 @@ The game page, top to bottom:
 
 1. Title, with the cover beside it on a wide screen and above it on a narrow one. The cover keeps its aspect ratio.
 2. Player count and play time.
-3. Essential links: Rulebook, Log a play, and the how-to-play video. Each one is omitted when its field is empty. Extra official files from `extraEssentials` sit in that same row, and only when the game has them. BoardGameGeek is the cover, not a separate button.
-4. Chip row: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). The row scrolls away with the page. The site header stays put. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the chip row. There are no Setup, Turn, End of Game, or Scoring jump buttons.
+3. Action row: Rulebook, How to play, Teach it, Log a play, then extra official files. A button is omitted when that game does not have it. Teach it opens `#/game/<slug>/teach` and the link carries the current player count and selected expansions and sides. Extra files come from `extraEssentials`. BoardGameGeek is the cover, not a separate button.
+4. Chip row: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). The row scrolls away with the page. The site header stays put. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the chip row.
 5. **How you win**.
-6. **Teach it**, collapsed, and only when `teachingScript` has text.
-7. **Common mistakes**, only when `commonMistakes` has text.
-8. **First game? Use this**, only when `firstGameSetup` has text for the selected count.
-9. The rules: Quick Set Up, Player Count Set Up, Starting Resources, Turn Structure, End of Game, End Game Scoring, Reminders.
-10. **Player aids**, only when at least one aid is on the page.
+6. **Common mistakes**, only when `commonMistakes` has text.
+7. **First game? Use this**, only when `firstGameSetup` has text for the selected count.
+8. Three chapters, each omitted when it has nothing to say: **Set up** (shared setup, then the selected player count, then starting resources), **On your turn** (turn structure, then reminders), and **End of the game** (when it ends, then scoring). Set up is teal, On your turn uses the game accent, and End of the game is gold. The accent comes from the cover when the image can be read, and otherwise from a hue derived from the slug.
+9. **Player aids**, only when at least one aid is on the page.
 
-An empty field leaves no heading, placeholder, or gap. The older rule sections still show their placeholder line when that section itself is empty. Common mistakes, Teach it, First game, and Player aids do not.
+An empty field leaves no heading, placeholder, or gap. Common mistakes, First game, and Player aids do not render when empty. The three chapters do not show a placeholder line.
 
 `endOfGame` is optional. It is the trigger: when the game stops, who takes a last turn, what is an instant win. Put points in `endGameScoring`, not here.
 
@@ -190,7 +189,7 @@ To follow the player-count buttons, use a count map. `"*"` is the shared script,
 
 ## Common mistakes
 
-`commonMistakes` is the existing field. Do not rename it and do not rewrite the sentences for this layout. The page shows it under Teach it, above the rules, as its own list. The first 3 items are visible. The rest sit under **Show N more**. A section-level `details` block stays available. An empty string or empty list renders nothing.
+`commonMistakes` is the existing field. Do not rename it and do not rewrite the sentences for this layout. The page shows it under How you win, above the three chapters. The first 3 items are visible. The rest sit under **Show N more**. A section-level `details` block stays available. An empty string or empty list renders nothing.
 
 ## First game? Use this
 
@@ -283,17 +282,17 @@ There is no separate Expansions list at the bottom of the page. Chips still merg
 
 | Expansion field | Section |
 | --- | --- |
-| `setup` | Quick Set Up |
-| `quickStart` | Quick Set Up. If it is the same text as `setup`, it is shown once. |
-| `rules` | Reminders |
-| `reminders` | Reminders. If it is the same text as `rules`, it is shown once. |
-| `scoring` | End Game Scoring. A chip with no `scoring` does not change that section. |
+| `setup` | Set up |
+| `quickStart` | Set up. If it is the same text as `setup`, it is shown once. |
+| `rules` | On your turn, under Reminders |
+| `reminders` | On your turn, under Reminders. If it is the same text as `rules`, it is shown once. |
+| `scoring` | End of the game, under Scoring. A chip with no `scoring` does not change that section. |
 | `teachingScript` | Teach it, under the expansion name |
 | `playerAids` | Player aids, under the expansion name |
-| `rulebook`, `youtube`, `bggId` | Links in the Turn section, under the expansion name |
+| `rulebook`, `youtube`, `bggId` | Links in On your turn, under the expansion name |
 | `cover` | A small image in that same Turn block, when the field is set |
 | `rulesStatus` | Not shown. `"pending"` means the chip has no rules text yet. |
-| Any other non-empty text field | **Expansion rules: &lt;name&gt;** inside Turn Structure |
+| Any other non-empty text field | **Expansion rules: &lt;name&gt;** inside On your turn |
 
 `name` is the chip label. Use a new field for rules that are not setup or scoring, such as a new action or a new card type. Put the bullet format on that field. The Turn block is titled `Expansion rules: ` plus the expansion name, and it disappears when the chip is off.
 
@@ -425,6 +424,6 @@ A bare array and a section object can both be the value of a field. Prefer the s
 
 ## What stays put
 
-Player-count buttons change Player Count Set Up. They also change the header time when `playTimeByPlayerCount` has that count, the First game box when `firstGameSetup` is a count map, and Teach it when `teachingScript` is a count map.
+Player-count buttons update the player-count steps inside Set up. They also change the header time when `playTimeByPlayerCount` has that count, the First game box when `firstGameSetup` is a count map, and the Teach it link when `teachingScript` is a count map.
 
-The older rule sections still show their placeholder line when empty. Teach it, Common mistakes, First game, and Player aids do not. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.
+Empty chapters stay hidden. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.
