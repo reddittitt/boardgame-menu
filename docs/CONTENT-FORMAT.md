@@ -160,7 +160,7 @@ Write the map value as the words to show, including `min` when you want it. A co
 
 ## Teach it
 
-Optional `teachingScript`. Same bullet format as a rules section. The toggle is collapsed until someone opens it. Leave the field off when you have nothing to teach from.
+Optional `teachingScript`. Same bullet format as a rules section. Teach it is a button on the game page. It opens `#/game/<slug>/teach`. Leave the field off when you have nothing to teach from. The button appears when the base game, any expansion, or any character has a script.
 
 Suggested order inside the bullets: theme or goal, what you do on a turn, how the game ends and how you win, then a "new players miss" list.
 
@@ -182,7 +182,7 @@ Suggested order inside the bullets: theme or goal, what you do on a turn, how th
 }
 ```
 
-An expansion may set its own `teachingScript`. That addendum is appended under the expansion name, and only while its chip is on. If the base field is empty, the Teach it toggle appears only when such a chip is on.
+An expansion may set its own `teachingScript`. That addendum is appended under the expansion name, and only while its chip is on. If the base field is empty, the Teach it button appears only when such a chip, or a character with a script, is what the page can show. The button itself is on the game page whenever any of those scripts exist.
 
 A character may set `teachingScript` in the same shape. It is appended under that character's name, after any selected expansion, and only while its chip is on. Turning the chip off removes it.
 
