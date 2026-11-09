@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Board Game Quick</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
 
@@ -93,8 +93,8 @@
   border-color: color-mix(in srgb, var(--accent) 70%, transparent 30%);
 }
 
-  html { font-size:18px; }
-  html, body { min-height:100%; }
+  html { font-size:18px; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  html, body { min-height:100%; max-width:100%; }
   body {
     margin:0;
     background:var(--bg);
@@ -117,8 +117,10 @@
     z-index:5;
     background:var(--brand);
     color:#ffffff;
-    padding:10px 14px;
+    padding:10px max(14px, env(safe-area-inset-right)) 10px max(14px, env(safe-area-inset-left));
     box-shadow:0 2px 12px rgba(0,0,0,0.15);
+    box-sizing:border-box;
+    max-width:100%;
   }
   header .wrap {
     max-width:1000px;
@@ -180,9 +182,10 @@
   }
 
   main {
-    max-width:1000px;
+    max-width:min(1000px, 100%);
     margin:16px auto 40px;
-    padding:0 14px;
+    padding:0 max(14px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
+    box-sizing:border-box;
   }
 
   /* Micro-animations */
@@ -340,6 +343,9 @@
     flex-direction:column;
     gap:12px;
     overflow-anchor:none;
+    box-sizing:border-box;
+    max-width:100%;
+    min-width:0;
   }
   .detail-head {
     display:grid;
@@ -354,6 +360,8 @@
     flex-wrap:wrap;
     gap:8px;
     margin:0;
+    min-width:0;
+    max-width:100%;
   }
   .essential-link {
     display:inline-flex;
@@ -361,6 +369,7 @@
     justify-content:center;
     flex-wrap:wrap;
     gap:6px;
+    min-width:0;
     max-width:100%;
     min-height:44px;
     padding:8px 12px;
@@ -373,7 +382,7 @@
     line-height:1.2;
     box-sizing:border-box;
   }
-  .essential-link-title { min-width:0; }
+  .essential-link-title { min-width:0; overflow-wrap:anywhere; }
   .essential-link-channel {
     font-weight:600;
     font-size:0.75rem;
@@ -1672,13 +1681,13 @@
   @media (max-width:840px) {
     html { font-size:19px; }
     .table-bar {
-      margin-left:-16px;
-      margin-right:-16px;
-      border-radius:0;
-      border-left:0;
-      border-right:0;
+      margin-left:0;
+      margin-right:0;
+      width:100%;
+      max-width:100%;
+      border-radius:12px;
       padding:6px 10px;
-      overflow-x:auto;
+      overflow-x:clip;
     }
     .playercount-controls,
     .expansion-controls {
@@ -1695,7 +1704,7 @@
     }
   }
   @media (max-width:520px) {
-    header { padding:6px 10px; }
+    header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
     header .wrap { gap:8px; }
     .header-logo { height:44px; }
     header h1 {
@@ -1772,8 +1781,8 @@
     .grid {
       grid-template-columns:repeat(auto-fill, minmax(min(220px, 100%), 1fr));
     }
-    /* clip keeps a stray wide child off the page without turning html/body into a scrollport. hidden would unstick the header and the player bar. */
-    html, body { overflow-x:clip; }
+    /* Clip stray width inside the page column. Clipping html/body makes iOS treat the layout as wider than the screen and zoom in. */
+    main, .detail, .table-bar, .essential-links { overflow-x:clip; max-width:100%; }
   }
 
 </style>
@@ -109267,8 +109276,10 @@
       var need = readingRoom();
       var collapseChars = hasChars && charH >= 80;
       var roomWithoutChars = room + (collapseChars ? charH : 0);
-      var narrow = Math.min(window.innerWidth, window.innerHeight) <= 500;
-      var collapseExps = !!(hasChars && expH >= 80 && (roomWithoutChars < need || (narrow && expH >= 150)));
+      // Fold a multi-line expansion row with the factions. Leaving it up makes
+      // the stuck bar hundreds of pixels tall and shoves the page.
+      var collapseExps = !!(collapseChars && expH >= 80);
+      if (!collapseExps && hasChars && expH >= 80 && roomWithoutChars < need) collapseExps = true;
       var roomAfter = roomWithoutChars + (collapseExps ? expH : 0) - ((collapseChars || collapseExps) ? 48 : 0);
       var collapsePc = !!((collapseChars || collapseExps) && pcH >= 100 && roomAfter < Math.min(220, Math.round(window.innerHeight * 0.34)));
       if (!collapseChars && !collapseExps && !collapsePc) return null;
@@ -109445,9 +109456,21 @@
       summary.style.height = "0px";
       summary.style.opacity = "0";
       var fromH = hiding.map(function (el) { return el.getBoundingClientRect().height; });
+      var marker = bar.nextElementSibling;
+      var headerBottom = header.getBoundingClientRect().bottom;
+      var anchorTop = marker ? marker.getBoundingClientRect().top : headerBottom;
+      var finalBarH = collapsedBarHeight(plan, summaryTarget);
       var start = performance.now();
       barState.animating = true;
       barState.ignoreScroll = true;
+      function holdContent(e) {
+        if (!marker || !marker.isConnected) return;
+        // The lists are already above the fold. Shrink them without chasing
+        // the bar, and ease the text down only enough to clear the short bar.
+        var desired = anchorTop + ((headerBottom + finalBarH + 8) - anchorTop) * e;
+        var delta = marker.getBoundingClientRect().top - desired;
+        if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+      }
       function frame(now) {
         if (token !== barState.foldToken || !bar.isConnected) return;
         var t = Math.min(1, (now - start) / FOLD_MS);
@@ -109457,30 +109480,43 @@
           el.style.opacity = String(1 - e);
         });
         summary.style.height = (summaryTarget * e) + "px";
-        summary.style.opacity = String(e);
-        // Keep the collapsing edge on screen, then settle the short bar under the header.
-        var headerBottom = header.getBoundingClientRect().bottom;
-        var desiredTop = headerBottom - bar.offsetHeight * (1 - e);
-        var delta = bar.getBoundingClientRect().top - desiredTop;
-        if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+        summary.style.opacity = String(Math.min(1, e * 1.15));
+        holdContent(e);
         if (t < 1) requestAnimationFrame(frame);
         else {
           hiding.forEach(function (el) { markFolded(el, true); });
           clearFoldStyles(summary);
           summary.hidden = false;
+          var topBefore = bar.getBoundingClientRect().top;
           applyCollapseClasses(plan);
-          placeContentBelowBar();
-          var aid = barState.revealAid;
-          barState.revealAid = null;
-          if (aid && aid.isConnected && aid.scrollIntoView) aid.scrollIntoView({ block: "start" });
+          var jumped = bar.getBoundingClientRect().top - topBefore;
+          if (Math.abs(jumped) > 1) window.scrollBy(0, jumped);
+          holdContent(1);
           finishMotion();
-          if (barIsNearTop()) {
-            barState.collapsed = false;
-            syncTableBarCollapse(false, false);
-          }
         }
       }
       requestAnimationFrame(frame);
+    }
+    function collapsedBarHeight(plan, summaryTarget) {
+      var bar = document.getElementById("table-bar");
+      var els = foldableElements();
+      var cs = bar ? window.getComputedStyle(bar) : null;
+      var pad = cs ? (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0) : 0;
+      var gap = cs ? (parseFloat(cs.rowGap || cs.gap) || 0) : 0;
+      var h = pad;
+      var n = 0;
+      function add(el) {
+        if (!el) return;
+        h += el.getBoundingClientRect().height;
+        n += 1;
+      }
+      if (!plan.collapsePc) add(els.pc);
+      if (!plan.collapseExps) add(els.exps);
+      h += summaryTarget;
+      n += 1;
+      if (!plan.collapseChars) add(els.chars);
+      if (n > 1) h += gap * (n - 1);
+      return h;
     }
     function animateExpand(token) {
       var bar = document.getElementById("table-bar");
@@ -109513,6 +109549,13 @@
         el.style.height = fromH[i] + "px";
       });
       if (bar) bar.offsetHeight;
+      var growth = 0;
+      targets.forEach(function (h, i) { growth += Math.max(0, h - fromH[i]); });
+      var expandMs = Math.max(320, Math.min(900, Math.round(280 + growth * 0.28)));
+      function expandEase(t) {
+        if (growth > 480) return t;
+        return easeInOut(t);
+      }
       var summaryFrom = 0;
       if (summary && !summary.hidden) {
         summaryFrom = parseFloat(summary.style.height);
@@ -109526,8 +109569,8 @@
       barState.ignoreScroll = true;
       function frame(now) {
         if (token !== barState.foldToken || !bar || !bar.isConnected) return;
-        var t = Math.min(1, (now - start) / FOLD_MS);
-        var e = easeInOut(t);
+        var t = Math.min(1, (now - start) / expandMs);
+        var e = expandEase(t);
         showing.forEach(function (el, i) {
           el.style.height = (fromH[i] + (targets[i] - fromH[i]) * e) + "px";
           el.style.opacity = String(fromOpacity[i] + (1 - fromOpacity[i]) * e);
@@ -109696,13 +109739,35 @@
     if (summaryBtn) {
       summaryBtn.addEventListener("click", function () {
         var bar = document.getElementById("table-bar");
+        var headerEl = document.querySelector("header");
         barState.holdOpen = true;
         barState.collapsed = false;
         barState.skipPast = false;
         barState.plan = null;
         barState.ignoreScroll = true;
-        if (bar && bar.scrollIntoView) bar.scrollIntoView({ block: "start" });
-        syncTableBarCollapse(false, true);
+        function beginExpand() {
+          syncTableBarCollapse(false, true);
+        }
+        var headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
+        // Sticky position lies about where the lists live. Use the document position.
+        var docTop = bar ? layoutTop(bar) : 0;
+        var listsAreAbove = docTop + 24 < (window.scrollY || 0) + headerBottom;
+        if (bar && listsAreAbove && !prefersReducedMotion()) {
+          var targetY = Math.max(0, docTop - headerBottom);
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+          var started = false;
+          function startOnce() {
+            if (started) return;
+            started = true;
+            window.removeEventListener("scrollend", startOnce);
+            beginExpand();
+          }
+          window.addEventListener("scrollend", startOnce);
+          setTimeout(startOnce, 800);
+        } else {
+          if (bar && listsAreAbove) window.scrollTo(0, Math.max(0, docTop - headerBottom));
+          beginExpand();
+        }
       });
     }
     tableBarApi = {
