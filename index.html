@@ -114085,6 +114085,33 @@
     var scaleH = unscaled.height ? availH / unscaled.height : scaleW;
     return Math.min(scaleW, scaleH);
   }
+  /* CSS pixels times this ratio is the canvas bitmap. Includes pinch zoom so a zoomed page is redrawn, not stretched. */
+  function rulebookPixelRatio() {
+    var dpr = window.devicePixelRatio || 1;
+    var pinch = window.visualViewport && window.visualViewport.scale ? window.visualViewport.scale : 1;
+    var ratio = dpr * pinch;
+    if (!(ratio >= 1)) ratio = 1;
+    return Math.min(ratio, 6);
+  }
+  function rulebookBitmap(cssWidth, cssHeight) {
+    var ratio = rulebookPixelRatio();
+    var width = Math.max(1, Math.floor(cssWidth * ratio));
+    var height = Math.max(1, Math.floor(cssHeight * ratio));
+    var edge = Math.max(width, height);
+    if (edge > 4096) {
+      var cut = 4096 / edge;
+      width = Math.max(1, Math.floor(width * cut));
+      height = Math.max(1, Math.floor(height * cut));
+      ratio = width / cssWidth;
+    }
+    return { width: width, height: height, ratio: ratio };
+  }
+  function paintRulebookCanvas(canvas, cssWidth, cssHeight) {
+    var bitmap = rulebookBitmap(cssWidth, cssHeight);
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    return bitmap.ratio === 1 ? null : [bitmap.ratio, 0, 0, bitmap.ratio, 0, 0];
+  }
   function syncRulebookFitButtons() {
     var widthBtn = document.getElementById("rulebook-fit-width");
     var pageBtn = document.getElementById("rulebook-fit-page");
@@ -114100,6 +114127,25 @@
       highlightJob.drawnKey = "";
       drawRulebookHighlight(rulebookViewerToken);
     }
+  }
+  var rulebookPixelBucket = -1;
+  function refreshRulebookPixels() {
+    var bucket = Math.round(rulebookPixelRatio() * 20);
+    if (bucket === rulebookPixelBucket) return;
+    rulebookPixelBucket = bucket;
+    rulebookFitEpoch++;
+    if (typeof highlightJob.refit === "function") highlightJob.refit();
+    else if (highlightJob.opts && highlightJob.stage) {
+      highlightJob.drawnKey = "";
+      drawRulebookHighlight(rulebookViewerToken);
+    }
+  }
+  if (window.visualViewport) {
+    var rulebookPixelTimer = 0;
+    window.visualViewport.addEventListener("resize", function () {
+      clearTimeout(rulebookPixelTimer);
+      rulebookPixelTimer = setTimeout(refreshRulebookPixels, 120);
+    });
   }
 
   /* Find runs on the PDF that is open, including words missing from the page index. */
@@ -114634,7 +114680,7 @@
       });
       return;
     }
-    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, opts.query, opts.nthOnPage, opts.markSection ? "section" : ""].join("|");
+    var key = [opts.url, opts.page, Math.round(cssWidth), rulebookFitMode, Math.round(rulebookPixelRatio() * 100), opts.query, opts.nthOnPage, opts.markSection ? "section" : ""].join("|");
     if (key === highlightJob.drawnKey && highlightJob.sheet && highlightJob.sheet.querySelector("canvas")) return;
     if (highlightJob.progressFn) {
       unwatchRulebookProgress(highlightJob.progressUrl, highlightJob.progressFn);
@@ -114679,9 +114725,7 @@
           sheet.style.width = Math.floor(viewport.width) + "px";
           sheet.style.height = Math.floor(viewport.height) + "px";
           var canvas = document.createElement("canvas");
-          var dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = Math.floor(viewport.width * dpr);
-          canvas.height = Math.floor(viewport.height * dpr);
+          var transform = paintRulebookCanvas(canvas, viewport.width, viewport.height);
           canvas.setAttribute("role", "img");
           canvas.setAttribute("aria-label", "Rulebook page " + pageNum);
           var layer = document.createElement("div");
@@ -114690,7 +114734,6 @@
           sheet.appendChild(canvas);
           sheet.appendChild(layer);
           if (highlightJob.loading) highlightJob.loading.hidden = true;
-          var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
           var task = page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport, transform: transform });
           highlightJob.renderTask = task;
           return task.promise.then(function () {
@@ -115123,15 +115166,12 @@
           slot.style.minHeight = "0";
           slot.innerHTML = "";
           var canvas = document.createElement("canvas");
-          var dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = Math.floor(viewport.width * dpr);
-          canvas.height = Math.floor(viewport.height * dpr);
+          var transform = paintRulebookCanvas(canvas, viewport.width, viewport.height);
           canvas.style.width = "100%";
           canvas.style.height = "100%";
           canvas.setAttribute("role", "img");
           canvas.setAttribute("aria-label", "Rulebook page " + pageNum + " of " + pdf.numPages);
           slot.appendChild(canvas);
-          var transform = dpr === 1 ? null : [dpr, 0, 0, dpr, 0, 0];
           return page.render({
             canvasContext: canvas.getContext("2d"),
             viewport: viewport,
@@ -116203,7 +116243,7 @@
         if (!node.isConnected) return;
         var unscaled = page.getViewport({ scale: 1 });
         var cssWidth = node.clientWidth || 320;
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var dpr = rulebookPixelRatio();
         var shown = spec.crop === "right" || spec.crop === "left" ? unscaled.width / 2 : unscaled.width;
         var scale = Math.min(1400, Math.max(shown, Math.round(cssWidth * dpr))) / shown;
         var viewport = page.getViewport({ scale: scale });
