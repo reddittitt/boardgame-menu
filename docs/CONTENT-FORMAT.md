@@ -173,6 +173,17 @@ Leave a flag off when it does not apply. A game that was already on the menu, an
 
 The menu uses the flags for two filters besides search. **All** is the default and shows every game. **Group** shows games with `group: true`. **My games** shows games with `mine: true`, and games that have neither flag. A game with `group: true` and no `mine` stays out of My games.
 
+## Default player count
+
+Optional `defaultPlayerCount`. The page opens on this count when the game has a `setupByPlayerCount` entry for it. Use the same key as that map (`"4"`, not `"4p"`). Leave it off when no count is the usual one. The page then opens on the lowest count, as it always has.
+
+A `players` value in the URL overrides the default and any count remembered in this session. The hash form is `#/game/<slug>?players=2`. A search-string `?players=2` is read the same way, including when `?game=` is rewritten into the hash.
+
+```json
+"players": "1–4",
+"defaultPlayerCount": "4"
+```
+
 ## Play time by player count
 
 Optional. The header time follows the selected player-count button.
