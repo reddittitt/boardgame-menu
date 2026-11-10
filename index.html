@@ -20244,7 +20244,7 @@
           "bullets": [
             {
               "lead": "This table",
-              "text": "Use the solo side of the central board. It has 3 spaces. Reveal 3 animal cards, not 5. At the end of your turn, the 6 tokens you did not take go back in the box, not the pouch. Then put 3 new tokens out."
+              "text": "Use the solo side of the central board. It has 3 spaces. Reveal 3 animal cards, not 5. At the end of your turn, the 6 tokens you did not take go back in the box, not the pouch. Then put 3 tokens in each of the 3 spaces."
             }
           ]
         },
@@ -20282,367 +20282,594 @@
       "time": "30–45",
       "year": "2024",
       "bggId": "414317",
-      "quickStart": [
-        {
-          "lead": "Book",
-          "text": "Libellud Harmonies rulebook, the English PDF."
-        },
-        {
-          "lead": "Side A",
-          "text": "Play a few games on side A of the personal boards, and leave the Nature's Spirit cards and cubes in the box."
-        },
+            "quickStart": [
         {
           "lead": "Pouch",
-          "text": "Put all 120 tokens in the pouch."
+          "text": "Put all 120 tokens in the pouch, then set the pouch next to the central board.",
+          "source": {
+            "page": 2,
+            "query": "Put all the tokens in the Pouch, then place the Pouch next to the Central board"
+          }
         },
         {
-          "lead": "Board",
-          "text": "The central board shows its 2 to 4 player side."
+          "lead": "Personal boards",
+          "text": "Each player takes one. Choose one side together, and everyone plays that same side face up. Take the reminder card that shows that side.",
+          "source": {
+            "page": 2,
+            "query": "All players must play with the same side faceup"
+          }
         },
         {
-          "lead": "Fill",
-          "text": "Fill each of its 5 spaces with 3 tokens drawn at random."
+          "lead": "Animal cubes",
+          "text": "Leave the animal cubes where every player can reach them.",
+          "source": {
+            "page": 2,
+            "query": "place the Animal cubes within reach of all players"
+          }
         },
         {
-          "lead": "Animals",
-          "text": "Reveal 5 animal cards."
+          "lead": "First player",
+          "text": "The first player is whoever last saw a magnificent landscape. Point the central board's arrow at that player.",
+          "source": {
+            "page": 2,
+            "query": "magnificent landscape is the first player"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Side A",
+          "text": "For the first few games, use side A of the personal boards, the river side. Everyone still uses that same side.",
+          "source": {
+            "page": 2,
+            "query": "using Side A of the Personal boards"
+          }
         },
         {
-          "lead": "Deck",
-          "text": "The rest are a deck."
+          "lead": "Leave these in the box",
+          "text": "Play several games before using the Nature's Spirit cards. Leave those cards and the Nature's Spirit cubes in the box.",
+          "source": {
+            "page": 2,
+            "query": "play several games before using the Nature's Spirit cards"
+          }
         },
         {
-          "lead": "Cubes",
-          "text": "The animal cubes stay in reach."
-        },
-        {
-          "lead": "Personal board",
-          "text": "Every player uses the same side of the personal board, and takes the reminder card for that side."
-        },
-        {
-          "lead": "First",
-          "text": "The first player is whoever last saw a magnificent landscape."
-        },
-        {
-          "lead": "Arrow",
-          "text": "Point the board's arrow at them."
+          "lead": "Different colors",
+          "text": "On your first games, do not hold several animal cards whose cubes sit on the same color. The stripe on the side of the card is that color.",
+          "source": {
+            "page": 3,
+            "query": "avoid having multiple Animal cards above your Personal board whose cubes are placed on the same color"
+          }
         }
       ],
       "startingResources": [
         {
-          "lead": "Board",
-          "text": "An empty personal board."
+          "lead": "Each player",
+          "text": "An empty personal board, and the reminder card for the side everyone chose.",
+          "source": {
+            "page": 2,
+            "query": "Each player takes a Personal board"
+          }
+        }
+      ],
+      "turnStructure": [
+        {
+          "lead": "Around the table",
+          "text": "The first player goes first. Play continues clockwise.",
+          "source": {
+            "page": 3,
+            "query": "Starting with the first player and proceeding clockwise"
+          }
         },
         {
-          "lead": "Animals",
-          "text": "No animal cards yet."
+          "lead": "Any order",
+          "text": "On your turn, take tokens once, and you may take one animal card once. Do those in either order. You may place animal cubes any number of times, including between tokens.",
+          "source": {
+            "page": 3,
+            "query": "in the order of their choosing"
+          }
         },
         {
-          "lead": "Center",
-          "text": "The center starts with 5 stacks of 3 tokens."
+          "lead": "Tokens, once",
+          "text": "Take the 3 tokens from one central space. Place all 3 on your personal board. After each token, you may take the card or place cubes before you place the next token.",
+          "source": {
+            "page": 3,
+            "query": "Take 3 tokens from any one of the Central board spaces"
+          },
+          "details": [
+            {
+              "lead": "Exactly once",
+              "text": "You must take tokens once on your turn, from a single space. You cannot take a second set.",
+              "source": {
+                "page": 3,
+                "query": "exactly once during your turn"
+              }
+            }
+          ]
+        },
+        {
+          "lead": "Animal card, once",
+          "text": "Optional. Take one face-up animal card, put it above your personal board, and put one cube on every space printed on that card.",
+            "source": {
+              "page": 3,
+              "query": "only once per turn"
+            },
+            "details": [
+              {
+                "lead": "Cubes on the card",
+                "text": "Take one cube from the reserve for each space on the card, and put one cube on each of those spaces.",
+                "source": {
+                  "page": 3,
+                  "query": "place 1 cube on each of these spaces"
+                }
+              },
+              {
+                "lead": "Four cards",
+              "text": "You may have up to 4 cards above your personal board at the same time. A finished card, set to the side, does not count.",
+              "source": {
+                "page": 3,
+                "query": "up to 4 cards simultaneously above your Personal board"
+              }
+            },
+            {
+              "lead": "Which cubes",
+              "text": "When you place a cube onto your board, take the bottom cube off that card.",
+              "source": {
+                "page": 4,
+                "query": "take the bottommost cube from the Animal card"
+              }
+            }
+          ]
+        },
+        {
+          "lead": "Then refill",
+          "text": "At 2, 3, or 4 players, draw 3 tokens from the pouch into the empty central space, and refill the animal row to 5 if it is short. At 1 player, the 6 tokens you did not take go to the box, not the pouch, and you then put 3 tokens in each of the 3 spaces.",
+          "source": {
+            "page": 3,
+            "query": "draw 3 tokens from the Pouch and refill the Central board"
+          },
+          "details": [
+            {
+              "lead": "Animal row at 2–4",
+              "text": "Refill face-up animal cards so there are 5.",
+              "source": {
+                "page": 3,
+                "query": "so that there are 5 faceup cards"
+              }
+            },
+            {
+              "lead": "Solo refill",
+              "text": "Return the remaining 6 tokens to the box. They do not go back in the pouch. If you took no animal card, you may discard one face-up animal and replace it from the deck.",
+              "source": {
+                "page": 6,
+                "query": "Return the remaining 6 tokens to the box"
+              }
+            }
+          ]
         }
       ],
       "remindersText": {
         "bullets": [
           {
-            "lead": "Order",
-            "text": "On your turn, in any order: take and place tokens, once, and you may take one animal card."
+            "lead": "Empty space",
+            "text": "A token can always go on an empty space of your personal board.",
+            "source": {
+              "page": 3,
+              "query": "It can always be placed on an empty space"
+            }
           },
           {
-            "lead": "Cubes",
-            "text": "You may place animal cubes any number of times, including between tokens."
+            "lead": "Only three stacks",
+            "text": "A token may sit on 1 or 2 tokens only when that stack is a tree, a building, or a mountain. Nothing else stacks.",
+            "source": {
+              "page": 3,
+              "query": "No other stacking is allowed"
+            }
           },
           {
-            "lead": "Take",
-            "text": "Take the 3 tokens from one central space."
+            "lead": "No sliding under",
+            "text": "You cannot put a token underneath tokens that are already placed.",
+            "source": {
+              "page": 3,
+              "query": "It cannot be placed underneath previously placed tokens"
+            }
           },
           {
-            "lead": "Place",
-            "text": "Each token goes on an empty space, or on top of 1 or 2 tokens to make a tree, a building, or a mountain.",
+            "lead": "Animal cubes stay put",
+            "text": "You cannot place a token on a space that already has an animal cube. A cube, once placed, stays even if you later cover the pattern it used.",
+            "source": {
+              "page": 4,
+              "query": "The placement of an Animal cube is final"
+            },
             "details": [
               {
-                "lead": "Stacks",
-                "text": "Nothing else stacks."
+                "lead": "Do not cover a cube",
+                "text": "A token cannot go on a space occupied by an animal cube.",
+                "source": {
+                  "page": 3,
+                  "query": "It cannot be placed on a space occupied by an Animal cube"
+                }
               },
               {
-                "lead": "Slide",
-                "text": "You cannot slide a token under something, and you cannot cover an animal cube."
+                "lead": "Example",
+                "text": "A red token placed on a gray token can cover the old pattern. The cube that was already there is not removed.",
+                "source": {
+                  "page": 4,
+                  "query": "if a red token is placed on a grey token"
+                }
               }
             ]
           },
           {
             "lead": "Tree",
-            "text": "A tree is a green token on 0, 1, or 2 brown tokens, so its height is 1, 2, or 3."
+            "text": "One green token on 0, 1, or 2 brown tokens. That is height 1, 2, or 3.",
+            "source": {
+              "page": 5,
+              "query": "placed on top of 0, 1, or 2 brown tokens to create Trees of size 1, 2, or 3"
+            }
           },
           {
             "lead": "Mountain",
-            "text": "A mountain is a stack of 1, 2, or 3 gray tokens."
+            "text": "A stack of 1, 2, or 3 gray tokens.",
+            "source": {
+              "page": 5,
+              "query": "A Mountain is a stack made of 1, 2, or 3 gray tokens"
+            }
           },
           {
             "lead": "Building",
-            "text": "A building is a red token on one brown, gray, or red token.",
-            "details": "The bottom token of a building can be any of those."
+            "text": "One red token on exactly one brown, gray, or red token. A red token on an empty space is not a building.",
+            "source": {
+              "page": 5,
+              "query": "placed on top of 1 brown, gray, or red token"
+            }
           },
           {
-            "lead": "Animal card",
-            "text": "An animal card shows a pattern, the color the cube sits on, and the points."
-          },
-          {
-            "lead": "Hand",
-            "text": "You may hold 4 unfinished cards."
-          },
-          {
-            "lead": "Take cubes",
-            "text": "When you take one, also take one cube per space printed on it."
-          },
-          {
-            "lead": "Place cubes",
-            "text": "Place cubes from the bottom of that stack onto a matching pattern.",
+            "lead": "Habitat",
+            "text": "The pattern must match the card, but you may turn it. Tree and mountain heights must match the card. The token that receives the cube must be empty. A building may use any legal bottom token.",
+            "source": {
+              "page": 4,
+              "query": "The Habitat pattern must be created exactly on your Personal board"
+            },
             "details": [
               {
                 "lead": "Turn",
-                "text": "The pattern may be turned."
+                "text": "The pattern may face any direction.",
+                "source": {
+                  "page": 4,
+                  "query": "it can be oriented in any direction"
+                }
               },
               {
                 "lead": "Heights",
-                "text": "Heights must match."
+                "text": "Trees and mountains must be the height shown on the card.",
+                "source": {
+                  "page": 4,
+                  "query": "The height of the Trees and Mountains must exactly match"
+                }
               },
               {
-                "lead": "Buildings",
-                "text": "Buildings may use any legal bottom token."
+                "lead": "Empty token",
+                "text": "The space that gets the cube has no cube on it yet.",
+                "source": {
+                  "page": 4,
+                  "query": "within the Habitat must be unoccupied"
+                }
               },
               {
-                "lead": "Empty",
-                "text": "The cube's token must be empty."
-              },
-              {
-                "lead": "Habitats",
-                "text": "One token can sit in several habitats."
-              },
-              {
-                "lead": "Stays",
-                "text": "A placed cube stays, even if you later cover the habitat."
+                "lead": "Any building",
+                "text": "The token under the red token may be red, brown, or gray.",
+                "source": {
+                  "page": 4,
+                  "query": "Buildings can be of any type"
+                }
               }
             ]
           },
           {
-            "lead": "Finished",
-            "text": "When the last cube leaves the card, the card is done and no longer counts toward the 4."
+            "lead": "One token, several homes",
+            "text": "The same token can be part of more than one habitat, including habitats of different animals.",
+            "source": {
+              "page": 4,
+              "query": "A single token can be used as part of multiple Habitats"
+            }
           },
           {
-            "lead": "Refill",
-            "text": "At the end of the turn, draw 3 tokens into the empty central space, and refill the animal row to 5 if it is short."
+            "lead": "Finished card",
+            "text": "When its last cube is placed, set the card beside your board. It is done, and it no longer counts toward the 4 cards above the board.",
+            "source": {
+              "page": 4,
+              "query": "no longer counts against your 4-card limit"
+            }
           },
           {
-            "lead": "Spirit",
-            "text": "Nature's Spirit, after you know the game: deal 2 face down.",
+            "lead": "Nature's Spirit",
+            "text": "After several games, deal 2 Nature's Spirit cards face down to each player. On your first turn, keep 1, return the other to the box, and put a Nature's Spirit cube on the card you kept.",
+            "source": {
+              "page": 6,
+              "query": "deal 2 to each player, facedown"
+            },
             "details": [
               {
-                "lead": "First turn",
-                "text": "On your first turn, keep 1, return the other, and put a spirit cube on it."
+                "lead": "Hand limit",
+                "text": "That card counts toward your 4 cards until you place its cube.",
+                "source": {
+                  "page": 6,
+                  "query": "towards your 4-card limit until it is completed"
+                }
               },
               {
-                "lead": "Limit",
-                "text": "It counts toward the 4 cards until that cube is placed."
+                "lead": "Cube",
+                "text": "The Nature's Spirit cube follows the same placement rules as an animal cube.",
+                "source": {
+                  "page": 6,
+                  "query": "follow the same placement rules as the Animal cubes"
+                }
               },
               {
-                "lead": "Score",
-                "text": "Its points are scored at the end from the landscapes you built, in addition to everything else."
+                "lead": "When it scores",
+                "text": "You score it at the end, from the landscapes you built, and only if you placed the cube. The card says how. There is no penalty if you never place it.",
+                "source": {
+                  "page": 6,
+                  "query": "not tallied until the end of the game"
+                }
               },
               {
-                "lead": "Card",
-                "text": "The card says how."
+                "lead": "Added",
+                "text": "Those points are added on top of your landscape and animal points.",
+                "source": {
+                  "page": 6,
+                  "query": "in addition to all other points scored elsewhere"
+                }
               }
             ]
           }
         ]
       },
-      "playerCountSetup": [
-        {
-          "lead": "Shared",
-          "text": "Two, three, and four players share the 5-space board."
-        },
-        {
-          "lead": "Solo",
-          "text": "Solo uses the other side of the central board."
-        },
-        {
-          "lead": "Button",
-          "text": "The 1 button is that game."
-        }
-      ],
-      "turnStructure": [
-        {
-          "lead": "Turn",
-          "text": "Mandatory token action, optional animal card, optional cube placements, then refill."
-        },
-        {
-          "lead": "End",
-          "text": "The game ends if the pouch is empty when the center must be refilled, or if a player ends a turn with 2 or fewer empty spaces."
-        },
-        {
-          "lead": "Round",
-          "text": "Finish the round so everyone has taken the same number of turns."
-        },
-        {
-          "lead": "Score",
-          "text": "Then score landscapes and animals."
-        },
-        {
-          "lead": "Winner",
-          "text": "Most points wins."
-        },
-        {
-          "lead": "Tie",
-          "text": "A tie goes to the most animal cubes placed."
-        },
-        {
-          "lead": "Further tie",
-          "text": "A further tie is shared."
-        }
-      ],
       "commonMistakes": [
         {
-          "lead": "Drafting",
-          "text": "Drafting hexes or biome cards."
+          "lead": "Illegal stack",
+          "text": "Stacking a color the rules do not list. Only a tree, a building, or a mountain may be more than one token high.",
+          "source": {
+            "page": 3,
+            "query": "No other stacking is allowed"
+          }
         },
         {
-          "lead": "This booklet",
-          "text": "This booklet uses stacks of round tokens and animal cards."
+          "lead": "One big field",
+          "text": "Scoring a group of 4 or more yellow tokens as more than one field. It is one field and scores 5.",
+          "source": {
+            "page": 5,
+            "query": "it only counts as a single Field and is only worth 5 points"
+          }
         },
         {
-          "lead": "Stacking",
-          "text": "Stacking a color the booklet does not list."
+          "lead": "Every river",
+          "text": "Scoring more than one river. Only your best river scores.",
+          "source": {
+            "page": 5,
+            "query": "You only score your best river"
+          }
         },
         {
-          "lead": "Legal stacks",
-          "text": "Only trees, buildings, and mountains stack."
+          "lead": "Lone mountain",
+          "text": "Scoring a mountain that does not touch another mountain. It scores 0.",
+          "source": {
+            "page": 5,
+            "query": "a Mountain is worth 0 points if it is not adjacent to another Mountain"
+          }
         },
         {
-          "lead": "Field",
-          "text": "Scoring a field of 4 or more yellow tokens as more than one field."
+          "lead": "Bare building",
+          "text": "Scoring a building that is not touching at least 3 different colors. It scores 0.",
+          "source": {
+            "page": 5,
+            "query": "a Building is worth 0 points"
+          }
         },
         {
-          "lead": "One field",
-          "text": "It is one field, worth 5."
+          "lead": "Picking a cube back up",
+          "text": "Removing an animal cube because a later token changed the pattern under it. The cube stays.",
+          "source": {
+            "page": 4,
+            "query": "The placement of an Animal cube is final"
+          }
         },
         {
-          "lead": "Rivers",
-          "text": "Scoring every river."
-        },
-        {
-          "lead": "Best river",
-          "text": "Only the best river scores."
-        },
-        {
-          "lead": "Cubes",
-          "text": "Picking up an animal cube because the pattern under it changed."
+          "lead": "Covering a cube",
+          "text": "Placing a token on an animal cube, or sliding a token under tokens already on the board.",
+          "source": {
+            "page": 3,
+            "query": "It cannot be placed on a space occupied by an Animal cube"
+          }
         }
       ],
       "endOfGame": [
         {
-          "lead": "Pouch",
-          "text": "The game ends if the pouch is empty when the center must be refilled, or if a player ends a turn with 2 or fewer empty spaces."
+          "lead": "Empty pouch",
+          "text": "The game ends if the pouch is empty when a player must refill the central board.",
+          "source": {
+            "page": 4,
+            "query": "The Pouch is empty when you need to refill the Central board"
+          }
         },
         {
-          "lead": "Round",
-          "text": "Finish the round so everyone has taken the same number of turns."
+          "lead": "Full board",
+          "text": "Or a player ends their turn with 2 or fewer empty spaces on their personal board.",
+          "source": {
+            "page": 4,
+            "query": "2 or less unoccupied spaces on your Personal board"
+          }
         },
         {
-          "lead": "Score",
-          "text": "Then score landscapes and animals."
+          "lead": "Equal turns",
+          "text": "Finish the round, if needed, so every player has taken the same number of turns.",
+          "source": {
+            "page": 4,
+            "query": "all players have played an equal number of turns"
+          }
+        },
+        {
+          "lead": "Then score",
+          "text": "Score the landscapes on your personal board and the animals you placed.",
+          "source": {
+            "page": 4,
+            "query": "tally the points for the Landscapes you created and the Animals you placed"
+          }
         },
         {
           "lead": "Winner",
-          "text": "Most points wins."
+          "text": "The player with the most points wins.",
+          "source": {
+            "page": 4,
+            "query": "The player with the most points wins the game"
+          }
         },
         {
           "lead": "Tie",
-          "text": "A tie goes to the most animal cubes placed."
+          "text": "If points are tied, the player who placed the most animal cubes wins.",
+          "source": {
+            "page": 4,
+            "query": "the player who has placed the most Animal cubes wins"
+          }
         },
         {
-          "lead": "Further tie",
-          "text": "A further tie is shared."
+          "lead": "Another tie",
+          "text": "If that is also tied, the players share the win.",
+          "source": {
+            "page": 4,
+            "query": "players share the victory"
+          }
         }
       ],
       "endGameScoring": {
         "bullets": [
           {
             "lead": "Trees",
-            "text": "Trees score by height.",
-            "details": "The height table is printed in the booklet and on the board, and it is not copied here."
+            "text": "A tree scores by height: 1 point at height 1, 3 at height 2, and 7 at height 3. A brown token with no green token on it scores 0.",
+            "source": {
+              "page": 5,
+              "query": "The height of each Tree determines the number of points you score"
+            }
           },
           {
-            "lead": "Mountain",
-            "text": "A mountain scores by height, and scores 0 if it does not touch another mountain."
+            "lead": "Mountains",
+            "text": "A mountain that does not touch another mountain scores 0. One that touches another mountain scores 1, 3, or 7 for height 1, 2, or 3.",
+            "source": {
+              "page": 5,
+              "query": "a Mountain is worth 0 points if it is not adjacent to another Mountain"
+            }
           },
           {
-            "lead": "Field",
-            "text": "A field is 2 or more yellow tokens in one connected group.",
+            "lead": "Fields",
+            "text": "One yellow token is not a field and scores 0. Each connected group of 2 or more yellow tokens scores 5. A group of 4 or more is still one field, still 5.",
+            "source": {
+              "page": 5,
+              "query": "it only counts as a single Field and is only worth 5 points"
+            }
+          },
+          {
+            "lead": "Buildings",
+            "text": "A building scores 5 only when at least 3 tokens of different colors touch it. Count the top token of each neighboring space. Red is one of the six colors. Otherwise the building scores 0.",
+            "source": {
+              "page": 5,
+              "query": "only if surrounded by at least 3 tokens of different colors"
+            },
             "details": [
               {
-                "lead": "Score",
-                "text": "Each such group scores 5."
-              },
-              {
-                "lead": "Size",
-                "text": "A bigger group is still one field."
+                "lead": "Short",
+                "text": "If it does not have those 3 colors, it scores 0.",
+                "source": {
+                  "page": 5,
+                  "query": "a Building is worth 0 points"
+                }
               }
             ]
           },
           {
-            "lead": "Building",
-            "text": "A building scores 5 only if at least 3 tokens of different colors touch it, counting the top token of each neighbor, and red is one of the six colors.",
-            "details": "Otherwise it scores 0."
-          },
-          {
-            "lead": "River",
-            "text": "Side A, the river: only your longest river scores, counting the shortest path from end to end.",
+            "lead": "River, side A",
+            "text": "Only your best river scores. Count the shortest path from one end to the other, including both ends. Lengths 1 through 6 score 0, 2, 5, 8, 11, and 15. Each token past the sixth scores 4 more.",
+            "source": {
+              "page": 5,
+              "query": "You only score your best river"
+            },
             "details": [
               {
                 "lead": "Past six",
-                "text": "Each token past the sixth scores 4 more."
+                "text": "Score 4 points for each token beyond the 6th.",
+                "source": {
+                  "page": 5,
+                  "query": "score 4 points for each token beyond the 6th"
+                }
               },
               {
-                "lead": "Table",
-                "text": "The points for a river of 1 to 6 are the table in the booklet."
+                "lead": "Path",
+                "text": "A river is consecutive blue tokens. A blue token off the shortest path does not add to the length.",
+                "source": {
+                  "page": 5,
+                  "query": "by the shortest path (ends included)"
+                }
               }
             ]
           },
           {
-            "lead": "Islands",
-            "text": "Side B, the islands: each area separated by blue tokens scores 5.",
-            "details": "You always have at least one island, even with no blue."
-          },
-          {
-            "lead": "Animals",
-            "text": "Each animal card, finished or not, scores the number in its topmost empty cube space.",
+            "lead": "Islands, side B",
+            "text": "Each area separated from the others by blue tokens scores 5. You always have at least 1 island, even with no blue tokens.",
+            "source": {
+              "page": 5,
+              "query": "You score 5 points for each island"
+            },
             "details": [
               {
-                "lead": "Full card",
-                "text": "A card that still has every cube on it scores 0."
-              },
-              {
-                "lead": "Penalty",
-                "text": "There is no other penalty."
+                "lead": "At least one",
+                "text": "An empty board, with no blue, is still one island.",
+                "source": {
+                  "page": 5,
+                  "query": "You always have at least 1 island"
+                }
               }
             ]
           },
           {
-            "lead": "Spirit",
-            "text": "Nature's Spirit points, if you used them, are added at the end."
+            "lead": "Animal cards",
+            "text": "Each card, finished or not, scores the number printed in its topmost empty cube space. A card that still has every cube on it scores 0. There is no other penalty for cubes left on the card.",
+            "source": {
+              "page": 5,
+              "query": "topmost space without an Animal cube"
+            },
+            "details": [
+              {
+                "lead": "All cubes still on it",
+                "text": "That card scores 0.",
+                "source": {
+                  "page": 5,
+                  "query": "A card with all cubes still on it is worth 0 points"
+                }
+              },
+              {
+                "lead": "No extra penalty",
+                "text": "Cubes left on the card only mean it is worth fewer points.",
+                "source": {
+                  "page": 5,
+                  "query": "There is no penalty for not removing all cubes"
+                }
+              }
+            ]
           },
           {
-            "lead": "Solo",
-            "text": "Solo suns, and the bonus for the board side and the spirit you chose, are the table in the booklet."
+            "lead": "Nature's Spirit",
+            "text": "If you placed its cube, add the points on that card at the end. They are extra, on top of the landscapes and the animals. The card says which landscapes count.",
+            "source": {
+              "page": 6,
+              "query": "in addition to all other points scored elsewhere"
+            }
           }
-        ],
-        "details": "These notes are the Libellud English rulebook."
+        ]
       },
       "scoringSummary": [
         "Most points wins.",
-        "A tie goes to the most animal cubes placed.",
-        "A further tie is shared."
+        "A tie goes to the player who placed the most animal cubes.",
+        "If that is also tied, the players share the win."
       ],
       "rulesGlossary": [
         {
@@ -20650,11 +20877,40 @@
           "desc": [
             {
               "lead": "Stack",
-              "text": "Green on zero, one, or two brown tokens."
+              "text": "A green token on 0, 1, or 2 brown tokens. Height is 1, 2, or 3.",
+              "source": {
+                "page": 5,
+                "query": "A Tree is formed by 1 green token, placed on top of 0, 1, or 2 brown tokens"
+              }
             },
             {
-              "lead": "Height",
-              "text": "Height is 1, 2, or 3, and a habitat must match that height."
+              "lead": "Score",
+              "text": "1, 3, or 7 points for those heights. A brown token with no green token scores 0.",
+              "source": {
+                "page": 5,
+                "query": "The height of each Tree determines the number of points you score"
+              }
+            }
+          ]
+        },
+        {
+          "term": "Mountain",
+          "desc": [
+            {
+              "lead": "Stack",
+              "text": "1, 2, or 3 gray tokens.",
+              "source": {
+                "page": 5,
+                "query": "A Mountain is a stack made of 1, 2, or 3 gray tokens"
+              }
+            },
+            {
+              "lead": "Score",
+              "text": "0 if it does not touch another mountain. Otherwise 1, 3, or 7 by height.",
+              "source": {
+                "page": 5,
+                "query": "a Mountain is worth 0 points if it is not adjacent to another Mountain"
+              }
             }
           ]
         },
@@ -20663,11 +20919,19 @@
           "desc": [
             {
               "lead": "Group",
-              "text": "Two or more connected yellow tokens."
+              "text": "2 or more yellow tokens in one connected group.",
+              "source": {
+                "page": 5,
+                "query": "A Field is formed by at least 2 yellow tokens in a contiguous group"
+              }
             },
             {
               "lead": "Score",
-              "text": "The whole group scores 5, no matter how large it is."
+              "text": "The whole group scores 5, however large it is.",
+              "source": {
+                "page": 5,
+                "query": "it only counts as a single Field and is only worth 5 points"
+              }
             }
           ]
         },
@@ -20676,11 +20940,58 @@
           "desc": [
             {
               "lead": "Stack",
-              "text": "Red on one brown, gray, or red token."
+              "text": "A red token on one brown, gray, or red token.",
+              "source": {
+                "page": 5,
+                "query": "A Building is made of 1 red token, placed on top of 1 brown, gray, or red token"
+              }
             },
             {
               "lead": "Score",
-              "text": "Scores 5 only when 3 different colors touch it."
+              "text": "5 only when at least 3 different colors touch it. Otherwise 0.",
+              "source": {
+                "page": 5,
+                "query": "only if surrounded by at least 3 tokens of different colors"
+              }
+            }
+          ]
+        },
+        {
+          "term": "River",
+          "desc": [
+            {
+              "lead": "Side A",
+              "text": "A line of consecutive blue tokens. Only the best river scores, by the shortest path from end to end.",
+              "source": {
+                "page": 5,
+                "query": "A River is a string of consecutive blue tokens"
+              }
+            }
+          ]
+        },
+        {
+          "term": "Island",
+          "desc": [
+            {
+              "lead": "Side B",
+              "text": "An area separated from the others by blue tokens. Each island scores 5, and you always have at least one.",
+              "source": {
+                "page": 5,
+                "query": "Each space or group of spaces separated from each other by blue tokens forms an Island"
+              }
+            }
+          ]
+        },
+        {
+          "term": "Habitat",
+          "desc": [
+            {
+              "lead": "Pattern",
+              "text": "The arrangement of tokens on an animal card. You may turn it. The cube goes on the marked token, which must be empty.",
+              "source": {
+                "page": 3,
+                "query": "the Habitat pattern you must form within your Landscape"
+              }
             }
           ]
         }
@@ -20872,53 +21183,143 @@
         }
       ],
       "rulebook": "https://cdn.svc.asmodee.net/production-libellud/uploads/2024/12/HARMONIES_Rules_EN.pdf",
-      "setupByPlayerCount": {
+            "setupByPlayerCount": {
         "1": [
           {
-            "lead": "Board",
-            "text": "Use the solo side of the central board."
+            "lead": "Solo side",
+            "text": "Use the solo side of the central board. It has 3 spaces.",
+            "source": {
+              "page": 6,
+              "query": "Solo side faceup, which only has 3 spaces"
+            }
           },
           {
-            "lead": "Spaces",
-            "text": "It has 3 spaces."
+            "lead": "Three cards",
+            "text": "Place 3 animal cards face up. The rest are the draw pile.",
+            "source": {
+              "page": 6,
+              "query": "Place only 3 Animal cards faceup"
+            }
           },
           {
-            "lead": "Animals",
-            "text": "Reveal 3 animal cards, not 5."
+            "lead": "Unused tokens",
+            "text": "At the end of your turn, the 6 tokens you did not take go back in the box, not the pouch. Then put 3 tokens in each of the 3 spaces.",
+            "source": {
+              "page": 6,
+              "query": "Return the remaining 6 tokens to the box"
+            }
           },
           {
-            "lead": "Unused",
-            "text": "At the end of your turn, the 6 tokens you did not take go back in the box, not the pouch."
+            "lead": "Swap a card",
+            "text": "If you took no animal card that turn, you may discard one face-up animal and replace it from the deck.",
+            "source": {
+              "page": 6,
+              "query": "you may discard 1 Animal card from the center of the table"
+            }
           },
           {
-            "lead": "Refill",
-            "text": "Then put 3 new tokens in each of the 3 spaces."
+            "lead": "The rest",
+            "text": "Every other rule is unchanged.",
+            "source": {
+              "page": 6,
+              "query": "All other rules remain unchanged"
+            }
           },
           {
-            "lead": "Discard",
-            "text": "If you did not take an animal card, you may discard one face-up animal and replace it from the deck."
-          },
-          {
-            "lead": "Rest",
-            "text": "Everything else is the same."
-          },
-          {
-            "lead": "Table",
-            "text": "The sun table for the score, the board side, and the spirit is in the booklet."
+            "lead": "Suns",
+            "text": "Your result is suns, not a comparison with another player. The printed score row is 1 sun at 40 points, 2 at 70, 3 at 90, 4 at 110, 5 at 130, 6 at 140, 7 at 150, and 8 at 160. Add the suns for your personal-board side and for the Nature's Spirit you kept.",
+            "source": {
+              "page": 6,
+              "query": "earn as many suns as possible"
+            },
+            "details": [
+              {
+                "lead": "Example",
+                "text": "130 points is 5 suns. Side A adds 1. The Lion's Spirit in the example adds 1. That total is 7. Side B's column on the same row adds none.",
+                "source": {
+                  "page": 6,
+                  "query": "scored 130 points"
+                }
+              }
+            ]
           }
         ],
         "2": [
           {
-            "lead": "Game",
-            "text": "The 2, 3, and 4 player game."
+            "lead": "Central board",
+            "text": "Use the side marked for 2–4 players.",
+            "source": {
+              "page": 2,
+              "query": "the 2-4 Players side faceup"
+            }
           },
           {
-            "lead": "Center",
-            "text": "Five central spaces, 3 tokens each, 5 animal cards."
+            "lead": "Five spaces",
+            "text": "Fill each of the 5 spaces with 3 tokens drawn at random from the pouch.",
+            "source": {
+              "page": 2,
+              "query": "Fill each of the 5 spaces of the Central board with 3 tokens you draw randomly from the Pouch"
+            }
           },
           {
-            "lead": "Boards",
-            "text": "Same personal-board side for everyone."
+            "lead": "Animal cards",
+            "text": "Shuffle the animal cards. Place 5 face up beside the central board. The rest are the draw pile.",
+            "source": {
+              "page": 2,
+              "query": "place 5 cards faceup next to the Central board"
+            }
+          }
+        ],
+        "3": [
+          {
+            "lead": "Central board",
+            "text": "Use the side marked for 2–4 players.",
+            "source": {
+              "page": 2,
+              "query": "the 2-4 Players side faceup"
+            }
+          },
+          {
+            "lead": "Five spaces",
+            "text": "Fill each of the 5 spaces with 3 tokens drawn at random from the pouch.",
+            "source": {
+              "page": 2,
+              "query": "Fill each of the 5 spaces of the Central board with 3 tokens you draw randomly from the Pouch"
+            }
+          },
+          {
+            "lead": "Animal cards",
+            "text": "Shuffle the animal cards. Place 5 face up beside the central board. The rest are the draw pile.",
+            "source": {
+              "page": 2,
+              "query": "place 5 cards faceup next to the Central board"
+            }
+          }
+        ],
+        "4": [
+          {
+            "lead": "Central board",
+            "text": "Use the side marked for 2–4 players.",
+            "source": {
+              "page": 2,
+              "query": "the 2-4 Players side faceup"
+            }
+          },
+          {
+            "lead": "Five spaces",
+            "text": "Fill each of the 5 spaces with 3 tokens drawn at random from the pouch.",
+            "source": {
+              "page": 2,
+              "query": "Fill each of the 5 spaces of the Central board with 3 tokens you draw randomly from the Pouch"
+            }
+          },
+          {
+            "lead": "Animal cards",
+            "text": "Shuffle the animal cards. Place 5 face up beside the central board. The rest are the draw pile.",
+            "source": {
+              "page": 2,
+              "query": "place 5 cards faceup next to the Central board"
+            }
           }
         ]
       },
