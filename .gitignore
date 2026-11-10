@@ -1,0 +1,3 @@
+# Private insert photos and packing sheets. Designer listing photos
+# stay on disk for local use and are never published with the site.
+/private/

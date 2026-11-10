@@ -2334,6 +2334,69 @@
   }
   .teach-open { margin:0 0 10px; }
   .teach-page .byline { margin-top:0; }
+  .away-page { display:flex; flex-direction:column; gap:14px; }
+  .away-note { margin:0; color:var(--muted, #5c574e); }
+  .away-kind {
+    display:inline-block;
+    margin:0 0 8px;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.02em;
+  }
+  .away-kind--illustration { background:#f3ead2; }
+  .away-figure {
+    margin:0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .away-figure img,
+  .away-figure svg { display:block; width:100%; height:auto; background:#f7f1e4; }
+  .away-figure figcaption { padding:10px 12px 12px; }
+  .away-steps { display:flex; flex-direction:column; gap:8px; }
+  .away-nav { display:flex; gap:8px; }
+  .away-nav button, .away-layer {
+    min-height:44px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:700;
+  }
+  .away-nav button { flex:1; }
+  .away-nav button:disabled { opacity:0.4; }
+  .away-stack-wrap { position:relative; margin:8px 0 4px; }
+  .away-stack {
+    position:relative;
+    margin-right:36px;
+  }
+  .away-layer {
+    position:absolute;
+    left:0;
+    right:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:0 14px;
+    text-align:left;
+    box-shadow:0 6px 16px rgba(0,0,0,0.12);
+  }
+  .away-layer[data-active="true"] {
+    outline:2px solid currentColor;
+    transform:translateX(22px);
+    z-index:3;
+  }
+  .away-layer-no { opacity:0.7; font-variant-numeric:tabular-nums; }
+  .away-detail h3 { margin:0 0 6px; }
+  .away-trays { margin:8px 0 0; padding:0; list-style:none; }
+  .away-trays li { margin:0 0 8px; }
+  .away-trays ul { margin:4px 0 0; padding-left:1.1em; }
   .teach-script {
     background:var(--card);
     border:1px solid var(--hig-sep);
@@ -117371,6 +117434,7 @@
     attachRulebookGuards();
     markRecentlyViewed(g);
     mountRulebookSearch(g, rulebookHref);
+    mountPutAwayLink(g);
   }
 
   function normalizeIncoming() {
@@ -117406,6 +117470,337 @@
     return { slug: slug, expansions: [] };
   }
 
+  function putAwayManifestUrl(slug) {
+    return basePath() + "/private/put-away/" + encodeURIComponent(slug) + "/manifest.json";
+  }
+  function putAwayImageUrl(slug, src) {
+    var s = String(src || "").trim();
+    if (!s || /^[a-z][a-z0-9+.-]*:/i.test(s) || s.indexOf("..") !== -1 || s.charAt(0) === "/" || s.charAt(0) === "\\") return "";
+    if (!/^[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(s)) return "";
+    return basePath() + "/private/put-away/" + encodeURIComponent(slug) + "/" + s.split("/").map(function (part) {
+      return encodeURIComponent(part);
+    }).join("/");
+  }
+  function normalizePutAway(data) {
+    data = data && typeof data === "object" ? data : {};
+    var steps = (Array.isArray(data.steps) ? data.steps : []).map(function (step) {
+      step = step || {};
+      var layer = step.layer != null && step.layer !== "" ? Number(step.layer) : null;
+      return {
+        image: String(step.image || "").trim(),
+        caption: String(step.caption || "").trim(),
+        layer: layer != null && isFinite(layer) ? layer : null,
+        kind: step.kind === "illustration" ? "illustration" : "photo"
+      };
+    }).filter(function (step) { return step.caption || step.image; });
+    var layers = (Array.isArray(data.layers) ? data.layers : []).map(function (layer, i) {
+      layer = layer || {};
+      var n = layer.n != null && layer.n !== "" ? Number(layer.n) : i + 1;
+      var trays = (Array.isArray(layer.trays) ? layer.trays : []).map(function (tray) {
+        tray = tray || {};
+        var contents = (Array.isArray(tray.contents) ? tray.contents : []).map(function (item) {
+          return String(item || "").trim();
+        }).filter(Boolean);
+        return { name: String(tray.name || "").trim(), contents: contents };
+      }).filter(function (tray) { return tray.name || tray.contents.length; });
+      return {
+        n: isFinite(n) ? n : i + 1,
+        name: String(layer.name || "").trim(),
+        image: String(layer.image || "").trim(),
+        caption: String(layer.caption || "").trim(),
+        kind: layer.kind === "illustration" ? "illustration" : "photo",
+        trays: trays
+      };
+    }).filter(function (layer) {
+      return layer.name || layer.caption || layer.image || layer.trays.length;
+    }).sort(function (a, b) { return a.n - b.n; });
+    if (!steps.length && !layers.length) return null;
+    return {
+      title: String(data.title || "Put it away").trim().slice(0, 80) || "Put it away",
+      note: String(data.note || "").trim().slice(0, 280),
+      steps: steps,
+      layers: layers
+    };
+  }
+  function loadPutAway(slug) {
+    return fetch(putAwayManifestUrl(slug), { cache: "no-store" }).then(function (res) {
+      if (!res.ok) throw new Error("missing");
+      return res.json();
+    }).then(normalizePutAway);
+  }
+  function awayIllustration(caption, layerLabel) {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 320 200");
+    svg.setAttribute("role", "img");
+    var label = layerLabel ? "Illustration, " + layerLabel : "Illustration";
+    svg.setAttribute("aria-label", label);
+    function el(name, attrs) {
+      var node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+      return node;
+    }
+    svg.appendChild(el("rect", { x: "16", y: "28", width: "288", height: "150", rx: "16", fill: "#f4e7cf", stroke: "#8a5a2a", "stroke-width": "3" }));
+    svg.appendChild(el("rect", { x: "36", y: "52", width: "116", height: "64", rx: "8", fill: "#efe0c4", stroke: "#8a5a2a" }));
+    svg.appendChild(el("rect", { x: "168", y: "52", width: "116", height: "64", rx: "8", fill: "#efe0c4", stroke: "#8a5a2a" }));
+    svg.appendChild(el("rect", { x: "36", y: "128", width: "248", height: "32", rx: "8", fill: "#efe0c4", stroke: "#8a5a2a" }));
+    var title = el("text", { x: "160", y: "22", "text-anchor": "middle", "font-size": "13", "font-family": "sans-serif", fill: "#5c3b16" });
+    title.textContent = layerLabel || "Packing step";
+    svg.appendChild(title);
+    return svg;
+  }
+  function awayKindBadge(kind) {
+    var badge = document.createElement("p");
+    badge.className = "away-kind" + (kind === "illustration" ? " away-kind--illustration" : "");
+    badge.textContent = kind === "illustration" ? "Illustration" : "Photo";
+    return badge;
+  }
+  function awayMountFigure(host, slug, spec) {
+    host.innerHTML = "";
+    var useArt = spec.kind === "illustration" || !putAwayImageUrl(slug, spec.image);
+    function showArt() {
+      host.innerHTML = "";
+      host.appendChild(awayKindBadge("illustration"));
+      var figure = document.createElement("figure");
+      figure.className = "away-figure";
+      var layerLabel = spec.layerLabel || (spec.layer != null ? "Layer " + spec.layer : "");
+      figure.appendChild(awayIllustration(spec.caption, layerLabel));
+      if (spec.caption) {
+        var cap = document.createElement("figcaption");
+        cap.textContent = spec.caption;
+        figure.appendChild(cap);
+      }
+      host.appendChild(figure);
+    }
+    if (useArt) {
+      showArt();
+      return;
+    }
+    host.appendChild(awayKindBadge("photo"));
+    var figure = document.createElement("figure");
+    figure.className = "away-figure";
+    var img = document.createElement("img");
+    img.alt = spec.caption || "Packing photo";
+    img.src = putAwayImageUrl(slug, spec.image);
+    img.addEventListener("error", showArt);
+    figure.appendChild(img);
+    if (spec.caption) {
+      var cap = document.createElement("figcaption");
+      cap.textContent = spec.caption;
+      figure.appendChild(cap);
+    }
+    host.appendChild(figure);
+  }
+  function renderPutAwayPage(slug) {
+    var g = DATA[slug];
+    if (!g) {
+      appEl.innerHTML = '<div class="detail fade-in"><p>Game not found: <code>' + escapeHtml(slug) + "</code></p></div>";
+      return;
+    }
+    detailSlug = slug;
+    setGameAccent(g);
+    appEl.innerHTML = '<article class="detail away-page"><p class="page-back"><a class="back-link" href="#/game/' + slug + '">\u2190 ' + escapeHtml(g.name) + '</a></p><h2 class="title">Put it away</h2><p class="away-note">Loading packing notes\u2026</p></article>';
+    loadPutAway(slug).then(function (pack) {
+      if (detailSlug !== slug || !pack) throw new Error("missing");
+      paintPutAway(g, pack);
+    }).catch(function () {
+      if (detailSlug !== slug) return;
+      var note = appEl.querySelector(".away-note");
+      if (note) note.textContent = "No private packing photos are loaded for this game.";
+    });
+  }
+  function paintPutAway(game, pack) {
+    var slug = game.slug;
+    var root = document.createElement("article");
+    root.className = "detail away-page";
+    var back = document.createElement("p");
+    back.className = "page-back";
+    back.innerHTML = '<a class="back-link" href="#/game/' + slug + '">\u2190 ' + escapeHtml(game.name) + "</a>";
+    root.appendChild(back);
+    var title = document.createElement("h2");
+    title.className = "title";
+    title.textContent = pack.title || "Put it away";
+    root.appendChild(title);
+    if (pack.note) {
+      var note = document.createElement("p");
+      note.className = "away-note";
+      note.textContent = pack.note;
+      root.appendChild(note);
+    }
+    var layerIndex = 0;
+    var stepIndex = 0;
+    var layerHost = document.createElement("section");
+    var stepHost = document.createElement("section");
+    if (pack.layers.length) {
+      var layerHeading = document.createElement("h3");
+      layerHeading.textContent = "Layers";
+      layerHost.appendChild(layerHeading);
+      var stack = document.createElement("div");
+      stack.className = "away-stack";
+      stack.setAttribute("role", "list");
+      var layerH = 64;
+      var lift = 26;
+      stack.style.height = (layerH + lift * (pack.layers.length - 1) + 8) + "px";
+      pack.layers.forEach(function (layer, i) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "away-layer";
+        btn.setAttribute("role", "listitem");
+        btn.setAttribute("data-layer", String(i));
+        btn.style.bottom = (i * lift) + "px";
+        btn.style.zIndex = String(i + 1);
+        btn.style.height = layerH + "px";
+        btn.style.background = "hsl(32, 45%, " + (78 - i * 6) + "%)";
+        var name = document.createElement("span");
+        name.textContent = layer.name || ("Layer " + layer.n);
+        var num = document.createElement("span");
+        num.className = "away-layer-no";
+        num.textContent = i === 0 ? "Bottom" : (i === pack.layers.length - 1 ? "Top" : "Layer " + layer.n);
+        btn.appendChild(name);
+        btn.appendChild(num);
+        stack.appendChild(btn);
+      });
+      layerHost.appendChild(stack);
+      var layerNav = document.createElement("div");
+      layerNav.className = "away-nav";
+      var prevL = document.createElement("button");
+      prevL.type = "button";
+      prevL.textContent = "Lower layer";
+      var nextL = document.createElement("button");
+      nextL.type = "button";
+      nextL.textContent = "Higher layer";
+      layerNav.appendChild(prevL);
+      layerNav.appendChild(nextL);
+      layerHost.appendChild(layerNav);
+      var layerFigure = document.createElement("div");
+      layerHost.appendChild(layerFigure);
+      var layerCopy = document.createElement("div");
+      layerCopy.className = "away-detail";
+      layerHost.appendChild(layerCopy);
+      function paintLayer() {
+        var layer = pack.layers[layerIndex];
+        Array.prototype.forEach.call(stack.querySelectorAll(".away-layer"), function (btn) {
+          var on = btn.getAttribute("data-layer") === String(layerIndex);
+          if (on) btn.setAttribute("data-active", "true");
+          else btn.removeAttribute("data-active");
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        prevL.disabled = layerIndex <= 0;
+        nextL.disabled = layerIndex >= pack.layers.length - 1;
+        awayMountFigure(layerFigure, slug, {
+          image: layer.image,
+          caption: layer.caption,
+          kind: layer.kind,
+          layer: layer.n,
+          layerLabel: layer.name || ("Layer " + layer.n)
+        });
+        layerCopy.innerHTML = "";
+        var h = document.createElement("h3");
+        h.textContent = (layer.name || ("Layer " + layer.n)) + (layerIndex === 0 ? " (bottom)" : (layerIndex === pack.layers.length - 1 ? " (top)" : ""));
+        layerCopy.appendChild(h);
+        if (layer.trays.length) {
+          var list = document.createElement("ul");
+          list.className = "away-trays";
+          layer.trays.forEach(function (tray) {
+            var li = document.createElement("li");
+            var strong = document.createElement("strong");
+            strong.textContent = tray.name || "Tray";
+            li.appendChild(strong);
+            if (tray.contents.length) {
+              var ul = document.createElement("ul");
+              tray.contents.forEach(function (item) {
+                var row = document.createElement("li");
+                row.textContent = item;
+                ul.appendChild(row);
+              });
+              li.appendChild(ul);
+            }
+            list.appendChild(li);
+          });
+          layerCopy.appendChild(list);
+        }
+      }
+      stack.addEventListener("click", function (e) {
+        var btn = e.target.closest ? e.target.closest(".away-layer") : null;
+        if (!btn) return;
+        layerIndex = parseInt(btn.getAttribute("data-layer"), 10) || 0;
+        paintLayer();
+      });
+      prevL.addEventListener("click", function () {
+        if (layerIndex > 0) { layerIndex -= 1; paintLayer(); }
+      });
+      nextL.addEventListener("click", function () {
+        if (layerIndex < pack.layers.length - 1) { layerIndex += 1; paintLayer(); }
+      });
+      paintLayer();
+      root.appendChild(layerHost);
+    }
+    if (pack.steps.length) {
+      var stepHeading = document.createElement("h3");
+      stepHeading.textContent = "Steps";
+      stepHost.appendChild(stepHeading);
+      var stepFigure = document.createElement("div");
+      stepHost.appendChild(stepFigure);
+      var stepNav = document.createElement("div");
+      stepNav.className = "away-nav";
+      var prevS = document.createElement("button");
+      prevS.type = "button";
+      prevS.textContent = "Previous step";
+      var nextS = document.createElement("button");
+      nextS.type = "button";
+      nextS.textContent = "Next step";
+      stepNav.appendChild(prevS);
+      stepNav.appendChild(nextS);
+      stepHost.appendChild(stepNav);
+      function paintStep() {
+        var step = pack.steps[stepIndex];
+        prevS.disabled = stepIndex <= 0;
+        nextS.disabled = stepIndex >= pack.steps.length - 1;
+        var caption = "Step " + (stepIndex + 1) + " of " + pack.steps.length + (step.caption ? ". " + step.caption : "");
+        if (step.layer != null) caption += " Layer " + step.layer + ".";
+        awayMountFigure(stepFigure, slug, {
+          image: step.image,
+          caption: caption,
+          kind: step.kind,
+          layer: step.layer
+        });
+      }
+      prevS.addEventListener("click", function () {
+        if (stepIndex > 0) { stepIndex -= 1; paintStep(); }
+      });
+      nextS.addEventListener("click", function () {
+        if (stepIndex < pack.steps.length - 1) { stepIndex += 1; paintStep(); }
+      });
+      paintStep();
+      root.appendChild(stepHost);
+    }
+    appEl.innerHTML = "";
+    appEl.appendChild(root);
+  }
+  function mountPutAwayLink(game) {
+    if (!game || !game.slug) return;
+    loadPutAway(game.slug).then(function (pack) {
+      if (!pack || detailSlug !== game.slug) return;
+      var detail = appEl.querySelector(".detail");
+      if (!detail || detail.querySelector(".away-open")) return;
+      var nav = detail.querySelector(".essential-links");
+      if (!nav) {
+        nav = document.createElement("nav");
+        nav.className = "essential-links";
+        nav.setAttribute("aria-label", "Game links");
+        var head = detail.querySelector(".detail-head");
+        if (head) head.insertAdjacentElement("afterend", nav);
+        else detail.insertBefore(nav, detail.firstChild);
+      }
+      var link = document.createElement("a");
+      link.className = "essential-link away-open";
+      link.href = "#/game/" + game.slug + "/away";
+      link.textContent = "Put it away";
+      var teach = nav.querySelector(".teach-open");
+      if (teach) teach.insertAdjacentElement("afterend", link);
+      else nav.appendChild(link);
+    }).catch(function () {});
+  }
+
   function parseHash() {
     var h = window.location.hash || "#/";
     var parts = h.slice(2).split("?");
@@ -117415,6 +117810,9 @@
     var params = new URLSearchParams(q);
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
+      if ((pieces[2] || "").toLowerCase() === "away") {
+        return { route: "away", slug: routed.slug };
+      }
       if ((pieces[2] || "").toLowerCase() === "teach") {
         return {
           route: "teach",
@@ -117601,7 +117999,11 @@
     syncHeaderOffset();
     if (normalizeIncoming()) return;
     var parsed = parseHash();
-    if (parsed.route === "teach") {
+    if (parsed.route === "away") {
+      scrollPageToTop();
+      renderPutAwayPage(parsed.slug);
+      requestAnimationFrame(scrollPageToTop);
+    } else if (parsed.route === "teach") {
       scrollPageToTop();
       renderTeachPage(parsed.slug, Object.assign({ routeExps: parsed.expansions || [] }, parsed.teachQuery || {}));
       requestAnimationFrame(scrollPageToTop);
