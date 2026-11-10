@@ -2335,6 +2335,8 @@
   .teach-open { margin:0 0 10px; }
   .setup-photo { margin:12px 0 0; }
   .setup-photo img { display:block; width:100%; height:auto; border-radius:12px; }
+  .setup-photo figcaption { margin:6px 2px 0; font-size:12px; line-height:1.35; color:var(--muted); }
+  .setup-photo figcaption a { color:inherit; }
   .pack-away { margin-top:8px; }
   .pack-away figure { margin:0 0 8px; }
   .pack-away img, .pack-away svg { display:block; width:100%; height:auto; border-radius:12px; background:#f7f1e4; }
@@ -116543,7 +116545,10 @@
     var src = setupPhotoUrl(chosen.src);
     var alt = String(chosen.alt || "").trim();
     if (!src || !alt) return null;
-    return { src: src, alt: alt };
+    var credit = String(chosen.credit || "").trim();
+    var href = String(chosen.href || "").trim();
+    if (!/^https:\/\/boardgamegeek\.com\/image\/[0-9]+\/[A-Za-z0-9-]+$/.test(href)) href = "";
+    return { src: src, alt: alt, credit: credit, href: href };
   }
   function loadSetupPhotoSpec(slug) {
     if (!setupPhotoCache[slug]) {
@@ -116565,7 +116570,14 @@
         return;
       }
       slot.hidden = false;
-      slot.innerHTML = '<figure class="setup-photo"><img alt="' + escapeHtml(photo.alt) + '" src="' + escapeHtml(photo.src) + '"></figure>';
+      var caption = "";
+      if (photo.credit) {
+        var label = escapeHtml(photo.credit);
+        caption = photo.href
+          ? '<figcaption><a href="' + escapeHtml(photo.href) + '" target="_blank" rel="noopener noreferrer">' + label + "</a></figcaption>"
+          : "<figcaption>" + label + "</figcaption>";
+      }
+      slot.innerHTML = '<figure class="setup-photo"><img alt="' + escapeHtml(photo.alt) + '" src="' + escapeHtml(photo.src) + '">' + caption + "</figure>";
       var img = slot.querySelector("img");
       if (img) img.addEventListener("error", function () {
         slot.hidden = true;
