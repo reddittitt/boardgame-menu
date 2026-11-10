@@ -117533,6 +117533,7 @@
     svg.setAttribute("viewBox", "0 0 320 200");
     svg.setAttribute("role", "img");
     var label = layerLabel ? "Illustration, " + layerLabel : "Illustration";
+    if (caption) label += ". " + String(caption).slice(0, 120);
     svg.setAttribute("aria-label", label);
     function el(name, attrs) {
       var node = document.createElementNS("http://www.w3.org/2000/svg", name);
