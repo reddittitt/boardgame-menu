@@ -113543,8 +113543,8 @@
     }
     var citationQuery = cleanFindQuery(highlightJob.tourQuery || opts.query || "");
     if (opts.markSection && cleanFindQuery(rulebookFind.query) === citationQuery) {
-      // The step is already outlined on the zoomed page. Repainting with the
-      // fit-width scale shifts that box onto a different line.
+      // The step is already outlined on the fit-width page. Replacing that
+      // layer would drop the outline.
       return;
     }
     if (opts.markSection) {
@@ -113763,39 +113763,6 @@
     return { start: start, end: end };
   }
 
-  function sectionPdfSpan(runs, range) {
-    var starts = [];
-    (runs || []).forEach(function (run) {
-      if (!run || run.end <= range.start || run.start >= range.end) return;
-      var transform = run.item && run.item.transform ? run.item.transform : [1, 0, 0, 1, 0, 0];
-      starts.push({ x: transform[4], width: run.item && run.item.width ? run.item.width : 0, font: run.item && run.item.height ? run.item.height : 0 });
-    });
-    if (!starts.length) return { width: 0, font: 0 };
-    var minX = starts[0].x;
-    var font = 0;
-    starts.forEach(function (item) {
-      if (item.x < minX) minX = item.x;
-      if (item.font > font) font = item.font;
-    });
-    var maxX = minX;
-    starts.forEach(function (item) {
-      if (item.x > minX + 320) return;
-      var right = Math.min(item.x + item.width, minX + 320);
-      if (right > maxX) maxX = right;
-    });
-    return { width: maxX > minX ? maxX - minX : 0, font: font };
-  }
-
-  function markSectionScale(stage, unscaled, span, fitScale) {
-    var avail = rulebookViewerWidth(stage);
-    var byWidth = span.width > 40 ? (avail - 8) / span.width : fitScale;
-    var font = span.font > 2 ? span.font : 9;
-    var byText = 18 / font;
-    var scale = Math.max(fitScale, Math.min(byWidth, byText, fitScale * 2.8));
-    if (!(scale > 0)) return fitScale;
-    return scale;
-  }
-
   function bandFromBoxes(boxes, anchorLeft) {
     if (!boxes || !boxes.length) return null;
     var origin = typeof anchorLeft === "number" ? anchorLeft : boxes[0].left;
@@ -113863,10 +113830,9 @@
     if (!stage || !el) return;
     var stageRect = stage.getBoundingClientRect();
     var markRect = el.getBoundingClientRect();
-    stage.scrollTop += markRect.top - stageRect.top - 14;
-    stage.scrollLeft += markRect.left - stageRect.left - 10;
+    stage.scrollTop += markRect.top - stageRect.top - 48;
     if (stage.scrollTop < 0) stage.scrollTop = 0;
-    if (stage.scrollLeft < 0) stage.scrollLeft = 0;
+    stage.scrollLeft = 0;
   }
 
   function placeHighlightBox(layer, box) {
@@ -113930,7 +113896,6 @@
           var sectionRange = null;
           if (opts.markSection && focus >= 0 && found.ranges[focus]) {
             sectionRange = expandToSection(built.raw, found.ranges[focus]);
-            scale = markSectionScale(stage, unscaled, sectionPdfSpan(built.runs, sectionRange), scale);
           }
           var viewport = page.getViewport({ scale: scale });
           sheet.hidden = false;
