@@ -15,3 +15,4 @@ This folder contains everything needed for GitHub Pages:
 Republish note (2026-11-09): the Pages deploy of main `8600c452d4bc0075296891173d487c03ec9e16e2` timed out, so this line is here for a merge to retrigger that deploy.
 
 Republish note (2026-11-09): the Pages deploy of `813d629f6d615d807bde6ea8a153d806dd37243c` (#83) timed out, so this line is here for a merge to retrigger that publish.
+Republish note (2026-11-10): the Pages deploy of `0b8e46c5d317869b92f6d79af82c40bd3e0655fa` (#88) timed out, so this line is here for a merge to retrigger that publish.
