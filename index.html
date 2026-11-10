@@ -507,19 +507,19 @@
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-height:44px;
-    min-width:44px;
-    margin:0 0 0 6px;
-    padding:0 10px;
-    border:1px solid var(--border);
+    min-height:0;
+    min-width:0;
+    margin:0 0 0 0.35rem;
+    padding:0.08rem 0.42rem;
+    border:1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
     border-radius:999px;
     background:transparent;
     color:var(--accent);
-    font-size:0.85rem;
-    font-weight:700;
-    line-height:1;
+    font-size:0.72rem;
+    font-weight:650;
+    line-height:1.3;
     text-decoration:none;
-    vertical-align:middle;
+    vertical-align:baseline;
     white-space:nowrap;
   }
   .rulebook-ref:focus-visible {
@@ -7753,7 +7753,8 @@
           },
           {
             "lead": "Give each player",
-            "text": "a board on the colored-wall side."
+            "text": "a board on the colored-wall side.",
+            "source": { "page": 1, "query": "Give each player a player board", "snippet": "Give each player a player board. Flip your board to the side with the colored wall" }
           },
           {
             "lead": "Everyone",
@@ -8081,7 +8082,8 @@
       "endOfGame": [
         {
           "lead": "When",
-          "text": "The game ends right after the wall-tiling phase in which someone completes a horizontal line of 5."
+          "text": "The game ends right after the wall-tiling phase in which someone completes a horizontal line of 5.",
+          "source": { "page": 1, "query": "horizontal line of 5 consecutive tiles", "snippet": "completed a horizontal line of 5 consecutive tiles on her wall" }
         },
         {
           "lead": "Then",
@@ -34107,30 +34109,33 @@
         "bullets": [
           {
             "lead": "Each player takes",
-            "text": "the board and the pieces listed on its back."
+            "text": "the board and the pieces listed on its back.",
+            "source": { "page": 5, "query": "Assign Factions and Starting Player", "snippet": "Each player takes their chosen faction board and the pieces listed on its back" }
           },
           {
             "lead": "Markers",
-            "text": "Score markers on 0."
+            "text": "Score markers on 0.",
+            "source": { "page": 5, "query": "Place Score Markers", "snippet": "Each player places their score marker on the 0 space" }
           },
           {
             "lead": "Put a ruin",
             "text": "on each slot marked R (four).",
-            "source": { "page": 5, "query": "Place Ruins", "label": "5.1.4" }
+            "source": { "page": 5, "query": "Step 4: Place Ruins", "snippet": "Place a ruin in each slot on the map marked with an R" }
           },
           {
             "lead": "Item supply",
             "text": "On the printed spaces: 2 boots (M), 2 bags (B), 1 crossbow (C), 1 hammer (H), 2 swords (S), 2 tea (T), and 2 coins (X).",
-            "source": { "page": 5, "query": "Form Item Supply", "label": "5.1.5" }
+            "source": { "page": 5, "query": "Step 5: Form Item Supply", "snippet": "Place these items on the corresponding spaces of the item supply" }
           },
           {
             "lead": "Overview cards as wanted",
-            "text": "And the two battle dice."
+            "text": "And the two battle dice.",
+            "source": { "page": 5, "query": "two battle dice near the map", "snippet": "Hand out the 16 faction overview cards as desired, and place the two battle dice near the map" }
           },
           {
             "lead": "Then each faction",
             "text": "sets up in the printed order A, then B, then C.",
-            "source": { "page": 5, "query": "Set Up Factions", "label": "5.1.7" }
+            "source": { "page": 5, "query": "Step 7: Set Up Factions", "snippet": "In setup order (A, B, C, etc.), each player follows their faction's setup" }
           }
         ]
       },
@@ -34147,12 +34152,13 @@
               },
               {
                 "lead": "Assign",
-                "text": "factions and the starting player at random."
+                "text": "factions and the starting player at random.",
+                "source": { "page": 5, "query": "Determine the starting player and seating order", "snippet": "Determine the starting player and seating order" }
               },
               {
                 "lead": "Cards",
                 "text": "Shuffle the deck. Each player draws 3.",
-                "source": { "page": 5, "query": "draws three cards", "label": "5.1.3" }
+                "source": { "page": 5, "query": "draws three cards", "snippet": "draws three cards" }
               },
               {
                 "lead": "Leave in the box",
@@ -34179,7 +34185,7 @@
               {
                 "lead": "Cards",
                 "text": "Shuffle the deck. Each player draws 5 and keeps 3.",
-                "source": { "page": 23, "query": "draws five cards", "label": "A.7" }
+                "source": { "page": 23, "query": "Each player draws five cards", "snippet": "Each player draws five cards. (Not three, as in Standard" }
               },
               {
                 "lead": "Optional pieces",
@@ -34205,15 +34211,18 @@
           },
           {
             "lead": "Move",
-            "text": "any number of your warriors and pawns from one clearing to an adjacent clearing."
+            "text": "any number of your warriors and pawns from one clearing to an adjacent clearing.",
+            "source": { "page": 4, "query": "4.2 Move", "snippet": "4.2 Move" }
           },
           {
             "lead": "You must rule",
-            "text": "the origin, the destination, or both."
+            "text": "the origin, the destination, or both.",
+            "source": { "page": 4, "query": "4.2.1 You Must Rule", "snippet": "4.2.1 You Must Rule. To take a move, you must rule" }
           },
           {
             "lead": "Battle",
-            "text": "the defender may play one matching ambush."
+            "text": "the defender may play one matching ambush.",
+            "source": { "page": 4, "query": "Defender May Ambush", "snippet": "Step 1: Defender May Ambush" }
           },
           {
             "lead": "The attacker may",
@@ -34222,11 +34231,13 @@
           },
           {
             "lead": "Then",
-            "text": "roll both dice."
+            "text": "roll both dice.",
+            "source": { "page": 4, "query": "Roll both battle dice", "snippet": "Roll Dice. Roll both battle dice" }
           },
           {
             "lead": "The attacker uses",
-            "text": "the higher roll and the defender the lower."
+            "text": "the higher roll and the defender the lower.",
+            "source": { "page": 4, "query": "the higher roll", "snippet": "deal hits equal to the higher roll, and the defender" }
           },
           {
             "lead": "Rolled hits cannot",
@@ -34238,7 +34249,8 @@
           },
           {
             "lead": "If the defender has no warriors",
-            "text": "the attacker deals one extra hit."
+            "text": "the attacker deals one extra hit.",
+            "source": { "page": 4, "query": "If the defender has no warriors", "snippet": "Defenseless. If the defender has no warriors" }
           },
           {
             "lead": "The side taking",
@@ -34282,7 +34294,8 @@
           },
           {
             "lead": "Each turn is",
-            "text": "Birdsong, then Daylight, then Evening."
+            "text": "Birdsong, then Daylight, then Evening.",
+            "source": { "page": 2, "query": "Birdsong, Daylight, and Evening", "snippet": "Birdsong, Daylight, and Evening" }
           },
           {
             "lead": "Anything at the start",
@@ -37551,11 +37564,12 @@
             {
               "lead": "Remove all four dominance cards",
               "text": "Do this before the shuffle.",
-              "source": { "page": 5, "query": "remove all four dominance", "label": "5.1.3" }
+              "source": { "page": 5, "query": "remove all four dominance", "snippet": "remove all four dominance cards from the deck" }
             },
             {
-              "lead": "Reach of the two",
-              "text": "factions must total 17 or more."
+            "lead": "Reach of the two",
+            "text": "factions must total 17 or more.",
+            "source": { "page": 5, "query": "17+ Reach", "snippet": "use any faction mix with 17+ Reach" }
             },
             {
               "lead": "Marquise 10",
@@ -37615,7 +37629,8 @@
       "endOfGame": [
         {
           "lead": "30 points",
-          "text": "The first player to 30 victory points wins immediately, including in the middle of a turn."
+          "text": "The first player to 30 victory points wins immediately, including in the middle of a turn.",
+          "source": { "page": 3, "query": "The first player to reach 30 victory points immediately", "snippet": "The first player to reach 30 victory points immediately wins the game" }
         },
         {
           "lead": "Same moment",
@@ -113526,12 +113541,29 @@
       drawRulebookHighlight(++rulebookViewerToken);
       return;
     }
+    var citationQuery = cleanFindQuery(highlightJob.tourQuery || opts.query || "");
+    if (opts.markSection && cleanFindQuery(rulebookFind.query) === citationQuery) {
+      // The step is already outlined on the zoomed page. Repainting with the
+      // fit-width scale shifts that box onto a different line.
+      return;
+    }
+    if (opts.markSection) {
+      opts.markSection = false;
+      highlightJob.pageReady = false;
+      highlightJob.drawnKey = "";
+      sheet.hidden = true;
+      sheet.innerHTML = "";
+      drawRulebookHighlight(++rulebookViewerToken);
+      return;
+    }
     var gen = rulebookFind.generation;
     rulebookFind.pdf.getPage(match.page).then(function (page) {
       if (gen !== rulebookFind.generation) return;
       if (!highlightJob.opts || highlightJob.opts.page !== match.page) return;
       var unscaled = page.getViewport({ scale: 1 });
-      var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
+      var painted = parseFloat(sheet.style.width) || sheet.clientWidth || 0;
+      var scale = painted > 40 && unscaled.width ? painted / unscaled.width : rulebookFitScale(stage, unscaled);
+      var viewport = page.getViewport({ scale: scale });
       var focusEl = paintFindLayer(layer, built, viewport, match.nthOnPage);
       if (focusEl) scrollStageTo(stage, focusEl);
       highlightJob.drawnKey = "";
@@ -113706,12 +113738,24 @@
   function expandToSection(raw, range) {
     var start = range.start;
     var end = range.end;
-    var before = String(raw || "").slice(0, start);
+    var text = String(raw || "");
     var re = /(?:\d+\.\d+(?:\.\d+)?|[A-Z]\.\d+)\s+Step\s+\d+/gi;
-    var found = null;
-    var match;
-    while ((match = re.exec(before))) found = match;
-    if (found && start - found.index < 900) start = found.index;
+    var windowStart = Math.max(0, start - 48);
+    var head = text.slice(windowStart, start + 12);
+    re.lastIndex = 0;
+    var local = null;
+    var localMatch;
+    while ((localMatch = re.exec(head))) local = localMatch;
+    if (local && windowStart + local.index <= start) {
+      start = windowStart + local.index;
+    } else {
+      var before = text.slice(0, start);
+      var found = null;
+      var match;
+      re.lastIndex = 0;
+      while ((match = re.exec(before))) found = match;
+      if (found && start - found.index < 80) start = found.index;
+    }
     var after = String(raw || "").slice(end);
     var next = after.search(/\n\s*(?:\d+\.\d+(?:\.\d+)?|[A-Z]\.\d+)\b/);
     if (next >= 0 && next < 1600) end = end + next;
@@ -114974,14 +115018,12 @@
     if (!href) return "";
     var query = String(source.query || "").trim();
     var snippet = String(source.snippet || query).trim();
-    var label = String(source.label || ("p. " + page)).trim();
     return ' <a class="rulebook-ref" href="' + escapeHtml(href) + "#page=" + page + '"' +
       ' data-page="' + page + '"' +
       ' data-query="' + escapeHtml(query) + '"' +
       ' data-snippet="' + escapeHtml(snippet) + '"' +
       ' title="Open this part of the rulebook"' +
-      ' aria-label="Open rulebook ' + escapeHtml(label) + '">' +
-      escapeHtml(label) + "</a>";
+      ' aria-label="Open the rulebook at this passage">Rulebook</a>';
   }
   function renderBulletItem(item) {
     if (typeof item === "string") item = { text: item };

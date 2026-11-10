@@ -408,20 +408,21 @@ Write the words a player needs. Do not leave a letter, icon initial, or jargon c
 
 ## Rulebook links
 
-Optional `source` on a bullet. The page draws a small control after the line. Tapping it opens the in-app rulebook viewer, scrolls to that step, and marks the step. The heading you searched for is the darker mark. The rest of the step stays inside the same outline, so a phone does not land on a bare page. Leave `source` off when the game has no official PDF the viewer can open, or when the page or heading was not checked against that PDF. Do not invent a page number or a section name.
+Optional `source` on a bullet. The page draws a small **Rulebook** chip after the line. The chip always says Rulebook. It does not show a section number, a page number, or a custom `label`. Games without numbered sections use the same chip.
+
+Tapping it opens the in-app rulebook viewer on `page`, scrolls that passage into view, outlines the matching step, and marks the heading more strongly. Leave `source` off when the game has no official PDF the viewer can open, or when you have not checked the page and the words against that PDF. Do not invent a page number or a query. If the query matches more than one place on that page, set `snippet` to a longer unique quote from the passage you mean, or choose a query that occurs once. A link you cannot verify does not belong on the bullet.
 
 | Field | Required | What it is |
 | --- | --- | --- |
-| `page` | yes | 1-based page in that game's `rulebook` PDF. |
-| `query` | no | Words that appear on that page, used to highlight the passage. |
-| `snippet` | no | A longer quote from that page when `query` matches more than once. Defaults to `query`. |
-| `label` | no | The control's text. Defaults to `p. ` plus the page. Use the book's own section number when you have checked it. |
+| `page` | yes | 1-based page in that game's `rulebook` PDF, checked in the file the viewer opens. |
+| `query` | yes | Words that appear on that page and identify the passage. They must match the PDF text layer. |
+| `snippet` | no | A longer quote from that same passage when `query` matches more than once. Defaults to `query`. |
 
 ```json
 {
   "lead": "Item supply",
   "text": "On the printed spaces: 2 boots (M) and 2 bags (B).",
-  "source": { "page": 5, "query": "Form Item Supply", "label": "5.1.5" }
+    "source": { "page": 5, "query": "Step 5: Form Item Supply", "snippet": "Place these items on the corresponding spaces of the item supply" }
 }
 ```
 
