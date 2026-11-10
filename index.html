@@ -114066,6 +114066,8 @@
     highlightJob.drawSlot = null;
     highlightJob.onSlotDrawn = null;
     highlightJob.tourQuery = "";
+    highlightJob.citation = null;
+    highlightJob.citationScrolled = false;
     updateRulebookMatchNav();
   }
 
@@ -115100,13 +115102,78 @@
     link.textContent = "Open the official file";
     note.appendChild(link);
   }
-  function openRulebookDocument(url, title) {
+  function paintPageCitation(stage, slot, pageNum) {
+    var cite = highlightJob.citation;
+    if (!cite || !rulebookFind.pdf || !slot || !stage) return Promise.resolve();
+    var gen = rulebookFind.generation;
+    return ensureRulebookPageText(rulebookFind.pdf, pageNum).then(function (built) {
+      if (gen !== rulebookFind.generation || !slot.isConnected || !built) return;
+      return rulebookFind.pdf.getPage(pageNum).then(function (page) {
+        if (gen !== rulebookFind.generation || !slot.isConnected) return;
+        var unscaled = page.getViewport({ scale: 1 });
+        var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
+        var found = searchMatchRanges(built.raw, cite.query || "");
+        var focus = 0;
+        if (cite.snippet && found.ranges.length) {
+          var picked = snippetFocusIndex(built.raw, found.ranges, cite.snippet);
+          if (picked >= 0) focus = picked;
+        }
+        if (!found.ranges.length) focus = -1;
+        var layer = slot.querySelector(".rulebook-viewer-highlights");
+        if (!layer) {
+          layer = document.createElement("div");
+          layer.className = "rulebook-viewer-highlights";
+          layer.setAttribute("aria-hidden", "true");
+          slot.appendChild(layer);
+        }
+        layer.innerHTML = "";
+        var boxes = focus >= 0 ? highlightBoxes(built.runs, found.ranges, focus, viewport, built.styles) : [];
+        var focusEl = null;
+        boxes.forEach(function (box) {
+          var el = placeHighlightBox(layer, box);
+          if (box.focus) focusEl = el;
+        });
+        var bandEl = null;
+        if (cite.markSection && focus >= 0 && found.ranges[focus]) {
+          var sectionRange = expandToSection(built.raw, found.ranges[focus]);
+          var sectionBoxes = highlightBoxes(built.runs, [sectionRange], 0, viewport, built.styles);
+          var anchorLeft = focusEl ? parseFloat(focusEl.style.left) : null;
+          var band = bandFromBoxes(sectionBoxes, anchorLeft);
+          if (band && band.height > 12) bandEl = placeSectionBand(layer, band);
+        }
+        var note = stage.querySelector(".rulebook-viewer-note");
+        if (note) {
+          note.hidden = false;
+          var shown = quoteQuery(cite.query);
+          note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
+          note.textContent = boxes.length
+            ? "Marked " + shown + " on this page."
+            : shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
+        }
+        if (!highlightJob.citationScrolled) {
+          highlightJob.citationScrolled = true;
+          stage.scrollTop = Math.max(0, slot.offsetTop - 4);
+          var mark = bandEl || focusEl;
+          if (mark) {
+            var stageRect = stage.getBoundingClientRect();
+            var markRect = mark.getBoundingClientRect();
+            if (markRect.top < stageRect.top + 8 || markRect.bottom > stageRect.bottom - 8) {
+              scrollMarkIntoView(stage, mark);
+            }
+          }
+        }
+      });
+    }).catch(function () {});
+  }
+  function openRulebookDocument(url, title, citation) {
     var dialog = document.getElementById("rulebook-viewer");
     var stage = document.getElementById("rulebook-viewer-stage");
     var titleEl = document.getElementById("rulebook-viewer-title");
     var closeBtn = document.getElementById("rulebook-viewer-close");
     if (!dialog || !stage || !url) return;
     cancelRulebookHighlight();
+    highlightJob.citation = citation && citation.page ? citation : null;
+    highlightJob.citationScrolled = false;
     var token = rulebookViewerToken;
     var label = title || "Rulebook";
     if (titleEl) titleEl.textContent = label;
@@ -115190,6 +115257,8 @@
       }
       highlightJob.drawSlot = drawSlot;
       highlightJob.onSlotDrawn = function (slot, pageNum) {
+        var cite = highlightJob.citation;
+        if (cite && cite.page === pageNum) paintPageCitation(stage, slot, pageNum);
         if (rulebookFind.mode !== "document" || rulebookFind.scanning) return;
         if (!rulebookFind.query || rulebookFind.query.length < 2) return;
         paintDocumentPage(pageNum, false);
@@ -115219,9 +115288,26 @@
       } else {
         slots.forEach(drawSlot);
       }
-      drawSlot(slots[0]);
-      if (slots[1]) drawSlot(slots[1]);
-      if (slots[2]) drawSlot(slots[2]);
+      var startPage = highlightJob.citation && highlightJob.citation.page ? highlightJob.citation.page : 1;
+      if (startPage < 1 || startPage > slots.length) startPage = 1;
+      var sized = [];
+      for (var p = 1; p <= pdf.numPages; p++) sized.push(pdf.getPage(p));
+      Promise.all(sized).then(function (pageList) {
+        if (token !== rulebookViewerToken) return;
+        pageList.forEach(function (page, idx) {
+          var unscaled = page.getViewport({ scale: 1 });
+          var viewport = page.getViewport({ scale: rulebookFitScale(stage, unscaled) });
+          slots[idx].style.width = Math.floor(viewport.width) + "px";
+          slots[idx].style.height = Math.floor(viewport.height) + "px";
+          slots[idx].style.minHeight = "0";
+        });
+        var startSlot = slots[startPage - 1];
+        stage.scrollTop = Math.max(0, startSlot.offsetTop - 4);
+        if (titleEl) titleEl.textContent = label + " \u00b7 " + startPage + " / " + pdf.numPages;
+        drawSlot(startSlot);
+        if (slots[startPage - 2]) drawSlot(slots[startPage - 2]);
+        if (slots[startPage]) drawSlot(slots[startPage]);
+      });
       stage.addEventListener("scroll", function onBookScroll() {
         if (token !== rulebookViewerToken) {
           stage.removeEventListener("scroll", onBookScroll);
@@ -115280,15 +115366,10 @@
       var pageMatch = String(link.hash || "").match(/page=(\d+)/i);
       var pageNum = pageMatch ? parseInt(pageMatch[1], 10) : 0;
       var snippet = link.getAttribute("data-snippet") || "";
-      var section = link.closest ? link.closest(".rulebook-search") : null;
-      var tour = section && section._rulebookTour ? section._rulebookTour : [];
-      openRulebookHighlight({
-        url: link.href.split("#")[0],
+      openRulebookDocument(link.href.split("#")[0], "Rulebook", {
         page: pageNum,
         query: link.getAttribute("data-query") || "",
         snippet: snippet,
-        tour: tour,
-        tourIndex: tour.length ? tourStartIndex(tour, pageNum, snippet) : 0,
         markSection: link.classList.contains("rulebook-ref")
       });
       return;
