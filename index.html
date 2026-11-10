@@ -20279,6 +20279,7 @@
       "bggRank": 51,
       "bggRating": 7.78,
       "players": "1–4",
+      "defaultPlayerCount": "4",
       "time": "30–45",
       "year": "2024",
       "bggId": "414317",
@@ -116540,6 +116541,38 @@
     });
   }
 
+  function playerCountKeys(game) {
+    var map = game && game.setupByPlayerCount;
+    if (!map || typeof map !== "object" || Array.isArray(map)) return [];
+    return Object.keys(map).sort(function (a, b) {
+      return parseInt(a, 10) - parseInt(b, 10);
+    });
+  }
+  function urlPlayerCount() {
+    var fromHash = "";
+    try {
+      fromHash = new URLSearchParams((window.location.hash || "").split("?")[1] || "").get("players") || "";
+    } catch (err) {
+      fromHash = "";
+    }
+    return String(fromHash || qp("players") || "").trim();
+  }
+  function countIsListed(counts, value) {
+    return value != null && String(value) !== "" && counts.indexOf(String(value)) !== -1;
+  }
+  /* URL ?players= wins. Then a count already chosen this session. Then the game's default. */
+  function choosePlayerCount(game, counts, remembered) {
+    var fromUrl = urlPlayerCount();
+    if (countIsListed(counts, fromUrl)) return { count: String(fromUrl), fromUrl: true };
+    if (remembered && countIsListed(counts, remembered.count)) {
+      return { count: String(remembered.count), fromUrl: false };
+    }
+    if (game && countIsListed(counts, game.defaultPlayerCount)) {
+      return { count: String(game.defaultPlayerCount), fromUrl: false };
+    }
+    return { count: counts.length ? counts[0] : null, fromUrl: false };
+  }
+
   function renderDetail(slug, action, presetExpansions) {
     detailSlug = "";
     if (action === void 0) action = "quicksetup";
@@ -116611,11 +116644,12 @@
     var playerButtonsHtml = "";
     var playerCountHtmlInner;
     var selectedCount = null;
+    var urlLockedCount = false;
     if (hasSetupByPlayerCount) {
-      var counts = Object.keys(setupByPlayerCount).sort(function(a, b) {
-        return parseInt(a, 10) - parseInt(b, 10);
-      });
-      var first = counts[0];
+      var counts = playerCountKeys(g);
+      var pickedCount = choosePlayerCount(g, counts, playMemory[slug]);
+      var first = pickedCount.count || counts[0];
+      urlLockedCount = pickedCount.fromUrl;
       selectedCount = first;
       playerButtonsHtml =
         '<div class="playercount-controls" role="group" aria-label="Player count">' +
@@ -117224,7 +117258,9 @@
     }
     var remembered = playMemory[slug];
     if (remembered) {
-      if (remembered.count != null) selectedCount = String(remembered.count);
+      if (!urlLockedCount && countIsListed(playerCountKeys(g), remembered.count)) {
+        selectedCount = String(remembered.count);
+      }
       (remembered.chars || []).forEach(function (name) { activeCharacterNames[name] = true; });
       if (remembered.exps) {
         var expOn = {};
@@ -117380,6 +117416,8 @@
     var slugged = slugify(want);
     var a = (qp("action") || "quicksetup").toLowerCase();
     var hash = "#/game/" + slugged + "?action=" + encodeURIComponent(a);
+    var players = qp("players");
+    if (players) hash += "&players=" + encodeURIComponent(players);
     // A hash-only location.replace keeps ?game= on the URL. render() would
     // then see the query on every pass and never paint the detail view.
     if (window.location.hash !== hash || window.location.search) {
@@ -117458,10 +117496,13 @@
       });
     }
     var useUrl = !!query.has;
-    var countSource = useUrl ? query.count : mem.count;
-    var count = countSource != null && counts.indexOf(String(countSource)) !== -1
+    var fromPlayers = urlPlayerCount();
+    var countSource = countIsListed(counts, fromPlayers)
+      ? fromPlayers
+      : (useUrl && query.count ? query.count : (useUrl ? null : mem.count));
+    var count = countIsListed(counts, countSource)
       ? String(countSource)
-      : (counts[0] || null);
+      : (countIsListed(counts, g.defaultPlayerCount) ? String(g.defaultPlayerCount) : (counts[0] || null));
     var expSource = useUrl ? (query.exps || []) : (mem.exps && mem.exps.length ? mem.exps : (query.routeExps || []));
     var charSource = useUrl ? (query.chars || []) : (mem.chars || []);
     var setupId = (useUrl ? query.setup : "") || mem.setup || "";
