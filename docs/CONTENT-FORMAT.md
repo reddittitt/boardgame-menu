@@ -104,14 +104,14 @@ setup-photos/<slug>.webp
 
 `src` is a file in `setup-photos/`. An official rulebook diagram puts the credit in `alt` only, and the page does not print a caption.
 
-A photo from a BoardGameGeek gallery adds `credit` and `href`. The page prints `credit` under the picture and links it to the image page. Use the uploader’s name: `Photo: <username> on BoardGameGeek`. `href` is `https://boardgamegeek.com/image/<id>/<slug>`.
+A photo from a BoardGameGeek gallery adds `credit` and `href`. The page prints `credit` under the picture and links it to the image page. Use the uploader’s name: `Photo: <username> on BoardGameGeek`. `href` is `https://boardgamegeek.com/image/<id>/<slug>`. Prefer a multiplayer photo at the page’s default player count, usually four when the game plays four.
 
 ```json
 {
   "src": "root.webp",
-  "alt": "Starting setup of Root, with the autumn map and faction boards.",
-  "credit": "Photo: MattP73 on BoardGameGeek",
-  "href": "https://boardgamegeek.com/image/9220557/root"
+  "alt": "Four-player starting setup of Root, with the autumn map and the four base factions.",
+  "credit": "Photo: mborda on BoardGameGeek",
+  "href": "https://boardgamegeek.com/image/6331215/root"
 }
 ```
 
