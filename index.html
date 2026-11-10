@@ -2193,6 +2193,31 @@
   :root[data-look="hig"][data-theme="neongrid"] .rule-chapter--setup > summary {
     color:#99f6e4;
   }
+  :root[data-look="hig"] #rules-glossary.exp {
+    margin-top:0;
+    padding:0;
+    border:0;
+    background:transparent;
+  }
+  :root[data-look="hig"] .rule-chapter--glossary {
+    background:color-mix(in srgb, var(--accent) 12%, var(--card));
+    border-color:color-mix(in srgb, var(--accent) 40%, var(--hig-sep));
+    border-left-color:var(--accent);
+  }
+  :root[data-look="hig"] .rule-chapter--glossary > summary {
+    color:var(--accent-ink, var(--accent));
+  }
+  :root[data-look="hig"] .glossary-item {
+    margin:0 0 8px;
+    padding:8px 10px 4px;
+    border-radius:10px;
+    background:color-mix(in srgb, var(--accent) 8%, var(--card));
+    border:1px solid color-mix(in srgb, var(--accent) 28%, var(--hig-sep));
+  }
+  :root[data-look="hig"] .glossary-item:last-child { margin-bottom:0; }
+  :root[data-look="hig"] .glossary-term {
+    color:var(--accent-ink, var(--accent));
+  }
   :root[data-look="hig"] .playercount-controls,
   :root[data-look="hig"] .expansion-controls,
   :root[data-look="hig"] .chip-group-chips {
@@ -114512,7 +114537,7 @@
       var glossaryItems = rulesGlossary.map(function(item) {
         var term = (item.term || "").trim();
         var desc = item.desc;
-        var label = term ? "<strong>" + escapeHtml(term) + ".</strong> " : "";
+        var label = term ? '<strong class="glossary-term">' + escapeHtml(term) + ".</strong> " : "";
         var body;
         if (desc == null || typeof desc === "string") {
           body = "<p>" + label + textToHtml(desc || "") + "</p>";
@@ -114524,7 +114549,7 @@
 
       rulesGlossaryHtml =
         '<section class="exp" id="rules-glossary">' +
-          '<details class="expansion">' +
+          '<details class="expansion rule-chapter rule-chapter--glossary">' +
             '<summary><span class="expansion-name">Quick Rules Glossary</span></summary>' +
             '<div class="expansion-body">' +
               glossaryItems +
