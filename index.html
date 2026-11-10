@@ -2333,6 +2333,32 @@
     :root[data-look="hig"] .exp { padding:8px 10px; }
   }
   .teach-open { margin:0 0 10px; }
+  .setup-photo { margin:12px 0 0; }
+  .setup-photo img { display:block; width:100%; height:auto; border-radius:12px; }
+  .pack-away { margin-top:8px; }
+  .pack-away figure { margin:0 0 8px; }
+  .pack-away img, .pack-away svg { display:block; width:100%; height:auto; border-radius:12px; background:#f7f1e4; }
+  .pack-away figcaption { margin-top:8px; }
+  .pack-nav { display:flex; gap:8px; }
+  .pack-nav button, .pack-layer {
+    min-height:44px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:700;
+  }
+  .pack-nav button { flex:1; }
+  .pack-nav button:disabled { opacity:0.4; }
+  .pack-stack { position:relative; margin:8px 36px 8px 0; }
+  .pack-layer {
+    position:absolute; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px; text-align:left;
+  }
+  .pack-layer[data-active="true"] { outline:2px solid currentColor; transform:translateX(18px); }
+  .pack-kind { display:inline-block; margin:0 0 6px; font-size:0.75rem; font-weight:700; }
   .teach-page .byline { margin-top:0; }
   .teach-script {
     background:var(--card);
@@ -116572,6 +116598,300 @@
     }
     return { count: counts.length ? counts[0] : null, fromUrl: false };
   }
+  var setupPhotoCache = {};
+  function setupPhotoUrl(src) {
+    var s = String(src || "").trim();
+    if (!s || /^[a-z][a-z0-9+.-]*:/i.test(s) || s.indexOf("..") !== -1 || s.charAt(0) === "/" || s.charAt(0) === "\\") return "";
+    if (!/^[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(s)) return "";
+    return basePath() + "/setup-photos/" + s.split("/").map(encodeURIComponent).join("/");
+  }
+  function chooseSetupPhoto(spec, count, variantId) {
+    if (!spec || typeof spec !== "object") return null;
+    var chosen = null;
+    if (variantId && spec.byVariant && Object.prototype.hasOwnProperty.call(spec.byVariant, variantId)) {
+      chosen = spec.byVariant[variantId];
+    } else if (count != null && String(count) !== "" && spec.byCount && Object.prototype.hasOwnProperty.call(spec.byCount, String(count))) {
+      chosen = spec.byCount[String(count)];
+    } else if (spec.src && spec.alt) {
+      chosen = spec;
+    }
+    if (!chosen || typeof chosen !== "object") return null;
+    var src = setupPhotoUrl(chosen.src);
+    var alt = String(chosen.alt || "").trim();
+    if (!src || !alt) return null;
+    return { src: src, alt: alt };
+  }
+  function loadSetupPhotoSpec(slug) {
+    if (!setupPhotoCache[slug]) {
+      setupPhotoCache[slug] = fetch(basePath() + "/setup-photos/" + encodeURIComponent(slug) + ".json", { cache: "no-store" }).then(function (res) {
+        return res.ok ? res.json() : null;
+      }).catch(function () { return null; });
+    }
+    return setupPhotoCache[slug];
+  }
+  function paintSetupPhoto(slug, count, variantId) {
+    var slot = document.getElementById("setup-photo");
+    if (!slot || detailSlug !== slug) return;
+    loadSetupPhotoSpec(slug).then(function (spec) {
+      if (detailSlug !== slug || !slot.isConnected) return;
+      var photo = chooseSetupPhoto(spec, count, variantId);
+      if (!photo) {
+        slot.hidden = true;
+        slot.innerHTML = "";
+        return;
+      }
+      slot.hidden = false;
+      slot.innerHTML = '<figure class="setup-photo"><img alt="' + escapeHtml(photo.alt) + '" src="' + escapeHtml(photo.src) + '"></figure>';
+      var img = slot.querySelector("img");
+      if (img) img.addEventListener("error", function () {
+        slot.hidden = true;
+        slot.innerHTML = "";
+      });
+    });
+  }
+  function readPackUnlock() {
+    try {
+      var raw = localStorage.getItem("bgqStorage");
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      var owner = data && data.owner;
+      var repo = data && data.repo;
+      var token = data && data.token;
+      if (!/^[A-Za-z0-9_.-]+$/.test(owner || "") || !/^[A-Za-z0-9_.-]+$/.test(repo || "")) return null;
+      token = String(token || "");
+      if (token.length < 20 || token.length > 400) return null;
+      return { owner: owner, repo: repo, token: token };
+    } catch (err) { return null; }
+  }
+  function packApi(unlock, path) {
+    return "https://api.github.com/repos/" + encodeURIComponent(unlock.owner) + "/" + encodeURIComponent(unlock.repo) + "/contents/" + String(path || "").split("/").filter(Boolean).map(encodeURIComponent).join("/");
+  }
+  function packFetch(unlock, path, raw) {
+    return fetch(packApi(unlock, path), {
+      headers: {
+        Authorization: "Bearer " + unlock.token,
+        Accept: raw ? "application/vnd.github.raw" : "application/vnd.github+json"
+      }
+    });
+  }
+  function normalizePack(data) {
+    data = data && typeof data === "object" ? data : {};
+    var steps = (Array.isArray(data.steps) ? data.steps : []).map(function (step) {
+      step = step || {};
+      var layer = step.layer != null && step.layer !== "" ? Number(step.layer) : null;
+      return {
+        image: String(step.image || "").trim(),
+        caption: String(step.caption || "").trim(),
+        layer: layer != null && isFinite(layer) ? layer : null,
+        kind: step.kind === "illustration" ? "illustration" : "photo"
+      };
+    }).filter(function (step) { return step.caption || step.image; });
+    var layers = (Array.isArray(data.layers) ? data.layers : []).map(function (layer, i) {
+      layer = layer || {};
+      var n = layer.n != null && layer.n !== "" ? Number(layer.n) : i + 1;
+      var trays = (Array.isArray(layer.trays) ? layer.trays : []).map(function (tray) {
+        tray = tray || {};
+        return {
+          name: String(tray.name || "").trim(),
+          contents: (Array.isArray(tray.contents) ? tray.contents : []).map(function (item) {
+            return String(item || "").trim();
+          }).filter(Boolean)
+        };
+      }).filter(function (tray) { return tray.name || tray.contents.length; });
+      return {
+        n: isFinite(n) ? n : i + 1,
+        name: String(layer.name || "").trim(),
+        image: String(layer.image || "").trim(),
+        caption: String(layer.caption || "").trim(),
+        kind: layer.kind === "illustration" ? "illustration" : "photo",
+        trays: trays
+      };
+    }).filter(function (layer) {
+      return layer.name || layer.caption || layer.image || layer.trays.length;
+    }).sort(function (a, b) { return a.n - b.n; });
+    if (!steps.length && !layers.length) return null;
+    return {
+      title: String(data.title || "Put it away").trim().slice(0, 80) || "Put it away",
+      note: String(data.note || "").trim().slice(0, 280),
+      steps: steps,
+      layers: layers
+    };
+  }
+  function packIllustration(label) {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 320 180");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", "Illustration. " + String(label || "").slice(0, 120));
+    var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", "24"); rect.setAttribute("y", "24");
+    rect.setAttribute("width", "272"); rect.setAttribute("height", "132");
+    rect.setAttribute("rx", "16"); rect.setAttribute("fill", "#f4e7cf");
+    rect.setAttribute("stroke", "#8a5a2a"); rect.setAttribute("stroke-width", "3");
+    svg.appendChild(rect);
+    var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", "160"); text.setAttribute("y", "96");
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("font-size", "16");
+    text.setAttribute("font-family", "sans-serif");
+    text.setAttribute("fill", "#5c3b16");
+    text.textContent = "Illustration";
+    svg.appendChild(text);
+    return svg;
+  }
+  function mountPackFigure(host, unlock, slug, spec) {
+    host.innerHTML = "";
+    var kind = document.createElement("p");
+    kind.className = "pack-kind";
+    function showArt() {
+      host.innerHTML = "";
+      kind.textContent = "Illustration";
+      host.appendChild(kind);
+      var fig = document.createElement("figure");
+      fig.appendChild(packIllustration(spec.caption || spec.name || ""));
+      if (spec.caption) {
+        var cap = document.createElement("figcaption");
+        cap.textContent = spec.caption;
+        fig.appendChild(cap);
+      }
+      host.appendChild(fig);
+    }
+    var src = String(spec.image || "");
+    if (spec.kind === "illustration" || !src || src.indexOf("..") !== -1) {
+      showArt();
+      return;
+    }
+    kind.textContent = "Photo";
+    host.appendChild(kind);
+    var fig = document.createElement("figure");
+    var img = document.createElement("img");
+    img.alt = spec.caption || spec.name || "";
+    fig.appendChild(img);
+    if (spec.caption) {
+      var cap = document.createElement("figcaption");
+      cap.textContent = spec.caption;
+      fig.appendChild(cap);
+    }
+    host.appendChild(fig);
+    packFetch(unlock, "put-away/" + slug + "/" + src, true).then(function (res) {
+      if (!res.ok) throw new Error("missing");
+      return res.blob();
+    }).then(function (blob) {
+      if (!img.isConnected) return;
+      img.src = URL.createObjectURL(blob);
+    }).catch(showArt);
+  }
+  function mountPrivatePacking(game) {
+    var unlock = readPackUnlock();
+    if (!unlock || !game || !game.slug) return;
+    var slug = game.slug;
+    packFetch(unlock, "put-away/" + slug + "/manifest.json", true).then(function (res) {
+      if (!res.ok || detailSlug !== slug) return null;
+      return res.json();
+    }).then(function (data) {
+      if (!data || detailSlug !== slug) return;
+      var pack = normalizePack(data);
+      if (!pack) return;
+      var body = document.querySelector(".detail-body");
+      if (!body || body.querySelector(".pack-away")) return;
+      var section = document.createElement("section");
+      section.className = "pack-away";
+      var heading = document.createElement("h3");
+      heading.textContent = pack.title;
+      section.appendChild(heading);
+      if (pack.note) {
+        var note = document.createElement("p");
+        note.textContent = pack.note;
+        section.appendChild(note);
+      }
+      if (pack.steps.length) {
+        var stepHost = document.createElement("div");
+        var stepIndex = 0;
+        var nav = document.createElement("div");
+        nav.className = "pack-nav";
+        var prev = document.createElement("button");
+        prev.type = "button";
+        prev.textContent = "Previous";
+        var next = document.createElement("button");
+        next.type = "button";
+        next.textContent = "Next";
+        nav.appendChild(prev);
+        nav.appendChild(next);
+        function paintStep() {
+          var step = pack.steps[stepIndex];
+          prev.disabled = stepIndex <= 0;
+          next.disabled = stepIndex >= pack.steps.length - 1;
+          var caption = step.caption || "";
+          if (step.layer != null) caption = (caption ? caption + " " : "") + "Layer " + step.layer + ".";
+          mountPackFigure(stepHost, unlock, slug, { image: step.image, caption: caption, kind: step.kind, name: "Step " + (stepIndex + 1) });
+        }
+        prev.addEventListener("click", function () { if (stepIndex > 0) { stepIndex -= 1; paintStep(); } });
+        next.addEventListener("click", function () { if (stepIndex < pack.steps.length - 1) { stepIndex += 1; paintStep(); } });
+        section.appendChild(stepHost);
+        section.appendChild(nav);
+        paintStep();
+      }
+      if (pack.layers.length) {
+        var layerIndex = 0;
+        var stack = document.createElement("div");
+        stack.className = "pack-stack";
+        stack.setAttribute("role", "list");
+        var layerH = 56;
+        var lift = 22;
+        stack.style.height = (layerH + lift * (pack.layers.length - 1)) + "px";
+        pack.layers.forEach(function (layer, i) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "pack-layer";
+          btn.setAttribute("data-layer", String(i));
+          btn.style.bottom = (i * lift) + "px";
+          btn.style.height = layerH + "px";
+          btn.style.zIndex = String(i + 1);
+          btn.style.background = "hsl(32, 42%, " + (80 - i * 6) + "%)";
+          btn.textContent = layer.name || ("Layer " + layer.n);
+          stack.appendChild(btn);
+        });
+        var layerCopy = document.createElement("div");
+        var layerFig = document.createElement("div");
+        function paintLayer() {
+          var layer = pack.layers[layerIndex];
+          Array.prototype.forEach.call(stack.querySelectorAll(".pack-layer"), function (btn) {
+            var on = btn.getAttribute("data-layer") === String(layerIndex);
+            if (on) btn.setAttribute("data-active", "true");
+            else btn.removeAttribute("data-active");
+            btn.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+          layerCopy.innerHTML = "";
+          var h = document.createElement("h4");
+          h.textContent = layer.name || ("Layer " + layer.n);
+          layerCopy.appendChild(h);
+          if (layer.trays.length) {
+            var ul = document.createElement("ul");
+            layer.trays.forEach(function (tray) {
+              var li = document.createElement("li");
+              var strong = document.createElement("strong");
+              strong.textContent = tray.name || "Tray";
+              li.appendChild(strong);
+              if (tray.contents.length) li.appendChild(document.createTextNode(": " + tray.contents.join(", ")));
+              ul.appendChild(li);
+            });
+            layerCopy.appendChild(ul);
+          }
+          mountPackFigure(layerFig, unlock, slug, layer);
+        }
+        stack.addEventListener("click", function (e) {
+          var btn = e.target.closest ? e.target.closest(".pack-layer") : null;
+          if (!btn) return;
+          layerIndex = parseInt(btn.getAttribute("data-layer"), 10) || 0;
+          paintLayer();
+        });
+        section.appendChild(stack);
+        section.appendChild(layerFig);
+        section.appendChild(layerCopy);
+        paintLayer();
+      }
+      body.appendChild(section);
+    }).catch(function () {});
+  }
 
   function renderDetail(slug, action, presetExpansions) {
     detailSlug = "";
@@ -116848,7 +117168,8 @@
         chapterSlot("qs-variant", initialSetupVariant ? renderRuleContent(initialSetupVariant.setup) : "") +
         chapterSlot("qs-text", composeSection(quickText, "", [], "setup")) +
         chapterSlot("pc-text", playerCountHtmlInner) +
-        chapterSlot("resources-text", setupResourcesHtml, "Starting resources")
+        chapterSlot("resources-text", setupResourcesHtml, "Starting resources") +
+        chapterSlot("setup-photo", "")
       ) +
       chapterShell("turn-chapter", "On your turn",
         chapterSlot("turn-text", renderTurnBody(turnStructure, g, [])) +
@@ -116990,6 +117311,7 @@
             paintPlayTime(count);
             paintFirstGame(count);
             paintTeach();
+            paintSetupPhoto(slug, count, selectedSetupId);
             savePlayMemory();
           });
         });
@@ -117188,6 +117510,7 @@
       paintSummary(selected);
       paintTeach();
       paintAids(selected);
+      paintSetupPhoto(slug, selectedCount, selectedSetupId);
       refreshChapters();
       wrapWideTables(appEl);
       savePlayMemory();
@@ -117407,6 +117730,8 @@
     attachRulebookGuards();
     markRecentlyViewed(g);
     mountRulebookSearch(g, rulebookHref);
+    paintSetupPhoto(slug, selectedCount, selectedSetupId);
+    mountPrivatePacking(g);
   }
 
   function normalizeIncoming() {

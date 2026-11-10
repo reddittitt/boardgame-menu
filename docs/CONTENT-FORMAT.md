@@ -84,6 +84,43 @@ Optional `setupVariants`. Use it when the same game has two or more named setups
 
 The choice is kept with the player count and the selected chips for the session. It is not a separate sticky bar.
 
+## Final setup photo
+
+Optional. A diagram of the table after setup, at the end of Set up. Nothing is shown when the game has no file. There is no empty frame.
+
+One JSON file per game, next to the image:
+
+```
+setup-photos/<slug>.json
+setup-photos/<slug>.webp
+```
+
+```json
+{
+  "src": "azul.webp",
+  "alt": "Setup diagram from the Azul rulebook."
+}
+```
+
+`src` is a file in `setup-photos/`. `alt` is the only credit, including the rulebook or publisher. The page does not print a caption.
+
+To use a different picture for a player count or a setup variant, add `byCount` or `byVariant`. A count or variant with an entry uses that entry. Other counts keep the top-level picture. A count with no entry and no top-level picture shows nothing.
+
+```json
+{
+  "src": "example.webp",
+  "alt": "Setup diagram from the example rulebook.",
+  "byCount": {
+    "2": { "src": "example--2.webp", "alt": "Two-player setup diagram from the example rulebook." }
+  },
+  "byVariant": {
+    "advanced": { "src": "example--advanced.webp", "alt": "Advanced setup diagram from the example rulebook." }
+  }
+}
+```
+
+Replace the image and the `alt` line to use a table photo later. The file name stays the same.
+
 ## Header links
 
 These sit under the player/time line. A missing or blank value leaves that link out. There is no placeholder.
