@@ -25502,13 +25502,36 @@
       "quickStart": {
         "bullets": [
           {
-            "text": "Each person takes a zero-value fake card and an aid."
+            "text": "Each player takes a 0-value fake money card and a player aid.",
+            "source": { "page": 1, "query": "0-value fake" }
           },
           {
-            "text": "Remove whole currencies for fewer than five players, shuffle the rest with the gold and silver, and deal six cards, then add the fake card."
+            "text": "With 2 or 4 players, remove all cards of any 1 currency.",
+            "source": { "page": 1, "query": "2 or 4 Players" }
           },
           {
-            "text": "The deck sits on the market board between two rows of four face-up cards."
+            "text": "With 3 players, remove all cards of any 2 currencies.",
+            "source": { "page": 1, "query": "Remove all cards of any 2" }
+          },
+          {
+            "text": "Shuffle the remaining money cards together with all gold and silver cards.",
+            "source": { "page": 1, "query": "together with all gold and silver" }
+          },
+          {
+            "text": "Deal each player a hand of 6 cards.",
+            "source": { "page": 1, "query": "hand of 6 cards" }
+          },
+          {
+            "text": "Each player adds their fake money card to their hand.",
+            "source": { "page": 1, "query": "adds their fake money" }
+          },
+          {
+            "text": "Place the deck on the market board in the middle of the table.",
+            "source": { "page": 1, "query": "deck on the market board" }
+          },
+          {
+            "text": "Deal 2 face-up rows of 4 cards on each side of the market board.",
+            "source": { "page": 1, "query": "2 faceup rows of 4" }
           }
         ]
       },
@@ -25520,22 +25543,36 @@
       "turnStructure": {
         "bullets": [
           {
-            "text": "A round is a secret bid, turns from the high bid down, then a refill."
+            "text": "Players secretly select 1 or more cards from their hand to bid.",
+            "source": { "page": 1, "query": "secretly selecting" }
           },
           {
-            "text": "Bid value is the sum of the cards you set down."
+            "text": "The value of your bid is the sum of the cards in it.",
+            "source": { "page": 1, "query": "value of your bid is the sum" }
           },
           {
-            "text": "When bids flip, fake cards return to hand."
+            "text": "When bids are revealed, a player who reveals their fake money card immediately returns it to hand.",
+            "source": { "page": 1, "query": "immediately returns it to hand" }
           },
           {
-            "text": "A tied high bid goes to the lowest serial number."
+            "text": "A tie for highest bid goes to the lowest serial number.",
+            "source": { "page": 1, "query": "lowest serial" }
           },
           {
-            "text": "You must swap your whole bid for one market side, swap it for another player’s whole bid, or keep it, then take those cards into hand."
+            "text": "Swap all cards in your bid with all cards on one side of the market.",
+            "source": { "page": 1, "query": "one side of the market" }
           },
           {
-            "text": "The best bid still on the table acts next."
+            "text": "Or swap all cards in your bid with all cards in another player’s bid.",
+            "source": { "page": 1, "query": "another player’s bid" }
+          },
+          {
+            "text": "Or decline to swap and keep all cards in your bid.",
+            "source": { "page": 1, "query": "Decline to swap" }
+          },
+          {
+            "text": "The player with the highest bid left on the table takes the next turn.",
+            "source": { "page": 1, "query": "highest bid left" }
           }
         ]
       },
@@ -25543,16 +25580,35 @@
       "endGameScoring": {
         "bullets": [
           {
-            "text": "When the last deck card is dealt to the market, play one more round, then score hands."
+            "text": "When no cards are left in front of the players, the round ends and the market cards stay.",
+            "source": { "page": 2, "query": "no more cards in front" }
           },
           {
-            "text": "A currency of at least 200 scores its value; 101–199 scores that value minus 100; 100 or less scores 0."
+            "text": "Then refill each side of the market board up to 4 cards.",
+            "source": { "page": 2, "query": "refill each side" }
+          },
+          {
+            "text": "If the last card in the deck is dealt while refilling the market, play 1 more round, then score.",
+            "source": { "page": 2, "query": "play 1 more round" }
+          },
+          {
+            "text": "If you have at least 200 of a currency, score points equal to that total.",
+            "source": { "page": 2, "query": "at least 200 of a currency" }
+          },
+          {
+            "text": "If you have more than 100 but less than 200 of a currency, subtract 100 and score the result.",
+            "source": { "page": 2, "query": "more than 100 but less" }
+          },
+          {
+            "text": "If you have 100 or less of a currency, score 0.",
+            "source": { "page": 2, "query": "100 or less of a currency" }
           },
           {
             "text": "Gold and silver score face value."
           },
           {
-            "text": "Each exact trio of 20s, 30s, gold, or silver is 100."
+            "text": "Score a 100-point bonus for each set of 3 exactly matching cards.",
+            "source": { "page": 2, "query": "set of 3 exactly matching" }
           }
         ],
         "details": "Allplay / Dr. Reiner Knizia Money! rulebook v18 (2025)"
@@ -25571,7 +25627,12 @@
       "endOfGame": {
         "bullets": [
           {
-            "text": "Highest total wins, and a tie shares it."
+            "text": "The player with the highest score wins.",
+            "source": { "page": 2, "query": "highest score wins" }
+          },
+          {
+            "text": "In a tie, victory is shared.",
+            "source": { "page": 2, "query": "victory is shared" }
           }
         ]
       },
@@ -25582,36 +25643,45 @@
         "2": {
           "bullets": [
             {
-              "text": "Remove one currency (9 cards)."
+              "text": "Remove all cards of any 1 currency (9 cards).",
+              "source": { "page": 1, "query": "any 1 currency" }
             },
             {
-              "text": "The fake card may split your reveal into two bids, and each bid is its own turn."
+              "text": "Each player may use their fake money card to separate the selected cards into 2 bids.",
+              "source": { "page": 2, "query": "2 bids each" }
+            },
+            {
+              "text": "Each player takes 1 turn for each of their bids.",
+              "source": { "page": 2, "query": "for each of their bids" }
             }
           ]
         },
         "3": {
           "bullets": [
             {
-              "text": "Remove two currencies (18 cards)."
+              "text": "Remove all cards of any 2 currencies (18 cards).",
+              "source": { "page": 1, "query": "currencies (18 cards)" }
             }
           ]
         },
         "4": {
           "bullets": [
             {
-              "text": "Remove one currency (9 cards)."
+              "text": "Remove all cards of any 1 currency (9 cards).",
+              "source": { "page": 1, "query": "any 1 currency" }
             }
           ]
         },
         "5": {
           "bullets": [
             {
-              "text": "Use every currency."
+              "text": "The currency removal is for fewer than 5 players.",
+              "source": { "page": 1, "query": "fewer than 5" }
             }
           ]
         }
       },
-      "rulebook": "https://gamers-hq.de/media/pdf/08/c5/24/Money_rulebook_v18.pdf",
+      "rulebook": "money",
       "howToPlayVideo": {
         "url": "https://www.youtube.com/watch?v=Bw3s0NAokTE",
         "title": "How to Play Money",
@@ -25798,31 +25868,38 @@
       "quickStart": [
         {
           "lead": "References",
-          "text": "Take the 4 quick-start rules cards out of the pack and hand them around as references."
+          "text": "Remove the 4 Quick Start Rules cards from the pack and hand them out for reference.",
+          "source": { "page": 1, "query": "4 Quick Start Rules" }
         },
         {
           "lead": "Deal",
-          "text": "Shuffle the rest of the pack and deal 5 cards face down to each player."
+          "text": "Shuffle the rest of the cards and deal 5 to each player, face down.",
+          "source": { "page": 1, "query": "deal 5 to each player" }
         },
         {
           "lead": "Look",
-          "text": "Players may look at their own cards and keep them hidden."
+          "text": "Look at your cards, but keep them a secret.",
+          "source": { "page": 1, "query": "keep them a secret" }
         },
         {
           "lead": "Draw pile",
-          "text": "Put the remaining cards face down in the center as the draw pile."
+          "text": "Put the remaining cards face down in the center to create the draw pile.",
+          "source": { "page": 1, "query": "create the draw pile" }
         },
         {
           "lead": "First",
-          "text": "Choose a first player."
+          "text": "Decide who goes first.",
+          "source": { "page": 1, "query": "Decide who goes first" }
         },
         {
           "lead": "Order",
-          "text": "Play continues clockwise."
+          "text": "Play continues clockwise.",
+          "source": { "page": 1, "query": "Play continues clockwise" }
         },
         {
           "lead": "Six or more",
-          "text": "For 6 or more players, shuffle two packs together and use the same rules."
+          "text": "To play with 6 or more players, shuffle two packs together and play as normal.",
+          "source": { "page": 1, "query": "shuffle two packs together" }
         }
       ],
       "startingResources": [
@@ -26018,7 +26095,8 @@
       "endOfGame": [
         {
           "lead": "Sets",
-          "text": "Be the first player to collect 3 full property sets of different colors."
+          "text": "3 different-colored property sets win the game.",
+          "source": { "page": 1, "query": "3 DIFFERENT-COLORED PROPERTY SETS" }
         },
         {
           "lead": "Your turn",
@@ -26043,7 +26121,7 @@
         "details": "These notes follow © 1935, 2008 Hasbro; monopoly-deal.txt."
       },
       "scoringSummary": [
-        "Be the first player to collect 3 full property sets of different colors.",
+        "3 different-colored property sets win the game.",
         "You may say you have won only on your own turn.",
         "There is no point total."
       ],
@@ -62491,16 +62569,28 @@
       "quickStart": {
         "bullets": [
           {
-            "text": "The table edge is the limit."
+            "text": "The edge of the table marks the boundary. Cards cannot go beyond it.",
+            "source": { "page": 3, "query": "cannot go beyond it" }
           },
           {
-            "text": "Starting card in the center."
+            "text": "Place the Starting Card in the center of the play area.",
+            "source": { "page": 3, "query": "Starting Card in the center" }
           },
           {
-            "text": "With six or fewer, each person takes one 18-card color, holds it as a stack, and may play either outer card only."
+            "text": "If there are 6 players or fewer, each player starts with 18 cards, one color per player.",
+            "source": { "page": 3, "query": "6 players or fewer" }
           },
           {
-            "text": "Lowest outer value starts; a tie uses the lower pair of outer values."
+            "text": "Hold the deck as a stack and play either of the two outermost cards.",
+            "source": { "page": 3, "query": "two outermost cards" }
+          },
+          {
+            "text": "The player with the lowest value on either outermost card starts.",
+            "source": { "page": 3, "query": "lowest value on either" }
+          },
+          {
+            "text": "If those values tie, the lowest combined value on the outermost cards starts.",
+            "source": { "page": 3, "query": "lowest combined value" }
           }
         ]
       },
@@ -62510,22 +62600,32 @@
       "turnStructure": {
         "bullets": [
           {
-            "text": "Flip or rotate one outer card so a single edge shape covers one matching shape."
+            "text": "Flip or turn the card so one shape covers one matching shape.",
+            "source": { "page": 3, "query": "Flip or turn the card" }
           },
           {
-            "text": "The outline underneath should read as continuous."
+            "text": "When the shapes match and align, the outline of the card underneath appears to be continuous.",
+            "source": { "page": 3, "query": "appears to be continuous" }
           },
           {
-            "text": "Dots may cover blanks and the reverse."
+            "text": "Shapes with dots can cover blank shapes, and blank shapes can cover shapes with dots.",
+            "source": { "page": 4, "query": "dots can cover blank" }
           },
           {
-            "text": "One card, one connection, no later nudging into a new place."
+            "text": "Connect to only one card per turn.",
+            "source": { "page": 4, "query": "only one card per turn" }
           },
           {
-            "text": "If you have no legal card, you may play one that touches nothing."
+            "text": "Gently nudge a legally placed card back into position if it becomes misaligned.",
+            "source": { "page": 4, "query": "nudge legally placed" }
           },
           {
-            "text": "Continue clockwise."
+            "text": "If it is your turn and you do not have a legal move, you may place a card in the play area without touching any other card.",
+            "source": { "page": 4, "query": "legal move" }
+          },
+          {
+            "text": "Play continues clockwise.",
+            "source": { "page": 3, "query": "continues clockwise" }
           }
         ]
       },
@@ -62533,10 +62633,20 @@
       "endGameScoring": {
         "bullets": [
           {
-            "text": "When the stacks are gone, count your visible dots and let the player on your right check."
+            "text": "When players place all the cards from their decks, the game ends and scoring begins.",
+            "source": { "page": 6, "query": "place all the cards" }
           },
           {
-            "text": "An illegal card found now comes off, but dots that touched it still count."
+            "text": "Players count their own dots, then double-check the player to their right.",
+            "source": { "page": 6, "query": "double-check the player" }
+          },
+          {
+            "text": "If an illegal card is discovered during scoring, remove it.",
+            "source": { "page": 6, "query": "illegal card is discovered" }
+          },
+          {
+            "text": "Any visible dots that were connected to that card still count.",
+            "source": { "page": 6, "query": "WILL still count" }
           }
         ],
         "details": "The Op Games TACTA rules (USAopoly, 2025). The cover prints age 7+, 2+ players, 20+ minutes."
@@ -62548,16 +62658,22 @@
       "endOfGame": {
         "bullets": [
           {
-            "text": "Most dots wins."
+            "text": "The player with the most visible dots is the winner.",
+            "source": { "page": 6, "query": "most visible dots is the winner" }
           },
           {
-            "text": "A tie shares, or you play again, or the person who ran out first wins."
+            "text": "If players tie, they share the victory.",
+            "source": { "page": 6, "query": "share the victory" }
+          },
+          {
+            "text": "If a winner must be declared, play again or declare the player who went out first the winner.",
+            "source": { "page": 6, "query": "out first the winner" }
           }
         ]
       },
       "scoringSummary": [
-        "Most dots wins.",
-        "A tie shares, or you play again, or the person who ran out first wins."
+        "The player with the most visible dots is the winner.",
+        "A tie shares the victory. If a winner must be declared, play again or the player who went out first wins."
       ],
       "rulebook": "https://cdn.shopify.com/s/files/1/0611/3958/3198/files/TACTA_RULES.pdf?v=1745612132",
       "howToPlayVideo": {
@@ -64490,52 +64606,87 @@
       "quickStart": {
         "bullets": [
           {
-            "lead": "Each player has",
-            "text": "a color of trains, a few train cards, and two secret tickets."
+            "lead": "Trains",
+            "text": "Give each player 20 trains of a single color.",
+            "source": { "page": 1, "query": "20 trains of a single color" }
           },
           {
-            "lead": "On your turn",
-            "text": "Either draw two train cards or spend matching cards to claim one route."
+            "lead": "Train cards",
+            "text": "Shuffle the train cards and give each player 4.",
+            "source": { "page": 1, "query": "give each player 4 random" }
           },
           {
-            "lead": "When your trains",
-            "text": "connect the two cities on a ticket, show it and draw a replacement."
+            "lead": "Tickets",
+            "text": "Shuffle the ticket cards and give each player 2.",
+            "source": { "page": 1, "query": "2 random Ticket Cards" }
           },
           {
-            "lead": "The first player",
-            "text": "to complete six tickets wins at once."
+            "lead": "Draw",
+            "text": "On your turn, draw two Train Cards from the top of the deck.",
+            "source": { "page": 1, "query": "Draw two Train Cards" }
+          },
+          {
+            "lead": "Claim",
+            "text": "Or play Train Cards from your hand to claim a route and place your trains on it.",
+            "source": { "page": 1, "query": "Play Train Cards from your hand to claim" }
+          },
+          {
+            "lead": "Show",
+            "text": "When your trains connect the two cities on a ticket, tell the other players and flip it face up.",
+            "source": { "page": 2, "query": "flip it faceup" }
+          },
+          {
+            "lead": "Replace",
+            "text": "Then draw one Ticket Card from the top of the deck.",
+            "source": { "page": 2, "query": "draw one Ticket Card" }
+          },
+          {
+            "lead": "Win",
+            "text": "The first player to complete 6 Tickets wins.",
+            "source": { "page": 1, "query": "complete 6 Tickets" }
           }
         ]
       },
       "startingResources": {
         "bullets": [
           {
-            "lead": "Give each player",
-            "text": "20 trains in one color."
-          },
-          {
-            "lead": "Deal each player",
-            "text": "4 train cards and 2 ticket cards."
-          },
-          {
             "lead": "Hidden",
-            "text": "Keep hands hidden."
+            "text": "Keep all of your cards hidden from the other players.",
+            "source": { "page": 1, "query": "hidden from the other players" }
           },
           {
-            "lead": "The rest of the train",
-            "text": "cards and tickets become facedown decks."
+            "lead": "Train deck",
+            "text": "The remaining train cards form a facedown Train deck.",
+            "source": { "page": 1, "query": "form the Train deck" }
           },
           {
-            "lead": "The four coast-to-coast",
-            "text": "bonus tickets and the Golden Ticket stay beside the board until earned."
+            "lead": "Ticket deck",
+            "text": "The remaining ticket cards form a facedown Ticket deck.",
+            "source": { "page": 1, "query": "form the Ticket deck" }
+          },
+          {
+            "lead": "Coast-to-coast",
+            "text": "You do not need the 4 Coast-to-Coast Bonus Ticket Cards for now.",
+            "source": { "page": 1, "query": "do not need these" }
+          },
+          {
+            "lead": "Beside the board",
+            "text": "Place them next to the board.",
+            "source": { "page": 1, "query": "next to the board" }
           }
         ]
       },
       "remindersText": {
         "bullets": [
           {
-            "lead": "Train-card colors are yellow",
-            "text": "Green, white, black, blue, and red, plus multicolored locomotives."
+            "lead": "Colors",
+            "text": "Train Cards come in six colors: Yellow, Green, White, Black, Blue, and Red.",
+            "source": { "page": 1, "query": "six different colors" }
+          },
+          {
+            "lead": "Locomotives",
+            "text": "Locomotives are multi-colored and can be used as a wild card when claiming a route.",
+            "source": { "page": 1, "query": "used as a wild card" }
           },
           {
             "lead": "Completed",
@@ -64546,12 +64697,14 @@
             "text": "tickets stay hidden."
           },
           {
-            "lead": "A route of two",
-            "text": "yellow spaces needs two yellow cards, or locomotives filling any of those cards."
+            "lead": "Example",
+            "text": "A yellow route that is two spaces long needs two yellow Train Cards.",
+            "source": { "page": 2, "query": "two yellow Train Cards" }
           },
           {
             "lead": "The Golden Ticket",
-            "text": "is a winner's reward, not a card you draw."
+            "text": "You take the Golden Ticket as a reward if you win the game.",
+            "source": { "page": 1, "query": "take it as a reward if you win" }
           }
         ]
       },
@@ -64570,16 +64723,24 @@
       "turnStructure": {
         "bullets": [
           {
-            "lead": "The youngest player goes first",
-            "text": "Then turns continue clockwise."
+            "lead": "First",
+            "text": "The youngest player goes first.",
+            "source": { "page": 1, "query": "youngest player goes first" }
           },
           {
-            "lead": "On your turn",
-            "text": "do one thing: draw two train cards from the top of the deck, or claim one route."
+            "lead": "Order",
+            "text": "Play then proceeds clockwise around the table.",
+            "source": { "page": 1, "query": "clockwise around the table" }
           },
           {
-            "lead": "You may also",
-            "text": "skip the turn to discard both tickets and draw two new ones, if you cannot complete the ones you hold."
+            "lead": "Stuck tickets",
+            "text": "If you know you will not be able to complete your Tickets, skip a turn and discard both of them.",
+            "source": { "page": 2, "query": "discard BOTH" }
+          },
+          {
+            "lead": "Replace them",
+            "text": "Draw two new Tickets from the top of the deck to replace them.",
+            "source": { "page": 2, "query": "Draw two new Tickets" }
           },
           {
             "lead": "To claim a route",
@@ -64587,11 +64748,13 @@
           },
           {
             "lead": "Discard the cards",
-            "text": "face up beside the train deck."
+            "text": "All cards used to claim the route are discarded face up next to the Train deck.",
+            "source": { "page": 2, "query": "discarded faceup next" }
           },
           {
             "lead": "Wild",
-            "text": "Locomotives are wild."
+            "text": "Locomotives are wild.",
+            "source": { "page": 2, "query": "Locomotives are wild" }
           },
           {
             "lead": "Your plastic train",
@@ -64686,8 +64849,8 @@
             "text": "with the most completed tickets wins."
           },
           {
-            "lead": "A tie means",
-            "text": "all tied players win together."
+            "lead": "Last-train tie",
+            "text": "If the game ends because a player placed their last train, the most completed Tickets wins; tied players win together."
           }
         ],
         "details": "These notes follow Days of Wonder, Ticket to Ride: First Journey, USA Map, Rulebook English, file"
@@ -64758,25 +64921,38 @@
           }
         }
       ],
-      "rulebook": "https://cdn.svc.asmodee.net/staging-daysofwonder/uploads/2024/07/tk_rules_en_2018.pdf",
+      "rulebook": "ticket-to-ride-first-journey-u-s",
       "endOfGame": [
         {
           "lead": "Six tickets",
-          "text": "The game ends immediately when a player completes a sixth ticket. That player wins the Golden Ticket."
+          "text": "The game immediately ends when a player completes a sixth Ticket.",
+          "source": { "page": 2, "query": "sixth Ticket" }
+        },
+        {
+          "lead": "Reward",
+          "text": "That player is the winner and takes the Golden Ticket as a reward.",
+          "source": { "page": 2, "query": "takes the Golden Ticket" }
         },
         {
           "lead": "Last train",
-          "text": "The game also ends if a player places their last train. Then the most completed tickets wins."
+          "text": "The game also ends if a player places their last train on the board.",
+          "source": { "page": 2, "query": "his last train" }
+        },
+        {
+          "lead": "Most tickets",
+          "text": "Then the player with the most completed Tickets wins.",
+          "source": { "page": 2, "query": "most completed Tickets" }
         },
         {
           "lead": "Tie",
-          "text": "On the last-train ending, every tied player wins together."
+          "text": "If the game ends because a player placed their last train, the most completed Tickets wins; tied players win together.",
+          "source": { "page": 2, "query": "tied players win" }
         }
       ],
       "scoringSummary": [
         "Six completed tickets wins at once.",
         "Otherwise, most completed tickets when someone places their last train.",
-        "That tie is a shared win."
+        "If that last-train ending ties, the tied players win together."
       ],
       "howToPlayVideo": {
         "url": "https://www.youtube.com/watch?v=Rp7ULyiiYjg",
@@ -93454,40 +93630,107 @@
           "rulesStatus": "pending"
         }
       ],
-      "rulebook": "https://bghub.org/r/mycelia.pdf",
+      "rulebook": "mycelia-2024",
       "quickStart": {
         "text": "Split Stone Games, Mycelia rulebook, ©2024. One to four players. This is the fungi-kingdom game, not the Ravensburger deck-builder.",
         "bullets": [
           {
             "lead": "Tiles",
-            "text": "Shuffle the triangle tiles into two face-down piles. Take the top 6 of each and set them in a star. Leave room for the board to grow."
+            "text": "Shuffle the triangle tiles and place them in two face-down piles.",
+            "source": { "page": 3, "query": "two piles face" }
+          },
+          {
+            "lead": "Star",
+            "text": "Select the top 6 from each pile and set them up in a star.",
+            "source": { "page": 3, "query": "top 6 from each pile" }
+          },
+          {
+            "lead": "Room",
+            "text": "Leave plenty of room around the initial star shape.",
+            "source": { "page": 3, "query": "of room around the initial" }
           },
           {
             "lead": "Insects",
-            "text": "A tile with the insect symbol gets an insect token. Give one insect token to each player."
+            "text": "If a tile has the insect symbol, immediately place an insect token on it.",
+            "source": { "page": 3, "query": "insect symbol" }
+          },
+          {
+            "lead": "Give",
+            "text": "Then give one insect token to each player and leave the rest to one side.",
+            "source": { "page": 3, "query": "token to each player" }
           },
           {
             "lead": "Cards",
-            "text": "Shuffle the mushroom cards and deal 3 face down to each player."
+            "text": "Shuffle the mushroom cards, deal 3 to each player, and leave them face down.",
+            "source": { "page": 3, "query": "leave them face down" }
           },
           {
             "lead": "Mats",
-            "text": "Each player lines up 5 mats, pips 1 through 5, with a mushroom token on the matching space and a spore counter in the far-left colour slot."
+            "text": "Each player places 5 of their colour player mats, ordered from 1 to 5 pips.",
+            "source": { "page": 3, "query": "from 1 to 5 pips" }
+          },
+          {
+            "lead": "Tokens",
+            "text": "Place mushroom tokens on the spaces that match the number of pips.",
+            "source": { "page": 3, "query": "match the number of pips" }
+          },
+          {
+            "lead": "Spores",
+            "text": "Place each spore counter in the farthest slot to the left, the colour slot.",
+            "source": { "page": 3, "query": "farthest slot to the left" }
           },
           {
             "lead": "Mothers",
-            "text": "In reverse order, each player places their Mother mushroom on one of the 6 centre tiles, never a black tile and never sharing a tile. An insect there is claimed at once."
+            "text": "In reverse order, each player places their Mother mushroom on one of the 6 centre triangle tiles.",
+            "source": { "page": 3, "query": "In reverse order" }
+          },
+          {
+            "lead": "Black",
+            "text": "Do not place a Mother on a black tile, if one is present.",
+            "source": { "page": 3, "query": "black tile, if present" }
+          },
+          {
+            "lead": "Share",
+            "text": "Mother mushrooms can never be on the same tile as another player’s.",
+            "source": { "page": 3, "query": "same tile as another" }
+          },
+          {
+            "lead": "Claim",
+            "text": "A Mother placed on a tile with an insect token immediately gains that token.",
+            "source": { "page": 3, "query": "immediately gain the token" }
+          },
+          {
+            "lead": "When",
+            "text": "The market is revealed after players have placed their Mother mushrooms.",
+            "source": { "page": 3, "query": "market is revealed" }
           },
           {
             "lead": "Market",
-            "text": "After the Mothers are placed, reveal the top 3 cards beside the deck."
+            "text": "Reveal the top three cards from the deck and place them next to the deck.",
+            "source": { "page": 3, "query": "top three cards" }
           },
           {
             "lead": "First",
-            "text": "Whoever last saw a mushroom in the wild, or draw a spore from a hat."
+            "text": "The first player is whoever saw a mushroom in the wild last.",
+            "source": { "page": 3, "query": "mushroom in the wild" }
+          },
+          {
+            "lead": "Hat",
+            "text": "Or put a spore from each player into a hat and see whose is drawn.",
+            "source": { "page": 3, "query": "into a hat" }
+          },
+          {
+            "lead": "Short",
+            "text": "For a shorter game, set up just 3 or 4 player mats for each player.",
+            "source": { "page": 3, "query": "3 or 4 player" }
+          },
+          {
+            "lead": "Short token",
+            "text": "That end-game token is then worth the same number of points as there are player mats.",
+            "source": { "page": 3, "query": "same amount of points" }
           }
         ],
-        "details": "A shorter game uses 3 or 4 mats each. The end-game token is then worth that many points instead of 5."
+        "details": "Split Stone Games, Mycelia rulebook, ©2024."
       },
       "turnStructure": [
         {
@@ -93534,7 +93777,8 @@
         },
         {
           "lead": "Token",
-          "text": "The player who triggers that end takes the end-game token, worth 5 points. The Automata does not take it."
+            "text": "The player who triggers the end takes the end-game marker, worth 5 points.",
+            "source": { "page": 3, "query": "worth 5 points" }
         }
       ],
       "endGameScoring": [
@@ -93562,7 +93806,8 @@
         "2": [
           {
             "lead": "Hand",
-            "text": "Same setup, except the second player starts with one extra card."
+            "text": "The second player gets one extra card in their starting hand.",
+            "source": { "page": 3, "query": "one extra card" }
           }
         ],
         "3": [
