@@ -2361,6 +2361,15 @@
   }
   .pack-layer[data-active="true"] { outline:2px solid currentColor; transform:translateX(18px); }
   .pack-kind { display:inline-block; margin:0 0 6px; font-size:0.75rem; font-weight:700; }
+  .storage-form { display:grid; gap:12px; max-width:28rem; }
+  .storage-form label { display:grid; gap:4px; font-weight:700; }
+  .storage-form input {
+    font:inherit; font-size:max(1rem, 16px);
+    padding:10px 12px; border-radius:10px;
+    border:1px solid var(--hig-sep, #ccc); background:var(--card, #fff); color:inherit;
+  }
+  .storage-actions { display:flex; flex-wrap:wrap; gap:8px; }
+  .storage-status { margin:0; }
   .teach-page .byline { margin-top:0; }
   .teach-script {
     background:var(--card);
@@ -116741,6 +116750,16 @@
       });
     });
   }
+  function writePackUnlock(unlock) {
+    localStorage.setItem("bgqStorage", JSON.stringify({
+      owner: unlock.owner,
+      repo: unlock.repo,
+      token: unlock.token
+    }));
+  }
+  function clearPackUnlock() {
+    localStorage.removeItem("bgqStorage");
+  }
   function readPackUnlock() {
     try {
       var raw = localStorage.getItem("bgqStorage");
@@ -116760,11 +116779,19 @@
   }
   function packFetch(unlock, path, raw) {
     return fetch(packApi(unlock, path), {
+      redirect: "error",
       headers: {
         Authorization: "Bearer " + unlock.token,
         Accept: raw ? "application/vnd.github.raw" : "application/vnd.github+json"
       }
     });
+  }
+  function packImagePath(slug, image) {
+    var src = String(image || "").trim().replace(/^\.\//, "").replace(/^\/+/, "");
+    var prefix = "put-away/" + slug + "/";
+    if (src.indexOf(prefix) === 0) src = src.slice(prefix.length);
+    if (!src || src.indexOf("..") !== -1) return "";
+    return "put-away/" + slug + "/" + src;
   }
   function normalizePack(data) {
     data = data && typeof data === "object" ? data : {};
@@ -116772,7 +116799,7 @@
       step = step || {};
       var layer = step.layer != null && step.layer !== "" ? Number(step.layer) : null;
       return {
-        image: String(step.image || "").trim(),
+        image: String(step.image || step.src || step.file || "").trim(),
         caption: String(step.caption || "").trim(),
         layer: layer != null && isFinite(layer) ? layer : null,
         kind: step.kind === "illustration" ? "illustration" : "photo"
@@ -116785,7 +116812,7 @@
         tray = tray || {};
         return {
           name: String(tray.name || "").trim(),
-          contents: (Array.isArray(tray.contents) ? tray.contents : []).map(function (item) {
+          contents: (Array.isArray(tray.contents) ? tray.contents : String(tray.contents || "").split(",")).map(function (item) {
             return String(item || "").trim();
           }).filter(Boolean)
         };
@@ -116793,7 +116820,7 @@
       return {
         n: isFinite(n) ? n : i + 1,
         name: String(layer.name || "").trim(),
-        image: String(layer.image || "").trim(),
+        image: String(layer.image || layer.src || layer.file || "").trim(),
         caption: String(layer.caption || "").trim(),
         kind: layer.kind === "illustration" ? "illustration" : "photo",
         trays: trays
@@ -116847,8 +116874,8 @@
       }
       host.appendChild(fig);
     }
-    var src = String(spec.image || "");
-    if (spec.kind === "illustration" || !src || src.indexOf("..") !== -1) {
+    var src = packImagePath(slug, spec.image);
+    if (spec.kind === "illustration" || !src) {
       showArt();
       return;
     }
@@ -116864,7 +116891,7 @@
       fig.appendChild(cap);
     }
     host.appendChild(fig);
-    packFetch(unlock, "put-away/" + slug + "/" + src, true).then(function (res) {
+    packFetch(unlock, src, true).then(function (res) {
       if (!res.ok) throw new Error("missing");
       return res.blob();
     }).then(function (blob) {
@@ -118054,9 +118081,103 @@
     document.body.scrollTop = 0;
   }
 
+  function unlockRequested() {
+    if (new URL(window.location.href).searchParams.has("unlock")) return true;
+    var hash = (window.location.hash || "").replace(/^#/, "").split("?")[0];
+    return hash === "unlock" || hash === "/unlock";
+  }
+  function setUnlockRobots(on) {
+    var meta = document.querySelector('meta[name="robots"]');
+    if (on) {
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute("name", "robots");
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute("content", "noindex");
+      return;
+    }
+    if (meta) meta.remove();
+  }
+  function renderStorage() {
+    detailSlug = null;
+    setUnlockRobots(true);
+    var saved = readPackUnlock();
+    appEl.innerHTML =
+      '<article class="detail fade-in">' +
+        '<h2 class="title">Private storage</h2>' +
+        '<p>Use a fine-grained token with Contents read-only on this one repository. The token stays in this browser.</p>' +
+        '<form class="storage-form" id="storage-form">' +
+          '<label>Owner <input name="owner" autocomplete="off" value="' + escapeHtml(saved ? saved.owner : "reddittitt") + '"></label>' +
+          '<label>Repository <input name="repo" autocomplete="off" value="' + escapeHtml(saved ? saved.repo : "bgquick-storage") + '"></label>' +
+          '<label>Token <input name="token" type="password" autocomplete="off" spellcheck="false"></label>' +
+          '<div class="storage-actions">' +
+            '<button type="submit">Save</button>' +
+            '<button type="button" id="storage-test">Test</button>' +
+            '<button type="button" id="storage-forget">Forget</button>' +
+          '</div>' +
+          '<p class="storage-status" id="storage-status" role="status"></p>' +
+        '</form>' +
+      '</article>';
+    var form = document.getElementById("storage-form");
+    var status = document.getElementById("storage-status");
+    function values() {
+      var data = new FormData(form);
+      var owner = String(data.get("owner") || "").trim();
+      var repo = String(data.get("repo") || "").trim();
+      var token = String(data.get("token") || "");
+      if (!token) {
+        var current = readPackUnlock();
+        if (current && current.owner === owner && current.repo === repo) token = current.token;
+      }
+      return { owner: owner, repo: repo, token: token };
+    }
+    function usable(next) {
+      return /^[A-Za-z0-9_.-]+$/.test(next.owner) && /^[A-Za-z0-9_.-]+$/.test(next.repo) && next.token.length >= 20 && next.token.length <= 400;
+    }
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var next = values();
+      if (!usable(next)) {
+        status.textContent = "Enter the owner, repository, and token.";
+        return;
+      }
+      writePackUnlock(next);
+      form.token.value = "";
+      status.textContent = "Saved.";
+    });
+    document.getElementById("storage-forget").addEventListener("click", function () {
+      clearPackUnlock();
+      form.owner.value = "reddittitt";
+      form.repo.value = "bgquick-storage";
+      form.token.value = "";
+      status.textContent = "Forgotten.";
+    });
+    document.getElementById("storage-test").addEventListener("click", function () {
+      var next = values();
+      if (!usable(next)) {
+        status.textContent = "Enter the owner, repository, and token.";
+        return;
+      }
+      status.textContent = "Testing…";
+      packFetch(next, "put-away/thunder-road-vendetta/manifest.json", true).then(function (res) {
+        if (res.ok) status.textContent = "OK";
+        else status.textContent = "HTTP " + res.status + (res.statusText ? " " + res.statusText : "");
+      }).catch(function () {
+        status.textContent = "The test could not reach GitHub.";
+      });
+    });
+  }
   function render() {
     closeRulebookViewer();
     syncHeaderOffset();
+    if (unlockRequested()) {
+      scrollPageToTop();
+      renderStorage();
+      requestAnimationFrame(scrollPageToTop);
+      return;
+    }
+    setUnlockRobots(false);
     if (normalizeIncoming()) return;
     var parsed = parseHash();
     if (parsed.route === "teach") {
@@ -118083,6 +118204,14 @@
     }
   }
 
+  document.querySelectorAll("header a").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      if (!new URL(window.location.href).searchParams.has("unlock")) return;
+      event.preventDefault();
+      history.pushState(null, "", window.location.pathname + (link.getAttribute("href") || "#/"));
+      render();
+    });
+  });
   window.addEventListener("hashchange", render);
   window.addEventListener("resize", function () {
     syncHeaderOffset();
