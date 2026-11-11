@@ -115740,17 +115740,27 @@
     var check = opts.rulebook ? ' data-check="rulebook"' : "";
     return '<a class="essential-link" href="' + escapeHtml(href) + '"' + check + externalAttrs(href) + ">" + escapeHtml(label) + "</a>";
   }
+  function isYouTubeUrl(url) {
+    var host = "";
+    try { host = new URL(String(url || "")).hostname.toLowerCase(); }
+    catch (e) { return false; }
+    if (host.indexOf("www.") === 0) host = host.slice(4);
+    return host === "youtu.be" || host === "youtube.com" || host === "youtube-nocookie.com" ||
+      host.slice(-12) === ".youtube.com" || host.slice(-20) === ".youtube-nocookie.com";
+  }
   function renderEssentialVideo(video) {
     var title = String((video && video.title) || "").trim();
     var channel = String((video && video.channel) || "").trim();
-    var accessible = title && title !== "How to play" ? title : "How to play";
-    if (channel) accessible += ", " + channel;
-    var extra = title && title !== "How to play"
+    var youtube = isYouTubeUrl(video && video.url);
+    var label = youtube ? "YouTube" : "How to play";
+    var accessible = youtube ? "Watch how to play on YouTube" : (title && title !== "How to play" ? title : "How to play");
+    if (!youtube && channel) accessible += ", " + channel;
+    var extra = !youtube && title && title !== "How to play"
       ? '<span class="u-hidden-text">' + escapeHtml(title + (channel ? ", " + channel : "")) + "</span>"
       : "";
     return (
       '<a class="essential-link essential-link--video" href="' + escapeHtml(video.url) + '" aria-label="' + escapeHtml(accessible) + '"' + externalAttrs(video.url) + ">" +
-        '<span class="essential-link-title">How to play</span>' +
+        '<span class="essential-link-title">' + escapeHtml(label) + "</span>" +
         extra +
       "</a>"
     );
