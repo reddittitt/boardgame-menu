@@ -2341,8 +2341,12 @@
   .pack-away figure { margin:0 0 8px; }
   .pack-away img, .pack-away svg { display:block; width:100%; height:auto; border-radius:12px; background:#f7f1e4; }
   .pack-away figcaption { margin-top:8px; }
-  .pack-nav { display:flex; gap:8px; }
-  .pack-nav button, .pack-layer {
+  .pack-chips {
+    display:flex; gap:8px; overflow-x:auto; margin:0 0 8px;
+    padding-bottom:4px; -webkit-overflow-scrolling:touch;
+  }
+  .pack-chips[hidden], .pack-nav[hidden] { display:none; }
+  .pack-chip, .pack-nav button {
     min-height:44px;
     border-radius:999px;
     border:1px solid var(--btn-border);
@@ -2351,15 +2355,15 @@
     font:inherit;
     font-weight:700;
   }
-  .pack-nav button { flex:1; }
+  .pack-chip { flex:0 0 auto; padding:0 14px; }
+  .pack-chip[aria-selected="true"] { outline:2px solid currentColor; }
+  .pack-nav { display:flex; gap:8px; align-items:center; }
+  .pack-nav button { flex:1; padding:0 12px; }
   .pack-nav button:disabled { opacity:0.4; }
-  .pack-stack { position:relative; margin:8px 36px 8px 0; }
-  .pack-layer {
-    position:absolute; left:0; right:0;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 14px; text-align:left;
-  }
-  .pack-layer[data-active="true"] { outline:2px solid currentColor; transform:translateX(18px); }
+  .pack-pos { margin:0; min-width:4.5rem; text-align:center; font-weight:700; }
+  .pack-frame h4 { margin:0 0 8px; }
+  .pack-trays { margin:8px 0 0; padding-left:1.2rem; }
+  .pack-trays li { margin:4px 0; }
   .pack-kind { display:inline-block; margin:0 0 6px; font-size:0.75rem; font-weight:700; }
   .storage-form { display:grid; gap:12px; max-width:28rem; }
   .storage-form label { display:grid; gap:4px; font-weight:700; }
@@ -116874,6 +116878,10 @@
     return svg;
   }
   function mountPackFigure(host, unlock, slug, spec) {
+    if (host._packBlob) {
+      URL.revokeObjectURL(host._packBlob);
+      host._packBlob = "";
+    }
     host.innerHTML = "";
     var kind = document.createElement("p");
     kind.className = "pack-kind";
@@ -116912,8 +116920,80 @@
       return res.blob();
     }).then(function (blob) {
       if (!img.isConnected) return;
-      img.src = URL.createObjectURL(blob);
+      var blobUrl = URL.createObjectURL(blob);
+      host._packBlob = blobUrl;
+      img.src = blobUrl;
     }).catch(showArt);
+  }
+  function joinCaption(parts) {
+    var seen = {};
+    var out = [];
+    parts.forEach(function (part) {
+      var text = String(part || "").trim();
+      if (!text || seen[text]) return;
+      seen[text] = true;
+      out.push(text);
+    });
+    return out.join(" ");
+  }
+  function packSequence(pack) {
+    var steps = pack.steps || [];
+    var layers = pack.layers || [];
+    var byLayer = {};
+    steps.forEach(function (step) {
+      if (step.layer == null) return;
+      var key = String(step.layer);
+      if (!byLayer[key]) byLayer[key] = [];
+      byLayer[key].push(step);
+    });
+    var frames = [];
+    var placed = false;
+    function placeLayers() {
+      if (placed) return;
+      placed = true;
+      var nums = {};
+      layers.forEach(function (layer) { nums[layer.n] = true; });
+      Object.keys(byLayer).forEach(function (key) { nums[Number(key)] = true; });
+      Object.keys(nums).map(Number).filter(function (n) { return isFinite(n); }).sort(function (a, b) { return a - b; }).forEach(function (n) {
+        var layer = null;
+        for (var i = 0; i < layers.length; i++) if (layers[i].n === n) { layer = layers[i]; break; }
+        var group = byLayer[String(n)] || [];
+        var image = "";
+        group.forEach(function (step) {
+          if (!image && step.kind !== "illustration" && step.image) image = step.image;
+        });
+        if (!image && layer && layer.kind !== "illustration" && layer.image) image = layer.image;
+        var captions = [];
+        group.forEach(function (step) { captions.push(step.caption); });
+        if (layer) captions.push(layer.caption);
+        frames.push({
+          layer: true,
+          n: n,
+          name: layer && layer.name ? layer.name : "",
+          image: image,
+          caption: joinCaption(captions),
+          kind: image ? "photo" : "illustration",
+          trays: layer ? layer.trays : []
+        });
+      });
+    }
+    steps.forEach(function (step) {
+      if (step.layer != null) {
+        placeLayers();
+        return;
+      }
+      frames.push({
+        layer: false,
+        n: null,
+        name: "",
+        image: step.kind === "illustration" ? "" : step.image,
+        caption: step.caption,
+        kind: step.kind === "illustration" || !step.image ? "illustration" : "photo",
+        trays: []
+      });
+    });
+    if (!placed) placeLayers();
+    return frames;
   }
   function mountPrivatePacking(game) {
     var unlock = readPackUnlock();
@@ -116926,6 +117006,8 @@
       if (!data || detailSlug !== slug) return;
       var pack = normalizePack(data);
       if (!pack) return;
+      var frames = packSequence(pack);
+      if (!frames.length) return;
       var body = document.querySelector(".detail-body");
       if (!body || body.querySelector(".pack-away")) return;
       var section = document.createElement("section");
@@ -116938,93 +117020,87 @@
         note.textContent = pack.note;
         section.appendChild(note);
       }
-      if (pack.steps.length) {
-        var stepHost = document.createElement("div");
-        var stepIndex = 0;
-        var nav = document.createElement("div");
-        nav.className = "pack-nav";
-        var prev = document.createElement("button");
-        prev.type = "button";
-        prev.textContent = "Previous";
-        var next = document.createElement("button");
-        next.type = "button";
-        next.textContent = "Next";
-        nav.appendChild(prev);
-        nav.appendChild(next);
-        function paintStep() {
-          var step = pack.steps[stepIndex];
-          prev.disabled = stepIndex <= 0;
-          next.disabled = stepIndex >= pack.steps.length - 1;
-          var caption = step.caption || "";
-          if (step.layer != null) caption = (caption ? caption + " " : "") + "Layer " + step.layer + ".";
-          mountPackFigure(stepHost, unlock, slug, { image: step.image, caption: caption, kind: step.kind, name: "Step " + (stepIndex + 1) });
-        }
-        prev.addEventListener("click", function () { if (stepIndex > 0) { stepIndex -= 1; paintStep(); } });
-        next.addEventListener("click", function () { if (stepIndex < pack.steps.length - 1) { stepIndex += 1; paintStep(); } });
-        section.appendChild(stepHost);
-        section.appendChild(nav);
-        paintStep();
-      }
-      if (pack.layers.length) {
-        var layerIndex = 0;
-        var stack = document.createElement("div");
-        stack.className = "pack-stack";
-        stack.setAttribute("role", "list");
-        var layerH = 56;
-        var lift = 22;
-        stack.style.height = (layerH + lift * (pack.layers.length - 1)) + "px";
-        pack.layers.forEach(function (layer, i) {
-          var btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "pack-layer";
-          btn.setAttribute("data-layer", String(i));
-          btn.style.bottom = (i * lift) + "px";
-          btn.style.height = layerH + "px";
-          btn.style.zIndex = String(i + 1);
-          btn.style.background = "hsl(32, 42%, " + (80 - i * 6) + "%)";
-          btn.textContent = layer.name || ("Layer " + layer.n);
-          stack.appendChild(btn);
+      var layerFrames = frames.filter(function (frame) { return frame.layer; });
+      var chips = document.createElement("div");
+      chips.className = "pack-chips";
+      chips.setAttribute("role", "tablist");
+      chips.setAttribute("aria-label", "Layers");
+      if (layerFrames.length < 2) chips.hidden = true;
+      layerFrames.forEach(function (frame) {
+        var chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "pack-chip";
+        chip.setAttribute("role", "tab");
+        chip.textContent = frame.n + (frame.name ? " " + frame.name : "");
+        chip.addEventListener("click", function () {
+          index = frames.indexOf(frame);
+          paint();
         });
-        var layerCopy = document.createElement("div");
-        var layerFig = document.createElement("div");
-        function paintLayer() {
-          var layer = pack.layers[layerIndex];
-          Array.prototype.forEach.call(stack.querySelectorAll(".pack-layer"), function (btn) {
-            var on = btn.getAttribute("data-layer") === String(layerIndex);
-            if (on) btn.setAttribute("data-active", "true");
-            else btn.removeAttribute("data-active");
-            btn.setAttribute("aria-pressed", on ? "true" : "false");
-          });
-          layerCopy.innerHTML = "";
+        chips.appendChild(chip);
+      });
+      var frameHost = document.createElement("div");
+      frameHost.className = "pack-frame";
+      var nav = document.createElement("div");
+      nav.className = "pack-nav";
+      var prev = document.createElement("button");
+      prev.type = "button";
+      prev.textContent = "Previous";
+      var pos = document.createElement("p");
+      pos.className = "pack-pos";
+      var next = document.createElement("button");
+      next.type = "button";
+      next.textContent = "Next";
+      nav.appendChild(prev);
+      nav.appendChild(pos);
+      nav.appendChild(next);
+      if (frames.length < 2) nav.hidden = true;
+      var index = 0;
+      function paint() {
+        var frame = frames[index];
+        prev.disabled = index <= 0;
+        next.disabled = index >= frames.length - 1;
+        pos.textContent = (index + 1) + " of " + frames.length;
+        Array.prototype.forEach.call(chips.querySelectorAll(".pack-chip"), function (chip, chipIndex) {
+          var on = layerFrames[chipIndex] === frame;
+          chip.setAttribute("aria-selected", on ? "true" : "false");
+          if (on) chips.scrollLeft = Math.max(0, chip.offsetLeft - 8);
+        });
+        var previous = frameHost.querySelector("[data-pack-figure]");
+        if (previous && previous._packBlob) {
+          URL.revokeObjectURL(previous._packBlob);
+          previous._packBlob = "";
+        }
+        frameHost.innerHTML = "";
+        if (frame.layer) {
           var h = document.createElement("h4");
-          h.textContent = layer.name || ("Layer " + layer.n);
-          layerCopy.appendChild(h);
-          if (layer.trays.length) {
-            var ul = document.createElement("ul");
-            layer.trays.forEach(function (tray) {
-              var li = document.createElement("li");
-              var strong = document.createElement("strong");
-              strong.textContent = tray.name || "Tray";
-              li.appendChild(strong);
-              if (tray.contents.length) li.appendChild(document.createTextNode(": " + tray.contents.join(", ")));
-              ul.appendChild(li);
-            });
-            layerCopy.appendChild(ul);
-          }
-          mountPackFigure(layerFig, unlock, slug, layer);
+          h.textContent = frame.n + (frame.name ? " " + frame.name : "");
+          frameHost.appendChild(h);
         }
-        stack.addEventListener("click", function (e) {
-          var btn = e.target.closest ? e.target.closest(".pack-layer") : null;
-          if (!btn) return;
-          layerIndex = parseInt(btn.getAttribute("data-layer"), 10) || 0;
-          paintLayer();
-        });
-        section.appendChild(stack);
-        section.appendChild(layerFig);
-        section.appendChild(layerCopy);
-        paintLayer();
+        var figHost = document.createElement("div");
+        figHost.setAttribute("data-pack-figure", "true");
+        frameHost.appendChild(figHost);
+        mountPackFigure(figHost, unlock, slug, frame);
+        if (frame.trays.length) {
+          var ul = document.createElement("ul");
+          ul.className = "pack-trays";
+          frame.trays.forEach(function (tray) {
+            var li = document.createElement("li");
+            var strong = document.createElement("strong");
+            strong.textContent = tray.name || "Tray";
+            li.appendChild(strong);
+            if (tray.contents.length) li.appendChild(document.createTextNode(": " + tray.contents.join(", ")));
+            ul.appendChild(li);
+          });
+          frameHost.appendChild(ul);
+        }
       }
+      prev.addEventListener("click", function () { if (index > 0) { index -= 1; paint(); } });
+      next.addEventListener("click", function () { if (index < frames.length - 1) { index += 1; paint(); } });
+      section.appendChild(chips);
+      section.appendChild(frameHost);
+      section.appendChild(nav);
       body.appendChild(section);
+      paint();
     }).catch(function () {});
   }
 
@@ -118123,7 +118199,7 @@
       '<article class="detail fade-in">' +
         '<h2 class="title">Private storage</h2>' +
         '<p>Use a fine-grained token with Contents read-only on this one repository. The token stays in this browser.</p>' +
-        '<form class="storage-form" id="storage-form">' +
+        '<form class="storage-form" id="storage-form" method="post" action="#">' +
           '<label>Owner <input name="owner" autocomplete="off" value="' + escapeHtml(saved ? saved.owner : "reddittitt") + '"></label>' +
           '<label>Repository <input name="repo" autocomplete="off" value="' + escapeHtml(saved ? saved.repo : "bgquick-storage") + '"></label>' +
           '<label>Token <input name="token" type="password" autocomplete="off" spellcheck="false"></label>' +
