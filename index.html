@@ -40739,7 +40739,7 @@
             "text": "Each player who caught the most foul fish loses 2."
           }
         ],
-        "details": "These notes are OCR of rulebooks/shallow-regrets.pdf, a PNG of the Button Shy sheet, © Judson Cowan."
+        "details": "These notes are OCR of the Button Shy sheet in rulebooks/shallow-regrets.pdf, © Judson Cowan."
       },
       "scoringSummary": [
         "The highest score wins.",
@@ -111580,7 +111580,7 @@
           "rulesStatus": "pending"
         }
       ],
-      "rulebook": "https://esltqdkllporgkecoqih.supabase.co/storage/v1/object/public/rulebooks/vinhos_deluxe_edition_35bde02a.pdf",
+      "rulebook": "https://www.boardgamehelpers.com/Vinhos/Images/VDE_SV2016_2016-01-25_VL_LOW.pdf",
       "quickStart": {
         "text": "Eagle-Gryphon Vinhos, Vital Lacerda. This page is the 2010 Reserve in the Deluxe rulebook, the first edition with that book's balance notes. Lines printed only for the 2016 vintage are not copied here.",
         "bullets": [
@@ -114764,10 +114764,8 @@
       highlightJob.pageReady = true;
       if (highlightJob.sheet) highlightJob.sheet.hidden = true;
       if (highlightJob.loading) highlightJob.loading.hidden = true;
-      if (highlightJob.note) {
-        highlightJob.note.className = "rulebook-viewer-note";
-        highlightJob.note.textContent = "This rulebook could not be drawn here, so the match could not be highlighted.";
-      }
+      var failedUrl = highlightJob.opts && highlightJob.opts.url;
+      if (failedUrl && highlightJob.note) rulebookFallback(highlightJob.note, failedUrl);
     }).then(function () {
       if (highlightJob.progressFn === onProgress) {
         unwatchRulebookProgress(opts.url, onProgress);
@@ -115079,14 +115077,20 @@
   }
   function rulebookFallback(note, url) {
     resetRulebookFind();
+    var opened = window.open(url, "_blank", "noopener,noreferrer");
+    if (opened) {
+      closeRulebookViewer();
+      return;
+    }
+    if (!note) return;
     note.hidden = false;
     note.className = "rulebook-viewer-note";
-    note.textContent = "This rulebook could not be drawn in the app. ";
+    note.textContent = "";
     var link = document.createElement("a");
     link.href = url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = "Open the official file";
+    link.textContent = "Open the original file";
     note.appendChild(link);
   }
   function paintPageCitation(stage, slot, pageNum) {
@@ -116342,8 +116346,20 @@
       });
     }).catch(function () {
       if (!node.isConnected) return;
+      var opened = spec.renderUrl ? window.open(spec.renderUrl, "_blank", "noopener,noreferrer") : null;
       node.className = "character-aid-viewport character-aid-viewport--note";
-      node.innerHTML = '<p class="character-aid-status">This abilities page could not be drawn here. Open it with the link below, or use the text version.</p>';
+      node.innerHTML = "";
+      if (!opened && spec.renderUrl) {
+        var p = document.createElement("p");
+        p.className = "character-aid-status";
+        var a = document.createElement("a");
+        a.href = spec.renderUrl;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = "Open the original file";
+        p.appendChild(a);
+        node.appendChild(p);
+      }
       var card = node.closest ? node.closest(".character-aid") : null;
       var details = card && card.querySelector(".character-aid-text");
       if (details) details.open = true;
