@@ -420,6 +420,12 @@
     color:var(--muted);
     white-space:nowrap;
   }
+  button.essential-link {
+    font:inherit;
+    cursor:pointer;
+    appearance:none;
+    -webkit-appearance:none;
+  }
   .essential-link:focus-visible {
     outline:3px solid var(--brand);
     outline-offset:2px;
@@ -2338,6 +2344,7 @@
   .setup-photo figcaption { margin:6px 2px 0; font-size:12px; line-height:1.35; color:var(--muted); }
   .setup-photo figcaption a { color:inherit; }
   .pack-away { margin-top:8px; }
+  .pack-away-title { scroll-margin-top:calc(var(--header-h, 64px) + 8px); }
   .pack-viewer { margin:0; }
   .pack-stage {
     position:relative;
@@ -120364,6 +120371,8 @@
       var section = document.createElement("section");
       section.className = "pack-away";
       var heading = document.createElement("h3");
+      heading.id = "put-it-away";
+      heading.className = "pack-away-title";
       heading.textContent = pack.title;
       section.appendChild(heading);
       var paints = [];
@@ -120389,7 +120398,25 @@
       if (!paints.length) return;
       body.appendChild(section);
       paints.forEach(function (paint) { paint(); });
+      revealPutAwayJump(slug);
     }).catch(function () {});
+  }
+  function revealPutAwayJump(slug) {
+    if (detailSlug !== slug) return;
+    var nav = document.querySelector(".detail .essential-links");
+    var heading = document.getElementById("put-it-away");
+    if (!nav || !heading || nav.querySelector("[data-put-away-jump]")) return;
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "essential-link";
+    button.setAttribute("data-put-away-jump", "1");
+    button.textContent = "Put it away";
+    button.addEventListener("click", function () {
+      var target = document.getElementById("put-it-away");
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    nav.appendChild(button);
   }
 
   function renderDetail(slug, action, presetExpansions) {
