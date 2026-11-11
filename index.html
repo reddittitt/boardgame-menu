@@ -117010,7 +117010,7 @@
         if (layerKey && byPath[layerKey]) {
           var held = byPath[layerKey];
           if (held.n == null || held.n === layer.n) {
-            held.caption = joinCaption([held.caption, layer.caption]);
+            if (!held.traySlide) held.caption = joinCaption([held.caption, layer.caption]);
             held.trays = layer.trays || [];
             held.traySlide = true;
             held.name = layer.name || held.name;
