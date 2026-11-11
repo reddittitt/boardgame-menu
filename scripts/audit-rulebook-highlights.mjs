@@ -1,7 +1,9 @@
 // Confirms every Rulebook chip's highlight box sits on the query in the PDF
 // text layer. It runs the same fold, match, and highlightBoxes functions as
 // index.html, then checks that the middle of each matched glyph falls inside
-// a focus box. No page is rasterized; the text layer is the position the
+// a focus box. A query that matches more than once after hyphen folding
+// fails, so a line-break hyphen cannot make the chip highlight a second
+// sentence. No page is rasterized; the text layer is the position the
 // viewer paints.
 //
 //   node scripts/audit-rulebook-highlights.mjs
@@ -156,6 +158,16 @@ for (const [slug, list] of bySlug) {
     const found = api.searchMatchRanges(built.raw, chip.query);
     if (!found.ranges.length) {
       failures.push({ slug, page: chip.page, query: chip.query, error: "query not on that page" });
+      continue;
+    }
+    if (found.ranges.length > 1) {
+      failures.push({
+        slug,
+        page: chip.page,
+        query: chip.query,
+        error: "query matches more than once on that page",
+        matches: found.ranges.length
+      });
       continue;
     }
     let focus = chip.snippet ? api.snippetFocusIndex(built.raw, found.ranges, chip.snippet) : 0;
