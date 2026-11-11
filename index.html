@@ -116731,11 +116731,19 @@
   }
   function packFetch(unlock, path, raw) {
     return fetch(packApi(unlock, path), {
+      redirect: "error",
       headers: {
         Authorization: "Bearer " + unlock.token,
         Accept: raw ? "application/vnd.github.raw" : "application/vnd.github+json"
       }
     });
+  }
+  function packImagePath(slug, image) {
+    var src = String(image || "").trim().replace(/^\.\//, "").replace(/^\/+/, "");
+    var prefix = "put-away/" + slug + "/";
+    if (src.indexOf(prefix) === 0) src = src.slice(prefix.length);
+    if (!src || src.indexOf("..") !== -1) return "";
+    return "put-away/" + slug + "/" + src;
   }
   function normalizePack(data) {
     data = data && typeof data === "object" ? data : {};
@@ -116743,7 +116751,7 @@
       step = step || {};
       var layer = step.layer != null && step.layer !== "" ? Number(step.layer) : null;
       return {
-        image: String(step.image || "").trim(),
+        image: String(step.image || step.src || step.file || "").trim(),
         caption: String(step.caption || "").trim(),
         layer: layer != null && isFinite(layer) ? layer : null,
         kind: step.kind === "illustration" ? "illustration" : "photo"
@@ -116756,7 +116764,7 @@
         tray = tray || {};
         return {
           name: String(tray.name || "").trim(),
-          contents: (Array.isArray(tray.contents) ? tray.contents : []).map(function (item) {
+          contents: (Array.isArray(tray.contents) ? tray.contents : String(tray.contents || "").split(",")).map(function (item) {
             return String(item || "").trim();
           }).filter(Boolean)
         };
@@ -116764,7 +116772,7 @@
       return {
         n: isFinite(n) ? n : i + 1,
         name: String(layer.name || "").trim(),
-        image: String(layer.image || "").trim(),
+        image: String(layer.image || layer.src || layer.file || "").trim(),
         caption: String(layer.caption || "").trim(),
         kind: layer.kind === "illustration" ? "illustration" : "photo",
         trays: trays
@@ -116818,8 +116826,8 @@
       }
       host.appendChild(fig);
     }
-    var src = String(spec.image || "");
-    if (spec.kind === "illustration" || !src || src.indexOf("..") !== -1) {
+    var src = packImagePath(slug, spec.image);
+    if (spec.kind === "illustration" || !src) {
       showArt();
       return;
     }
@@ -116835,7 +116843,7 @@
       fig.appendChild(cap);
     }
     host.appendChild(fig);
-    packFetch(unlock, "put-away/" + slug + "/" + src, true).then(function (res) {
+    packFetch(unlock, src, true).then(function (res) {
       if (!res.ok) throw new Error("missing");
       return res.blob();
     }).then(function (blob) {
@@ -118104,14 +118112,8 @@
         return;
       }
       status.textContent = "Testing…";
-      fetch(packApi(next, ""), {
-        redirect: "error",
-        headers: {
-          Authorization: "Bearer " + next.token,
-          Accept: "application/vnd.github+json"
-        }
-      }).then(function (res) {
-        if (res.ok) status.textContent = "Connected";
+      packFetch(next, "put-away/thunder-road-vendetta/manifest.json", true).then(function (res) {
+        if (res.ok) status.textContent = "OK";
         else status.textContent = "HTTP " + res.status + (res.statusText ? " " + res.statusText : "");
       }).catch(function () {
         status.textContent = "The test could not reach GitHub.";
