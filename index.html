@@ -2398,7 +2398,6 @@
     <div class="spacer"></div>
 
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
-    <a class="home" href="#/storage">Storage</a>
     <a class="home" href="#/">All Games</a>
   </div>
 </header>
@@ -117840,7 +117839,6 @@
     var q = parts[1] || "";
     var pieces = path.split("/");
     var params = new URLSearchParams(q);
-    if (pieces[0] === "storage") return { route: "storage" };
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
       if ((pieces[2] || "").toLowerCase() === "teach") {
@@ -118027,97 +118025,114 @@
     document.body.scrollTop = 0;
   }
 
+  function unlockRequested() {
+    if (new URL(window.location.href).searchParams.has("unlock")) return true;
+    var hash = (window.location.hash || "").replace(/^#/, "").split("?")[0];
+    return hash === "unlock" || hash === "/unlock";
+  }
+  function setUnlockRobots(on) {
+    var meta = document.querySelector('meta[name="robots"]');
+    if (on) {
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.setAttribute("name", "robots");
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute("content", "noindex");
+      return;
+    }
+    if (meta) meta.remove();
+  }
   function renderStorage() {
     detailSlug = null;
+    setUnlockRobots(true);
     var saved = readPackUnlock();
     appEl.innerHTML =
       '<article class="detail fade-in">' +
-        '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>' +
         '<h2 class="title">Private storage</h2>' +
-        '<p>Packing photos are read from a private GitHub repository. The token stays in this browser and is not shown again after you save it.</p>' +
+        '<p>Use a fine-grained token with Contents read-only on this one repository. The token stays in this browser.</p>' +
         '<form class="storage-form" id="storage-form">' +
-          '<label>Owner <input name="owner" autocomplete="off" required value="' + escapeHtml(saved ? saved.owner : "") + '"></label>' +
-          '<label>Repository <input name="repo" autocomplete="off" required value="' + escapeHtml(saved ? saved.repo : "") + '"></label>' +
-          '<label>Token <input name="token" type="password" autocomplete="off" placeholder="' + (saved ? "Token saved" : "GitHub token that can read the repository") + '"></label>' +
+          '<label>Owner <input name="owner" autocomplete="off" value="' + escapeHtml(saved ? saved.owner : "reddittitt") + '"></label>' +
+          '<label>Repository <input name="repo" autocomplete="off" value="' + escapeHtml(saved ? saved.repo : "bgquick-storage") + '"></label>' +
+          '<label>Token <input name="token" type="password" autocomplete="off" spellcheck="false"></label>' +
           '<div class="storage-actions">' +
             '<button type="submit">Save</button>' +
-            '<button type="button" id="storage-check">Check</button>' +
-            '<button type="button" id="storage-clear">Clear</button>' +
+            '<button type="button" id="storage-test">Test</button>' +
+            '<button type="button" id="storage-forget">Forget</button>' +
           '</div>' +
-          '<p class="storage-status" id="storage-status" role="status">' + (saved ? "Saved in this browser." : "Not unlocked.") + '</p>' +
+          '<p class="storage-status" id="storage-status" role="status"></p>' +
         '</form>' +
       '</article>';
     var form = document.getElementById("storage-form");
     var status = document.getElementById("storage-status");
     function values() {
       var data = new FormData(form);
-      return {
-        owner: String(data.get("owner") || "").trim(),
-        repo: String(data.get("repo") || "").trim(),
-        token: String(data.get("token") || "")
-      };
+      var owner = String(data.get("owner") || "").trim();
+      var repo = String(data.get("repo") || "").trim();
+      var token = String(data.get("token") || "");
+      if (!token) {
+        var current = readPackUnlock();
+        if (current && current.owner === owner && current.repo === repo) token = current.token;
+      }
+      return { owner: owner, repo: repo, token: token };
     }
-    function validNames(owner, repo) {
-      return /^[A-Za-z0-9_.-]+$/.test(owner) && /^[A-Za-z0-9_.-]+$/.test(repo);
+    function usable(next) {
+      return /^[A-Za-z0-9_.-]+$/.test(next.owner) && /^[A-Za-z0-9_.-]+$/.test(next.repo) && next.token.length >= 20 && next.token.length <= 400;
     }
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       var next = values();
-      var current = readPackUnlock();
-      if (!next.token && current && current.owner === next.owner && current.repo === next.repo) next.token = current.token;
-      if (!validNames(next.owner, next.repo) || next.token.length < 20 || next.token.length > 400) {
-        status.textContent = "Enter an owner, a repository, and a token of 20 to 400 characters.";
+      if (!usable(next)) {
+        status.textContent = "Enter the owner, repository, and token.";
         return;
       }
       writePackUnlock(next);
       form.token.value = "";
-      form.token.placeholder = "Token saved";
-      status.textContent = "Saved in this browser.";
+      status.textContent = "Saved.";
     });
-    document.getElementById("storage-clear").addEventListener("click", function () {
+    document.getElementById("storage-forget").addEventListener("click", function () {
       clearPackUnlock();
-      form.owner.value = "";
-      form.repo.value = "";
+      form.owner.value = "reddittitt";
+      form.repo.value = "bgquick-storage";
       form.token.value = "";
-      form.token.placeholder = "GitHub token that can read the repository";
-      status.textContent = "Cleared.";
+      status.textContent = "Forgotten.";
     });
-    document.getElementById("storage-check").addEventListener("click", function () {
+    document.getElementById("storage-test").addEventListener("click", function () {
       var next = values();
-      var current = readPackUnlock();
-      if (!next.token && current && current.owner === next.owner && current.repo === next.repo) next.token = current.token;
-      if (!validNames(next.owner, next.repo) || next.token.length < 20 || next.token.length > 400) {
-        status.textContent = "Enter an owner, a repository, and a token of 20 to 400 characters.";
+      if (!usable(next)) {
+        status.textContent = "Enter the owner, repository, and token.";
         return;
       }
-      status.textContent = "Checking…";
-      fetch("https://api.github.com/repos/" + encodeURIComponent(next.owner) + "/" + encodeURIComponent(next.repo), {
+      status.textContent = "Testing…";
+      fetch(packApi(next, ""), {
+        redirect: "error",
         headers: {
           Authorization: "Bearer " + next.token,
           Accept: "application/vnd.github+json"
         }
       }).then(function (res) {
-        if (res.status === 200) status.textContent = "This browser can read that repository.";
-        else if (res.status === 401 || res.status === 403) status.textContent = "That token cannot read the repository.";
-        else if (res.status === 404) status.textContent = "That repository was not found.";
-        else status.textContent = "The check returned status " + res.status + ".";
+        if (res.ok) status.textContent = "Connected";
+        else status.textContent = "HTTP " + res.status + (res.statusText ? " " + res.statusText : "");
       }).catch(function () {
-        status.textContent = "The check could not reach GitHub.";
+        status.textContent = "The test could not reach GitHub.";
       });
     });
   }
   function render() {
     closeRulebookViewer();
     syncHeaderOffset();
+    if (unlockRequested()) {
+      scrollPageToTop();
+      renderStorage();
+      requestAnimationFrame(scrollPageToTop);
+      return;
+    }
+    setUnlockRobots(false);
     if (normalizeIncoming()) return;
     var parsed = parseHash();
     if (parsed.route === "teach") {
       scrollPageToTop();
       renderTeachPage(parsed.slug, Object.assign({ routeExps: parsed.expansions || [] }, parsed.teachQuery || {}));
-      requestAnimationFrame(scrollPageToTop);
-    } else if (parsed.route === "storage") {
-      scrollPageToTop();
-      renderStorage();
       requestAnimationFrame(scrollPageToTop);
     } else if (parsed.route === "detail") {
       scrollPageToTop();
@@ -118139,6 +118154,14 @@
     }
   }
 
+  document.querySelectorAll("header a").forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      if (!new URL(window.location.href).searchParams.has("unlock")) return;
+      event.preventDefault();
+      history.pushState(null, "", window.location.pathname + (link.getAttribute("href") || "#/"));
+      render();
+    });
+  });
   window.addEventListener("hashchange", render);
   window.addEventListener("resize", function () {
     syncHeaderOffset();
