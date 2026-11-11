@@ -116936,61 +116936,131 @@
     });
     return out.join(" ");
   }
+  function packImageKey(image) {
+    var src = String(image || "").trim().replace(/^\.\//, "").replace(/^\/+/, "");
+    if (src.indexOf("put-away/") === 0) {
+      var rest = src.slice("put-away/".length);
+      var slash = rest.indexOf("/");
+      if (slash >= 0) src = rest.slice(slash + 1);
+    }
+    if (!src || src.indexOf("..") !== -1) return "";
+    return src;
+  }
   function packSequence(pack) {
     var steps = pack.steps || [];
     var layers = pack.layers || [];
-    var byLayer = {};
-    steps.forEach(function (step) {
-      if (step.layer == null) return;
-      var key = String(step.layer);
-      if (!byLayer[key]) byLayer[key] = [];
-      byLayer[key].push(step);
-    });
     var frames = [];
-    var placed = false;
+    var byPath = {};
+    function claim(image, caption, meta) {
+      meta = meta || {};
+      var key = meta.kind === "illustration" ? "" : packImageKey(image);
+      if (key && byPath[key]) {
+        var existing = byPath[key];
+        existing.caption = joinCaption([existing.caption, caption]);
+        if (meta.trays && meta.trays.length) existing.trays = meta.trays;
+        if (meta.traySlide) existing.traySlide = true;
+        if (meta.layer && existing.n == null) {
+          existing.layer = true;
+          existing.n = meta.n;
+          existing.name = meta.name || existing.name;
+        } else if (meta.name && !existing.name) existing.name = meta.name;
+        return existing;
+      }
+      var frame = {
+        layer: !!meta.layer,
+        n: meta.layer ? meta.n : null,
+        name: meta.name || "",
+        image: key,
+        caption: String(caption || "").trim(),
+        kind: key ? "photo" : "illustration",
+        trays: meta.trays || [],
+        traySlide: !!meta.traySlide
+      };
+      if (key) byPath[key] = frame;
+      frames.push(frame);
+      return frame;
+    }
+    function layerRecords() {
+      var byN = {};
+      layers.forEach(function (layer) { byN[layer.n] = layer; });
+      steps.forEach(function (step) {
+        if (step.layer == null || byN[step.layer]) return;
+        byN[step.layer] = { n: step.layer, name: "", image: "", caption: "", kind: "photo", trays: [] };
+      });
+      return Object.keys(byN).map(Number).filter(function (n) { return isFinite(n); }).sort(function (a, b) { return a - b; }).map(function (n) {
+        return byN[n];
+      });
+    }
     function placeLayers() {
-      if (placed) return;
-      placed = true;
-      var nums = {};
-      layers.forEach(function (layer) { nums[layer.n] = true; });
-      Object.keys(byLayer).forEach(function (key) { nums[Number(key)] = true; });
-      Object.keys(nums).map(Number).filter(function (n) { return isFinite(n); }).sort(function (a, b) { return a - b; }).forEach(function (n) {
-        var layer = null;
-        for (var i = 0; i < layers.length; i++) if (layers[i].n === n) { layer = layers[i]; break; }
-        var group = byLayer[String(n)] || [];
-        var image = "";
+      layerRecords().forEach(function (layer) {
+        var layerKey = layer.kind === "illustration" ? "" : packImageKey(layer.image);
+        var group = steps.filter(function (step) { return step.layer === layer.n; });
         group.forEach(function (step) {
-          if (!image && step.kind !== "illustration" && step.image) image = step.image;
+          var stepKey = step.kind === "illustration" ? "" : packImageKey(step.image);
+          var same = !!(stepKey && stepKey === layerKey);
+          claim(step.image, same ? joinCaption([step.caption, layer.caption]) : step.caption, {
+            kind: step.kind,
+            layer: true,
+            n: layer.n,
+            name: layer.name,
+            trays: same ? layer.trays : [],
+            traySlide: same
+          });
         });
-        if (!image && layer && layer.kind !== "illustration" && layer.image) image = layer.image;
-        var captions = [];
-        group.forEach(function (step) { captions.push(step.caption); });
-        if (layer) captions.push(layer.caption);
-        frames.push({
+        if (layerKey && byPath[layerKey]) {
+          var held = byPath[layerKey];
+          if (held.n == null || held.n === layer.n) {
+            held.caption = joinCaption([held.caption, layer.caption]);
+            held.trays = layer.trays || [];
+            held.traySlide = true;
+            held.name = layer.name || held.name;
+            if (held.n == null) {
+              held.layer = true;
+              held.n = layer.n;
+            }
+          }
+          return;
+        }
+        if (layerKey) {
+          claim(layer.image, layer.caption, {
+            kind: layer.kind,
+            layer: true,
+            n: layer.n,
+            name: layer.name,
+            trays: layer.trays,
+            traySlide: true
+          });
+          return;
+        }
+        var first = null;
+        for (var i = 0; i < frames.length; i++) if (frames[i].n === layer.n) { first = frames[i]; break; }
+        if (first) {
+          first.caption = joinCaption([first.caption, layer.caption]);
+          if (!first.trays.length) first.trays = layer.trays || [];
+          first.traySlide = true;
+          first.name = layer.name || first.name;
+          return;
+        }
+        claim("", layer.caption, {
+          kind: "illustration",
           layer: true,
-          n: n,
-          name: layer && layer.name ? layer.name : "",
-          image: image,
-          caption: joinCaption(captions),
-          kind: image ? "photo" : "illustration",
-          trays: layer ? layer.trays : []
+          n: layer.n,
+          name: layer.name,
+          trays: layer.trays,
+          traySlide: true
         });
       });
     }
+    var placed = false;
     steps.forEach(function (step) {
       if (step.layer != null) {
-        placeLayers();
+        if (!placed) {
+          placeLayers();
+          placed = true;
+        }
         return;
       }
-      frames.push({
-        layer: false,
-        n: null,
-        name: "",
-        image: step.kind === "illustration" ? "" : step.image,
-        caption: step.caption,
-        kind: step.kind === "illustration" || !step.image ? "illustration" : "photo",
-        trays: []
-      });
+      claim(step.image, step.caption, { kind: step.kind });
     });
     if (!placed) placeLayers();
     return frames;
@@ -117020,20 +117090,31 @@
         note.textContent = pack.note;
         section.appendChild(note);
       }
-      var layerFrames = frames.filter(function (frame) { return frame.layer; });
+      var chipMeta = [];
+      var seenLayer = {};
+      frames.forEach(function (frame, frameIndex) {
+        if (!frame.layer || frame.n == null || seenLayer[frame.n]) return;
+        seenLayer[frame.n] = true;
+        var jump = frameIndex;
+        for (var i = 0; i < frames.length; i++) {
+          if (frames[i].n === frame.n && frames[i].traySlide) { jump = i; break; }
+        }
+        chipMeta.push({ n: frame.n, name: frame.name, jump: jump });
+      });
       var chips = document.createElement("div");
       chips.className = "pack-chips";
       chips.setAttribute("role", "tablist");
       chips.setAttribute("aria-label", "Layers");
-      if (layerFrames.length < 2) chips.hidden = true;
-      layerFrames.forEach(function (frame) {
+      if (chipMeta.length < 2) chips.hidden = true;
+      chipMeta.forEach(function (meta) {
         var chip = document.createElement("button");
         chip.type = "button";
         chip.className = "pack-chip";
         chip.setAttribute("role", "tab");
-        chip.textContent = frame.n + (frame.name ? " " + frame.name : "");
+        chip.setAttribute("data-layer", String(meta.n));
+        chip.textContent = meta.n + (meta.name ? " " + meta.name : "");
         chip.addEventListener("click", function () {
-          index = frames.indexOf(frame);
+          index = meta.jump;
           paint();
         });
         chips.appendChild(chip);
@@ -117060,8 +117141,8 @@
         prev.disabled = index <= 0;
         next.disabled = index >= frames.length - 1;
         pos.textContent = (index + 1) + " of " + frames.length;
-        Array.prototype.forEach.call(chips.querySelectorAll(".pack-chip"), function (chip, chipIndex) {
-          var on = layerFrames[chipIndex] === frame;
+        Array.prototype.forEach.call(chips.querySelectorAll(".pack-chip"), function (chip) {
+          var on = frame.layer && chip.getAttribute("data-layer") === String(frame.n);
           chip.setAttribute("aria-selected", on ? "true" : "false");
           if (on) chips.scrollLeft = Math.max(0, chip.offsetLeft - 8);
         });
