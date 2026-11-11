@@ -116405,8 +116405,6 @@
       var rulebookLabel = String(game.rulebookLabel || "").trim() || "Rulebook";
       items.push(renderEssentialLink(rulebookHref, rulebookLabel, { rulebook: true }));
     }
-    var publisher = safeLinkUrl(game && game.rulebookPublisher);
-    if (publisher) items.push(renderEssentialLink(publisher, "View on publisher site", { external: true }));
     var video = howToPlayFrom(game);
     if (video) items.push(renderEssentialVideo(video));
     if (teachHrefValue) {
