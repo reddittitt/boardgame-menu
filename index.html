@@ -116423,7 +116423,7 @@
   /* --- Service worker registration (instant-load / offline cache) --- */
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
-      .register("./sw.js")
+      .register("./sw.js", { updateViaCache: "none" })
       .catch(function (err) {
         console.warn("SW registration failed:", err);
       });
