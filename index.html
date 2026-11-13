@@ -364,7 +364,15 @@
 
   #rules-glossary .glossary-item {
   margin-bottom: 0.4rem;
+  max-width: 100%;
 }
+  #rules-glossary .rulebook-ref {
+    min-height: 44px;
+    min-width: 44px;
+    margin: 8px 0 0;
+    padding: 0 14px;
+    touch-action: manipulation;
+  }
 
   /* Detail view. Title and player/time sit beside the cover, then the chip row. */
   .detail {
@@ -24054,7 +24062,11 @@
           },
           {
             "lead": "Retirement money",
-            "text": "is set beside you until the London Season ends. It is paid to the bank then. Spending it early changes who picks a prestige card."
+            "text": "Set it beside you until the London Season ends, then pay the bank. That pile decides who picks a prestige card first.",
+            "source": {
+              "page": 11,
+              "query": "set it near your player area"
+            }
           },
           {
             "lead": "A prize you cannot keep",
@@ -24086,7 +24098,11 @@
         "bullets": [
           {
             "lead": "Agree first",
-            "text": "The rulebook asks everyone to consent before playing. It treats the East India Company as a frank portrait of imperialism and says the game might not suit every group."
+            "text": "The rulebook asks the group to consent before playing. It is meant as a frank portrait of an institution, and it wrestles with imperialism and globalization in the eighteenth and nineteenth centuries. It might not suit every group.",
+            "source": {
+              "page": 1,
+              "query": "consents to this exploration before playing"
+            }
           },
           {
             "lead": "1710",
@@ -24140,7 +24156,11 @@
               },
               {
                 "lead": "Deregulation",
-                "text": "This scenario does not include Deregulation, and there is no vote to add it."
+                "text": "This scenario does not include Deregulation, and there is no vote to add it. That vote is only in 1758 and Long 1710. The 1813 scenario starts with it.",
+                "source": {
+                  "page": 37,
+                  "query": "during the long 1710 scenario or the 1758 scenario"
+                }
               }
             ]
           }
@@ -24168,11 +24188,15 @@
               },
               {
                 "lead": "Scenario card",
-                "text": "Take the 1758 scenario card. Follow its front, mark the tracks it lists, and set up India as the card shows. Put the turn marker on 1758 and point the Prime Minister dial at 1758."
+                "text": "Take the 1758 scenario card. Follow its front, mark the tracks it lists, and set up India as the card shows. Put the turn marker on 1758 and point the Prime Minister dial at 1758.",
+                "source": {
+                  "page": 4,
+                  "query": "take the matching scenario setup card"
+                }
               },
               {
                 "lead": "Deregulation vote",
-                "text": "The Prime Minister may open a special session at the start of a turn, before the London Season, when Standing or Debt is on a lined space. If either marker is on a starred space, the session is required. The vote is on Deregulation and is not tied to a policy. If it passes, lower Debt one space for every two Debt, put Standing on the space marked S, and the Prime Minister takes a passed-law token. If it fails, raise the value of Company shares with the share token in the Court, never beyond plus or minus 3. The Prime Minister stays, and this law is not discarded.",
+                "text": "The Prime Minister may open a special session at the start of a turn, before the London Season, when Standing or Debt is on a lined space. If either marker is on a starred space, the session is required. The vote is on Deregulation and is not tied to a policy. The Prime Minister may vote against it. If it passes, lower Debt one space for every two Debt, put Standing on the space marked S, and the Prime Minister takes a passed-law token. If it fails, place or flip the Company share victory point token in the Court so shares are worth more, never past plus or minus 3. The Prime Minister stays, and this law is not discarded.",
                 "source": {
                   "page": 36,
                   "query": "before the London Season phase"
@@ -24213,7 +24237,7 @@
               },
               {
                 "lead": "Firms",
-                "text": "Firms trade in India apart from the Company and give shareholders another way to score. Each firm has a London treasury and an India treasury. Family cash cannot be transferred into or out of either. After Family and before Hiring, run the Firms phase. In the London Season, a player with a firm share may make one extra retirement from their supply, spending no more than the highest dividend of a firm they share in. A firm with no dividend cube, or with that cube on zero, cannot be used.",
+                "text": "Firms trade in India apart from the Company and give shareholders another way to score. Each firm has a London treasury and an India treasury. Family cash cannot be transferred into or out of either. After Family and before Hiring, run the Firms phase. In the London Season, a player with a firm share may make one extra retirement from their supply. The money spent cannot exceed the highest total dividend paid out by a firm they share in. A spouse discount lowers that cost, so the prize can be worth more than the dividend. A firm with no dividend cube, or with that cube on zero, cannot be used.",
                 "source": {
                   "page": 37,
                   "query": "These rules are in play during the 1813 scenario"
@@ -24237,7 +24261,11 @@
               },
               {
                 "lead": "Scenario card",
-                "text": "The opening matches the 1710 scenario. Take that scenario card, follow its front, mark the tracks it lists, and set up India as the card shows. Put the turn marker on 1710 and point the Prime Minister dial at 1710."
+                "text": "The opening matches the 1710 scenario. Take that scenario card, follow its front, mark the tracks it lists, and set up India as the card shows. Put the turn marker on 1710 and point the Prime Minister dial at 1710.",
+                "source": {
+                  "page": 4,
+                  "query": "begins identically to the 1710 scenario"
+                }
               },
               {
                 "lead": "Length",
@@ -24249,7 +24277,7 @@
               },
               {
                 "lead": "Deregulation vote",
-                "text": "The same special session as 1758. Before the London Season, when Standing or Debt is on a lined space, and required if either is on a starred space. Pass: lower Debt one space for every two Debt, put Standing on S, and the Prime Minister takes a passed-law token. Fail: Company shares gain value, to a limit of plus or minus 3, the Prime Minister stays, and the law is not discarded.",
+                "text": "The same special session as 1758. Before the London Season, when Standing or Debt is on a lined space, and required if either is on a starred space. The Prime Minister may vote against it. Pass: lower Debt one space for every two Debt, put Standing on S, and the Prime Minister takes a passed-law token. Fail: place or flip the Company share victory point token in the Court, never past plus or minus 3. The Prime Minister stays, and the law is not discarded.",
                 "source": {
                   "page": 36,
                   "query": "vote on Deregulation"
@@ -24356,7 +24384,7 @@
           "bullets": [
             {
               "lead": "Crown pieces",
-              "text": "Do this before dealing setup cards. The Crown uses the family board titled The Crown. Give the Crown two families of pieces, 36 family members, and use one color completely before the other. Split the 12 Crown promise cubes so the Crown and the human players have equal shares: 6 and 6 with one player, or 4 each with two. The Crown sits last in order after whoever was Chairman during setup, or before the next office in that order if the Crown is Chairman.",
+              "text": "Do this before dealing setup cards. The Crown uses the family board titled The Crown. Give the Crown two families of pieces, 36 family members, and use one color completely before the other. Split the 12 Crown promise cubes so the Crown and the human players have equal shares: 6 and 6 with one player, or 4 each with two. The Crown sits last in order after whoever was Chairman during setup, or before the next player in that order if the Crown is Chairman.",
               "source": {
                 "page": 43,
                 "query": "so they have 36"
@@ -24388,11 +24416,19 @@
             },
             {
               "lead": "Difficulty",
-              "text": "Easy: each human player has 5 promise cards that can be traded for promise cubes, as the Crown family board shows. Normal: promise cards are not traded for cubes. Hard: as Normal, and give the Crown 4 more promise cubes. With two players those 4 cubes are 2 from each player. Expert: as Hard, and give the Crown 3 extra setup cards."
+              "text": "Easy: each human player has 5 promise cards that can be traded for promise cubes, as the Crown family board shows. Normal: promise cards are not traded for cubes. Hard: as Normal, and give the Crown 4 more promise cubes. With two players those 4 cubes are 2 from each player. Expert: as Hard, and give the Crown 3 extra setup cards.",
+              "source": {
+                "page": 44,
+                "query": "You can adjust the difficulty of the Crown"
+              }
             },
             {
               "lead": "Crown cards",
-              "text": "Shuffle the Crown cards and reveal one. Set the climate marker on the Crown family board to the icon on that card. The Crown Handbook tells you how the Crown acts in the current phase. Do not read ahead. Promise cubes can be spent to change a Crown decision, and the Crown returns cubes when you do it a favor."
+              "text": "Shuffle the Crown AI cards and reveal the top card. Set the climate marker, an unused opportunity marker, on the Crown family board to the icon on that card. The Crown Handbook says what the Crown does in the current phase. Do not read ahead. Spend promise cubes to change a Crown decision. A favor can move promise cubes from the Crown back to you.",
+              "source": {
+                "page": 44,
+                "query": "Shuffle the AI cards"
+              }
             },
             {
               "lead": "London Season display",
@@ -24416,7 +24452,7 @@
           "bullets": [
             {
               "lead": "Crown pieces",
-              "text": "Do this before dealing setup cards. The Crown uses the family board titled The Crown. Give the Crown two families of pieces, 36 family members, and use one color completely before the other. Split the 12 Crown promise cubes so the Crown and the human players have equal shares: 6 and 6 with one player, or 4 each with two. The Crown sits last in order after whoever was Chairman during setup, or before the next office in that order if the Crown is Chairman.",
+              "text": "Do this before dealing setup cards. The Crown uses the family board titled The Crown. Give the Crown two families of pieces, 36 family members, and use one color completely before the other. Split the 12 Crown promise cubes so the Crown and the human players have equal shares: 6 and 6 with one player, or 4 each with two. The Crown sits last in order after whoever was Chairman during setup, or before the next player in that order if the Crown is Chairman.",
               "source": {
                 "page": 43,
                 "query": "so they have 36"
@@ -24440,7 +24476,7 @@
             },
             {
               "lead": "Player Button",
-              "text": "Choose an unused component as the Player Button. Give it to the player sitting on the side the current Crown card's finger points to. When the Crown must choose between the two players, it chooses the player holding the button, who then passes it. That player may also give the button away in a deal.",
+              "text": "Choose an unused component as the Player Button. Give it to the player to the right or the left of the Crown, matching the finger on the current Crown AI card. Right is counter-clockwise and left is clockwise. When the Crown must choose between the two players, it chooses the player holding the button, who then passes it. That same player also decides if both of you want the same Crown favor at once, and then passes the button. The holder may give the button away in a deal.",
               "source": {
                 "page": 44,
                 "query": "Designate one component or object as the Player Button"
@@ -24448,11 +24484,19 @@
             },
             {
               "lead": "Difficulty",
-              "text": "Easy: each human player has 5 promise cards that can be traded for promise cubes, as the Crown family board shows. Normal: promise cards are not traded for cubes. Hard: as Normal, and give the Crown 4 more promise cubes. With two players those 4 cubes are 2 from each player. Expert: as Hard, and give the Crown 3 extra setup cards."
+              "text": "Easy: each human player has 5 promise cards that can be traded for promise cubes, as the Crown family board shows. Normal: promise cards are not traded for cubes. Hard: as Normal, and give the Crown 4 more promise cubes. With two players those 4 cubes are 2 from each player. Expert: as Hard, and give the Crown 3 extra setup cards.",
+              "source": {
+                "page": 44,
+                "query": "You can adjust the difficulty of the Crown"
+              }
             },
             {
               "lead": "Crown cards",
-              "text": "Shuffle the Crown cards and reveal one. Set the climate marker on the Crown family board to the icon on that card. The Crown Handbook tells you how the Crown acts in the current phase. Do not read ahead. Promise cubes can be spent to change a Crown decision, and the Crown returns cubes when you do it a favor."
+              "text": "Shuffle the Crown AI cards and reveal the top card. Set the climate marker, an unused opportunity marker, on the Crown family board to the icon on that card. The Crown Handbook says what the Crown does in the current phase. Do not read ahead. Spend promise cubes to change a Crown decision. A favor can move promise cubes from the Crown back to you.",
+              "source": {
+                "page": 44,
+                "query": "Shuffle the AI cards"
+              }
             },
             {
               "lead": "London Season display",
@@ -24621,15 +24665,27 @@
         "bullets": [
           {
             "lead": "Each family",
-            "text": "has a family board, 18 family members, 5 promise cards, a glass opportunity marker, 2 firm cubes, and 4 firm strategy cards."
+            "text": "has a family board, 18 family members, 1 victory point marker, 5 promise cards, a glass opportunity marker, 2 firm cubes, and 4 firm strategy cards.",
+            "source": {
+              "page": 2,
+              "query": "18 family members, 1 victory point marker"
+            }
           },
           {
             "lead": "Firm pieces",
-            "text": "stay in the player area when Deregulation is in play. The cubes and strategy cards are not used in 1710."
+            "text": "The firm cubes and strategy cards stay in the player area only while Deregulation is in play. They are not used in the 1710 scenario.",
+            "source": {
+              "page": 5,
+              "query": "if playing with deregulation, their firm cubes"
+            }
           },
           {
             "lead": "Victory points",
-            "text": "The marker starts at 0. The track has no limit."
+            "text": "The marker starts at 0. The track has no limit.",
+            "source": {
+              "page": 6,
+              "query": "Vote tracks have no limit"
+            }
           }
         ]
       },
@@ -24649,7 +24705,7 @@
             "bullets": [
               {
                 "lead": "Attrition",
-                "text": "Roll one die for each office card you hold. Each fatigue cube on that card adds 1. On a 1 or 2, nothing happens. On a 3 or 4, add a fatigue. On a 5 or more, that family member becomes a pensioner, the office card is flipped to its vacant side, and its fatigue returns to the supply. The Chairman adds 1 to that roll.",
+                "text": "Roll one die for each office card you hold, all at once. Each fatigue cube on that card adds 1. On a 1 or 2, nothing happens. On a 3 or 4, add a fatigue. On a 5 or more, move that family member to the Pensioners box, flip the office card to its vacant side, put it in the Vacant Offices box, and return its fatigue to the supply. Add 1 when the office is the Chairman.",
                 "source": {
                   "page": 11,
                   "query": "5 or more: That officeholder retires"
@@ -24665,7 +24721,7 @@
               },
               {
                 "lead": "Prestige cards",
-                "text": "Whoever spent the most on retirements goes first, and each player who retired at least one pensioner must take or discard one card from the London Season display. Break ties by the most window icons, counting retirements from this turn, then by clockwise order from the Prime Minister. If the display is empty, the remaining players are skipped. Then discard any cards left in it and refill it to three.",
+                "text": "Whoever spent the most on retirements goes first. Each player who retired at least one pensioner must take or discard one card from the London Season display, and may peek at a blackmail card there first. Break ties by the most window icons, counting retirements from this turn, then by clockwise order from the Prime Minister. If the display is empty, the remaining players are skipped. Then discard any cards left in it and refill it to three, even if nobody took a card. Prestige cards go face up and blackmail cards go face down. Return any family members still in the Pensioners box to their supplies.",
                 "source": {
                   "page": 12,
                   "query": "most total cash on retirements"
@@ -24675,11 +24731,11 @@
           },
           {
             "lead": "II. Family",
-            "text": "Starting with the Chairman and going clockwise, each player takes one family action and puts the opportunity marker on it. If the marker was already on that action, you may take it twice. If you have no family member to place, you must take one from a prize and lose that prize's victory points.",
+            "text": "This phase has two steps. Starting with the Chairman and going clockwise, each player takes one family action and puts the opportunity marker on it. If the marker was already on that action, you may take it twice. If you have no family member to place, you must take one from a prize and lose that prize's victory points. After every player has acted, new Company shares may be created.",
             "bullets": [
               {
                 "lead": "Enlist Writer",
-                "text": "Put one family member in a Writers box. If four or more offices are vacant, you may place one extra writer this turn.",
+                "text": "Put one family member in one of the three Writers boxes. If four or more offices are vacant, you may place one extra writer once this turn. If your opportunity marker was already on this action, you may take it twice, which can place two or three writers.",
                 "source": {
                   "page": 13,
                   "query": "Enlist Writer"
@@ -24687,7 +24743,11 @@
               },
               {
                 "lead": "Enlist Officer",
-                "text": "Put one family member in Officers-in-Training."
+                "text": "Put one family member in the Officers-in-Training box.",
+                "source": {
+                  "page": 13,
+                  "query": "in the Officers-in-Training box"
+                }
               },
               {
                 "lead": "Purchase Luxury",
@@ -24715,10 +24775,18 @@
               },
               {
                 "lead": "Seek Share",
-                "text": "Put a family member on an empty space of the Stock Exchange and pay the printed price. If the Company has Debt, move the rightmost family member there into the Court and lower Debt by one, and repeat while Debt remains. A family member in the Court is a Company share. If Debt is gone, slide any leftover members as far right as they can go, keeping their order.",
+                "text": "Put a family member on an empty space of the Stock Exchange, above the Court of Directors, and pay the printed price to the bank.",
                 "source": {
                   "page": 14,
                   "query": "Seek Share"
+                }
+              },
+              {
+                "lead": "New shares",
+                "text": "After every family action, check the Stock Exchange. If the Company has Debt, move the rightmost family member there into the Court and lower Debt by one, and repeat while Debt remains. A family member in the Court is a Company share. If Debt is gone, slide any leftover members as far right as they can go, keeping their order.",
+                "source": {
+                  "page": 14,
+                  "query": "move the rightmost family member on the Stock"
                 }
               }
             ],
@@ -24799,7 +24867,7 @@
           },
           {
             "lead": "VII. Events in India",
-            "text": "Roll the storm die, resolve storms, then resolve an event. If a lost region drives Standing to the leftmost space, finish this phase and then go to final scoring.",
+            "text": "Roll the storm die. That face names which ships can be stormed and how many events to resolve. Resolve the storms, then that many events. If a lost region moves Standing to the leftmost space, finish this phase, then go to final scoring.",
             "source": {
               "page": 28,
               "query": "roll the storm die, resolve any storms"
@@ -24811,11 +24879,19 @@
             "bullets": [
               {
                 "lead": "Votes",
-                "text": "Clockwise from the Prime Minister, players vote. Each £1 from the family treasury is 1 vote, and vote icons on cards count too. You may move the Votes marker up or down. The Prime Minister may call another round, but a round with no votes must be resolved. The Prime Minister cannot vote against the current law or allow their enterprises to be used against it, unless the promise to vote with those enterprises is used."
+                "text": "Clockwise from the Prime Minister, players vote. Each £1 from the family treasury is 1 vote, and vote icons on cards count too. Turn a card when its votes are used. You may move the Votes marker up or down, with no limit. The Prime Minister may call another round, but a round with no votes must be resolved. Once you vote against the law, you cannot vote for it later. The player with the most votes against it takes the Opposition Leader marker. A tie leaves that marker where it is. You may cast votes for another player who is against the law, or who commits to be, if they consent. The Prime Minister cannot vote against the current law or allow their enterprises to be used against it, unless the promise to vote with those enterprises is used.",
+                "source": {
+                  "page": 35,
+                  "query": "is the Opposition Leader"
+                }
               },
               {
                 "lead": "Result",
-                "text": "At −1 support or less, the law fails. The Opposition Leader becomes Prime Minister and moves the chosen policy to either adjacent space. Otherwise the law passes, the Prime Minister takes a passed-law token, and the policy and the law both resolve. If a law makes the Company fail, finish the vote and then score."
+                "text": "At −1 support or less, the law fails. Discard it, and resolve any If Failed text if it is a dilemma. The Opposition Leader returns that marker, takes the Prime Minister wheel, moves the chosen policy to either adjacent space, and resolves that policy. Otherwise the law passes. The Prime Minister takes a passed-law token, then the chosen policy and the law both resolve. If a law makes the Company fail, finish the vote and then score.",
+                "source": {
+                  "page": 36,
+                  "query": "If the law has -1 support or less"
+                }
               }
             ],
             "source": {
@@ -24837,10 +24913,18 @@
         "bullets": [
           {
             "lead": "Deals",
-            "text": "Most things can be negotiated. Players may transfer money to one another at any time. Family cash still cannot be moved into or out of a firm treasury.",
+            "text": "You may transfer enterprises, facedown blackmail, family-treasury cash, shares, and promise cards. You may not transfer officeholders, writers, officers, pieces on prizes, spouses, passed laws, played blackmail, the Prime Minister dial, trophies, or the Chairman. A transferred thing cannot activate twice. An immediate transfer is binding. Any other deal is not.",
             "source": {
-              "page": 6,
-              "query": "cash in your family treasury"
+              "page": 8,
+              "query": "You cannot transfer officeholders"
+            }
+          },
+          {
+            "lead": "Player aids",
+            "text": "The box includes this rulebook, the Crown Handbook for one and two players, two large player aids, and two small player aid cards.",
+            "source": {
+              "page": 2,
+              "query": "two large player aids and two small"
             }
           },
           {
@@ -24861,7 +24945,11 @@
           },
           {
             "lead": "Presidencies",
-            "text": "India is split into three Presidencies, each named for its home region. Each has an army, writers, ships, and, later, offices under it."
+            "text": "India is split into three Presidencies, each named for its home region. Each has an army, writers, ships, and, later, offices under it. Those pieces sit in the marked boxes or in the nearby sea zone.",
+            "source": {
+              "page": 6,
+              "query": "administrative zones called"
+            }
           },
           {
             "lead": "Orders",
@@ -24873,7 +24961,11 @@
           },
           {
             "lead": "Window icons",
-            "text": "Many prizes and enterprises have them. A window-tax policy charges the icons on prizes and enterprises. The end of the game also uses the count as a tie-break."
+            "text": "Many prizes and enterprises have a window tax icon. A window-tax policy charges the icons on family members on prizes and on enterprises. If you cannot pay, that enterprise or the family member on the prize returns to the supply. The end of the game also uses the count as a tie-break.",
+            "source": {
+              "page": 34,
+              "query": "pay cash equal to the number of window icons"
+            }
           }
         ]
       },
@@ -24897,7 +24989,11 @@
           },
           {
             "lead": "After the end",
-            "text": "Players may not negotiate, cash in promises, or play blackmail unless a card says they still can."
+            "text": "Players may not negotiate, cash in promises, or play blackmail unless a card says they still can.",
+            "source": {
+              "page": 9,
+              "query": "players may not negotiate, cash in promises"
+            }
           },
           {
             "lead": "Long 1710",
@@ -24913,7 +25009,7 @@
         "bullets": [
           {
             "lead": "Power",
-            "text": "Score enterprises and Company shares from the Power track. The bottom two spaces are worth 0. Add 1 for each passed-law token, 2 for holding the Prime Minister, any power printed on cards, and 1 for each trophy. Blackmail counts face up or face down. The most power and the second most score the values on the board for this final turn. A tie for most scores only the lower value, and second place scores nothing. A tie for second also scores nothing.",
+            "text": "Score enterprises and Company shares from the Power track. The bottom two spaces are worth 0. Add 1 for each passed-law token and 2 for holding the Prime Minister. Some blackmail cards and one spouse are worth power. Blackmail counts face up or face down. Each trophy is 1. The most power and the second most score the values on the board for this final turn. A tie for most scores only the lower value, and second place scores nothing. A tie for second also scores nothing.",
             "source": {
               "page": 9,
               "query": "1. Power Award"
@@ -24937,7 +25033,7 @@
           },
           {
             "lead": "Firms",
-            "text": "Only when Deregulation is in play. At the start of final scoring, each firm share and each family member in Debtor's Prison scores or loses that firm's value. Round fractions down. Shareholders may then make one special retirement before the rest of scoring, and they do not take a London Season card for it.",
+            "text": "Only when Deregulation is in play. At the start of final scoring, each firm share and each family member in Debtor's Prison scores or loses that firm's value, whether the Company survived or failed. Round fractions down. Shareholders may then make one special retirement before the rest of scoring, and they do not take a London Season card for it.",
             "source": {
               "page": 37,
               "query": "Firms in Final Scoring"
@@ -24956,39 +25052,75 @@
       "rulesGlossary": [
         {
           "term": "Standing",
-          "desc": "The Company's health on its track. The leftmost space is failure, and the game ends."
+          "desc": "The Company's health on its track. The leftmost space is failure, and the game ends.",
+          "source": {
+            "page": 9,
+            "query": "Company Standing marker ever moves to the leftmost space"
+          }
         },
         {
           "term": "Company share",
-          "desc": "A family member in the Court of Directors. It scores the Court's value if the Company survives, and costs that value if the Company fails. The Chairman counts as a share when dividends are paid."
+          "desc": "A family member in the Court of Directors. It scores the Court's value if the Company survives, and costs that value if the Company fails. The Chairman counts as a share when dividends are paid.",
+          "source": {
+            "page": 14,
+            "query": "is called a Company share"
+          }
         },
         {
           "term": "Pensioner",
-          "desc": "A family member moved to the Pensioners box after leaving an office. During the London Season that piece may be retired onto a prize."
+          "desc": "A family member moved to the Pensioners box after leaving an office. During the London Season that piece may be retired onto a prize.",
+          "source": {
+            "page": 11,
+            "query": "Pensioners box on the board"
+          }
         },
         {
           "term": "Fatigue",
-          "desc": "A cube on an office card. Each cube adds 1 to that office's attrition roll. A roll of 3 or 4 adds another cube. Retirement returns the cubes to the supply."
+          "desc": "A cube on an office card. Each cube adds 1 to that office's attrition roll. A roll of 3 or 4 adds another cube. A roll of 5 or more returns the cubes to the supply.",
+          "source": {
+            "page": 11,
+            "query": "Each fatigue on a card adds"
+          }
         },
         {
           "term": "Presidency",
-          "desc": "One of the three regions that administer India. Each Presidency has its own army, writers, and ships, stored in its boxes and in the nearby sea zone."
+          "desc": "One of three administrative zones, each named for its home region. Each Presidency has its own army, writers, and ships, stored in its boxes and in the nearby sea zone.",
+          "source": {
+            "page": 6,
+            "query": "administrative zones called"
+          }
         },
         {
           "term": "Order",
-          "desc": "A numbered circle in a region. The number is the order's value. Home ports have a heavy outline. A closed order is covered and is not open trade."
+          "desc": "A numbered circle in a region. The number is the order's value. Home ports have a heavy outline. A closed order is covered and is not open trade.",
+          "source": {
+            "page": 6,
+            "query": "connected circles called orders"
+          }
         },
         {
           "term": "Window icon",
-          "desc": "A mark on many prizes and enterprises. Window tax uses the count, and so does the victory-point tie-break."
+          "desc": "A mark on many prizes and enterprises. Window tax uses the count, and so does the victory-point tie-break.",
+          "source": {
+            "page": 34,
+            "query": "pay cash equal to the number of window icons"
+          }
         },
         {
           "term": "Deregulation",
-          "desc": "Private firms. They are in play for the whole 1813 scenario. In 1758 and Long 1710 they begin only after the Deregulation vote passes. They are not part of 1710."
+          "desc": "Private firms. They are in play for the whole 1813 scenario. In 1758 and Long 1710 they begin only after the Deregulation vote passes. They are not part of 1710.",
+          "source": {
+            "page": 37,
+            "query": "These rules are in play during the 1813 scenario"
+          }
         },
         {
           "term": "The Crown",
-          "desc": "The extra family in the one-player and two-player game. It has its own board, 36 family members, and a share of the 12 promise cubes. The Crown Handbook says what it does each phase."
+          "desc": "The extra family in the one-player and two-player game. It has its own board, 36 family members, and a share of the 12 promise cubes. The Crown Handbook says what it does each phase.",
+          "source": {
+            "page": 43,
+            "query": "you will be playing against the Crown"
+          }
         }
       ],
       "teachingScript": {
@@ -25008,7 +25140,7 @@
             },
             {
               "lead": "Retiring",
-              "text": "Roll one die per office. Fatigue adds 1, and the Chairman adds 1. A 1 or 2 does nothing. A 3 or 4 adds fatigue. A 5 or more sends that person to the pensioners and vacates the office. From the Chairman, clockwise, you may pay a prize's cost and score its points. Leave that money beside you until the phase ends. Whoever spent the most then takes or discards a London Season card."
+              "text": "Roll one die per office. Fatigue adds 1, and the Chairman's office adds 1. A 1 or 2 does nothing. A 3 or 4 adds fatigue. A 5 or more sends that person to the pensioners and vacates the office. From the Chairman, clockwise, you may pay a prize's cost and score its points. Leave that money beside you until the phase ends. The player who spent the most goes first. Each player who retired at least one pensioner must take or discard a London Season card."
             },
             {
               "lead": "Your action",
@@ -25020,11 +25152,11 @@
             },
             {
               "lead": "Parliament",
-              "text": "The Prime Minister draws up to three laws and must keep a dilemma. We vote with family pounds and with vote icons. The marker can go up or down. At −1 or worse the law fails and the Opposition Leader becomes Prime Minister. Otherwise it passes."
+              "text": "The Prime Minister draws up to three laws and must keep a dilemma. We vote with family pounds and with vote icons. The marker can go up or down. At −1 or worse the law fails. The Opposition Leader becomes Prime Minister, moves the chosen policy to either neighboring space, and resolves that policy. Otherwise it passes."
             },
             {
               "lead": "How you win",
-              "text": "Most victory points. Power on the last turn pays the table printed on the board. Shares pay the Court if the Company survived and cost that much if it failed. Workshops score 1 only when it fails. Survivors get a last retirement and no prestige cards. A failure draws one blame card. A tie is the most window icons, then clockwise from the Prime Minister."
+              "text": "Most victory points. Power on the last turn pays the table printed on the board. Shares pay the Court if the Company survived and cost that much if it failed. Workshops score 1 only when it fails. Survivors get a last retirement and no prestige cards. A failure draws one Company failure card. A tie is the most window icons, then clockwise from the Prime Minister."
             },
             {
               "lead": "New players miss",
@@ -25044,7 +25176,7 @@
           "bullets": [
             {
               "lead": "The Crown",
-              "text": "You both face the Crown. Set up as three families, with the Crown as one of them, and give the Crown 36 family members. Split the 12 promise cubes 4 each. From the 12 setup cards, draw 3, keep 2, and give 1 to the Crown, twice. The Player Button starts with the player the Crown card points to and passes when the Crown chooses between you. Read the Crown Handbook one phase at a time."
+              "text": "You both face the Crown. Set up as three families, with the Crown as one of them, and give the Crown 36 family members. Split the 12 promise cubes 4 each. From the 12 setup cards, draw 3, keep 2, and give 1 to the Crown, twice. The Player Button starts with the player the Crown AI card's finger points to, on the Crown's right or left, and passes when the Crown chooses between you. Read the Crown Handbook one phase at a time."
             }
           ]
         }
@@ -135827,7 +135959,7 @@
         } else {
           body = (label ? "<p>" + label + "</p>" : "") + renderRuleContent(desc);
         }
-        return '<div class="expansion-text-block glossary-item">' + body + "</div>";
+        return '<div class="expansion-text-block glossary-item">' + body + renderRulebookRef(item) + "</div>";
       }).join("");
 
       rulesGlossaryHtml =
