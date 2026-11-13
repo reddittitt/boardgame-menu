@@ -145,6 +145,7 @@ def normalize_line(text: str) -> str:
         .replace("\u200b", "")
         .replace("\u2011", "-")
     )
+    text = re.sub(r"[\u0000-\u0008\u000b\u000c\u000e-\u001f]", "", text)
     text = re.sub(r"\s+", " ", text).strip()
     text = re.sub(r"^[\u2022\u25cf\u25aa\u25e6]+\s*", "", text)
     # Display titles are often tracked out one letter at a time: "G O A L".
@@ -364,7 +365,7 @@ def materialize(source: str | Path, work: Path) -> Path:
     return dest
 
 
-def build_slug(slug: str, enrich: dict) -> dict:
+def build_slug(slug: str, enrich: dict, text_only: bool = False) -> dict:
     game = enrich.get(slug)
     if not isinstance(game, dict):
         die(f"{slug} is not in the catalog")
@@ -375,7 +376,7 @@ def build_slug(slug: str, enrich: dict) -> dict:
         pdf = materialize(source, work)
         count = page_count(pdf)
         chunks = pdftotext_pages(pdf, count)
-        ocr_needed = [index + 1 for index, chunk in enumerate(chunks) if letter_count(chunk) < MIN_PAGE_LETTERS]
+        ocr_needed = [] if text_only else [index + 1 for index, chunk in enumerate(chunks) if letter_count(chunk) < MIN_PAGE_LETTERS]
         if ocr_needed:
             print(f"  image-only pages: {ocr_needed}", file=sys.stderr)
             ocr = ocr_pages(pdf, ocr_needed, work)
@@ -425,22 +426,23 @@ def smoke(slug: str, payload: dict) -> None:
         print(f"  warning: {slug} has no line containing {query!r}", file=sys.stderr)
 
 
-def parse_args(argv: list[str]) -> list[str]:
-    slugs = argv[1:]
+def parse_args(argv: list[str]) -> tuple[bool, list[str]]:
+    text_only = "--text-only" in argv[1:]
+    slugs = [arg for arg in argv[1:] if arg != "--text-only"]
     if not slugs:
-        return list(DEFAULT_SLUGS)
+        return text_only, list(DEFAULT_SLUGS)
     bad = [slug for slug in slugs if not re.fullmatch(r"[a-z0-9-]+", slug)]
     if bad:
         die("slugs must be lowercase letters, numbers, and hyphens: " + ", ".join(bad))
-    return slugs
+    return text_only, slugs
 
 
 def main(argv: list[str]) -> None:
     require_tools()
-    slugs = parse_args(argv)
+    text_only, slugs = parse_args(argv)
     enrich = load_enrich()
     for slug in slugs:
-        payload = build_slug(slug, enrich)
+        payload = build_slug(slug, enrich, text_only=text_only)
         lines = sum(len(page["lines"]) for page in payload["pages"])
         destination = INDEX_DIR / f"{slug}.json"
         write_json(destination, payload)
