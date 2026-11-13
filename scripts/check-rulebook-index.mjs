@@ -77,10 +77,31 @@ async function pdfBytes(slug, game) {
   return fs.readFileSync(cache);
 }
 
+function isPrintArtifact(text) {
+  if (/[\u0000-\u001f]/.test(text)) return true;
+  if (/\.(?:indd|pdf|ai|psd)\b/i.test(text)) return true;
+  if (/\b(?:lpi|cmyk|icc|rgb|pms)\b/i.test(text)) return true;
+  if (/color profile|output intent|prepress|process color|notes to printer/i.test(text)) return true;
+  if (/©|copyright|all rights reserved|may be reproduced|may not be reproduced|registered trademark/i.test(text)) return true;
+  if (/approved for ages|formula guide|color swatch/i.test(text)) return true;
+  if (/\.{3,}/.test(text)) return true;
+  if (/reprint\s+\d{4}|rules?\s+en\b/i.test(text)) return true;
+  if (/[A-Za-z0-9]+_[A-Za-z0-9].*\d/.test(text)) return true;
+  const tokens = text.split(" ").filter(Boolean);
+  const letters = tokens.filter((token) => /^[A-Za-z]+$/.test(token));
+  const singles = letters.filter((token) => token.length === 1).length;
+  if (letters.length >= 4 && singles / letters.length >= 0.45) return true;
+  if (/(?:[A-Za-z] ){4,}[A-Za-z]/.test(text)) return true;
+  return false;
+}
+
 function candidateLines(lines) {
   const out = [];
   for (const item of lines || []) {
-    const text = String(item).replace(/[\u0000-\u001f]/g, "").replace(/\s+/g, " ").trim();
+    const raw = String(item);
+    if (isPrintArtifact(raw)) continue;
+    const text = raw.replace(/[\u0000-\u001f]/g, "").replace(/\s+/g, " ").trim();
+    if (isPrintArtifact(text)) continue;
     if (text.length < 24 || text.length > 140) continue;
     if (/[^\u0000-\u007e\u00a0-\u024f]/.test(text)) continue;
     const words = text.split(" ").filter((word) => /^[A-Za-z]{3,}/.test(word));
