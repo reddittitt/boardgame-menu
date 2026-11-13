@@ -155,18 +155,19 @@
     align-items:center;
     justify-content:center;
   }
-  header a.home {
-    color:#ffffff;
-    text-decoration:none;
-    border:1px solid rgba(255,255,255,0.35);
-    border-radius:9px;
-    padding:8px 12px;
-    min-height:44px;
-    box-sizing:border-box;
+  .all-games-bar { margin:0 0 4px; }
+  main:has(a.back-link[href="#/"]) .all-games-bar { display:none; }
+  .all-games-bar a.home {
     display:inline-flex;
     align-items:center;
-    justify-content:center;
+    min-height:44px;
+    padding:6px 2px;
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:700;
+    font-size:0.92rem;
   }
+  .all-games-bar a.home:hover { text-decoration:underline; }
 
   .header-home-link {
     display:flex;
@@ -879,7 +880,7 @@
   .btn:focus-visible,
   .btnlink:focus-visible,
   header .toggle:focus-visible,
-  header .home:focus-visible,
+  .all-games-bar a.home:focus-visible,
   #search-clear:focus-visible {
     outline:3px solid var(--brand);
     outline-offset:2px;
@@ -1828,8 +1829,7 @@
   @media (max-width:520px) {
     header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
     header .wrap { gap:6px; }
-    header button.toggle,
-    header a.home {
+    header button.toggle {
       padding:6px 8px;
       font-size:0.92rem;
     }
@@ -2456,11 +2456,11 @@
     <div class="spacer"></div>
 
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
-    <a class="home" href="#/">All Games</a>
   </div>
 </header>
 
 <main>
+  <p class="all-games-bar"><a class="home" href="#/">All Games</a></p>
   <div id="app"><noscript>JavaScript required.</noscript></div>
 </main>
 
