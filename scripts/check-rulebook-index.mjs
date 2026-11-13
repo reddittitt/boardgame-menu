@@ -59,6 +59,14 @@ function viewerSource(slug, game) {
   return { kind: "file", value: path.join(root, "rulebooks", fileSlug + ".pdf") };
 }
 
+// A Dropbox share with dl=0 returns an HTML preview, not the PDF. The same
+// link with dl=1 is the file the viewer is meant to open.
+function dropboxPdfUrl(url) {
+  const value = String(url || "");
+  if (!/dropbox\.com/i.test(value)) return value;
+  return value.replace(/([?&])dl=0\b/gi, "$1dl=1");
+}
+
 const cacheDir = "/tmp/rulebook-index-check";
 fs.mkdirSync(cacheDir, { recursive: true });
 
@@ -70,7 +78,7 @@ async function pdfBytes(slug, game) {
   }
   const cache = path.join(cacheDir, slug + ".pdf");
   if (!fs.existsSync(cache) || fs.statSync(cache).size < 1000) {
-    const res = await fetch(source.value, { headers: { "User-Agent": "bgquick-rulebook-index/1.0", Accept: "application/pdf,*/*" } });
+    const res = await fetch(dropboxPdfUrl(source.value), { headers: { "User-Agent": "bgquick-rulebook-index/1.0", Accept: "application/pdf,*/*" } });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const buf = Buffer.from(await res.arrayBuffer());
     if (!buf.subarray(0, 5).equals(Buffer.from("%PDF-"))) throw new Error("response was not a PDF");
