@@ -273,6 +273,37 @@
     color:#ffffff;
     border-color:transparent;
   }
+  .catalog-filters {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:8px 0 10px;
+    min-width:0;
+  }
+  .catalog-filter {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    flex:1 1 9rem;
+    min-width:0;
+    font-size:0.75rem;
+    font-weight:700;
+  }
+  .catalog-filter[hidden] { display:none; }
+  .catalog-filter select {
+    width:100%;
+    min-width:0;
+    min-height:44px;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:max(1rem, 16px);
+    font-weight:600;
+    box-sizing:border-box;
+  }
   .empty-note {
     grid-column:1 / -1;
     margin:8px 0;
@@ -116697,6 +116728,27 @@
         '<button type="button" data-collection="group" aria-pressed="' + (collectionView === "group" ? "true" : "false") + '">Group</button>' +
         '<button type="button" data-collection="mine" aria-pressed="' + (collectionView === "mine" ? "true" : "false") + '">My games</button>' +
       "</div>" +
+      '<div class="catalog-filters">' +
+        '<label class="catalog-filter" data-facet="players">Players' +
+          '<select id="filter-players" aria-label="Player count"><option value="">Any</option></select>' +
+        "</label>" +
+        '<label class="catalog-filter" data-facet="time">Play time' +
+          '<select id="filter-time" aria-label="Play time">' +
+            '<option value="">Any</option>' +
+            '<option value="30">30 minutes or less</option>' +
+            '<option value="60">60 minutes or less</option>' +
+            '<option value="120">2 hours or less</option>' +
+          "</select>" +
+        "</label>" +
+        '<label class="catalog-filter" data-facet="weight">Weight' +
+          '<select id="filter-weight" aria-label="Weight">' +
+            '<option value="">Any</option>' +
+            '<option value="light">Light, under 2</option>' +
+            '<option value="medium">Medium, 2 to 3</option>' +
+            '<option value="heavy">Heavy, over 3</option>' +
+          "</select>" +
+        "</label>" +
+      "</div>" +
       '<p id="search-count" class="search-count"></p>' +
       '<section id="game-grid" class="grid"></section>';
 
@@ -116704,15 +116756,90 @@
     var search = document.getElementById("search");
     var clearBtn = document.getElementById("search-clear");
     var countEl = document.getElementById("search-count");
+    var playerSelect = document.getElementById("filter-players");
+    var timeSelect = document.getElementById("filter-time");
+    var weightSelect = document.getElementById("filter-weight");
     var gridToken = 0;
+
+    function numberRange(value) {
+      var nums = String(value || "").match(/\d+(?:\.\d+)?/g);
+      if (!nums) return null;
+      var values = nums.map(Number).filter(function (n) { return isFinite(n); });
+      if (!values.length) return null;
+      return { min: Math.min.apply(null, values), max: Math.max.apply(null, values) };
+    }
+    function gameWeight(game) {
+      if (game.weight == null || game.weight === "") return null;
+      var n = parseFloat(game.weight);
+      return isFinite(n) ? n : null;
+    }
+    function facetPicks() {
+      return {
+        players: playerSelect ? parseInt(playerSelect.value, 10) : NaN,
+        time: timeSelect ? parseInt(timeSelect.value, 10) : NaN,
+        weight: weightSelect ? weightSelect.value : ""
+      };
+    }
+    function matchesFacets(game, picks) {
+      if (picks.players) {
+        var players = numberRange(game.players);
+        if (!players || picks.players < players.min || picks.players > players.max) return false;
+      }
+      if (picks.time) {
+        var time = numberRange(game.time);
+        if (!time || time.max > picks.time) return false;
+      }
+      if (picks.weight) {
+        var weight = gameWeight(game);
+        if (weight == null) return false;
+        if (picks.weight === "light" && !(weight < 2)) return false;
+        if (picks.weight === "medium" && !(weight >= 2 && weight <= 3)) return false;
+        if (picks.weight === "heavy" && !(weight > 3)) return false;
+      }
+      return true;
+    }
+    function refreshFacetVisibility(scoped) {
+      var hasPlayers = false;
+      var hasTime = false;
+      var hasWeight = false;
+      var counts = {};
+      scoped.forEach(function (game) {
+        var players = numberRange(game.players);
+        if (players) {
+          hasPlayers = true;
+          var hi = Math.min(players.max, 12);
+          for (var n = Math.max(1, players.min); n <= hi; n++) counts[n] = true;
+        }
+        if (numberRange(game.time)) hasTime = true;
+        if (gameWeight(game) != null) hasWeight = true;
+      });
+      var playerFacet = playerSelect && playerSelect.closest(".catalog-filter");
+      var timeFacet = timeSelect && timeSelect.closest(".catalog-filter");
+      var weightFacet = weightSelect && weightSelect.closest(".catalog-filter");
+      if (playerFacet) playerFacet.hidden = !hasPlayers;
+      if (timeFacet) timeFacet.hidden = !hasTime;
+      if (weightFacet) weightFacet.hidden = !hasWeight;
+      if (playerSelect) {
+        var selected = playerSelect.value;
+        var options = '<option value="">Any</option>';
+        Object.keys(counts).map(Number).sort(function (a, b) { return a - b; }).forEach(function (n) {
+          options += '<option value="' + n + '">' + n + "</option>";
+        });
+        playerSelect.innerHTML = options;
+        if (counts[selected]) playerSelect.value = selected;
+      }
+    }
 
     function updateGrid(filter) {
       var token = ++gridToken;
       filter = (filter || "").toLowerCase();
+      var picks = facetPicks();
       var scoped = Object.keys(DATA)
         .map(function(k) { return DATA[k]; })
         .filter(inCollectionView);
+      refreshFacetVisibility(scoped);
       var games = scoped.filter(function(g) {
+        if (!matchesFacets(g, picks)) return false;
         if (!filter) return true;
         if (g.name.toLowerCase().indexOf(filter) !== -1) return true;
         var extra = g.aliases;
@@ -116728,15 +116855,16 @@
         : collectionView === "mine"
           ? " of my games"
           : " games";
+      var narrowed = !!(filter || picks.players || picks.time || picks.weight);
       if (countEl) {
-        countEl.textContent = filter
+        countEl.textContent = narrowed
           ? (games.length + " of " + scoped.length + (collectionView === "mine" ? "" : suffix))
           : (scoped.length + suffix);
       }
       if (clearBtn) clearBtn.hidden = !filter;
       grid.innerHTML = "";
       if (!games.length) {
-        grid.innerHTML = '<p class="empty-note">No games match that search.</p>';
+        grid.innerHTML = '<p class="empty-note">No games match.</p>';
         return;
       }
       var i = 0;
@@ -116775,6 +116903,10 @@
         });
         updateGrid(search.value);
       });
+    });
+    [playerSelect, timeSelect, weightSelect].forEach(function (select) {
+      if (!select) return;
+      select.addEventListener("change", function () { updateGrid(search.value); });
     });
   }
 
