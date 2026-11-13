@@ -1784,6 +1784,22 @@
     font-size:0.95rem;
     font-family:inherit;
   }
+  .chapter-note {
+    margin:0.75rem 0 0.15rem;
+    border-top:1px solid var(--border);
+    padding-top:0.35rem;
+  }
+  .chapter-note > summary {
+    cursor:pointer;
+    font-weight:700;
+    font-size:0.95rem;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+  }
+  .chapter-note-body {
+    padding:0 0 0.15rem;
+  }
   .chapter-slot[hidden] { display:none; }
   .rule-chapter[hidden] { display:none; }
   .rule-empty {
@@ -9223,7 +9239,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Corners only",
+          "text": "Each new piece must touch at least one other piece of the same color, but only at the corners.",
+          "source": {
+            "page": 2,
+            "query": "but only at the corners"
+          }
+        },
+        {
+          "lead": "Never along a side",
+          "text": "Pieces of the same color can never touch along a side.",
+          "source": {
+            "page": 2,
+            "query": "can never touch along a side"
+          }
+        },
+        {
+          "lead": "Pass when stuck",
+          "text": "Whenever a player is unable to place a piece on the board, that player must pass their turn.",
+          "source": {
+            "page": 2,
+            "query": "that player must pass their turn"
+          }
+        },
+        {
+          "lead": "Pieces cannot move",
+          "text": "Once a piece has been placed on the board it cannot be moved.",
+          "source": {
+            "page": 2,
+            "query": "it cannot be moved"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Cover a corner",
+          "text": "The first piece played by each player must cover a corner square.",
+          "source": {
+            "page": 2,
+            "query": "must cover a corner square"
+          }
+        },
+        {
+          "lead": "Take a color",
+          "text": "Each player chooses a color and takes that set of 21 pieces.",
+          "source": {
+            "page": 1,
+            "query": "takes that set of 21 pieces"
+          }
+        },
+        {
+          "lead": "Choose who starts",
+          "text": "Choose a player to go first, and play proceeds clockwise around the board.",
+          "source": {
+            "page": 1,
+            "query": "Choose a player to go first"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -11889,7 +11964,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Pay the gear cost",
+          "text": "Some Gear have a Coin cost that must be paid in order to be played.",
+          "source": {
+            "page": 5,
+            "query": "must be paid in order to be played"
+          }
+        },
+        {
+          "lead": "Do not revert sets",
+          "text": "Do not revert effects previously gained from other Set Effects.",
+          "source": {
+            "page": 7,
+            "query": "Do not revert effects previously gained"
+          }
+        },
+        {
+          "lead": "Return what you can",
+          "text": "If they cannot return the full amount, then they must discard as many Coins as they have.",
+          "source": {
+            "page": 7,
+            "query": "must discard as many Coins as they have"
+          }
+        },
+        {
+          "lead": "Unique stolen goods",
+          "text": "A set cannot contain 2 of the same Stolen Good.",
+          "source": {
+            "page": 8,
+            "query": "a set cannot contain 2 of the same Stolen Good"
+          }
+        },
+        {
+          "lead": "One set per tile",
+          "text": "A Stolen Good tile cannot be used in more than 1 Set.",
+          "source": {
+            "page": 8,
+            "query": "cannot be used in more than 1 Set"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Start in Paris",
+          "text": "For your first game, we recommend playing in lovely Paris.",
+          "source": {
+            "page": 3,
+            "query": "we recommend playing in lovely Paris"
+          }
+        },
+        {
+          "lead": "Sit across",
+          "text": "Sit across the table from the other Mastermind.",
+          "source": {
+            "page": 3,
+            "query": "Sit across the table from the other Mastermind"
+          }
+        },
+        {
+          "lead": "Tracker on intro",
+          "text": "Place the Round Tracker on the Intro slot of the Round Track.",
+          "source": {
+            "page": 3,
+            "query": "Round Tracker on the Intro slot"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -14689,7 +14831,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No half-dice",
+          "text": "You cannot spend half-dice, so any additional points on the dice spent over the Fish’s difficulty are lost.",
+          "source": {
+            "page": 6,
+            "query": "You cannot spend half-dice"
+          }
+        },
+        {
+          "lead": "One fish per action",
+          "text": "With each fishing action you may only try to catch one Fish, no matter the outcome, then your turn ends.",
+          "source": {
+            "page": 6,
+            "query": "only try to catch one Fish"
+          }
+        },
+        {
+          "lead": "Lifeboat stays down",
+          "text": "Once the lifeboat is face-down, it can never be flipped back over.",
+          "source": {
+            "page": 6,
+            "query": "can never be flipped back over"
+          }
+        },
+        {
+          "lead": "No late abandon",
+          "text": "You cannot abandon ship once you have passed.",
+          "source": {
+            "page": 6,
+            "query": "You cannot abandon ship once you have passed"
+          }
+        },
+        {
+          "lead": "Need a fresh die",
+          "text": "You must have at least one Fresh die in order to take the fishing action, regardless of your items and abilities.",
+          "source": {
+            "page": 6,
+            "query": "at least one Fresh die"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Take an angler board",
+          "text": "Each player takes an Angler Board and places it in front of them, either side up.",
+          "source": {
+            "page": 4,
+            "query": "takes an Angler Board"
+          }
+        },
+        {
+          "lead": "Most regrettable day",
+          "text": "Give the first player marker to the person who has had the most regrettable day.",
+          "source": {
+            "page": 4,
+            "query": "most regrettable day"
+          }
+        },
+        {
+          "lead": "First day at sea",
+          "text": "The first Day is always spent at Sea.",
+          "source": {
+            "page": 4,
+            "query": "The first Day is always spent at Sea"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -20518,7 +20727,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No camp in Nottingham",
+          "text": "Nottingham can otherwise contain any number of Henchmen and Merry Men, but it may never contain a Camp.",
+          "source": {
+            "page": 3,
+            "query": "it may never contain a Camp"
+          }
+        },
+        {
+          "lead": "Carriages follow roads",
+          "text": "Carriages may only be moved to the adjacent space that lies closer to Nottingham along the road, or into Nottingham once in either of the adjacent Forest spaces.",
+          "source": {
+            "page": 3,
+            "query": "Carriages may only be moved"
+          }
+        },
+        {
+          "lead": "One space each",
+          "text": "Each Carriage may only move at most one space.",
+          "source": {
+            "page": 6,
+            "query": "may only move at most one space"
+          }
+        },
+        {
+          "lead": "Sneak moves once",
+          "text": "Each Merry Man piece may only move once during a Sneak Plot.",
+          "source": {
+            "page": 7,
+            "query": "Each Merry Man piece may only move once"
+          }
+        },
+        {
+          "lead": "Forests never revolt",
+          "text": "The two irregular green-shaded Forest spaces adjacent to Nottingham are never Submissive or Revolting.",
+          "source": {
+            "page": 3,
+            "query": "never Submissive or Revolting"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Use the learn booklet",
+          "text": "If this is your first time playing, you might want to start with the separate Learn to Play booklet, which will guide you through setup and teach you the game.",
+          "source": {
+            "page": 2,
+            "query": "start with the separate Learn to Play booklet"
+          }
+        },
+        {
+          "lead": "Robin Hood is eligible",
+          "text": "Robin Hood will always be First Eligible at the start of each Ballad.",
+          "source": {
+            "page": 5,
+            "query": "First Eligible at the start of each Ballad"
+          }
+        },
+        {
+          "lead": "Reveal the first event",
+          "text": "Draw and reveal the top card of the Event deck, placing it face up next to the deck to form a played Events pile.",
+          "source": {
+            "page": 5,
+            "query": "Draw and reveal the top card of the Event deck"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -25496,7 +25772,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Towers only off suit",
+          "text": "You may play a Tower card into a trick only if you cannot follow suit.",
+          "source": {
+            "page": 7,
+            "query": "play a Tower card into a trick only if you cannot"
+          }
+        },
+        {
+          "lead": "Orcs only off suit",
+          "text": "You may play an Orcs card into a trick only if you cannot follow suit.",
+          "source": {
+            "page": 8,
+            "query": "play an Orcs card into a trick only if you cannot"
+          }
+        },
+        {
+          "lead": "Orcs never win tricks",
+          "text": "An Orcs card can never win a trick.",
+          "source": {
+            "page": 8,
+            "query": "An Orcs card can never win a trick."
+          }
+        },
+        {
+          "lead": "Discuss only public info",
+          "text": "Players can only discuss information visible to all players during setup and gameplay.",
+          "source": {
+            "page": 9,
+            "query": "Players can only discuss information visible to all players"
+          }
+        },
+        {
+          "lead": "Cannot discuss your hand",
+          "text": "Players cannot discuss or show the cards in their hands or any other player’s hands.",
+          "source": {
+            "page": 9,
+            "query": "Players cannot discuss"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Sequential chapters recommended",
+          "text": "They can be played in any order, though playing sequentially is recommended.",
+          "source": {
+            "page": 1,
+            "query": "playing sequentially is recommended"
+          }
+        },
+        {
+          "lead": "Start with chapter 19",
+          "text": "Play Chapter 19 Now!",
+          "source": {
+            "page": 10,
+            "query": "Play Chapter 19 Now!"
+          }
+        },
+        {
+          "lead": "Read the full rules",
+          "text": "If you’re new to this style of game, please read the full rules first.",
+          "source": {
+            "page": 32,
+            "query": "If you’re new to this style of game"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -25928,7 +26271,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Never behind zero",
+          "text": "When losing PP, you can never fall back behind the 0 space.",
+          "source": {
+            "page": 8,
+            "query": "never fall back behind the 0 space"
+          }
+        },
+        {
+          "lead": "Three uses per option",
+          "text": "You can only choose each option 3 times, so you will play 9 turns per Era, for a total of 27 turns in the game.",
+          "source": {
+            "page": 9,
+            "query": "you can only choose each option 3 times"
+          }
+        },
+        {
+          "lead": "Choose only one",
+          "text": "If two actions are separated, you must choose only one of them.",
+          "source": {
+            "page": 9,
+            "query": "you must choose only one of them"
+          }
+        },
+        {
+          "lead": "Pay the tablet cost",
+          "text": "You cannot choose a Tablet which has a cost you cannot pay.",
+          "source": {
+            "page": 10,
+            "query": "a cost you cannot pay"
+          }
+        },
+        {
+          "lead": "Craft board is full",
+          "text": "If you fill your Board with Crafts, you cannot add more to it.",
+          "source": {
+            "page": 13,
+            "query": "with Crafts, you cannot add more"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Place the main board",
+          "text": "Place the Main Board on the table with the side corresponding to the number of players.",
+          "source": {
+            "page": 5,
+            "query": "Place the Main Board on the table"
+          }
+        },
+        {
+          "lead": "Choose the starter",
+          "text": "Randomly decide who will be the starting player, and this player places their Water Lily on position 1 of the Turn Order Track.",
+          "source": {
+            "page": 6,
+            "query": "Water Lily on position 1"
+          }
+        },
+        {
+          "lead": "Deal opening tablets",
+          "text": "Randomly deal each player one type 1, 2, and 3 Tablet.",
+          "source": {
+            "page": 6,
+            "query": "one type 1, 2, and 3 Tablet"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -26087,7 +26497,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Do not refill",
+          "text": "If a side already has 4 or more cards, do not add any more.",
+          "source": {
+            "page": 2,
+            "query": "If a side already has 4 or more cards"
+          }
+        },
+        {
+          "lead": "Pay a commission",
+          "text": "If you have more than 100 but less than 200 of a currency, you must pay a commission.",
+          "source": {
+            "page": 2,
+            "query": "you must pay a commission"
+          }
+        },
+        {
+          "lead": "Ignore set bonuses",
+          "text": "Do not count set bonuses when determining the highest bid or your position in a currency.",
+          "source": {
+            "page": 2,
+            "query": "Do not count set bonuses"
+          }
+        },
+        {
+          "lead": "Only one bid",
+          "text": "If you reveal cards on only 1 side of your fake money card, you only make 1 bid.",
+          "source": {
+            "page": 2,
+            "query": "you only make 1 bid"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Take fake money",
+          "text": "Each player takes a 0-value fake money card and a player aid.",
+          "source": {
+            "page": 1,
+            "query": "0-value fake money card"
+          }
+        },
+        {
+          "lead": "Deal six cards",
+          "text": "Deal each player a hand of 6 cards.",
+          "source": {
+            "page": 1,
+            "query": "Deal each player a hand of 6 cards"
+          }
+        },
+        {
+          "lead": "Deal the market",
+          "text": "To create the market, deal 2 faceup rows of 4 cards each.",
+          "source": {
+            "page": 1,
+            "query": "deal 2 faceup rows of 4 cards each"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -26290,7 +26759,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No stacked arches",
+          "text": "You may not place an arch directly on top of another arch.",
+          "source": {
+            "page": 3,
+            "query": "You may not place an arch directly on top of another arch."
+          }
+        },
+        {
+          "lead": "Center knobs",
+          "text": "You may not build on the two center knobs of the arches.",
+          "source": {
+            "page": 3,
+            "query": "you may not build on the two center knobs of the arches."
+          }
+        },
+        {
+          "lead": "Arches are steps",
+          "text": "A player cannot place arches as supporting bricks branching off from the direct path.",
+          "source": {
+            "page": 3,
+            "query": "cannot place arches as supporting bricks branching off from the direct path"
+          }
+        },
+        {
+          "lead": "Credits do not save",
+          "text": "You cannot save Monkey Credits for your next turn.",
+          "source": {
+            "page": 4,
+            "query": "you cannot save Monkey Credits for your next turn."
+          }
+        },
+        {
+          "lead": "Top card only",
+          "text": "You may only take the top card from each pile on each turn.",
+          "source": {
+            "page": 4,
+            "query": "you may only take the top card from each pile on each turn."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Ground Map 1",
+          "text": "For your first game, we recommend playing with Ground Map 1.",
+          "source": {
+            "page": 2,
+            "query": "For your first game, we recommend playing with Ground Map 1"
+          }
+        },
+        {
+          "lead": "Animals come later",
+          "text": "The Butterfly and the Frog are optional, and we recommend playing a couple of games before introducing them.",
+          "source": {
+            "page": 5,
+            "query": "we recommend playing a couple of games before introducing them"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -29910,7 +30438,66 @@
           "text": "Resolve winter effects, all of them mandatory. Return heralds. Move supporters on the map to the lost pile. Clear clash markers. Active cards without an influence on them go to the discard; a card with influence loses one of it. Advance the round marker."
         }
       ],
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Bid strength only",
+          "text": "When resolving a Bid, only the Strength value of the Bidding card is considered.",
+          "source": {
+            "page": 18,
+            "query": "only the Strength value of the Bidding card is considered."
+          }
+        },
+        {
+          "lead": "Hidden region cards",
+          "text": "Players may not look at their opponents’ face-down cards.",
+          "source": {
+            "page": 22,
+            "query": "may not look at their opponents’ face-down cards."
+          }
+        },
+        {
+          "lead": "Active cards only",
+          "text": "Actions or Commands printed on or gained by Faction Cards may only be activated if the card is Active in the current Clash.",
+          "source": {
+            "page": 26,
+            "query": "may only be activated if the card is Active in the current Clash."
+          }
+        },
+        {
+          "lead": "Hand size cap",
+          "text": "A player may never increase their Hand Size above eight.",
+          "source": {
+            "page": 47,
+            "query": "A player may never increase their Hand Size above eight."
+          }
+        },
+        {
+          "lead": "Empty deck",
+          "text": "A player does not incur Attrition if their Deck is empty, only when they try to draw from an empty Deck.",
+          "source": {
+            "page": 49,
+            "query": "only when they try to draw from an empty Deck."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Recommended length",
+          "text": "Standard Game of five rounds is the recommended game length.",
+          "source": {
+            "page": 48,
+            "query": "This is the recommended game length."
+          }
+        },
+        {
+          "lead": "Experienced setup",
+          "text": "Advanced Setup is recommended for players who have experience with the game and are comfortable with more asymmetric starting positions.",
+          "source": {
+            "page": 48,
+            "query": "Advanced Setup is recommended for players who have experience with the game"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -30354,7 +30941,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Favour once a round",
+          "text": "Each King’s Favour may only be used once per Round.",
+          "source": {
+            "page": 8,
+            "query": "may only be used once per Round"
+          }
+        },
+        {
+          "lead": "Seven of each action",
+          "text": "Players can only ever do 7 of each Commission, Fortify, Garrison, Absolve and Convert actions.",
+          "source": {
+            "page": 12,
+            "query": "can only ever do 7 of each"
+          }
+        },
+        {
+          "lead": "Cannot split workers",
+          "text": "If players place a single Worker on 1 turn, they cannot place the second Worker on a future turn.",
+          "source": {
+            "page": 14,
+            "query": "cannot place the second Worker on a future turn"
+          }
+        },
+        {
+          "lead": "Leftmost monk first",
+          "text": "Players must always Commission their left-most available Monk.",
+          "source": {
+            "page": 16,
+            "query": "left-most available Monk"
+          }
+        },
+        {
+          "lead": "Pass when finished",
+          "text": "Once a player has no more Workers available to take an action, or when they decide not to take any further actions, they must pass.",
+          "source": {
+            "page": 24,
+            "query": "they decide not to take any further actions, they must pass"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Join the boards",
+          "text": "Place the 2 Parts of the Main Board together to form the large central play area.",
+          "source": {
+            "page": 5,
+            "query": "Place the 2 Parts of the Main Board together"
+          }
+        },
+        {
+          "lead": "Give the start marker",
+          "text": "Randomly determine a starting player and give them the Start Player Marker.",
+          "source": {
+            "page": 7,
+            "query": "give them the Start Player Marker"
+          }
+        },
+        {
+          "lead": "Recruit a townsfolk",
+          "text": "Each player must select 1 Townsfolk to Recruit into their crew, from those visible above the Main Board.",
+          "source": {
+            "page": 7,
+            "query": "must select 1 Townsfolk to Recruit"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -39767,7 +40421,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Lowest number",
+          "text": "The number 1 is always played as the lowest number, it cannot follow the number 13.",
+          "source": {
+            "page": 1,
+            "query": "it cannot follow the number 13"
+          }
+        },
+        {
+          "lead": "Initial meld",
+          "text": "For their initial meld, players may not use tiles already played on the table.",
+          "source": {
+            "page": 1,
+            "query": "players may not use tiles already played on the table"
+          }
+        },
+        {
+          "lead": "Just drawn",
+          "text": "Players cannot lay down a tile they just drew; they must wait until their next turn to play this tile.",
+          "source": {
+            "page": 1,
+            "query": "Players cannot lay down a tile they just drew"
+          }
+        },
+        {
+          "lead": "Joker retrieval",
+          "text": "A player cannot retrieve a joker before s/he has played his/her initial meld.",
+          "source": {
+            "page": 3,
+            "query": "cannot retrieve a joker before s/he has played"
+          }
+        },
+        {
+          "lead": "No loose tiles",
+          "text": "At the end of each round only legitimate sets remain and no loose tiles are left over.",
+          "source": {
+            "page": 2,
+            "query": "no loose tiles are left over"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Highest number",
+          "text": "Each player picks a tile; the player with the highest number goes ﬁrst.",
+          "source": {
+            "page": 1,
+            "query": "the player with the highest number goes"
+          }
+        },
+        {
+          "lead": "Opening deal",
+          "text": "Each player takes 14 tiles and places them on his/her rack.",
+          "source": {
+            "page": 1,
+            "query": "Each player takes 14 tiles and places them"
+          }
+        },
+        {
+          "lead": "Stacks of seven",
+          "text": "It is recommended to stack the tiles in piles of 7 for ease of playing.",
+          "source": {
+            "page": 1,
+            "query": "recommended to stack the tiles in piles of 7"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -42388,7 +43109,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Only the top card",
+          "text": "They can build up any number of cards in any order in the DISCARD piles, but may only play the top card.",
+          "source": {
+            "page": 1,
+            "query": "may only play the top card"
+          }
+        },
+        {
+          "lead": "Start with a one",
+          "text": "Only a 1 or a SKIP-BO card can start a BUILDING pile.",
+          "source": {
+            "page": 1,
+            "query": "Only a 1 or a SKIP-BO card can start"
+          }
+        },
+        {
+          "lead": "Partner stays quiet",
+          "text": "However, during your turn, your partner must keep quiet.",
+          "source": {
+            "page": 1,
+            "query": "your partner must keep quiet"
+          }
+        },
+        {
+          "lead": "Cheating adds cards",
+          "text": "Any player guilty of cheating must take 2 cards from the DRAW pile and place them in his/her STOCK pile without looking at them.",
+          "source": {
+            "page": 1,
+            "query": "guilty of cheating must take 2 cards"
+          }
+        },
+        {
+          "lead": "Shuffle extra cards",
+          "text": "If you inadvertently draw too many cards, you must shuffle the extra cards drawn into your own STOCK pile.",
+          "source": {
+            "page": 1,
+            "query": "must shuffle the extra cards drawn"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Left of the dealer",
+          "text": "The person to the left of the dealer starts.",
+          "source": {
+            "page": 1,
+            "query": "to the left of the dealer starts"
+          }
+        },
+        {
+          "lead": "Deal the stock piles",
+          "text": "When there are 2 to 4 players, the dealer deals 30 cards to each player.",
+          "source": {
+            "page": 1,
+            "query": "the dealer deals 30 cards to each player"
+          }
+        },
+        {
+          "lead": "Turn the top card",
+          "text": "Each player turns the top card of his/her STOCK pile face up on top of the pile, without looking at any of the other cards in the pile.",
+          "source": {
+            "page": 1,
+            "query": "without looking at any of the other cards"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -47163,7 +47951,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Own headquarters",
+          "text": "You can never place a Troop on your own H.Q.",
+          "source": {
+            "page": 4,
+            "query": "you can never place a Troop on your own H.Q."
+          }
+        },
+        {
+          "lead": "Leave stack order",
+          "text": "You may look at the tile stacks on the Terrain, but you may never change the order.",
+          "source": {
+            "page": 4,
+            "query": "you may never change the order"
+          }
+        },
+        {
+          "lead": "Eight on the rack",
+          "text": "You cannot draw Troops if you already have 8 Troops on your rack.",
+          "source": {
+            "page": 3,
+            "query": "you cannot perform this action if you already have 8 Troops on your rack"
+          }
+        },
+        {
+          "lead": "Only the top",
+          "text": "Only the visible Troop on top of the stack occupies the base.",
+          "source": {
+            "page": 4,
+            "query": "only the visible Troop (on top of the stack) occupies the base"
+          }
+        },
+        {
+          "lead": "Through your bases",
+          "text": "You must always follow a continuous path from your H.Q. to the Troop you are placing, passing only through bases you occupy.",
+          "source": {
+            "page": 4,
+            "query": "passing only through bases you occupy"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Start on Castle",
+          "text": "For your first game, we suggest playing with Castle Field.",
+          "source": {
+            "page": 2,
+            "query": "For your first game, we suggest playing with Castle Field"
+          }
+        },
+        {
+          "lead": "Keep the player aid",
+          "text": "For your first games, feel free to place the player aid nearby.",
+          "source": {
+            "page": 2,
+            "query": "For your first games, feel free to place the player aid nearby"
+          }
+        },
+        {
+          "lead": "Skip base effects",
+          "text": "For your first games, we suggest playing without special base effects.",
+          "source": {
+            "page": 3,
+            "query": "we suggest playing without special base effects"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -47903,7 +48758,74 @@
         ],
         "details": "One vineyard action cannot buy two vineyards in the same region. The nine action spaces and their prices stay on the board."
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "One wine per fair",
+          "text": "Each player must present 1 Wine, and only 1 Wine, at each Fair.",
+          "source": {
+            "page": 3,
+            "query": "only 1 Wine, at each Fair"
+          }
+        },
+        {
+          "lead": "Must leave the space",
+          "text": "You cannot stay in the same space; you must move to a new space.",
+          "source": {
+            "page": 4,
+            "query": "You cannot stay in the same space"
+          }
+        },
+        {
+          "lead": "Pass space is free",
+          "text": "You never have to pay to move to the Pass / Press Release space, even if other players’ Action Markers are there.",
+          "source": {
+            "page": 4,
+            "query": "You never have to pay to move to the Pass"
+          }
+        },
+        {
+          "lead": "One tile per slot",
+          "text": "Only 1 tile (Vineyard or Winery) can occupy any single Estate Slot.",
+          "source": {
+            "page": 6,
+            "query": "Only 1 tile (Vineyard or Winery)"
+          }
+        },
+        {
+          "lead": "No double region buy",
+          "text": "A single Vineyard Action never allows you to buy 2 Vineyards from the same region.",
+          "source": {
+            "page": 6,
+            "query": "never allows you to buy 2 Vineyards"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Weather starts the year",
+          "text": "Each year begins with the weather forecast for the current year.",
+          "source": {
+            "page": 2,
+            "query": "Each year begins with the weather forecast"
+          }
+        },
+        {
+          "lead": "Year one skips phase",
+          "text": "At the beginning of each year except the 1st (which skips this phase), prepare for the year as follows.",
+          "source": {
+            "page": 3,
+            "query": "which skips this phase"
+          }
+        },
+        {
+          "lead": "Mark the first action",
+          "text": "Place the Year/Taxation Marker on space 1 of the current year to indicate that everyone is taking their 1st action.",
+          "source": {
+            "page": 3,
+            "query": "Place the Year/Taxation Marker on space"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -51826,7 +52748,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Different card names",
+          "text": "During the Play step, the 2 cards you play from your hand, 1 face up and 1 face down, must have different card names.",
+          "source": {
+            "page": 9,
+            "query": "must have different card names"
+          }
+        },
+        {
+          "lead": "All same name",
+          "text": "In the rare case that all the cards in your hand have the same card name, it is allowed to play 2 identical cards.",
+          "source": {
+            "page": 9,
+            "query": "it is allowed to play 2 identical cards"
+          }
+        },
+        {
+          "lead": "Win at the End",
+          "text": "You can win the game only during the End step, not during the Recruit step.",
+          "source": {
+            "page": 9,
+            "query": "only during the End step, not during the Recruit step"
+          }
+        },
+        {
+          "lead": "No redraw if empty",
+          "text": "If the agent deck is empty, you can't discard an agent card from your hand to draw a new one.",
+          "source": {
+            "page": 9,
+            "query": "you can’t discard an agent card from your hand to draw a new one"
+          }
+        },
+        {
+          "lead": "Escape does not count",
+          "text": "If you catch your opponent's meeple but it escapes forward during the same turn, it doesn't count as you catching it.",
+          "source": {
+            "page": 9,
+            "query": "it doesn’t count as you catching it"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "New players stay simple",
+          "text": "If you are new to the game, it is recommended to use only the rules of the simple mode.",
+          "source": {
+            "page": 4,
+            "query": "use only the rules of the simple mode"
+          }
+        },
+        {
+          "lead": "Learn advanced later",
+          "text": "Once you are familiar with the game, you can then read the rules of the advanced mode and the team variant.",
+          "source": {
+            "page": 4,
+            "query": "Once you are familiar with the game"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -52114,7 +53095,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Builder touches bricks",
+          "text": "Only the builder can touch the LEGO bricks.",
+          "source": {
+            "page": 2,
+            "query": "Only the BUILDER can touch the LEGO"
+          }
+        },
+        {
+          "lead": "Speak without pointing",
+          "text": "The instructor and the builder may speak to each other, but no pointing.",
+          "source": {
+            "page": 2,
+            "query": "may speak to each other, but no pointing"
+          }
+        },
+        {
+          "lead": "Instructor sees the shape",
+          "text": "Only the instructor may look at the Shape Card.",
+          "source": {
+            "page": 2,
+            "query": "Only the INSTRUCTOR may look at the Shape Card."
+          }
+        },
+        {
+          "lead": "Hide shapes until done",
+          "text": "The Shape Card may not be revealed until all teams are finished building.",
+          "source": {
+            "page": 2,
+            "query": "The Shape Card may not be revealed until all teams are finished building."
+          }
+        },
+        {
+          "lead": "Take only those bricks",
+          "text": "The builder may take only the bricks they are instructed to take.",
+          "source": {
+            "page": 2,
+            "query": "may take only the bricks they are instructed to take"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Delay challenge cards",
+          "text": "Play a couple of times before adding Challenge Cards to the game.",
+          "source": {
+            "page": 2,
+            "query": "Play a couple of times before adding Challenge Cards"
+          }
+        },
+        {
+          "lead": "Start with easier shapes",
+          "text": "New or younger players may choose to play with Shape Cards of values 5 and 6 only.",
+          "source": {
+            "page": 2,
+            "query": "Shape Cards of values 5 and 6 only"
+          }
+        },
+        {
+          "lead": "Measure while instructing",
+          "text": "New or younger players may use a brick to measure the size of shapes during their turns as instructor.",
+          "source": {
+            "page": 2,
+            "query": "use a brick to measure the size of shapes"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -54803,7 +55851,7 @@
           },
           {
             "text": "For a new game, place eight starting stickers, set out the unshuffled catalog (cards 1–57), and read Year 1 in the storybook.",
-            "source": { "page": 1, "query": "Place 8 starting stickers" }
+            "source": { "page": 1, "query": "For your first game, choose one side of the map" }
           },
           {
             "text": "Resources are shared."
@@ -54837,7 +55885,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Match the background",
+          "text": "Do not place a sticker with a grass background on water or rock, or vice versa.",
+          "source": {
+            "page": 2,
+            "query": "do not place a sticker with a grass background on water or rock"
+          }
+        },
+        {
+          "lead": "Cover only when told",
+          "text": "Clear stickers can be placed on other stickers, but otherwise only cover a sticker when specifically instructed to.",
+          "source": {
+            "page": 2,
+            "query": "otherwise only cover a sticker when specifically instructed to"
+          }
+        },
+        {
+          "lead": "Sticker actions wait",
+          "text": "If the sticker has an action on it, do not resolve it when you place it.",
+          "source": {
+            "page": 2,
+            "query": "do not resolve it when you place it"
+          }
+        },
+        {
+          "lead": "No extra resources",
+          "text": "You cannot gain more resources than the tokens provided in the game.",
+          "source": {
+            "page": 3,
+            "query": "cannot gain more resources than the tokens provided"
+          }
+        },
+        {
+          "lead": "Spend the full cost",
+          "text": "If an option requires you to spend resources, you cannot choose this option unless you spend the full amount.",
+          "source": {
+            "page": 3,
+            "query": "you cannot choose this option unless you spend the full amount"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Place eight stickers",
+          "text": "Before you begin year 1 of a new game, first place 8 starting stickers on the map.",
+          "source": {
+            "page": 1,
+            "query": "first place 8 starting stickers on the map"
+          }
+        },
+        {
+          "lead": "One from each pair",
+          "text": "Place 1 sticker from each pair with \"OR\" instructions.",
+          "source": {
+            "page": 1,
+            "query": "Place 1 sticker from each pair with \"OR\" instructions."
+          }
+        },
+        {
+          "lead": "Card 3A first",
+          "text": "Use card 3A for your first playthrough of the game.",
+          "source": {
+            "page": 3,
+            "query": "for your first playthrough of the game"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -57651,7 +58766,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Cannot dismiss this card",
+          "text": "This card cannot be dismissed using the Dismiss a Toon action or by another card’s ability.",
+          "source": {
+            "page": 7,
+            "query": "cannot be dismissed using the Dismiss a Toon action"
+          }
+        },
+        {
+          "lead": "Dismiss your own grid",
+          "text": "Players may only dismiss cards in their own grid.",
+          "source": {
+            "page": 8,
+            "query": "Players may only dismiss cards in their own grid"
+          }
+        },
+        {
+          "lead": "Do not refill",
+          "text": "If the toon deck is ever depleted, do not add additional cards to the market.",
+          "source": {
+            "page": 9,
+            "query": "do not add additional cards to the market"
+          }
+        },
+        {
+          "lead": "One skunk each round",
+          "text": "Only one player can benefit from the skunk’s ability each round.",
+          "source": {
+            "page": 12,
+            "query": "Only one player can benefit from the skunk"
+          }
+        },
+        {
+          "lead": "Ostrich ends the flip",
+          "text": "If an ostrich is placed as the final card of a player’s grid, do not reveal or place another card.",
+          "source": {
+            "page": 12,
+            "query": "If an ostrich is placed as the final card"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Deal starting cards",
+          "text": "Give each player a deck of six starting cards: 2 caterpillars, 1 skunk, 1 dragonfly, 1 bee, and 1 snail.",
+          "source": {
+            "page": 4,
+            "query": "a deck of six starting cards"
+          }
+        },
+        {
+          "lead": "Gray rank zero",
+          "text": "All starting cards are gray and have a rank of 0.",
+          "source": {
+            "page": 4,
+            "query": "All starting cards are gray"
+          }
+        },
+        {
+          "lead": "Cartoon watcher starts",
+          "text": "Give the player who most recently watched a cartoon the first player card.",
+          "source": {
+            "page": 4,
+            "query": "most recently watched a cartoon"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -57833,7 +59015,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Cannot dismiss hidden cards",
+          "text": "Cards in the player's deck or face down in the player's grid cannot be dismissed.",
+          "source": {
+            "page": 8,
+            "query": "player’s grid cannot be dismissed."
+          }
+        },
+        {
+          "lead": "Dismiss only your grid",
+          "text": "Unless a card ability says otherwise, players may dismiss cards only in their own grid.",
+          "source": {
+            "page": 8,
+            "query": "dismiss cards only in their own grid."
+          }
+        },
+        {
+          "lead": "Keep four cards minimum",
+          "text": "Players may not dismiss a toon if they have fewer than four cards in their deck and grid.",
+          "source": {
+            "page": 8,
+            "query": "may not dismiss a toon if they have fewer"
+          }
+        },
+        {
+          "lead": "Fame does not carry",
+          "text": "Unspent fame is not carried over to the next round.",
+          "source": {
+            "page": 8,
+            "query": "Unspent fame is not carried over to the next round."
+          }
+        },
+        {
+          "lead": "Not a fish card",
+          "text": "The shark is not considered a fish card.",
+          "source": {
+            "page": 13,
+            "query": "The shark is not considered a fish card."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Deal the starting deck",
+          "text": "Give each player a deck of six starting cards: 2 mosquitoes, 1 spider, 1 grasshopper, 1 ladybug, and 1 firefly.",
+          "source": {
+            "page": 4,
+            "query": "deck of six starting cards: 2 mosquitoes, 1 spider"
+          }
+        },
+        {
+          "lead": "Recent cartoon watcher",
+          "text": "Give the player who most recently watched a cartoon the first player card.",
+          "source": {
+            "page": 4,
+            "query": "Give the player who most recently watched a cartoon the first player card."
+          }
+        },
+        {
+          "lead": "Open a five-card market",
+          "text": "Reveal and place the top five cards from the toon deck to create the market.",
+          "source": {
+            "page": 4,
+            "query": "Reveal and place the top five cards from the toon deck to create the market."
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -58031,7 +59280,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Raise every bid",
+          "text": "If they bid, the bid amount must be more than the previous bid.",
+          "source": {
+            "page": 2,
+            "query": "the bid amount must be more than the previous bid"
+          }
+        },
+        {
+          "lead": "Must bid or pass",
+          "text": "The next player must decide whether they will bid or pass.",
+          "source": {
+            "page": 2,
+            "query": "The next player must decide whether they will bid or pass"
+          }
+        },
+        {
+          "lead": "Controllers split checks",
+          "text": "If you have multiple Controllers, each must be used on a different Check card.",
+          "source": {
+            "page": 4,
+            "query": "each must be used on a different Check card"
+          }
+        },
+        {
+          "lead": "Decide before the next",
+          "text": "You must decide to pay or not before the next player plays an Advisor.",
+          "source": {
+            "page": 4,
+            "query": "You must decide to pay or not"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Separate the decks",
+          "text": "To set up the game, separate the cards by type (Advisor, Vehicle and Check) and shuffle each deck.",
+          "source": {
+            "page": 2,
+            "query": "separate the cards by type"
+          }
+        },
+        {
+          "lead": "Give starting cash",
+          "text": "With 3-4 players, give each player $28,000 starting money.",
+          "source": {
+            "page": 2,
+            "query": "give each player $28,000 starting money"
+          }
+        },
+        {
+          "lead": "Recent buyer starts",
+          "text": "The player who most recently purchased a vehicle starts and places any amount of money in front of them as their bid.",
+          "source": {
+            "page": 2,
+            "query": "who most recently purchased a vehicle starts"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -58442,7 +59750,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Never look at numbers",
+          "text": "You must never look at the numbers on the 5 tiles on your stand, nor read out the numbers on your opponents' tiles.",
+          "source": {
+            "page": 1,
+            "query": "you must never look at the numbers on the 5 tiles on your stand"
+          }
+        },
+        {
+          "lead": "Clues fit ascending order",
+          "text": "Your neighbour must place the tile so that it fits into the ascending order of the tiles on your stand.",
+          "source": {
+            "page": 3,
+            "query": "They must place the tile so that it fits into the ascending order"
+          }
+        },
+        {
+          "lead": "Yes or no only",
+          "text": "Your neighbour must answer your question with a simple yes or no.",
+          "source": {
+            "page": 3,
+            "query": "must answer your question with a simple"
+          }
+        },
+        {
+          "lead": "One guess only",
+          "text": "You have a single chance to declare your 5 numbers and find out whether you identified them correctly.",
+          "source": {
+            "page": 4,
+            "query": "You have a single chance to declare your 5 numbers"
+          }
+        },
+        {
+          "lead": "Colours need not match",
+          "text": "When you place the chosen tile above 1 of the 5 tiles on your stand, the colours do not have to match.",
+          "source": {
+            "page": 3,
+            "query": "The colours don"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Youngest player starts",
+          "text": "The youngest player starts.",
+          "source": {
+            "page": 3,
+            "query": "Youngest player starts."
+          }
+        },
+        {
+          "lead": "Cross out seen numbers",
+          "text": "Before starting the game, each player crosses out the numbers visible on their opponents' tiles and the numbers on the 5 face-up tiles near the supply.",
+          "source": {
+            "page": 2,
+            "query": "Before starting the game, each player crosses out all the numbers visible"
+          }
+        },
+        {
+          "lead": "Draw five hidden tiles",
+          "text": "Each player draws 1 tile of each of the 5 colours at random from the supply, without looking at their numbers.",
+          "source": {
+            "page": 1,
+            "query": "Each draw 1 tile of each of the 5 colours at random"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -59127,7 +60502,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Other guessers score nothing",
+          "text": "If one or more guesses exactly match the Subject's answer, no other Guessers receive points this turn.",
+          "source": {
+            "page": 4,
+            "query": "No other Guessers receive points this turn."
+          }
+        },
+        {
+          "lead": "Subject scores one way",
+          "text": "If one or more guesses exactly match the Subject's answer, the Subject also receives 3 points, and this is the only way a Subject can score points.",
+          "source": {
+            "page": 4,
+            "query": "This is the only way a Subject can score points."
+          }
+        },
+        {
+          "lead": "Usually no negatives",
+          "text": "Using zero is fine, but negative answers usually are not, unless the prompt makes it sensible.",
+          "source": {
+            "page": 5,
+            "query": "negative answers usually aren"
+          }
+        },
+        {
+          "lead": "Guess their number",
+          "text": "A Guesser writes the number they think the Subject will write, not how many chickens they have seen.",
+          "source": {
+            "page": 3,
+            "query": "Not how many chickens you have seen"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Pick a starting player",
+          "text": "Choose a starting player by any method, or by the most recent person to have seen a chicken.",
+          "source": {
+            "page": 2,
+            "query": "Choose a starting player by any method"
+          }
+        },
+        {
+          "lead": "Hand out the whiteboards",
+          "text": "Give each player a whiteboard and marker.",
+          "source": {
+            "page": 2,
+            "query": "Give each player a whiteboard and marker."
+          }
+        },
+        {
+          "lead": "Shuffle the scenario cards",
+          "text": "Shuffle the Scenario Cards into a face-down deck.",
+          "source": {
+            "page": 2,
+            "query": "Shuffle the Scenario Cards into a face-down deck."
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -59320,7 +60754,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Keep clues secret",
+          "text": "You must keep your clue words secret from the other players.",
+          "source": {
+            "page": 2,
+            "query": "You must keep these secret from the other players."
+          }
+        },
+        {
+          "lead": "Never show the clue",
+          "text": "Never show your clue card.",
+          "source": {
+            "page": 3,
+            "query": "never showing your clue card"
+          }
+        },
+        {
+          "lead": "Seven guesses each",
+          "text": "You may only make at most seven guesses each for the players on your left and right over the course of the game.",
+          "source": {
+            "page": 5,
+            "query": "you may only make at most seven guesses each"
+          }
+        },
+        {
+          "lead": "Guesses stay put",
+          "text": "You are not allowed to change or erase guesses you made in previous rounds.",
+          "source": {
+            "page": 5,
+            "query": "allowed to change or erase guesses you made in previous rounds"
+          }
+        },
+        {
+          "lead": "Skip the round-three draw",
+          "text": "Skip drawing ink cards in round three.",
+          "source": {
+            "page": 5,
+            "query": "Skip this step in round three."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Deal one clue card",
+          "text": "Deal one clue card to each player.",
+          "source": {
+            "page": 2,
+            "query": "the clue cards and deal one to each player"
+          }
+        },
+        {
+          "lead": "Deal eight ink cards",
+          "text": "Deal eight ink cards to each player.",
+          "source": {
+            "page": 2,
+            "query": "the ink cards and deal eight to each player"
+          }
+        },
+        {
+          "lead": "Write neighbour names",
+          "text": "Write the name of the players next to you on your scoresheet.",
+          "source": {
+            "page": 2,
+            "query": "Write the name of the players next to you on your scoresheet."
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -59470,7 +60971,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Match the challenge color",
+          "text": "You may only play a skill card from your hand that matches the color of the challenge card.",
+          "source": {
+            "page": 5,
+            "query": "you may only play a skill card from your hand"
+          }
+        },
+        {
+          "lead": "Health cannot exceed start",
+          "text": "The Seekers’ health is never allowed to exceed its starting value for the game.",
+          "source": {
+            "page": 5,
+            "query": "never allowed to exceed its starting value"
+          }
+        },
+        {
+          "lead": "Do not boost yourself",
+          "text": "In a game with 2 or more Seekers, you may not boost your own actions.",
+          "source": {
+            "page": 14,
+            "query": "you may not boost your own actions"
+          }
+        },
+        {
+          "lead": "No draw between turns",
+          "text": "You do not draw new cards at the start or end of your turn.",
+          "source": {
+            "page": 16,
+            "query": "you do not draw new cards at the start or end of your turn"
+          }
+        },
+        {
+          "lead": "Empty hands must exhaust",
+          "text": "If your hand is empty, you MUST exhaust yourself and draw a new hand of cards.",
+          "source": {
+            "page": 16,
+            "query": "if your hand is empty, you MUST exhaust yourself"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Search for four cards",
+          "text": "For your first game, look through the Well deck for the following 4 specific cards instead.",
+          "source": {
+            "page": 6,
+            "query": "For your first game, look through the Well deck"
+          }
+        },
+        {
+          "lead": "Skip hard mode first",
+          "text": "If you’d like to play on hard mode, set it to 8 instead (this isn’t recommended for your first game).",
+          "source": {
+            "page": 6,
+            "query": "recommended for your first game"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -59636,7 +61196,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Tiles must not overlap",
+          "text": "Tiles must not overlap and previously placed tiles cannot be moved.",
+          "source": {
+            "page": 3,
+            "query": "Tiles must not overlap and previously placed tiles cannot be moved"
+          }
+        },
+        {
+          "lead": "Unfinished tiles stay put",
+          "text": "If a player has not completed their placement when a timer ends, the tile must remain where it is at that moment.",
+          "source": {
+            "page": 3,
+            "query": "the tile must remain where it is at that moment"
+          }
+        },
+        {
+          "lead": "Wrecks cannot fire",
+          "text": "It will no longer be in the way of laser beams and cannot fire unless it has already done so.",
+          "source": {
+            "page": 4,
+            "query": "cannot fire unless it has already done so"
+          }
+        },
+        {
+          "lead": "Hit the illustration",
+          "text": "The valid target is the actual illustration and not the whole tile.",
+          "source": {
+            "page": 4,
+            "query": "The valid target is the actual illustration and not the whole tile"
+          }
+        },
+        {
+          "lead": "Own ships lose points",
+          "text": "If you claim one of your own spaceships, you lose points instead of gaining them.",
+          "source": {
+            "page": 5,
+            "query": "you lose points instead of gaining them"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Play the basics first",
+          "text": "Read the rest of the rulebook after playing a few games with the basic rules.",
+          "source": {
+            "page": 5,
+            "query": "Read the rest of the rulebook after playing a few games"
+          }
+        },
+        {
+          "lead": "Add ads when ready",
+          "text": "When you feel comfortable with the basic rules of the game, you can start to run some ads.",
+          "source": {
+            "page": 6,
+            "query": "When you feel comfortable with the basic rules of the game"
+          }
+        },
+        {
+          "lead": "Powers follow the ads",
+          "text": "After mastering the sponsored asteroids, you can go for an asymmetric challenge.",
+          "source": {
+            "page": 7,
+            "query": "After mastering the sponsored asteroids, you can go for an asymmetric"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -60488,7 +62115,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No talking during play",
+          "text": "You cannot communicate in any way whatsoever.",
+          "source": {
+            "page": 3,
+            "query": "You cannot communicate in any way whatsoever"
+          }
+        },
+        {
+          "lead": "Only your action card",
+          "text": "You cannot perform any actions that are not on your Action card.",
+          "source": {
+            "page": 4,
+            "query": "you cannot perform any actions that are not on your Action card"
+          }
+        },
+        {
+          "lead": "Never stop a movement",
+          "text": "You are never allowed to stop another player’s movement.",
+          "source": {
+            "page": 4,
+            "query": "never allowed to stop another player’s movement"
+          }
+        },
+        {
+          "lead": "One pawn per space",
+          "text": "There can never be two Hero pawns on the same space.",
+          "source": {
+            "page": 5,
+            "query": "never be two Hero pawns on the same space"
+          }
+        },
+        {
+          "lead": "No vortex while escaping",
+          "text": "The Use a Vortex action cannot be used during your escape.",
+          "source": {
+            "page": 6,
+            "query": "Vortex action cannot be used during your escape"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "New players use A",
+          "text": "Place the starting card (Card 1) in the middle of the table (A-side-up if you are new to the game; otherwise, however you like).",
+          "source": {
+            "page": 2,
+            "query": "A-side-up if you are new to the game"
+          }
+        },
+        {
+          "lead": "Retry or skip ahead",
+          "text": "When you fail a scenario, you can either try again or skip to the next one.",
+          "source": {
+            "page": 11,
+            "query": "When you fail a scenario, you can either try again or skip"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -60942,7 +62628,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Hide cards before dice",
+          "text": "Players cannot reveal any cards from their hand before the Hazard Dice are rolled.",
+          "source": {
+            "page": 17,
+            "query": "cannot reveal any cards from their hand before the Hazard Dice"
+          }
+        },
+        {
+          "lead": "Cannot negotiate owned items",
+          "text": "Players cannot negotiate over any prestige, cards, or credits already owned.",
+          "source": {
+            "page": 17,
+            "query": "Players cannot negotiate over any prestige, cards, or credits already owned."
+          }
+        },
+        {
+          "lead": "No blocking ally hazards",
+          "text": "Players may not block D Hazards for their Allies.",
+          "source": {
+            "page": 19,
+            "query": "Players may not block D Hazards for their Allies."
+          }
+        },
+        {
+          "lead": "Cannot drop below zero",
+          "text": "Players cannot drop below zero Prestige.",
+          "source": {
+            "page": 23,
+            "query": "Players cannot drop below zero Prestige."
+          }
+        },
+        {
+          "lead": "Four ship parts maximum",
+          "text": "Players cannot have more than 4 Ship Parts installed on their Command Terminal.",
+          "source": {
+            "page": 25,
+            "query": "Players cannot have more than 4 Ship Parts installed on their Command Terminal."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Start with two credits",
+          "text": "Each player starts the game with 2 Credits.",
+          "source": {
+            "page": 9,
+            "query": "Each player starts the game with 2 Credits"
+          }
+        },
+        {
+          "lead": "Ten-card action deck",
+          "text": "Each ship has the same starting actions, represented by 10 Action Cards that make up the starting Action Deck.",
+          "source": {
+            "page": 8,
+            "query": "represented by 10 Action Cards that make up the starting Action Deck"
+          }
+        },
+        {
+          "lead": "Draw five opening cards",
+          "text": "Each player draws 5 cards from their Action Deck.",
+          "source": {
+            "page": 8,
+            "query": "Each player draws 5 cards from their Action Deck."
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -61194,7 +62947,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Resolve only one symbol",
+          "text": "If a tile shows two action symbols, you must choose and resolve only one.",
+          "source": {
+            "page": 5,
+            "query": "If a tile shows two action symbols, you must choose and resolve only one."
+          }
+        },
+        {
+          "lead": "Leave the zoo open",
+          "text": "Do not cover the Zoo center space.",
+          "source": {
+            "page": 6,
+            "query": "Do not cover the Zoo center space."
+          }
+        },
+        {
+          "lead": "Meet the space condition",
+          "text": "Do not resolve the action of a space showing a condition unless you meet the condition of that space.",
+          "source": {
+            "page": 6,
+            "query": "Do not resolve the action of a space showing a condition"
+          }
+        },
+        {
+          "lead": "No moves onto entrances",
+          "text": "Animal figures cannot move onto Entrance spaces or spaces for undiscovered animals.",
+          "source": {
+            "page": 7,
+            "query": "cannot move onto Entrance spaces"
+          }
+        },
+        {
+          "lead": "Undiscovered animals stay",
+          "text": "You cannot move an animal that is on an undiscovered space.",
+          "source": {
+            "page": 7,
+            "query": "You cannot move an animal that is on an undiscovered space"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Board in the center",
+          "text": "Place the Game board in the center of the table.",
+          "source": {
+            "page": 4,
+            "query": "Place the Game board in the center of the table."
+          }
+        },
+        {
+          "lead": "Take the first token",
+          "text": "The first player takes the First Player token.",
+          "source": {
+            "page": 4,
+            "query": "The first player takes the First Player token."
+          }
+        },
+        {
+          "lead": "Draft the top row",
+          "text": "Starting with the first player, in clockwise order, take an Action tile from the top row of the Game board.",
+          "source": {
+            "page": 5,
+            "query": "take an Action tile from the top row of the Game board"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -62037,7 +63857,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No cubes in Administrate",
+          "text": "Do not place any cubes in the upper left Administrate segment, as no resources are produced here.",
+          "source": {
+            "page": 7,
+            "query": "Do not place any cubes in the upper left Administrate segment"
+          }
+        },
+        {
+          "lead": "Six steps per sail",
+          "text": "You may not travel more than 6 steps with a single Sail action.",
+          "source": {
+            "page": 11,
+            "query": "You may not travel more than 6 steps with a single Sail action."
+          }
+        },
+        {
+          "lead": "Never sail backward",
+          "text": "You can never move backward toward Ostia.",
+          "source": {
+            "page": 11,
+            "query": "You can never move backward (toward Ostia)."
+          }
+        },
+        {
+          "lead": "One ship per route",
+          "text": "You may only sail 1 Corbita along each route.",
+          "source": {
+            "page": 11,
+            "query": "You may only sail 1 Corbita along each route."
+          }
+        },
+        {
+          "lead": "Ponto needs clear sea",
+          "text": "You may only build a Ponto if you have no Corbitas in the Local Sea area of the main board.",
+          "source": {
+            "page": 12,
+            "query": "You may only build a Ponto if you have NO corbitas in the Local Sea area"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Ship starts in Ostia",
+          "text": "Place your last Corbita in the starting Ostia space on the main game board.",
+          "source": {
+            "page": 6,
+            "query": "Place your last Corbita in the starting Ostia space on the main game board."
+          }
+        },
+        {
+          "lead": "Pass the first marker",
+          "text": "Give the first player the First Player marker.",
+          "source": {
+            "page": 7,
+            "query": "Give this player the First Player marker."
+          }
+        },
+        {
+          "lead": "Deal a four-card market",
+          "text": "Deal 4 cards to form a market near the main game board, and place the deck face down next to it.",
+          "source": {
+            "page": 5,
+            "query": "Deal 4 cards to form a market near the main game board"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -64083,7 +65970,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Stay inside the table",
+          "text": "Cards cannot go beyond the edge of the table.",
+          "source": {
+            "page": 3,
+            "query": "cards cannot go beyond it."
+          }
+        },
+        {
+          "lead": "Never fan the deck",
+          "text": "Never fan or look through your deck.",
+          "source": {
+            "page": 3,
+            "query": "Never fan or look through your deck."
+          }
+        },
+        {
+          "lead": "One card per turn",
+          "text": "Connect to only one card per turn.",
+          "source": {
+            "page": 4,
+            "query": "Connect to only one card per turn."
+          }
+        },
+        {
+          "lead": "Remove only if uncovered",
+          "text": "An illegally placed card should be removed from the play area only if no other card has been placed on top of it.",
+          "source": {
+            "page": 4,
+            "query": "only if no other card has been placed on top of it."
+          }
+        },
+        {
+          "lead": "Do not rearrange cards",
+          "text": "Do not rearrange a card once you have placed it in the play area.",
+          "source": {
+            "page": 5,
+            "query": "Rearrange a card once you have placed it in the play area."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Place the starting card",
+          "text": "Place the Starting Card in the center of the play area.",
+          "source": {
+            "page": 3,
+            "query": "Place the Starting Card in the center of the play area."
+          }
+        },
+        {
+          "lead": "Lowest card starts",
+          "text": "The player with the lowest value on either of their outermost cards starts.",
+          "source": {
+            "page": 3,
+            "query": "The player with the lowest value on either of their outermost cards starts."
+          }
+        },
+        {
+          "lead": "Start with 18 cards",
+          "text": "If there are 6 players or fewer, each player should start with 18 cards, one color per player.",
+          "source": {
+            "page": 3,
+            "query": "each player should start with 18 cards (one color per player)."
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -64189,7 +66143,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Never shuffle the deck",
+          "text": "In Tag Team, you’ll never shuffle your deck.",
+          "source": {
+            "page": 1,
+            "query": "you’ll never shuffle your deck"
+          }
+        },
+        {
+          "lead": "Power never below zero",
+          "text": "Your Power can never be below 0.",
+          "source": {
+            "page": 9,
+            "query": "Your Power can never be below 0."
+          }
+        },
+        {
+          "lead": "Actions cannot be ignored",
+          "text": "You cannot choose to ignore any Action on a card you play.",
+          "source": {
+            "page": 10,
+            "query": "You cannot choose to ignore"
+          }
+        },
+        {
+          "lead": "Cannot transfer missing items",
+          "text": "You cannot Transfer something you don’t have.",
+          "source": {
+            "page": 12,
+            "query": "cannot Transfer something you don’t have"
+          }
+        },
+        {
+          "lead": "Cannot reorder the deck",
+          "text": "You cannot rearrange the order of the other cards in your Fight Deck.",
+          "source": {
+            "page": 14,
+            "query": "You cannot rearrange the order"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Skip the draft page",
+          "text": "If this is your first time playing Tag Team, please skip this page and move straight to Setup on Page 4.",
+          "source": {
+            "page": 3,
+            "query": "If this is your first time playing Tag Team"
+          }
+        },
+        {
+          "lead": "Suggested first matchup",
+          "text": "We suggest playing your first game with Joan and Ching Shih versus Bödvar and Wong Fei-Hung.",
+          "source": {
+            "page": 4,
+            "query": "playing your first game with Joan"
+          }
+        },
+        {
+          "lead": "Use the suggested boards",
+          "text": "Take the Fighter boards for Joan and Ching Shih, and the other player takes the boards for Bödvar and Wong Fei-Hung.",
+          "source": {
+            "page": 4,
+            "query": "FIRST GAME: Take the Fighter boards"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -64202,7 +66223,7 @@
           },
           {
             "text": "So is being unable to draw three build cards.",
-            "source": { "page": 15, "query": "draw 3 cards from your Build Deck" }
+            "source": { "page": 15, "query": "cannot draw 3 cards from your Build Deck, the Fight is judged" }
           },
           {
             "text": "No points."
@@ -64588,7 +66609,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No shared day cards",
+          "text": "You may never place your Player Piece on the same F Day Card as another player’s Player Piece.",
+          "source": {
+            "page": 6,
+            "query": "never place your Player Piece on the same F Day Card"
+          }
+        },
+        {
+          "lead": "No shared night cards",
+          "text": "You may never place your Player Piece on the same G Night Card as another player’s Player Piece.",
+          "source": {
+            "page": 6,
+            "query": "never place your Player Piece on the same G Night Card"
+          }
+        },
+        {
+          "lead": "Ends of streets only",
+          "text": "You may never place a gained card in the middle of a street (between cards).",
+          "source": {
+            "page": 10,
+            "query": "never place a gained card in the middle of a street"
+          }
+        },
+        {
+          "lead": "One landmark per street",
+          "text": "There is a strict limit of one C Landmark Card per street only!",
+          "source": {
+            "page": 10,
+            "query": "strict limit of one C Landmark Card per street only"
+          }
+        },
+        {
+          "lead": "Own card never scores",
+          "text": "White arrows never score for features on their own card.",
+          "source": {
+            "page": 12,
+            "query": "White arrows never score for features on their own card."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Try eight rounds first",
+          "text": "If it's your first time playing TENBY, or if you're looking for a shorter game, then try playing just 8 rounds.",
+          "source": {
+            "page": 16,
+            "query": "If it's your first time playing TENBY"
+          }
+        },
+        {
+          "lead": "Core game before options",
+          "text": "We would recommend that you play at least one game of TENBY before exploring the extra game options given here.",
+          "source": {
+            "page": 16,
+            "query": "play at least one game of TENBY before"
+          }
+        },
+        {
+          "lead": "Solo core rules first",
+          "text": "We would encourage you to play at least once using only the core rules for the solo version before playing with any of the following options.",
+          "source": {
+            "page": 27,
+            "query": "play at least once using only the core rules"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -66673,7 +68761,74 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Cannot flip card sides",
+          "text": "You can’t flip cards from food to bird or from bird to food.",
+          "source": {
+            "page": 7,
+            "query": "can’t flip cards from food to bird"
+          }
+        },
+        {
+          "lead": "Eggs are not food",
+          "text": "Eggs are not food, so the 2-for-1 conversion does not apply to egg costs.",
+          "source": {
+            "page": 4,
+            "query": "Eggs are not food, so the 2-for-1"
+          }
+        },
+        {
+          "lead": "Tuck one card only",
+          "text": "You may only tuck one card at a time, but there is no limit on how many tucked cards you can accumulate.",
+          "source": {
+            "page": 10,
+            "query": "You may only tuck one card at a time"
+          }
+        },
+        {
+          "lead": "Not both food types",
+          "text": "If a card shows 2 types of food, you may spend it as either of those types, not both.",
+          "source": {
+            "page": 7,
+            "query": "as a fruit OR as a seed, not both"
+          }
+        },
+        {
+          "lead": "Fewer eggs still allowed",
+          "text": "If you do not have 3 different cards with space for eggs, you may still choose this option, placing fewer eggs.",
+          "source": {
+            "page": 8,
+            "query": "If you do not have 3 different cards with space for eggs"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Ignore advanced rules",
+          "text": "Ignore advanced rules if this is any player’s first game.",
+          "source": {
+            "page": 2,
+            "query": "Ignore advanced rules if this is any player’s first game."
+          }
+        },
+        {
+          "lead": "First-game component list",
+          "text": "For your first game, you’ll need all double-sided bird/food cards, 1 Nest/scoring card per player, and 1 player aid per player.",
+          "source": {
+            "page": 1,
+            "query": "For your first game, you’ll need"
+          }
+        },
+        {
+          "lead": "Enough to start playing",
+          "text": "That’s most of what you need to start playing; the rest of this rulebook describes each step in more detail.",
+          "source": {
+            "page": 4,
+            "query": "most of what you need to start playing"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -67353,7 +69508,66 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "No extra inoperable damage",
+          "text": "An inoperable car cannot take additional damage.",
+          "source": {
+            "page": 8,
+            "query": "An inoperable car cannot take additional damage."
+          }
+        },
+        {
+          "lead": "Cannot move or shoot",
+          "text": "An inoperable car cannot be assigned movement dice or shoot.",
+          "source": {
+            "page": 8,
+            "query": "An inoperable car cannot be assigned movement"
+          }
+        },
+        {
+          "lead": "Upgrades cannot be moved",
+          "text": "Once assigned, an upgrade cannot be moved.",
+          "source": {
+            "page": 9,
+            "query": "an upgrade cannot be moved."
+          }
+        },
+        {
+          "lead": "Enter ramps from behind",
+          "text": "A road vehicle can only enter a ramp from the space directly behind the ramp.",
+          "source": {
+            "page": 10,
+            "query": "can only enter a ramp from the space directly behind"
+          }
+        },
+        {
+          "lead": "No extra fire tokens",
+          "text": "A vehicle that is already on fire cannot take additional ON FIRE! tokens.",
+          "source": {
+            "page": 20,
+            "query": "already on fire cannot take additional"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Learn the base game",
+          "text": "This rulebook is set up to guide you through learning the base game, with the expansion rules able to be added as desired.",
+          "source": {
+            "page": 2,
+            "query": "guide you through learning the base"
+          }
+        },
+        {
+          "lead": "Learn setup before expansions",
+          "text": "It is a good idea to become familiar with setting the game up with these steps before including expansion components.",
+          "source": {
+            "page": 4,
+            "query": "become familiar with setting the game up"
+          }
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -71109,6 +73323,74 @@
       }
     },
     "animal-upon-animal": {
+      "commonMistakes": [
+        {
+          "lead": "Two or three",
+          "text": "If there are two or three players the remaining animals are kept in the box.",
+          "source": {
+            "page": 8,
+            "query": "the remaining animals are kept in the box"
+          }
+        },
+        {
+          "lead": "One or two",
+          "text": "If one or two animals have fallen off, the player who tried to pile them has to take them into their provision.",
+          "source": {
+            "page": 9,
+            "query": "has to take them into their provision"
+          }
+        },
+        {
+          "lead": "More than two",
+          "text": "If more than two animals have fallen off, the player takes two of them and puts the rest back in the game box.",
+          "source": {
+            "page": 9,
+            "query": "puts the rest back in the game box"
+          }
+        },
+        {
+          "lead": "One hand",
+          "text": "Take an animal from your provision and place it carefully with one hand anywhere on the pyramid.",
+          "source": {
+            "page": 8,
+            "query": "place it carefully with one hand anywhere on the pyramid"
+          }
+        },
+        {
+          "lead": "Crocodile returns",
+          "text": "The crocodile is put back in the center and all remaining animals are returned to the box.",
+          "source": {
+            "page": 9,
+            "query": "The crocodile is put back in the center"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Place crocodile",
+          "text": "Select the crocodile and put it in the center of the table.",
+          "source": {
+            "page": 8,
+            "query": "Select the crocodile and put it in the center"
+          }
+        },
+        {
+          "lead": "First animal",
+          "text": "It is the first animal of the pyramid.",
+          "source": {
+            "page": 8,
+            "query": "the first animal of the pyramid"
+          }
+        },
+        {
+          "lead": "Who starts",
+          "text": "Whoever can balance on one foot like a flamingo for the longest time, starts the game.",
+          "source": {
+            "page": 8,
+            "query": "balance on one foot like a flamingo for the longest time"
+          }
+        }
+      ],
       "bggTime": { "min": 15, "max": 15 },
       "playerPoll": { "best": "4", "recommended": "2–4" },
       "bggId": "17329",
@@ -71220,6 +73502,74 @@
       }
     },
     "anomia": {
+      "commonMistakes": [
+        {
+          "lead": "No peeking",
+          "text": "You may not peek at your card, and you must keep your hands out of the way.",
+          "source": {
+            "page": 2,
+            "query": "You may not peek at your card"
+          }
+        },
+        {
+          "lead": "One card showing",
+          "text": "You should only have one face-up card showing at a time.",
+          "source": {
+            "page": 1,
+            "query": "only have one face-up card showing at a time"
+          }
+        },
+        {
+          "lead": "One wild card",
+          "text": "Only one Wild Card can be in play at a time.",
+          "source": {
+            "page": 1,
+            "query": "Only one Wild Card can be in play at a time"
+          }
+        },
+        {
+          "lead": "Finish face-offs",
+          "text": "Drawing must not continue until all possible Face-Offs have been played.",
+          "source": {
+            "page": 1,
+            "query": "Drawing must not continue until all possible Face-Offs"
+          }
+        },
+        {
+          "lead": "One face-off",
+          "text": "There can be only one Face-Off at a time, though there may be many in quick succession.",
+          "source": {
+            "page": 1,
+            "query": "there can be only one Face-Off at a time"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Read aloud",
+          "text": "Read the following directions out loud as you begin to play.",
+          "source": {
+            "page": 1,
+            "query": "Read the following directions out loud AS you begin"
+          }
+        },
+        {
+          "lead": "First turn",
+          "text": "The shuffler takes the first turn.",
+          "source": {
+            "page": 1,
+            "query": "The shuffler takes the first turn"
+          }
+        },
+        {
+          "lead": "Two draw piles",
+          "text": "Take one of the decks from the box, shuffle thoroughly (5 or 6 times), and split into two piles.",
+          "source": {
+            "page": 1,
+            "query": "take one (1) of the decks from the box and shuffle thoroughly"
+          }
+        }
+      ],
       "bggTime": { "min": 30, "max": 30 },
       "playerPoll": { "best": "5", "recommended": "3–7" },
       "bggId": "67877",
@@ -71333,6 +73683,74 @@
       "rulesStatus": "pending"
     },
     "aquatica": {
+      "commonMistakes": [
+        {
+          "lead": "No carry-over",
+          "text": "The resources do not carry-over.",
+          "source": {
+            "page": 11,
+            "query": "The resources do not carry-over"
+          }
+        },
+        {
+          "lead": "Empty depths",
+          "text": "Some Depths are empty: They cannot be used for any purpose.",
+          "source": {
+            "page": 13,
+            "query": "They cannot be used for any purpose"
+          }
+        },
+        {
+          "lead": "Same goal once",
+          "text": "You cannot accomplish the same Goal more than once.",
+          "source": {
+            "page": 24,
+            "query": "You cannot accomplish the same Goal more than once"
+          }
+        },
+        {
+          "lead": "Score to count",
+          "text": "A fully risen Location doesn’t give you any Prosperity Points unless you score it.",
+          "source": {
+            "page": 22,
+            "query": "doesn’t give you any Prosperity Points unless you score it"
+          }
+        },
+        {
+          "lead": "Not itself",
+          "text": "You can’t raise the same Location that you are using the effect from.",
+          "source": {
+            "page": 20,
+            "query": "raise the same Location that you are using the effect from"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Printed goals",
+          "text": "For your first game we recommend that you play with the goals already printed on the board.",
+          "source": {
+            "page": 6,
+            "query": "For your first game we recommend that you play with the goals"
+          }
+        },
+        {
+          "lead": "Kings when ready",
+          "text": "Use the King cards when you are ready for more challenging experience.",
+          "source": {
+            "page": 8,
+            "query": "Use the King cards when you are ready for more challenging"
+          }
+        },
+        {
+          "lead": "First player",
+          "text": "The last player to dive in the sea is the first in turn order.",
+          "source": {
+            "page": 7,
+            "query": "The last player to dive in the sea is the first"
+          }
+        }
+      ],
       "bggTime": { "min": 30, "max": 60 },
       "playerPoll": { "best": "3", "recommended": "2–4" },
       "howToPlayVideo": {
@@ -96050,6 +98468,74 @@
       }
     },
     "mycelia-2024": {
+      "commonMistakes": [
+        {
+          "lead": "Mothers never share tiles",
+          "text": "Mother mushrooms can never be on the same tile as another player's.",
+          "source": {
+            "page": 3,
+            "query": "Mother mushrooms can never be on the same tile"
+          }
+        },
+        {
+          "lead": "Move only the mother",
+          "text": "The only piece that you can move in the game is your Mother mushroom.",
+          "source": {
+            "page": 4,
+            "query": "The only piece that you can move in the game is your Mother mushroom"
+          }
+        },
+        {
+          "lead": "Blocked by other mothers",
+          "text": "You can never move onto a tile that already has another player's Mother mushroom on it.",
+          "source": {
+            "page": 4,
+            "query": "You can never move onto a tile that already has another player"
+          }
+        },
+        {
+          "lead": "Two different actions",
+          "text": "A player must choose 2 different actions on their turn.",
+          "source": {
+            "page": 4,
+            "query": "A player must choose 2 different actions on their turn."
+          }
+        },
+        {
+          "lead": "No stacked decay upgrades",
+          "text": "You cannot double up on decay upgrade card actions.",
+          "source": {
+            "page": 6,
+            "query": "You cannot double up on decay upgrade card actions."
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Who saw a mushroom",
+          "text": "The first player is whoever saw a mushroom in the wild last, or you put a spore from each player into a hat and see whose is drawn first, or you argue about it for 15 minutes.",
+          "source": {
+            "page": 3,
+            "query": "The first player is determined by whoever saw a mushroom in the wild last"
+          }
+        },
+        {
+          "lead": "Deal three face-down cards",
+          "text": "Shuffle all the mushroom cards, deal 3 cards to each player, and leave them face down.",
+          "source": {
+            "page": 3,
+            "query": "deal 3 cards to each player and leave them face down."
+          }
+        },
+        {
+          "lead": "Place mothers in reverse",
+          "text": "In reverse order, each player places their Mother mushroom on one of the 6 centre triangle tiles, not on a black tile if one is present.",
+          "source": {
+            "page": 3,
+            "query": "each player places their Mother mushroom on one of the 6 centre triangle tiles"
+          }
+        }
+      ],
       "bggTime": { "min": 40, "max": 90 },
       "playerPoll": { "best": "3–4", "recommended": "2–4" },
       "rulebookSearchable": true,
@@ -102857,6 +105343,74 @@
       ]
     },
     "sea-salt-and-paper-includes-expansions-extra-salt-and-extra-pepper": {
+      "commonMistakes": [
+        {
+          "lead": "No looking through discards",
+          "text": "It is not possible to look through the discard piles.",
+          "source": {
+            "page": 1,
+            "query": "It is not possible to look through the discard piles."
+          }
+        },
+        {
+          "lead": "Mermaid colors stay separate",
+          "text": "The same color cannot be counted for more than one mermaid card.",
+          "source": {
+            "page": 1,
+            "query": "The same color cannot be counted for more than one mermaid card."
+          }
+        },
+        {
+          "lead": "Duo effects when placed",
+          "text": "The duo effect is only applied when the player places the two cards in front of them.",
+          "source": {
+            "page": 1,
+            "query": "only applied when the player places the two cards in front of them"
+          }
+        },
+        {
+          "lead": "Say stop or last",
+          "text": "When a player triggers the end of the round, they reveal their hand of cards and must announce STOP or LAST CHANCE.",
+          "source": {
+            "page": 1,
+            "query": "must announce STOP or LAST CHANCE."
+          }
+        },
+        {
+          "lead": "No choice if empty",
+          "text": "If a discard pile is empty, they have no choice but to put their card there.",
+          "source": {
+            "page": 1,
+            "query": "they have no choice but to put their card there"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Choose the first player",
+          "text": "Choose the first player at random.",
+          "source": {
+            "page": 1,
+            "query": "Choose the first player at random."
+          }
+        },
+        {
+          "lead": "Shuffle into one deck",
+          "text": "Shuffle the cards into a deck, placed facedown within easy reach.",
+          "source": {
+            "page": 1,
+            "query": "Shuffle the cards into a deck, placed facedown within easy reach."
+          }
+        },
+        {
+          "lead": "Open two discard piles",
+          "text": "Reveal the first two cards and place them faceup next to the deck to form two discard piles.",
+          "source": {
+            "page": 1,
+            "query": "Reveal the first two cards and place them faceup next to the deck"
+          }
+        }
+      ],
       "bggId": "468272",
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=468272",
       "cover": "https://cf.geekdo-images.com/3a8VIwuFY0GTuzLtFOtJqg__itemrep/img/n239qSxyjDbluCAwgIk522EjVT0=/fit-in/246x300/filters:strip_icc()/pic9546700.jpg",
@@ -107571,6 +110125,50 @@
       ]
     },
     "spot-it": {
+      "commonMistakes": [
+        {
+          "lead": "Only one shared symbol",
+          "text": "Between any 2 cards, there is always 1—and only 1— matching symbol.",
+          "source": {
+            "page": 1,
+            "query": "there is always 1—and only 1—"
+          }
+        },
+        {
+          "lead": "Match your top card",
+          "text": "If you have 2 or more cards in your hand, look only at your top card for a match.",
+          "source": {
+            "page": 1,
+            "query": "look only at your top card for a match."
+          }
+        },
+        {
+          "lead": "Triplet needs one symbol",
+          "text": "The same symbol must be present on all 3 cards to make a matching set.",
+          "source": {
+            "page": 1,
+            "query": "The same symbol must be present on all 3 cards"
+          }
+        }
+      ],
+      "firstGameSetup": [
+        {
+          "lead": "Practice with two cards",
+          "text": "If you’ve never played Dobble before, familiarise yourself with the game by drawing 2 cards at random and placing them faceup on the table so that everyone can see them.",
+          "source": {
+            "page": 1,
+            "query": "familiarise yourself with the game by drawing 2 cards"
+          }
+        },
+        {
+          "lead": "Practice rounds first",
+          "text": "It can be helpful to play a few practice rounds first to make sure everyone understands the rules.",
+          "source": {
+            "page": 1,
+            "query": "play a few practice rounds first"
+          }
+        }
+      ],
       "bggTime": { "min": 15, "max": 15 },
       "playerPoll": { "best": "4–5", "recommended": "2–7" },
       "rulebookSearchable": true,
@@ -121489,7 +124087,16 @@
     if (!intro && !items.length && contentIsEmpty(tail)) return null;
     return { intro: intro, items: items, tail: tail };
   }
-  function renderCommonMistakes(value) {
+  function chapterNote(title, inner, collapsed) {
+    if (!inner) return "";
+    return (
+      '<details class="chapter-note"' + (collapsed ? "" : " open") + ">" +
+        "<summary>" + escapeHtml(title) + "</summary>" +
+        '<div class="chapter-note-body">' + inner + "</div>" +
+      "</details>"
+    );
+  }
+  function renderCommonMistakes(value, collapsed) {
     var parts = mistakeParts(value);
     if (!parts) return "";
     var html = parts.intro;
@@ -121497,12 +124104,7 @@
     if (parts.items.length) html += renderShowMore(parts.items, 3, extra);
     else if (extra) html += extra;
     if (!html) return "";
-    return (
-      '<section class="callout callout-mistakes" id="common-mistakes" aria-labelledby="common-mistakes-title">' +
-        '<h3 id="common-mistakes-title">Common mistakes</h3>' +
-        html +
-      "</section>"
-    );
+    return chapterNote("Common mistakes", html, collapsed);
   }
   function resolveFirstGame(value, count) {
     if (contentIsEmpty(value)) return null;
@@ -121513,15 +124115,10 @@
     }
     return value;
   }
-  function renderFirstGame(value, count) {
+  function renderFirstGame(value, count, collapsed) {
     var inner = renderRuleContent(resolveFirstGame(value, count));
     if (!inner) return "";
-    return (
-      '<section class="callout callout-first" id="first-game" aria-labelledby="first-game-title">' +
-        '<h3 id="first-game-title">First game? Use this</h3>' +
-        '<div class="callout-body" id="first-game-body">' + inner + "</div>" +
-      "</section>"
-    );
+    return chapterNote("First game", inner, collapsed);
   }
   function renderAidCard(aid) {
     var title = escapeHtml(aid.title);
@@ -122546,11 +125143,13 @@
         chapterSlot("qs-text", composeSection(quickText, "", [], "setup")) +
         chapterSlot("pc-text", playerCountHtmlInner) +
         chapterSlot("resources-text", setupResourcesHtml, "Starting resources") +
-        chapterSlot("setup-photo", "")
+        chapterSlot("setup-photo", "") +
+        chapterSlot("first-game-slot", renderFirstGame(g.firstGameSetup, selectedCount, !contentIsEmpty(quickText) || !!playerCountHtmlInner || !!setupResourcesHtml || !!initialSetupVariant))
       ) +
       chapterShell("turn-chapter", "On your turn",
         chapterSlot("turn-text", renderTurnBody(turnStructure, g, [])) +
-        chapterSlot("reminders-text", composeSection(remindersText, "", [], "rules"), "Reminders")
+        chapterSlot("reminders-text", composeSection(remindersText, "", [], "rules"), "Reminders") +
+        chapterSlot("mistakes-slot", renderCommonMistakes(commonMistakes, !contentIsEmpty(turnStructure) || !contentIsEmpty(remindersText)))
       ) +
       chapterShell("end-chapter", "End of the game",
         chapterSlot("end-text", renderRuleContent(endOfGame) || "") +
@@ -122609,8 +125208,6 @@
             '<h3 id="scoring-summary-title">How you win</h3>' +
             '<div id="scoring-summary-body">' + renderSummaryHtml(summaryLines) + "</div>" +
           "</aside>" +
-          '<div id="common-mistakes-slot">' + renderCommonMistakes(commonMistakes) + "</div>" +
-          '<div id="first-game-slot">' + renderFirstGame(g.firstGameSetup, selectedCount) + "</div>" +
           '<div class="actions">' +
             (expansionNoteHtml ? '<div class="rules-notes">' + expansionNoteHtml + "</div>" : "") +
             quickBlocksHtml +
@@ -123017,7 +125614,15 @@
     }
     function paintFirstGame(count) {
       var slot = document.getElementById("first-game-slot");
-      if (slot) slot.innerHTML = renderFirstGame(g.firstGameSetup, count);
+      if (!slot) return;
+      var longPage = ["qs-variant", "qs-text", "pc-text", "resources-text", "setup-photo"].some(function (id) {
+        var el = document.getElementById(id);
+        return el && !el.hidden && String(el.textContent || "").trim();
+      });
+      var html = renderFirstGame(g.firstGameSetup, count, longPage);
+      slot.innerHTML = html;
+      slot.hidden = !html;
+      refreshChapters();
     }
     function paintTeach() {
       var link = document.getElementById("teach-link");
