@@ -116761,13 +116761,42 @@
     var weightSelect = document.getElementById("filter-weight");
     var gridToken = 0;
 
-    function numberRange(value) {
-      var nums = String(value || "").match(/\d+(?:\.\d+)?/g);
+    /* catalog-filter-parse:start */
+    function blankFacet(value) {
+      var text = String(value == null ? "" : value).trim();
+      return !text || /^(none|varies|n\/a|unknown|—|-)$/i.test(text);
+    }
+    function playerSpan(value) {
+      if (blankFacet(value)) return null;
+      var text = String(value).trim();
+      var nums = text.match(/\d+/g);
+      if (!nums) return null;
+      var values = nums.map(Number);
+      var min = Math.min.apply(null, values);
+      var max = Math.max.apply(null, values);
+      var open = /(\+|or more|and up)/i.test(text);
+      if (open) max = Math.max(max, 99);
+      return { min: min, max: max, open: open };
+    }
+    function playMinutes(game, pickedPlayers) {
+      if (!game || blankFacet(game.time)) return null;
+      var text = String(game.time).trim();
+      var nums = text.match(/\d+(?:\.\d+)?/g);
       if (!nums) return null;
       var values = nums.map(Number).filter(function (n) { return isFinite(n); });
       if (!values.length) return null;
-      return { min: Math.min.apply(null, values), max: Math.max.apply(null, values) };
+      var min = Math.min.apply(null, values);
+      var max = Math.max.apply(null, values);
+      if (/\bper\s+player\b/i.test(text)) {
+        var span = playerSpan(game.players);
+        var count = pickedPlayers || 0;
+        if (!count && span) count = span.open ? 12 : span.max;
+        if (!count) return null;
+        return { min: min * count, max: max * count };
+      }
+      return { min: min, max: max };
     }
+    /* catalog-filter-parse:end */
     function gameWeight(game) {
       if (game.weight == null || game.weight === "") return null;
       var n = parseFloat(game.weight);
@@ -116782,11 +116811,11 @@
     }
     function matchesFacets(game, picks) {
       if (picks.players) {
-        var players = numberRange(game.players);
+        var players = playerSpan(game.players);
         if (!players || picks.players < players.min || picks.players > players.max) return false;
       }
       if (picks.time) {
-        var time = numberRange(game.time);
+        var time = playMinutes(game, picks.players || 0);
         if (!time || time.max > picks.time) return false;
       }
       if (picks.weight) {
@@ -116804,13 +116833,13 @@
       var hasWeight = false;
       var counts = {};
       scoped.forEach(function (game) {
-        var players = numberRange(game.players);
+        var players = playerSpan(game.players);
         if (players) {
           hasPlayers = true;
           var hi = Math.min(players.max, 12);
           for (var n = Math.max(1, players.min); n <= hi; n++) counts[n] = true;
         }
-        if (numberRange(game.time)) hasTime = true;
+        if (playMinutes(game, 0)) hasTime = true;
         if (gameWeight(game) != null) hasWeight = true;
       });
       var playerFacet = playerSelect && playerSelect.closest(".catalog-filter");
