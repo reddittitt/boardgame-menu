@@ -25576,19 +25576,37 @@
         },
         {
           "term": "Company share",
-          "desc": "A family member in the Court of Directors. It scores the Court's value if the Company survives, and costs that value if the Company fails. The Chairman counts as a share when dividends are paid.",
+          "desc": "A family member in the Court of Directors. It scores the Court's value if the Company survives, and costs that value if the Company fails.",
           "source": {
             "page": 14,
             "query": "is called a Company share"
-          }
+          },
+          "also": [
+            {
+              "text": "The Chairman counts as a share when dividends are paid.",
+              "source": {
+                "page": 27,
+                "query": "the Chairman counts as a Company share for dividends"
+              }
+            }
+          ]
         },
         {
           "term": "Pensioner",
-          "desc": "5 or more: That officeholder retires. Move the family member holding that office to the Pensioners box on the board. Starting with the Chairman (or former Chairman if the office is vacant) and going clockwise, each player may retire their pensioner(s). For each pensioner, choose a prize on the left side of the board, pay the cost indicated on the top left of the prize box, and move your pensioner to that box. Increase your victory point marker by the amount listed. Lastly, return any family members in the Pensioners box to their supplies.",
+          "desc": "5 or more: That officeholder retires. Move the family member holding that office to the Pensioners box on the board. Starting with the Chairman (or former Chairman if the office is vacant) and going clockwise, each player may retire their pensioner(s). For each pensioner, choose a prize on the left side of the board, pay the cost indicated on the top left of the prize box, and move your pensioner to that box. Increase your victory point marker by the amount listed.",
           "source": {
             "page": 11,
             "query": "Pensioners box on the board"
-          }
+          },
+          "also": [
+            {
+              "text": "Lastly, return any family members in the Pensioners box to their supplies.",
+              "source": {
+                "page": 12,
+                "query": "return any family members in the Pensioners box to their supplies"
+              }
+            }
+          ]
         },
         {
           "term": "Fatigue",
@@ -25616,11 +25634,20 @@
         },
         {
           "term": "Window icon",
-          "desc": "Some tax policy spaces have a window icon. If a law passes and a policy space with this icon is selected, all players must pay cash equal to the number of window icons associated with each of their family members on a prize and each of their enterprises. If they cannot, the enterprise or family member on the prize is returned to its supply. Any ties after Final Scoring are broken in favor of the player with the most window icons and then in Prime Minister order (clockwise, starting with the Prime Minister).",
+          "desc": "Some tax policy spaces have a window icon. If a law passes and a policy space with this icon is selected, all players must pay cash equal to the number of window icons associated with each of their family members on a prize and each of their enterprises. If they cannot, the enterprise or family member on the prize is returned to its supply.",
           "source": {
             "page": 34,
             "query": "pay cash equal to the number of window icons"
-          }
+          },
+          "also": [
+            {
+              "text": "Any ties after Final Scoring are broken in favor of the player with the most window icons and then in Prime Minister order (clockwise, starting with the Prime Minister).",
+              "source": {
+                "page": 9,
+                "query": "Any ties after Final Scoring are broken in favor of the player with the most"
+              }
+            }
+          ]
         },
         {
           "term": "Deregulation",
@@ -25632,11 +25659,27 @@
         },
         {
           "term": "The Crown",
-          "desc": "Give the Crown the family members of two players, so they have 36 pieces instead of 18. They will first use all of one color when placing family members. Divide the 12 Crown promise cubes equally between the Crown and the human players (i.e. 6 each in a solo game, 4 each in a 2-player game). The Crown uses the family board titled \u201cThe Crown.\u201d The Crown Handbook will be used to determine the behavior and interactions of the Crown during each game. However, players are encouraged to not look beyond the phase they are currently in within the Handbook.",
+          "desc": "Give the Crown the family members of two players, so they have 36 pieces instead of 18. They will first use all of one color when placing family members. Divide the 12 Crown promise cubes equally between the Crown and the human players (i.e. 6 each in a solo game, 4 each in a 2-player game). The Crown uses the family board titled \u201cThe Crown.\u201d",
           "source": {
             "page": 43,
             "query": "you will be playing against the Crown"
-          }
+          },
+          "also": [
+            {
+              "text": "The Crown Handbook will be used to determine the behavior and interactions of the Crown during each game.",
+              "source": {
+                "page": 44,
+                "query": "Crown Handbook will be used to determine the behavior and interactions"
+              }
+            },
+            {
+              "text": "However, players are encouraged to not look beyond the phase they are currently in within the Handbook.",
+              "source": {
+                "page": 44,
+                "query": "not look beyond the phase they are currently in within the Handbook"
+              }
+            }
+          ]
         }
       ],
       "teachingScript": {
@@ -136477,11 +136520,17 @@
         var label = term ? '<strong class="glossary-term">' + escapeHtml(term) + ".</strong> " : "";
         var body;
         if (desc == null || typeof desc === "string") {
-          body = "<p>" + label + textToHtml(desc || "") + "</p>";
+          body = "<p>" + label + textToHtml(desc || "") + "</p>" + renderRulebookRef(item);
         } else {
-          body = (label ? "<p>" + label + "</p>" : "") + renderRuleContent(desc);
+          body = (label ? "<p>" + label + "</p>" : "") + renderRuleContent(desc) + renderRulebookRef(item);
         }
-        return '<div class="expansion-text-block glossary-item">' + body + renderRulebookRef(item) + "</div>";
+        if (Array.isArray(item.also)) {
+          item.also.forEach(function (part) {
+            if (!part || !part.text) return;
+            body += "<p>" + textToHtml(part.text) + "</p>" + renderRulebookRef(part);
+          });
+        }
+        return '<div class="expansion-text-block glossary-item">' + body + "</div>";
       }).join("");
 
       rulesGlossaryHtml =
