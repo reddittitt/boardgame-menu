@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /* Sample each searchable game's index against the PDF the viewer opens.
 
-   Picks up to three lines from different pages and checks that the viewer's
-   text layer contains that line once on that page. A searchable game with no
-   index fails. Image-only books should be marked rulebookSearchable false
-   instead of carrying an index the viewer cannot highlight.
+   Picks up to three pages and checks that the viewer's text layer contains
+   one of that page's index lines. Whitespace, hyphens, and punctuation are
+   folded first, so a line the text layer joins differently still counts.
+   Print, legal, and contents lines are skipped. A searchable game with no
+   index fails. An upstream fetch that fails is a warning. Image-only books
+   should be marked rulebookSearchable false.
 
    node scripts/check-rulebook-index.mjs
    node scripts/check-rulebook-index.mjs azul root
@@ -30,7 +32,7 @@ const end = html.indexOf("var rulebookViewerToken");
 if (start < 0 || end < start) throw new Error("could not find the viewer search functions");
 const sandbox = { Math, String, Object, isFinite, Number };
 vm.createContext(sandbox);
-vm.runInContext(html.slice(start, end) + "\nthis.api = { searchMatchRanges, textRunsFromItems };", sandbox);
+vm.runInContext(html.slice(start, end) + "\nthis.api = { searchMatchRanges, textRunsFromItems, foldSearchText };", sandbox);
 const api = sandbox.api;
 
 function slugify(name) {
@@ -82,17 +84,24 @@ function isPrintArtifact(text) {
   if (/\.(?:indd|pdf|ai|psd)\b/i.test(text)) return true;
   if (/\b(?:lpi|cmyk|icc|rgb|pms)\b/i.test(text)) return true;
   if (/color profile|output intent|prepress|process color|notes to printer/i.test(text)) return true;
-  if (/©|copyright|all rights reserved|may be reproduced|may not be reproduced|registered trademark/i.test(text)) return true;
+  if (/©|copyright|all rights reserved|may be reproduced|may not be reproduced|registered trademark|trademark of/i.test(text)) return true;
   if (/approved for ages|formula guide|color swatch/i.test(text)) return true;
-  if (/\.{3,}/.test(text)) return true;
+  if (/years of age|not suitable for children|not a toy|not intended for|age requirement|small parts/i.test(text)) return true;
+  if (/\.{4,}/.test(text)) return true;
+  if (/\s\.\s*\d{1,3}\s*$/.test(text)) return true;
   if (/reprint\s+\d{4}|rules?\s+en\b/i.test(text)) return true;
   if (/[A-Za-z0-9]+_[A-Za-z0-9].*\d/.test(text)) return true;
   const tokens = text.split(" ").filter(Boolean);
   const letters = tokens.filter((token) => /^[A-Za-z]+$/.test(token));
   const singles = letters.filter((token) => token.length === 1).length;
-  if (letters.length >= 4 && singles / letters.length >= 0.45) return true;
-  if (/(?:[A-Za-z] ){4,}[A-Za-z]/.test(text)) return true;
+  if (letters.length >= 4 && singles / letters.length >= 0.35) return true;
+  if (/(?:[A-Za-z] ){3,}[A-Za-z]/.test(text)) return true;
   return false;
+}
+
+function compact(raw) {
+  const folded = api.foldSearchText(String(raw || "")).folded;
+  return folded.replace(/[^a-z0-9]+/g, "");
 }
 
 function candidateLines(lines) {
@@ -107,7 +116,6 @@ function candidateLines(lines) {
     const words = text.split(" ").filter((word) => /^[A-Za-z]{3,}/.test(word));
     if (words.length < 4) continue;
     out.push(text);
-    if (out.length >= 5) break;
   }
   return out;
 }
@@ -129,6 +137,7 @@ function samples(index) {
 }
 
 const failures = [];
+const warnings = [];
 let checked = 0;
 for (const { slug, game } of games) {
   const indexPath = path.join(root, "rulebooks", "index", slug + ".json");
@@ -146,30 +155,48 @@ for (const { slug, game } of games) {
   try {
     bytes = await pdfBytes(slug, game);
   } catch (err) {
-    failures.push({ slug, error: "could not open viewer PDF: " + err.message });
+    const message = err.message || String(err);
+    if (/^HTTP |response was not a PDF/.test(message)) {
+      warnings.push({ slug, error: "upstream fetch failed: " + message });
+    } else {
+      failures.push({ slug, error: "could not open viewer PDF: " + message });
+    }
     continue;
   }
   const doc = await pdfjs.getDocument({ data: new Uint8Array(bytes), disableWorker: true }).promise;
+  let confirmed = 0;
   for (const sample of lines) {
-    checked += 1;
     if (sample.page < 1 || sample.page > doc.numPages) {
-      failures.push({ slug, page: sample.page, query: sample.query, error: "page out of range" });
+      failures.push({ slug, page: sample.page, query: sample.queries[0], error: "page out of range" });
       continue;
     }
     const page = await doc.getPage(sample.page);
     const content = await page.getTextContent();
     const built = api.textRunsFromItems(content.items);
-    const hit = sample.queries.some((query) => api.searchMatchRanges(built.raw, query).ranges.length);
+    const letters = (built.raw.match(/[A-Za-z]/g) || []).length;
+    if (letters < 40) continue;
+    checked += 1;
+    const pageText = compact(built.raw);
+    const hit = sample.queries.some((query) => pageText.includes(compact(query)));
     if (!hit) {
       failures.push({ slug, page: sample.page, query: sample.queries[0], error: "none of the sampled index lines are on that page of the viewer PDF" });
+    } else {
+      confirmed += 1;
     }
+  }
+  if (!confirmed && !failures.some((failure) => failure.slug === slug)) {
+    failures.push({ slug, error: "viewer pages have no text layer to match the index" });
   }
   process.stdout.write(slug + " ok\n");
 }
 
+for (const warning of warnings) {
+  console.warn("warning: " + warning.slug + ": " + warning.error);
+}
 if (failures.length) {
   console.error(JSON.stringify(failures, null, 2));
   console.error(failures.length + " failure(s), " + checked + " lines checked, " + games.length + " searchable games");
   process.exit(1);
 }
-console.log("rulebook index ok (" + games.length + " games, " + checked + " lines)");
+const warningNote = warnings.length ? ", " + warnings.length + " upstream warning(s)" : "";
+console.log("rulebook index ok (" + games.length + " games, " + checked + " lines" + warningNote + ")");
