@@ -132854,7 +132854,7 @@
     ["season"],
     ["autumn"],
     ["battle", "combat"],
-    ["clearing"],
+    ["clearing", "clear"],
     ["warrior"],
     ["spirit"],
     ["power"],
@@ -132905,11 +132905,107 @@
       var next = buf.charAt(i + 1);
       if (next && !/[\s"'”’)\]]/.test(next)) continue;
       var sofar = buf.slice(0, i + 1).trim();
-      if (sofar.length < 28) continue;
+      if (ch === "." && sofar.length < 18) continue;
       if (!/[A-Za-z]/.test(sofar)) continue;
       return i;
     }
     return -1;
+  }
+  function askNoise(line) {
+    var words = String(line || "").split(/\s+/).filter(Boolean);
+    if (!words.length) return true;
+    var singles = 0;
+    words.forEach(function (word) {
+      if (word.replace(/[^A-Za-z]/g, "").length === 1) singles += 1;
+    });
+    return singles >= 2 && singles / words.length >= 0.45;
+  }
+  function askIsHeading(line) {
+    if (!line || line.length > 62) return false;
+    var letters = (line.match(/[A-Za-z]/g) || []).length;
+    if (letters < 3) return false;
+    if (!/^[A-Z0-9“"]/.test(line)) return false;
+    if (/[.!?]/.test(line) && /[a-z]/.test(line) && line.length > 32) return false;
+    if (/^\d+\.\d+(?:\.\d+)*\s+[A-Z]/.test(line)) return true;
+    var words = line.split(/\s+/).filter(function (word) { return /[A-Za-z]/.test(word); });
+    if (words.length < 2) return false;
+    var caps = (line.match(/[A-Z]/g) || []).length;
+    return caps / letters >= 0.6;
+  }
+  function askPolish(sentence) {
+    var s = String(sentence || "").replace(/\s+/g, " ").replace(/\s+([.,;!?])/g, "$1").trim();
+    if (/\b(?:onthe|inthe|tothe|ofthe|andthe|forthe|fromthe|withthe|only die|action shown)\b/i.test(s)) return "";
+    if (/^[A-Z][^:]{2,28}:\s+[A-Z]/.test(s) && /[.!?]$/.test(s) && s.length <= 90 && !/[\\@_|]/.test(s)) {
+      var labelWords = s.split(":")[0].split(/\s+/).length;
+      var labeled = (s.match(/[A-Za-z]/g) || []).length;
+      if (labelWords <= 3 && labeled >= 18 && labeled / s.length >= 0.7 && (s.match(/:/g) || []).length === 1) return s;
+    }
+    s = s.replace(/^(?:[\d]+(?:\.[\d]+)*[.)]?\s+)+/, "");
+    var words = s.split(" ");
+    var i = 0;
+    while (i < words.length) {
+      var bare = words[i].replace(/[^A-Za-z0-9]/g, "");
+      if (bare && bare === bare.toUpperCase() && /[A-Z]/.test(bare) && bare.length >= 2) i += 1;
+      else break;
+    }
+    words = words.slice(i);
+    var lowerAt = -1;
+    for (var n = 0; n < words.length; n++) {
+      if (/^[a-z]/.test(words[n].replace(/^[^A-Za-z]+/, ""))) { lowerAt = n; break; }
+    }
+    if (lowerAt >= 3) {
+      var starters = {
+        The: 1, A: 1, An: 1, If: 1, When: 1, After: 1, Before: 1, Each: 1, You: 1, Your: 1,
+        This: 1, These: 1, Once: 1, During: 1, To: 1, At: 1, In: 1, On: 1, For: 1,
+        Remember: 1, Note: 1, However: 1, Then: 1, Any: 1, All: 1, Most: 1, Some: 1,
+        Players: 1, Finally: 1, Use: 1, Also: 1
+      };
+      var start = lowerAt - 1;
+      for (var b = lowerAt - 1; b >= Math.max(0, lowerAt - 4); b--) {
+        var bw = words[b].replace(/[^A-Za-z]/g, "");
+        if (starters[bw]) start = b;
+      }
+      if (start === lowerAt - 1 && lowerAt >= 2) {
+        var prev = words[lowerAt - 1].replace(/[^A-Za-z]/g, "");
+        var prev2 = words[lowerAt - 2].replace(/[^A-Za-z]/g, "");
+        if (/^[A-Z]/.test(prev2) && /^[A-Z]/.test(prev)) start = lowerAt - 2;
+      }
+      words = words.slice(start);
+    }
+    s = words.join(" ").replace(/^[^A-Za-z"“]+/, "").trim();
+    s = s.replace(/^(?:(?:[A-Z][a-z]+)(?:\s+[A-Z][a-z]+){0,3}\.\s+)+(?=[A-Z])/, "");
+    s = s.replace(/:\s*\d+\.?$/, ".");
+    if (!/^[A-Z"“]/.test(s) || !/[.!?]$/.test(s)) return "";
+    if (/\.\.\.|…|[\\@_|]/.test(s)) return "";
+    if (/\[p\.\s*\d/.test(s)) return "";
+    if (/[^A-Za-z0-9\s.,;:'"“”‘’()\-–—£$%+/!?]/.test(s)) return "";
+    if (/\s(?:Any|The|When|If|After|This|You|Each|Some|All|Once|During|Also|Then)\b/.test(s.slice(1))) return "";
+    if (/:\s+/.test(s) && /, and [a-z]{3,}\b/.test(s)) return "";
+    if (/, and [a-z]+ [a-z]+ed\b/.test(s)) return "";
+    if (/\b(?:onthe|inthe|tothe|ofthe|andthe|forthe|fromthe|withthe|only die)\b/i.test(s)) return "";
+    if ((s.match(/:/g) || []).length > 1) return "";
+    if (/\b(ae|aa|te|ce|fo|om|ay|io|ms|laok|strauld|populetions|whatit|aneffect|thiveity|beard)\b/i.test(s)) return "";
+    var letters = (s.match(/[A-Za-z]/g) || []).length;
+    if (letters < 18 || letters / s.length < 0.72) return "";
+    var tokens = s.split(/\s+/);
+    var shortOk = { a: 1, i: 1, of: 1, to: 1, in: 1, on: 1, or: 1, as: 1, at: 1, by: 1, if: 1, we: 1, be: 1, is: 1, it: 1, an: 1, no: 1, so: 1, up: 1, vs: 1, do: 1, go: 1, my: 1, he: 1, us: 1, am: 1, vp: 1, hp: 1 };
+    for (var t = 0; t < tokens.length; t++) {
+      var bareTok = tokens[t].replace(/[^A-Za-z]/g, "");
+      if (bareTok && bareTok.length <= 2 && !shortOk[bareTok.toLowerCase()]) return "";
+    }
+    var singles = tokens.filter(function (word) {
+      var bare = word.replace(/[^A-Za-z]/g, "");
+      return bare.length === 1 && !/^[aAiI]$/.test(bare);
+    }).length;
+    if (singles >= 2) return "";
+    if ((s.match(/\(/g) || []).length !== (s.match(/\)/g) || []).length) return "";
+    if (/\ba the\b|\bthe a\b/i.test(s)) return "";
+    if (/^[A-Z][a-z]+ has \d/.test(s)) return "";
+    var colonAt = s.indexOf(":");
+    if (colonAt !== -1 && s.slice(0, colonAt).trim().split(/\s+/).length > 3) return "";
+    var labeledRule = /^[^:]{2,28}:\s+\S/.test(s) && s.split(":")[0].split(/\s+/).length <= 3;
+    if (!labeledRule && !/\b(is|are|was|were|be|been|has|have|had|do|does|did|can|may|must|will|shall|should|would|could|gain|gains|place|places|win|wins|score|scores|move|moves|choose|chooses|roll|rolls|generate|generates|activate|activates|start|starts|retire|retires|pay|pays|draw|draws|become|becomes|end|ends|reach|reaches|rule|rules|take|takes|add|adds|remove|removes|return|returns|share|shares|follow|follows|destroy|destroys|destroys|deal|deals|flip|flips|advance|advances|earn|earns|play|plays|discard|discards|resolve|resolves|lose|loses|meet|meets|count|counts|mark|marks|tuck|tucks|hold|holds|throw|throws|finish|finishes|pass|passes|reveal|reveals|cover|covers|terrify|terrifies|require|requires|represent|represents|harm|harms|clear|clears|reset|resets|contribute|contributes|fill|fills|begin|begins|let|lets|need|needs|include|includes|affect|affects|determine|determines|happen|happens|skip|skips|vote|votes|adjust|adjusts|increase|increases|decrease|decreases|cost|costs|worth|generated|destroyed|retired|moved|placed|flipped|returned|scored|reached|finished|completed|resolved|instructed|treated|called|composed|linked|divided|spent|used|paid|listed|printed|indicated|chosen|forced|limited|defined|shuffled|discarded|crafted|removed|scored|won)\b/i.test(s)) return "";
+    return s;
   }
   function askBuildPassages(index) {
     var docs = [];
@@ -132926,46 +133022,47 @@
           if (end < 0) break;
           var sentence = buf.slice(0, end + 1).replace(/\s+/g, " ").trim();
           buf = buf.slice(end + 1).replace(/^\s+/, "");
-          if (sentence.length >= 40 && /[.!?]$/.test(sentence)) docs.push({ page: pageNum, text: sentence });
+          var clean = askPolish(sentence);
+          if (clean) docs.push({ page: pageNum, text: clean, heading: heading });
         }
       }
-      for (var i = 0; i < lines.length; i++) {
-        var line = askCleanLine(lines[i]);
+      for (var li = 0; li < lines.length; li++) {
+        var line = askCleanLine(lines[li]);
+        if (!line || askNoise(line)) continue;
+        if (askIsHeading(line)) {
+          emitReady();
+          buf = "";
+          heading = line.replace(/[—–-]+\s*$/, "").trim();
+          continue;
+        }
+        if (/^[A-Z][^:]{2,32}:/.test(line) && line.split(":")[0].split(/\s+/).length <= 3) {
+          emitReady();
+          buf = "";
+        }
+        var labeledLine = line.match(/^([A-Z][^:]{2,32}:\s+[A-Z][^.]{6,80}[.!?])\s+(\S.*)$/);
+        if (labeledLine && labeledLine[1].split(":")[0].split(/\s+/).length <= 3 && (/^[a-z0-9$<>]/.test(labeledLine[2]) || labeledLine[2].length < 16)) {
+          line = labeledLine[1];
+        }
+        if (buf && /^(The|If|When|After|Before|Each|You|Your|This|Once|During|Remember|Players|Finally|Also|In)\b/.test(line) && !/[,:;(]$/.test(buf.trim())) {
+          emitReady();
+          buf = "";
+        }
         if (!askUseful(line)) {
           if (buf && /[A-Za-z]/.test(line) && line.length >= 6 && line.length < 80) {
             buf += " " + line;
             emitReady();
-            continue;
+          } else {
+            emitReady();
+            buf = "";
           }
-          if (line && line.length < 48 && /[A-Za-z]/.test(line) && (line.match(/[A-Za-z]/g) || []).length >= 3) heading = line;
-          else heading = "";
-          emitReady();
-          buf = "";
           continue;
-        }
-        if (heading) {
-          line = heading + " " + line;
-          heading = "";
         }
         buf = buf ? buf + " " + line : line;
         emitReady();
       }
       emitReady();
     }
-    var packed = [];
-    for (var d = 0; d < docs.length; d++) {
-      var text = docs[d].text;
-      var pageNum = docs[d].page;
-      if (text.length < 75 && d + 1 < docs.length && docs[d + 1].page === pageNum) {
-        var next = docs[d + 1].text;
-        if ((text + " " + next).length <= 420) {
-          text = text + " " + next;
-          d += 1;
-        }
-      }
-      packed.push({ page: pageNum, text: text });
-    }
-    return packed;
+    return docs;
   }
   function askPrepare(index) {
     if (index && index._ask) return index._ask;
@@ -133013,6 +133110,56 @@
     var slice = words.slice(start, start + 8);
     return slice.join(" ").replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
   }
+  function askHeadingBoost(heading, rawTerms) {
+    var stems = askWords(heading).map(askStem);
+    var exact = 0;
+    var syn = 0;
+    rawTerms.forEach(function (stem) {
+      if (stems.indexOf(stem) !== -1) exact += 1;
+      else {
+        var group = askGroup(stem);
+        for (var i = 0; i < group.length; i++) {
+          if (stems.indexOf(group[i]) !== -1) syn += 1;
+        }
+      }
+    });
+    if (!exact && !syn) return 1;
+    return 1 + exact * 0.9 + syn * 0.45;
+  }
+  function askPhraseHits(text, rawTerms) {
+    if (rawTerms.length < 2) return 0;
+    var stems = [];
+    askWords(text).forEach(function (word) {
+      if (ASK_STOP[word]) return;
+      stems.push(askStem(word));
+    });
+    var hits = 0;
+    for (var i = 0; i < rawTerms.length - 1; i++) {
+      var left = askGroup(rawTerms[i]);
+      var right = askGroup(rawTerms[i + 1]);
+      for (var p = 0; p < stems.length; p++) {
+        if (left.indexOf(stems[p]) === -1) continue;
+        for (var q = p + 1; q < Math.min(stems.length, p + 5); q++) {
+          if (right.indexOf(stems[q]) !== -1) hits += (q === p + 1 ? 2 : 1);
+        }
+      }
+    }
+    return hits;
+  }
+  function askSimilar(a, b) {
+    var left = {};
+    var right = {};
+    var keys = {};
+    askWords(a).forEach(function (word) { left[word] = 1; keys[word] = 1; });
+    askWords(b).forEach(function (word) { right[word] = 1; keys[word] = 1; });
+    var inter = 0;
+    var union = 0;
+    Object.keys(keys).forEach(function (key) {
+      union += 1;
+      if (left[key] && right[key]) inter += 1;
+    });
+    return union ? inter / union : 0;
+  }
   function askRulebook(index, question) {
     var prepared = askPrepare(index);
     var rawTerms = [];
@@ -133024,11 +133171,11 @@
     });
     if (!rawTerms.length) return [];
     var k1 = 1.2;
-    var b = 0.75;
+    var bend = 0.55;
+    var side = /rugwort|hireling|automa|coalition/i;
+    var flavor = /historian records|skulks away|might never, ever|enchanted by the wondrous|records your victory/i;
     var scored = [];
     prepared.docs.forEach(function (doc) {
-      var letters = (doc.text.match(/[A-Za-z]/g) || []).length;
-      if (letters / doc.text.length < 0.7) return;
       var score = 0;
       var matched = 0;
       rawTerms.forEach(function (stem) {
@@ -133042,22 +133189,80 @@
         if (!tf) return;
         matched += 1;
         var idf = Math.log(1 + (prepared.n - df + 0.5) / (df + 0.5));
-        var norm = tf * (k1 + 1) / (tf + k1 * (1 - b + b * doc.len / prepared.avg));
+        var norm = tf * (k1 + 1) / (tf + k1 * (1 - bend + bend * doc.len / prepared.avg));
         score += idf * norm;
       });
-      if (!matched) return;
-      score *= 1 + (matched - 1) * 0.35;
-      scored.push({ page: doc.page, text: doc.text, score: score, matched: matched });
+      var headingBoost = askHeadingBoost(doc.heading || "", rawTerms);
+      if (!matched && headingBoost <= 1) return;
+      if (!matched) score = 1.4 * (headingBoost - 1);
+      else score *= headingBoost;
+      var phrases = askPhraseHits(doc.text, rawTerms);
+      if (phrases) score *= 1 + Math.min(phrases, 3) * 0.45;
+      var aboutWin = rawTerms.some(function (stem) { return askGroup(stem).indexOf("win") !== -1; });
+      if (aboutWin && /immediately wins the game|most points is the winner|most points wins|current victory condition/i.test(doc.text)) score *= 1.6;
+      if (aboutWin && /Terror Level\s+[123]\s*:/i.test(doc.text)) {
+        score = Math.max(score, 12);
+        matched = Math.max(matched, 1);
+      }
+      if (aboutWin && /Terror Level\s+VICTORY\s*:/i.test(doc.text)) score = Math.max(score, 6);
+      if (aboutWin && /you lose\b/i.test(doc.text) && !/you win\b/i.test(doc.text)) score *= 0.2;
+      if (aboutWin && /on the ropes|achieving victory|beyond hope/i.test(doc.text)) score *= 0.15;
+      var aboutFail = rawTerms.some(function (stem) { return askGroup(stem).indexOf("fail") !== -1; });
+      if (aboutFail && /has failed[.]$/.test(doc.text) && /leftmost|Standing track/i.test(doc.text)) score *= 1.8;
+      var aboutScore = (rawTerms.indexOf("score") !== -1 || rawTerms.indexOf("point") !== -1) && rawTerms.indexOf("end") !== -1;
+      if (aboutScore && !/round/i.test(question)) {
+        if (/end-of-round|end of the round|round you just completed/i.test(doc.text)) score *= 0.28;
+        if (/game ends|most points wins|scorepad/i.test(doc.text)) score *= 1.7;
+        if (/\bworth\b/i.test(doc.text) && !/game ends|most points|scorepad/i.test(doc.text)) score *= 0.3;
+      }
+      if (rawTerms.indexOf("fear") !== -1 && /^Fear\b/.test(doc.text) && /terrif|generated|Fear Marker|Fear Card/i.test(doc.text)) score *= 1.55;
+      var aboutBlight = rawTerms.some(function (stem) { return askGroup(stem).indexOf("blight") !== -1; });
+      if (aboutBlight && /Blight Card|becomes Blighted|add Blight|run out of Blight/i.test(doc.text)) score *= 1.45;
+      if (aboutBlight && /beyond hope of recovery|^It.s easy to\b/i.test(doc.text)) score *= 0.15;
+      var aboutRule = rawTerms.indexOf("rule") !== -1 && rawTerms.indexOf("clear") !== -1 || rawTerms.indexOf("rule") !== -1 && rawTerms.indexOf("clearing") !== -1;
+      if (aboutRule && /rules a clearing if/i.test(doc.text)) score *= 1.7;
+      if (aboutRule && /regardless of who rules/i.test(doc.text)) score *= 0.55;
+      if (rawTerms.indexOf("autumn") !== -1 && /^In autumn\b/i.test(doc.text) && /gain|activate/i.test(doc.text)) score *= 1.8;
+      if (rawTerms.indexOf("pensioner") !== -1 && /retire their pensioner|for each pensioner/i.test(doc.text)) score *= 1.7;
+      var seenGroup = {};
+      rawTerms.forEach(function (stem) {
+        var key = askGroup(stem).join("|");
+        if (seenGroup[key] && !doc.tf[stem]) score *= 0.2;
+        seenGroup[key] = 1;
+      });
+      if (side.test(doc.text) && !side.test(question)) score *= 0.22;
+      if (flavor.test(doc.text) && !/story|flavor|historian/i.test(question)) score *= 0.12;
+      if (!score) return;
+      scored.push({
+        page: doc.page,
+        text: doc.text,
+        score: score,
+        matched: matched,
+        phrase: phrases,
+        heading: headingBoost
+      });
     });
     scored.sort(function (a, b2) { return b2.score - a.score; });
     var out = [];
     var best = scored.length ? scored[0].score : 0;
+    var top = scored[0];
+    var coverage = top && rawTerms.length ? top.matched / rawTerms.length : 0;
+    var strong = top && top.score >= 3.2 && top.matched >= 1 && (
+      top.phrase || top.heading > 1 ||
+      (rawTerms.length === 1 && top.score >= 3.4) ||
+      (coverage >= 0.67 && top.score >= 4)
+    );
+    if (!strong) return [];
     for (var i = 0; i < scored.length && out.length < 3; i++) {
       var row = scored[i];
-      if (out.length && row.score < best * 0.34) break;
+      if (out.length && row.score < best * 0.47) break;
       var dup = false;
       for (var j = 0; j < out.length; j++) {
-        if (out[j].page === row.page && out[j].text.slice(0, 80) === row.text.slice(0, 80)) dup = true;
+        var labelA = out[j].text.match(/^([^:]{2,40}):/);
+        var labelB = row.text.match(/^([^:]{2,40}):/);
+        if (labelA && labelB && labelA[1] !== labelB[1]) continue;
+        if (askSimilar(out[j].text, row.text) >= 0.55) dup = true;
+        if (out[j].text.indexOf(row.text) !== -1 || row.text.indexOf(out[j].text) !== -1) dup = true;
       }
       if (dup) continue;
       row.query = askHighlight(row.text, rawTerms);
@@ -134464,7 +134669,7 @@
         var hits = askRulebook(data, q);
         var message = hits.length
           ? "Showing " + hits.length + (hits.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
-          : "Nothing in this rulebook matched that question.";
+          : "No clear match. Try the rulebook search.";
         paint(message, hits, q);
       }).catch(function () {
         if (detailSlug !== slug) return;
