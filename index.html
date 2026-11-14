@@ -479,10 +479,38 @@
     flex-direction:column;
     gap:8px;
     margin:0;
+    min-width:0;
+    max-width:100%;
+  }
+  .rulebook-search--ask {
+    padding:12px;
+    border-radius:14px;
+    border:1px solid color-mix(in srgb, var(--accent) 46%, var(--border));
+    background:color-mix(in srgb, var(--accent) 11%, var(--card));
   }
   .rulebook-search label {
     font-weight:700;
     font-size:0.95rem;
+  }
+  .rulebook-search--ask label {
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--accent);
+  }
+  .rulebook-search-field {
+    position:relative;
+    min-width:0;
+  }
+  .rulebook-search-icon {
+    position:absolute;
+    left:12px;
+    top:50%;
+    width:18px;
+    height:18px;
+    transform:translateY(-50%);
+    color:var(--accent);
+    pointer-events:none;
   }
   .rulebook-search input {
     width:100%;
@@ -496,6 +524,15 @@
     font-size:16px;
     box-sizing:border-box;
     touch-action:manipulation;
+  }
+  .rulebook-search--ask input {
+    padding-left:40px;
+    border-color:color-mix(in srgb, var(--accent) 55%, var(--border));
+    background:color-mix(in srgb, var(--card) 90%, var(--accent));
+  }
+  .rulebook-search--ask input:focus-visible {
+    outline-color:var(--accent);
+    border-color:var(--accent);
   }
   .rulebook-search input:focus-visible,
   .rulebook-ask input:focus-visible,
@@ -600,9 +637,9 @@
     margin:8px 0 0;
     padding:0 14px;
     border-radius:999px;
-    border:1px solid var(--btn-border);
-    background:var(--btn);
-    color:inherit;
+    border:1px solid color-mix(in srgb, var(--accent) 58%, var(--border));
+    background:color-mix(in srgb, var(--accent) 16%, var(--card));
+    color:var(--accent);
     text-decoration:none;
     font:inherit;
     font-weight:700;
@@ -614,6 +651,12 @@
     width:14px;
     height:14px;
     flex:0 0 auto;
+  }
+  .rulebook-ask-bgg:hover,
+  .rulebook-ask-bgg:active {
+    background:color-mix(in srgb, var(--accent) 30%, var(--card));
+    border-color:var(--accent);
+    color:var(--accent);
   }
   .rulebook-ask-bgg:focus-visible {
     outline:3px solid var(--brand);
@@ -2286,6 +2329,16 @@
     border:1px solid var(--hig-sep);
     border-radius:12px;
     box-shadow:none;
+  }
+  :root[data-look="hig"] .rulebook-search--ask {
+    background:color-mix(in srgb, var(--accent) 12%, var(--card));
+    border:1px solid color-mix(in srgb, var(--accent) 42%, var(--hig-sep, var(--border)));
+    border-radius:14px;
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .rulebook-search--ask input {
+    background:color-mix(in srgb, var(--card) 88%, var(--accent));
+    border-color:color-mix(in srgb, var(--accent) 50%, var(--hig-sep, var(--border)));
   }
   :root[data-look="hig"] .scoring-summary,
   :root[data-look="hig"] .callout,
@@ -132859,13 +132912,6 @@
   }
 
   /* rulebook-ask:start */
-  var RULEBOOK_ASK_PILOT = {
-    "john-company-second-edition": 1,
-    "root": 1,
-    "spirit-island": 1,
-    "everdell": 1,
-    "wingspan": 1
-  };
   var ASK_STOP = {
     a: 1, an: 1, the: 1, is: 1, are: 1, was: 1, were: 1, be: 1, been: 1, being: 1,
     do: 1, does: 1, did: 1, how: 1, what: 1, when: 1, where: 1, why: 1, who: 1, which: 1,
@@ -132877,7 +132923,7 @@
     have: 1, has: 1, had: 1, will: 1, would: 1, could: 1, should: 1, also: 1, only: 1
   };
   var ASK_GROUPS = [
-    ["win", "victory", "winner"],
+    ["win", "victory", "winner", "won"],
     ["fail", "failure"],
     ["score", "point", "scor"],
     ["turn", "round"],
@@ -133018,6 +133064,7 @@
     if (singles >= 2) return true;
     if ((s.match(/\(/g) || []).length !== (s.match(/\)/g) || []).length) return true;
     if (/\ba the\b|\bthe a\b/i.test(s)) return true;
+    if (/\b(?:you|the|a|an|to|of|and)\s+\d+\.$/.test(s)) return true;
     return false;
   }
   function askPolish(sentence) {
@@ -133268,7 +133315,7 @@
     var k1 = 1.2;
     var bend = 0.55;
     var side = /rugwort|hireling|automa|coalition/i;
-    var flavor = /historian records|skulks away|might never, ever|enchanted by the wondrous|records your victory/i;
+    var flavor = /historian records|skulks away|might never, ever|enchanted by the wondrous|records your victory|winner-takes-all|the stakes:|fate of humanity|good luck, explorers|lange rochade/i;
     var scored = [];
     prepared.docs.forEach(function (doc) {
       var score = 0;
@@ -133294,7 +133341,15 @@
       var phrases = askPhraseHits(doc.text, rawTerms);
       if (phrases) score *= 1 + Math.min(phrases, 3) * 0.45;
       var aboutWin = rawTerms.some(function (stem) { return askGroup(stem).indexOf("win") !== -1; });
-      if (aboutWin && /immediately wins the game|most points is the winner|most points wins|current victory condition/i.test(doc.text)) score *= 1.6;
+      if (aboutWin && /immediately wins the game|most points is the winner|most points[^.]{0,60}\bwins|current victory condition|first player to reach \d+|game is won by the player who has checkmated|win as soon as cures/i.test(doc.text)) {
+        score = Math.max(score * 1.6, 6.4);
+      }
+      if (aboutWin && /\b(?:is|are) the winner\b/i.test(doc.text)) score *= 1.25;
+      if (aboutWin && /if there is a tie|still a tie|leftover resources/i.test(doc.text)) score *= 0.55;
+      if (rawTerms.indexOf("castl") !== -1 && /move of the king and either rook/i.test(doc.text)) score = Math.max(score * 1.6, 6);
+      if ((rawTerms.indexOf("score") !== -1 || rawTerms.indexOf("city") !== -1) && /each tile in a completed city is worth/i.test(doc.text)) score = Math.max(score * 1.9, 9);
+      if (rawTerms.indexOf("place") !== -1 && rawTerms.indexOf("tile") !== -1 && /must place the tile you drew such that it continues/i.test(doc.text)) score *= 1.8;
+      if (/\b(?:green|blue|red|black|yellow|white) player\b/i.test(doc.text) && !/\b(?:green|blue|red|black|yellow|white)\b/i.test(question)) score *= 0.35;
       if (aboutWin && /Terror Level\s+[123]\s*:/i.test(doc.text)) {
         score = Math.max(score, 12);
         matched = Math.max(matched, 1);
@@ -134746,29 +134801,27 @@
       if (!games || games.indexOf(slug) === -1) return;
       var detail = appEl.querySelector(".detail");
       if (!detail || detail.querySelector(".rulebook-search")) return;
-      var ask = !!RULEBOOK_ASK_PILOT[slug];
       var section = document.createElement("section");
-      section.className = "rulebook-search";
-      section.setAttribute("aria-label", ask ? "Search or ask the rulebook" : "Search rulebook");
+      section.className = "rulebook-search rulebook-search--ask";
+      section.setAttribute("aria-label", "Search or ask the rulebook");
+      var searchIcon = '<svg class="rulebook-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="7" cy="7" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.2 10.2 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
       var bggIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M6 3.5H3.5v9h9V10M8.5 3.5H12.5V7.5M12.2 3.8 7 9"/></svg>';
-      section.innerHTML = ask
-        ? '<label for="rulebook-search-input">Search or ask the rulebook</label>' +
+      section.innerHTML =
+        '<label for="rulebook-search-input">Search or ask the rulebook</label>' +
+        '<div class="rulebook-search-field">' + searchIcon +
           '<input id="rulebook-search-input" type="search" placeholder="Search a word or ask a question" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
-          '<div class="rulebook-ask-block" hidden>' +
-            '<h3 class="rulebook-section-label">Best answers</h3>' +
-            '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
-            '<div class="rulebook-ask-results"></div>' +
-          '</div>' +
-          '<div class="rulebook-match-block" hidden>' +
-            '<h3 class="rulebook-section-label">Matches in the rulebook</h3>' +
-            '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
-            '<ul class="rulebook-search-results"></ul>' +
-          '</div>' +
-          '<a class="rulebook-ask-bgg" href="https://www.google.com/search" target="_blank" rel="noopener noreferrer" hidden><span>Search BGG forums</span>' + bggIcon + '</a>'
-        : '<label for="rulebook-search-input">Search rulebook</label>' +
-          '<input id="rulebook-search-input" type="search" placeholder="Word or phrase from the rulebook" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+        '</div>' +
+        '<div class="rulebook-ask-block" hidden>' +
+          '<h3 class="rulebook-section-label">Best answers</h3>' +
+          '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
+          '<div class="rulebook-ask-results"></div>' +
+        '</div>' +
+        '<div class="rulebook-match-block" hidden>' +
+          '<h3 class="rulebook-section-label">Matches in the rulebook</h3>' +
           '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
-          '<ul class="rulebook-search-results"></ul>';
+          '<ul class="rulebook-search-results"></ul>' +
+        '</div>' +
+        '<a class="rulebook-ask-bgg" href="https://www.google.com/search" target="_blank" rel="noopener noreferrer" hidden><span>Search BGG forums</span>' + bggIcon + '</a>';
       var links = detail.querySelector(".essential-links");
       if (links) links.insertAdjacentElement("afterend", section);
       else {
@@ -134776,7 +134829,7 @@
         if (head) head.insertAdjacentElement("afterend", section);
         else detail.insertBefore(section, detail.firstChild);
       }
-      bindRulebookSearch(section, slug, rulebookHref, ask ? game : null);
+      bindRulebookSearch(section, slug, rulebookHref, game);
     });
   }
 
