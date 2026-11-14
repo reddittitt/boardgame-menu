@@ -134617,7 +134617,14 @@
       return indexPromise;
     }
 
-    function paint(message, hits) {
+    function paint(message, hits, hideWhenEmpty) {
+      var rows = hits || [];
+      if (matchBlock && hideWhenEmpty && !rows.length) {
+        status.textContent = "";
+        list.innerHTML = "";
+        matchBlock.hidden = true;
+        return;
+      }
       status.textContent = message || "";
       list.innerHTML = "";
       if (matchBlock) matchBlock.hidden = !String(input.value || "").trim();
@@ -134699,20 +134706,22 @@
         if (detailSlug !== slug || input.value !== raw) return;
         section._rulebookTour = rulebookMatchTour(data, raw);
         var result = searchRulebookIndex(data, raw);
+        var answers = asking && q.length >= 3 ? askRulebook(data, q) : [];
+        var hasAnswers = answers.length > 0;
+        if (asking && q.length >= 3) {
+          var answerMessage = hasAnswers
+            ? "Showing " + answers.length + (answers.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
+            : "No clear match. Try the rulebook search.";
+          paintAsk(true, answerMessage, answers);
+        }
         var message;
-        if (!result.total) message = "No matches.";
+        if (!result.total) message = hasAnswers ? "" : "No matches.";
         else if (result.total > result.hits.length) {
           message = "Showing " + result.hits.length + " of " + result.total + " matches.";
         } else {
           message = result.total === 1 ? "1 match." : result.total + " matches.";
         }
-        paint(message, result.hits);
-        if (!asking || q.length < 3) return;
-        var answers = askRulebook(data, q);
-        var answerMessage = answers.length
-          ? "Showing " + answers.length + (answers.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
-          : "No clear match. Try the rulebook search.";
-        paintAsk(true, answerMessage, answers);
+        paint(message, result.hits, hasAnswers);
       }).catch(function () {
         if (detailSlug !== slug) return;
         paint("The rulebook index could not be loaded.", []);
