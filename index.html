@@ -134656,7 +134656,7 @@
       '<input id="rulebook-ask-input" type="search" placeholder="Ask a question in your own words" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
       '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
       '<div class="rulebook-ask-results"></div>' +
-      '<a class="rulebook-ask-bgg" href="https://boardgamegeek.com/geeksearch.php?action=search&objecttype=thread" target="_blank" rel="noopener noreferrer" hidden>See BGG discussions</a>';
+      '<a class="rulebook-ask-bgg" href="https://www.google.com/search" target="_blank" rel="noopener noreferrer" hidden>See BGG discussions</a>';
     var search = detail.querySelector(".rulebook-search");
     if (search) search.insertAdjacentElement("afterend", section);
     else detail.insertBefore(section, detail.firstChild);
@@ -134700,8 +134700,7 @@
         results.appendChild(item);
       });
       if (question) {
-        var q = (name + " " + question).replace(/\s+/g, " ").trim();
-        bgg.href = "https://boardgamegeek.com/geeksearch.php?action=search&objecttype=thread&q=" + encodeURIComponent(q);
+        bgg.href = "https://www.google.com/search?q=" + encodeURIComponent('site:boardgamegeek.com/thread "' + name + '" ' + question);
         bgg.hidden = false;
       } else {
         bgg.hidden = true;
