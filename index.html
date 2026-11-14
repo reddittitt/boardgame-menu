@@ -497,6 +497,7 @@
     box-sizing:border-box;
   }
   .rulebook-search input:focus-visible,
+  .rulebook-ask input:focus-visible,
   .rulebook-hit:focus-visible,
   #search:focus-visible {
     outline:3px solid var(--brand);
@@ -518,6 +519,62 @@
     gap:6px;
   }
   .rulebook-search-results:empty { display:none; }
+  .rulebook-ask {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:0;
+    min-width:0;
+    max-width:100%;
+    touch-action:manipulation;
+  }
+  .rulebook-ask label {
+    font-weight:700;
+    font-size:0.95rem;
+  }
+  .rulebook-ask input {
+    width:100%;
+    min-height:48px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--fg);
+    font:inherit;
+    font-size:16px;
+    box-sizing:border-box;
+    touch-action:manipulation;
+  }
+  .rulebook-ask-status {
+    margin:0;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .rulebook-ask-status:empty { display:none; }
+  .rulebook-ask-results {
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:0;
+  }
+  .rulebook-ask-results:empty { display:none; }
+  .rulebook-ask-item {
+    min-width:0;
+    max-width:100%;
+  }
+  .rulebook-ask-passage {
+    margin:0;
+    line-height:1.45;
+    overflow-wrap:anywhere;
+  }
+  .rulebook-ask-bgg {
+    font-weight:700;
+    color:var(--accent);
+    overflow-wrap:anywhere;
+  }
   .rulebook-hit {
     display:grid;
     grid-template-columns:auto minmax(0, 1fr);
@@ -1882,6 +1939,7 @@
   /* Floor at 16px. iOS Safari zooms the page when a focused field is smaller. */
   #search,
   .rulebook-search input,
+  .rulebook-ask input,
   #rulebook-viewer-find-input,
   textarea {
     font-size:max(1rem, 16px);
@@ -2532,6 +2590,7 @@
   /* Typed fields stay at least 16px so a phone does not zoom on focus. */
   :root[data-look="hig"] #search,
   :root[data-look="hig"] .rulebook-search input,
+  :root[data-look="hig"] .rulebook-ask input,
   :root[data-look="hig"] #rulebook-viewer-find-input,
   :root[data-look="hig"] textarea {
     font-size:max(1rem, 16px);
@@ -132755,6 +132814,259 @@
     return { query: q, total: found.length, hits: found.slice(0, 20) };
   }
 
+  /* rulebook-ask:start */
+  var RULEBOOK_ASK_PILOT = {
+    "john-company-second-edition": 1,
+    "root": 1,
+    "spirit-island": 1,
+    "everdell": 1,
+    "wingspan": 1
+  };
+  var ASK_STOP = {
+    a: 1, an: 1, the: 1, is: 1, are: 1, was: 1, were: 1, be: 1, been: 1, being: 1,
+    do: 1, does: 1, did: 1, how: 1, what: 1, when: 1, where: 1, why: 1, who: 1, which: 1,
+    to: 1, of: 1, in: 1, on: 1, for: 1, and: 1, or: 1, but: 1, if: 1, with: 1, from: 1,
+    by: 1, at: 1, it: 1, its: 1, this: 1, that: 1, these: 1, those: 1, can: 1, i: 1,
+    you: 1, your: 1, we: 1, they: 1, my: 1, me: 1, as: 1, into: 1, about: 1, than: 1,
+    then: 1, so: 1, just: 1, there: 1, their: 1, them: 1, any: 1, some: 1, many: 1,
+    work: 1, mean: 1, happen: 1, get: 1, use: 1, make: 1, take: 1, game: 1, during: 1,
+    have: 1, has: 1, had: 1, will: 1, would: 1, could: 1, should: 1, also: 1, only: 1
+  };
+  var ASK_GROUPS = [
+    ["win", "victory", "winner"],
+    ["fail", "failure"],
+    ["score", "point", "scor"],
+    ["turn", "round"],
+    ["card"],
+    ["end", "finish", "final"],
+    ["rule"],
+    ["bird"],
+    ["egg"],
+    ["tuck"],
+    ["food", "feed"],
+    ["goal"],
+    ["blight"],
+    ["fear"],
+    ["presence"],
+    ["invader", "invade"],
+    ["worker"],
+    ["city"],
+    ["season"],
+    ["autumn"],
+    ["battle", "combat"],
+    ["clearing"],
+    ["warrior"],
+    ["spirit"],
+    ["power"],
+    ["dahan"],
+    ["pensioner", "retire", "retir"],
+    ["dividend"],
+    ["share"],
+    ["office"],
+    ["fatigue"],
+    ["standing"],
+    ["chairman"],
+    ["company"]
+  ];
+  function askStem(word) {
+    var w = String(word || "");
+    if (w.length <= 3) return w;
+    if (w.slice(-3) === "ies" && w.length > 4) return w.slice(0, -3) + "y";
+    if (w.slice(-3) === "ing" && w.length > 5) return w.slice(0, -3);
+    if (w.slice(-2) === "ed" && w.length > 4) return w.slice(0, -2);
+    if (/(?:s|x|z|ch|sh)es$/.test(w) && w.length > 4) return w.slice(0, -2);
+    if (w.slice(-1) === "s" && w.slice(-2) !== "ss" && w.length > 3) return w.slice(0, -1);
+    return w;
+  }
+  function askWords(text) {
+    return String(text || "").toLowerCase().replace(/[^a-z0-9']+/g, " ").split(/\s+/).filter(function (w) {
+      return w && w.length > 1;
+    });
+  }
+  function askGroup(stem) {
+    for (var i = 0; i < ASK_GROUPS.length; i++) {
+      if (ASK_GROUPS[i].indexOf(stem) !== -1) return ASK_GROUPS[i];
+    }
+    return [stem];
+  }
+  function askCleanLine(line) {
+    return String(line || "").replace(/[|]/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function askUseful(line) {
+    var letters = (line.match(/[A-Za-z]/g) || []).length;
+    return letters >= 12 && letters / line.length >= 0.55;
+  }
+  function askSentenceEnd(buf) {
+    for (var i = 0; i < buf.length; i++) {
+      var ch = buf.charAt(i);
+      if (ch !== "." && ch !== "!" && ch !== "?") continue;
+      if (ch === "." && /\d$/.test(buf.slice(0, i)) && /^\d/.test(buf.slice(i + 1))) continue;
+      if (ch === "." && /\b(?:e\.g|i\.e|mr|mrs|dr|vs|st|no|fig)$/i.test(buf.slice(0, i))) continue;
+      var next = buf.charAt(i + 1);
+      if (next && !/[\s"'”’)\]]/.test(next)) continue;
+      var sofar = buf.slice(0, i + 1).trim();
+      if (sofar.length < 28) continue;
+      if (!/[A-Za-z]/.test(sofar)) continue;
+      return i;
+    }
+    return -1;
+  }
+  function askBuildPassages(index) {
+    var docs = [];
+    var pages = (index && index.pages) || [];
+    for (var p = 0; p < pages.length; p++) {
+      var pageNum = parseInt(pages[p].page, 10);
+      if (!pageNum) continue;
+      var buf = "";
+      var heading = "";
+      var lines = pages[p].lines || [];
+      function emitReady() {
+        while (buf) {
+          var end = askSentenceEnd(buf);
+          if (end < 0) break;
+          var sentence = buf.slice(0, end + 1).replace(/\s+/g, " ").trim();
+          buf = buf.slice(end + 1).replace(/^\s+/, "");
+          if (sentence.length >= 40 && /[.!?]$/.test(sentence)) docs.push({ page: pageNum, text: sentence });
+        }
+      }
+      for (var i = 0; i < lines.length; i++) {
+        var line = askCleanLine(lines[i]);
+        if (!askUseful(line)) {
+          if (buf && /[A-Za-z]/.test(line) && line.length >= 6 && line.length < 80) {
+            buf += " " + line;
+            emitReady();
+            continue;
+          }
+          if (line && line.length < 48 && /[A-Za-z]/.test(line) && (line.match(/[A-Za-z]/g) || []).length >= 3) heading = line;
+          else heading = "";
+          emitReady();
+          buf = "";
+          continue;
+        }
+        if (heading) {
+          line = heading + " " + line;
+          heading = "";
+        }
+        buf = buf ? buf + " " + line : line;
+        emitReady();
+      }
+      emitReady();
+    }
+    var packed = [];
+    for (var d = 0; d < docs.length; d++) {
+      var text = docs[d].text;
+      var pageNum = docs[d].page;
+      if (text.length < 75 && d + 1 < docs.length && docs[d + 1].page === pageNum) {
+        var next = docs[d + 1].text;
+        if ((text + " " + next).length <= 420) {
+          text = text + " " + next;
+          d += 1;
+        }
+      }
+      packed.push({ page: pageNum, text: text });
+    }
+    return packed;
+  }
+  function askPrepare(index) {
+    if (index && index._ask) return index._ask;
+    var docs = askBuildPassages(index);
+    var df = {};
+    var lengths = [];
+    docs.forEach(function (doc) {
+      var seen = {};
+      var count = {};
+      var n = 0;
+      askWords(doc.text).forEach(function (word) {
+        if (ASK_STOP[word]) return;
+        var stem = askStem(word);
+        if (!stem || ASK_STOP[stem]) return;
+        count[stem] = (count[stem] || 0) + 1;
+        n += 1;
+        if (!seen[stem]) {
+          seen[stem] = 1;
+          df[stem] = (df[stem] || 0) + 1;
+        }
+      });
+      doc.tf = count;
+      doc.len = n || 1;
+      lengths.push(doc.len);
+    });
+    var avg = lengths.length ? lengths.reduce(function (a, b) { return a + b; }, 0) / lengths.length : 1;
+    var prepared = { docs: docs, df: df, avg: avg, n: docs.length || 1 };
+    if (index) index._ask = prepared;
+    return prepared;
+  }
+  function askHighlight(text, stems) {
+    var words = String(text || "").split(/\s+/);
+    var at = 0;
+    for (var i = 0; i < words.length; i++) {
+      var stem = askStem(words[i].toLowerCase().replace(/[^a-z0-9']/g, ""));
+      var group = askGroup(stem);
+      var hit = false;
+      for (var g = 0; g < group.length; g++) {
+        if (stems.indexOf(group[g]) !== -1) hit = true;
+      }
+      if (stems.indexOf(stem) !== -1) hit = true;
+      if (hit) { at = i; break; }
+    }
+    var start = Math.max(0, at - 2);
+    var slice = words.slice(start, start + 8);
+    return slice.join(" ").replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
+  }
+  function askRulebook(index, question) {
+    var prepared = askPrepare(index);
+    var rawTerms = [];
+    askWords(question).forEach(function (word) {
+      if (ASK_STOP[word]) return;
+      var stem = askStem(word);
+      if (!stem || ASK_STOP[stem] || stem.length < 3) return;
+      if (rawTerms.indexOf(stem) === -1) rawTerms.push(stem);
+    });
+    if (!rawTerms.length) return [];
+    var k1 = 1.2;
+    var b = 0.75;
+    var scored = [];
+    prepared.docs.forEach(function (doc) {
+      var letters = (doc.text.match(/[A-Za-z]/g) || []).length;
+      if (letters / doc.text.length < 0.7) return;
+      var score = 0;
+      var matched = 0;
+      rawTerms.forEach(function (stem) {
+        var group = askGroup(stem);
+        var tf = 0;
+        var df = 0;
+        group.forEach(function (alt) {
+          tf = Math.max(tf, doc.tf[alt] || 0);
+          df = Math.max(df, prepared.df[alt] || 0);
+        });
+        if (!tf) return;
+        matched += 1;
+        var idf = Math.log(1 + (prepared.n - df + 0.5) / (df + 0.5));
+        var norm = tf * (k1 + 1) / (tf + k1 * (1 - b + b * doc.len / prepared.avg));
+        score += idf * norm;
+      });
+      if (!matched) return;
+      score *= 1 + (matched - 1) * 0.35;
+      scored.push({ page: doc.page, text: doc.text, score: score, matched: matched });
+    });
+    scored.sort(function (a, b2) { return b2.score - a.score; });
+    var out = [];
+    var best = scored.length ? scored[0].score : 0;
+    for (var i = 0; i < scored.length && out.length < 3; i++) {
+      var row = scored[i];
+      if (out.length && row.score < best * 0.34) break;
+      var dup = false;
+      for (var j = 0; j < out.length; j++) {
+        if (out[j].page === row.page && out[j].text.slice(0, 80) === row.text.slice(0, 80)) dup = true;
+      }
+      if (dup) continue;
+      row.query = askHighlight(row.text, rawTerms);
+      out.push(row);
+    }
+    return out;
+  }
+  /* rulebook-ask:end */
+
   function clipAroundAt(clean, at, matchLen, maxLen) {
     clean = String(clean || "");
     if (clean.length <= maxLen) return clean;
@@ -134074,6 +134386,97 @@
         else detail.insertBefore(section, detail.firstChild);
       }
       bindRulebookSearch(section, slug, rulebookHref);
+      if (RULEBOOK_ASK_PILOT[slug]) mountRulebookAsk(detail, game, slug, rulebookHref);
+    });
+  }
+
+  function mountRulebookAsk(detail, game, slug, rulebookHref) {
+    if (!detail || detail.querySelector(".rulebook-ask")) return;
+    var section = document.createElement("section");
+    section.className = "rulebook-ask";
+    section.setAttribute("aria-label", "Ask the rulebook");
+    section.innerHTML =
+      '<label for="rulebook-ask-input">Ask the rulebook</label>' +
+      '<input id="rulebook-ask-input" type="search" placeholder="Ask a question in your own words" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+      '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
+      '<div class="rulebook-ask-results"></div>' +
+      '<a class="rulebook-ask-bgg" href="https://boardgamegeek.com/geeksearch.php?action=search&objecttype=thread" target="_blank" rel="noopener noreferrer" hidden>See BGG discussions</a>';
+    var search = detail.querySelector(".rulebook-search");
+    if (search) search.insertAdjacentElement("afterend", section);
+    else detail.insertBefore(section, detail.firstChild);
+    var input = section.querySelector("input");
+    var status = section.querySelector(".rulebook-ask-status");
+    var results = section.querySelector(".rulebook-ask-results");
+    var bgg = section.querySelector(".rulebook-ask-bgg");
+    var indexPromise = null;
+    var timer = 0;
+    var name = (game && game.name) || slug;
+    function ensureIndex() {
+      if (!indexPromise) {
+        indexPromise = fetch(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json").then(function (res) {
+          if (!res.ok) throw new Error("index");
+          return res.json();
+        });
+      }
+      return indexPromise;
+    }
+    function paint(message, hits, question) {
+      status.textContent = message || "";
+      results.innerHTML = "";
+      var base = String(rulebookHref || "").split("#")[0];
+      (hits || []).forEach(function (hit) {
+        var item = document.createElement("div");
+        item.className = "rulebook-ask-item";
+        var passage = document.createElement("p");
+        passage.className = "rulebook-ask-passage";
+        passage.textContent = hit.text;
+        var chip = document.createElement("a");
+        chip.className = "rulebook-ref";
+        chip.href = base + "#page=" + hit.page;
+        chip.setAttribute("data-page", String(hit.page));
+        chip.setAttribute("data-query", hit.query || "");
+        chip.setAttribute("data-snippet", hit.query || "");
+        chip.title = "Open this part of the rulebook";
+        chip.setAttribute("aria-label", "Open the rulebook at this passage");
+        chip.textContent = "Rulebook";
+        item.appendChild(passage);
+        item.appendChild(chip);
+        results.appendChild(item);
+      });
+      if (question) {
+        var q = (name + " " + question).replace(/\s+/g, " ").trim();
+        bgg.href = "https://boardgamegeek.com/geeksearch.php?action=search&objecttype=thread&q=" + encodeURIComponent(q);
+        bgg.hidden = false;
+      } else {
+        bgg.hidden = true;
+      }
+    }
+    function run() {
+      var raw = input.value;
+      var q = raw.trim().replace(/\s+/g, " ");
+      if (q.length < 3) {
+        paint(q ? "Ask a little more than that." : "", [], "");
+        return;
+      }
+      status.textContent = "Looking through the rulebook\u2026";
+      ensureIndex().then(function (data) {
+        if (detailSlug !== slug || input.value !== raw) return;
+        var hits = askRulebook(data, q);
+        var message = hits.length
+          ? "Showing " + hits.length + (hits.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
+          : "Nothing in this rulebook matched that question.";
+        paint(message, hits, q);
+      }).catch(function () {
+        if (detailSlug !== slug) return;
+        paint("The rulebook index could not be loaded.", [], "");
+      });
+    }
+    input.addEventListener("focus", function () {
+      ensureIndex().catch(function () {});
+    });
+    input.addEventListener("input", function () {
+      clearTimeout(timer);
+      timer = setTimeout(run, 160);
     });
   }
 
