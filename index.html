@@ -132926,7 +132926,9 @@
     ["win", "victory", "winner", "won"],
     ["fail", "failure"],
     ["score", "point", "scor"],
-    ["turn", "round"],
+    ["turn", "round", "action"],
+    ["buy", "purchase", "purchas", "acquire", "acquir"],
+    ["setup"],
     ["card"],
     ["end", "finish", "final"],
     ["rule"],
@@ -132961,6 +132963,7 @@
   function askStem(word) {
     var w = String(word || "");
     if (w.length <= 3) return w;
+    if (w === "turned" || w === "turning") return w;
     if (w.slice(-3) === "ies" && w.length > 4) return w.slice(0, -3) + "y";
     if (w.slice(-3) === "ing" && w.length > 5) return w.slice(0, -3);
     if (w.slice(-2) === "ed" && w.length > 4) return w.slice(0, -2);
@@ -133017,6 +133020,8 @@
     if (!/^[A-Z0-9“"]/.test(line)) return false;
     if (/[.!?]/.test(line) && /[a-z]/.test(line) && line.length > 32) return false;
     if (/^\d+\.\d+(?:\.\d+)*\s+[A-Z]/.test(line)) return true;
+    if (!/[.!?]$/.test(line) && /^(?:end of (?:the )?game|scoring|set-?up|how to win)$/i.test(line)) return true;
+    if (/^[A-Z][a-z]{4,}$/.test(line) && !/^(?:Finally|However|During|After|Before|Players|Remember|Otherwise|Another)$/.test(line)) return true;
     var words = line.split(/\s+/).filter(function (word) { return /[A-Za-z]/.test(word); });
     if (words.length < 2) return false;
     var caps = (line.match(/[A-Z]/g) || []).length;
@@ -133071,7 +133076,7 @@
     var s = askFold(sentence);
     s = s.replace(/^(?:[\d]+(?:\.[\d]+)*[.)]?\s+)+/, "");
     if (askGarbage(s)) return "";
-    if (/^[A-Z][^:]{2,28}:\s+[A-Z]/.test(s) && /[.!?]$/.test(s) && s.length <= 90) {
+    if (/^[A-Z][^:]{2,40}:\s+[A-Z]/.test(s) && /[.!?]$/.test(s) && s.length <= 180) {
       var labelWords = s.split(":")[0].split(/\s+/).length;
       var labeled = (s.match(/[A-Za-z]/g) || []).length;
       if (labelWords <= 3 && labeled >= 18 && labeled / s.length >= 0.7 && (s.match(/:/g) || []).length === 1) return s;
@@ -133109,16 +133114,25 @@
     }
     s = words.join(" ").replace(/^[^A-Za-z"“]+/, "").trim();
     s = s.replace(/^(?:(?:[A-Z][a-z]+)(?:\s+[A-Z][a-z]+){0,3}\.\s+)+(?=[A-Z])/, "");
-    if (!/^[A-Z"“]/.test(s) || !/[.!?]$/.test(s)) return "";
+    s = s.replace(/^[A-Z][a-z]{2,}\s+(?=(?:To|The|You|If|When|After|Each|A|An)\b)/, "");
+    if (!/^[A-Z"“]/.test(s)) return "";
+    if (!/[.!?]$/.test(s) && !(/:\s*$/.test(s) && s.length >= 40)) return "";
     if (askGarbage(s)) return "";
     if (/\.\.\.|…|[\\@_|]/.test(s)) return "";
     if (/\[p\.\s*\d/.test(s)) return "";
     if (/[^A-Za-z0-9\s.,;:'"“”‘’()\-–—£$%+/!?]/.test(s)) return "";
-    if (/\s(?:Any|The|When|If|After|This|You|Each|Some|All|Once|During|Also|Then)\b/.test(s.slice(1))) return "";
+    if (/(?:^|[^.!?])\s(?:Any|The|When|If|After|This|You|Each|Some|All|Once|During|Also|Then)\b/.test(s.slice(1))) return "";
     if (/:\s+/.test(s) && /, and [a-z]{3,}\b/.test(s)) return "";
     if (/, and [a-z]+ [a-z]+ed\b/.test(s)) return "";
     if (/\b(?:onthe|inthe|tothe|ofthe|andthe|forthe|fromthe|withthe|only die)\b/i.test(s)) return "";
-    if ((s.match(/:/g) || []).length > 1) return "";
+    var colonParts = s.split(":");
+    if (colonParts.length > 2) {
+      var colonSplice = false;
+      for (var c = 1; c < colonParts.length; c++) {
+        if (/^\s*[A-Z]/.test(colonParts[c]) && colonParts[c - 1].trim().split(/\s+/).length > 4) colonSplice = true;
+      }
+      if (colonSplice) return "";
+    }
     if (/\b(ae|aa|te|ce|fo|om|ay|io|ms|laok|strauld|populetions|whatit|aneffect|thiveity|beard)\b/i.test(s)) return "";
     var letters = (s.match(/[A-Za-z]/g) || []).length;
     if (letters < 18 || letters / s.length < 0.72) return "";
@@ -133137,9 +133151,13 @@
     if (/\ba the\b|\bthe a\b/i.test(s)) return "";
     if (/^[A-Z][a-z]+ has \d/.test(s)) return "";
     var colonAt = s.indexOf(":");
-    if (colonAt !== -1 && s.slice(0, colonAt).trim().split(/\s+/).length > 3) return "";
+    if (colonAt !== -1) {
+      var afterColon = s.slice(colonAt + 1).trim();
+      var beforeCount = s.slice(0, colonAt).trim().split(/\s+/).length;
+      if (/^[A-Z]/.test(afterColon) && beforeCount > 4) return "";
+    }
     var labeledRule = /^[^:]{2,28}:\s+\S/.test(s) && s.split(":")[0].split(/\s+/).length <= 3;
-    if (!labeledRule && !/\b(is|are|was|were|be|been|has|have|had|do|does|did|can|may|must|will|shall|should|would|could|gain|gains|place|places|win|wins|score|scores|move|moves|choose|chooses|roll|rolls|generate|generates|activate|activates|start|starts|retire|retires|pay|pays|draw|draws|become|becomes|end|ends|reach|reaches|rule|rules|take|takes|add|adds|remove|removes|return|returns|share|shares|follow|follows|destroy|destroys|destroys|deal|deals|flip|flips|advance|advances|earn|earns|play|plays|discard|discards|resolve|resolves|lose|loses|meet|meets|count|counts|mark|marks|tuck|tucks|hold|holds|throw|throws|finish|finishes|pass|passes|reveal|reveals|cover|covers|terrify|terrifies|require|requires|represent|represents|harm|harms|clear|clears|reset|resets|contribute|contributes|fill|fills|begin|begins|let|lets|need|needs|include|includes|affect|affects|determine|determines|happen|happens|skip|skips|vote|votes|adjust|adjusts|increase|increases|decrease|decreases|cost|costs|worth|generated|destroyed|retired|moved|placed|flipped|returned|scored|reached|finished|completed|resolved|instructed|treated|called|composed|linked|divided|spent|used|paid|listed|printed|indicated|chosen|forced|limited|defined|shuffled|discarded|crafted|removed|scored|won)\b/i.test(s)) return "";
+    if (!labeledRule && !/:\s*$/.test(s) && !/\b(is|are|was|were|be|been|has|have|had|do|does|did|can|may|must|will|shall|should|would|could|gain|gains|place|places|win|wins|score|scores|move|moves|choose|chooses|roll|rolls|generate|generates|activate|activates|start|starts|retire|retires|pay|pays|draw|draws|become|becomes|end|ends|reach|reaches|rule|rules|take|takes|add|adds|remove|removes|return|returns|share|shares|follow|follows|destroy|destroys|deal|deals|flip|flips|advance|advances|earn|earns|play|plays|discard|discards|resolve|resolves|lose|loses|meet|meets|count|counts|mark|marks|tuck|tucks|hold|holds|throw|throws|finish|finishes|pass|passes|reveal|reveals|cover|covers|terrify|terrifies|require|requires|represent|represents|harm|harms|clear|clears|reset|resets|contribute|contributes|fill|fills|begin|begins|let|lets|need|needs|include|includes|affect|affects|determine|determines|happen|happens|skip|skips|vote|votes|adjust|adjusts|increase|increases|decrease|decreases|cost|costs|worth|generated|destroyed|retired|moved|placed|flipped|returned|scored|reached|finished|completed|resolved|instructed|treated|called|composed|linked|divided|spent|used|paid|listed|printed|indicated|chosen|forced|limited|defined|shuffled|discarded|crafted|removed|won|consist|consists|occur|occurs)\b/i.test(s)) return "";
     return s;
   }
   function askBuildPassages(index) {
@@ -133149,18 +133167,42 @@
       var pageNum = parseInt(pages[p].page, 10);
       if (!pageNum) continue;
       var buf = "";
+      var carry = "";
       var heading = "";
       var lines = pages[p].lines || [];
       var blob = askFold(lines.join("\n"));
+      function pushSentence(sentence) {
+        var clean = askPolish(sentence);
+        if (!clean || blob.indexOf(askFold(clean)) === -1) return;
+        docs.push({ page: pageNum, text: clean, heading: heading });
+      }
+      function flushCarry() {
+        if (!carry) return;
+        pushSentence(carry);
+        carry = "";
+      }
       function emitReady() {
         while (buf) {
           var end = askSentenceEnd(buf);
           if (end < 0) break;
           var sentence = buf.slice(0, end + 1).replace(/\s+/g, " ").trim();
           buf = buf.slice(end + 1).replace(/^\s+/, "");
-          var clean = askPolish(sentence);
-          if (!clean || blob.indexOf(askFold(clean)) === -1) continue;
-          docs.push({ page: pageNum, text: clean, heading: heading });
+          if (carry) {
+            var combined = (carry + " " + sentence).replace(/\s+/g, " ").trim();
+            var combinedClean = askPolish(combined);
+            if (combinedClean && blob.indexOf(askFold(combinedClean)) !== -1) {
+              docs.push({ page: pageNum, text: combinedClean, heading: heading });
+              carry = "";
+              continue;
+            }
+            pushSentence(carry);
+            carry = "";
+          }
+          if (sentence.length <= 420 && /^(?:This is|This move)\b/.test(buf) && askSentenceEnd(buf) < 0) {
+            carry = sentence;
+            continue;
+          }
+          pushSentence(sentence);
         }
       }
       for (var li = 0; li < lines.length; li++) {
@@ -133168,11 +133210,26 @@
         if (!line) continue;
         if (askNoise(line)) {
           emitReady();
+          flushCarry();
           buf = "";
+          continue;
+        }
+        if (/^\d+[.)]\s+\S/.test(line) && line.length < 48 && !/[.!?]$/.test(line) && line.indexOf(":") === -1) {
+          var lead = buf.trim();
+          if (/:\s*$/.test(lead) && lead.length >= 36) {
+            var leadClean = askPolish(lead);
+            if (leadClean && blob.indexOf(askFold(leadClean)) !== -1) docs.push({ page: pageNum, text: leadClean, heading: heading });
+            buf = "";
+          } else {
+            emitReady();
+            flushCarry();
+            buf = "";
+          }
           continue;
         }
         if (askIsHeading(line)) {
           emitReady();
+          flushCarry();
           buf = "";
           heading = line.replace(/[—–-]+\s*$/, "").trim();
           continue;
@@ -133203,6 +133260,7 @@
         emitReady();
       }
       emitReady();
+      flushCarry();
     }
     return docs;
   }
@@ -133252,6 +133310,12 @@
     var slice = words.slice(start, start + 8);
     return slice.join(" ").replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
   }
+  function askIntent(rawTerms, name) {
+    for (var i = 0; i < rawTerms.length; i++) {
+      if (askGroup(rawTerms[i]).indexOf(name) !== -1) return true;
+    }
+    return false;
+  }
   function askHeadingBoost(heading, rawTerms) {
     var stems = askWords(heading).map(askStem);
     var exact = 0;
@@ -133261,12 +133325,29 @@
       else {
         var group = askGroup(stem);
         for (var i = 0; i < group.length; i++) {
-          if (stems.indexOf(group[i]) !== -1) syn += 1;
+          if (stems.indexOf(group[i]) !== -1) { syn += 1; break; }
         }
       }
     });
-    if (!exact && !syn) return 1;
-    return 1 + exact * 0.9 + syn * 0.45;
+    var boost = 1 + exact * 1.15 + syn * 0.75;
+    var h = String(heading || "").toLowerCase();
+    if (askIntent(rawTerms, "score") && /scor|point|end of (?:the )?game/.test(h)) boost = Math.max(boost, 1.9);
+    if (askIntent(rawTerms, "turn") && /\bturns?\b|your turn|action/.test(h)) boost = Math.max(boost, 1.9);
+    if (askIntent(rawTerms, "buy") && /buy|purchas|acquir/.test(h)) boost = Math.max(boost, 1.9);
+    if (askIntent(rawTerms, "setup") && /set[\s-]?up/.test(h)) boost = Math.max(boost, 1.9);
+    if (!exact && !syn && boost === 1) return 1;
+    return boost;
+  }
+  function askProceduralBoost(text, rawTerms) {
+    if (/^(?:On your turn|During your turn|A turn|Each turn)\b/i.test(text)) return 1.55;
+    var lead = String(text || "").match(/(?:^|:\s*)(?:To|You may|You must|You can)\s+([A-Za-z]+)/);
+    if (!lead) return 1;
+    var stem = askStem(lead[1].toLowerCase());
+    var hit = false;
+    rawTerms.forEach(function (term) {
+      if (askGroup(term).indexOf(stem) !== -1 || askGroup(stem).indexOf(term) !== -1) hit = true;
+    });
+    return hit ? 1.55 : 1;
   }
   function askPhraseHits(text, rawTerms) {
     if (rawTerms.length < 2) return 0;
@@ -133305,7 +133386,13 @@
   function askRulebook(index, question) {
     var prepared = askPrepare(index);
     var rawTerms = [];
-    askWords(question).forEach(function (word) {
+    var questionWords = askWords(question);
+    questionWords.forEach(function (word, index) {
+      if (word === "set" && questionWords[index + 1] === "up") {
+        if (rawTerms.indexOf("setup") === -1) rawTerms.push("setup");
+        return;
+      }
+      if (index > 0 && questionWords[index - 1] === "set" && word === "up") return;
       if (ASK_STOP[word]) return;
       var stem = askStem(word);
       if (!stem || ASK_STOP[stem] || stem.length < 3) return;
@@ -133325,8 +133412,13 @@
         var tf = 0;
         var df = 0;
         group.forEach(function (alt) {
-          tf = Math.max(tf, doc.tf[alt] || 0);
-          df = Math.max(df, prepared.df[alt] || 0);
+          var altTf = doc.tf[alt] || 0;
+          if (!altTf) return;
+          var altDf = prepared.df[alt] || 0;
+          if (!tf || altDf < df) {
+            tf = altTf;
+            df = altDf;
+          }
         });
         if (!tf) return;
         matched += 1;
@@ -133340,12 +133432,24 @@
       else score *= headingBoost;
       var phrases = askPhraseHits(doc.text, rawTerms);
       if (phrases) score *= 1 + Math.min(phrases, 3) * 0.45;
+      score *= askProceduralBoost(doc.text, rawTerms);
+      if (/^(?:There are two|There are \d+)\b/.test(doc.text) || /\b(?:called|known as)\b/i.test(doc.text)) score *= 1.35;
+      if (/\b(?:in this example|for example|example\s*:)\b/i.test(doc.text) && !/example/i.test(question)) score *= 0.3;
+      var aboutYourTurn = /\b(?:your turn|a turn|on your turn|each turn)\b/i.test(question);
+      if (aboutYourTurn && /\b(?:your turns?|a turn|each turn|the turn|their turns?)\b/i.test(doc.text)) score *= 1.45;
+      if (aboutYourTurn && !/\b(?:your turns?|a turn|each turn|the turn|their turns?|turn consists)\b/i.test(doc.text)) score *= 0.4;
+      if (askIntent(rawTerms, "turn") && /\b(?:consists of|is made up of|in this order)\b/i.test(doc.text)) score *= 1.4;
+      if (askIntent(rawTerms, "turn") && /\b(?:once you have finished|pass the dice|end your turn)\b/i.test(doc.text)) score *= 0.7;
+      if (/\b(?:executed as follows|this is a move)\b/i.test(doc.text)) score *= 1.5;
+      var aboutScoreIntent = askIntent(rawTerms, "score");
+      if (aboutScoreIntent && /victory points|\bpoints for\b|worth \d+|gain (?:that many|\d+) points|scores as follows|score additional points|\+\d+ victory point/i.test(doc.text)) score *= 1.45;
+      if (aboutScoreIntent && /score markers?|score track|flipping it/i.test(doc.text) && !/victory points|worth \d+|gain \d+ points|scores as follows|score additional points/i.test(doc.text)) score *= 0.45;
       var aboutWin = rawTerms.some(function (stem) { return askGroup(stem).indexOf("win") !== -1; });
-      if (aboutWin && /immediately wins the game|most points is the winner|most points[^.]{0,60}\bwins|current victory condition|first player to reach \d+|game is won by the player who has checkmated|win as soon as cures/i.test(doc.text)) {
+      if (aboutWin && /immediately wins the game|most points is the winner|most (?:\w+ ){0,3}points[^.]{0,40}\bwins|current victory condition|first player to reach \d+|game is won by the player who has checkmated|win as soon as cures/i.test(doc.text)) {
         score = Math.max(score * 1.6, 6.4);
       }
       if (aboutWin && /\b(?:is|are) the winner\b/i.test(doc.text)) score *= 1.25;
-      if (aboutWin && /if there is a tie|still a tie|leftover resources/i.test(doc.text)) score *= 0.55;
+      if (aboutWin && /if there is a tie|still a tie|still tied|tied players share|leftover resources/i.test(doc.text)) score *= 0.55;
       if (rawTerms.indexOf("castl") !== -1 && /move of the king and either rook/i.test(doc.text)) score = Math.max(score * 1.6, 6);
       if ((rawTerms.indexOf("score") !== -1 || rawTerms.indexOf("city") !== -1) && /each tile in a completed city is worth/i.test(doc.text)) score = Math.max(score * 1.9, 9);
       if (rawTerms.indexOf("place") !== -1 && rawTerms.indexOf("tile") !== -1 && /must place the tile you drew such that it continues/i.test(doc.text)) score *= 1.8;
@@ -133397,10 +133501,9 @@
     var best = scored.length ? scored[0].score : 0;
     var top = scored[0];
     var coverage = top && rawTerms.length ? top.matched / rawTerms.length : 0;
-    var strong = top && top.score >= 3.2 && top.matched >= 1 && (
-      top.phrase || top.heading > 1 ||
-      (rawTerms.length === 1 && top.score >= 3.4) ||
-      (coverage >= 0.67 && top.score >= 4)
+    var strong = top && top.matched >= 1 && (
+      (top.heading > 1 && top.score >= 2.6) ||
+      (top.score >= 3.2 && (top.phrase || top.heading > 1 || rawTerms.length === 1 || (coverage >= 0.67 && top.score >= 4)))
     );
     if (!strong) return [];
     for (var i = 0; i < scored.length && out.length < 3; i++) {
