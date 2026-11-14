@@ -133022,6 +133022,12 @@
     if (/^\d+\.\d+(?:\.\d+)*\s+[A-Z]/.test(line)) return true;
     if (!/[.!?]$/.test(line) && /^(?:end of (?:the )?game|scoring|set-?up|how to win)$/i.test(line)) return true;
     if (/^[A-Z][a-z]{4,}$/.test(line) && !/^(?:Finally|However|During|After|Before|Players|Remember|Otherwise|Another)$/.test(line)) return true;
+    if (!/^\d/.test(line) && !/[.,;!?]/.test(line) && line.length <= 42) {
+      var title = line.replace(/^[A-Z]\)\s*/, "").split(/\s+/).filter(function (word) { return /[A-Za-z]/.test(word); });
+      var small = /^(?:a|an|the|of|to|in|on|for|and|or|with|from|by)$/i;
+      var titled = title.filter(function (word) { return /^[A-Z]/.test(word); }).length;
+      if (title.length >= 2 && title.length <= 7 && titled >= 2 && title.every(function (word) { return /^[A-Z]/.test(word) || small.test(word); })) return true;
+    }
     var words = line.split(/\s+/).filter(function (word) { return /[A-Za-z]/.test(word); });
     if (words.length < 2) return false;
     var caps = (line.match(/[A-Z]/g) || []).length;
@@ -133075,6 +133081,7 @@
   function askPolish(sentence) {
     var s = askFold(sentence);
     s = s.replace(/^(?:[\d]+(?:\.[\d]+)*[.)]?\s+)+/, "");
+    s = s.replace(/^(?:[B-HJ-Z]\s+){1,4}(?=[A-Z])/, "");
     if (askGarbage(s)) return "";
     if (/^[A-Z][^:]{2,40}:\s+[A-Z]/.test(s) && /[.!?]$/.test(s) && s.length <= 180) {
       var labelWords = s.split(":")[0].split(/\s+/).length;
@@ -133115,6 +133122,7 @@
     s = words.join(" ").replace(/^[^A-Za-z"“]+/, "").trim();
     s = s.replace(/^(?:(?:[A-Z][a-z]+)(?:\s+[A-Z][a-z]+){0,3}\.\s+)+(?=[A-Z])/, "");
     s = s.replace(/^[A-Z][a-z]{2,}\s+(?=(?:To|The|You|If|When|After|Each|A|An)\b)/, "");
+    s = s.replace(/^(?:[B-HJ-Z]\s+){1,4}(?=[A-Z])/, "");
     if (!/^[A-Z"“]/.test(s)) return "";
     if (!/[.!?]$/.test(s) && !(/:\s*$/.test(s) && s.length >= 40)) return "";
     if (askGarbage(s)) return "";
@@ -133214,7 +133222,7 @@
           buf = "";
           continue;
         }
-        if (/^\d+[.)]\s+\S/.test(line) && line.length < 48 && !/[.!?]$/.test(line) && line.indexOf(":") === -1) {
+        if ((/^\d+[.)]\s+\S/.test(line) && line.length < 48 && !/[.!?]$/.test(line) && line.indexOf(":") === -1) || /^[A-Z]:\s+\S/.test(line)) {
           var lead = buf.trim();
           if (/:\s*$/.test(lead) && lead.length >= 36) {
             var leadClean = askPolish(lead);
@@ -133331,15 +133339,17 @@
     });
     var boost = 1 + exact * 1.15 + syn * 0.75;
     var h = String(heading || "").toLowerCase();
-    if (askIntent(rawTerms, "score") && /scor|point|end of (?:the )?game/.test(h)) boost = Math.max(boost, 1.9);
-    if (askIntent(rawTerms, "turn") && /\bturns?\b|your turn|action/.test(h)) boost = Math.max(boost, 1.9);
+    if (askIntent(rawTerms, "score") && /scor|point|end of (?:the )?game|game end|final scor/.test(h)) boost = Math.max(boost, 1.9);
+    if (askIntent(rawTerms, "win") && /end of (?:the )?game|game end|final scor|how to win|victory/.test(h)) boost = Math.max(boost, 1.75);
+    if (askIntent(rawTerms, "turn") && /\bturns?\b|your turn|each turn|player'?s turn|action|game flow/.test(h)) boost = Math.max(boost, 1.9);
+    if (rawTerms.indexOf("play") !== -1 && /taking a turn|how to play|card placement|playing/.test(h)) boost = Math.max(boost, 1.9);
     if (askIntent(rawTerms, "buy") && /buy|purchas|acquir/.test(h)) boost = Math.max(boost, 1.9);
     if (askIntent(rawTerms, "setup") && /set[\s-]?up/.test(h)) boost = Math.max(boost, 1.9);
     if (!exact && !syn && boost === 1) return 1;
     return boost;
   }
   function askProceduralBoost(text, rawTerms) {
-    if (/^(?:On your turn|During your turn|A turn|Each turn)\b/i.test(text)) return 1.55;
+    if (/^(?:On your turn|During your turn|During each turn|A turn|Each turn|Each round)\b/i.test(text)) return 1.55;
     var lead = String(text || "").match(/(?:^|:\s*)(?:To|You may|You must|You can)\s+([A-Za-z]+)/);
     if (!lead) return 1;
     var stem = askStem(lead[1].toLowerCase());
@@ -133401,7 +133411,7 @@
     if (!rawTerms.length) return [];
     var k1 = 1.2;
     var bend = 0.55;
-    var side = /rugwort|hireling|automa|coalition/i;
+    var side = /rugwort|hireling|automa|coalition|\bsolo\b|\b\d-player\b|\d to \d players|two-player|three-player|fewer players|introductory game|\bvariant\b|multi-player game/i;
     var flavor = /historian records|skulks away|might never, ever|enchanted by the wondrous|records your victory|winner-takes-all|the stakes:|fate of humanity|good luck, explorers|lange rochade/i;
     var scored = [];
     prepared.docs.forEach(function (doc) {
@@ -133428,24 +133438,29 @@
       });
       var headingBoost = askHeadingBoost(doc.heading || "", rawTerms);
       if (!matched && headingBoost <= 1) return;
-      if (!matched) score = 1.4 * (headingBoost - 1);
+      if (!matched && headingBoost >= 1.85 && doc.text.split(/\s+/).length >= 8 && /worth|receive|earn|rupee|token|point|score|bonus|victory/i.test(doc.text)) {
+        score = 3.4;
+        matched = 1;
+      } else if (!matched) score = 1.4 * (headingBoost - 1);
       else score *= headingBoost;
       var phrases = askPhraseHits(doc.text, rawTerms);
       if (phrases) score *= 1 + Math.min(phrases, 3) * 0.45;
       score *= askProceduralBoost(doc.text, rawTerms);
       if (/^(?:There are two|There are \d+)\b/.test(doc.text) || /\b(?:called|known as)\b/i.test(doc.text)) score *= 1.35;
-      if (/\b(?:in this example|for example|example\s*:)\b/i.test(doc.text) && !/example/i.test(question)) score *= 0.3;
+      if (/\b(?:in this example|for example|example\s*:)\b/i.test(doc.text) && !/example/i.test(question)) score *= 0.18;
       var aboutYourTurn = /\b(?:your turn|a turn|on your turn|each turn)\b/i.test(question);
       if (aboutYourTurn && /\b(?:your turns?|a turn|each turn|the turn|their turns?)\b/i.test(doc.text)) score *= 1.45;
-      if (aboutYourTurn && !/\b(?:your turns?|a turn|each turn|the turn|their turns?|turn consists)\b/i.test(doc.text)) score *= 0.4;
-      if (askIntent(rawTerms, "turn") && /\b(?:consists of|is made up of|in this order)\b/i.test(doc.text)) score *= 1.4;
+      if (aboutYourTurn && !/\b(?:your turns?|a turn|each turn|the turn|their turns?|turn consists|consists of|is made up of|in this order)\b/i.test(doc.text)) score *= 0.4;
+      if (aboutYourTurn && /\bturns? (?:over|into|up|the)\b|\bturned\b/i.test(doc.text) && !/\b(?:your turns?|a turn|each turn)\b/i.test(doc.text)) score *= 0.22;
+      if (askIntent(rawTerms, "turn") && /\b(?:consists of|is made up of|in this order|turn ends when)\b/i.test(doc.text)) score *= 1.4;
       if (askIntent(rawTerms, "turn") && /\b(?:once you have finished|pass the dice|end your turn)\b/i.test(doc.text)) score *= 0.7;
       if (/\b(?:executed as follows|this is a move)\b/i.test(doc.text)) score *= 1.5;
       var aboutScoreIntent = askIntent(rawTerms, "score");
       if (aboutScoreIntent && /victory points|\bpoints for\b|worth \d+|gain (?:that many|\d+) points|scores as follows|score additional points|\+\d+ victory point/i.test(doc.text)) score *= 1.45;
+      if (aboutScoreIntent && /everyone receives the victory points|victory points depicted|respective scoring/i.test(doc.text)) score *= 1.4;
       if (aboutScoreIntent && /score markers?|score track|flipping it/i.test(doc.text) && !/victory points|worth \d+|gain \d+ points|scores as follows|score additional points/i.test(doc.text)) score *= 0.45;
       var aboutWin = rawTerms.some(function (stem) { return askGroup(stem).indexOf("win") !== -1; });
-      if (aboutWin && /immediately wins the game|most points is the winner|most (?:\w+ ){0,3}points[^.]{0,40}\bwins|current victory condition|first player to reach \d+|game is won by the player who has checkmated|win as soon as cures/i.test(doc.text)) {
+      if (aboutWin && /immediately wins the game|most points is the winner|most (?:\w+ ){0,3}points[^.]{0,40}\bwins|current victory condition|first player to (?:reach|collect) \d+|game is won by the player who has checkmated|win as soon as cures/i.test(doc.text)) {
         score = Math.max(score * 1.6, 6.4);
       }
       if (aboutWin && /\b(?:is|are) the winner\b/i.test(doc.text)) score *= 1.25;
@@ -133453,7 +133468,8 @@
       if (rawTerms.indexOf("castl") !== -1 && /move of the king and either rook/i.test(doc.text)) score = Math.max(score * 1.6, 6);
       if ((rawTerms.indexOf("score") !== -1 || rawTerms.indexOf("city") !== -1) && /each tile in a completed city is worth/i.test(doc.text)) score = Math.max(score * 1.9, 9);
       if (rawTerms.indexOf("place") !== -1 && rawTerms.indexOf("tile") !== -1 && /must place the tile you drew such that it continues/i.test(doc.text)) score *= 1.8;
-      if (/\b(?:green|blue|red|black|yellow|white) player\b/i.test(doc.text) && !/\b(?:green|blue|red|black|yellow|white)\b/i.test(question)) score *= 0.35;
+      if (/\b(?:green|blue|red|black|yellow|white)(?:\s+player|\s+team)\b/i.test(doc.text) && !/\b(?:green|blue|red|black|yellow|white)\b/i.test(question)) score *= 0.35;
+      if (/^(?:Or|Then) (?:she|he)\b/.test(doc.text) && !/\b(?:she|he)\b/i.test(question)) score *= 0.3;
       if (aboutWin && /Terror Level\s+[123]\s*:/i.test(doc.text)) {
         score = Math.max(score, 12);
         matched = Math.max(matched, 1);
@@ -133484,7 +133500,14 @@
         if (seenGroup[key] && !doc.tf[stem]) score *= 0.2;
         seenGroup[key] = 1;
       });
-      if (side.test(doc.text) && !side.test(question)) score *= 0.22;
+      var variantHead = /\bsolo\b|fewer players|introductory game|\bvariant\b|two-player|three-player|\b\d-player\b/i;
+      if ((side.test(doc.text) || variantHead.test(doc.heading || "")) && !side.test(question)) score *= 0.18;
+      if (/\bsetup rules\b|play a new round|played in a series of rounds/i.test(doc.text) && !/setup/i.test(question)) score *= 0.3;
+      if (/\b(?:chess\s?960|this variant)\b/i.test(doc.text + " " + (doc.heading || "")) && !/960|variant/i.test(question)) score *= 0.2;
+      var wordCount = doc.text.split(/\s+/).length;
+      if (wordCount <= 8 && !/\d|\bmust\b|\bif\b|\bwhen\b|\beach\b|\bwins?\b|\bwinner\b|\bpoints?\b|\bscor/i.test(doc.text)) score *= 0.4;
+      if (/\b(?:in|on) the first turn\b/i.test(doc.text) && /\b(?:she|he)\b/.test(doc.text) && !/first turn/i.test(question)) score *= 0.28;
+      if (aboutScoreIntent && !aboutWin && /\b(?:wins the game|is the winner|highest score wins|scoring track wins|wins[.!])\b/i.test(doc.text) && !/receive|worth \d|gain \d|points for|depict/i.test(doc.text)) score *= 0.22;
       if (flavor.test(doc.text) && !/story|flavor|historian/i.test(question)) score *= 0.12;
       if (!score) return;
       scored.push({
