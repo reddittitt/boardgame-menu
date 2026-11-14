@@ -495,6 +495,7 @@
     font:inherit;
     font-size:16px;
     box-sizing:border-box;
+    touch-action:manipulation;
   }
   .rulebook-search input:focus-visible,
   .rulebook-ask input:focus-visible,
@@ -570,10 +571,53 @@
     line-height:1.45;
     overflow-wrap:anywhere;
   }
-  .rulebook-ask-bgg {
+  .rulebook-section-label {
+    margin:2px 0 0;
+    font-size:0.92rem;
     font-weight:700;
-    color:var(--accent);
-    overflow-wrap:anywhere;
+    line-height:1.3;
+  }
+  .rulebook-ask-block,
+  .rulebook-match-block {
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:0;
+    max-width:100%;
+  }
+  .rulebook-ask-block[hidden],
+  .rulebook-match-block[hidden] { display:none; }
+  .rulebook-ask-bgg {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    align-self:flex-start;
+    width:auto;
+    max-width:100%;
+    height:44px;
+    min-height:44px;
+    margin:8px 0 0;
+    padding:0 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    text-decoration:none;
+    font:inherit;
+    font-weight:700;
+    line-height:1.2;
+    box-sizing:border-box;
+    touch-action:manipulation;
+  }
+  .rulebook-ask-bgg svg {
+    width:14px;
+    height:14px;
+    flex:0 0 auto;
+  }
+  .rulebook-ask-bgg:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
   }
   .rulebook-hit {
     display:grid;
@@ -134536,10 +134580,24 @@
     });
   }
 
-  function bindRulebookSearch(section, slug, rulebookHref) {
+  function askLooksLikeQuestion(text) {
+    var q = String(text || "").trim();
+    if (!q) return false;
+    if (q.indexOf("?") !== -1) return true;
+    if (/^(how|what|when|where|why|who|which|does|do|is|are|can|should|could|would)\b/i.test(q)) return true;
+    return q.split(/\s+/).filter(Boolean).length >= 3;
+  }
+
+  function bindRulebookSearch(section, slug, rulebookHref, askGame) {
     var input = section.querySelector("input");
     var status = section.querySelector(".rulebook-search-status");
     var list = section.querySelector(".rulebook-search-results");
+    var matchBlock = section.querySelector(".rulebook-match-block");
+    var askBlock = section.querySelector(".rulebook-ask-block");
+    var askStatus = section.querySelector(".rulebook-ask-status");
+    var askResults = section.querySelector(".rulebook-ask-results");
+    var bgg = section.querySelector(".rulebook-ask-bgg");
+    var askName = askGame ? ((askGame.name) || slug) : "";
     var indexPromise = null;
     var indexData = null;
     var timer = 0;
@@ -134562,6 +134620,7 @@
     function paint(message, hits) {
       status.textContent = message || "";
       list.innerHTML = "";
+      if (matchBlock) matchBlock.hidden = !String(input.value || "").trim();
       (hits || []).forEach(function (hit) {
         var li = document.createElement("li");
         var link = document.createElement("a");
@@ -134583,102 +134642,13 @@
       });
     }
 
-    function run() {
-      var raw = input.value;
-      var q = raw.trim().replace(/\s+/g, " ");
-      if (q.length < 2) {
-        paint(q ? "Type at least 2 letters." : "", []);
-        return;
-      }
-      if (!indexData) paint("Loading the rulebook index\u2026", []);
-      ensureIndex().then(function (data) {
-        if (detailSlug !== slug || input.value !== raw) return;
-        section._rulebookTour = rulebookMatchTour(data, raw);
-        var result = searchRulebookIndex(data, raw);
-        var message;
-        if (!result.total) message = "No matches.";
-        else if (result.total > result.hits.length) {
-          message = "Showing " + result.hits.length + " of " + result.total + " matches.";
-        } else {
-          message = result.total === 1 ? "1 match." : result.total + " matches.";
-        }
-        paint(message, result.hits);
-      }).catch(function () {
-        if (detailSlug !== slug) return;
-        paint("The rulebook index could not be loaded.", []);
-      });
-    }
-
-    input.addEventListener("focus", function () {
-      ensureIndex().catch(function () {});
-    });
-    input.addEventListener("input", function () {
-      clearTimeout(timer);
-      timer = setTimeout(run, 120);
-    });
-  }
-
-  function mountRulebookSearch(game, rulebookHref) {
-    var slug = game && game.slug;
-    if (!slug || !rulebookHref || !rulebookSearchEnabled(game)) return;
-    loadRulebookManifest().then(function (games) {
-      if (detailSlug !== slug) return;
-      if (!games || games.indexOf(slug) === -1) return;
-      var detail = appEl.querySelector(".detail");
-      if (!detail || detail.querySelector(".rulebook-search")) return;
-      var section = document.createElement("section");
-      section.className = "rulebook-search";
-      section.setAttribute("aria-label", "Search rulebook");
-      section.innerHTML =
-        '<label for="rulebook-search-input">Search rulebook</label>' +
-        '<input id="rulebook-search-input" type="search" placeholder="Word or phrase from the rulebook" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
-        '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
-        '<ul class="rulebook-search-results"></ul>';
-      var links = detail.querySelector(".essential-links");
-      if (links) links.insertAdjacentElement("afterend", section);
-      else {
-        var head = detail.querySelector(".detail-head");
-        if (head) head.insertAdjacentElement("afterend", section);
-        else detail.insertBefore(section, detail.firstChild);
-      }
-      bindRulebookSearch(section, slug, rulebookHref);
-      if (RULEBOOK_ASK_PILOT[slug]) mountRulebookAsk(detail, game, slug, rulebookHref);
-    });
-  }
-
-  function mountRulebookAsk(detail, game, slug, rulebookHref) {
-    if (!detail || detail.querySelector(".rulebook-ask")) return;
-    var section = document.createElement("section");
-    section.className = "rulebook-ask";
-    section.setAttribute("aria-label", "Ask the rulebook");
-    section.innerHTML =
-      '<label for="rulebook-ask-input">Ask the rulebook</label>' +
-      '<input id="rulebook-ask-input" type="search" placeholder="Ask a question in your own words" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
-      '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
-      '<div class="rulebook-ask-results"></div>' +
-      '<a class="rulebook-ask-bgg" href="https://www.google.com/search" target="_blank" rel="noopener noreferrer" hidden>See BGG discussions</a>';
-    var search = detail.querySelector(".rulebook-search");
-    if (search) search.insertAdjacentElement("afterend", section);
-    else detail.insertBefore(section, detail.firstChild);
-    var input = section.querySelector("input");
-    var status = section.querySelector(".rulebook-ask-status");
-    var results = section.querySelector(".rulebook-ask-results");
-    var bgg = section.querySelector(".rulebook-ask-bgg");
-    var indexPromise = null;
-    var timer = 0;
-    var name = (game && game.name) || slug;
-    function ensureIndex() {
-      if (!indexPromise) {
-        indexPromise = fetch(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json").then(function (res) {
-          if (!res.ok) throw new Error("index");
-          return res.json();
-        });
-      }
-      return indexPromise;
-    }
-    function paint(message, hits, question) {
-      status.textContent = message || "";
-      results.innerHTML = "";
+    function paintAsk(show, message, hits) {
+      if (!askBlock) return;
+      askBlock.hidden = !show;
+      if (askStatus) askStatus.textContent = message || "";
+      if (!askResults) return;
+      askResults.innerHTML = "";
+      if (!show) return;
       var base = String(rulebookHref || "").split("#")[0];
       (hits || []).forEach(function (hit) {
         var item = document.createElement("div");
@@ -134697,41 +134667,107 @@
         chip.textContent = "Rulebook";
         item.appendChild(passage);
         item.appendChild(chip);
-        results.appendChild(item);
+        askResults.appendChild(item);
       });
-      if (question) {
-        bgg.href = "https://www.google.com/search?q=" + encodeURIComponent('site:boardgamegeek.com/thread "' + name + '" ' + question);
-        bgg.hidden = false;
-      } else {
-        bgg.hidden = true;
-      }
     }
+
+    function paintBgg(question) {
+      if (!bgg) return;
+      if (!question) {
+        bgg.hidden = true;
+        return;
+      }
+      bgg.href = "https://www.google.com/search?q=" + encodeURIComponent('site:boardgamegeek.com/thread "' + askName + '" ' + question);
+      bgg.hidden = false;
+    }
+
     function run() {
       var raw = input.value;
       var q = raw.trim().replace(/\s+/g, " ");
-      if (q.length < 3) {
-        paint(q ? "Ask a little more than that." : "", [], "");
+      var asking = !!(askName && askLooksLikeQuestion(q));
+      paintBgg(q);
+      if (q.length < 2) {
+        paint(q ? "Type at least 2 letters." : "", []);
+        paintAsk(false, "", []);
         return;
       }
-      status.textContent = "Looking through the rulebook\u2026";
+      if (!asking) paintAsk(false, "", []);
+      else if (q.length < 3) paintAsk(true, "Ask a little more than that.", []);
+      else paintAsk(true, "Looking through the rulebook\u2026", []);
+      if (!indexData) paint("Loading the rulebook index\u2026", []);
       ensureIndex().then(function (data) {
         if (detailSlug !== slug || input.value !== raw) return;
-        var hits = askRulebook(data, q);
-        var message = hits.length
-          ? "Showing " + hits.length + (hits.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
+        section._rulebookTour = rulebookMatchTour(data, raw);
+        var result = searchRulebookIndex(data, raw);
+        var message;
+        if (!result.total) message = "No matches.";
+        else if (result.total > result.hits.length) {
+          message = "Showing " + result.hits.length + " of " + result.total + " matches.";
+        } else {
+          message = result.total === 1 ? "1 match." : result.total + " matches.";
+        }
+        paint(message, result.hits);
+        if (!asking || q.length < 3) return;
+        var answers = askRulebook(data, q);
+        var answerMessage = answers.length
+          ? "Showing " + answers.length + (answers.length === 1 ? " passage from the rulebook." : " passages from the rulebook.")
           : "No clear match. Try the rulebook search.";
-        paint(message, hits, q);
+        paintAsk(true, answerMessage, answers);
       }).catch(function () {
         if (detailSlug !== slug) return;
-        paint("The rulebook index could not be loaded.", [], "");
+        paint("The rulebook index could not be loaded.", []);
+        if (asking) paintAsk(true, "The rulebook index could not be loaded.", []);
       });
     }
+
     input.addEventListener("focus", function () {
       ensureIndex().catch(function () {});
     });
     input.addEventListener("input", function () {
       clearTimeout(timer);
-      timer = setTimeout(run, 160);
+      timer = setTimeout(run, askName ? 160 : 120);
+    });
+  }
+
+  function mountRulebookSearch(game, rulebookHref) {
+    var slug = game && game.slug;
+    if (!slug || !rulebookHref || !rulebookSearchEnabled(game)) return;
+    loadRulebookManifest().then(function (games) {
+      if (detailSlug !== slug) return;
+      if (!games || games.indexOf(slug) === -1) return;
+      var detail = appEl.querySelector(".detail");
+      if (!detail || detail.querySelector(".rulebook-search")) return;
+      var ask = !!RULEBOOK_ASK_PILOT[slug];
+      var section = document.createElement("section");
+      section.className = "rulebook-search";
+      section.setAttribute("aria-label", ask ? "Search or ask the rulebook" : "Search rulebook");
+      var bggIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M6 3.5H3.5v9h9V10M8.5 3.5H12.5V7.5M12.2 3.8 7 9"/></svg>';
+      section.innerHTML = ask
+        ? '<label for="rulebook-search-input">Search or ask the rulebook</label>' +
+          '<input id="rulebook-search-input" type="search" placeholder="Search a word or ask a question" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+          '<div class="rulebook-ask-block" hidden>' +
+            '<h3 class="rulebook-section-label">Best answers</h3>' +
+            '<p class="rulebook-ask-status" role="status" aria-live="polite"></p>' +
+            '<div class="rulebook-ask-results"></div>' +
+          '</div>' +
+          '<div class="rulebook-match-block" hidden>' +
+            '<h3 class="rulebook-section-label">Matches in the rulebook</h3>' +
+            '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
+            '<ul class="rulebook-search-results"></ul>' +
+          '</div>' +
+          '<a class="rulebook-ask-bgg" href="https://www.google.com/search" target="_blank" rel="noopener noreferrer" hidden><span>Search BGG forums</span>' + bggIcon + '</a>'
+        : '<label for="rulebook-search-input">Search rulebook</label>' +
+          '<input id="rulebook-search-input" type="search" placeholder="Word or phrase from the rulebook" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+          '<p class="rulebook-search-status" role="status" aria-live="polite"></p>' +
+          '<ul class="rulebook-search-results"></ul>';
+      var links = detail.querySelector(".essential-links");
+      if (links) links.insertAdjacentElement("afterend", section);
+      else {
+        var head = detail.querySelector(".detail-head");
+        if (head) head.insertAdjacentElement("afterend", section);
+        else detail.insertBefore(section, detail.firstChild);
+      }
+      bindRulebookSearch(section, slug, rulebookHref, ask ? game : null);
     });
   }
 
