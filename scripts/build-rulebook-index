@@ -7,8 +7,8 @@ opens; it is downloaded for this run and not saved.
 
 Pages come from pdftotext. A page with almost no text is treated as an image
 and read with tesseract. Wingspan's uploaded PDF has no text layer, so every
-page is OCR. Heat's field is the Days of Wonder basic-rules PDF. The file
-rulebooks/heat-pedal-to-the-metal.pdf is the advanced booklet and is not indexed.
+page is OCR. Heat's field is the Days of Wonder basic-rules PDF, which is the
+file this index is built from.
 
 Writes rulebooks/index/<slug>.json and refreshes rulebooks/index/manifest.json
 from the JSON files in that directory.
