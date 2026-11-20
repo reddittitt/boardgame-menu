@@ -2,7 +2,7 @@
 
 A game page can search its official rulebook. The box is shown only when that game is listed in `rulebooks/index/manifest.json`. The index itself is fetched the first time the box is used, so the game list does not load it.
 
-Typing a word or phrase shows up to 20 short snippets, about one or two lines each, with the query highlighted in the list. A plain click opens that page in the rulebook viewer and highlights the query on the page. Previous and Next step through every instance of that search, on the same page or a later one, and the viewer shows which instance this is, such as 2 of 8. Close returns to the game. The result does not send the window to the PDF file. The page does not paste the book. A scanned page with no selectable text is shown without a highlight, and the viewer says so. Next still leaves that page for the following instance.
+Typing a word or phrase shows up to 20 short snippets, about one or two lines each, with the query highlighted in the list. A plain click opens that page in the rulebook viewer and highlights the query on the page. Previous and Next step through every instance of that search, on the same page or a later one, and the viewer shows which instance this is, such as 2 of 8. Close returns to the game. The result does not send the window to the PDF file. The page does not paste the book. A scanned page with no text layer is highlighted from `rulebooks/ocr/<slug>.json` when that file exists. The file stores each word and its box. The highlight is the same softened mark used on a text page, including when the page is fit to the screen. If that file is missing, the page is shown without a highlight and the viewer says so. Next still leaves that page for the following instance.
 
 ## What the script reads
 
@@ -60,3 +60,22 @@ Leave `mine` and `group` as they are. Do not add a person's name to the page or 
 ```
 
 `page` is the PDF page used in `#page=`. Lines are the text of that page, already trimmed to short lines.
+
+## Scanned pages
+
+`rulebooks/ocr/<slug>.json` is the word layer for a rulebook whose PDF has no text. It is derived data: the words read from the page and where they sit. The PDF and the page images are not stored.
+
+```json
+{
+  "slug": "hanabi",
+  "pages": [
+    {
+      "page": 2,
+      "lines": ["The player with the most colorful clothing begins the game."],
+      "words": [[1200, 6400, 480, 110, "The", 0], [1720, 6400, 620, 110, "player", 1]]
+    }
+  ]
+}
+```
+
+Each word is `[x, y, width, height, text, endOfLine]`. The box is in tenths of a PDF point. `x` and `y` are the left and bottom edges. `endOfLine` is 1 on the last word of a line. `lines` is those words joined, and it is what `rulebooks/index/<slug>.json` is built from. A Rulebook chip's `query` has to match this text, and the text has to match the printed page.

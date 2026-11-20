@@ -6510,6 +6510,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=5"
     },
     "air-land-and-sea-critters-at-war": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 15, "max": 30 },
       "playerPoll": { "best": "2", "recommended": "2" },
       "cover": "covers/air-land-and-sea-critters-at-war.webp",
@@ -6530,11 +6531,13 @@
         {
           "lead": "Commanders",
           "text": "Shuffle the two Supreme Commander cards and deal one face down to each player, then reveal them.",
+            "source": { "page": 3, "query": "white Supreme Commander" },
           "details": "The white commander is the first player."
         },
         {
           "lead": "Deal",
           "text": "Shuffle the other 18 cards and deal 6 to each player.",
+            "source": { "page": 3, "query": "deal 6 to each player" },
           "details": "Those hands are secret. Set the undealt cards aside without revealing them, and put the score tokens in a pile."
         }
       ],
@@ -6593,7 +6596,8 @@
       "turnStructure": [
         {
           "lead": "Play",
-          "text": "Play a card into a theater, or withdraw."
+          "text": "Play a card into a theater, or withdraw.",
+            "source": { "page": 5, "query": "Strength of 2" }
         },
         {
           "lead": "Continue",
@@ -6624,7 +6628,8 @@
       "endOfGame": [
         {
           "lead": "War",
-          "text": "The first player to 12 wins."
+          "text": "The first player to 12 wins.",
+            "source": { "page": 3, "query": "to reach 12 VPs wins the game" }
         },
         {
           "lead": "Longer",
@@ -14845,13 +14850,15 @@
             "text": "A series of battles on Intelligence, Diplomacy, and Economics."
           },
           {
-            "text": "Randomly line up the three theaters."
+            "text": "Randomly line up the three theaters.",
+            "source": { "page": 2, "query": "Randomly place the three Theater boards" }
           },
           {
             "text": "Deal one Supreme Commander facedown; the white card is first player."
           },
           {
-            "text": "Shuffle the other 18 cards, deal six each, and set the rest aside."
+            "text": "Shuffle the other 18 cards, deal six each, and set the rest aside.",
+            "source": { "page": 2, "query": "deal 6 to each" }
           },
           {
             "text": "You do not draw during a battle."
@@ -14864,10 +14871,12 @@
       "turnStructure": {
         "bullets": [
           {
-            "text": "On your turn play one card or withdraw."
+            "text": "On your turn play one card or withdraw.",
+            "source": { "page": 3, "query": "played into these three Theaters" }
           },
           {
-            "text": "A faceup card must match its theater and uses its tactical ability."
+            "text": "A faceup card must match its theater and uses its tactical ability.",
+            "source": { "page": 3, "query": "in that Theater" }
           },
           {
             "text": "A facedown card is wild, Strength 2, with no ability."
@@ -14921,7 +14930,7 @@
       ],
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/critters-at-war-flies-lies-and-supplies",
       "rulebookPublisher": "https://www.arcanewonders.com/wp-content/uploads/2022/07/CAW_SLS_Rulebook_v3.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=367807",
       "howToPlayVideo": {
         "url": "https://www.youtube.com/watch?v=OhvVl9yvQsg",
@@ -23583,6 +23592,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=366013"
     },
     "hive-pocket": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 20, "max": 20 },
       "playerPoll": { "best": "2", "recommended": "2" },
       "mine": true, "group": true,
@@ -23613,7 +23623,8 @@
         },
         {
           "lead": "Set",
-          "text": "Each player takes all 13 pieces of one color: one Queen Bee, three Soldier Ants, two Spiders, two Beetles, three Grasshoppers, one Mosquito, and one Ladybug."
+          "text": "Each player takes all 13 pieces of one color: one Queen Bee, three Soldier Ants, two Spiders, two Beetles, three Grasshoppers, one Mosquito, and one Ladybug.",
+            "source": { "page": 2, "query": "all 13 pieces of one colour" }
         },
         {
           "lead": "New players",
@@ -23621,11 +23632,13 @@
         },
         {
           "lead": "First",
-          "text": "One player places any piece in the center."
+          "text": "One player places any piece in the center.",
+            "source": { "page": 2, "query": "centre of the table" }
         },
         {
           "lead": "Join",
-          "text": "The other joins one of their pieces to it, edge to edge."
+          "text": "The other joins one of their pieces to it, edge to edge.",
+            "source": { "page": 2, "query": "edge to edge" }
         }
       ],
       "startingResources": [
@@ -23649,19 +23662,23 @@
         },
         {
           "lead": "Stay",
-          "text": "A placed piece is never removed."
+          "text": "A placed piece is never removed.",
+            "source": { "page": 3, "query": "it cannot be removed" }
         },
         {
           "lead": "Queen window",
-          "text": "You may place the Queen on any turn from your first through your fourth."
+          "text": "You may place the Queen on any turn from your first through your fourth.",
+            "source": { "page": 3, "query": "placed at any time from your first to your" }
         },
         {
           "lead": "Turn 4",
-          "text": "If it is not down, your fourth turn must place it."
+          "text": "If it is not down, your fourth turn must place it.",
+            "source": { "page": 3, "query": "must place your Queen Bee on your fourth turn" }
         },
         {
           "lead": "Before Queen",
-          "text": "You cannot move until your Queen is on the hive."
+          "text": "You cannot move until your Queen is on the hive.",
+            "source": { "page": 3, "query": "has been placed (but not before)" }
         },
         {
           "lead": "After Queen",
@@ -23669,7 +23686,8 @@
         },
         {
           "lead": "One Hive",
-          "text": "Every piece must keep touching the hive."
+          "text": "Every piece must keep touching the hive.",
+            "source": { "page": 3, "query": "must always touch at least one other piece" }
         },
         {
           "lead": "Hinge",
@@ -32028,6 +32046,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266810"
     },
     "pan-am": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 60, "max": 60 },
       "playerPoll": { "best": "3–4", "recommended": "2–4" },
       "mine": true, "group": true,
@@ -32050,11 +32069,13 @@
         },
         {
           "lead": "Rounds",
-          "text": "Seven rounds."
+          "text": "Seven rounds.",
+            "source": { "page": 3, "query": "played in seven rounds" }
         },
         {
           "lead": "Board",
-          "text": "Put the board in the center and the two hangars by the planes."
+          "text": "Put the board in the center and the two hangars by the planes.",
+            "source": { "page": 4, "query": "Place the game board in the center" }
         },
         {
           "lead": "Events",
@@ -32062,7 +32083,8 @@
         },
         {
           "lead": "Choose",
-          "text": "Choose one event at random for each round, stack those seven face down, and return the rest."
+          "text": "Choose one event at random for each round, stack those seven face down, and return the rest.",
+            "source": { "page": 4, "query": "deck of 7 cards" }
         },
         {
           "lead": "Destinations",
@@ -32070,7 +32092,8 @@
         },
         {
           "lead": "Slots",
-          "text": "The deck goes on its space, with one card face up in each of the four slots."
+          "text": "The deck goes on its space, with one card face up in each of the four slots.",
+            "source": { "page": 4, "query": "one card face up in each of the four" }
         },
         {
           "lead": "Directives",
@@ -32082,7 +32105,8 @@
         },
         {
           "lead": "Stock marker",
-          "text": "The stock marker waits."
+          "text": "The stock marker waits.",
+            "source": { "page": 4, "query": "Set aside the Stock Marker for now" }
         },
         {
           "lead": "Price",
@@ -32218,7 +32242,8 @@
       "turnStructure": [
         {
           "lead": "Rounds",
-          "text": "Seven rounds."
+          "text": "Seven rounds.",
+            "source": { "page": 3, "query": "played in seven rounds" }
         },
         {
           "lead": "Order",
@@ -32305,7 +32330,8 @@
             },
             {
               "lead": "Win",
-              "text": "Most stock wins after round 7."
+              "text": "Most stock wins after round 7.",
+            "source": { "page": 3, "query": "most Stock at the end of the game wins" }
             }
           ]
         }
@@ -33674,6 +33700,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266524"
     },
     "parks-second-edition": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 30, "max": 60 },
       "playerPoll": { "best": "3", "recommended": "1–4" },
       "mine": true, "group": true,
@@ -33689,16 +33716,19 @@
       "quickStart": {
         "bullets": [
           {
-            "text": "Two hikers each walk a trail over three seasons."
+            "text": "Two hikers each walk a trail over three seasons.",
+            "source": { "page": 4, "query": "end of the third Season" }
           },
           {
             "text": "The first hiker moves one hiker any distance forward, stops at a site, and takes that site’s action."
           },
           {
-            "text": "Play continues clockwise."
+            "text": "Play continues clockwise.",
+            "source": { "page": 4, "query": "each player in clockwise order" }
           },
           {
-            "text": "There is no backtracking."
+            "text": "There is no backtracking.",
+            "source": { "page": 4, "query": "There is no backtracking" }
           },
           {
             "text": "Weather tokens on a site are picked up as well."
@@ -33726,7 +33756,8 @@
             "text": "You may visit a site only if you can take its action."
           },
           {
-            "text": "A hiker who reaches Trail’s End stays there for the season."
+            "text": "A hiker who reaches Trail’s End stays there for the season.",
+            "source": { "page": 4, "query": "stays there for the rest of the Season" }
           },
           {
             "text": "When only one player remains on the trail, that player moves each remaining hiker straight to the end and takes one Trail’s End action per hiker."
@@ -37005,6 +37036,7 @@
       }
     },
     "ravine": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 15, "max": 20 },
       "playerPoll": { "best": "3–6", "recommended": "3–6" },
       "mine": true, "group": true,
@@ -37020,28 +37052,34 @@
         "bullets": [
           {
             "lead": "Source",
-            "text": "Ravine, the cooperative survival game. The image PDF in this repo was read with OCR. The publisher how-to is playravine.com/howto."
+            "text": "Ravine, the cooperative survival game. The image PDF in this repo was read with OCR. The publisher how-to is playravine.com/howto.",
+            "source": { "page": 2, "query": "playravine.com/howto" }
           },
           {
             "lead": "Decks",
-            "text": "Separate and shuffle Forage, Madness, and the other decks. Forage and Madness go face down in the center."
+            "text": "Separate and shuffle Forage, Madness, and the other decks. Forage and Madness go face down in the center.",
+            "source": { "page": 2, "query": "Forage and Madness decks face down" }
           },
           {
             "lead": "Deal",
-            "text": "Deal each player one Wreckage card and one Crafting Guide, face up. The other wreckage and the craft cards wait until needed."
+            "text": "Deal each player one Wreckage card and one Crafting Guide, face up. The other wreckage and the craft cards wait until needed.",
+            "source": { "page": 2, "query": "1 Wreckage and 1 Crafting Guide" }
           },
           {
             "lead": "Night pile",
             "text": "Choose a difficulty and make a face-down night pile of that many nights. Beginner is 8, normal is 12, difficult is 16 or more.",
+            "source": { "page": 2, "query": "BEGINNER: 8" },
             "details": "Shuffle The Rescue, which is disguised as a night card, into the bottom three nights."
           },
           {
             "lead": "Fire",
-            "text": "The fire token starts face down, so the fire is out."
+            "text": "The fire token starts face down, so the fire is out.",
+            "source": { "page": 2, "query": "this means the Fire is out" }
           },
           {
             "lead": "Hearts",
             "text": "Each player takes 6 heart tokens, sets 3 heart-side up, and rolls the other 3 like dice. That roll is the health you have after the crash.",
+            "source": { "page": 2, "query": "Give each player 6 Heart tokens" },
             "details": "Hearts stay visible."
           }
         ]
@@ -37060,6 +37098,7 @@
         {
           "lead": "Round",
           "text": "A round is a night card, then the day. Draw a night and do what it says.",
+            "source": { "page": 2, "query": "Draw a Night card" },
           "details": "Anyone with only 1 heart left when the night begins must draw a Madness card. Then the cycle returns to night, until rescue or until the group is dead."
         },
         {
@@ -43686,6 +43725,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=418059"
     },
     "shallow-regrets": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 15, "max": 15 },
       "playerPoll": { "best": "2–3", "recommended": "2–3" },
       "mine": true, "group": true,
@@ -43706,11 +43746,13 @@
         {
           "lead": "Shoals",
           "text": "Shuffle the 18 fish cards and deal six shoals of three.",
+            "source": { "page": 1, "query": "six 3-card piles called shoals" },
           "details": "If fewer than three shoals show a small shadow on top, shuffle the shoal with the largest visible shadow and check again until three small shadows are showing."
         },
         {
           "lead": "First",
-          "text": "The player who had the most remorseful day goes first."
+          "text": "The player who had the most remorseful day goes first.",
+            "source": { "page": 1, "query": "most remorseful day" }
         },
         {
           "lead": "Strength",
@@ -43742,16 +43784,19 @@
         },
         {
           "lead": "Abilities",
-          "text": "On your turn, before you fish, you may use any number of abilities on non-exhausted fish."
+          "text": "On your turn, before you fish, you may use any number of abilities on non-exhausted fish.",
+            "source": { "page": 1, "query": "non-exhausted fish" }
         },
         {
           "lead": "Exhaust",
           "text": "Rotate a fish to exhaust it.",
+            "source": { "page": 1, "query": "rotate its fish 90" },
           "details": "It stays exhausted for the game, even if someone else takes it. An exhausted fish still counts its hooks, points, type, and difficulty. It just cannot use the ability."
         },
         {
           "lead": "Draw",
-          "text": "Then draw two cards, one at a time, from any shoal or shoals."
+          "text": "Then draw two cards, one at a time, from any shoal or shoals.",
+            "source": { "page": 1, "query": "draws 2 cards one at a time" }
         },
         {
           "lead": "Catch",
@@ -43812,10 +43857,12 @@
           {
             "lead": "Win",
             "text": "The highest score wins.",
+            "source": { "page": 1, "query": "highest score wins" },
             "details": [
               {
                 "lead": "Tie",
-                "text": "A tie goes to the fewest foul fish."
+                "text": "A tie goes to the fewest foul fish.",
+            "source": { "page": 1, "query": "fewest foul fish" }
               },
               {
                 "lead": "Shared",
@@ -47919,15 +47966,18 @@
       "quickStart": [
         {
     "lead": "Town",
-    "text": "One to six players. The town is a 4 by 4 grid."
+    "text": "One to six players. The town is a 4 by 4 grid.",
+            "source": { "page": 1, "query": "represented by a 4x4" }
         },
         {
           "lead": "Boards",
-          "text": "Give each player a board."
+          "text": "Give each player a board.",
+            "source": { "page": 2, "query": "Give each player a player board" }
         },
         {
           "lead": "Resource cards",
-          "text": "Leave the resource cards in the box unless you are using Town Hall or the solo variant."
+          "text": "Leave the resource cards in the box unless you are using Town Hall or the solo variant.",
+            "source": { "page": 2, "query": "Leave the Resource cards in the box" }
         },
         {
           "lead": "Cottage",
@@ -47951,7 +48001,8 @@
         },
         {
           "lead": "Resources",
-          "text": "There are five resources: wood, wheat, brick, glass, and stone."
+          "text": "There are five resources: wood, wheat, brick, glass, and stone.",
+            "source": { "page": 2, "query": "There are 5 different resources" }
         },
         {
           "lead": "Monuments",
@@ -47959,11 +48010,13 @@
         },
         {
           "lead": "Hammer",
-          "text": "The player who most recently built something in real life takes the Master Builder hammer."
+          "text": "The player who most recently built something in real life takes the Master Builder hammer.",
+            "source": { "page": 2, "query": "recently constructed something" }
         },
         {
           "lead": "Deal",
-          "text": "Deal two monument cards face down to each player. Each keeps one secret and discards the other face down."
+          "text": "Deal two monument cards face down to each player. Each keeps one secret and discards the other face down.",
+            "source": { "page": 2, "query": "deal each player 2 Monument cards" }
         },
         {
           "lead": "Wooden",
@@ -47971,7 +48024,8 @@
         },
         {
           "lead": "Skip",
-          "text": "A first game may skip monuments."
+          "text": "A first game may skip monuments.",
+            "source": { "page": 2, "query": "play without monuments" }
         }
       ],
       "startingResources": [
@@ -48749,7 +48803,7 @@
       ],
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/tiny-towns",
       "rulebookPublisher": "https://www.alderac.com/wp-content/uploads/2025/04/TinyTowns_BaseGame_Rulebook_Optimized.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "setupByPlayerCount": {
         "1": [
           {
@@ -51653,6 +51707,7 @@
       }
     },
     "wingspan": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 40, "max": 70 },
       "playerPoll": { "best": "3", "recommended": "1–4" },
       "teachingScript": {
@@ -51708,11 +51763,13 @@
         "bullets": [
           {
             "lead": "Birds",
-            "text": "Shuffle the bird cards. The deck goes by the tray, with 3 cards face up."
+            "text": "Shuffle the bird cards. The deck goes by the tray, with 3 cards face up.",
+            "source": { "page": 2, "query": "Shuffle the bird cards into a deck" }
           },
           {
             "lead": "Supply",
-            "text": "Food and eggs form the supply. Throw the 5 food dice into the birdfeeder."
+            "text": "Food and eggs form the supply. Throw the 5 food dice into the birdfeeder.",
+            "source": { "page": 2, "query": "Toss the food dice into the birdfeeder" }
           },
           {
             "lead": "Goals",
@@ -51720,7 +51777,8 @@
           },
           {
             "lead": "Each player",
-            "text": "A player mat, 8 action cubes of one color, 2 bonus cards, 5 bird cards, and 5 food tokens, one of each type."
+            "text": "A player mat, 8 action cubes of one color, 2 bonus cards, 5 bird cards, and 5 food tokens, one of each type.",
+            "source": { "page": 2, "query": "8 action cubes" }
           },
           {
             "lead": "Keep",
@@ -51772,15 +51830,18 @@
         "bullets": [
           {
             "lead": "Rounds",
-            "text": "Four rounds. A round lasts until every player has placed all of their available action cubes: 8, then 7, then 6, then 5."
+            "text": "Four rounds. A round lasts until every player has placed all of their available action cubes: 8, then 7, then 6, then 5.",
+            "source": { "page": 4, "query": "played over 4 rounds" }
           },
           {
             "lead": "Four actions",
-            "text": "Play a bird, gain food and activate the forest, lay eggs and activate the grassland, or draw cards and activate the wetland."
+            "text": "Play a bird, gain food and activate the forest, lay eggs and activate the grassland, or draw cards and activate the wetland.",
+            "source": { "page": 4, "query": "take 1 of 4 actions" }
           },
           {
             "lead": "Play a bird",
-            "text": "This does not activate the row. Pay the column's egg cost from any birds: no egg in column 1, 1 egg in column 2 or 3, and 2 eggs in column 4 or 5. Then pay the bird's food."
+            "text": "This does not activate the row. Pay the column's egg cost from any birds: no egg in column 1, 1 egg in column 2 or 3, and 2 eggs in column 4 or 5. Then pay the bird's food.",
+            "source": { "page": 4, "query": "Play a bird from your hand" }
           },
           {
             "lead": "Food",
@@ -52398,7 +52459,8 @@
         "bullets": [
           {
             "lead": "Winner",
-            "text": "Most points. A tie goes to the most unused food tokens. A remaining tie is shared."
+            "text": "Most points. A tie goes to the most unused food tokens. A remaining tie is shared.",
+            "source": { "page": 5, "query": "The player who has the most points wins" }
           }
         ]
       },
@@ -60957,7 +61019,8 @@
         },
         {
           "lead": "Goal",
-          "text": "You build fireworks together."
+          "text": "You build fireworks together.",
+            "source": { "page": 1, "query": "work together towards a common goal" }
         },
         {
           "lead": "Hands",
@@ -60965,23 +61028,28 @@
         },
         {
           "lead": "Blue",
-          "text": "Put the 8 blue tokens face up."
+          "text": "Put the 8 blue tokens face up.",
+            "source": { "page": 1, "query": "8 blue clock tokens face up" }
         },
         {
           "lead": "Fuses",
-          "text": "Stack the 4 black fuse tokens with the longest fuse on top and the explosion on the bottom."
+          "text": "Stack the 4 black fuse tokens with the longest fuse on top and the explosion on the bottom.",
+            "source": { "page": 1, "query": "longest fuse on top and the explosion" }
         },
         {
           "lead": "Deck",
-          "text": "Shuffle the 50 cards of the five single-color suits."
+          "text": "Shuffle the 50 cards of the five single-color suits.",
+            "source": { "page": 1, "query": "Shuffle the 50 cards to make a deck" }
         },
         {
           "lead": "Multicolor",
-          "text": "Leave the multicolor suit in the box unless you are using a variant."
+          "text": "Leave the multicolor suit in the box unless you are using a variant.",
+            "source": { "page": 1, "query": "6th multicolor suit is included" }
         },
         {
           "lead": "Deal",
-          "text": "Deal 5 cards each at 2 or 3 players, and 4 cards each at 4 or 5."
+          "text": "Deal 5 cards each at 2 or 3 players, and 4 cards each at 4 or 5.",
+            "source": { "page": 1, "query": "Deal a hand of 5 cards to each with 2 or 3 players" }
         },
         {
           "lead": "Hold",
@@ -60989,21 +61057,25 @@
         },
         {
           "lead": "Own cards",
-          "text": "Do not look at your own cards."
+          "text": "Do not look at your own cards.",
+            "source": { "page": 2, "query": "MUST NOT look at the cards which are dealt" }
         },
         {
           "lead": "Lead",
-          "text": "The player in the most colorful clothing leads."
+          "text": "The player in the most colorful clothing leads.",
+            "source": { "page": 2, "query": "most colorful clothing begins the game" }
         },
         {
           "lead": "Order",
-          "text": "Turns go clockwise."
+          "text": "Turns go clockwise.",
+            "source": { "page": 2, "query": "going in a clockwise direction" }
         }
       ],
       "startingResources": [
         {
           "lead": "Hand",
-          "text": "A hand of 5 cards at 2 or 3 players, or 4 cards at 4 or 5."
+          "text": "A hand of 5 cards at 2 or 3 players, or 4 cards at 4 or 5.",
+            "source": { "page": 1, "query": "Deal a hand of 4 cards if there are 4 or 5 players" }
         },
         {
           "lead": "Fronts",
@@ -61025,7 +61097,8 @@
       "remindersText": [
         {
           "lead": "Clue",
-          "text": "A clue names one color or one value, never both, and it marks every matching card."
+          "text": "A clue names one color or one value, never both, and it marks every matching card.",
+            "source": { "page": 2, "query": "clearly point to the cards" }
         },
         {
           "lead": "No blue",
@@ -61238,7 +61311,7 @@
       "weight": 1.69,
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/hanabi",
       "rulebookPublisher": "https://rnrgames.com/Content/RRGames/images/ProductRules/hanabiRules.PDF",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "setupByPlayerCount": {
         "2": [
           {
@@ -61247,7 +61320,8 @@
           },
           {
             "lead": "Hands",
-            "text": "Do not look at your own cards."
+            "text": "Do not look at your own cards.",
+            "source": { "page": 2, "query": "MUST NOT look at the cards which are dealt" }
           },
           {
             "lead": "Rest",
@@ -61261,7 +61335,8 @@
           },
           {
             "lead": "Hands",
-            "text": "Do not look at your own cards."
+            "text": "Do not look at your own cards.",
+            "source": { "page": 2, "query": "MUST NOT look at the cards which are dealt" }
           }
         ],
         "4": [
@@ -61271,7 +61346,8 @@
           },
           {
             "lead": "Hands",
-            "text": "Do not look at your own cards."
+            "text": "Do not look at your own cards.",
+            "source": { "page": 2, "query": "MUST NOT look at the cards which are dealt" }
           }
         ],
         "5": [
@@ -61281,7 +61357,8 @@
           },
           {
             "lead": "Hands",
-            "text": "Do not look at your own cards."
+            "text": "Do not look at your own cards.",
+            "source": { "page": 2, "query": "MUST NOT look at the cards which are dealt" }
           },
           {
             "lead": "Same",
@@ -63404,13 +63481,15 @@
             "text": "A shared Progress deck makes things happen to every colony, many of them fatal."
           },
           {
-            "text": "Each player takes a scientist, five personal perks, and four action chits."
+            "text": "Each player takes a scientist, five personal perks, and four action chits.",
+            "source": { "page": 3, "query": "set of 5 Perks" }
           },
           {
             "text": "Developments, events, and buildings start in faceup piles."
           },
           {
-            "text": "Events stay sorted, lowest number on top."
+            "text": "Events stay sorted, lowest number on top.",
+            "source": { "page": 3, "query": "lowest number on top" }
           }
         ]
       },
@@ -63423,7 +63502,8 @@
             "text": "Each turn, reveal the next Progress card and everyone follows it together."
           },
           {
-            "text": "Four Work cards are in the starting deck."
+            "text": "Four Work cards are in the starting deck.",
+            "source": { "page": 4, "query": "four Work cards in the starting deck" }
           },
           {
             "text": "When Work happens, each player chooses Restock (2 resources onto buildings), Mine (4 ore), Farm (4 food), Research (draw 2), or Build (pay the card’s cost and put it in play)."
@@ -63432,7 +63512,8 @@
             "text": "Building abilities of that color resolve too."
           },
           {
-            "text": "If the Progress deck is empty when the next card is needed, shuffle the discards."
+            "text": "If the Progress deck is empty when the next card is needed, shuffle the discards.",
+            "source": { "page": 4, "query": "shuffle the discards" }
           }
         ]
       },
@@ -63440,7 +63521,8 @@
       "endGameScoring": {
         "bullets": [
           {
-            "text": "The game lasts until one colony has no people left or the players reach the bottom of the Event deck."
+            "text": "The game lasts until one colony has no people left or the players reach the bottom of the Event deck.",
+            "source": { "page": 2, "query": "no people left" }
           }
         ],
         "details": "https://gamers-hq.de/media/pdf/3d/a4/65/Rules_Moon_Colony_Bloodbath.pdf"
@@ -63452,7 +63534,8 @@
       "endOfGame": {
         "bullets": [
           {
-            "text": "The player with the most survivors wins."
+            "text": "The player with the most survivors wins.",
+            "source": { "page": 2, "query": "most survivors wins" }
           }
         ]
       },
@@ -63461,7 +63544,7 @@
       ],
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/moon-colony-bloodbath",
       "rulebookPublisher": "https://www.riograndegames.com/wp-content/uploads/2024/07/MCB.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "setupByPlayerCount": {
         "1": [
           {
@@ -65507,6 +65590,7 @@
           {
             "lead": "Deck",
             "text": "The deck is 140 planet and space cards. Shuffle them planet side down.",
+            "source": { "page": 3, "query": "POINT GALAXY is a card-drafting" },
             "details": "Planet is the front. Space, with moons, suns, asteroids, and wormholes, is the back."
           },
           {
@@ -65529,11 +65613,13 @@
           },
           {
             "lead": "Piles",
-            "text": "Split the remaining cards into three roughly equal draw piles, planet side down."
+            "text": "Split the remaining cards into three roughly equal draw piles, planet side down.",
+            "source": { "page": 4, "query": "three roughly equal draw piles" }
           },
           {
             "lead": "Market",
-            "text": "Flip two cards from each pile into a column under that pile. The market is those 6 face-up planets plus the 3 space cards on top of the piles."
+            "text": "Flip two cards from each pile into a column under that pile. The market is those 6 face-up planets plus the 3 space cards on top of the piles.",
+            "source": { "page": 4, "query": "Flip over two cards from each draw pile" }
           },
           {
             "lead": "Rockets",
@@ -65541,11 +65627,13 @@
           },
           {
             "lead": "Sun",
-            "text": "Deal each player one random starting sun. That is their first solar system."
+            "text": "Deal each player one random starting sun. That is their first solar system.",
+            "source": { "page": 4, "query": "first Solar System" }
           },
           {
             "lead": "Start",
-            "text": "Deal player aids at random, and include the aid with the start-player symbol. That player goes first."
+            "text": "Deal player aids at random, and include the aid with the start-player symbol. That player goes first.",
+            "source": { "page": 4, "query": "becomes the first player" }
           }
         ]
       },
@@ -65589,6 +65677,7 @@
           {
             "lead": "Draft",
             "text": "On your turn, draft any 2 cards from the market. You may take them one at a time.",
+            "source": { "page": 6, "query": "draft any 2 cards from the market" },
             "details": "If you take the space card on top of a pile, the next card is revealed, and you may take that one as your second card. You may place the two cards in either order. The market does not refill until the end of the turn."
           },
           {
@@ -65702,7 +65791,7 @@
       "weight": 1.93,
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/point-galaxy",
       "rulebookPublisher": "https://www.alderac.com/wp-content/uploads/2025/07/Point_Galaxy_Rulebook-optimized.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "setupByPlayerCount": {
         "1": [
           {
@@ -65824,16 +65913,19 @@
         {
           "lead": "Deck",
           "text": "Without looking at the point sides, build the deck for this player count.",
+            "source": { "page": 4, "query": "without looking at the point card backs" },
           "details": "Put removed cards back in the box so nobody sees which point cards left."
         },
         {
           "lead": "Piles",
           "text": "Shuffle the rest. Make three roughly equal piles, point side up.",
+            "source": { "page": 4, "query": "three roughly equal draw piles" },
           "details": "Flip two cards from each pile into a column under it, veggie side up. That column is the market."
         },
         {
           "lead": "Start",
-          "text": "Choose a start player at random."
+          "text": "Choose a start player at random.",
+            "source": { "page": 4, "query": "Randomly choose a start player" }
         }
       ],
       "startingResources": [
@@ -65843,7 +65935,8 @@
         },
         {
           "lead": "Market",
-          "text": "The market starts with six veggies, two under each pile."
+          "text": "The market starts with six veggies, two under each pile.",
+            "source": { "page": 4, "query": "two cards from each draw pile" }
         }
       ],
       "remindersText": [
@@ -65869,11 +65962,13 @@
       "turnStructure": [
         {
           "lead": "Draft",
-          "text": "Draft either the top point card of any pile, or two veggies from the market. Add them to your face-up tableau, same side up."
+          "text": "Draft either the top point card of any pile, or two veggies from the market. Add them to your face-up tableau, same side up.",
+            "source": { "page": 5, "query": "On your turn you draft" }
         },
         {
           "lead": "Flip",
           "text": "Once on your turn, you may flip one of your point cards to its veggie side. You may flip a card you just drafted.",
+            "source": { "page": 5, "query": "flip over any one of your point cards" },
           "details": "You cannot flip a veggie back into a point card. The veggie type is in the corners."
         },
         {
@@ -65903,14 +65998,16 @@
       "endOfGame": [
         {
           "lead": "Drafted out",
-          "text": "The game ends when every point pile and every market card has been drafted."
+          "text": "The game ends when every point pile and every market card has been drafted.",
+            "source": { "page": 6, "query": "when all cards from both the point card piles" }
         }
       ],
       "endGameScoring": {
         "bullets": [
           {
             "lead": "Winner",
-            "text": "Most points wins."
+            "text": "Most points wins.",
+            "source": { "page": 6, "query": "most points is the winner" }
           },
           {
             "lead": "Tie",
@@ -65938,7 +66035,7 @@
       "weight": 1.15,
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/point-salad",
       "rulebookPublisher": "https://www.alderac.com/wp-content/uploads/2025/04/PointSalad_BaseGame_Rulebook_Optimized.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "setupByPlayerCount": {
         "2": [
           {
@@ -74427,16 +74524,18 @@
       "group": true,
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/air-land-and-sea",
       "rulebookPublisher": "https://www.arcanewonders.com/wp-content/uploads/2021/05/Air_Land_and_Sea_Rulebook.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "quickStart": {
         "bullets": [
           {
             "lead": "Theaters",
-            "text": "Lay the Air, Land, and Sea boards in a random row."
+            "text": "Lay the Air, Land, and Sea boards in a random row.",
+            "source": { "page": 3, "query": "Randomly place the three Theater boards" }
           },
           {
             "lead": "Hands",
-            "text": "Shuffle the 18 battle cards and deal 6 to each player. Set the rest aside, face down."
+            "text": "Shuffle the 18 battle cards and deal 6 to each player. Set the rest aside, face down.",
+            "source": { "page": 3, "query": "deal 6 to each player" }
           },
           {
             "lead": "Tokens",
@@ -74444,7 +74543,8 @@
           },
           {
             "lead": "Commander",
-            "text": "Deal one Supreme Commander card to each player. The red card is the first player and takes the first turn."
+            "text": "Deal one Supreme Commander card to each player. The red card is the first player and takes the first turn.",
+            "source": { "page": 3, "query": "red Supreme Commander" }
           }
         ],
         "details": "Arcane Wonders Air, Land, & Sea rulebook, ©2018, the PDF on arcanewonders.com."
@@ -74473,7 +74573,8 @@
           },
           {
             "lead": "Improvise",
-            "text": "Or play one card face down to any theater. It is strength 2 and has no ability."
+            "text": "Or play one card face down to any theater. It is strength 2 and has no ability.",
+            "source": { "page": 5, "query": "Strength of 2" }
           },
           {
             "lead": "Withdraw",
@@ -74523,7 +74624,8 @@
           },
           {
             "lead": "War",
-            "text": "The first player to 12 victory points wins. A longer game can be played to 18."
+            "text": "The first player to 12 victory points wins. A longer game can be played to 18.",
+            "source": { "page": 3, "query": "reach 12 VPs" }
           }
         ]
       },
@@ -74565,7 +74667,7 @@
       "group": true,
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/air-land-and-sea-spies-lies-and-supplies",
       "rulebookPublisher": "https://www.arcanewonders.com/wp-content/uploads/2022/04/ALS_SLS_Rulebook_v9.pdf",
-      "rulebookSearchable": false,
+      "rulebookSearchable": true,
       "howToPlayVideo": {
         "url": "https://www.youtube.com/watch?v=fMj1HSY3aOo",
         "title": "Air, Land, and Sea: Spies, Lies, and Supplies Review - with Tom Vasel",
@@ -74575,7 +74677,8 @@
         "bullets": [
           {
             "lead": "Theaters",
-            "text": "Lay Intelligence, Diplomacy, and Economics in a random row."
+            "text": "Lay Intelligence, Diplomacy, and Economics in a random row.",
+            "source": { "page": 3, "query": "one for Intelligence, one for Diplomacy" }
           },
           {
             "lead": "Commander",
@@ -74596,7 +74699,8 @@
         "bullets": [
           {
             "lead": "Deploy",
-            "text": "Play one card face up into its matching theater, covering cards already on your side. The ability happens now."
+            "text": "Play one card face up into its matching theater, covering cards already on your side. The ability happens now.",
+            "source": { "page": 3, "query": "in that Theater" }
           },
           {
             "lead": "Improvise",
@@ -134330,6 +134434,41 @@
     return boxes;
   }
 
+  /* A scanned page has no text layer. rulebooks/ocr/<slug>.json stores each
+     word and its box in tenths of a PDF point, origin at the bottom-left.
+     These items are the same shape pdf.js gives highlightBoxes. */
+  function ocrSlugForUrl(url) {
+    var value = String(url || "");
+    var relay = value.match(/bgquick-rulebooks-relay\.bgquick\.workers\.dev\/([^/?#]+)/i);
+    if (relay) return decodeURIComponent(relay[1]);
+    var file = value.match(/\/rulebooks\/([^/?#]+)\.pdf(?:$|[?#])/i);
+    if (file) return decodeURIComponent(file[1]);
+    return "";
+  }
+
+  function ocrItemsFromWords(words) {
+    var items = [];
+    if (!words || !words.length) return items;
+    for (var i = 0; i < words.length; i++) {
+      var word = words[i];
+      if (!word || word.length < 5) continue;
+      var text = String(word[4] || "");
+      if (!text) continue;
+      var eol = word[5] === 1;
+      var width = Number(word[2]) / 10;
+      var height = Number(word[3]) / 10;
+      if (!(width > 0) || !(height > 0)) continue;
+      items.push({
+        str: eol ? text : text + " ",
+        width: width,
+        height: height,
+        transform: [1, 0, 0, 1, Number(word[0]) / 10, Number(word[1]) / 10],
+        hasEOL: eol
+      });
+    }
+    return items;
+  }
+
   var rulebookViewerToken = 0;
   var highlightJob = {
     renderTask: null,
@@ -134487,7 +134626,8 @@
     text: {},
     textPromises: {},
     scanning: false,
-    timer: 0
+    timer: 0,
+    sourceUrl: ""
   };
 
   function cleanFindQuery(query) {
@@ -134505,6 +134645,7 @@
     rulebookFind.text = {};
     rulebookFind.textPromises = {};
     rulebookFind.scanning = false;
+    rulebookFind.sourceUrl = "";
     var bar = document.getElementById("rulebook-viewer-find");
     var input = document.getElementById("rulebook-viewer-find-input");
     var count = document.getElementById("rulebook-viewer-find-count");
@@ -134539,16 +134680,51 @@
     if (next) next.disabled = !(n && i >= 0 && i < n - 1);
   }
 
+  var ocrBookCache = {};
+  function loadOcrBook(url) {
+    var slug = ocrSlugForUrl(url);
+    if (!slug) return Promise.resolve(null);
+    if (!ocrBookCache[slug]) {
+      ocrBookCache[slug] = fetch(basePath() + "/rulebooks/ocr/" + encodeURIComponent(slug) + ".json")
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .catch(function () { return null; });
+    }
+    return ocrBookCache[slug];
+  }
+  function ocrWordsForPage(book, pageNum) {
+    var pages = book && book.pages;
+    if (!pages) return null;
+    for (var i = 0; i < pages.length; i++) {
+      if (parseInt(pages[i].page, 10) === pageNum && pages[i].words && pages[i].words.length) return pages[i].words;
+    }
+    return null;
+  }
+  /* A page with a real text layer is used as-is. A scanned page, or one whose
+     only text is a footer, is highlighted from the stored word boxes. */
+  function textFromContentOrOcr(textContent, url, pageNum) {
+    var built = textRunsFromItems(textContent.items);
+    built.styles = textContent.styles || null;
+    if (letterCount(built.raw) >= 80) return Promise.resolve(built);
+    return loadOcrBook(url).then(function (book) {
+      var words = ocrWordsForPage(book, pageNum);
+      if (!words) return built;
+      var ocrBuilt = textRunsFromItems(ocrItemsFromWords(words));
+      ocrBuilt.styles = null;
+      ocrBuilt.ocr = true;
+      return ocrBuilt;
+    });
+  }
   function ensureRulebookPageText(pdf, pageNum) {
     var hit = rulebookFind.text[pageNum];
     if (hit) return Promise.resolve(hit);
     if (rulebookFind.textPromises[pageNum]) return rulebookFind.textPromises[pageNum];
+    var sourceUrl = rulebookFind.sourceUrl || "";
     rulebookFind.textPromises[pageNum] = pdf.getPage(pageNum).then(function (page) {
       return page.getTextContent().then(function (textContent) {
-        var built = textRunsFromItems(textContent.items);
-        built.styles = textContent.styles || null;
-        rulebookFind.text[pageNum] = built;
-        return built;
+        return textFromContentOrOcr(textContent, sourceUrl, pageNum).then(function (built) {
+          rulebookFind.text[pageNum] = built;
+          return built;
+        });
       });
     });
     return rulebookFind.textPromises[pageNum];
@@ -134872,7 +135048,6 @@
   function armRulebookFind(pdf, mode, query, anchor) {
     if (!pdf) return;
     var searchable = rulebookSearchEnabled(DATA[detailSlug]);
-    if (!searchable && mode !== "highlight") return;
     rulebookFind.pdf = pdf;
     rulebookFind.mode = mode;
     rulebookFind.text = {};
@@ -134880,6 +135055,10 @@
     var bar = document.getElementById("rulebook-viewer-find");
     var input = document.getElementById("rulebook-viewer-find-input");
     if (bar) bar.hidden = !searchable;
+    if (!searchable && mode !== "highlight") {
+      updateRulebookMatchNav();
+      return;
+    }
     var q = cleanFindQuery(query);
     if (input) input.value = q;
     updateRulebookMatchNav();
@@ -135038,7 +135217,8 @@
         if (!sheet) return null;
         return page.getTextContent().then(function (textContent) {
           if (token !== rulebookViewerToken || !sheet) return null;
-          var built = textRunsFromItems(textContent.items);
+          return textFromContentOrOcr(textContent, opts.url, pageNum).then(function (built) {
+          if (token !== rulebookViewerToken || !sheet) return null;
           var found = searchMatchRanges(built.raw, opts.query);
           var focus = -1;
           if (found.ranges.length) {
@@ -135072,7 +135252,7 @@
           return task.promise.then(function () {
             if (highlightJob.renderTask === task) highlightJob.renderTask = null;
             if (token !== rulebookViewerToken) return null;
-            var boxes = highlightBoxes(built.runs, found.ranges, focus, viewport, textContent.styles);
+            var boxes = highlightBoxes(built.runs, found.ranges, focus, viewport, built.styles);
             var focusEl = null;
             boxes.forEach(function (box) {
               var el = placeHighlightBox(layer, box);
@@ -135080,7 +135260,7 @@
             });
             var bandEl = null;
             if (sectionRange) {
-              var sectionBoxes = highlightBoxes(built.runs, [sectionRange], 0, viewport, textContent.styles);
+              var sectionBoxes = highlightBoxes(built.runs, [sectionRange], 0, viewport, built.styles);
               var anchorLeft = focusEl ? parseFloat(focusEl.style.left) : null;
               var band = bandFromBoxes(sectionBoxes, anchorLeft);
               if (band && band.height > 12) {
@@ -135094,11 +135274,13 @@
               highlightJob.note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
               if (opts.markSection && (bandEl || boxes.length)) highlightJob.note.textContent = "Marked " + shown + " on this page.";
               else if (boxes.length) highlightJob.note.textContent = "Highlighted " + shown + " on this page.";
+              else if (built.ocr) highlightJob.note.textContent = shown + " was not found in the text read from this page.";
               else if (letterCount(built.raw) < 40) highlightJob.note.textContent = "This page has no selectable text, so " + shown + " could not be highlighted.";
               else highlightJob.note.textContent = shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
             }
             if (opts.markSection) scrollMarkIntoView(stage, bandEl || focusEl);
             else setHighlightFocus(focus);
+          });
           });
         });
       });
@@ -135206,6 +135388,7 @@
     var closeBtn = document.getElementById("rulebook-viewer-close");
     if (!dialog || !stage || !opts) return;
     cancelRulebookHighlight();
+    rulebookFind.sourceUrl = opts.url || "";
     var token = rulebookViewerToken;
     var tour = opts.tour && opts.tour.length ? opts.tour : [{
       page: opts.page,
@@ -135581,7 +135764,9 @@
           note.className = "rulebook-viewer-note" + (boxes.length ? " rulebook-viewer-note--ok" : "");
           note.textContent = boxes.length
             ? "Marked " + shown + " on this page."
-            : shown + " was not in this page\u2019s selectable text, so it could not be highlighted.";
+            : (built.ocr
+              ? shown + " was not found in the text read from this page."
+              : shown + " was not in this page\u2019s selectable text, so it could not be highlighted.");
         }
         if (!highlightJob.citationScrolled) {
           highlightJob.citationScrolled = true;
@@ -135605,6 +135790,7 @@
     var closeBtn = document.getElementById("rulebook-viewer-close");
     if (!dialog || !stage || !url) return;
     cancelRulebookHighlight();
+    rulebookFind.sourceUrl = url;
     highlightJob.citation = citation && citation.page ? citation : null;
     highlightJob.citationScrolled = false;
     var token = rulebookViewerToken;

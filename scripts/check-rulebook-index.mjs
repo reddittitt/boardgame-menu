@@ -5,8 +5,9 @@
    one of that page's index lines. Whitespace, hyphens, and punctuation are
    folded first, so a line the text layer joins differently still counts.
    Print, legal, and contents lines are skipped. A searchable game with no
-   index fails. An upstream fetch that fails is a warning. Image-only books
-   should be marked rulebookSearchable false.
+   index fails. An upstream fetch that fails is a warning. A game with
+   rulebooks/ocr/<slug>.json is checked against that word text. An image-only
+   book with no OCR file should be marked rulebookSearchable false.
 
    node scripts/check-rulebook-index.mjs
    node scripts/check-rulebook-index.mjs azul root
@@ -157,6 +158,31 @@ for (const { slug, game } of games) {
   const lines = samples(index);
   if (!lines.length) {
     failures.push({ slug, error: "index has no plain sentences to sample" });
+    continue;
+  }
+  const ocrPath = path.join(root, "rulebooks", "ocr", slug + ".json");
+  if (fs.existsSync(ocrPath)) {
+    const ocr = JSON.parse(fs.readFileSync(ocrPath, "utf8"));
+    const byPage = new Map((ocr.pages || []).map((page) => [page.page, page]));
+    let confirmed = 0;
+    for (const sample of lines) {
+      const page = byPage.get(sample.page);
+      const words = page && page.words ? page.words.map((word) => word[4]).join(" ") : "";
+      if (!words) {
+        failures.push({ slug, page: sample.page, query: sample.queries[0], error: "OCR file has no words for that page" });
+        continue;
+      }
+      checked += 1;
+      const pageText = compact(words);
+      const hit = sample.queries.some((query) => pageText.includes(compact(query)));
+      if (!hit) {
+        failures.push({ slug, page: sample.page, query: sample.queries[0], error: "none of the sampled index lines are in the OCR text for that page" });
+      } else confirmed += 1;
+    }
+    if (!confirmed && !failures.some((failure) => failure.slug === slug)) {
+      failures.push({ slug, error: "OCR text does not match the index" });
+    }
+    process.stdout.write(slug + " ok\n");
     continue;
   }
   let bytes;
