@@ -1305,6 +1305,10 @@
     line-height:1.35;
   }
   .play-time-source[hidden] { display:none; }
+  #play-time-value.is-count-time {
+    font-weight:700;
+    color:var(--accent-ink, var(--accent));
+  }
 
   #teach-it-slot:empty,
   #common-mistakes-slot:empty,
@@ -1367,6 +1371,29 @@
     outline-offset:2px;
   }
   .show-more-extra[hidden] { display:none; }
+  .rules-answer { display:block; margin-top:0.15rem; }
+  .rules-official {
+    display:inline-block;
+    margin-left:0.35rem;
+    padding:0 0.4rem;
+    border-radius:999px;
+    font-size:0.68rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    vertical-align:0.15em;
+    color:#92400e;
+    background:color-mix(in srgb, #d97706 18%, var(--card));
+  }
+  .rules-source {
+    display:inline-block;
+    margin-top:0.15rem;
+    font-size:0.78rem;
+    font-weight:700;
+    color:var(--accent-ink, var(--accent));
+  }
+  .rules-topic { margin-top:0.9rem; }
+  .rule-chapter--deep { margin-top:12px; }
 
   .player-aids { margin:0; }
   .player-aids h3 {
@@ -2580,8 +2607,20 @@
     border-color:color-mix(in srgb, var(--accent) 40%, var(--hig-sep));
     border-left-color:var(--accent);
   }
-  :root[data-look="hig"] .rule-chapter--glossary > summary {
+  :root[data-look="hig"] .rule-chapter--glossary > summary,
+  :root[data-look="hig"] .rule-chapter--deep > summary {
     color:var(--accent-ink, var(--accent));
+  }
+  :root[data-look="hig"] .rule-chapter--deep {
+    background:color-mix(in srgb, var(--accent) 12%, var(--card));
+    border-color:color-mix(in srgb, var(--accent) 40%, var(--hig-sep));
+    border-left-color:var(--accent);
+  }
+  :root[data-look="hig"][data-theme="dark"] .rules-official,
+  :root[data-look="hig"][data-theme="darkwood"] .rules-official,
+  :root[data-look="hig"][data-theme="neongrid"] .rules-official {
+    color:#fcd34d;
+    background:color-mix(in srgb, #fbbf24 18%, var(--card));
   }
   :root[data-look="hig"] .glossary-item {
     margin:0 0 8px;
@@ -5485,6 +5524,29 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "How many resources can you buy on one turn, and what changes the price?",
+          "a": "There is no limit. You pay the bank. Only your opponent's brown and grey cards raise the price. Yellow cards and wonders do not.",
+          "official": true,
+          "source": "https://bgquick-rulebooks-relay.bgquick.workers.dev/7-wonders-duel",
+          "depth": "core"
+        },
+        {
+          "q": "When do guilds pay coins, and can the end-game city be a different one?",
+          "a": "The coins come from the bank once, when you build the card. At the end of the game you may score a different city from the one that paid those coins.",
+          "official": true,
+          "source": "https://bgquick-rulebooks-relay.bgquick.workers.dev/7-wonders-duel",
+          "depth": "core"
+        },
+        {
+          "q": "For the Shipowners Guild, can you pick one city for brown cards and another for grey?",
+          "a": "No. You pick one city, and that city is used for both colors.",
+          "official": true,
+          "source": "https://bgquick-rulebooks-relay.bgquick.workers.dev/7-wonders-duel",
+          "depth": "core"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -7992,6 +8054,211 @@
             "page": 18,
             "query": "If no one accrues 10 Conservation Points before the game ends"
           }
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "q": "When you release an animal, or move one into a new special enclosure, which standard enclosure flips?",
+          "a": "Flip the smallest occupied standard enclosure that meets every requirement, including water and rock. If none does, flip the smallest occupied enclosure that at least matches the size. If none is large enough, flip nothing.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "If you upgrade an action card in the middle of that action, can you use the new side immediately?",
+          "a": "No. The upgraded side waits until your next action. The card does count as upgraded right away when something asks whether it is upgraded.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Can you use a bonus you just gained during the rest of that same action?",
+          "a": "Yes. Do the steps in order. Only the strength and the kind of action are fixed when the action starts.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "How much does a partner zoo reduce an animal's cost?",
+          "a": "Three money for each matching continent icon on the animal. A second copy of the same icon is another three. Icons in the conditions on the left side of the card do not count.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What happens when appeal or conservation reaches the end of the track?",
+          "a": "You stop. You cannot go past 113 appeal or 41 conservation.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "core"
+        },
+        {
+          "topic": "Animal abilities",
+          "q": "How do the other action cards move when Boost places one in slot 1 or slot 5?",
+          "a": "Slot 1 shifts the cards that were to its left one step right. Slot 5 shifts the cards that were to its right one step left.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Animal abilities",
+          "q": "What happens to tokens on a card you take with Hypnosis?",
+          "a": "Constriction and venom on that card affect you too, and then you discard them. You cannot use a multiplier token that is on the card.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Animal abilities",
+          "q": "Who does the Japanese macaque steal from when several zoos are tied for conservation?",
+          "a": "You choose. A zoo needs at least 1 conservation point to count as having the most.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Animal abilities",
+          "q": "Do you have to remove the attack cards if your group dislikes them?",
+          "a": "No. You may use the alternate effects printed for the solo game instead.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "Where does a multiplier token from a bonus tile go?",
+          "a": "Straight onto one of your action cards. It does not sit in your supply.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "Can a bonus give you a third partner zoo, or a building on a locked space, before that action card is upgraded?",
+          "a": "No. The requirement is on your zoo map, so it applies no matter how you gained the partner zoo or the building.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "Can the sponsor icon that plays a sponsor card take one from the display?",
+          "a": "No. It plays a sponsor from your hand only, even after Sponsors is upgraded.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "Does the WAZA Small Animals Program require you to play an extra small animal from your hand?",
+          "a": "No. You may still take the small animal from the display if you do not play one from your hand.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "If the Polar Bear Exhibit pushes you over the end of the game on another player's turn, whose turn is next?",
+          "a": "The game does not end in the middle of their turn. You trigger the end at the end of your own turn, or during a break, unless someone else triggers it first.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bonuses and sponsors",
+          "q": "Do rock and water spaces count as empty border spaces for Native Farm Animals?",
+          "a": "No. Only building spaces count, including spaces you cannot build on yet because Build is not upgraded.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Zoo maps",
+          "q": "If you build next to one hex of a two-hex lake, are you adjacent to one water space or two?",
+          "a": "One. The lake being two hexes does not make the building touch both.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Zoo maps",
+          "q": "Can you build next to the kiosk printed on zoo map A?",
+          "a": "Yes. That kiosk counts as already built. Putting a kiosk tile on it is a reminder, not a new build.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Zoo maps",
+          "q": "Can you ignore the Outdoor Areas size bonus when you release an animal or move one into a special enclosure?",
+          "a": "No. After a standard enclosure is placed next to Outdoor Areas, it is two spaces larger for every purpose.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Zoo maps",
+          "q": "What does the Park Restaurant let you build?",
+          "a": "One of the two special enclosures it shows, for free, even if Build is not upgraded yet. Not both.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "Can you take the X-token action on a card that has a venom token?",
+          "a": "Yes, and that discards the venom token. You cannot do it if you already have 5 X-tokens.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "Do the water and rock pictures on unique buildings and standard enclosures satisfy those requirements?",
+          "a": "No. Printed art is not a water or rock space.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "When you release an animal, which happens first, losing appeal or gaining conservation?",
+          "a": "Lose the appeal first. Then gain the conservation.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "When you build the Reptile House or the Large Bird Aviary, how many animals may you move?",
+          "a": "Every matching animal in your zoo, not only one.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "What is a border space?",
+          "a": "A space on your zoo map that has no neighboring space on at least one of its six sides.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "During a break, when do you refill the card display?",
+          "a": "After each player who gains a card, not once at the end of the break.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Other rulings",
+          "q": "Which break steps does the solo game use?",
+          "a": "Steps 1 through 5. Do not return the break token. That is step 6.",
+          "official": true,
+          "source": "https://www.feuerland-spiele.de/fileadmin/game/Arche_Nova/Arche_Nova_FAQ_V1_EN_low_US.pdf",
+          "depth": "deep"
         }
       ],
       "endGameScoring": {
@@ -13056,6 +13323,22 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "What if the supply runs out of a resource while several players are owed it?",
+          "a": "If more than one player is owed that resource, nobody receives it. If only one player is owed it, that player receives whatever is left.",
+          "official": true,
+          "source": "https://bgquick-rulebooks-relay.bgquick.workers.dev/catan",
+          "depth": "core"
+        },
+        {
+          "q": "When several players have a building on the hex you moved the robber to, who do you steal from?",
+          "a": "You choose one of them. The robber must move to a different hex. You take one random resource card from the player you chose.",
+          "official": true,
+          "source": "https://bgquick-rulebooks-relay.bgquick.workers.dev/catan",
+          "depth": "core"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -22907,7 +23190,40 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Blueberries",
+          "text": "A blueberry bush is planted empty and stays in that field space for the whole game."
+        },
+        {
+          "lead": "One action",
+          "text": "Planting several seeds, even mixed types, is still one field action if you have the space and the fertilizer."
+        },
+        {
+          "lead": "Crop points",
+          "text": "Unharvested crops score 1 each. Blueberry bushes are not part of that score. Each bush scores 2."
+        },
+        {
+          "lead": "Coins",
+          "text": "Leftover coins score 1 point for every 2 coins, not 1 point each."
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "q": "What does the 3-action field space cost?",
+          "a": "Coins equal to the current round number. The 2-action and 1-action spaces are free. The 1-action space also gives water or fertilizer, and you may take that before or after the field action.",
+          "official": true,
+          "source": "https://gamers-hq.de/media/pdf/3f/d4/f5/Harvest-Rulebook.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Can Farmer's Market actions be taken in any order?",
+          "a": "Yes. Each action must finish completely, including anything it triggers, before the next one starts.",
+          "official": true,
+          "source": "https://gamers-hq.de/media/pdf/3f/d4/f5/Harvest-Rulebook.pdf",
+          "depth": "core"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -29753,7 +30069,28 @@
           "text": "The player to the left goes. Continue until each player has taken 3 turns."
         }
       ],
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Red cards",
+          "text": "You can place a friend only on a red card you own, never on another player's."
+        },
+        {
+          "lead": "Tan cards",
+          "text": "A tan card activates once, when you play it. It does not activate again."
+        },
+        {
+          "lead": "Green cards",
+          "text": "A green card activates when you play it, and again at the start of each new round."
+        },
+        {
+          "lead": "Parades",
+          "text": "Each parade can be achieved only once. Take the highest token of that type that is still left."
+        },
+        {
+          "lead": "Dice spaces",
+          "text": "Only one friend may sit on a special resource-dice space."
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -38315,6 +38652,91 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "If the Law does not say you cannot do something, can you do it?",
+          "a": "Yes, inside the action you are taking. That does not let you invent a new action.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "core"
+        },
+        {
+          "q": "Which text wins when the card, the Learning to Play, and the Law disagree?",
+          "a": "The card beats the Law. The Law beats the Learning to Play. A faction or hireling rule beats the general rule only when you cannot follow both.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "core"
+        },
+        {
+          "q": "Can another rule override the word cannot?",
+          "a": "No. Cannot is absolute unless a rule explicitly says it overrides that cannot.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "core"
+        },
+        {
+          "q": "Who chooses when two effects happen at the same time?",
+          "a": "The player whose turn it is, whenever the order is unclear or the Law does not say who decides.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "core"
+        },
+        {
+          "q": "Can you interrupt an action with another effect?",
+          "a": "No. You cannot interrupt an action, a compound action such as a March, an ability, or a persistent effect unless that effect explicitly allows it.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "core"
+        },
+        {
+          "topic": "Turns",
+          "q": "When do start-of-phase and end-of-phase effects happen?",
+          "a": "At the start means before everything else in that phase. At the end means after everything else in that phase, and before the next phase begins.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        },
+        {
+          "topic": "Crafting and battle",
+          "q": "Can you craft an immediate card if the supply is missing the item it would give you?",
+          "a": "No. If the item supply on the map does not have that item, you cannot craft the card.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        },
+        {
+          "topic": "Crafting and battle",
+          "q": "Can you craft a second copy of a persistent effect you already have?",
+          "a": "No. A persistent effect with the same name blocks the new one.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        },
+        {
+          "topic": "Crafting and battle",
+          "q": "Is there a cap on hits from the dice?",
+          "a": "Yes. Hits from the roll cannot exceed your warriors in that clearing. Extra hits from effects are not capped that way.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        },
+        {
+          "topic": "Crafting and battle",
+          "q": "What if the defender has no warriors in the clearing?",
+          "a": "The defender is defenseless. The attacker deals one extra hit.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        },
+        {
+          "topic": "Crafting and battle",
+          "q": "When can an ambush be played, and can it be cancelled?",
+          "a": "The defender may ambush before the roll. The attacker may cancel it by also playing an ambush card.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0106/0162/7706/files/Root_Base_Law_Oct_2025.pdf?v=1774903756",
+          "depth": "deep"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -43923,6 +44345,22 @@
           "details": "They sit on 20 and 30, and they are resolved last when several milestones happen at once."
         }
       ],
+      "rulesClarifications": [
+        {
+          "q": "When several effects discard a card from the row to mark a signal, when is the row refilled?",
+          "a": "After all of those discards. Do not refill between them.",
+          "official": true,
+          "source": "https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "When can telescope technologies be used during a scan?",
+          "a": "In any order, after the scan steps. Most of them have an extra cost. Do not skip that cost.",
+          "official": true,
+          "source": "https://filemanager.czechgames.com/storage/files/seti-search-for-extraterrestrial-intelligence/rules/seti-rules-en.pdf",
+          "depth": "core"
+        }
+      ],
       "endOfGame": {
         "bullets": [
           {
@@ -46012,7 +46450,40 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Two bids",
+          "text": "You place two tokens. One is your bid, marked with a ship. The other is the Skyborne's. If you have no ship left, both belong to the Skyborne."
+        },
+        {
+          "lead": "Face down",
+          "text": "Eye slots are face up. Blank slots are face down. You may look at your own face-down bids. You may not look at a face-down Skyborne bid after it is placed."
+        },
+        {
+          "lead": "Specials",
+          "text": "Special tokens do not count toward the 3-token hand. You may hold up to 3 specials. A fourth means you discard one."
+        },
+        {
+          "lead": "Modifiers",
+          "text": "A +4 or -4 on the previous token does nothing if it is the first token on the quest. The same is true of a next-token modifier that is placed last."
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "q": "A quest has both a +2 or -2 modifier and a times-2 modifier. Which happens first?",
+          "a": "Resolve them in the order the tokens were placed.",
+          "official": true,
+          "source": "https://gamers-hq.de/media/pdf/96/7e/62/Soar_Rulebook.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What if two players tie for the lowest score?",
+          "a": "Both of them score the Skyborne's point total instead.",
+          "official": true,
+          "source": "https://gamers-hq.de/media/pdf/96/7e/62/Soar_Rulebook.pdf",
+          "depth": "core"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -52727,6 +53198,91 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "When you take more than one food from the birdfeeder, do you pick every die at once?",
+          "a": "No. Choose one die at a time. You may reroll the feeder between those choices.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "When you draw more than one card, can you look at the first and then choose where the next one comes from?",
+          "a": "Yes. Draw one, look at it, and then take the next from the deck or from the face-up birds.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can a pink once-between-turns power still happen after your last turn?",
+          "a": "Yes. It can activate once after your final turn.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can you discard a bird that is already on your mat?",
+          "a": "No. A bird you have played stays for the rest of the game.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can you take less food, fewer eggs, or fewer cards than an action offers?",
+          "a": "Yes. You may turn down a benefit, on the basic actions and on bird powers. You may not skip a cost. You may skip a bird power entirely, and that skips its cost too.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "topic": "Bird powers",
+          "q": "What does a bird that repeats another bird actually do?",
+          "a": "Choose any other when-activated bird in that same habitat, on either side. That bird's power happens again. The repeater does not copy the power onto itself. If the power lays an egg on this bird, the egg goes on the bird you repeated.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bird powers",
+          "q": "When a bird migrates, does the action cube move with it?",
+          "a": "No. The cube stays in the row you chose. The bird may move even if it is the only bird in that row, as long as no card is already to its right.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        },
+        {
+          "topic": "Bird powers",
+          "q": "Can you reroll the feeder when a bird power takes food?",
+          "a": "Yes. The normal reroll rules apply whenever you may take food from the feeder, including powers that say if available.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        },
+        {
+          "topic": "Automa",
+          "q": "Who goes first against the Automa?",
+          "a": "You take the first turn of every round. The Automa takes the last turn.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        },
+        {
+          "topic": "Early printings",
+          "q": "Which early-printing bonus cards and birds were corrected?",
+          "a": "Omnivore Expert should read 16 percent, not 10. Photographer scores birds with a color in the name at 4 or 5 birds, not 2 or 3. Spotted Sandpiper is worth 5 points. Cartographer counts the word prairie. These fixes are already in later printings.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        },
+        {
+          "topic": "Early printings",
+          "q": "Does an empty habitat count as fewer birds?",
+          "a": "Yes. Zero birds is fewer than one. A player with nothing in that habitat still qualifies for a fewest-birds power.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "deep"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -56066,7 +56622,28 @@
           "text": "You may hold only one overall-winner card and one overall-loser card. Taking a new one returns the old one of that type."
         }
       ],
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Stacking",
+          "text": "A camel that lands on another camel stacks on top. Camels sharing a space always form one stack, except on the start card."
+        },
+        {
+          "lead": "Carrying",
+          "text": "Moving a camel takes every camel above it and leaves the camels below it."
+        },
+        {
+          "lead": "Last card",
+          "text": "Revealing the last racing card ends the leg as soon as that camel moves. You cannot bet afterward if you have not bet yet."
+        },
+        {
+          "lead": "Pieces",
+          "text": "The fennec and the palm tree cannot go on the finish card, or anywhere between the start card and the last camel."
+        },
+        {
+          "lead": "Ranking",
+          "text": "The camel on top of a stack is ahead of the camel it sits on. That is true for every payout."
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -57384,7 +57961,46 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "The bank",
+          "text": "Cash paid to the offshore bank joins an auction lot. Cash paid to the supply goes back to the piles. They are not the same place."
+        },
+        {
+          "lead": "Once each",
+          "text": "An action marked once per turn cannot be taken twice, even though other actions can."
+        },
+        {
+          "lead": "Island",
+          "text": "A delivery auction at Container Island ends your turn. No second action, and no free action, including repaying a loan."
+        },
+        {
+          "lead": "Interest",
+          "text": "Pay loan interest before you collect auction winnings. Those winnings cannot pay this turn's interest."
+        },
+        {
+          "lead": "Locked lot",
+          "text": "A bank lot with an auction token on it accepts no new cash and no new containers."
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "topic": "The bank",
+          "q": "Does a new bid reset the auction?",
+          "a": "Yes. Whoever takes the bid tile keeps it until their next turn to win the auction. Each new bid starts that clock over.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0143/6178/8473/files/Container_Rulebook_v9_EN2_BGG-compressed.pdf?v=1794604066",
+          "depth": "deep"
+        },
+        {
+          "topic": "The bank",
+          "q": "Who chooses which container goes in which bank lot?",
+          "a": "You do, when the containers have more than one color. The default resolution is the exception.",
+          "official": true,
+          "source": "https://cdn.shopify.com/s/files/1/0143/6178/8473/files/Container_Rulebook_v9_EN2_BGG-compressed.pdf?v=1794604066",
+          "depth": "deep"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -60301,6 +60917,100 @@
         {
           "lead": "Hand limit",
           "text": "Holding more than 6 artisans or more than 7 of one good between turns."
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "q": "If you use an ability, do you have to finish all of it?",
+          "a": "Yes. Resolve as much as you are able, unless that part of the ability says you may.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What does gain 2 of 1 good mean?",
+          "a": "Two goods of the same type. You may take them from that shop or from an artisan dragon there. You cannot take coins or draw dragons with that ability.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "When an ability places an artisan dragon, do the normal placement rules still apply?",
+          "a": "Yes, unless the ability says otherwise. The dragon must match the slot, and you still take the printed reward.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Does swapping one artisan dragon for another count as placing a dragon?",
+          "a": "No. Ignore the slot icons. You do not take the reward on either slot.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "core"
+        },
+        {
+          "topic": "Shops",
+          "q": "How does Bizarre Bazaar score the dragon you reveal?",
+          "a": "You must meet that dragon's goal. An artisan dragon scores normally. A fancy dragon scores as if the game had just ended, and it does not score again at the real end.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Shops",
+          "q": "What do dragons at Draggin' Tail do while they are there?",
+          "a": "They stay facedown. You may peek. They do not produce goods, they do not give abilities when you visit, and they do not count for fancy-dragon scoring. Moving one to another shop flips it face up immediately.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Shops",
+          "q": "Can artisan dragons be placed at Dragon Alley?",
+          "a": "No. If you leave coins there, put 2 coins on an empty double-coin space, take both rewards, and then take another full turn.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Shops",
+          "q": "Does Fogo de Char still need a matching slot?",
+          "a": "No. Your dragon may go on any empty slot in town. You still take that slot's reward, plus the 2 coins.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Fancy dragons",
+          "q": "Does Oh My Gourd add goods on top of what you already gathered?",
+          "a": "Yes. The second half gives +2 goods from each dragon in addition to the goods you gathered earlier that turn.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Fancy dragons",
+          "q": "Who gets the goods sitting on an artisan dragon at Pizza Coven?",
+          "a": "The player who takes that dragon. A dragon you took this turn cannot be used to complete the set of all five and gain the coin.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Fancy dragons",
+          "q": "How do you flip coins at the Wishing Well?",
+          "a": "You may flip none, or stop after any flip. Heads scores 2. Tails loses the coin you just flipped.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
+        },
+        {
+          "topic": "Fancy dragons",
+          "q": "What if you have not fired up a dragon when you would use Spellfire Springs?",
+          "a": "The ability does nothing.",
+          "official": true,
+          "source": "https://cardboardalchemy.com/wp-content/uploads/FC_EN_Rulebook_sm.pdf",
+          "depth": "deep"
         }
       ],
       "endOfGame": {
@@ -65551,6 +66261,51 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "Can you do something the Law never mentions because a similar rule exists?",
+          "a": "No. Read the rules literally. Do not infer a permission that is not written.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Which text wins when an italic reminder and a rule disagree?",
+          "a": "The italic line is a reminder. The non-italic rule it refers to wins.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Which document wins?",
+          "a": "The Law beats the Playbook and the player aids. The Site Reference is the exception and beats the Law.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "Does a power that lets you swap ignore the swap limits?",
+          "a": "No. Powers can add actions, and they still use the glossary. A swap still follows the Swap definition.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What may you keep secret, and may you lie about it?",
+          "a": "Discard-pile faces, the size of the world deck, world-deck backs past the top card, and facedown card faces are private. You may discuss them and you may lie. You may not rearrange which facedown adviser is which.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "core"
+        },
+        {
+          "topic": "Must and cannot",
+          "q": "What does must, if able mean when you cannot do it?",
+          "a": "You must do it when you can. If you cannot, you skip it, and there is no penalty.",
+          "official": true,
+          "source": "https://buriedgiant.com/oath/Oath_Law_of_Oath.pdf",
+          "depth": "deep"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -66490,7 +67245,24 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "Same action",
+          "text": "You must move to a different action each turn. The two bookstore spaces on the 4-player board are the same action, so you cannot step from one to the other."
+        },
+        {
+          "lead": "Battery",
+          "text": "You must be able to pay the social battery cost. If you cannot, choose a different action. Entering the village costs 5."
+        },
+        {
+          "lead": "Stack height",
+          "text": "No stack may be taller than 6 books."
+        },
+        {
+          "lead": "Accomplishments",
+          "text": "A major accomplishment is claimed the moment you meet it. It is not its own action. The first player takes the better reward. Later players take the secondary reward."
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -67942,6 +68714,29 @@
           }
         ]
       },
+      "rulesClarifications": [
+        {
+          "q": "Which tokens can a line include?",
+          "a": "Up to 3 gem or pearl tokens in one uninterrupted line: horizontal, vertical, or diagonal. You may take one or two instead. An empty space or a gold token breaks the line. This action cannot take gold.",
+          "official": true,
+          "source": "https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/SCSPL2P01EN_Rules_Planche_BD.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What if you must take a privilege and none are left above the board?",
+          "a": "Take one from your opponent. If you already have all 3, nothing happens.",
+          "official": true,
+          "source": "https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/SCSPL2P01EN_Rules_Planche_BD.pdf",
+          "depth": "core"
+        },
+        {
+          "q": "What if none of the mandatory actions are legal?",
+          "a": "You must replenish the board before you choose a mandatory action, unless the bag is empty. Replenishing gives your opponent a privilege.",
+          "official": true,
+          "source": "https://cdn.svc.asmodee.net/production-spacecowboys/uploads/2025/11/SCSPL2P01EN_Rules_Planche_BD.pdf",
+          "depth": "core"
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -71331,7 +72126,24 @@
           }
         ]
       },
-      "commonMistakes": "",
+      "commonMistakes": [
+        {
+          "lead": "The deck",
+          "text": "Do not shuffle the case deck, and do not look through it. Cases are played in order, and the next case waits until this one is finished."
+        },
+        {
+          "lead": "Hidden cards",
+          "text": "If you are told to remove a card that has not been revealed, put it away without looking at the face."
+        },
+        {
+          "lead": "Missions",
+          "text": "A mission is complete only when a card that says so is revealed."
+        },
+        {
+          "lead": "Locations",
+          "text": "A double-sided location stays on its starting side until a card tells you to flip it."
+        }
+      ],
       "endGameScoring": {
         "bullets": [
           {
@@ -75836,6 +76648,20 @@
       "cover": "https://cf.geekdo-images.com/3wpYeNwO7k_yjpIN7IQwaw__itemrep/img/SAwEfb0ri_dAG7FuKJtbWYxGoTk=/fit-in/246x300/filters:strip_icc()/pic4387681.jpg",
       "players": "2",
       "time": "20",
+      "commonMistakes": [
+        {
+          "lead": "Drawing",
+          "text": "You do not draw cards during a battle. You play from the six cards you were dealt."
+        },
+        {
+          "lead": "Face down",
+          "text": "A face-down card is strength 2 and has no tactical ability."
+        },
+        {
+          "lead": "Moving",
+          "text": "Moving a card is not playing a card. An ability that stops you from playing cards does not stop you from moving one."
+        }
+      ],
       "year": "2019",
       "weight": 1.73,
       "bggRating": 7.4,
@@ -75979,6 +76805,24 @@
       "cover": "https://cf.geekdo-images.com/nieWal_YYafCZatp6xErag__itemrep/img/g2tUxV0coM3xgFHhGwJDs3b5wuA=/fit-in/246x300/filters:strip_icc()/pic7844545.png",
       "players": "2",
       "time": "15–30",
+      "commonMistakes": [
+        {
+          "lead": "Drawing",
+          "text": "You do not draw cards from the battle deck during a battle."
+        },
+        {
+          "lead": "Face down",
+          "text": "A facedown card is strength 2 and has no tactical ability."
+        },
+        {
+          "lead": "Supply lines",
+          "text": "You are never required to use a supply line if you have another way to play the card."
+        },
+        {
+          "lead": "Naming",
+          "text": "You cannot name a card by its title alone."
+        }
+      ],
       "year": "2022",
       "weight": 1.78,
       "bggRating": 7.7,
@@ -123038,7 +123882,8 @@
         },
         {
           "lead": "Miner",
-          "text": "Only a Miner removes a Bomb, and then steps onto it. A Miner striking a Bomb removes both."
+          "text": "When a Miner strikes a Bomb, the Bomb is defused and removed from the gameboard. The Miner then moves onto the Bomb’s space on the board.",
+          "source": { "page": 4, "query": "The Miner then moves onto the Bomb’s space" }
         },
         {
           "lead": "Spy",
@@ -133323,6 +134168,61 @@
       "cover": "https://cf.geekdo-images.com/h1dRxq4lNMpuSUSGdgCmfA__itemrep/img/0qPO5ec-o8lueYYpLW2Hb2ikahU=/fit-in/246x300/filters:strip_icc()/pic7107431.jpg",
       "players": "1–7",
       "time": "40–70",
+      "commonMistakes": [
+        {
+          "lead": "Column eggs",
+          "text": "The eggs printed on columns 2 through 5 are the cost of playing a bird. Taking a habitat action does not pay them."
+        },
+        {
+          "lead": "Same action",
+          "text": "You may take an action you already used. On the first turns, repeating one action is allowed."
+        },
+        {
+          "lead": "Play a bird",
+          "text": "The narrow Play a Bird row is still one of the four actions."
+        },
+        {
+          "lead": "Brown powers",
+          "text": "Each brown power in the row is optional when the cube moves past it."
+        }
+      ],
+      "rulesClarifications": [
+        {
+          "q": "When you take more than one food from the birdfeeder, do you pick every die at once?",
+          "a": "No. Choose one die at a time. You may reroll the feeder between those choices.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "When you draw more than one card, can you look at the first and then choose where the next one comes from?",
+          "a": "Yes. Draw one, look at it, and then take the next from the deck or from the face-up birds.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can a pink once-between-turns power still happen after your last turn?",
+          "a": "Yes. It can activate once after your final turn.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can you discard a bird that is already on your mat?",
+          "a": "No. A bird you have played stays for the rest of the game.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        },
+        {
+          "q": "Can you take less food, fewer eggs, or fewer cards than an action offers?",
+          "a": "Yes. You may turn down a benefit. You may not skip a cost. Skipping the whole bird power skips its cost too.",
+          "official": true,
+          "source": "https://stonemaiergames.com/games/wingspan/rules/",
+          "depth": "core"
+        }
+      ],
       "year": "2022",
       "weight": 2.63,
       "bggRating": 8.2,
@@ -138148,15 +139048,15 @@
     }
     if (specific) {
       var source = game.playTimeSource ? String(game.playTimeSource).trim() : "";
-      return { text: specific, source: source };
+      return { text: specific, source: source, counted: true };
     }
     var perPlayer = listedPerPlayerMinutes(game, count);
-    if (perPlayer) return { text: perPlayer, source: "" };
+    if (perPlayer) return { text: perPlayer, source: "", counted: false };
     var bgg = bggTimeLabel(game);
-    if (bgg) return { text: bgg, source: "" };
+    if (bgg) return { text: bgg, source: "", counted: false };
     var plain = plainTimeLabel(game);
-    if (plain) return { text: plain, source: "" };
-    return { text: "", source: "" };
+    if (plain) return { text: plain, source: "", counted: false };
+    return { text: "", source: "", counted: false };
   }
   /* table-fit:end */
   function hasAnyPlayTime(game) {
@@ -138184,7 +139084,9 @@
         '<span class="game-meta-item play-time" id="play-time"' + (play.text || fit ? "" : " hidden") + ">" +
           '<span class="play-time-main" id="play-time-main"' + (play.text ? "" : " hidden") + ">" +
             '<span class="game-meta-icon" id="play-time-icon">⏱</span>' +
-            '<span id="play-time-value">' + escapeHtml(play.text) + "</span>" +
+            '<span id="play-time-value"' + (play.counted ? ' class="is-count-time"' : "") +
+              (play.counted && count != null ? ' aria-label="' + escapeHtml(play.text + " at " + count + (String(count) === "1" ? " player" : " players")) + '"' : "") +
+              ">" + escapeHtml(play.text) + "</span>" +
             '<span class="play-time-source" id="play-time-source"' + (play.source ? "" : " hidden") + ">" +
               escapeHtml(play.source) +
             "</span>" +
@@ -139077,6 +139979,95 @@
     else if (extra) html += extra;
     if (!html) return "";
     return chapterNote("Common mistakes", html, collapsed);
+  }
+  function normalizeClarification(item) {
+    if (!item || typeof item !== "object") return null;
+    var q = String(item.q || "").trim();
+    var a = String(item.a || "").trim();
+    var source = String(item.source || "").trim();
+    if (!q || !a || !/^https?:\/\//i.test(source)) return null;
+    return {
+      q: q,
+      a: a,
+      official: item.official === true,
+      source: source,
+      depth: String(item.depth || "").trim().toLowerCase() === "deep" ? "deep" : "core",
+      topic: String(item.topic || "").trim()
+    };
+  }
+  function clarificationItems(game) {
+    var raw = game && game.rulesClarifications;
+    if (!Array.isArray(raw)) return [];
+    var out = [];
+    raw.forEach(function (item) {
+      var next = normalizeClarification(item);
+      if (next) out.push(next);
+    });
+    return out;
+  }
+  function clarificationItemHtml(item) {
+    var official = item.official ? '<span class="rules-official">Official</span>' : "";
+    return "<li>" +
+      '<strong class="rule-lead">' + escapeHtml(item.q) + "</strong>" +
+      official +
+      '<span class="rules-answer">' + textToHtml(item.a) + "</span> " +
+      '<a class="rules-source" href="' + escapeHtml(item.source) + '" target="_blank" rel="noopener noreferrer">Source</a>' +
+      "</li>";
+  }
+  function renderClarificationList(items, limit) {
+    if (!items.length) return "";
+    if (!limit || items.length <= limit) {
+      return '<ul class="rule-list">' + items.map(clarificationItemHtml).join("") + "</ul>";
+    }
+    var listId = "show-more-list-" + (++showMoreSeq);
+    var hiddenCount = items.length - limit;
+    var label = "Show " + hiddenCount + " more";
+    var lis = items.map(function (item, index) {
+      var li = clarificationItemHtml(item);
+      if (index < limit) return li;
+      return li.replace("<li>", '<li class="show-more-extra" hidden>');
+    }).join("");
+    return (
+      '<div class="show-more">' +
+        '<ul class="rule-list" id="' + listId + '">' + lis + "</ul>" +
+        '<button type="button" class="show-more-toggle" aria-expanded="false" aria-controls="' + listId +
+          '" data-more-label="' + escapeHtml(label) + '" data-less-label="Show less">' +
+          escapeHtml(label) +
+        "</button>" +
+      "</div>"
+    );
+  }
+  function renderRulesQuestions(game, collapsed) {
+    var items = clarificationItems(game).filter(function (item) { return item.depth !== "deep"; });
+    var html = renderClarificationList(items, 3);
+    if (!html) return "";
+    return chapterNote("Rules questions", html, collapsed);
+  }
+  function renderGoDeeper(game) {
+    var items = clarificationItems(game).filter(function (item) { return item.depth === "deep"; });
+    if (!items.length) return "";
+    var loose = [];
+    var groups = [];
+    var seen = {};
+    items.forEach(function (item) {
+      if (!item.topic) { loose.push(item); return; }
+      if (!seen[item.topic]) {
+        seen[item.topic] = [];
+        groups.push({ topic: item.topic, items: seen[item.topic] });
+      }
+      seen[item.topic].push(item);
+    });
+    var html = loose.length ? renderClarificationList(loose, 0) : "";
+    groups.forEach(function (group) {
+      html += '<h4 class="chapter-label rules-topic">' + escapeHtml(group.topic) + "</h4>" +
+        renderClarificationList(group.items, 0);
+    });
+    return (
+      '<details class="expansion rule-chapter rule-chapter--deep" id="go-deeper">' +
+        '<summary><span class="expansion-name">Go Deeper</span></summary>' +
+        '<div class="expansion-body"><div class="rule-body">' + html + "</div></div>" +
+      "</details>"
+    );
   }
   function resolveFirstGame(value, count) {
     if (contentIsEmpty(value)) return null;
@@ -140129,7 +141120,8 @@
       chapterShell("turn-chapter", "On your turn",
         chapterSlot("turn-text", renderTurnBody(turnStructure, g, [])) +
         chapterSlot("reminders-text", composeSection(remindersText, "", [], "rules"), "Reminders") +
-        chapterSlot("mistakes-slot", renderCommonMistakes(commonMistakes, !contentIsEmpty(turnStructure) || !contentIsEmpty(remindersText)))
+        chapterSlot("mistakes-slot", renderCommonMistakes(commonMistakes, !contentIsEmpty(turnStructure) || !contentIsEmpty(remindersText))) +
+        chapterSlot("questions-slot", renderRulesQuestions(g, !contentIsEmpty(turnStructure) || !contentIsEmpty(remindersText)))
       ) +
       chapterShell("end-chapter", "End of the game",
         chapterSlot("end-text", renderRuleContent(endOfGame) || "") +
@@ -140198,6 +141190,7 @@
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             componentsHtml +
             rulesGlossaryHtml +
+            renderGoDeeper(g) +
             '<button class="btn" type="button" id="save-offline" aria-live="polite">Save for offline</button>' +
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
@@ -140588,6 +141581,13 @@
       if (!item || !valueEl) return;
       var play = formatPlayTime(g, count);
       valueEl.textContent = play.text;
+      if (play.counted && count != null) {
+        valueEl.classList.add("is-count-time");
+        valueEl.setAttribute("aria-label", play.text + " at " + count + (String(count) === "1" ? " player" : " players"));
+      } else {
+        valueEl.classList.remove("is-count-time");
+        valueEl.removeAttribute("aria-label");
+      }
       if (mainEl) mainEl.hidden = !play.text;
       var fit = fitEl ? fitEl.textContent.trim() : "";
       item.hidden = !play.text && !fit;
