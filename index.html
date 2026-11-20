@@ -13677,6 +13677,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=171"
     },
     "chronicles-of-crime": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 60, "max": 90 },
       "playerPoll": { "best": "2", "recommended": "1–3" },
       "mine": true, "group": true,
@@ -13700,27 +13701,32 @@
           {
             "lead": "Beside",
             "text": "Location boards sit to the side.",
+            "source": { "page": 3, "query": "Place the Location Boards to the side of the Evidence Board" },
             "details": "Character cards and special-item cards start face down beside the board."
           },
           {
             "lead": "Always",
             "text": "Evidence-category cards are always in play.",
+            "source": { "page": 3, "query": "Evidence Category Cards are always in play" },
             "details": [
               {
                 "text": "Split them among the players."
               },
               {
-                "text": "Forensic contacts are always in play and are split the same way."
+                "text": "Forensic contacts are always in play and are split the same way.",
+            "source": { "page": 3, "query": "Forensic Contacts are always in play" }
               }
             ]
           },
           {
             "lead": "Home",
-            "text": "Home starts at the police station, at the bottom of the board."
+            "text": "Home starts at the police station, at the bottom of the board.",
+            "source": { "page": 3, "query": "Home Location at the bottom of the Board" }
           },
           {
             "lead": "App",
-            "text": "Open the app, pick the scenario, and scan when the app asks."
+            "text": "Open the app, pick the scenario, and scan when the app asks.",
+            "source": { "page": 4, "query": "launch the app and select the scenario" }
           }
         ]
       },
@@ -13738,18 +13744,22 @@
         {
           "lead": "Scan",
           "text": "The story moves when you scan a card.",
+            "source": { "page": 4, "query": "progress in Chronicles of Crime by scanning" },
           "details": [
             {
               "lead": "Location",
-              "text": "A location card lets you travel there."
+              "text": "A location card lets you travel there.",
+            "source": { "page": 4, "query": "allows you to move to this location" }
             },
             {
               "lead": "Character",
-              "text": "A character answers once they have been scanned."
+              "text": "A character answers once they have been scanned.",
+            "source": { "page": 4, "query": "allows you to interrogate the character" }
             },
             {
               "lead": "Contacts",
               "text": "Contacts can be called.",
+            "source": { "page": 4, "query": "allows you to call your" },
               "details": "After a call, further scans follow the app."
             }
           ]
@@ -42826,6 +42836,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=437356"
     },
     "scout": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 20, "max": 20 },
       "playerPoll": { "best": "4", "recommended": "3–5" },
       "teachingScript": {
@@ -42898,6 +42909,7 @@
       "bggId": "291453",
       "quickStart": {
         "text": "Two to five players. You cannot reorder the cards in your hand.",
+            "source": { "page": 1, "query": "reorder the cards in your hand" },
         "bullets": [
           {
             "lead": "Rounds",
@@ -42905,16 +42917,19 @@
           },
           {
             "lead": "Two players",
-            "text": "Each player takes 3 Scout chips, and Scout and Show is not used. Deal 11 cards each and set the other 22 aside for the second round. A scout does not end your turn: you keep taking turns."
+            "text": "Each player takes 3 Scout chips, and Scout and Show is not used. Deal 11 cards each and set the other 22 aside for the second round. A scout does not end your turn: you keep taking turns.",
+            "source": { "page": 2, "query": "Scout & Show chips will not be used" }
           },
           {
             "lead": "Start",
             "text": "The starting player takes the marker.",
+            "source": { "page": 1, "query": "This player takes the Starting Player Marker" },
             "details": "One way to choose is the player holding the card that shows both 1 and 2."
           },
           {
             "lead": "Chips",
             "text": "Return cards by the buttons, then take one Scout and Show chip per player and put the rest away.",
+            "source": { "page": 1, "query": "equal to the amount of players" },
             "details": "All Scout chips go in the center. Each player gets one Scout and Show chip."
           },
           {
@@ -42931,7 +42946,8 @@
       "startingResources": [
         {
           "lead": "Start",
-          "text": "A hand dealt from the whole deck, one Scout and Show chip, and the shared pool of Scout chips."
+          "text": "A hand dealt from the whole deck, one Scout and Show chip, and the shared pool of Scout chips.",
+            "source": { "page": 1, "query": "Place all of the Scout chips in the center of the table" }
         }
       ],
       "remindersText": [
@@ -42942,15 +42958,18 @@
         {
           "lead": "Show",
           "text": "Show plays one card, or a consecutive run from the hand.",
+            "source": { "page": 1, "query": "must only play consecutive cards from your hand" },
           "details": "A run is consecutive numbers, ascending or descending, or several cards of the same number. You cannot rearrange to build it."
         },
         {
           "lead": "Legal",
-          "text": "If there is no active set, any show is legal."
+          "text": "If there is no active set, any show is legal.",
+            "source": { "page": 1, "query": "play any set you want" }
         },
         {
           "lead": "Stronger",
           "text": "Otherwise the new set must be stronger.",
+            "source": { "page": 1, "query": "stronger than the Active Set" },
           "bullets": [
             {
               "lead": "Count",
@@ -42982,7 +43001,8 @@
             },
             {
               "lead": "Chip",
-              "text": "The owner of the active set takes a Scout chip from the center."
+              "text": "The owner of the active set takes a Scout chip from the center.",
+            "source": { "page": 2, "query": "takes a Scout Chip from the center of the table" }
             },
             {
               "lead": "Stays",
@@ -43001,6 +43021,7 @@
         {
           "lead": "Scout and Show",
           "text": "Scout and Show spends your chip in the center and lets you show immediately after a scout.",
+            "source": { "page": 2, "query": "once per round" },
           "details": "Once per player per round."
         }
       ],
@@ -43061,6 +43082,7 @@
           {
             "lead": "Match",
             "text": "After as many rounds as there are players, the high score wins.",
+            "source": { "page": 2, "query": "most points at the end is the winner" },
             "details": "A tie is shared."
           }
         ]
@@ -43147,6 +43169,7 @@
           {
             "lead": "Deal",
             "text": "Deal 11 cards to each player.",
+            "source": { "page": 2, "query": "Deal 11 cards to each player" },
             "details": "Set the other 22 aside for round 2."
           },
           {
@@ -67292,6 +67315,7 @@
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=274960"
     },
     "rebel-princess-deluxe-edition": {
+      "rulebookSearchable": true,
       "bggTime": { "min": 45, "max": 45 },
       "playerPoll": { "best": "4–5", "recommended": "3–6" },
       "mine": true, "group": true,
@@ -67307,13 +67331,15 @@
             "text": "A five-round trick-taking game about avoiding princes."
           },
           {
-            "text": "Build the deck for the player count, deal the whole deck, and each player keeps one of two princesses."
+            "text": "Build the deck for the player count, deal the whole deck, and each player keeps one of two princesses.",
+            "source": { "page": 4, "query": "chooses 1 of their 2 Princess" }
           },
           {
             "text": "Lay out five round cards; darker-backed round cards are only for the final round."
           },
           {
-            "text": "A short game may use three rounds."
+            "text": "A short game may use three rounds.",
+            "source": { "page": 5, "query": "only 3 rounds" }
           }
         ]
       },
@@ -67323,22 +67349,27 @@
       "turnStructure": {
         "bullets": [
           {
-            "text": "Flip the round card, apply it, and pass cards as it says before looking at what you receive."
+            "text": "Flip the round card, apply it, and pass cards as it says before looking at what you receive.",
+            "source": { "page": 6, "query": "before giving yours" }
           },
           {
             "text": "The starter leads."
           },
           {
-            "text": "You must follow suit."
+            "text": "You must follow suit.",
+            "source": { "page": 8, "query": "must follow it" }
           },
           {
-            "text": "Highest card of the led suit wins the trick and leads next."
+            "text": "Highest card of the led suit wins the trick and leads next.",
+            "source": { "page": 8, "query": "highest card of the led suit" }
           },
           {
-            "text": "The Frog, 8 of Pets, is worth 5 marriage proposals."
+            "text": "The Frog, 8 of Pets, is worth 5 marriage proposals.",
+            "source": { "page": 11, "query": "receives 5 proposals" }
           },
           {
-            "text": "After the round, the lowest score starts the next round."
+            "text": "After the round, the lowest score starts the next round.",
+            "source": { "page": 7, "query": "lowest total score starts" }
           }
         ]
       },
@@ -67346,7 +67377,8 @@
       "endGameScoring": {
         "bullets": [
           {
-            "text": "A player who takes every prince and the Frog scores −10 for that round instead of the proposals’ sum."
+            "text": "A player who takes every prince and the Frog scores −10 for that round instead of the proposals’ sum.",
+            "source": { "page": 9, "query": "Princes and the Frog" }
           },
           {
             "text": "Ties favor the player who scored zero or fewer proposals in the most rounds; if still tied, play another random round."
@@ -67382,7 +67414,8 @@
       "endOfGame": {
         "bullets": [
           {
-            "text": "After all five rounds, the fewest marriage proposals wins."
+            "text": "After all five rounds, the fewest marriage proposals wins.",
+            "source": { "page": 13, "query": "proposals is the winner" }
           }
         ]
       },
