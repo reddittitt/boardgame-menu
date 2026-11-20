@@ -1,0 +1,2544 @@
+{
+  "7-wonders": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Cities": {
+        "adds": "7 Wonders: Cities, the second expansion for 7 Wonders, includes optional team rules, adds an 8th player (base game supports 7 players), a new type of card (black, representing the remains of cities), and new cards of old types (two new wonders: Petras and Byzantium, 3 new guild and 6 new leader cards).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/111661",
+        "players": "Adds an 8th player (base game supports 7 players)."
+      },
+      "Armada": {
+        "adds": "7 Wonders – Armada Take command of a fleet of ships The horizon is now within reach, your armada waits only on you to go conquer the seas! On board your ships, discover faraway isles, trade with remote cities, and equip your fleets to prepare for the naval conflict to come...",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/247315",
+        "combines": "7 Wonders Armada is an independent expansion but is compatible with the other expansions for 7 Wonders."
+      },
+      "Leaders": {
+        "adds": "7 Wonders: Leaders adds 42 new cards to the base game of 7 Wonders, comprising four new guilds, one new wonder card, and 36 (+1 blank) white \"Leader\" cards. At the start of the game, each player takes a hand of four leaders and may play one at the start of each of the three Ages.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/92539",
+        "firstPlay": "For first games, deal only from the 34 Standard leaders.",
+        "firstPlaySource": "Rulebook",
+        "combines": "The 6 Cities bonus leaders are used only when Cities is also in the game.",
+        "combinesSource": "Rulebook"
+      }
+    }
+  },
+  "7-wonders-duel": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Pantheon": {
+        "adds": "A pantheon from several civilizations — including Greek, Egyptian, and Middle-Eastern — gets added to 7 Wonders Duel in 7 Wonders Duel: Pantheon, with each god having its own power to help you or hinder your opponent. During Age I you collect mythology tokens — which allow you to choose which deities have a place in the Pantheon — and during Age II you collect offering tokens, which help you court those deities.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/202976"
+      },
+      "Agora": {
+        "adds": "7 Wonders Duel: Agora features a new board called the Senate, comprising six separate chambers that provide players with benefits once they take possession of the area. Players can obtain a Senate chamber by taking senator cards.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/309116"
+      }
+    }
+  },
+  "arcs": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Arcs: Leaders & Lore Pack": {
+        "adds": "Explore unique, tricky strategies in the Arcs base game with new Leaders, and add wild twists to both the Arcs base and campaign games with new Lore. —description form the publisher Initially known as the \"More to Explore Pack\" during the Kickstarter campaign.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/419279"
+      }
+    }
+  },
+  "ark-nova": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Marine Worlds": {
+        "adds": "Ark Nova: Marine Worlds, an expansion for Ark Nova, introduces multiple new elements to the game, such as sea animals that each have to be played in new special enclosures that must be built adjacent to water. Roughly half the sea animals are reef dwellers, and whenever you add a reef dweller to your zoo, you trigger the ability of all reef dwellers in your zoo.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/368966"
+      },
+      "Ark Nova: Zoo Map Pack 1": {
+        "adds": "Ark Nova: Zoo Map Pack 1 contains the two new zoo maps #9 (Geographical Zoo) and #10 (Rescue Station).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/368158"
+      },
+      "Ark Nova: Zoo Map Pack 2": {
+        "adds": "The \"Tournament 1\" design is on all four game boards so that players can compete with the same layout. Four different zoo boards with new and interesting abilities are on the opposite sides of the Tournament game boards: Artificial Intelligence Caves Drawing Board Lagoon.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/426978"
+      }
+    }
+  },
+  "azul": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Azul: Crystal Mosaic": {
+        "adds": "Azul: Crystal Mosaic contains double-sided player boards, with each board offering new challenges and exciting new strategic opportunities. The \"Crystal Mosaic\" of the title is actually a plastic overlay that provides a recess to keep tiles from being accidentally bumped out of place.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/294345"
+      },
+      "Azul: Joker Tiles": {
+        "adds": "Azul: Joker Tiles is a set of ten promotional tiles that can be used with the Azul base game. Complementing the castle's aesthetics, these special tiles also provide more depth in decision-making as they can serve as a proxy for any of the other tiles.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/235739"
+      }
+    }
+  },
+  "bomb-busters": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Bomb Busters: The Pro Kit": {
+        "adds": "Complete your Bomb Busters experience with equipment designed for true bomb disposal experts! Acrylic Wire Tiles Long-lasting and satisfying to handle Replay all 66 classic missions and discover 11 exciting new ones!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/472930"
+      }
+    }
+  },
+  "brink": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Brink: Bonus Hexes Vol 1": {
+        "adds": "A set of 4 bonus hexes which came with the Kickstarter editions. List of hexes: Convergence Void Sat.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/454230"
+      },
+      "Brink: Community Cards Vol 1": {
+        "adds": "Includes: Ambassador Cards: The Warden Ark TII Armitage Salatar Amper Action Cards: Bold Traversal Technician Award Selfish Gambit Diplomatic Core Retrofit Emergency Rider Cards: General Uprising Hostile Takeover Resignation Revenge Plan of Action Shadow Council.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/451782"
+      },
+      "Brink: Gencon 2025 Promo Cards": {
+        "adds": "Set includes: Ikaar - Cost: 5 Ventus Influence/Power. Spend 1 Sorelia Influence and 1 Ventus Influence to move your Class III ship to an adjacent hex.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/451933"
+      },
+      "Brink: Section 99": {
+        "adds": "In the Section 99 micro-expansion for Brink, upgrading a ship now has a hidden cost - one of the cubes used is pulled from circulation and placed on a mysterious HEX - known as Section 99 - at the edge of the board. Players can choose to travel there to reclaim the lost resources, but doing so comes at the cost of 5 Prestige, a penalty for dealing in questionable territory.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/445487"
+      }
+    }
+  },
+  "castle-combo": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Castle Combo: Out of the Oubliette": {
+        "adds": "The prison gates have just slammed shut... 12 outlaws are now serving their questionable sentences in the kingdom's dungeons!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/448182"
+      }
+    }
+  },
+  "catan": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Catan: 5-6 Player Expansion": {
+        "adds": "Allows you to add up to two more opponents to The Settlers of Catan. The only change in the rules is that there is a building round at the end of each turn in which any player can build.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/2807",
+        "players": "For 5–6 players."
+      },
+      "Catan: Cities & Knights": {
+        "adds": "Adds several new aspects to Settlers of Catan but the two major ones are creating knights to protect the land from invading barbarians and building city improvements that confer benefits upon that city's owner. Adds tactical complexity to the game and game length.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/926"
+      },
+      "Catan: Seafarers": {
+        "adds": "This is an expansion for CATAN. Players can build shipping lanes, which are very similar to roads.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/325"
+      }
+    }
+  },
+  "chronicles-of-crime": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Chronicles of Crime: Noir": {
+        "adds": "Noir is an expansion authored by Stephane Anquetil, a very talented writer with credentials including Sherlock Holmes Consulting Detective scenarios as well as Escape Books and Box (404 éditions). In Noir, the whole group is collectively representing one private detective with unconventional methods.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/249811"
+      }
+    }
+  },
+  "deep-regrets": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Lamentable Tentacles": {
+        "adds": "18 additional fish cards to add to the base game, all featuring far too many tentacles and everybody's favorite great old one. Compatible with solo mode!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/421471",
+        "combines": "Compatible with solo mode!"
+      },
+      "Even Deeper Regrets": {
+        "adds": "Gameplay in Even Deeper Regrets is the same as in the base game with one major exception: you can now choose to start each day Inland in addition to Sea and Port! Inland, you can fish from three River shoals or one Loch shoal, both of which have a higher risk/reward ratio than the Sea.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/440640"
+      }
+    }
+  },
+  "earth": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Earth: Abundance": {
+        "adds": "Earth: Abundance is an expansion for Earth that allows you to enhance the rich gameplay of the award-winning board game with new player interactions and opportunities to curate your hand.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/414734"
+      }
+    }
+  },
+  "everdell": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Bellfaire": {
+        "adds": "The king is throwing an unprecedented year-long event to commemorate the 100th year since Everdell's founding. Come one, come all, to the Bellfaire!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/289057",
+        "players": "Components and rules for 5-6 players."
+      },
+      "Pearlbrook": {
+        "adds": "Explore a new underwater society in Pearlbrook, the first expansion for Everdell! Pearlbrook introduces a new side board, the river board, where you'll send your frog ambassador to gather a new resource: pearls.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/259996"
+      },
+      "Spirecrest": {
+        "adds": "Spirecrest adds several exciting and challenging new mechanics and features to the Everdell base game, including: Weather cards that impose challenging limitations to overcome. Discovery cards let players encounter intrepid new critters and locations on their journey, providing unique new strategies and abilities.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/289056"
+      },
+      "Newleaf": {
+        "adds": "Newleaf introduces brand new critters, constructions, and exciting events to draw Visitor cards to your blossoming city! It also features the Train Station Board, resource-delivering Train Cars, travel-worthy Tickets, and Reservation Tokens!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/332390"
+      },
+      "Mistwood": {
+        "adds": "Pit your wits against Nightweave and her sticky schemes in solo or two-player games, and recruit heroes of yore from the More Legends and Corrin Evertail expansion packs as well as transform your farms with our new Through Every Season expansion pack!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/332397"
+      },
+      "Everdell: Extra! Extra!": {
+        "adds": "This expansion was released by polish publisher Rebel. Cards that can be found in Collector's Edition and Glimmergold Pack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/297973"
+      },
+      "Everdell: Legends": {
+        "adds": "This expansion was released by Polish publisher Rebel. It contains 10 Legendary Cards that can be found in Collector's Edition and Glimmergold Pack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/297972"
+      },
+      "Everdell: Rugwort Pack": {
+        "adds": "The Rugwort Pack adds 3 new cards that feature the solo mode opponent, Rugwort! Shuffle them in with the Everdell deck to add a little more 'take-that' to your game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/261142",
+        "firstPlay": "Not recommend for beginning players!"
+      }
+    }
+  },
+  "fire-tower": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Rising Flames": {
+        "adds": "In the Rising Flames Expansion, rapid crown fires, heavy winds, and tumultuous weather threatens the forest. Defend your tower with a powerful new deck and a flock of legendary firehawks!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/311033"
+      }
+    }
+  },
+  "for-sale": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "For Sale: Advisors": {
+        "adds": "For Sale: Advisors adds a third phase to the classic game For Sale, with players starting the game by bidding to hire advisors who will then assist in the second and third phases of the game when players acquire houses, then sell them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/318710"
+      }
+    }
+  },
+  "harmonies": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Harmonies: Pulse": {
+        "adds": "With the Pulse expansion for Harmonies, your landscape becomes more dynamic. It introduces additional animal cards with a variety of requirements, which will test your spatial organization.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/466234"
+      },
+      "Harmonies: Crescendo": {
+        "adds": "The Crescendo expansion for Harmonies includes 3 new modules that can be used individually or in combination with other modules. Sanctuaries: Build unique landscapes that can accommodate multiple animals.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/472690",
+        "combines": "The Crescendo expansion for Harmonies includes 3 new modules that can be used individually or in combination with other modules."
+      }
+    }
+  },
+  "heat-pedal-to-the-metal": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Heavy Rain": {
+        "adds": "This expansion introduces: One new driver w/ all essential player specific components in orange (now allows up to 7 racers) Two new maps (Japan & Mexico) New upgrade cards (introducing the purple drop - a different cooldown that allows the player to take a heat card from their discard pile and place it back into their engine) Submerged track sections (must spend an extra heat for down shifting.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/410291"
+      },
+      "Tunnel Vision": {
+        "adds": "The roar of powerful engines bursts from the dark mouth of the Pyrenean tunnel just moments before gleaming cars streak past. One mistake could mean certain destruction, but the lure of the Spanish Grand Prix keeps the drivers focused and aggressive.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/436904"
+      },
+      "Rocky Roads": {
+        "adds": "The desert heat is relentless but so are you... Gravel sprays out from under your tires and your car gives a sickening lurch as it begins to spin out.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/459763"
+      },
+      "Heat: Legends": {
+        "adds": "This expansion brings all six expansion cars onto the track as Legend automated drivers. But these Legends aren't just extra cars—they're smarter, faster, and tougher.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/463405"
+      }
+    }
+  },
+  "hive-pocket": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Hive: The Pillbug": {
+        "adds": "Hive: The Pillbug is a new pair of tiles that can be added to Hive. The pillbug can move one space at a time OR it can move an adjacent unstacked piece (friend or enemy) two spaces: up onto the Pillbug itself, then down into another empty space adjacent to itself.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/139666"
+      }
+    }
+  },
+  "marvel-villainous": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "We Are Venom": {
+        "adds": "In the first single-villain expansion, Venom is trying to merge with Spiderman to win. His allies, the other symbiotes will assist in this goal, while the dastardly heros, such as the Silver Spider will be obstacles in its path.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/369671"
+      }
+    }
+  },
+  "moonrollers": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Moonrakers: Intrepid": {
+        "adds": "Intrepid turns Moonrollers into a Moonrakers expansion. Use the Moonrollers dice to modify an odd collection of Moonrakers ship parts, crew, and contracts.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/426274"
+      },
+      "Moonrollers: B3-AR Promo Card": {
+        "adds": "The B3-AR card allows you to finish the current requirement if you roll 3 or more thrusters. This card was provided as part of the 2025 Dice Tower Gamefound 'Pack C'.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/459841"
+      },
+      "Moonrollers: Gencon 2025 Promo Cards": {
+        "adds": "Promo pack of four crew cards for Moonrollers that was distributed out to attendees of GenCon 2025. Pack contains: Dibla - If you roll 4+ Damage, you may finish 2 requirements and end your turn.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/451912"
+      }
+    }
+  },
+  "the-old-kings-crown": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Old King's Crown: Songs of Home": {
+        "adds": "The Songs of Home expansion adds new factions, neutral kingdom cards and exciting ways to help you claim the throne.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/463981"
+      },
+      "The Old King's Crown: Waking Kingdom": {
+        "adds": "The Waking Kingdom expansion (formerly titled Wild Kingdom) adds new map tiles, cards, and four modules that enable experienced players to modify and randomize future game plays. \"Night\" Kingdom Map Tiles allow random map setups and \"Waking Kingdom\" cards dramatically increase options.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/404385"
+      }
+    }
+  },
+  "onitama": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Onitama: Sensei's Path": {
+        "adds": "The Onitama: Sensei's Path expansion consists of sixteen new movement cards that can be shuffled together with those of the Onitama base game in order to have more variety during play.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/219326"
+      },
+      "Onitama: Cat and Serow Promo Cards": {
+        "adds": "A set of 2 cards packaged together in Cleric Pack of The Dice Tower 2023 Kickstarter campaign. These cards provide new movement options for your pieces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/405817"
+      },
+      "Onitama: Hornet and Centipede Promo Cards": {
+        "adds": "A set of 2 cards packaged together in Pack E of The Dice Tower 2022 Kickstarter campaign. These cards provide new movement options for your pieces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/369829"
+      },
+      "Onitama: Moth and Butterfly Promo Cards": {
+        "adds": "Originally available from Dice Tower 2024 Kickstarter Doppler Pack. These cards provide new movement options for your pieces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/432308"
+      },
+      "Onitama: Steer and Lobster Promo Cards": {
+        "adds": "A set of 2 cards packaged together in Pack A of The Dice Tower 2021 Kickstarter campaign. These cards provide new movement options for your pieces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/355277"
+      },
+      "Onitama: Whale and Cricket Promo Cards": {
+        "adds": "Two promo cards originally available as a reward in the 2025 Dice Tower Gamefound campaign in Promo Pack D. These cards provide new movement options for your pieces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/459102"
+      }
+    }
+  },
+  "parks": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Nightfall": {
+        "adds": "Welcome to PARKS Expansion: Nightfall. In Nightfall, you'll find new Park Cards featuring new rewards and all new artwork from the Fifty-Nine Parks Print Series, including the 17 parks not represented in the base game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/298729"
+      },
+      "Wildlife": {
+        "adds": "Expand the award-winning game Parks with Parks: Wildlife! Grab your binoculars and prepare for even more animal sightings at Iconic Wildlife Parks, featuring all-new artwork from Tom Whalen and the Fifty-Nine Parks Print Series, and the newest national park addition, New River Gorge.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/358854"
+      }
+    }
+  },
+  "project-l": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Project L: Ghost Piece": {
+        "adds": "The Ghost Piece expansion introduces puzzles with new reward mechanics, special level-5 Ghost Pieces, and 6-player games.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/284988"
+      },
+      "Project L: Finesse": {
+        "adds": "The Finesse expansion brings extra strategic depth to Project L through an addition of goals which require each player to fulfill different conditions to get more points during the game. Completing your goals may require making compromises in your strategy or deviating from it altogether, allowing new ways to play Project L.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/287508"
+      }
+    }
+  },
+  "the-quacks-of-quedlinburg": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Herb Witches": {
+        "adds": "The Quacks of Quedlinburg: The Herb Witches expands the town of Quedlinburg with four new sets of items: The Witches - new characters with special abilities that players may use once per game Locoweed - a new ingredient whose value is determined by its ability rather than being fixed New ingredient books for each existing ingredient type.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/269259",
+        "players": "A 5th player uses the extra pot, bag, flask, droplets, scoring marker, rat stone, and 0/50 seal.",
+        "playersSource": "Rulebook"
+      },
+      "The Alchemists": {
+        "adds": "The Quacks of Quedlinburg: The Alchemists introduces nightmares, obsession, and hysteria to The Quacks of Quedlinburg base game, with players working in new laboratories to distill essences that can free the citizens of Quedlinburg from these afflictions. The Alchemists can be played with just the base game or combined with The Herb Witches expansion.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/316597",
+        "combines": "The Alchemists can be played with just the base game or combined with The Herb Witches expansion."
+      }
+    }
+  },
+  "raccoon-tycoon": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Raccoon Tycoon: The Fat Cat Expansion": {
+        "adds": "The Fat Cat Expansion to Raccoon Tycoon adds new content that increases the number of players to six, adds new depth to the gameplay, fun new components and exciting new strategies.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/279770",
+        "players": "The Fat Cat Expansion to Raccoon Tycoon adds new content that increases the number of players to six, adds new depth to the gameplay, fun new components and exciting new strategies."
+      }
+    }
+  },
+  "ravine": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Spirits Expansion": {
+        "adds": "In this expansion, some players take on the role of the Spirits that haunt the island, allowing you to play with up to 9 people. Will they help you or torment you?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/264344",
+        "players": "In this expansion, some players take on the role of the Spirits that haunt the island, allowing you to play with up to 9 people."
+      }
+    }
+  },
+  "root": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Riverfolk Expansion": {
+        "adds": "The Riverfolk expansion includes: A New Core Faction: The Riverfolk Company A New Core Faction: The Lizard Cult An Extra Vagabond One Card Holder For The Riverfolk Company Cooperative Scenarios Rules for Bot Play and Three Additional Vagabond Variants This expansion now allows Root to be played with 1-6 players.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/241386",
+        "players": "Played with 1-6 players."
+      },
+      "Underworld Expansion": {
+        "adds": "The Underworld Expansion includes: The Great Underground Duchy: an imperial faction that mixes the flexibility of the Marquise with the escalating Eyrie Dynasties. The Corvid Conspiracy: a secretive faction that hatches plots directly into the hands of their opponents.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/272637"
+      },
+      "Marauder Expansion": {
+        "adds": "Root: The Marauder Expansion introduces two new factions to the Woodland⁠—the Lord of the Hundreds and Keepers in Iron—alongside four hirelings and a new setup draft suitable for both casual and competitive play. Play as the: - Lord of the Hundreds – Oppress the Woodland and burn it to the ground if need be.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/330149"
+      },
+      "Homeland Expansion": {
+        "adds": "Rediscover the Woodland with three brand-new factions and two new maps for Root! Lilypad Diaspora Scattered long ago and suppressed ever since, the Lilypad Diaspora now hopes to call the Woodland home.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/428335"
+      },
+      "Exiles and Partisans Deck": {
+        "adds": "This deck replaces the old deck and contains a fresh roster of special powers for players to craft, many based on the factions themselves. Frustrated by the Woodland Alliance's guerrilla tactics?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/272638"
+      },
+      "Squires and Disciples Deck": {
+        "adds": "Try out new strategies with the Squires and Disciples deck! Just like the Exiles and Partisans deck, this deck can be swapped in to replace the deck from the base game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/431218"
+      },
+      "Landmarks Pack": {
+        "adds": "Bring the Root Woodland to life with landmarks! Landmarks add unique powers to their clearings and can be added to games with any player count.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/334486"
+      },
+      "Hirelings": {
+        "adds": "Three new hirelings enter the fray: the Freshwater Refugees, Heartwood Peacemakers, and the neutral Prosperous Farmers. Each comes with a double-sided tarot card and new meeples, adding even more variety to your games of Root.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/431220"
+      },
+      "Vagabond Pack": {
+        "adds": "Includes three new Vagabond character cards: Harrier, Ronin and Adventurer.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/309977"
+      },
+      "Root: Homeland Hirelings Pack": {
+        "adds": "Three new hirelings enter the fray: the Freshwater Refugees, Heartwood Peacemakers, and the neutral Prosperous Farmers. Each comes with a double-sided tarot card and new meeples, adding even more variety to your games of Root.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/431220"
+      },
+      "Root: Marauder Hirelings Pack & Hireling Box": {
+        "adds": "Here they are, fiery and fierce. Discover unique strategies and make the Woodland wilder by adding hirelings.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/336276"
+      },
+      "Root: Riverfolk Hirelings Pack": {
+        "adds": "Best with fewer players, great with more! This product contains six new hirelings: - Riverfolk Flotilla and Otter Divers - Warm Sun Prophets and Lizard Envoys - Highway Bandits and Bandit Gangs Hirelings can be added to games at any player count.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/334485"
+      },
+      "Root: Underworld Hirelings Pack": {
+        "adds": "How much gold do you have? Discover unique strategies and make the Woodland wilder by adding hirelings.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/361193"
+      }
+    }
+  },
+  "sagrada": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Sagrada: 2025 Promo Card Collection": {
+        "adds": "This Promo pack includes Window Pattern Cards: Balboa Bay / Vitraux Alpenglow / Komorebi Apollo / Godfather Fog of Love Crossover Intl. Tabletop Day Watch It Played We Our FLGS Galápagos Jogos Geekach Games CuseCon Gathering of Friends Board Game Geek The Dice Tower 2020 Man vs.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/465171"
+      },
+      "Sagrada: 5-6 Player Expansion": {
+        "adds": "Add to your Sagrada experience with the 5-6 Player Expansion! You can now enjoy more Sagrada by adding up to 2 extra players!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/244262",
+        "players": "For 5–6 players."
+      },
+      "Sagrada: Promo 10 – Dice Tower 2020 Window Pattern Card": {
+        "adds": "A new double sided player card to build the stained glass window in. Shuffle into the deck with the other player cards during setup and proceed as normal.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/309221"
+      },
+      "Sagrada: Remastered Celebration Foil Promos": {
+        "adds": "Six new foil promos to celebrate the launch of Sagrada Remastered. Contains promos: PR33, PR38, PR39, PR40, PR41, and PR42.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/465172"
+      },
+      "Sagrada: The Great Facades – Passion": {
+        "adds": "Named after the Sagrada-Familia facades, Sagrada: The Great Facades is a series of expansions to be released in three parts: Passion, Life, and Glory. Each part of the expansion contains modules of content that players can add individually or together to their games of Sagrada.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/263695"
+      }
+    }
+  },
+  "sail": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Sail: Seafarers": {
+        "adds": "Sail: Seafarers introduces a variety of brand new content to the base game. Included are four new scenarios that challenge players with new hazards they'll need to overcome, such as whirlpools and pirate ships.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/393101"
+      }
+    }
+  },
+  "seti": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "SETI: Search for Extraterrestrial Intelligence – Gateway to Mars Promo Card": {
+        "adds": "Originally available as part of A Pack from the Dice Tower 2025 Gamefound campaign.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/437940"
+      },
+      "SETI: Space Agencies": {
+        "adds": "SETI: Space Agencies, an expansion for SETI: Search for Extraterrestrial Intelligence, introduces powerful asymmetric organizations — each with unique abilities, strategic advantages, and starting conditions that redefine how you approach the search for alien life.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/445048"
+      }
+    }
+  },
+  "shallow-regrets": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Shallow Regrets: Lingering Remorse": {
+        "adds": "Shallow Regrets: Lingering Remorse 6-card expansion complicates your fishing plans with an assortment of bewildering fish. These new creatures have lingering effects that are ongoing, forcing you to adapt your strategy to your current collection.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/437439",
+        "players": "With the ability to add a 4th player, there's even more competition for the best catches!"
+      },
+      "Shallow Regrets: The Fisher & the Frod": {
+        "adds": "Defeat Frod in a fishing competition in this 6-card solo expansion. Scripted decision-making and a small selection of strategies for Frod to follow keeps Frod's turns moving quickly while still capturing the unpredictability and interaction of the core game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/437440"
+      }
+    }
+  },
+  "sky-team": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Sky Team: Turbulence": {
+        "adds": "In Sky Team: Turbulence, terrible weather conditions and technical incidents will be the order of the day for your landings. Take your seat in the cockpit and test your skills in 20 scenarios that are even more demanding!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/423177"
+      }
+    }
+  },
+  "sniper-elite-the-board-game": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Sniper Elite: Eagle's Nest": {
+        "adds": "The expansion adds two new maps to the game – the infamous Eagle's Nest and the Heavy Water Facility – each providing the Allied Sniper and the defending Axis forces with new challenges to face. It also includes 4 alternate Snipers for the Allied player to choose from at the start of the game, each with their own unique skillset and miniature to represent them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/363022"
+      },
+      "Sniper Elite: Escalation": {
+        "adds": "This new game mode can be played on any board and with any other expansion content to bring your game to the next level. This modular expansion for Sniper Elite: The Board Game introduces a series of new Special Ops, new equipment, squad upgrades and more that is compatible with the entire Sniper Elite range.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/444238"
+      },
+      "Sniper Elite: Operation Kraken": {
+        "adds": "An ambitious operation to end the war, the Axis are launching an experimental super carrier across the Atlantic. Find these plans before it can launch, or infiltrate it to bring down this war machine from within.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/444239"
+      }
+    }
+  },
+  "survive-the-island": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Survive The Island: Monster Pack": {
+        "adds": "Survive The Island: Monster Pack contains three new monsters to bring twists to your game: the pterodactyl can lift you off the ground and leave you stranded far from safety; the whale creates chaos by tipping over boats, forcing you to rethink your escape strategy; and the unpredictable octopus can snatch players when they least expect it, making the race to escape even trickier.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/436998"
+      }
+    }
+  },
+  "ticket-to-ride": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Ticket to Ride: USA 1910": {
+        "adds": "Ticket to Ride: USA 1910 is a card expansion for the original Ticket to Ride boardgame, winner of the 2004 Spiel des Jahres. It contains 181 large format cards (the same size as Ticket to Ride: Europe and Ticket to Ride: Märklin ).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/24439"
+      }
+    }
+  },
+  "tiny-towns": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Fortune": {
+        "adds": "The smaller creatures of the forest have created a civilization free of predators, and they look to you as mayor to guide their growing and thriving town. However, the area is small, and resources are scarce.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/287576"
+      },
+      "Architects": {
+        "adds": "Mayors new and old—it's time to get creative with your city plan! Architects have been cooking up innovative building techniques using wild resources that allow for a bit of flexibility.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/388566"
+      },
+      "Villagers": {
+        "adds": "In Tiny Towns: Villagers, word has spread far and wide of a thriving little civilization in the forest. Creatures with incredible talents - from engineers to merchants - have come to visit these towns and decide where they will make their new homes.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/311441"
+      },
+      "Underground": {
+        "adds": "Space is tighter than ever, so the creatures of the forest have begun building downward in Tiny Towns: Underground. These new underground buildings leave room on the surface for resource cubes, allowing you to begin your town in the center for a change.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/452647"
+      },
+      "Tiny Towns: Tiny Trees": {
+        "adds": "Tiny Trees is a micro-expansion for Tiny Towns. In tiny trees, each mayor has a chance to watch a tree grow in their town.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/321679"
+      },
+      "Tiny Towns: FLGS and Larkstone Promo Cards": {
+        "adds": "Two special promo cards for Tiny Towns! Larkstone: This Monument scores after all other scoring.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/311714"
+      },
+      "Tiny Towns: McPherson Manor Promo Card": {
+        "adds": "Promotional Monument card exclusively available at AEG's booth at 2022 conventions, or alternately through Tantrum House's Season 9 Kickstarter campaign and later available in Pack Archer from Dice Tower 2023 Kickstarter campaign. After constructing this monument, that player may only construct buildings adjacent to other buildings.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/370580"
+      }
+    }
+  },
+  "toy-battle": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Toy Battle: La Croisette": {
+        "adds": "In this strategic duel for two players, your mission remains the same: maneuver your toy troops and cleverly use their effects to gain the upper hand over your opponent. To win the battle, you must capture the enemy headquarters or earn as many medals as possible.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/465499"
+      }
+    }
+  },
+  "wandering-towers": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Mini-Spell Expansion #1": {
+        "adds": "This expansion contains 2 spells: Retrieve A Card and Movement Swap. Retrieve A Card Effect: Take the top card from the discard pile, even if it is the card you just played.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/392106",
+        "combines": "Any combination of the six Spell Pack spells may be in a game.",
+        "combinesSource": "Rulebook"
+      },
+      "Mini-Spell Expansion #2": {
+        "adds": "Mini spell expansion 2 includes: Close Ravenenskeep and Draw 2 Cards. Close Ravenskeep Effect: Place this spell face down (bramble side up) atop Ravenskeep.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/398755",
+        "combines": "Any combination of the six Spell Pack spells may be in a game.",
+        "combinesSource": "Rulebook"
+      },
+      "Mini-Spell Expansion #3": {
+        "adds": "This expansion includes 2 New Magic Spells for Wandering Towers. New Spells included are Fill a Potion Bottle and Extra Die Roll.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/402302",
+        "combines": "Any combination of the six Spell Pack spells may be in a game.",
+        "combinesSource": "Rulebook"
+      },
+      "Spell Pack": {
+        "adds": "This expansion contains 2 spells: Retrieve A Card and Movement Swap. Retrieve A Card Effect: Take the top card from the discard pile, even if it is the card you just played.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/392106"
+      },
+      "Wandering Towers: The Magic Tower": {
+        "adds": "Lucky wizards may find an elixir fountain to fill a potion bottle along the path to Ravenskeep... but if it's covered by a bouncy spiderweb, it will catapult them along the path (for better or worse). Rumor has it that there's a witch roaming the path.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/456246",
+        "firstPlay": "Five modules, recommended one at a time in the booklet's order, then any combination: elixir fountain, bouncy spiderweb, witch, raven, and magic tower.",
+        "firstPlaySource": "Rulebook"
+      }
+    }
+  },
+  "watergate": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Watergate: Change in History": {
+        "adds": "Watergate: Change in History is a pair of promo cards for Watergate that was originally given to attendees of the 2020 Camp Capstone virtual convention. Later available as part of Pack C from the Dice Tower 2021 Kickstarter campaign.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/320416"
+      }
+    }
+  },
+  "wingspan": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Europe Expansion": {
+        "adds": "In this first expansion to Wingspan, we increase the scope of the world to include the regal, beautiful, and varied birds of Europe. These birds feature a variety of new abilities, including a number of birds with round end abilities, abilities that increase interaction between players, and birds that benefit from excess cards/food.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/290448"
+      },
+      "Oceania Expansion": {
+        "adds": "Wingspan: Oceania Expansion focuses on birds in Australia and New Zealand. It's designed by Elizabeth Hargrave and features birds illustrated by Natalia Rojas and Ana Maria Martinez.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/300580",
+        "combines": "The Oceania bird cards are designed to be shuffled into the bird cards from the base game, with or without other expansions."
+      },
+      "Asia Expansion": {
+        "adds": "Wingspan: Asia introduces the diverse and vibrant birds of the Asian continent. As always, the objective is to earn the most points by playing birds, achieving objectives, and laying eggs across your habitats.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/366161",
+        "players": "Flock is 6 or 7 players and uses the base game's player components.",
+        "playersSource": "Rulebook"
+      },
+      "Americas Expansion": {
+        "adds": "This fourth Wingspan expansion explores the birds of Mexico, Central America, South America, and the Caribbean. This incredibly biodiverse and abundant region is home to more than 3,000 bird species, including the birds with the smallest and largest wingspans in the world (the Bee Hummingbird and Snowy Albatross, respectively).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/461932"
+      }
+    }
+  },
+  "7-wonders-second-edition": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Edifice": {
+        "adds": "7 Wonders: Edifice gives players the opportunity to work together to construct communal buildings. If you do your part and the building comes to be, you'll be rewarded.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/378839",
+        "combines": "7 Wonders: Edifice can be used with any edition of 7 Wonders ."
+      },
+      "Armada": {
+        "adds": "7 Wonders – Armada Take command of a fleet of ships The horizon is now within reach, your armada waits only on you to go conquer the seas! On board your ships, discover faraway isles, trade with remote cities, and equip your fleets to prepare for the naval conflict to come...",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/316382",
+        "combines": "7 Wonders Armada is an independent expansion but is compatible with the other expansions for 7 Wonders."
+      },
+      "7 Wonders: Manneken Pis": {
+        "adds": "7 Wonders: Manneken Pis – first available as a promotional item at Spiel 2010, then distributed later via the BGG Store and Spielbox – is a wonder that can be used with the 7 Wonders base game in order for players to have more choices of wonders available to them. Unlike the wonders included with the base game, Manneken Pis produces no resource of its own, instead giving its owner more money at the start of the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/83445"
+      },
+      "7 Wonders: The Great Wall": {
+        "adds": "7 Wonders: Great Wall – first available through the 7 Wonders: Wonder Pack, and now available on its own – is a wonder that can be used with the 7 Wonders base game in order for players to have more choices of wonders available to them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/447859"
+      }
+    }
+  },
+  "agent-avenue": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Division M": {
+        "adds": "The Agent Avenue: Division M expansion introduces a new agent type to Agent Avenue, with these special agents creating a danger zone around your home space. Also included are fifteen unique black market cards, each adding fresh twists and unpredictable opportunities to every game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/450196"
+      }
+    }
+  },
+  "burgle-bros-3-future-flip": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Burgle Bros 3: Future Flip – Runners": {
+        "adds": "This Netrunner themed mini-expansion for Burgle Bros 3 expands the game with the following: 5 new characters to play pulled right from the Netrunner universe. Each one comes with a two unique thematic powers - one for their disguised mode, and one for their geared mode on the back side of their card.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/463777"
+      }
+    }
+  },
+  "container": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "More Containers": {
+        "adds": "More Containers includes... more containers! Plus other brand-new modules and updated fan favorites from the classic game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/468181"
+      }
+    }
+  },
+  "the-crew-mission-deep-sea": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Crew: Mission Deep Sea – Captain for the Day": {
+        "adds": "Postcard with two new missions for The Crew: Mission Deep Sea. They play between mission 16 and 17.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/350373"
+      }
+    }
+  },
+  "the-crew-the-quest-for-planet-nine": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Crew: Flight to the ISS": {
+        "adds": "This expansion adds 3 new missions; the base game is unchanged. It was published in the German and English versions of Spielbox 2/2020.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/307204"
+      }
+    }
+  },
+  "flamecraft": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Flamecraft: Dragons & Dragons": {
+        "adds": "All NEW Flamecraft mini-expansions for the base game. 15 Hydragons - Dual Hydragons are coming to town!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/445543"
+      },
+      "Flamecraft: Dragons of the Past Promo Pack": {
+        "adds": "ALL THE PREVIOUS FLAMECRAFT PROMOS! We have bundled together all the previous Flamecraft promos released to date in this amazing deal.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/447867"
+      }
+    }
+  },
+  "fliptoons-season-2": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "FlipToons: Big Button 2 Mini-Expansion": {
+        "adds": "This mini-expansion card pack adds the Platypus character and a new version of the Big Red Button with a choice of a new mechanism to play with! Not feeling the star-power of the Toons currently in the market?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/474020"
+      },
+      "FlipToons: Big Button Mini-Expansion": {
+        "adds": "This mini-expansion card pack adds the Axolotl character and a new mechanic: the Big Red Button to FlipToons. Is your cast not living up to their celebrity?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/449362"
+      }
+    }
+  },
+  "gruntz": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Gruntz: Supplies": {
+        "adds": "Supplies add powerful but limited actions for commanders to turn the tide of battle. Move all Gruntz at once, swap vehicle attachments, Paradrop Gruntz, and more!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/468575"
+      }
+    }
+  },
+  "the-lord-of-the-rings-duel-for-middle-earth": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Lord of the Rings: Duel for Middle-earth – Allies": {
+        "adds": "The Lord of the Rings: Duel for Middle-Earth – Allies features various characters from J. Tolkien's universe who will come to the aid of either the Fellowship or Sauron.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/450429"
+      }
+    }
+  },
+  "lost-cities": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Lost Cities: Expedition 6 – The Lost Expedition": {
+        "adds": "The Lost Cities: Sixth Expedition promo pack contains a set of grey cards that are added to the old base game as an additional (6.) expedition. The sixth expedition has the same rules as the other five.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/206374"
+      }
+    }
+  },
+  "moonrakers": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Moonrakers: Binding Ties": {
+        "adds": "As the UA consolidates power in the surrounding planet clusters, the Moonrakers have finally begun to rise above their petty conflicts and unite under one banner. In the Binding Ties Expansion, players will gain additional rewards from allying with each other as they gain Faction Reputation with the great houses that each player represents.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366450"
+      },
+      "Moonrakers: Celestial Crew Cards": {
+        "adds": "Moonrakers micro-expansion that was part of the Veiled Fate: Tribunal Expansion's Kickstarter. Includes 3 new crew member cards: Arbiter, Steward, Hadria Steward: If you have 1 less Prestige than another player, subtract 1 from any requirement. +1 Credit, +1 Action.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/445594"
+      },
+      "Moonrakers: Dark Matter": {
+        "adds": "No one knows who first discovered Dark Matter. They are surely long dead by now.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/407444"
+      },
+      "Moonrakers: Frontier": {
+        "adds": "Embark on new adventures with the Frontier expansion, featuring 18 new Contracts that will take you across Moonrakers solar system. Every contract in Frontier features a distinct modifier, changing the way you approach and interact with each mission.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/424408"
+      },
+      "Moonrakers: Gencon 2025 Promo Crew Cards": {
+        "adds": "Four crew cards that grant free actions for subsequent reactor/thruster/shield/damage cards played that turn. First available at Gencon 2025.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/452127"
+      },
+      "Moonrakers: Marauders": {
+        "adds": "Meet the Marauders, the most fanatical warriors of the Moonrakers. Known for their relentless aggression and unmatched firepower, they embody shoot-first, ask-questions-never.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/433335"
+      },
+      "Moonrakers: Nomad": {
+        "adds": "The Moonraker's five factions have continued to grow roots throughout the system: establishing defenses, trade networks, and even a loose intergovernmental organization simply called the Council. The Nomad expansion adds global events, overhauls the Contract system,and adds new prototype Ship Parts to the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366452"
+      },
+      "Moonrakers: Overload": {
+        "adds": "As the Moonrakers' influence and population grew, so did the opposition from the Utopian Alliance. Backed into a corner, the Moonrakers entered a new wave of technological advancements.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366451"
+      },
+      "Moonrakers: Starfall": {
+        "adds": "The shattered star will redeem us all\", they chant in unison. Most of us don't share their beliefs, or even really understand them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/409045"
+      },
+      "Moonrakers: The Endless": {
+        "adds": "We found them on accident. A crash landing on a barren world.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/367402"
+      },
+      "Moonrakers: The Shard": {
+        "adds": "We first encountered the Shard under the guise of peaceful trading. They had fairly priced and exotic goods, even if they were a bit eclectic.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/333584",
+        "combines": "Includes 15 cards and is compatible with all versions of Moonrakers."
+      }
+    }
+  },
+  "night-at-the-zoo": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Night at the Zoo: Latecomers": {
+        "adds": "The Zoo has opened four new enclosures, welcoming more animals into the park. Under the cover of darkness, these curious beings joined their friends and escaped!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/465741"
+      }
+    }
+  },
+  "oath": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Oath: New Foundations": {
+        "adds": "Return to the world of Oath with the New Foundations expansion. Develop your family's lineage through quests and intrigues, construct an empire that can withstand the torrents of a fallen world, and shape the very foundations of the game in your own image.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/420719"
+      }
+    }
+  },
+  "rebel-princess-deluxe-edition": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Rebel Princess: Deluxe Edition – Beauty": {
+        "adds": "Behold, Princess Beauty \"Deluxe\" and her power of Kingmaker! This version of Beauty is only compatible with Rebel Princess Deluxe Edition.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/442868"
+      },
+      "Rebel Princess: Deluxe Edition – Carmesina": {
+        "adds": "Behold, Princess Carmesina \"Deluxe\" and her power of Reflection! This version of Carmesina is only compatible with Rebel Princess Deluxe Edition.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/423469"
+      },
+      "Rebel Princess: Deluxe Edition – Happily Never After": {
+        "adds": "A year has passed since their last gathering and the princesses have sent out invitations for their annual five-day all-princess party! Rumor has it that Red Riding Hood & the Swan Maiden will be making an appearance.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/438511"
+      },
+      "Rebel Princess: Deluxe Edition – Marianne": {
+        "adds": "Behold, Rebel Princess Marianne and her power of \"Tell Me What You Want\"! Tell Me What You Want: Before a trick, name a specific card with a value of 5 or less.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/474162"
+      }
+    }
+  },
+  "splendor-duel": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "The Counterfeiters": {
+        "adds": "This expansion add 8 new Royal cards and a daring new twist: the Counterfeiters — 4 paste gem tokens and 17 cards that bring deeper asymmetry and reshape all strategies. This tiny expansion fits seamlessly into the base game box — because once you've played it, there's no going back.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/462460"
+      }
+    }
+  },
+  "targi": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Targi: The Expansion": {
+        "adds": "The expansion of the tribe goes on in Targi: Die Erweiterung, an expansion for Targi. With water as a new element, the tribe has more flexibility in how it will extend itself.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/202453"
+      }
+    }
+  },
+  "thunder-road-vendetta": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Big Rig and the Final Five": {
+        "adds": "This expansion adds two new racing crews to the base game. The Big Rig is a relentless metal beast, bristling with lethal weapons and advanced defense systems.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/347977",
+        "players": "The crews can be played in any game with each other or the cars from the base game and also allow for a fifth player."
+      },
+      "Carnage at Devil's Run": {
+        "adds": "Legend tells of a place called Devil's Run, a land of fire with roads turned to slick glass from the burning sands. The few that emerge tell stories none believe.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/347978"
+      },
+      "Choppe Shoppe": {
+        "adds": "Some races are bigger than others. In the biggest race of all, you need a veteran leader and some extra gear to come out on top.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/347976"
+      },
+      "Extra Ammo": {
+        "adds": "Extra Ammo is a deck of bonus mini-expansions for your game. As we unlock more stretch goals, the ammo box gets bigger.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/355996"
+      },
+      "German Engineering": {
+        "adds": "This expansion replaces the car crew movement dice and the shooting die with cards. Each car crew that uses it gets a deck of 18 cards in that crew's color.",
+        "combines": "The Big Rig and the Final Five do not use this expansion, but you can play with either or both of them against cars that do.",
+        "combinesSource": "Rulebook",
+        "source": "Rulebook",
+        "sourceUrl": "https://restorationgames.com/wp-content/uploads/2023/08/MaximumChromeRulebook-8-pages.pdf"
+      }
+    }
+  },
+  "thunder-road-vendetta-maximum-chrome": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Thunder Road: Vendetta – Carnival of Chaos": {
+        "adds": "Carnival of Chaos is an expansion for Thunder Road: Vendetta (or Thunder Road: Vendetta – Maximum Chrome ) that offers a new way to play. Players race their cars into the arena, collecting wild party favors, powerful super-weapons, and precious scrap along the way.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/415878"
+      }
+    }
+  },
+  "wyrmspan": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Wyrmspan: Dragon Academy": {
+        "adds": "The expansion to Wyrmspan adds a wide variety of new dragons and caves, objective tiles, dragon guilds, and a new round tracker that presents you with an income choice when you pass for the round. Welcome to Wyrmspan: Dragon Academy, designed by Connie Vogelmann and illustrated by Clémentine Campardou!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/453406"
+      }
+    }
+  },
+  "finspan": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Sharks & Reefs": {
+        "adds": "Finspan: Sharks & Reefs adds to the variety of the core game with a focus on sharks and fish that live among coral reefs. This expansion introduces new coral reef habitats to your ocean mat and more incredible sharks—with fearsome new abilities!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/468426"
+      }
+    }
+  },
+  "a-feast-for-odin": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "A Feast for Odin: The Norwegians": {
+        "adds": "The first large expansion for A Feast for Odin, The Norwegians, includes a viking-sized number of additions to the game, adding new strategies and puzzle-tiles.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/216788"
+      }
+    }
+  },
+  "after-the-empire": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "After the Empire: Captain of the Guard": {
+        "adds": "A mini-expansion for After the Empire which adds 1 Captain Miniature and 1 Refugee card.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/292072"
+      },
+      "After the Empire: Solo Mode": {
+        "adds": "This deck of cards allows you to enjoy After the Empire when no one else is around. Gather resources, refugees, and recruits to improve your city, build up your castle, and keep it defended from the ever increasing invaders.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/372725"
+      }
+    }
+  },
+  "agricola-all-creatures-big-and-small": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Agricola: All Creatures Big and Small – Even More Buildings Big and Small": {
+        "adds": "Like the first expansion for Agricola: All Creatures Big and Small, Agricola - Even More Buildings Big and Small includes 27 new buildings for use with the base game as well as a fifth Stall tile and a farm expansion.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/145355"
+      },
+      "Agricola: All Creatures Big and Small – More Buildings Big and Small": {
+        "adds": "Agricola: All Creatures Big and Small - More Buildings Big and Small, an expansion for the standalone two-player game Agricola: All Creatures Big and Small, adds 27 new special buildings to the base game as well as a fifth Stall tile and a farm expansion. These tiles offer players new ways to keep and breed animals, and allow them to expand their farms in interesting and innovative ways.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/130752"
+      }
+    }
+  },
+  "aquatica": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Aquatica: Cold Waters": {
+        "adds": "The waters of Aquatica have been prosperous for centuries. Under the reign of the wise and noble Sea-Kings, all the creatures of the sea lived in peace and serenity.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/300872"
+      }
+    }
+  },
+  "atlantis-rising-second-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Atlantis Rising: Monstrosities": {
+        "adds": "The gods will spare no effort to destroy Atlantis. From the hidden depths of the world they have called forth unspeakable terrors, monsters sent to destroy, frighten, and harry the Atlantean effort to save their civilization.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/321302"
+      }
+    }
+  },
+  "bang-the-dice-game": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "BANG! The Dice Game: Old Saloon": {
+        "adds": "The Dice Game – Old Saloon consists of five modules that can be used individually or in any combination with BANG! The expansion features lethal new characters, extra roles, new tokens, and two Saloon dice: the Loudmouth and the Coward.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/193614",
+        "combines": "The Dice Game – Old Saloon consists of five modules that can be used individually or in any combination with BANG!"
+      }
+    }
+  },
+  "bohnanza": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Bohnanza: Bohnaparte & High Bohn": {
+        "adds": "Bohnanza: Bohnaparte & High Bohn consists of two Bohnanza expansions that were previously released separately by Rio Grande Games. With Bohnaparte, players get to conquer the Bohnreich, territory created with new cards included in this expansion!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/174239"
+      }
+    }
+  },
+  "calico": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Calico: Kickstarter Promo Cats": {
+        "adds": "A special double-sided promo cat scoring tile and four additional cat tokens, given for free to Kickstarter backers. These cats add 'largest pattern group' and 'longest pattern line' scoring options, giving you more ways to play!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/293834"
+      }
+    }
+  },
+  "captain-sonar": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Captain Sonar: Chicago Map": {
+        "adds": "This promo set was given out at the Asmodee booth at Gen Con. It included four two sided maps: two Captain Functions and two Radio Operator Functions.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/207122"
+      },
+      "Captain Sonar: New York Map": {
+        "adds": "This promo set was given out at the Asmodee booth at Gen Con. It included four two sided maps: two Captain Functions and two Radio Operator Functions.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/207123"
+      }
+    }
+  },
+  "carcassonne": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Carcassonne: Mage & Witch": {
+        "adds": "In Carcassonne: Mage & Witch, a small expansion for Carcassonne, eight landscape tiles bearing a mage symbol are mixed with the other tiles at the start of the game. Whenever a player draws one of these tiles, they play it following the standard placement rules.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118618"
+      },
+      "Carcassonne: The Ferries": {
+        "adds": "Carcassonne: The Ferries, a small expansion for Carcassonne, includes eight new land tiles that show three or four road segments leading to a lake in the center of the tile; these tiles are mixed with the other tiles in the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118614"
+      },
+      "Carcassonne: The Festival": {
+        "adds": "This mini-expansion for Carcassonne comprises 10 tiles marked with a 10th anniversary icon. When placed, the tiles allow a player to place a follower as normal, or return a follower currently on the board back to their supply.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/123905"
+      },
+      "Carcassonne: The Messengers": {
+        "adds": "In Carcassonne: The Messengers, a small expansion for Carcassonne, players place a second meeple (included in this expansion) on the score board at the start of the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118619"
+      },
+      "Carcassonne: The Robbers": {
+        "adds": "In Carcassonne: The Robber, a small expansion for Carcassonne, eight landscape tiles bearing a robber symbol are mixed with the other tiles at the start of the game. Whenever a player draws one of these tiles, he places it as normal according to the standard rules, then he places his robber figure – a special meeple included in this expansion – on the score track next to the score marker of any other player.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118616"
+      }
+    }
+  },
+  "carcassonne-wheel-of-fortune": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Carcassonne: Catapult": {
+        "adds": "The seventh \"large\" expansion for Carcassonne. 12 new tiles with a faire symbol are added to the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/38855"
+      },
+      "Carcassonne: Dragon & Fairy": {
+        "adds": "In this third major expansion for the prize-winning Carcassonne, we move into the realm of fantasy. The land around Carcassonne is being visited by a dragon, making life very difficult for the followers.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/15158"
+      },
+      "Carcassonne: Expansion 5 – Abbey & Mayor": {
+        "adds": "The fifth major expansion to Carcassonne, Abbey & Mayor adds 3 new wooden piece types, 6 abbey tiles, and 12 landscape tiles. The Abbey tiles act as Cloisters but do not have to match adjacent tiles and they complete adjacent features when placed.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/31784"
+      },
+      "Carcassonne: Expansion 6 – Count, King & Robber": {
+        "adds": "The sixth large expansion to Carcassonne released in Europe by Hans im Glück is actually a compilation of three existing small expansions and a new one. Before Z-Man Games picked up the Carcassonne license, this compilation was only available in the US from Rio Grande Games as part of the Big Box 2, or each small expansion was available individually.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/33458"
+      },
+      "Carcassonne: Expansion 8 – Bridges, Castles and Bazaars": {
+        "adds": "The eighth expansion for Carcassonne, Brücken, Burgen und Basare (English: Bridges, Castles & Bazaars) allows players three new options while playing: Bridges may be used to continue a road over a field tile, thereby allowing an incomplete road to technically run into a field segment. They are otherwise treated and scored just like roads.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/66646"
+      },
+      "Carcassonne: GQ Promo Tiles": {
+        "adds": "Includes 2 river tiles (a spring with an attached road, and a river between two cities) and 10 other tiles not previously seen. This includes a cloister with 4 roads, and a piece which contains only a field.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/26615"
+      },
+      "Carcassonne: Halb so wild II": {
+        "adds": "Carcassonne: Halb so Wild II (Halflings II) takes the standard Carcassonne tiles and breaks them in half. More specifically, the sheet of tiles consists of twelve triangular landscape tiles that are half the size of a normal tile.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/169392"
+      },
+      "Carcassonne: Inns & Cathedrals": {
+        "adds": "Carcassonne: Die Erweiterung (later prints used the title Inns & Cathedrals ) is the first major expansion for Carcassonne and introduces a few new aspects to the game. There are a couple of completely new kinds of tiles: the inns and cathedrals.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/2993",
+        "players": "Another whole set of meeples means 6 players can now enjoy the game."
+      },
+      "Carcassonne: Sheep & Shepherds": {
+        "adds": "Carcassonne: Hills & Sheep is the ninth numbered expansion for the Carcassonne base game, and now players get to be shepherds on the hills in addition to the usual thieves, knights, monks and farmers.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/153773"
+      },
+      "Carcassonne: The Flying Machines": {
+        "adds": "In Carcassonne: The Flying Machines, a small expansion for Carcassonne, eight landscape tiles showing a pair of wings are mixed with the other tiles to be used in the game. Whenever a player draws one of these tiles, he places it according to the normal rules.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118615"
+      },
+      "Carcassonne: The Gold Mines": {
+        "adds": "In Carcassonne: The Gold Mines, a small expansion for Carcassonne, eight landscape tiles showing a gold bar are mixed with the other tiles being used in the game. Whenever a player draws one of these tiles during play, he or she places the tile according to the normal rules, then places one gold bar on this tile and one gold bar on any adjacent tile, whether orthogonally or diagonally adjacent.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/118617"
+      },
+      "Carcassonne: The River": {
+        "adds": "Der Fluss ( The River ) is a mini-expansion for Carcassonne. It adds twelve river tiles.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/2591"
+      },
+      "Carcassonne: The School": {
+        "adds": "As a part of the Rainbow Over Ghana school-building program, Carcassonne: Die Schule (The School), a new mini-expansion, will be released at Spiel 2011 bundled with the new Dominion promotional card \"Carcassonne\"/\"Walled Village\". Together, these expansions celebrate ten years of Carcassonne while also benefiting the school-building project of Rainbow Over Ghana by donating a portion of the proceeds to that effort.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/104634"
+      },
+      "Carcassonne: Towers & Thieves": {
+        "adds": "The Tower is the fourth major expansion for the Carcassonne game. Tower segments are added to the game, as well as some new actions.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/21385"
+      },
+      "Carcassonne: Traders & Builders": {
+        "adds": "The second major expansion to the original game of Carcassonne, Traders & Builders contains 24 tiles with new features such as Bridges and Cities. Some tiles also feature symbols for the goods Wine, Cloth or Wheat.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/5405"
+      }
+    }
+  },
+  "castles-of-mad-king-ludwig": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Castles of Mad King Ludwig: Secrets": {
+        "adds": "What secrets are lurking in the shadows of King Ludwig's castle? Dozens of hidden swans are scattered throughout thirty new rooms in Castles of Mad King Ludwig: Secrets.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/174296"
+      }
+    }
+  },
+  "castles-of-mad-king-ludwig-collectors-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Castles of Mad King Ludwig: Renovations": {
+        "adds": "Castles of Mad King Ludwig: Renovations are special double room type tiles that you can use to renovate your castle...while you build it! Get double the completion rewards and fulfill favors twice as fast with a wide variety of renovations in every size.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/369683"
+      }
+    }
+  },
+  "catacombs-third-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Catacombs: Cavern of Soloth (Third Edition)": {
+        "adds": "Dwarves mining in the Scavewyrm Pit have brought back news that the mythical cavern of Soloth has been discovered. Although unexplored, it is rumored to contain exotic weapons and treasures from the reign of Soloth, the ancient Vampire Lord of the Underworld.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/198576"
+      }
+    }
+  },
+  "champions-of-midgard": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Jarl Edition": {
+        "adds": "Champions of Midgard Jarl Edition comes with both Champions of Midgard: Valhalla and Champions of Midgard: The Dark Mountains as well as exclusive content not available at retail, including a box designed to hold everything including the base game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/245646"
+      },
+      "The Dark Mountains": {
+        "adds": "The Dark Mountains, the first expansion for Champions of Midgard, extends your adventures to distant lands, allowing you to trek into the dark mountains where the Bergrisar live and wage constant battle with the Archer Clans of the North. Fight fearsome mountain giants and liberate archers who join your cause.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/219787",
+        "players": "Champions of Midgard: The Dark Mountains adds a ton of new content to the base game, including the ability to play with up to five players."
+      },
+      "Valhalla": {
+        "adds": "In Valhalla, the second expansion for Champions of Midgard, you will find yourself rewarded when your warriors die in battle. Your warriors' eternal glory becomes your earthly reward as the Valkyries bestow powerful effects, relics, and warriors upon you for use in your battles in Midgard.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/219788"
+      },
+      "Polyhedral Dice Promo Tiles": {
+        "adds": "Military and economic promo tiles that were sold with a limited-edition custom made complete polyhedral dice set. The two promo tiles are: Varangian Guard: Roll the die on this tile and collect Viking dice based on the result.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/357337"
+      }
+    }
+  },
+  "cloudage": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "CloudAge: Rollo Promo Card": {
+        "adds": "Rollo (P1) is a promo card for CloudAge, first given with preorders of the game. Playing with the Promo Card \"Rollo\": Rollo is the only project card you can play by paying metall and 2 project cards from the hand.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/327262"
+      }
+    }
+  },
+  "codenames-duet": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Codenames: Bonus Pack – Board Gaming (English)": {
+        "adds": "Found in Spielbox Issue 1-2017 English Edition. Also came with Game Boy Geek 2018 Kickstarter Family Pack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/224198"
+      }
+    }
+  },
+  "deception-murder-in-hong-kong": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Deception: Undercover Allies": {
+        "adds": "A tremor of fear ripples through the population in the streets of Hong Kong. Word is out that a recent string of murders may have been committed by one of the very investigators charged with solving them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/227748"
+      }
+    }
+  },
+  "distilled": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Distilled: Africa & Middle East Expansion": {
+        "adds": "Explore the ingredients, recipes, and personalities of Africa and the Middle East with this expansion to Distilled: A Spirited Strategy Game. Get a taste of culture not included in the base game by distilling and selling new spirits such as Akpeteshie and Boukha.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/342219"
+      },
+      "Distilled: Promo Pack 1": {
+        "adds": "This 14-card promo pack from the Kickstarter campaign introduces 4 new distillers from around the world, as well as 2 premium bottles, 4 Ingredients, and 4 customizable flavor cards.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/376295"
+      }
+    }
+  },
+  "dixit-odyssey": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Dixit: \"Merry Christmas\" Promo Card": {
+        "adds": "Merry Christmas is a promo card for Dixit.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/261027"
+      },
+      "Dixit: \"The Elephants\" Promo Card": {
+        "adds": "The Elephants is a promo card for Dixit.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/261025"
+      },
+      "Dixit: Harmonies": {
+        "adds": "Delve even deeper into the imagination with the newest expansion for the smash hit Dixit with Dixit: Harmonies! This latest expansion incorporates the unique and powerful art of Paul Echegoyen to push players' imaginations even further, challenging them like only the game of Dixit can do.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/234553",
+        "combines": "Fully compatible with the base Dixit game and every other expansion, these 84 new image cards expand upon the replayability and joy that the game of Dixit is known for."
+      },
+      "Dixit: Memories": {
+        "adds": "Dixit: Memories is a set of 84 new cards that add value to existing Dixit releases.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/174090"
+      },
+      "Dixit: Mirrors": {
+        "adds": "The expansion is illustrated by Sebastien Telleschi. This expansion will add 84 beautiful new illustrated cards to the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/301112"
+      },
+      "Dixit: Quest": {
+        "adds": "84 new cards with paintings that can be used on their own (but then you need some kind of voting tokens and paper and pencil to take notes of the scoring) or with those from the base game (or with Dixit: Journey or Dixit: Odyssey ). The game does not contain scoring board and tokens, but it will be packed in a smaller box in which it is much easier to take it on a trip.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/55660"
+      },
+      "Dixit: Revelations": {
+        "adds": "Dixit: Revelations invites you to go beyond what you see at first glance and discover what lies hidden between — or hidden by — the lines. Featuring art by the French illustrator Marina Coudray, Dixit: Revelations looks utterly unlike any Dixit expansion that has preceded it.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/205761"
+      }
+    }
+  },
+  "encyclopedia": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Encyclopedia: Magna Itinera": {
+        "adds": "Magna Itinera is a small expansion that includes 3 modules: - Legendary Animals (15 cards) - Give you access to their unique powers. - Events (45 cards) - Add changing conditions to the game that might help or hinder your strategy. - Additional Experts (10 cards) - Grant unique bonuses.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/374924"
+      }
+    }
+  },
+  "everdell-the-complete-collection": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Bellfaire": {
+        "adds": "The king is throwing an unprecedented year-long event to commemorate the 100th year since Everdell's founding. Come one, come all, to the Bellfaire!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/289057"
+      },
+      "Pearlbrook": {
+        "adds": "Explore a new underwater society in Pearlbrook, the first expansion for Everdell! Pearlbrook introduces a new side board, the river board, where you'll send your frog ambassador to gather a new resource: pearls.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/259996"
+      },
+      "Spirecrest": {
+        "adds": "Spirecrest adds several exciting and challenging new mechanics and features to the Everdell base game, including: Weather cards that impose challenging limitations to overcome. Discovery cards let players encounter intrepid new critters and locations on their journey, providing unique new strategies and abilities.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/289056"
+      },
+      "Newleaf": {
+        "adds": "Newleaf introduces brand new critters, constructions, and exciting events to draw Visitor cards to your blossoming city! It also features the Train Station Board, resource-delivering Train Cars, travel-worthy Tickets, and Reservation Tokens!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/332390"
+      },
+      "Mistwood": {
+        "adds": "Pit your wits against Nightweave and her sticky schemes in solo or two-player games, and recruit heroes of yore from the More Legends and Corrin Evertail expansion packs as well as transform your farms with our new Through Every Season expansion pack!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/332397"
+      },
+      "Everdell: Extra! Extra!": {
+        "adds": "This expansion was released by polish publisher Rebel. Cards that can be found in Collector's Edition and Glimmergold Pack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/297973"
+      },
+      "Everdell: Legends": {
+        "adds": "This expansion was released by Polish publisher Rebel. It contains 10 Legendary Cards that can be found in Collector's Edition and Glimmergold Pack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/297972"
+      },
+      "Everdell: Rugwort Pack": {
+        "adds": "The Rugwort Pack adds 3 new cards that feature the solo mode opponent, Rugwort! Shuffle them in with the Everdell deck to add a little more 'take-that' to your game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/261142",
+        "firstPlay": "Not recommend for beginning players!"
+      }
+    }
+  },
+  "fireball-island-the-curse-of-vul-kar": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Fireball Island: The Curse of Vul-Kar – Crouching Tiger, Hidden Bees!": {
+        "adds": "Let's make one thing perfectly clear: The island is out to get you. But there's a whole lot more on the island that will have you running for your life.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/249326"
+      },
+      "Fireball Island: The Curse of Vul-Kar – Spider Springs": {
+        "adds": "Fireball Island just got a whole lot bigger. There's just one problem: It's covered with spiders, and they have a nasty habit of \"popping up\" all over the place.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/274536"
+      },
+      "Fireball Island: The Curse of Vul-Kar – The Last Adventurer": {
+        "adds": "The last adventurer has been stranded on Fireball Island a long time. He knows every cave, every path, every snake hole, fire pit, and bug.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/249325",
+        "players": "The Last Adventurer figure to increase player count to 5!"
+      },
+      "Fireball Island: The Curse of Vul-Kar – Treasure Trove": {
+        "adds": "Treasure Trove includes more souvenir cards to shuffle into the souvenir deck, legendary artifact cards for you to discover, and injury cards which give you a choice to take a random disadvantage rather than give up a treasure when hit by a fireball. These cards won't be in the retail game which is what is being shipped to backers so they will come as an extra package.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/250648"
+      },
+      "Fireball Island: The Curse of Vul-Kar – Wreck of the Crimson Cutlass": {
+        "adds": "Long ago, a pirate ship crashed on the shores of Fireball Island. During your visit, you can stumble upon it through one of the many caves.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/249792"
+      }
+    }
+  },
+  "five-tribes-the-djinns-of-naqala": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Five Tribes: The Artisans of Naqala": {
+        "adds": "Five Tribes: The Artisans of Naqala, the first expansion for Five Tribes, introduces a new tribe to the game, and players will want to use these artisans to help them in their quest to claim the Sultanate.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/176677"
+      }
+    }
+  },
+  "flick-em-up": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Flick 'em Up!: Red Rock Tomahawk": {
+        "adds": "The infamous Cooper clan has begun taking over small villages. Those villages, however, belong to the Native Americans who are armed with bows and tomahawks and ready to defend their land in five exciting scenarios in Flick 'em Up!: Red Rock Tomahawk.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/196114"
+      },
+      "Flick 'em Up!: Stallion Canyon": {
+        "adds": "What's a cowboy without his horse, you ask? Well, ask no more for Flick 'em Up!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/183099"
+      }
+    }
+  },
+  "flip-city": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Flip City: Reuse": {
+        "adds": "The first expansion to the card game Flip City, Reuse adds 2 more card stacks to buy from for a total of 4 new buildings: Plumber Shop - Flipped side: Renewal Agency Flea Market - Flipped side: Recycling Bin The Plumber Shop allows you to force each opponent to discard the top card (which is public knowledge) or the bottom card (which you do not get to look at beforehand) of their deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/193495"
+      }
+    }
+  },
+  "grand-austria-hotel": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Grand Austria Hotel: Let's Waltz!": {
+        "adds": "Grand Austria Hotel: Let's Waltz! is an expansion for Grand Austria Hotel that contains five modules. Night has fallen in Vienna and it's ball season.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/320780"
+      }
+    }
+  },
+  "great-western-trail": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Great Western Trail: 13th Building Tile": {
+        "adds": "Add each new building tile to the existing building tiles of its color. This promo comes with four identical 13a/b building tiles, one in each player color.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/295953"
+      },
+      "Great Western Trail: Promo Station Master Tiles": {
+        "adds": "Included in Great Western Trail: Rails to the North expansion Two promotional Station Master Tiles enclosed to the French \"Plato Magazine #95\". (Note: A Dutch version also exists, provided by 999games.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/225704"
+      },
+      "Great Western Trail: The Eleventh Building Tile": {
+        "adds": "Included in Great Western Trail: Rails to the North expansion Originally part of the Deutscher Spielepreis 2017 Goodie Box. Great Western Trail: The Eleventh Bulding Tile adds four new double sided building tiles (one for each colour).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/238620"
+      }
+    }
+  },
+  "harry-potter-hogwarts-battle": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Harry Potter: Hogwarts Battle – The Charms and Potions Expansion": {
+        "adds": "Continue to defend Hogwarts in Harry Potter: Hogwarts Battle – The Charms and Potions Expansion! This second expansion to Hogwarts Battle increases the player count to five heroes thanks the newest playable character — Ginny Weasley!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/304297"
+      },
+      "Harry Potter: Hogwarts Battle – The Monster Box of Monsters Expansion": {
+        "adds": "Venture into the Forbidden Forest with The Monster Box of Monsters, the highly anticipated expansion to Harry Potter: Hogwarts Battle Play as Harry, Hermione, Ron, Neville or Luna Lovegood as you face frightening creatures and challenging encounters. Beware of any wrongdoing that might earn you detention!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/223494"
+      }
+    }
+  },
+  "isle-of-skye-from-chieftain-to-king": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Isle of Skye: Journeyman": {
+        "adds": "Becoming a king is hard, but being a king is even harder. You need warriors to protect your kingdom, merchants to keep your treasury liquid and heralds which proclaim your popularity across the kingdom.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/232226"
+      }
+    }
+  },
+  "jamaica": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Jamaica: The Crew": {
+        "adds": "Jamaica: The Crew is a set of twenty characters, each with a special power, that add flavor to the game without any big changes in the rules. The characters may be hired when you're able to pay for the fee of a harbor, and they are \"loaded\" like any other resource, following the same rules.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/204807"
+      }
+    }
+  },
+  "kanban-ev": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Kanban EV: Upgrade Pack": {
+        "adds": "This pack contains two separate expansions: The SpeedCharger Expansion provides players with persistent special abilities they may pay shifts to unlock. The Special Garage Tile Expansion consists of seven special garage tiles.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/321238"
+      }
+    }
+  },
+  "king-of-tokyo": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "King of Tokyo/New York: Monster Pack – Anubis": {
+        "adds": "While rampaging through a history museum, you accidentally stepped on a sarcophagus, causing Anubis to appear, intent upon avenging the profaned mummy. Can you escape the wrath of the God of the Dead as he showers curses on the town?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/250532",
+        "combines": "The Anubis Monster Pack is compatible with the King of Tokyo and King of New York base games and with all their expansions."
+      },
+      "King of Tokyo/New York: Monster Pack – Cthulhu": {
+        "adds": "Monster Pack – Cthulhu includes a new monster — Cthulhu, in case you couldn't guess — as well as eight evolution cards to use with King of Tokyo. You can also play with the cultist tiles, giving players a bonus effect once they obtain it!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/207292"
+      },
+      "King of Tokyo/New York: Monster Pack – Cybertooth": {
+        "adds": "Cybertooth — a giant two-legged robot that can transform into a fearsome sabertoothed tiger — is about to hit the town! Infused with the power of the ancient berserkers, Cybertooth will settle for nothing less than the tiger's share!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/282788",
+        "combines": "The Cybertooth Monster Pack is compatible with the King of Tokyo and King of New York base games, and with all their expansions."
+      },
+      "King of Tokyo/New York: Monster Pack – King Kong": {
+        "adds": "King Kong is ready to conquer the Empire State Building and Tokyo Tower to find his love. Will you dare cross his path, or worse, capture his beloved?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/233076"
+      },
+      "King of Tokyo: Fish Market promo card": {
+        "adds": "First given out at Spiel 2016 in Essen, Germany. Discard Roll 6 dice Gain 1 heart for each 1, 2, 3, or heart you roll.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/211103"
+      },
+      "King of Tokyo: Halloween": {
+        "adds": "King of Tokyo: Halloween, which is subtitled \"Collector Pack 1\", includes two new monsters for use with the King of Tokyo base game: Pumpkin Jack and Boogie Woogie. What's more, each monster comes with its own set of eight Evolution cards – first introduced in King of Tokyo: Power Up! – so that each monster can mutate into an even more nightmarish version of itself!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/147183"
+      },
+      "King of Tokyo: Power Up!": {
+        "adds": "With King of Tokyo: Power Up! – an expansion for the King of Tokyo base game – Included is the new monster Pandakai, a giant panda bear. After choosing a monster, each player takes the eight Evolution cards associated with that monster, shuffles those cards, and creates a personal deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/127067"
+      }
+    }
+  },
+  "kings-forge": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "King's Forge: Glassworks": {
+        "adds": "King's Forge: Glassworks adds glass as a new material with which to work in King's Forge. The expansion includes new \"glass\" material dice, new items that require glass to craft, and new places to gather glass for your workshop.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/191595"
+      },
+      "King's Forge: Queen's Jubilee": {
+        "adds": "Each year, to celebrate the union of the five Duchies and the election of the first Sovereign Queen, the royal family holds a grand reception to renew their oath of justice and unity to the hereditary Dukes.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/147420"
+      }
+    }
+  },
+  "lewis-and-clark-the-expedition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Lewis & Clark: Promo Cards": {
+        "adds": "Six new promo cards, marked \"hc1\" to \"hc6\", released with the new edition of Lewis & Clark. Rules: Mr Hunter: If another player takes a basic ressource you can take 1 of the same kind.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/314494"
+      }
+    }
+  },
+  "magic-maze": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Magic Maze: 9 new tiles": {
+        "adds": "Some of them need the expansion \"Maximum security\". The tiles labeled with \"E\" and \"D\" are also published in Plato magazine issue #102.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/238664"
+      },
+      "Magic Maze: Maximum Security": {
+        "adds": "For some time now, the Magic Maze has been regularly robbed by unscrupulous adventurers, who incessantly steal from the same four shops. Due to this alarming observation, Management has installed new security systems to dissuade any further dishonest deeds.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/230359",
+        "firstPlay": "You will be guided step by step through all of the modules, and each of them comes with a tutorial that will help you practise the new rules before adding it to your \"real\" games of Magic Maze."
+      },
+      "Magic Maze: Roundabout Tile": {
+        "adds": "Contained in Brettspiel Adventskalender 2017 for day 1. Any Hero pawn on the external spaces of this tile can only move clockwise, in the direction of the arrows.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/234154"
+      }
+    }
+  },
+  "maracaibo": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Maracaibo: The Uprising": {
+        "adds": "The first big expansion of Maracaibo features several modules and scenarios, e.g. pushing the predominant nations out of the Caribbean (in competitive or cooperative mode). Other elements are asymmetrical player abilities, a new optional stories and legacy tiles as well as new project cards.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/338013"
+      }
+    }
+  },
+  "menara": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Menara: Rituals & Ruins": {
+        "adds": "Rituals & Ruins, an expansion to the co-operative building game Menara, has a lot to offer: spectacular temple floors, golden columns... and then there even are tears of the gods, trying to keep players from their collective success. The crew always takes on a scenario of its choice.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/286655"
+      }
+    }
+  },
+  "mr-jack": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Mr. Jack: Extension": {
+        "adds": "A contest got the designers of Mr. Jack 137 ideas for new characters.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/30362"
+      }
+    }
+  },
+  "mycelia-2024": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Mycelia: North American Expansion": {
+        "adds": "This expansion for Mycelia brings in new game mechanics to elevate the strategic depth of the original game as well as the option for a fifth player and 35 new mushroom cards depicting fungi endemic to North America. Inspired by the symbiotic relationship between trees and fungi in nature, the new mechanics incorporate saplings and \"Grandfather\" Trees.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/450078",
+        "players": "The option for a fifth player."
+      }
+    }
+  },
+  "new-bedford": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "New Bedford: Rising Tide": {
+        "adds": "Rising Tide is an expansion for New Bedford that includes more ships and supplies for a fifth captain, and even more buildings to expand the town. Ships at sea will have tales to tell from the Ship's Log, and while Providence favors the bold, darker Omens are also on the horizon...",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/204420"
+      },
+      "New Bedford: White Whale Promo": {
+        "adds": "The White Whale promo pack includes four new tiles that may be placed in the whaling bag. Each tile has a different effect when drawn and selected: White Whale - This whale is wily and dangerous; it has a big payout, but it will cost you a ship.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/205077"
+      }
+    }
+  },
+  "new-york-1901": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "New York 1901: Goons of New York": {
+        "adds": "New York 1901: Goons of New York is a promotional expansion pack for New York 1901 that adds five new \"Boss\" cards that give special powers to the players who control each district on the game board. Once all players in the game have reached the Silver Age, you look to see who controls the most territory of each color on the game board (with pink being excluded in two-player games).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/204242"
+      }
+    }
+  },
+  "paperback": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Paperback: Unabridged": {
+        "adds": "A modular expansion for Paperback that adds 80 new cards, new abilities, typos, and 16 new covers. Lowercase Letter Cards We're introducing a whole new type of victory card.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/225732"
+      }
+    }
+  },
+  "power-grid": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Power Grid: Benelux/Central Europe": {
+        "adds": "Two new expansion maps for Power Grid: Benelux on one side and Central Europe on the other. Along with the maps are small rule changes to reflect the power culture in these two countries.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/25031"
+      },
+      "Power Grid: The Robots": {
+        "adds": "You finally have a new opponent for your Power Grid games: a robot that acts as an additional player. Thanks to his different actions and special abilities he is a strong opponent.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/108667"
+      }
+    }
+  },
+  "queendomino": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Kingdomino: Age of Giants": {
+        "adds": "The giants have come to Kingdomino! And they will crush all your precious buildings if you can't find a way to send them off to one of your opponents' kingdoms.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/240909",
+        "players": "Allow a fifth player to join the game."
+      }
+    }
+  },
+  "rivals-for-catan": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Rivals for Catan: Age of Darkness": {
+        "adds": "The Rivals for Catan: Age of Darkness, a 90-card expansion for The Rivals for Catan, includes three separate theme sets that can be used with the base game: The Era of Intrigue – You will witness the confrontation of followers of new and old beliefs and take part to determine Catan's spiritual balance.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/93401"
+      },
+      "Rivals for Catan: Age of Enlightenment": {
+        "adds": "The Rivals for Catan: Age of Enlightenment contains three expansion sets (125 Cards Total) for The Rivals for Catan (released in Germany as Die Fürsten von Catan ). These theme sets – \"The Era of Explorers\", \"The Era of Sages\", and \"The Era of Prosperity\" – offer new variety for the base game and bring new elements into play.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/127437"
+      }
+    }
+  },
+  "robinson-crusoe-adventures-on-the-cursed-island-collectors-edition-gamefound-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Robinson Crusoe: Adventures on the Cursed Island – Mystery Tales": {
+        "adds": "Robinson Crusoe: Mystery Tales is the second big expansion for Robinson Crusoe: Adventures on the Cursed Island. Unlike its predecessor, it not only includes a campaign (titled \"The Lost City of Z\") in which you follow great explorer Lieutenant Colonel Percy Fawcett, but also a full set of rules and components that can be played with the base game of Robinson Crusoe, along with two standalone scenarios.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/238391"
+      },
+      "Robinson Crusoe: Adventures on the Cursed Island – Treasure Chest": {
+        "adds": "Treasure Chest is a special expansion including a complete set of Robinson Crusoe promos that have been released up to 2020, thereby giving players an enormous amount of content and variability to the game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/304337"
+      }
+    }
+  },
+  "rush-m-d": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Rush M.D.: ICU": {
+        "adds": "You and your fellow doctors have been working tirelessly treating patients all this time and you have helped your new Medical Center to acquire a good reputation and expand more! But now, with the Medical Center opening an Intensive Care Unit and 4 new Examination Clinics, the pressure is even higher for the doctors to work together in order to save lives and treat everyone quickly but also efficiently.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/307299"
+      }
+    }
+  },
+  "santorini-second-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Hiding in the Underworld": {
+        "adds": "Santorini: Hiding in the Underworld contains 17 characters: Arachne Cerberus Charon Chronus Hades Hecate Hypnus Mnemosyne Moerae Morpheus Nemesis Orpheus & Eurydice Persephone Phobos Sisyphus Tartarus Typhon It also contains 2 mode cards: Nyx's Veil Manticore's Shadow.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/432117"
+      },
+      "Seasons of Chaos": {
+        "adds": "Santorini: Seasons of Chaos contains 17 characters: Adonis Antaeus Asklepios Graeae Hestia Hydra Jason Khione Kratos Maenads Medea Pandora Prometheus Terpsichore Theseus Tyche Urania It also contains 2 mode cards: The Golden Fleece Chaos Reigns.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/432115"
+      },
+      "Soaring over Olympus": {
+        "adds": "Santorini: Soaring over Olympus contains 17 characters: Aeolus Aloadae Boreas Daedalus Eirene Europa & Talus Gryphus Harpies Helios Heracles Hermes Hesperides Nike Pleiades Polyhymnia Selene Stymphalians It also contains 2 mode cards: Harmonia's Test Chimera's Flight.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/432112"
+      },
+      "Tides of Poseidon": {
+        "adds": "Santorini: Tides of Poseidon contains 17 characters: Achilles Agamemnon Ares Charybdis Clio Echo Enodia Gaea Hephaestus Hippolyta Melpomene Moros Odysseus Poseidon Proteus Pythia Siren It also contains 2 mode cards: Circe's Curse Trojan War.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/432114"
+      }
+    }
+  },
+  "scythe": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Scythe: Encounters": {
+        "adds": "In June 2018, Scythe fans were invited to make a design for ONE encounter card using specific art. Jamey reviewed the submissions, selected his favorites (often mixing and matching various submissions), and developed them.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/262151",
+        "firstPlay": "We recommend that you play with them on their own for a few games; after that you can shuffle them into the regular encounter deck."
+      }
+    }
+  },
+  "sequoia": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "10-Minute Games: Expansions": {
+        "adds": "Up the fun on the three small games by adding the expansion pack which increases player counts and adds special variables. The Mountain Goat expansion pack adds more components for a fifth player and \"The Big Mountain\" expansion.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/326972",
+        "players": "The Mountain Goat expansion pack adds more components for a fifth player and \"The Big Mountain\" expansion."
+      }
+    }
+  },
+  "shadows-over-camelot": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Shadows over Camelot: Merlin's Company": {
+        "adds": "From DOW blog Merlin's Company is an expansion for the popular Shadows over Camelot board game. It introduces a host of new characters - including 7 new knights and Merlin himself - to the Shadows over Camelot epic.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/35704",
+        "players": "The Merlin's Company expansion supports up to 8 players, including 2 possible Traitors, assuring that even the most innocuous Shadows over Camelot Quest will be filled with grave peril."
+      }
+    }
+  },
+  "smash-up": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Smash Up: All Stars": {
+        "adds": "This deck is included in the Smash Up: All-Stars Event Kit as a prize for players who participate in games and tournaments run by retail outlets that use this kit. Smash Up: All Stars (as well as Geek and Sundry Geeks (\"The Geeks\")) faction will also be included in the Smash Up: The Bigger Geekier Box.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/220266"
+      },
+      "Smash Up: Goblins": {
+        "adds": "Goblins come to Smash Up, and bring all that glitters! The goblins desire for gold and jewels might blind them to all the dangers associated with mining, but boy when it pays off...",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/322233"
+      },
+      "Smash Up: Knights of the Round Table": {
+        "adds": "The Knights of the Round Table are going questing! Their search for the Holy Grail will take them from base to base, as they complete quests that will help bring you closer to victory!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/344066"
+      },
+      "Smash Up: Penguins": {
+        "adds": "Smash Up: Penguins is a single faction for Smash Up. First available at Gen Con 2019 then worldwide through the online AEG store.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/285585"
+      },
+      "Smash Up: Sheep": {
+        "adds": "Smash Up: Sheep is a single faction promotional item that publisher AEG is distributing to people who complete a survey about the Smash Up game line and signed up for the Smash Club newsletter. The minions in the sheep faction obediently and harmlessly follow other minions around from base to base — then they mercilessly crush their opponents with a wave of minions no one can stop.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/220188"
+      },
+      "Smash Up: Teens": {
+        "adds": "Don't you forget about them! The Teens are here to take part in all the radical action from the 80s.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/400087"
+      },
+      "Smash Up: The Bigger Geekier Box": {
+        "adds": "The box of the original Core Set could only accommodate the first 3 sets (up through The Obligatory Cthulhu Set), so The Big Geeky Box was created to accommodate more sets. But The Big Geeky Box will eventually run out of space, especially when you sleeve all the cards.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/247898"
+      },
+      "Smash Up: Titans": {
+        "adds": "This is a promotional pack of cards (plastic card dividers) included in the Smash Up: Titan Event Kit. These cards copy the Titan card mechanic, introduced in Smash Up: Big In Japan, for other factions.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/255207"
+      }
+    }
+  },
+  "space-cadets-dice-duel": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Space Cadets: Dice Duel – Die Fighter": {
+        "adds": "Space Cadets: Dice Duel – Die Fighter brings two new experiences to the Dice Duel universe to give veterans a whole new way to play: Fighters are flown by a single person and are fast and maneuverable, but lack shields and can be easily destroyed. In \"Carrier Strike\", suitable for 6-10 players, each team gets one original ship (now called a Capital Ship) and one fighter.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/155072"
+      }
+    }
+  },
+  "spirit-island": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Spirit Island: Branch & Claw": {
+        "adds": "The Branch & Claw Expansion for Spirit Island features: Two new Spirits! (Sharp Fangs Behind the Leaves and Keeper of the Forbidden Wilds) A new Adversary!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/193065"
+      },
+      "Spirit Island: Promo Pack 1": {
+        "adds": "Includes two Spirit Mats and eight Unique Power cards. When in print, it is available directly from Greater Than Games.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/232394"
+      },
+      "Spirit Island: Jagged Earth": {
+        "adds": "The battle against the colonizing invaders rages on! Known Spirits adopt different Aspects to battle the Invaders, and new Spirits join the fray.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/262722",
+        "combines": "No other expansions are required to use it, though it is best balanced when combined with the Branch & Claw expansion."
+      },
+      "Spirit Island: Promo Pack 2": {
+        "adds": "This is a promo pack that includes: Spirit: Finder of Paths Unseen Spirit: Downpour Drenches the World Adversary: Kingdom of Scotland 5 New Aspect Cards 5 New Fear Cards 2 New Scenarios.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/263778"
+      },
+      "Horizons of Spirit Island": {
+        "adds": "Horizons of Spirit Island is a stand alone, entry level, streamlined playing experience for those playing a Spirit Island game for the first time. It uses the same mechanics as Spirit Island but features a new double-sided game board with a streamlined set-up, punchboard components, and five new Spirits.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/367498",
+        "combines": "Horizons of Spirit Island is compatible with the Spirit Island core game and expansions. When more than one expansion is in the game, Horizons pieces are marked in that rulebook.",
+        "combinesSource": "Rulebook"
+      },
+      "Spirit Island: Nature Incarnate": {
+        "adds": "When white-sailed ships reach our coastal waters, when would-be colonizers step foot onto the unblighted shores, when they raise blade and plow to claim the land with greed and hunger, nature stirs. When Invaders strike out at the heart of the Island, they draw the attention of Spirits of myth and legend and face power unimaginable.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/365137"
+      }
+    }
+  },
+  "squire-for-hire-mystic-runes": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Squire for Hire: Luna": {
+        "adds": "Luna, the Necromancer's Acolyte, is a platypus squire. Unique traits: - +1 magic Item Value - Skulls are worth 1 point each when adjacent to a magic item. - Adjacent spellbooks and potions are worth 1 point. - Adjacent crystal balls and rings are worth 2 points.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/298360"
+      },
+      "Squire for Hire: Squire Pack 1": {
+        "adds": "Expand your selection of loot-hauling squires with Squire Pack 1, the first character expansion pack for Squire for Hire and Squire for Hire: Mystic Runes. This pack includes 18 new Squire cards with a range of new item combinations and abilities to help manage your junk and give you a lot more variability with each play.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/305600"
+      }
+    }
+  },
+  "star-realms-colony-wars": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Star Realms: Crisis – Bases & Battleships": {
+        "adds": "Star Realms: Crisis – Bases & Battleships, an expansion pack for Star Realms, includes a powerful new ship for each faction, along with eight additional ships and bases to add even more variation to your trade deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/166702"
+      },
+      "Star Realms: Crisis – Events": {
+        "adds": "Star Realms: Crisis – Events, an expansion pack for Star Realms, adds a new card type to the game: events. When an event enters the trade row, it immediately shakes up the game, destroying bases, letting players draw extra cards, and more!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/166707"
+      },
+      "Star Realms: Crisis – Fleets & Fortresses": {
+        "adds": "Star Realms: Crisis – Fleets & Fortresses, an expansion pack for Star Realms, is for those players who like to stock their side of the board with behemoth bases. This expansion pack is loaded with a powerful new base for each faction, as well as eight new ships with a variety of cool abilities.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/166704"
+      },
+      "Star Realms: Crisis – Heroes": {
+        "adds": "Star Realms: Crisis – Heroes, an expansion pack for Star Realms, adds a new card type to the game: heroes. Unlike other Star Realms cards, heroes enter play as soon as they're purchased!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/166708"
+      },
+      "Star Realms: Federal Transport": {
+        "adds": "Promo Card for Star Realms Cost: 2 (Blue) 1 buy and 5 health Blue: 2 buy.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/255240"
+      },
+      "Star Realms: Gambit Set": {
+        "adds": "This Star Realms expansion contains 18 new cards! 2 Solo Challenge cards allowing for solitaire play.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/158957"
+      },
+      "Star Realms: Merc Battlecruiser Promo Card": {
+        "adds": "Promo Card for Star Realms. Comes with the Star Realms Cardbox by Legion Supplies.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/231021"
+      },
+      "Star Realms: Pact Cutter Promo Card": {
+        "adds": "Star Realms: Pact Cutter Promo Card is a Blob/Trade Federation Ship promo card for use with Star Realms.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/258592"
+      },
+      "Star Realms: Promo Pack I": {
+        "adds": "Set of \"Year One\" Star Realms Promo Cards plus Mercenary Garrison and Security Craft (which is a Trade Federation promo card originally made for Dice Tower) 2x Battle Screecher 1x Breeding Site 2x Starmarket 1x Megahauler 2x Fortress Oblivion 1x The Ark 2x Battle Barge 1x Starbase Omega 2x Security Craft 1x Mercenary Garrison Note: These promo cards have alternate art from the versions released separately.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/203074"
+      }
+    }
+  },
+  "steam-park": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Steam Park: Essen Special Cards": {
+        "adds": "This is a set of two cards with different winnings for the number of Small Rides and for the number of Medium Rides in your park. It was given to the buyers of the game at Essen 2013.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/150153"
+      }
+    }
+  },
+  "stockpile": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Stockpile: Continuing Corruption": {
+        "adds": "Stockpile: Continuing Corruption, the first expansion for Stockpile, the critically acclaimed stock market game of insider trading, contains four expansion modules that can be played separately or used all together for more strategic game play. Module 1: Forecast Dice — Six custom dice offer more excitement by changing the market forecast round-to-round.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/195034"
+      }
+    }
+  },
+  "stroganov": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Stroganov: Turukhan": {
+        "adds": "Return to the vast Siberian wilderness in this expansion for Stroganov. This expansion consists of 4 different modules.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/387401"
+      }
+    }
+  },
+  "suburbia": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Suburbia: Con Tiles": {
+        "adds": "These tiles are fully compatible with the Suburbia base game, while also including stars to work with the Suburbia 5★ expansion. This expansion includes tiles for: Kublacon (San Francisco, CA, USA / Memorial Day weekend, May) Dice Tower Con (Orlando, FL, USA / June) Gen Con (Indianapolis, IN, USA / Late July/Early August) Essen Spiel (Essen, Germany / October) BGG.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/176806"
+      }
+    }
+  },
+  "suburbia-collectors-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Suburbia: Collector's Edition – Man vs. Meeple Studios": {
+        "adds": "Originally available as part of the Kickstarter for the Suburbia: Collector's Edition. Later this tile was part of Man vs Meeple Season 3 Kickstarter.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/290858"
+      },
+      "Suburbia: Collector's Edition – Sax Serenade Jazz Club": {
+        "adds": "This tile is also available in Suburbia: Nightlife Promo Tiles and Suburbia: Expansions (Second Edition). -$2 for every Office tile.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/275850"
+      },
+      "Suburbia: Collector's Edition – Tantrum House": {
+        "adds": "This tile is also available in Suburbia: Nightlife Promo Tiles and Suburbia: Expansions (Second Edition). -1 reputation for every restaurant.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/277302"
+      },
+      "Suburbia: Collector's Edition – The Dice Towers": {
+        "adds": "This tile is also available in Suburbia: Nightlife Promo Tiles and Suburbia: Expansions (Second Edition). -1 income for every school.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/277303"
+      }
+    }
+  },
+  "survive-escape-from-atlantis": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Survive: Dolphins & Squids & 5-6 Players...Oh My!": {
+        "adds": "Survive: Dolphins & Squids & 5-6 Players... Oh My! is a collection of three mini-expansions for Survive: Escape from Atlantis! that were previously available separately.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/177156",
+        "players": "For 5–6 players."
+      }
+    }
+  },
+  "tang-garden": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Tang Garden: Apricot Tree": {
+        "adds": "The Apricot can be added to the base game, to any Golden Age and Ghost Stories scenario. At the end of the game the Apricot can be considered as an additional tree for a set-collection, which can be composed by a maximum of 5 trees.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/267249"
+      },
+      "Tang Garden: Ghost Stories": {
+        "adds": "This expansion is inspired by ghost stories from Chinese literature. There are different elements that will bring more interaction between players in intriguing ways.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/267245"
+      },
+      "Tang Garden: Golden Age": {
+        "adds": "The Golden Age is an expansion for ThunderGryph Games' Tang Garden. This expansion contains several of the stretch goals from the Tang Garden Kickstarter.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/270753"
+      },
+      "Tang Garden: Seasons": {
+        "adds": "The roofs of the villages of the Tang Dynasty are the first to notice the slightest temperature changes and the passing of time. The wind blows, raising dry leaves that fly before the snow covers every architecture.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/354718"
+      },
+      "Tang Garden: The Herbalist": {
+        "adds": "Chinese herbal medicine advanced brilliantly during the Tang Dynasty. Imperial medical colleges were built, state examinations for doctors were held, and the \"Materia Medica\", a complete medical encyclopedia, with text and illustrations about almost one thousand medical substances, was released during the period.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/285244"
+      },
+      "Tang Garden: The Swan": {
+        "adds": "The Swan can be added to the base game, to any Golden Age and Ghost Stories scenario. At the end of the game the Swan can be considered as any Decoration card of your choice.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/267248"
+      },
+      "Tang Garden: The Wayfarer": {
+        "adds": "Character's Skill: Once per turn, the player may go back a level of an element in their personal board to advance one level on another of their elements. The wayfarer can't go back a level on one element if it is on a bonus space (coins or character).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/267247"
+      }
+    }
+  },
+  "tang-garden-big-box": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Tang Garden: Golden Cat": {
+        "adds": "Get 5 points at the end of a game of Tang Garden for the rare (unique, in fact!) Golden Cat. You can add this exciting, opportunistic decoration to any game mode.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/427779"
+      }
+    }
+  },
+  "tekhenu-obelisk-of-the-sun": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Tekhenu: Time of Seth": {
+        "adds": "With the power and splendor of Egypt increasing, its influence now reaches far beyond its borders. Seth, the god of conflict, demands that you subdue Canaan, and wage war on the mighty Hittite Empire.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/341943"
+      }
+    }
+  },
+  "the-7th-continent": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The 7th Continent: Facing the Elements": {
+        "adds": "Snowstorms, tornadoes, scorching heat. Face the elements and hope they are on your side!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/186987"
+      },
+      "The 7th Continent: Path of Repentance": {
+        "adds": "The Path of Repentance is the first add on pack for the 7th Continent and contains 30 cards that put you up against an adversary that not even the most proficient adventurer can escape: Time itself.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/185743"
+      },
+      "The 7th Continent: Swamp of Madness": {
+        "adds": "The savages call it A'hemDaar. Its name is spoken by them with fear and is seen as a bad omen.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/184904"
+      },
+      "The 7th Continent: The Forbidden Sanctuary": {
+        "adds": "Those that built this temple made sure that nobody would come and disturb their precious treasure. You'd best know some of its secrets before setting foot inside or each step could be your last.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/184186"
+      },
+      "The 7th Continent: The Icy Maze": {
+        "adds": "Explore lands where no other explorer has yet set foot. Is this cold, brutal land inhabited?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/183660"
+      },
+      "The 7th Continent: What Goes Up, Must Come Down": {
+        "adds": "The Expansion What Goes Up, Must Come Down invites you to come and discover, or perhaps return to, The 7th Continent for some fresh adventures! Two new curses are waiting, each with their own unique gameplay elements, for you to discover.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/236206"
+      }
+    }
+  },
+  "the-castles-of-burgundy": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The Castles of Burgundy: 8th Expansion – Trade Routes": {
+        "adds": "The Castles of Burgundy: Trade Routes is a small expansion for The Castles of Burgundy included in the Notre Dame: 10th Anniversary game and possibly available separately. Each player receives a number of cards depending on the number of players.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/214005"
+      }
+    }
+  },
+  "the-gallerist": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The Gallerist: KS Stretch Goal Pack #2": {
+        "adds": "Small expansion for The Gallerist. Originally only included in the Kickstarter-Version of the game, but also sold separately.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/193148"
+      },
+      "The Gallerist: Scoring Expansion": {
+        "adds": "This expansion brings variability to the Intermediate Scoring that is otherwise the same every game. When this phase begins, players may score none, some, or all of the 3 pre-determined tiles instead of the usual Intermediate Scoring.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/256676"
+      }
+    }
+  },
+  "the-lord-of-the-rings-the-card-game": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The Lord of the Rings: The Card Game – Khazad-dûm": {
+        "adds": "The first deluxe expansion for The Lord of the Rings: The Card Game, Khazad-dûm transports you to the ancient realm of the Dwarves with 165 new cards (with three copies each of its player cards), including new scenarios, encounter sets, heroes, allies, attachments, and events.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/107933"
+      }
+    }
+  },
+  "the-lost-expedition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The Lost Expedition: The Fountain of Youth & Other Adventures": {
+        "adds": "The Lost Expedition: The Fountain of Youth & Other Adventures expands the base game with four new, modular additions. In The Fountain of Youth & Other Adventures, Francisco de Orellana and his band of conquistadors traveled deep into the Amazon and were never seen again.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/248181"
+      }
+    }
+  },
+  "the-networks-primetime": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "The Networks: On the Air": {
+        "adds": "A mini-expansion for The Networks, consisting of cards unlocked by Kickstarter stretch goals. Contents: 7 new Season 4-5 Shows 7 new Stars 8 new Network Cards (2 copies of 4 cards) 2 new Ads 6 blank Season 2-3 Shows 1 blank Star 1 sticker sheet with stickers for the turn order and score markers.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/194003"
+      }
+    }
+  },
+  "things-in-rings": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Things in Rings: Pop Culture Promo Pack": {
+        "adds": "30 extra Thing cards related to our favorite objects in cinema, fantasy, comics, and more. Expand your gameplay and enjoy more great art, for cards like: Hoverboard Mjölnir Starfighter Ring Necronomicon.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/426189"
+      }
+    }
+  },
+  "ticket-to-ride-europe": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Ticket to Ride Map Collection 1: Asia + Legendary Asia": {
+        "adds": "Days of Wonder's Ticket to Ride Map Collection is a series of expansions for Alan R. Moon's Ticket to Ride, with most expansion including a double-sided game board and destination tickets and rules for those locations.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/106637"
+      },
+      "Ticket to Ride Map Collection 2: India & Switzerland": {
+        "adds": "Days of Wonder's Ticket to Ride Map Collection is a series of expansions for Alan R. Moon's Ticket to Ride, with each expansion including a double-sided game board and destination tickets and rules for those locations.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/106645"
+      },
+      "Ticket to Ride: Europa 1912": {
+        "adds": "The Ticket to Ride Europa 1912 expansion for the Ticket to Ride series includes 101 Destination Tickets - the 46 original tickets, plus 55 new ones that enable 3 new variants to the Ticket to Ride Europe map: Europe Expanded, which adds 19 new routes to the original 46; Big Cities of Europe, with tickets to 9 major European cities.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/53383"
+      }
+    }
+  },
+  "tiny-epic-western": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Tiny Epic Western: Kickstarter Deluxe Promo Pack": {
+        "adds": "This promo pack includes 4 new Boss Cards: the Lawman, the Bounty Hunter, the Apothecary, and the Entertainer. It also includes 2 additional Bullet Dice (Blue and Green) and a plastic windowed Wanted Card that lays over the Boss Cards for a more thematic immersion.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/211691"
+      },
+      "Tiny Epic Western: The Tycoon": {
+        "adds": "New boss card made available as an Essen 2016 Promo Text reads: At the end of phase four gain XX if you did not buy a building card at any point in the round. \"Rough times at the table?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/211240"
+      }
+    }
+  },
+  "two-rooms-and-a-boom": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Two Rooms and a Boom: Necroboomicon Expansion Pack": {
+        "adds": "The Necroboomicon Expansion Pack for Two Rooms and a Boom comes in a foil pack with characters designed as \"Hard Mode\". Lovecraft Cthulhu theme, players wrestle with fear and suspicion.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/219444"
+      }
+    }
+  },
+  "tzolkin-the-mayan-calendar": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Tzolk'in: The Mayan Calendar – Tribes & Prophecies": {
+        "adds": "In Tzolk'in: The Mayan Calendar - Tribes & Prophecies, each player now becomes the leader of a particular tribe, each of which has a special ability that only that player can use. The game includes 13 tribes to provide plenty of variety.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/143065",
+        "players": "(Woohoo, 13 again!) This expansion also has new buildings and components that allow up to five players to compete."
+      }
+    }
+  },
+  "unmatched": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Battle of Legends, Vol. 1": {
+        "adds": "Unmatched is a highly asymmetrical miniature fighting game for two or four players. Each hero is represented by a unique deck designed to evoke their style and legend.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/274637"
+      },
+      "Houdini vs. the Genie": {
+        "adds": "Unmatched is a highly asymmetrical miniature fighting game for two or four players. Each hero is represented by a unique deck designed to evoke their style and legend.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/354544"
+      },
+      "Brains and Brawn": {
+        "adds": "Unmatched: Brains and Brawn, the fifth and final Unmatched Marvel set, features some of Marvel's hottest heroes: Spider-Man, Dr. Spidey swings around the battlefield, using his spider-sense to keep him safe.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/383467"
+      },
+      "Stars and Stripes": {
+        "adds": "A homage to the folklore and legends of American history, Unmatched: Stars and Stripes features three fighters from the Unmatched design contest. Rosie the Riveter is the final winning entry from the Unmatched deck design contest with John Henry, and George Washington as runners up.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/451527"
+      },
+      "Tales to Amaze": {
+        "adds": "Unmatched Adventures: Tales to Amaze, which is themed around the pulp adventures, tall tales, and local legends of the mid-20th century, gives you a whole new way to play Unmatched. In the game, players work together to defeat one of two villains: Mothman or the Martian Invader.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/381297",
+        "firstPlay": "Villain Choose Mothman or the Martian Invader. The book recommends Mothman for a first game. Use that villain's side of the board.",
+        "firstPlaySource": "Rulebook"
+      }
+    }
+  },
+  "vinhos": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Vinhos: The Advertisers": {
+        "adds": "Advertising your wines gives you an advantage over your opponents as the advertisers help convince managers to help you in your quest to be the best wine producer because you obviously have the best wines! The Advertisers, a micro-expansion for Vinhos, adds four new wine expert tiles to the base game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/163274"
+      }
+    }
+  },
+  "viral": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Viral: The Hive": {
+        "adds": "Have you conquered the body in Viral? Are you ready to turn up the heat?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/328560"
+      }
+    }
+  },
+  "windmill-valley": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Windmill Valley: Blooming Sails": {
+        "adds": "As the demand for tulips steadily grows, so does your desire to expand. You begin to envision new markets, new homes for your prized bulbs.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/434507"
+      }
+    }
+  },
+  "wingspan-asia": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Wingspan: Americas Expansion": {
+        "adds": "This fourth Wingspan expansion explores the birds of Mexico, Central America, South America, and the Caribbean. This incredibly biodiverse and abundant region is home to more than 3,000 bird species, including the birds with the smallest and largest wingspans in the world (the Bee Hummingbird and Snowy Albatross, respectively).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/461932"
+      },
+      "Wingspan: European Expansion": {
+        "adds": "In this first expansion to Wingspan, we increase the scope of the world to include the regal, beautiful, and varied birds of Europe. These birds feature a variety of new abilities, including a number of birds with round end abilities, abilities that increase interaction between players, and birds that benefit from excess cards/food.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/290448"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – Additional Asian Avians": {
+        "adds": "This pack features 25 completely new birds primarily found in Asia (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455581"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – Birds of Canada": {
+        "adds": "This pack features 25 completely new birds primarily found in Canada (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455579"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – Birds of Continental Europe": {
+        "adds": "This pack features 25 completely new birds primarily found in Continental Europe (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455576"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – Birds of New Zealand": {
+        "adds": "This pack features 25 completely new birds primarily found in New Zealand (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455580"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – Birds of the U.S.A.": {
+        "adds": "This pack features 25 completely new birds primarily found in the U. (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455577"
+      },
+      "Wingspan: Fan-Designed Bird Promo Pack – British Birds": {
+        "adds": "This pack features 25 completely new birds primarily found in Great Britain (a region already covered by Wingspan, but not with these birds).",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/455578"
+      },
+      "Wingspan: Oceania Expansion": {
+        "adds": "Wingspan: Oceania Expansion focuses on birds in Australia and New Zealand. It's designed by Elizabeth Hargrave and features birds illustrated by Natalia Rojas and Ana Maria Martinez.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/300580",
+        "combines": "The Oceania bird cards are designed to be shuffled into the bird cards from the base game, with or without other expansions."
+      }
+    }
+  },
+  "word-on-the-street": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Word on the Street: Expansion 1": {
+        "adds": "Word on the Street: Expansion 1 includes 216 new double-sided category cards (as well as an additional timer) for use with the Word on the Street base game. For those not familiar with the game, in Word on the Street, players - either individually or in teams – try to claim letter tiles from the game board.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/112384"
+      }
+    }
+  },
+  "dune-imperium-uprising": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "CHOAM Module": {
+        "adds": "Adds 20 contracts, four extra intrigue cards, and four extra Imperium cards. Shaddam Corrino IV may be chosen.",
+        "source": "Rulebook"
+      }
+    }
+  },
+  "sea-salt-and-paper-includes-expansions-extra-salt-and-extra-pepper": {
+    "storedInBaseBox": true,
+    "expansions": {
+      "Extra Salt": {
+        "adds": "During setup, shuffle the new cards together with those from the standard game.",
+        "source": "Rulebook",
+        "sourceUrl": "https://studiobombyx.com/assets/EXTRA_SALT_rules_EN.pdf"
+      },
+      "Extra Pepper": {
+        "adds": "Shuffle the 12 event cards facedown to form the event deck. At the start of each round, reveal the top card to see which special rule applies to everyone that round.",
+        "source": "Rulebook",
+        "sourceUrl": "https://studiobombyx.com/assets/EXTRAPEPPER_rules_EN.pdf"
+      }
+    }
+  }
+}
