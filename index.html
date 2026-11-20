@@ -158399,7 +158399,7 @@
     var raw = (window.location.hash || "").replace(/^#\/?/, "");
     var bits = raw.split("?");
     var hashPath = bits[0] || "";
-    var params = new URLSearchParams(bits[1] || "");
+    var hashParams = new URLSearchParams(bits[1] || "");
     var routed = gameRoute(fromPath);
     if (hashPath === "teach") {
       return {
@@ -158407,13 +158407,18 @@
         slug: routed.slug,
         expansions: routed.expansions,
         teachQuery: {
-          has: params.has("count") || params.has("exps") || params.has("chars") || params.has("setup"),
-          count: params.get("count"),
-          exps: params.getAll("exps"),
-          chars: params.getAll("chars"),
-          setup: params.get("setup") || ""
+          has: hashParams.has("count") || hashParams.has("exps") || hashParams.has("chars") || hashParams.has("setup"),
+          count: hashParams.get("count"),
+          exps: hashParams.getAll("exps"),
+          chars: hashParams.getAll("chars"),
+          setup: hashParams.get("setup") || ""
         }
       };
+    }
+    var searchParams = new URLSearchParams(window.location.search || "");
+    var params = searchParams;
+    if (!readDetailSelectionParams(searchParams).has && !searchParams.has("action") && bits[1]) {
+      params = hashParams;
     }
     return {
       route: "detail",
