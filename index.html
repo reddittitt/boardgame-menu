@@ -281,35 +281,80 @@
     border-color:transparent;
   }
   .catalog-filters {
+    margin:6px 0 8px;
+    min-width:0;
+    max-width:100%;
+  }
+  .catalog-filter-head {
     display:flex;
-    flex-wrap:wrap;
+    align-items:center;
     gap:8px;
-    margin:8px 0 10px;
     min-width:0;
   }
-  .catalog-filter {
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    flex:1 1 9rem;
-    min-width:0;
-    font-size:0.75rem;
-    font-weight:700;
-  }
-  .catalog-filter[hidden] { display:none; }
-  .catalog-filter select {
-    width:100%;
-    min-width:0;
-    min-height:44px;
-    padding:8px 10px;
-    border-radius:10px;
+  .filter-toggle,
+  .catalog-clear,
+  .filter-chip {
+    appearance:none;
     border:1px solid var(--btn-border);
     background:var(--btn);
     color:inherit;
+    border-radius:999px;
+    padding:0 12px;
+    min-height:44px;
     font:inherit;
-    font-size:max(1rem, 16px);
+    font-size:16px;
     font-weight:600;
+    line-height:1.15;
+    cursor:pointer;
+    flex:0 0 auto;
     box-sizing:border-box;
+  }
+  .filter-summary {
+    margin:0;
+    min-width:0;
+    flex:1 1 auto;
+    color:var(--muted);
+    font-size:16px;
+    font-weight:600;
+    line-height:1.25;
+  }
+  .filter-summary:empty { display:none; }
+  .catalog-filters:has(#filter-toggle[aria-expanded="true"]) .filter-summary { display:none; }
+  .catalog-filter-panel {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin-top:4px;
+    min-width:0;
+  }
+  .catalog-filter-panel[hidden],
+  .catalog-facet[hidden],
+  .catalog-clear[hidden],
+  .filter-chip[hidden] { display:none; }
+  .catalog-facet {
+    display:flex;
+    align-items:flex-start;
+    gap:8px;
+    min-width:0;
+  }
+  .catalog-facet-label {
+    flex:0 0 4.6rem;
+    padding-top:12px;
+    font-size:16px;
+    font-weight:700;
+    color:var(--muted);
+  }
+  .catalog-chips {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    min-width:0;
+    flex:1 1 auto;
+  }
+  .filter-chip[aria-pressed="true"] {
+    background:var(--brand);
+    color:#ffffff;
+    border-color:transparent;
   }
   .empty-note {
     grid-column:1 / -1;
@@ -1073,7 +1118,10 @@
   .btnlink:focus-visible,
   header .toggle:focus-visible,
   .all-games-bar a.home:focus-visible,
-  #search-clear:focus-visible {
+  #search-clear:focus-visible,
+  .filter-toggle:focus-visible,
+  .catalog-clear:focus-visible,
+  .filter-chip:focus-visible {
     outline:3px solid var(--brand);
     outline-offset:2px;
   }
@@ -2400,6 +2448,41 @@
   }
   :root[data-look="hig"] .pc-btn[data-active="true"]::before,
   :root[data-look="hig"] .exp-chip[data-active="true"]::before {
+    content:"";
+    background:var(--accent);
+  }
+  /* Catalog filters use the same blue pill. Selected text stays white, with no checkmark. */
+  :root[data-look="hig"] .filter-chip,
+  :root[data-look="hig"] .filter-toggle,
+  :root[data-look="hig"] .catalog-clear {
+    position:relative;
+    z-index:0;
+    background:transparent;
+    border:0;
+    color:var(--fg);
+    font-weight:500;
+    box-shadow:none;
+  }
+  :root[data-look="hig"] .filter-chip::before,
+  :root[data-look="hig"] .filter-toggle::before,
+  :root[data-look="hig"] .catalog-clear::before {
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:0;
+    right:0;
+    top:50%;
+    height:32px;
+    transform:translateY(-50%);
+    border-radius:999px;
+    background:var(--hig-fill);
+  }
+  :root[data-look="hig"] .filter-chip[aria-pressed="true"] {
+    background:transparent;
+    border-color:transparent;
+    color:#ffffff;
+  }
+  :root[data-look="hig"] .filter-chip[aria-pressed="true"]::before {
     content:"";
     background:var(--accent);
   }
@@ -134701,6 +134784,100 @@
     return true;
   }
 
+  var FILTER_KEY = "bgq_filters";
+  var PLAYER_PICKS = { "1": 1, "2": 1, "3": 1, "4": 1, "5": 1, "6": 1, "7": 1 };
+  var TIME_PICKS = { under30: 1, "30-60": 1, "60-120": 1, "120": 1 };
+  var WEIGHT_PICKS = { light: 1, "medium-light": 1, medium: 1, "medium-heavy": 1, heavy: 1 };
+
+  function emptyFilters() {
+    return { players: "", best: false, time: "", weight: "", q: "" };
+  }
+  function cleanFilters(raw) {
+    raw = raw || {};
+    var next = emptyFilters();
+    var players = String(raw.players == null ? "" : raw.players);
+    var time = String(raw.time == null ? "" : raw.time);
+    var weight = String(raw.weight == null ? "" : raw.weight);
+    if (PLAYER_PICKS[players]) next.players = players;
+    if (TIME_PICKS[time]) next.time = time;
+    if (WEIGHT_PICKS[weight]) next.weight = weight;
+    next.best = raw.best === true || raw.best === 1 || raw.best === "1";
+    next.q = String(raw.q == null ? "" : raw.q);
+    return next;
+  }
+  function readStoredFilters() {
+    try {
+      var raw = sessionStorage.getItem(FILTER_KEY);
+      return raw ? cleanFilters(JSON.parse(raw)) : emptyFilters();
+    } catch (e) {
+      return emptyFilters();
+    }
+  }
+  function filtersFromHash() {
+    var hash = window.location.hash || "";
+    if (hash.indexOf("?") < 0) return null;
+    var params = new URLSearchParams(hash.split("?")[1] || "");
+    if (!params.has("players") && !params.has("time") && !params.has("weight") && !params.has("best") && !params.has("q")) {
+      return null;
+    }
+    return cleanFilters({
+      players: params.get("players") || "",
+      time: params.get("time") || "",
+      weight: params.get("weight") || "",
+      best: params.get("best") || "",
+      q: params.get("q") || ""
+    });
+  }
+  function writeStoredFilters(state) {
+    try { sessionStorage.setItem(FILTER_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function writeFilterHash(state) {
+    var path = (window.location.hash || "#/").replace(/^#\/?/, "").split("?")[0];
+    if (path) return;
+    var params = new URLSearchParams();
+    if (state.players) params.set("players", state.players);
+    if (state.best) params.set("best", "1");
+    if (state.time) params.set("time", state.time);
+    if (state.weight) params.set("weight", state.weight);
+    if (state.q) params.set("q", state.q);
+    var qs = params.toString();
+    var nextHash = "#/" + (qs ? "?" + qs : "");
+    var next = window.location.pathname + window.location.search + nextHash;
+    if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
+      history.replaceState(null, "", next);
+    }
+  }
+  function filtersActive(state) {
+    return !!(state.players || state.best || state.time || state.weight);
+  }
+  function filterSummary(state) {
+    var parts = [];
+    if (state.players) {
+      var count = state.players === "7" ? "7+" : state.players;
+      if (state.best) parts.push("Best at " + count);
+      else parts.push(count + (state.players === "1" ? " player" : " players"));
+    } else if (state.best) {
+      parts.push("Best at");
+    }
+    if (state.time === "under30") parts.push("Under 30 min");
+    else if (state.time === "30-60") parts.push("30\u201360 min");
+    else if (state.time === "60-120") parts.push("60\u2013120 min");
+    else if (state.time === "120") parts.push("2h+");
+    if (state.weight === "light") parts.push("Light");
+    else if (state.weight === "medium-light") parts.push("Medium-light");
+    else if (state.weight === "medium") parts.push("Medium");
+    else if (state.weight === "medium-heavy") parts.push("Medium-heavy");
+    else if (state.weight === "heavy") parts.push("Heavy");
+    return parts.join(" \u00b7 ");
+  }
+  function filterChip(facet, value, label, aria) {
+    return (
+      '<button type="button" class="filter-chip" data-facet="' + facet + '" data-value="' + value + '" aria-pressed="false" aria-label="' + aria + '">' +
+        label +
+      "</button>"
+    );
+  }
+
   function renderList() {
     detailSlug = "";
     clearGameAccent();
@@ -134715,37 +134892,59 @@
         '<button type="button" data-collection="mine" aria-pressed="' + (collectionView === "mine" ? "true" : "false") + '">My games</button>' +
       "</div>" +
       '<div class="catalog-filters">' +
-        '<label class="catalog-filter" data-facet="players">Players' +
-          '<select id="filter-players" aria-label="Player count"><option value="">Any</option></select>' +
-        "</label>" +
-        '<label class="catalog-filter" data-facet="time">Play time' +
-          '<select id="filter-time" aria-label="Play time">' +
-            '<option value="">Any</option>' +
-            '<option value="30">30 minutes or less</option>' +
-            '<option value="60">60 minutes or less</option>' +
-            '<option value="120">2 hours or less</option>' +
-          "</select>" +
-        "</label>" +
-        '<label class="catalog-filter" data-facet="weight">Weight' +
-          '<select id="filter-weight" aria-label="Weight">' +
-            '<option value="">Any</option>' +
-            '<option value="light">Light, under 2</option>' +
-            '<option value="medium">Medium, 2 to 3</option>' +
-            '<option value="heavy">Heavy, over 3</option>' +
-          "</select>" +
-        "</label>" +
+        '<div class="catalog-filter-head">' +
+          '<button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="catalog-filter-panel">Filters</button>' +
+          '<p id="filter-summary" class="filter-summary"></p>' +
+          '<button type="button" class="catalog-clear" id="catalog-clear" hidden>Clear</button>' +
+        "</div>" +
+        '<div id="catalog-filter-panel" class="catalog-filter-panel" hidden>' +
+          '<div class="catalog-facet" data-facet="players">' +
+            '<span class="catalog-facet-label" id="players-label">Players</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="players-label">' +
+              filterChip("players", "1", "1", "1 player") +
+              filterChip("players", "2", "2", "2 players") +
+              filterChip("players", "3", "3", "3 players") +
+              filterChip("players", "4", "4", "4 players") +
+              filterChip("players", "5", "5", "5 players") +
+              filterChip("players", "6", "6", "6 players") +
+              filterChip("players", "7", "7+", "7 or more players") +
+              filterChip("best", "1", "Best at", "Best at this player count") +
+            "</div>" +
+          "</div>" +
+          '<div class="catalog-facet" data-facet="time">' +
+            '<span class="catalog-facet-label" id="time-label">Time</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="time-label">' +
+              filterChip("time", "under30", "Under 30 min", "Under 30 minutes") +
+              filterChip("time", "30-60", "30\u201360", "30 to 60 minutes") +
+              filterChip("time", "60-120", "60\u2013120", "60 to 120 minutes") +
+              filterChip("time", "120", "2h+", "2 hours or more") +
+            "</div>" +
+          "</div>" +
+          '<div class="catalog-facet" data-facet="weight">' +
+            '<span class="catalog-facet-label" id="weight-label">Weight</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="weight-label">' +
+              filterChip("weight", "light", "Light", "Light weight") +
+              filterChip("weight", "medium-light", "Medium-light", "Medium-light weight") +
+              filterChip("weight", "medium", "Medium", "Medium weight") +
+              filterChip("weight", "medium-heavy", "Medium-heavy", "Medium-heavy weight") +
+              filterChip("weight", "heavy", "Heavy", "Heavy weight") +
+            "</div>" +
+          "</div>" +
+        "</div>" +
       "</div>" +
-      '<p id="search-count" class="search-count"></p>' +
+      '<p id="search-count" class="search-count" aria-live="polite"></p>' +
       '<section id="game-grid" class="grid"></section>';
 
     var grid = document.getElementById("game-grid");
     var search = document.getElementById("search");
     var clearBtn = document.getElementById("search-clear");
     var countEl = document.getElementById("search-count");
-    var playerSelect = document.getElementById("filter-players");
-    var timeSelect = document.getElementById("filter-time");
-    var weightSelect = document.getElementById("filter-weight");
+    var summaryEl = document.getElementById("filter-summary");
+    var catalogClear = document.getElementById("catalog-clear");
+    var filterToggle = document.getElementById("filter-toggle");
+    var filterPanel = document.getElementById("catalog-filter-panel");
     var gridToken = 0;
+    var state = filtersFromHash() || readStoredFilters();
 
     /* catalog-filter-parse:start */
     function blankFacet(value) {
@@ -134764,91 +134963,115 @@
       if (open) max = Math.max(max, 99);
       return { min: min, max: max, open: open };
     }
+    function countIncluded(span, pick) {
+      if (!span || !pick) return false;
+      if (String(pick) === "7") return span.max >= 7;
+      var n = parseInt(pick, 10);
+      if (!n) return false;
+      return n >= span.min && n <= span.max;
+    }
     function playMinutes(game, pickedPlayers) {
-      if (!game || blankFacet(game.time)) return null;
-      var text = String(game.time).trim();
-      var nums = text.match(/\d+(?:\.\d+)?/g);
-      if (!nums) return null;
-      var values = nums.map(Number).filter(function (n) { return isFinite(n); });
-      if (!values.length) return null;
-      var min = Math.min.apply(null, values);
-      var max = Math.max.apply(null, values);
-      if (/\bper\s+player\b/i.test(text)) {
-        var span = playerSpan(game.players);
-        var count = pickedPlayers || 0;
-        if (!count && span) count = span.open ? 12 : span.max;
-        if (!count) return null;
-        return { min: min * count, max: max * count };
+      if (!game) return null;
+      if (!blankFacet(game.time)) {
+        var text = String(game.time).trim();
+        var nums = text.match(/\d+(?:\.\d+)?/g);
+        if (nums) {
+          var values = nums.map(Number).filter(function (n) { return isFinite(n); });
+          if (values.length) {
+            var min = Math.min.apply(null, values);
+            var max = Math.max.apply(null, values);
+            if (/\bper\s+player\b/i.test(text)) {
+              var span = playerSpan(game.players);
+              var count = pickedPlayers || 0;
+              if (count) return { min: min * count, max: max * count };
+              if (!span) return null;
+              var hi = span.open ? Math.max(span.min, 12) : span.max;
+              return { min: min * span.min, max: max * hi };
+            }
+            return { min: min, max: max };
+          }
+        }
       }
-      return { min: min, max: max };
+      var bgg = game.bggTime;
+      if (!bgg || typeof bgg !== "object") return null;
+      var bmin = Number(bgg.min);
+      var bmax = Number(bgg.max);
+      if (!isFinite(bmin) || !isFinite(bmax) || bmin <= 0 || bmax < bmin) return null;
+      return { min: bmin, max: bmax };
+    }
+    /* BGG community weight bands: under 2, then 2, 2.5, 3.5, and 4. */
+    function weightBand(value) {
+      var n = typeof value === "number" ? value : parseFloat(value);
+      if (!isFinite(n)) return "";
+      if (n < 2) return "light";
+      if (n < 2.5) return "medium-light";
+      if (n < 3.5) return "medium";
+      if (n < 4) return "medium-heavy";
+      return "heavy";
+    }
+    function timeHits(span, bucket) {
+      if (!bucket) return true;
+      if (!span || !(span.min <= span.max)) return false;
+      var min = span.min;
+      var max = span.max;
+      if (bucket === "under30") return min < 30;
+      if (bucket === "30-60") return max >= 30 && min <= 60;
+      if (bucket === "60-120") return max >= 60 && min <= 120;
+      if (bucket === "120") return max >= 120;
+      return false;
     }
     /* catalog-filter-parse:end */
-    function gameWeight(game) {
-      if (game.weight == null || game.weight === "") return null;
-      var n = parseFloat(game.weight);
-      return isFinite(n) ? n : null;
-    }
-    function facetPicks() {
-      return {
-        players: playerSelect ? parseInt(playerSelect.value, 10) : NaN,
-        time: timeSelect ? parseInt(timeSelect.value, 10) : NaN,
-        weight: weightSelect ? weightSelect.value : ""
-      };
-    }
     function matchesFacets(game, picks) {
       if (picks.players) {
-        var players = playerSpan(game.players);
-        if (!players || picks.players < players.min || picks.players > players.max) return false;
+        var source = picks.best ? (game.playerPoll && game.playerPoll.best) : game.players;
+        if (!countIncluded(playerSpan(source), picks.players)) return false;
       }
       if (picks.time) {
-        var time = playMinutes(game, picks.players || 0);
-        if (!time || time.max > picks.time) return false;
+        var time = playMinutes(game, parseInt(picks.players, 10) || 0);
+        if (!timeHits(time, picks.time)) return false;
       }
       if (picks.weight) {
-        var weight = gameWeight(game);
-        if (weight == null) return false;
-        if (picks.weight === "light" && !(weight < 2)) return false;
-        if (picks.weight === "medium" && !(weight >= 2 && weight <= 3)) return false;
-        if (picks.weight === "heavy" && !(weight > 3)) return false;
+        if (weightBand(game.weight) !== picks.weight) return false;
       }
       return true;
     }
     function refreshFacetVisibility(scoped) {
       var hasPlayers = false;
+      var hasBest = false;
       var hasTime = false;
       var hasWeight = false;
-      var counts = {};
       scoped.forEach(function (game) {
-        var players = playerSpan(game.players);
-        if (players) {
-          hasPlayers = true;
-          var hi = Math.min(players.max, 12);
-          for (var n = Math.max(1, players.min); n <= hi; n++) counts[n] = true;
-        }
+        if (playerSpan(game.players)) hasPlayers = true;
+        if (playerSpan(game.playerPoll && game.playerPoll.best)) hasBest = true;
         if (playMinutes(game, 0)) hasTime = true;
-        if (gameWeight(game) != null) hasWeight = true;
+        if (weightBand(game.weight)) hasWeight = true;
       });
-      var playerFacet = playerSelect && playerSelect.closest(".catalog-filter");
-      var timeFacet = timeSelect && timeSelect.closest(".catalog-filter");
-      var weightFacet = weightSelect && weightSelect.closest(".catalog-filter");
-      if (playerFacet) playerFacet.hidden = !hasPlayers;
+      var playerFacet = document.querySelector('.catalog-facet[data-facet="players"]');
+      var timeFacet = document.querySelector('.catalog-facet[data-facet="time"]');
+      var weightFacet = document.querySelector('.catalog-facet[data-facet="weight"]');
+      var bestChip = document.querySelector('.filter-chip[data-facet="best"]');
+      if (playerFacet) playerFacet.hidden = !(hasPlayers || hasBest);
       if (timeFacet) timeFacet.hidden = !hasTime;
       if (weightFacet) weightFacet.hidden = !hasWeight;
-      if (playerSelect) {
-        var selected = playerSelect.value;
-        var options = '<option value="">Any</option>';
-        Object.keys(counts).map(Number).sort(function (a, b) { return a - b; }).forEach(function (n) {
-          options += '<option value="' + n + '">' + n + "</option>";
-        });
-        playerSelect.innerHTML = options;
-        if (counts[selected]) playerSelect.value = selected;
-      }
+      if (bestChip) bestChip.hidden = !hasBest;
+    }
+    function paintPressed() {
+      Array.prototype.forEach.call(document.querySelectorAll(".filter-chip"), function (btn) {
+        var facet = btn.getAttribute("data-facet");
+        var on = facet === "best" ? !!state.best : state[facet] === btn.getAttribute("data-value");
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (summaryEl) summaryEl.textContent = filterSummary(state);
+    }
+    function persistFilters() {
+      writeStoredFilters(state);
+      writeFilterHash(state);
     }
 
     function updateGrid(filter) {
       var token = ++gridToken;
       filter = (filter || "").toLowerCase();
-      var picks = facetPicks();
+      var picks = state;
       var scoped = Object.keys(DATA)
         .map(function(k) { return DATA[k]; })
         .filter(inCollectionView);
@@ -134876,6 +135099,8 @@
           ? (games.length + " of " + scoped.length + (collectionView === "mine" ? "" : suffix))
           : (scoped.length + suffix);
       }
+      paintPressed();
+      if (catalogClear) catalogClear.hidden = !filtersActive(state);
       if (clearBtn) clearBtn.hidden = !filter;
       grid.innerHTML = "";
       if (!games.length) {
@@ -134894,22 +135119,60 @@
       paintChunk();
     }
 
-    updateGrid("");
+    search.value = state.q;
+    persistFilters();
+    updateGrid(state.q);
 
     var searchTimer = 0;
     search.addEventListener("input", function(e) {
+      state.q = e.target.value;
+      persistFilters();
       clearTimeout(searchTimer);
-      var value = e.target.value;
+      var value = state.q;
       searchTimer = setTimeout(function() { updateGrid(value); }, 80);
     });
     if (clearBtn) {
       clearBtn.addEventListener("click", function() {
         clearTimeout(searchTimer);
+        state.q = "";
         search.value = "";
+        persistFilters();
         updateGrid("");
         search.focus();
       });
     }
+    if (catalogClear) {
+      catalogClear.addEventListener("click", function() {
+        clearTimeout(searchTimer);
+        state.players = "";
+        state.best = false;
+        state.time = "";
+        state.weight = "";
+        state.q = "";
+        search.value = "";
+        persistFilters();
+        updateGrid("");
+        if (filterToggle) filterToggle.focus();
+      });
+    }
+    if (filterToggle && filterPanel) {
+      filterToggle.addEventListener("click", function() {
+        var open = filterToggle.getAttribute("aria-expanded") === "true";
+        filterToggle.setAttribute("aria-expanded", open ? "false" : "true");
+        filterPanel.hidden = open;
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".filter-chip"), function (btn) {
+      btn.addEventListener("click", function() {
+        var facet = btn.getAttribute("data-facet");
+        var value = btn.getAttribute("data-value");
+        if (facet === "best") state.best = !state.best;
+        else if (state[facet] === value) state[facet] = "";
+        else state[facet] = value;
+        persistFilters();
+        updateGrid(search.value);
+      });
+    });
     Array.prototype.forEach.call(document.querySelectorAll(".collection-filter button"), function(btn) {
       btn.addEventListener("click", function() {
         collectionView = btn.getAttribute("data-collection") || "all";
@@ -134918,10 +135181,6 @@
         });
         updateGrid(search.value);
       });
-    });
-    [playerSelect, timeSelect, weightSelect].forEach(function (select) {
-      if (!select) return;
-      select.addEventListener("change", function () { updateGrid(search.value); });
     });
   }
 

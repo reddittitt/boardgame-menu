@@ -1,0 +1,10 @@
+{
+  "name": "boardgame-menu",
+  "private": true,
+  "scripts": {
+    "test:filters": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

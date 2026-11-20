@@ -106,7 +106,7 @@ function serveFile(req, res) {
   if (rel === "manifest.json") type = "application/manifest+json";
   if (rel === "sw.js") {
     let text = body.toString("utf8");
-    text = text.replace('var VERSION = "2026.11.20.2";', 'var VERSION = "' + config.version + '";');
+    text = text.replace(/var VERSION = "[^"]+";/, 'var VERSION = "' + config.version + '";');
     text = text.replace(/var IMAGE_CAP = \d+;/, "var IMAGE_CAP = " + config.imageCap + ";");
     body = Buffer.from(text);
   } else if (rel === "index.html") {

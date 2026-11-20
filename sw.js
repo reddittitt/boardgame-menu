@@ -10,7 +10,7 @@
    relay, publisher PDFs, cover CDNs, and fonts. Same-origin PDFs are not
    cached either.
 */
-var VERSION = "2026.11.20.2";
+var VERSION = "2026.11.20.3";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
