@@ -135212,6 +135212,11 @@
     if (aid && (aid.open || aid.hasAttribute("open"))) return false;
     var hash = window.location.hash || "";
     if (hash.indexOf("#/game/") === 0) return false;
+    /* /game/<slug>/ is the same open game when the hash has not moved to the list. */
+    if (pathGameSlug()) {
+      var bare = hash.replace(/^#/, "").split("?")[0];
+      if (!bare || bare === "/" || bare.indexOf("game/") === 0 || bare.indexOf("/game/") === 0) return false;
+    }
     return true;
   }
   function showUpdateBanner() {
@@ -135352,9 +135357,15 @@
       if (!abs || urls.indexOf(abs) !== -1) return;
       urls.push(abs);
     }
-    add(new URL("./index.html", window.location.href).href);
-    add(new URL("./offline.html", window.location.href).href);
-    add(new URL("./", window.location.href).href);
+    function shellAsset(file) {
+      var root = basePath();
+      var path = (root || "") + "/" + String(file || "").replace(/^\//, "");
+      return new URL(path, window.location.origin).href;
+    }
+    add(shellAsset("index.html"));
+    add(shellAsset("offline.html"));
+    add(shellAsset(""));
+    if (pathGameSlug()) add(window.location.href);
     add(coverUrl(slug));
     var game = DATA[slug];
     if (game && Array.isArray(game.expansions)) {
@@ -135519,9 +135530,37 @@
     return new URL(window.location.href).searchParams.get(n) || "";
   }
   function basePath() {
-    return window.location.pathname
-      .replace(/\/index\.html$/,"")
-      .replace(/\/$/,"");
+    var path = window.location.pathname.replace(/\/index\.html$/i, "");
+    path = path.replace(/\/game\/[a-z0-9-]+\/?$/i, "");
+    return path.replace(/\/$/, "");
+  }
+  function pathGameSlug() {
+    var path = window.location.pathname.replace(/\/index\.html$/i, "");
+    var match = path.match(/\/game\/([a-z0-9-]+)\/?$/i);
+    return match ? match[1].toLowerCase() : "";
+  }
+  function canonicalGameUrl(slug) {
+    return window.location.origin + (basePath() || "") + "/game/" + slug + "/";
+  }
+  function shareGameUrl(slug, state) {
+    var params = new URLSearchParams();
+    if (state && state.players != null && String(state.players) !== "") params.set("players", String(state.players));
+    if (state && state.setup) params.set("setup", String(state.setup));
+    var query = params.toString();
+    return canonicalGameUrl(slug) + (query ? "?" + query : "");
+  }
+  function setCanonical(href) {
+    var link = document.querySelector('link[rel="canonical"]');
+    if (!href) {
+      if (link) link.remove();
+      return;
+    }
+    if (!link) {
+      link = document.createElement("link");
+      link.setAttribute("rel", "canonical");
+      document.head.appendChild(link);
+    }
+    link.setAttribute("href", href);
   }
 
   var DATA = {};
@@ -140885,6 +140924,8 @@
       return;
     }
     detailSlug = slug;
+    document.title = g.name + " · Board Game Quick";
+    setCanonical(canonicalGameUrl(slug));
 
     setGameAccent(g);
 
@@ -141118,6 +141159,7 @@
         selectedSetupId = new URLSearchParams((window.location.hash || "").split("?")[1] || "").get("setup") || "";
       } catch (err) { selectedSetupId = ""; }
     }
+    if (!selectedSetupId) selectedSetupId = qp("setup");
     var setupSeedChars = [];
     if (playMemory[slug] && playMemory[slug].chars) {
       setupSeedChars = characterList(g).filter(function (ch) {
@@ -141257,7 +141299,7 @@
     var shareBtn = document.getElementById("share");
     if (shareBtn) {
       shareBtn.addEventListener("click", function() {
-        var u = window.location.href;
+        var u = shareGameUrl(g.slug, { players: selectedCount, setup: selectedSetupId });
         if (navigator.share) {
           navigator.share({
             title: g.name,
@@ -141788,7 +141830,12 @@
   }
 
   function parseHash() {
-    var h = window.location.hash || "#/";
+    var h = window.location.hash || "";
+    if (!h || h === "#") {
+      var fromPath = pathGameSlug();
+      if (fromPath) h = "#/game/" + fromPath;
+    }
+    if (!h) h = "#/";
     var parts = h.slice(2).split("?");
     var path = parts[0] || "";
     var q = parts[1] || "";
@@ -141835,6 +141882,7 @@
       return;
     }
     setGameAccent(g);
+    document.title = "Teach " + g.name + " · Board Game Quick";
     query = query || {};
     var mem = playMemory[slug] || {};
     var counts = [];
@@ -141881,6 +141929,10 @@
       if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
         history.replaceState(null, "", next);
       }
+      var canonical = canonicalGameUrl(slug);
+      var players = count || urlPlayerCount();
+      if (players) canonical += "?players=" + encodeURIComponent(players);
+      setCanonical(canonical + href);
     }
     var scenarioVariants = setupVariantList(g).filter(function (variant) {
       return !contentIsEmpty(variant.scenario);
@@ -142131,6 +142183,8 @@
     closeRulebookViewer();
     syncHeaderOffset();
     document.body.style.overflow = "";
+    document.title = "Board Game Quick";
+    setCanonical("");
     var nightLink = document.querySelector("header a.header-night");
     if (nightLink) nightLink.removeAttribute("aria-current");
     if (unlockRequested()) {

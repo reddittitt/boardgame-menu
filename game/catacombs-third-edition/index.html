@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Catacombs (Third Edition) · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/catacombs-third-edition/">
+<meta name="description" content="Catacombs (Third Edition). 2–5 players, 60–90 min.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Board Game Quick">
+<meta property="og:title" content="Catacombs (Third Edition)">
+<meta property="og:description" content="Catacombs (Third Edition). 2–5 players, 60–90 min.">
+<meta property="og:url" content="https://bgquick.com/game/catacombs-third-edition/">
+<meta property="og:image" content="https://cf.geekdo-images.com/fc7Ep7xvFxDy_UNOsi2QsQ__itemrep/img/uns0ErgHpmfFIUno6baNFRvsr3s=/fit-in/246x300/filters:strip_icc()/pic5416481.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b63ff">
+<link rel="icon" href="../../favicon.png">
+<link rel="manifest" href="../../manifest.json">
+</head>
+<body data-game="catacombs-third-edition">
+<p id="game-boot-note">Loading Catacombs (Third Edition)…</p>
+<script>
+(function () {
+  var shell = new URL("../../index.html", window.location.href);
+  var root = new URL("../../", window.location.href).href;
+  fetch(shell.href, { credentials: "same-origin" }).then(function (res) {
+    if (!res.ok) throw new Error("shell");
+    return res.text();
+  }).then(function (html) {
+    /* Point shell assets at the site root. A <base> tag would also retarget #/ links. */
+    ["./favicon.png", "./manifest.json", "./icons/", "./logo.png", "./game-night.css", "./game-night.js", "./game-day.html", "./sw.js"].forEach(function (rel) {
+      html = html.split(rel).join(root + rel.slice(2));
+    });
+    document.open();
+    document.write(html);
+    document.close();
+  }).catch(function () {
+    var note = document.getElementById("game-boot-note");
+    if (note) note.textContent = "You're offline. Open Board Game Quick once while you have a connection.";
+  });
+})();
+</script>
+</body>
+</html>

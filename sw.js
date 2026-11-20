@@ -11,7 +11,7 @@
    script.google.com. RSVP and food responses are never cached. Same-origin
    PDFs are not cached either.
 */
-var VERSION = "2026.11.20.6";
+var VERSION = "2026.11.20.7";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -33,6 +33,11 @@ var SHELL_FILES = [
   "./game-night.js",
   "./game-night.css"
 ];
+/* /game/<slug>/index.html is a per-game stub. Those pages are not precached:
+   there are hundreds of them, and install should stay the shell above.
+   A visit stores that one response in the shell cache (network-first HTML).
+   Offline, the cached stub loads the precached index.html. */
+
 var lastQuota = false;
 
 function keepCache(name) {
@@ -228,9 +233,9 @@ function cacheOne(raw, pin) {
           if (!ok) return false;
           var indexUrl = new URL("./index.html", self.location.href).href;
           if (href === indexUrl) return true;
-          if (url.pathname.endsWith("/") || /\/index\.html$/i.test(url.pathname)) {
-            return safePut(cache, indexUrl, response);
-          }
+          /* Only the site root is mirrored onto index.html. A /game/<slug>/ stub must not replace the shell. */
+          var rootPath = new URL("./", self.location.href).pathname;
+          if (url.pathname === rootPath) return safePut(cache, indexUrl, response);
           return true;
         });
       });

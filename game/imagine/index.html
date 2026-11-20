@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Imagine · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/imagine/">
+<meta name="description" content="Imagine. 3–8 players, 20 min.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Board Game Quick">
+<meta property="og:title" content="Imagine">
+<meta property="og:description" content="Imagine. 3–8 players, 20 min.">
+<meta property="og:url" content="https://bgquick.com/game/imagine/">
+<meta property="og:image" content="https://cf.geekdo-images.com/K-Hp2v5Bc_UKMGlBF2oIEQ__itemrep/img/9FaUpJOAZWfbnj5D4xxHvuA1LGI=/fit-in/246x300/filters:strip_icc()/pic3061260.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b63ff">
+<link rel="icon" href="../../favicon.png">
+<link rel="manifest" href="../../manifest.json">
+</head>
+<body data-game="imagine">
+<p id="game-boot-note">Loading Imagine…</p>
+<script>
+(function () {
+  var shell = new URL("../../index.html", window.location.href);
+  var root = new URL("../../", window.location.href).href;
+  fetch(shell.href, { credentials: "same-origin" }).then(function (res) {
+    if (!res.ok) throw new Error("shell");
+    return res.text();
+  }).then(function (html) {
+    /* Point shell assets at the site root. A <base> tag would also retarget #/ links. */
+    ["./favicon.png", "./manifest.json", "./icons/", "./logo.png", "./game-night.css", "./game-night.js", "./game-day.html", "./sw.js"].forEach(function (rel) {
+      html = html.split(rel).join(root + rel.slice(2));
+    });
+    document.open();
+    document.write(html);
+    document.close();
+  }).catch(function () {
+    var note = document.getElementById("game-boot-note");
+    if (note) note.textContent = "You're offline. Open Board Game Quick once while you have a connection.";
+  });
+})();
+</script>
+</body>
+</html>
