@@ -25,7 +25,7 @@ async function openFilters(page) {
 }
 
 function card(page, slug) {
-  return page.locator('a.card[href="#/game/' + slug + '"]');
+  return page.locator('a.card[href="/game/' + slug + '/"]');
 }
 
 function leadingCount(text) {
