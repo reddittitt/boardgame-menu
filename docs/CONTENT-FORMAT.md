@@ -39,10 +39,11 @@ The game page, top to bottom:
 3. Action row: Rulebook, How to play, Teach it, Log a play, then extra official files. The buttons share one height and, on a phone, one width per row. The How to play control shows the words How to play. The video title and channel stay in the accessible name. A button is omitted when that game does not have it. Teach it opens `#/game/<slug>/teach` and the link carries the current player count, setup variant, and selected expansions and sides. Extra files come from `extraEssentials`. BoardGameGeek is the cover, not a separate button.
 4. Chip row: the player-count buttons, the expansion chips, and, for a game with asymmetric sides, the character chips. The character row is documented in [CHARACTERS.md](CHARACTERS.md). The row scrolls away with the page. The site header stays put. **← All games** is a text link at the top-left of the page, above the title, and again at the bottom. It scrolls away. It is not in the chip row.
 5. **How you win**.
-6. **Common mistakes**, only when `commonMistakes` has text.
+6. **Common mistakes**, only when `commonMistakes` has text. **Rules questions** follows it, in the same place, when at least one clarification has `depth` `"core"` (or no depth).
 7. **First game? Use this**, only when `firstGameSetup` has text for the selected count.
 8. Three chapters, each omitted when it has nothing to say: **Set up** (the chosen setup variant, then the shared setup, then the selected player count, then starting resources), **On your turn** (turn structure, then reminders), and **End of the game** (when it ends, then scoring). Set up is teal, On your turn uses the game accent, and End of the game is gold. The accent comes from the cover when the image can be read, and otherwise from a hue derived from the slug. A game with two or more `setupVariants` shows those choices as chips at the top of Set up. One setup shows no chips.
 9. **Player aids**, only when at least one aid is on the page.
+10. **Go Deeper**, after the glossary and before Share. It is collapsed until opened. It renders only when at least one clarification has `depth` `"deep"`.
 
 An empty field leaves no heading, placeholder, or gap. Common mistakes, First game, and Player aids do not render when empty. The three chapters do not show a placeholder line.
 
@@ -250,7 +251,7 @@ Optional. The header time follows the selected player-count button.
 "playTimeSource": "box"
 ```
 
-Write the map value as the words to show, including `min` when you want it. A count with no entry falls back to `time`, and the page adds ` min` to that fallback the way it always has. The source label shows only next to a count-specific time. With no player-count buttons, the header keeps `time` and does not guess a count.
+Write the map value as the words to show, including `min` when you want it. A count with no entry falls back to `time`, and the page adds ` min` to that fallback the way it always has. The source label shows only next to a count-specific time. That count-specific time is shown in the accent color, and its accessible name includes the selected player count. With no player-count buttons, the header keeps `time` and does not guess a count. Leave the map off when no source states a time for a count. Do not invent one.
 
 ## Teach it
 
@@ -284,7 +285,46 @@ To follow the player-count buttons, use a count map. `"*"` is the shared script,
 
 ## Common mistakes
 
-`commonMistakes` is the existing field. Do not rename it and do not rewrite the sentences for this layout. The page shows it under How you win, above the three chapters. The first 3 items are visible. The rest sit under **Show N more**. A section-level `details` block stays available. An empty string or empty list renders nothing.
+`commonMistakes` is the existing field. Do not rename it and do not rewrite the sentences for this layout. The page shows it with the turn rules. The first 3 items are visible. The rest sit under **Show N more**. A section-level `details` block stays available. An empty string or empty list renders nothing.
+
+## Rules questions and Go Deeper
+
+Optional `rulesClarifications`. Each item is one ruling, written in your own words. Do not paste a forum post, and do not name a forum user.
+
+| Field | Required | What it is |
+| --- | --- | --- |
+| `q` | yes | The question, one sentence. |
+| `a` | yes | The answer, in plain words. |
+| `source` | yes | `https://` link to the BoardGameGeek thread or the official FAQ, errata, or rulebook passage. An item with no link is not shown. |
+| `official` | no | `true` only when the designer, the publisher, or an official FAQ or errata said it. Anything else stays `false`. |
+| `depth` | no | `"core"` or `"deep"`. Missing means `"core"`. |
+| `topic` | no | Group label. Used only inside Go Deeper. |
+
+`"core"` is the short list most tables hit. Keep it to about 3 to 5 items. They render as **Rules questions**, directly after Common mistakes. The first 3 are visible. The rest sit under **Show N more**. An official item shows a small Official mark. Every item shows a Source link.
+
+`"deep"` is the rest: edge cases, card interactions, and longer FAQ or errata notes. They render in **Go Deeper** at the bottom of the page. That section is collapsed until someone opens it. Items that share a `topic` are grouped under that label, in the order the topics first appear. Items with no topic are listed first, ungrouped.
+
+An empty list, or a list whose items are all missing a question, an answer, or a source link, leaves no heading.
+
+```json
+"rulesClarifications": [
+  {
+    "q": "Do you pick every food die at once?",
+    "a": "No. Choose one die at a time. You may reroll between picks.",
+    "official": true,
+    "source": "https://example.com/faq",
+    "depth": "core"
+  },
+  {
+    "topic": "Bird powers",
+    "q": "Where does the egg go when a bird repeats another bird?",
+    "a": "On the bird whose power you repeated, not on the repeater.",
+    "official": true,
+    "source": "https://example.com/faq",
+    "depth": "deep"
+  }
+]
+```
 
 ## First game? Use this
 
