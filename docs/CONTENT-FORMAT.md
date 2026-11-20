@@ -587,3 +587,25 @@ A bare array and a section object can both be the value of a field. Prefer the s
 Player-count buttons update the player-count steps inside Set up. They also change the header time when `playTimeByPlayerCount` has that count, the First game box when `firstGameSetup` is a count map, and the Teach it link when `teachingScript` is a count map.
 
 Empty chapters stay hidden. There is no per-game notes box. On load, leftover `notes_` keys in `localStorage` are removed. Theme and recently viewed stay.
+
+
+## Selection conditions
+
+Optional tags on a bullet, component row, or put-away step. Untagged items always show. The page re-filters when the player count, expansion chips, faction chips, or setup variant change. Selection is kept in the URL (`players`, `exps`, `chars`, `setup`) the same way Teach it keeps `count` / `exps` / `chars` / `setup`.
+
+```json
+{
+  "lead": "Lizard Cult",
+  "text": "25 warriors.",
+  "faction": ["Lizard Cult"]
+}
+```
+
+| Tag | Shape | When it shows |
+| --- | --- | --- |
+| `expansion` | string array of expansion names | Any listed expansion chip is on |
+| `faction` | string array of character names | That side is selected, or no sides are selected |
+| `players` | `{ "min": n, "max": n }` | The selected player count is in range |
+| `variant` | string array of setup variant ids | That setup chip is on |
+
+`when: { ... }` is accepted as a wrapper for the same keys. A **Showing for** line and a **Show everything** toggle appear on filtered sections.
