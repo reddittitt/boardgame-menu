@@ -4,13 +4,14 @@
     {
       "page": 1,
       "lines": [
-        "Designed by Molly Johnson, Robert and Shawn Stankewich",
-        "Graphic Design by Dylan Mangini"
+        "Designed by Molly Johnson, Robert Melvin, and Shawn Stankewich",
+        "Graphic Design by Oylan Mangini"
       ]
     },
     {
       "page": 2,
       "lines": [
+        "CREDITS",
         "Game Design",
         "Shawn Stankewich, Molly Johnson and Robert Melvin",
         "Director of Projects",
@@ -31,9 +32,9 @@
         "Jan Martinell, Lee Nicol, Viadimir Orellana, Sarah Reed, Will",
         "Reed, Kathy Rowland, Seattle Tabletop Designers, Josh Wood",
         "and John Zinser",
-        "© 2019 Alderac Entert t Group.",
-        "Point Salad al and ©",
-        "Alderac Entertainment Group, Inc. AEG",
+        "© 2019 Alderac Entertainment Group.",
+        "Point Salad and all related marks are ™ and ©",
+        "Alderac Entertainment Group, Inc.",
         "555 N El Camino Real #A393, San Clemente, CA 92672 USA.",
         "All rights reserved. Printed in China,",
         "Warning: Choking Hazard! Not for use by children under 3 years of age."
@@ -43,18 +44,20 @@
       "page": 3,
       "lines": [
         "for 2 to 6 players, ages 14+ by Flatout Games",
+        "OVERVIEW",
         "Point Salad is a card-drafting and tableau-building game for",
         "2-6 players. Players take turns building a salad of veggies and",
         "collecting point cards in order to score the most points for the",
         "ingredients in their salad!",
+        "COMPONENTS",
         "+ 108 double-sided veggie/point cards",
+        "1Rulebook",
         "Double-sided cards feature 18 each of 6 different veggies",
         "with 108 unique scoring conditions on their point card backs.",
         "VEGGIE SIDE POINT SIDE",
-        "\\ POINT",
-        "» |G scorine",
+        "POINT",
+        "@— scorinc",
         "CONDITIONS",
-        "O “IHS 4",
         "VEGGIE TYPE VEGGIE TYPE",
         "ON OPPOSITE SIDE"
       ]
@@ -62,6 +65,7 @@
     {
       "page": 4,
       "lines": [
+        "SETUP",
         "Based on the number of players, count out or remove the",
         "following number of each of the 6 veggie cards from the",
         "game (without looking at the point card backs):",
@@ -90,8 +94,7 @@
     {
       "page": 5,
       "lines": [
-        "VEGGIE : :",
-        "MARKET onion",
+        "GAMEPLAY",
         "On your turn you draft one or more cards, You may draft either",
         "(1) one point card from the top of any of the draw piles or",
         "(2) two veggie cards from those available in the market. After",
@@ -115,13 +118,13 @@
         "of the draw piles of point cards runs out, split the largest pile",
         "roughly in half, and move the",
         "bottom half to replace the",
-        "empty pile (ensuring the point",
-        "card on top of the largest ld)",
-        "pile does not move). Once Goma C777 )",
-        "the market refill has been fe:",
-        "completed, play continues",
+        "empty pile (ensuring the point y y",
+        "card on top of the largest sim",
+        "pile does not move). Once oom C777",
+        "the market refill has been CG",
+        "completed, play continues et",
         "with the next player to the left.",
-        "GAME END",
+        "GAME END 9",
         "The game ends when all cards from both the point card piles",
         "and veggie market have been drafted. The player with the",
         "most points is the winner.",
@@ -147,17 +150,11 @@
         "point cards are not scored (e.g., cabbage)",
         "1. 8 points for each combination of tomato, lettuce, and",
         "carrot: 8pts x 2 = 16pts",
-        "2. 5 points for each pair of carrots: 5pts x 2 = 10pts",
+        "2. 5 points for each pair of carrots: 5pts x 2 10pts",
         "3. 3 points for each carrot, -2 points for each onion: (3pts x 5)",
         "4. 10 points for having the most (or tied for the most) onions of",
         "all players: if it is the most = 10pts",
         "5. 5 points per veggie type with at least 3: 5pts x 3 = 15pts"
-      ]
-    },
-    {
-      "page": 8,
-      "lines": [
-        "FINALIST |"
       ]
     }
   ]

@@ -1,10 +1,10 @@
-// Confirms every Rulebook chip's highlight box sits on the query in the PDF
-// text layer. It runs the same fold, match, and highlightBoxes functions as
-// index.html, then checks that the middle of each matched glyph falls inside
-// a focus box. A query that matches more than once after hyphen folding
-// fails, so a line-break hyphen cannot make the chip highlight a second
-// sentence. No page is rasterized; the text layer is the position the
-// viewer paints.
+// Confirms every Rulebook chip's highlight box sits on the query. It runs the
+// same fold, match, and highlightBoxes functions as index.html, then checks
+// that the middle of each matched glyph falls inside a focus box. A query
+// that matches more than once after hyphen folding fails, so a line-break
+// hyphen cannot make the chip highlight a second sentence. A page with a
+// text layer uses that layer. A scanned page uses rulebooks/ocr/<slug>.json,
+// the same word boxes the viewer paints. No page is rasterized.
 //
 //   node scripts/audit-rulebook-highlights.mjs
 //   node scripts/audit-rulebook-highlights.mjs root azul
@@ -27,7 +27,7 @@ if (start < 0 || end < start) throw new Error("could not find highlight function
 const source = html.slice(start, end);
 const sandbox = { Math, String, Object, isFinite, Number };
 vm.createContext(sandbox);
-vm.runInContext(source + "\nthis.api = { foldSearchText, searchMatchRanges, snippetFocusIndex, textRunsFromItems, highlightBoxes };", sandbox);
+vm.runInContext(source + "\nthis.api = { foldSearchText, searchMatchRanges, snippetFocusIndex, textRunsFromItems, highlightBoxes, ocrItemsFromWords };", sandbox);
 const api = sandbox.api;
 
 function slugify(name) {
@@ -138,12 +138,26 @@ for (const [slug, list] of bySlug) {
   }
   const data = new Uint8Array(fs.readFileSync(file));
   const doc = await pdfjs.getDocument({ data, disableWorker: true }).promise;
+  let ocr = null;
+  const ocrPath = "rulebooks/ocr/" + slug + ".json";
+  if (fs.existsSync(ocrPath)) ocr = JSON.parse(fs.readFileSync(ocrPath, "utf8"));
   const pageCache = new Map();
   async function pageOf(n) {
     if (!pageCache.has(n)) {
       const page = await doc.getPage(n);
       const tc = await page.getTextContent();
-      pageCache.set(n, { viewport: page.getViewport({ scale: 1 }), built: api.textRunsFromItems(tc.items), styles: tc.styles });
+      const viewport = page.getViewport({ scale: 1 });
+      let items = tc.items;
+      let styles = tc.styles;
+      const letters = (api.textRunsFromItems(items).raw.match(/[A-Za-z]/g) || []).length;
+      if (letters < 80 && ocr) {
+        const pageData = (ocr.pages || []).find((entry) => entry.page === n);
+        if (pageData && pageData.words && pageData.words.length) {
+          items = api.ocrItemsFromWords(pageData.words);
+          styles = null;
+        }
+      }
+      pageCache.set(n, { viewport, built: api.textRunsFromItems(items), styles });
     }
     return pageCache.get(n);
   }
