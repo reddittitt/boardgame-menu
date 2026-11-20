@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Board Game Quick</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
+<meta name="theme-color" content="#0b63ff" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="BGQuick" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
 <!-- Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2693,6 +2700,39 @@
     font-size:max(1rem, 16px);
   }
 
+  #app-update {
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom:max(12px, env(safe-area-inset-bottom));
+    z-index:30;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    width:min(520px, calc(100% - 24px));
+    margin:0 auto;
+    padding:12px 14px;
+    border-radius:14px;
+    background:var(--card);
+    color:var(--fg);
+    border:1px solid var(--border);
+    box-shadow:0 8px 28px rgba(0,0,0,0.2);
+  }
+  #app-update[hidden] { display:none; }
+  #app-update p { margin:0; font-weight:650; }
+  #app-update button {
+    min-height:44px;
+    padding:8px 14px;
+    border:0;
+    border-radius:10px;
+    background:var(--brand);
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+  }
+
 </style>
 </head>
 <body>
@@ -2708,6 +2748,10 @@
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
 </header>
+<div id="app-update" hidden role="status" aria-live="polite">
+  <p>Update available. Tap to refresh.</p>
+  <button type="button" id="app-update-refresh">Refresh</button>
+</div>
 
 <main>
   <p class="all-games-bar"><a class="home" href="#/">All Games</a></p>
@@ -134045,13 +134089,267 @@
 
 <script>
 (function() {
-  /* --- Service worker registration (instant-load / offline cache) --- */
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("./sw.js", { updateViaCache: "none" })
-      .catch(function (err) {
-        console.warn("SW registration failed:", err);
+  /* --- Installed-app updates and offline saves --- */
+  var waitingWorker = null;
+  var expectReload = false;
+  var updateApplied = false;
+  var activatedElsewhere = false;
+  var hadController = ("serviceWorker" in navigator) && !!navigator.serviceWorker.controller;
+  var swAttempts = 0;
+  var activeRegistration = null;
+  var updateHooksBound = false;
+  var cacheMsgSeq = 0;
+  var rememberedOffline = {};
+
+  function updateIsSafe() {
+    var viewer = document.getElementById("rulebook-viewer");
+    if (viewer && (viewer.open || viewer.hasAttribute("open"))) return false;
+    var aid = document.getElementById("aid-lightbox");
+    if (aid && (aid.open || aid.hasAttribute("open"))) return false;
+    var hash = window.location.hash || "";
+    if (hash.indexOf("#/game/") === 0) return false;
+    return true;
+  }
+  function showUpdateBanner() {
+    var banner = document.getElementById("app-update");
+    if (banner) banner.hidden = false;
+  }
+  function recentlyTriedUpdate() {
+    try {
+      var at = parseInt(sessionStorage.getItem("bgq_skip_auto_update") || "0", 10);
+      return !!(at && Date.now() - at < 15000);
+    } catch (err) { return false; }
+  }
+  function applyUpdate() {
+    if (updateApplied) return;
+    updateApplied = true;
+    expectReload = true;
+    try { sessionStorage.setItem("bgq_skip_auto_update", String(Date.now())); } catch (err) {}
+    if (waitingWorker) waitingWorker.postMessage({ type: "SKIP_WAITING" });
+    setTimeout(function () { window.location.reload(); }, 1500);
+  }
+  function offerUpdate(worker) {
+    if (!worker) return;
+    waitingWorker = worker;
+    if (updateIsSafe() && !recentlyTriedUpdate()) applyUpdate();
+    else showUpdateBanner();
+  }
+  function watchWorker(worker) {
+    if (!worker || worker._bgqWatched) return;
+    worker._bgqWatched = true;
+    function decide() {
+      if (worker.state !== "installed") return;
+      if (navigator.serviceWorker.controller) offerUpdate(worker);
+      else worker.postMessage({ type: "SKIP_WAITING" });
+    }
+    if (worker.state === "installed") decide();
+    else worker.addEventListener("statechange", decide);
+    worker.addEventListener("statechange", function () {
+      if (worker.state === "redundant" && !navigator.serviceWorker.controller && swAttempts < 2) {
+        setTimeout(registerSw, 8000);
+      }
+    });
+  }
+  function bindUpdateHooks() {
+    if (updateHooksBound) return;
+    updateHooksBound = true;
+    var refreshBtn = document.getElementById("app-update-refresh");
+    if (refreshBtn) refreshBtn.addEventListener("click", applyUpdate);
+    window.addEventListener("hashchange", function () {
+      if (!waitingWorker && !activatedElsewhere) return;
+      if (!updateIsSafe()) return;
+      applyUpdate();
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "visible" && activeRegistration) {
+        activeRegistration.update().catch(function () {});
+      }
+    });
+    window.addEventListener("focus", function () {
+      if (activeRegistration) activeRegistration.update().catch(function () {});
+    });
+    window.addEventListener("pageshow", function () {
+      if (activeRegistration) activeRegistration.update().catch(function () {});
+    });
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!hadController) {
+          hadController = true;
+          return;
+        }
+        if (expectReload || updateIsSafe()) {
+          window.location.reload();
+          return;
+        }
+        activatedElsewhere = true;
+        waitingWorker = null;
+        showUpdateBanner();
       });
+    }
+  }
+  function registerSw() {
+    if (!("serviceWorker" in navigator) || swAttempts >= 2) return;
+    swAttempts += 1;
+    bindUpdateHooks();
+    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
+      activeRegistration = reg;
+      watchWorker(reg.installing);
+      watchWorker(reg.waiting);
+      reg.addEventListener("updatefound", function () { watchWorker(reg.installing); });
+      setTimeout(function () { reg.update().catch(function () {}); }, 5000);
+      if (!window._bgqUpdateTimer) {
+        window._bgqUpdateTimer = setInterval(function () {
+          if (activeRegistration) activeRegistration.update().catch(function () {});
+        }, 60 * 60 * 1000);
+      }
+    }).catch(function (err) {
+      console.warn("SW registration failed", err);
+      setTimeout(registerSw, 8000);
+    });
+  }
+  registerSw();
+
+  function sameOriginAsset(url) {
+    var raw = String(url || "").trim();
+    if (!raw) return "";
+    var parsed;
+    try { parsed = new URL(raw, window.location.href); }
+    catch (err) { return ""; }
+    if (parsed.origin !== window.location.origin) return "";
+    if (/\.pdf$/i.test(parsed.pathname)) return "";
+    if (parsed.pathname.indexOf("/put-away/") !== -1) return "";
+    parsed.search = "";
+    parsed.hash = "";
+    return parsed.href;
+  }
+  function addAidAssets(list, add) {
+    normalizeAids(list).forEach(function (aid) {
+      if (!aid || aid.type === "pdf") return;
+      add(aid.url);
+    });
+  }
+  function addSetupSpecImages(spec, add) {
+    function one(node) {
+      if (!node || typeof node !== "object" || !node.src) return;
+      add(setupPhotoUrl(node.src));
+    }
+    if (!spec || typeof spec !== "object") return;
+    one(spec);
+    ["byCount", "byVariant"].forEach(function (key) {
+      var group = spec[key];
+      if (!group || typeof group !== "object") return;
+      Object.keys(group).forEach(function (name) { one(group[name]); });
+    });
+  }
+  function collectGameAssets(slug, includeSearch) {
+    var urls = [];
+    function add(url) {
+      var abs = sameOriginAsset(url);
+      if (!abs || urls.indexOf(abs) !== -1) return;
+      urls.push(abs);
+    }
+    add(new URL("./index.html", window.location.href).href);
+    add(new URL("./offline.html", window.location.href).href);
+    add(new URL("./", window.location.href).href);
+    add(coverUrl(slug));
+    var game = DATA[slug];
+    if (game && Array.isArray(game.expansions)) {
+      game.expansions.forEach(function (exp) {
+        if (!exp) return;
+        if (exp.cover) add(expansionCoverUrl(slug, exp));
+        addAidAssets(exp.playerAids, add);
+      });
+    }
+    if (game) {
+      addAidAssets(game.playerAids, add);
+      characterList(game).forEach(function (ch) {
+        var ref = ch && ch.aid && ch.aid.reference;
+        if (!ref) return;
+        add(ref.url || ref.renderUrl);
+      });
+    }
+    add(basePath() + "/setup-photos/" + encodeURIComponent(slug) + ".json");
+    if (includeSearch) add(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json");
+    return loadSetupPhotoSpec(slug).then(function (spec) {
+      addSetupSpecImages(spec, add);
+      return urls;
+    });
+  }
+  function cacheUrls(urls, pin) {
+    if (!("serviceWorker" in navigator)) return Promise.resolve({ ok: false, saved: 0, failed: 1 });
+    return navigator.serviceWorker.ready.then(function (reg) {
+      var worker = reg.active;
+      if (!worker) return { ok: false, saved: 0, failed: 1 };
+      var id = ++cacheMsgSeq;
+      return new Promise(function (resolve) {
+        var timer = setTimeout(function () {
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          resolve({ ok: false, saved: 0, failed: 1 });
+        }, 30000);
+        function onMsg(event) {
+          var data = event.data || {};
+          if (data.type !== "CACHE_URLS_RESULT" || data.id !== id) return;
+          clearTimeout(timer);
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          resolve(data);
+        }
+        navigator.serviceWorker.addEventListener("message", onMsg);
+        worker.postMessage({ type: "CACHE_URLS", id: id, urls: urls, pin: !!pin });
+      });
+    });
+  }
+  function offlineSavedList() {
+    try {
+      var raw = localStorage.getItem("bgq_offline_games");
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (err) { return []; }
+  }
+  function markOfflineSaved(slug) {
+    var list = offlineSavedList().filter(function (item) { return item !== slug; });
+    list.unshift(slug);
+    if (list.length > 30) list = list.slice(0, 30);
+    try { localStorage.setItem("bgq_offline_games", JSON.stringify(list)); } catch (err) {}
+  }
+  function rememberGameOffline(slug) {
+    if (!slug || rememberedOffline[slug] || !("serviceWorker" in navigator)) return;
+    rememberedOffline[slug] = true;
+    collectGameAssets(slug, false).then(function (urls) {
+      return cacheUrls(urls, false);
+    }).then(function (result) {
+      if (result && result.saved > 0) document.documentElement.setAttribute("data-game-cached", slug);
+      else rememberedOffline[slug] = false;
+    }).catch(function () { rememberedOffline[slug] = false; });
+  }
+  function bindSaveOffline(slug) {
+    var btn = document.getElementById("save-offline");
+    if (!btn || btn.dataset.bound) return;
+    btn.dataset.bound = "1";
+    function paint(text) { btn.textContent = text; }
+    if (offlineSavedList().indexOf(slug) !== -1) paint("Saved for offline");
+    btn.addEventListener("click", function () {
+      btn.disabled = true;
+      paint("Saving…");
+      collectGameAssets(slug, true).then(function (urls) {
+        return cacheUrls(urls, true);
+      }).then(function (result) {
+        btn.disabled = false;
+        if (result && result.quota) {
+          paint("Not enough space to save");
+          return;
+        }
+        if (result && result.ok) {
+          markOfflineSaved(slug);
+          paint("Saved for offline");
+          document.documentElement.setAttribute("data-game-cached", slug);
+          return;
+        }
+        paint("Couldn't save");
+      }).catch(function () {
+        btn.disabled = false;
+        paint("Couldn't save");
+      });
+    });
   }
 
   /* --- Theme cycling: classic → dark → darkwood → neongrid --- */
@@ -139547,6 +139845,7 @@
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             componentsHtml +
             rulesGlossaryHtml +
+            '<button class="btn" type="button" id="save-offline" aria-live="polite">Save for offline</button>' +
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
         "</div>" +
@@ -140050,6 +140349,8 @@
     mountRulebookSearch(g, rulebookHref);
     paintSetupPhoto(slug, selectedCount, selectedSetupId);
     mountPrivatePacking(g);
+    bindSaveOffline(slug);
+    rememberGameOffline(slug);
   }
 
   function normalizeIncoming() {
@@ -140239,6 +140540,7 @@
       "</article>";
     page = appEl.querySelector(".teach-page");
     paint();
+    rememberGameOffline(slug);
     if (!page) return;
     page.addEventListener("click", function (e) {
       var setupBtn = e.target.closest ? e.target.closest(".setup-variant-btn") : null;
