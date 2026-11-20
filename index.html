@@ -1021,6 +1021,41 @@
     font-size:0.85rem;
     line-height:1.4;
   }
+  .expansion-guide-card + .expansion-guide-card {
+    margin-top:0.85rem;
+    padding-top:0.65rem;
+    border-top:1px solid var(--border);
+  }
+  .expansion-guide-facts {
+    margin:0.15rem 0 0.45rem;
+  }
+  .expansion-guide-fact {
+    margin:0 0 0.45rem;
+  }
+  .expansion-guide-fact dt {
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .expansion-guide-fact dd {
+    margin:0.1rem 0 0;
+    font-size:0.9rem;
+    line-height:1.4;
+  }
+  .expansion-guide-rules-label {
+    margin:0.35rem 0 0.15rem;
+    font-size:0.75rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .expansion-guide-src {
+    color:var(--muted);
+    font-size:0.75rem;
+  }
   .expansion-btns {
     display:flex;
     flex-direction:column;
@@ -137236,6 +137271,7 @@
       });
     }
     add(basePath() + "/setup-photos/" + encodeURIComponent(slug) + ".json");
+    add(basePath() + "/expansion-guides.json");
     if (includeSearch) add(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json");
     return loadSetupPhotoSpec(slug).then(function (spec) {
       addSetupSpecImages(spec, add);
@@ -142877,6 +142913,122 @@
     nav.appendChild(button);
   }
 
+  var expansionGuides = null;
+  var expansionGuidesPromise = null;
+  function loadExpansionGuides() {
+    if (expansionGuidesPromise) return expansionGuidesPromise;
+    expansionGuidesPromise = fetch(basePath() + "/expansion-guides.json", { cache: "no-store" }).then(function (res) {
+      return res.ok ? res.json() : {};
+    }).then(function (data) {
+      expansionGuides = data && typeof data === "object" ? data : {};
+      return expansionGuides;
+    }).catch(function () {
+      expansionGuides = {};
+      return expansionGuides;
+    });
+    return expansionGuidesPromise;
+  }
+  function guideRuleLines(exp) {
+    var lines = [];
+    function walk(value) {
+      if (!value || lines.length >= 4) return;
+      if (typeof value === "string") {
+        var text = value.replace(/\s+/g, " ").trim();
+        if (text && !/^these notes are/i.test(text)) lines.push(text);
+        return;
+      }
+      if (Array.isArray(value)) {
+        value.forEach(walk);
+        return;
+      }
+      if (typeof value === "object") {
+        var lead = value.lead ? String(value.lead).trim() : "";
+        var text = value.text ? String(value.text).trim() : "";
+        var line = lead && text ? lead + " " + text : (lead || text);
+        line = line.replace(/\s+/g, " ").trim();
+        if (line && !/^these notes are/i.test(line)) lines.push(line);
+        if (Array.isArray(value.bullets)) walk(value.bullets);
+      }
+    }
+    walk(exp && exp.rules);
+    return lines.slice(0, 4).map(function (line) {
+      if (line.length <= 220) return line;
+      var cut = line.slice(0, 217);
+      var at = cut.lastIndexOf(" ");
+      return (at > 80 ? cut.slice(0, at) : cut).replace(/[,;:\s]+$/, "") + "…";
+    });
+  }
+  function guideFactHtml(label, text, fieldSource, mainSource) {
+    if (!text) return "";
+    var note = fieldSource && fieldSource !== mainSource
+      ? ' <span class="expansion-guide-src">' + escapeHtml(fieldSource) + "</span>"
+      : "";
+    return '<div class="expansion-guide-fact"><dt>' + escapeHtml(label) + "</dt><dd>" +
+      escapeHtml(text) + note + "</dd></div>";
+  }
+  function renderExpansionGuide(game, book) {
+    if (!game) return "";
+    var exps = (Array.isArray(game.expansions) ? game.expansions : []).filter(function (exp) {
+      return exp && String(exp.name || "").trim();
+    });
+    if (!exps.length) return "";
+    var page = book && book[game.slug];
+    var entries = page && page.expansions ? page.expansions : {};
+    var cards = "";
+    exps.forEach(function (exp) {
+      var entry = entries[exp.name] || null;
+      var rules = guideRuleLines(exp);
+      if (!entry && !rules.length) return;
+      var source = entry && entry.source ? String(entry.source) : "";
+      var facts = "";
+      if (entry) {
+        facts += guideFactHtml("First play", entry.firstPlay, entry.firstPlaySource, source);
+        facts += guideFactHtml("Players", entry.players, entry.playersSource, source);
+        facts += guideFactHtml("Combines", entry.combines, entry.combinesSource, source);
+      }
+      var sourceHtml = "";
+      if (source) {
+        var href = entry.sourceUrl ? safeLinkUrl(entry.sourceUrl) : "";
+        sourceHtml = href
+          ? '<p class="exp-note">Source: <a href="' + escapeHtml(href) + '"' + externalAttrs(href) + ">" + escapeHtml(source) + "</a></p>"
+          : '<p class="exp-note">Source: ' + escapeHtml(source) + "</p>";
+      }
+      cards += '<div class="expansion-text-block expansion-guide-card">' +
+        "<h4>" + escapeHtml(exp.name) + "</h4>" +
+        (entry && entry.adds ? "<p>" + escapeHtml(entry.adds) + "</p>" : "") +
+        (facts ? '<dl class="expansion-guide-facts">' + facts + "</dl>" : "") +
+        (rules.length
+          ? '<p class="expansion-guide-rules-label">Rules changes</p><ul class="rule-list">' +
+            rules.map(function (line) { return "<li>" + escapeHtml(line) + "</li>"; }).join("") +
+            "</ul>"
+          : "") +
+        sourceHtml +
+        "</div>";
+    });
+    if (!cards) return "";
+    var stored = page && page.storedInBaseBox
+      ? '<p class="exp-note">Stored in the base box.</p>'
+      : "";
+    return '<details class="expansion rule-chapter" id="expansion-guide">' +
+      '<summary><span class="expansion-name">Expansion guide</span></summary>' +
+      '<div class="expansion-body"><div class="rule-body">' + stored + cards + "</div></div>" +
+      "</details>";
+  }
+  function paintExpansionGuide(slug) {
+    var slot = document.getElementById("expansion-guide-slot");
+    var game = DATA[slug];
+    if (!slot || !game) return;
+    function draw(book) {
+      if (detailSlug !== slug || !slot.isConnected) return;
+      slot.innerHTML = renderExpansionGuide(game, book || {});
+    }
+    if (expansionGuides) {
+      draw(expansionGuides);
+      return;
+    }
+    loadExpansionGuides().then(draw);
+  }
+
   function renderDetail(slug, action, presetExpansions) {
     detailSlug = "";
     if (action === void 0) action = "quicksetup";
@@ -143238,6 +143390,7 @@
           "</aside>" +
           '<div class="actions">' +
             (expansionNoteHtml ? '<div class="rules-notes">' + expansionNoteHtml + "</div>" : "") +
+            '<div id="expansion-guide-slot"></div>' +
             quickBlocksHtml +
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             componentsHtml +
@@ -143753,6 +143906,7 @@
     markRecentlyViewed(g);
     mountRulebookSearch(g, rulebookHref);
     paintSetupPhoto(slug, selectedCount, selectedSetupId);
+    paintExpansionGuide(slug);
     mountPrivatePacking(g);
     bindSaveOffline(slug);
     rememberGameOffline(slug);

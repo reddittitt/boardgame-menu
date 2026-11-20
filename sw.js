@@ -11,7 +11,7 @@
    script.google.com. RSVP and food responses are never cached. Same-origin
    PDFs are not cached either.
 */
-var VERSION = "2026.11.20.14";
+var VERSION = "2026.11.20.15";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -31,7 +31,8 @@ var SHELL_FILES = [
   "./icons/apple-touch-icon.png",
   "./icons/icon-maskable-512.png",
   "./game-night.js",
-  "./game-night.css"
+  "./game-night.css",
+  "./expansion-guides.json"
 ];
 var lastQuota = false;
 
@@ -454,7 +455,10 @@ self.addEventListener("fetch", function (event) {
     }).catch(function () {
       jsonGate.finish();
       return matchCache(DATA, request.url).then(function (cached) {
-        return cached || new Response("", { status: 504, statusText: "offline" });
+        if (cached) return cached;
+        return matchCache(SHELL, request.url).then(function (shellHit) {
+          return shellHit || new Response("", { status: 504, statusText: "offline" });
+        });
       });
     }));
     return;
