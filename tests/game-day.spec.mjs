@@ -98,7 +98,7 @@ test.beforeEach(function () {
 
 test("closed page shows the next Saturday and keeps the location private", async function ({ page }) {
   await page.goto(ON);
-  await expect(page.locator("#gd-date")).toHaveText("Saturday, November 28, 2026");
+  await expect(page.locator("#gd-date")).toHaveText("Saturday, November 21, 2026");
   await expect(page.locator("#gd-time")).toHaveText("3:00–9:00 PM");
   await expect(page.locator("#gd-location")).toHaveText("Location shared after you RSVP");
   await expect(page.getByText("CRPC", { exact: true })).toHaveCount(0);

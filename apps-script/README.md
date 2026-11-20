@@ -39,9 +39,9 @@ That `/exec` URL is not a secret. It is fine that it is visible in the websiteâ€
 
 ## 4. Check the deployment
 
-Paste the `/exec` URL into a browser and add `?event=2026-11-28` on the end. You should see text like:
+Paste the `/exec` URL into a browser and add `?event=2026-11-21` on the end. You should see text like:
 
-`{"ok":true,"eventId":"2026-11-28","rsvps":[],"food":[]}`
+`{"ok":true,"eventId":"2026-11-21","rsvps":[],"food":[]}`
 
 If you see a Google sign-in page, the access was not set to **Anyone**. Deploy a new version (step 6) and set **Who has access** to **Anyone**.
 

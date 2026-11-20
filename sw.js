@@ -11,7 +11,7 @@
    script.google.com. RSVP and food responses are never cached. Same-origin
    PDFs are not cached either.
 */
-var VERSION = "2026.11.20.5";
+var VERSION = "2026.11.20.6";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -29,7 +29,9 @@ var SHELL_FILES = [
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png",
-  "./icons/icon-maskable-512.png"
+  "./icons/icon-maskable-512.png",
+  "./game-night.js",
+  "./game-night.css"
 ];
 var lastQuota = false;
 
@@ -50,7 +52,12 @@ function bare(url) {
 
 function precache() {
   return caches.open(SHELL).then(function (cache) {
-    var required = { "./index.html": true, "./offline.html": true };
+    var required = {
+      "./index.html": true,
+      "./offline.html": true,
+      "./game-night.js": true,
+      "./game-night.css": true
+    };
     return Promise.all(SHELL_FILES.map(function (url) {
       return fetch(new Request(url, { cache: "reload", credentials: "same-origin" })).then(function (res) {
         if (!res || !res.ok) throw new Error("precache " + url);
@@ -354,9 +361,12 @@ self.addEventListener("fetch", function (event) {
   if (/\.pdf$/i.test(url.pathname)) return;
   if (/\/sw\.js$/i.test(url.pathname)) return;
 
-  if (/\/game-day\.js$/i.test(url.pathname)) {
-    var scriptGate = gate();
-    event.waitUntil(scriptGate.promise);
+  /* Same-origin scripts and styles for Game Day and Game Night.
+     Cross-origin requests already returned above, including script.google.com,
+     and are not cached. */
+  if (/\.(?:js|css)$/i.test(url.pathname)) {
+    var assetGate = gate();
+    event.waitUntil(assetGate.promise);
     event.respondWith(fetch(new Request(request.url, {
       method: "GET",
       cache: "reload",
@@ -365,14 +375,14 @@ self.addEventListener("fetch", function (event) {
       if (response && response.ok && response.type === "basic") {
         caches.open(SHELL).then(function (cache) {
           return safePut(cache, request.url, response.clone());
-        }).catch(function () {}).then(scriptGate.finish, scriptGate.finish);
+        }).catch(function () {}).then(assetGate.finish, assetGate.finish);
       } else {
-        scriptGate.finish();
+        assetGate.finish();
       }
       if (response) return response;
       return matchCache(SHELL, request.url);
     }).catch(function () {
-      scriptGate.finish();
+      assetGate.finish();
       return matchCache(SHELL, request.url).then(function (cached) {
         return cached || new Response("", { status: 504, statusText: "offline" });
       });

@@ -1,0 +1,18 @@
+{
+  "games": {
+    "night-teen-only": {
+      "name": "Night Teen Only",
+      "players": "2–4",
+      "time": "30",
+      "weight": 1.5,
+      "minAge": 14
+    },
+    "night-kid-ok": {
+      "name": "Night Kid Ok",
+      "players": "2–4",
+      "time": "30",
+      "weight": 1.4,
+      "bggMinAge": 8
+    }
+  }
+}
