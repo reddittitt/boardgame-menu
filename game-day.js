@@ -1,10 +1,19 @@
 /* Monthly Game Day. Dates and food rules come from data/game-days.json.
-   RSVPs and food claims go to the Apps Script /exec URL in that file.
+   RSVPs, food claims, and table sign-ups go to the Apps Script /exec URL.
    The edit key stays in localStorage and is never shown. */
 (function (root) {
   var LOCATION_BEFORE = "Location shared after you RSVP";
   var LOCATION_AFTER = "CRPC";
   var KEY_NAME = "bgq-gameday-key";
+  var EXPERIENCE_LABELS = {
+    "new": "New to it",
+    played: "Played before",
+    teach: "Can teach"
+  };
+  var START_TIMES = [
+    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+    "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"
+  ];
 
   function pad(n) {
     return (n < 10 ? "0" : "") + n;
@@ -45,6 +54,11 @@
     if (/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec\/?$/.test(u)) return true;
     if (/^http:\/\/(127\.0\.0\.1|localhost):\d+\/exec\/?$/.test(u)) return true;
     return false;
+  }
+
+
+  function payloadHasTables(payload) {
+    return !!(payload && Object.prototype.hasOwnProperty.call(payload, "tables"));
   }
 
   function parseConfig(raw) {
@@ -173,6 +187,100 @@
     return "Planning food for about " + formatNum(stats.people) + " people. " + kidPhrase;
   }
 
+  function experienceLabel(code) {
+    return EXPERIENCE_LABELS[code] || "";
+  }
+
+  function playerSpan(value) {
+    if (value == null || value === "") return null;
+    var text = String(value).trim();
+    if (!text || /^(none|varies)$/i.test(text)) return null;
+    var nums = text.match(/\d+/g);
+    if (!nums) return null;
+    var values = nums.map(Number);
+    var min = Math.min.apply(null, values);
+    var max = Math.max.apply(null, values);
+    var open = /(\+|or more|and up)/i.test(text);
+    if (open) max = Math.max(max, 99);
+    return { min: min, max: max, open: open };
+  }
+
+  function maxPlayersFromGame(game) {
+    if (!game || typeof game !== "object") return null;
+    var span = playerSpan(game.players);
+    if (span && !span.open) return span.max;
+    var rec = playerSpan(game.playerPoll && game.playerPoll.recommended);
+    if (rec && !rec.open) return rec.max;
+    if (span && span.open) return Math.min(Math.max(span.min, 4), 12);
+    if (rec) return Math.min(rec.max, 12);
+    return null;
+  }
+
+  function formatStartTime(value) {
+    var text = String(value || "");
+    if (!/^\d{2}:\d{2}$/.test(text)) return text;
+    var hour = Number(text.slice(0, 2));
+    var minute = text.slice(3);
+    var suffix = hour >= 12 ? "PM" : "AM";
+    var twelve = hour % 12;
+    if (twelve === 0) twelve = 12;
+    return twelve + ":" + minute + " " + suffix;
+  }
+
+  function needsTeacher(players) {
+    var list = players || [];
+    var i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i] && list[i].experience === "teach") return false;
+    }
+    return list.length > 0;
+  }
+
+  function seatsTaken(table) {
+    return table && Array.isArray(table.players) ? table.players.length : 0;
+  }
+
+  function tableFull(table) {
+    if (!table) return false;
+    var seats = Number(table.seats) || 0;
+    return seats > 0 && seatsTaken(table) >= seats;
+  }
+
+  function filterGames(games, query) {
+    var q = String(query || "").trim().toLowerCase();
+    var list = Array.isArray(games) ? games : [];
+    if (!q) return list.slice(0, 12);
+    var out = [];
+    var i;
+    for (i = 0; i < list.length; i++) {
+      var name = String(list[i].name || "");
+      if (name.toLowerCase().indexOf(q) !== -1) out.push(list[i]);
+      if (out.length >= 12) break;
+    }
+    return out;
+  }
+
+  function parseCatalog(raw) {
+    var data = raw && typeof raw === "object" ? raw : {};
+    var enrich = data.enrich && typeof data.enrich === "object" ? data.enrich : {};
+    var names = Array.isArray(data.names) ? data.names : [];
+    var out = [];
+    names.forEach(function (name) {
+      var title = String(name || "").trim();
+      if (!title) return;
+      var slug = title.toLowerCase().replace(/[:'"]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      var game = Object.assign({ name: title, slug: slug }, enrich[slug] || {});
+      out.push({
+        name: title,
+        slug: slug,
+        players: game.players || "",
+        playerPoll: game.playerPoll || null,
+        maxPlayers: maxPlayersFromGame(game)
+      });
+    });
+    return out;
+  }
+
   root.GameDay = {
     parseConfig: parseConfig,
     foodPeople: foodPeople,
@@ -182,7 +290,19 @@
     nextDate: nextDate,
     formatDate: formatDate,
     endpointOpen: endpointOpen,
-    validDate: validDate
+    payloadHasTables: payloadHasTables,
+    validDate: validDate,
+    experienceLabel: experienceLabel,
+    playerSpan: playerSpan,
+    maxPlayersFromGame: maxPlayersFromGame,
+    formatStartTime: formatStartTime,
+    needsTeacher: needsTeacher,
+    seatsTaken: seatsTaken,
+    tableFull: tableFull,
+    filterGames: filterGames,
+    parseCatalog: parseCatalog,
+    START_TIMES: START_TIMES,
+    EXPERIENCE_LABELS: EXPERIENCE_LABELS
   };
 
   if (!root.document) return;
@@ -193,10 +313,13 @@
     open: false,
     rsvps: [],
     food: [],
+    tables: [],
+    tablesReady: false,
+    catalog: [],
     loaded: false,
     loadError: ""
   };
-  var ui = { editingId: "", error: "", saving: false };
+  var ui = { editingId: "", error: "", saving: false, gameQuery: "", pickedMax: null };
   var drafts = {};
   var mainEl = document.getElementById("gd");
 
@@ -289,6 +412,38 @@
     storageSet(foodStorageName(eventId), JSON.stringify(ids));
   }
 
+  function tableStorageName(eventId) {
+    return "bgq-gameday-tables-" + eventId;
+  }
+
+  function storedTableSeats(eventId) {
+    try {
+      var raw = JSON.parse(storageGet(tableStorageName(eventId)) || "{}");
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) return {};
+      var out = {};
+      Object.keys(raw).forEach(function (tableId) {
+        if (/^[a-f0-9]{32}$/.test(tableId) && /^[a-f0-9]{32}$/.test(String(raw[tableId] || ""))) {
+          out[tableId] = String(raw[tableId]);
+        }
+      });
+      return out;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function rememberTableSeat(eventId, tableId, playerId) {
+    var map = storedTableSeats(eventId);
+    map[tableId] = playerId;
+    storageSet(tableStorageName(eventId), JSON.stringify(map));
+  }
+
+  function forgetTableSeat(eventId, tableId) {
+    var map = storedTableSeats(eventId);
+    delete map[tableId];
+    storageSet(tableStorageName(eventId), JSON.stringify(map));
+  }
+
   function rsvpIdFor(eventId) {
     var saved = storedRsvpId(eventId);
     if (saved) return saved;
@@ -349,6 +504,37 @@
       name: String(raw.name || "").slice(0, 80),
       bringing: String(raw.bringing || "").slice(0, 140),
       quantity: Math.min(500, quantity)
+    };
+  }
+
+  function asSeat(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    var id = String(raw.id || "");
+    var experience = String(raw.experience || "");
+    if (!/^[a-f0-9]{16,32}$/.test(id)) return null;
+    if (!EXPERIENCE_LABELS[experience]) return null;
+    return {
+      id: id,
+      name: String(raw.name || "").slice(0, 80),
+      experience: experience
+    };
+  }
+
+  function asTable(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    var id = String(raw.id || "");
+    if (!/^[a-f0-9]{16,32}$/.test(id)) return null;
+    var seats = Math.floor(Number(raw.seats));
+    if (!isFinite(seats) || seats < 1) seats = 1;
+    if (seats > 20) seats = 20;
+    var startTime = String(raw.startTime || "");
+    if (START_TIMES.indexOf(startTime) === -1) startTime = startTime.slice(0, 5);
+    return {
+      id: id,
+      game: String(raw.game || "").slice(0, 80),
+      startTime: startTime,
+      seats: seats,
+      players: (raw.players || []).map(asSeat).filter(Boolean)
     };
   }
 
@@ -420,6 +606,133 @@
           '<a href="./#/?collection=group">Group games</a>' +
           '<a href="./#/">All games</a>' +
         "</nav>" +
+      "</section>"
+    );
+  }
+
+  function experienceChoices(name, selected) {
+    var codes = ["new", "played", "teach"];
+    return (
+      '<div class="gd-choices" role="group" aria-label="Experience with this game">' +
+        codes.map(function (code) {
+          return (
+            '<button type="button" class="gd-choice" data-exp-group="' + name + '" data-experience="' + code + '" aria-pressed="' +
+            (selected === code ? "true" : "false") + '">' + EXPERIENCE_LABELS[code] + "</button>"
+          );
+        }).join("") +
+      "</div>"
+    );
+  }
+
+  function startTimeOptions(selected) {
+    return START_TIMES.map(function (value) {
+      var sel = value === selected ? " selected" : "";
+      return '<option value="' + value + '"' + sel + ">" + escapeHtml(formatStartTime(value)) + "</option>";
+    }).join("");
+  }
+
+  function gameSuggestions() {
+    var matches = filterGames(state.catalog, ui.gameQuery);
+    if (!matches.length) return '<p class="gd-muted" id="gd-game-suggestions">No catalog match — you can still type a game name.</p>';
+    return (
+      '<ul class="gd-suggest-list" id="gd-game-suggestions">' +
+        matches.map(function (game) {
+          var max = game.maxPlayers != null ? ' data-max="' + game.maxPlayers + '"' : "";
+          return '<li><button type="button" class="gd-game-pick" data-game="' + escapeHtml(game.name) + '"' + max + ">" + escapeHtml(game.name) +
+            (game.maxPlayers != null ? ' <span class="gd-muted">· up to ' + game.maxPlayers + "</span>" : "") +
+            "</button></li>";
+        }).join("") +
+      "</ul>"
+    );
+  }
+
+  function nominateForm() {
+    var seatsDefault = ui.pickedMax != null ? String(ui.pickedMax) : "4";
+    return (
+      '<form id="gd-nominate" class="gd-card">' +
+        "<h3>Nominate a table</h3>" +
+        '<p class="gd-muted">Host a game at a set time. You take the first seat.</p>' +
+        '<label class="gd-field">Your first name <input name="name" required maxlength="80" autocomplete="given-name" autocapitalize="words"></label>' +
+        '<label class="gd-field">Game <input id="gd-game" name="game" required maxlength="80" autocomplete="off" list="gd-game-list" placeholder="Search or type a game" value="' + escapeHtml(ui.gameQuery) + '"></label>' +
+        '<datalist id="gd-game-list"></datalist>' +
+        gameSuggestions() +
+        '<label class="gd-field">Start time <select name="startTime" required>' + startTimeOptions("15:00") + "</select></label>" +
+        '<label class="gd-field">Seats <input name="seats" inputmode="numeric" type="number" min="1" max="20" step="1" value="' + escapeHtml(seatsDefault) + '"></label>' +
+        '<p class="gd-muted">Includes you. Default is the game\'s max player count when we know it.</p>' +
+        '<label class="gd-field">Your experience</label>' +
+        experienceChoices("nominate", "teach") +
+        '<button type="submit">Nominate table</button>' +
+      "</form>"
+    );
+  }
+
+  function tableCard(table, ownSeats) {
+    var taken = seatsTaken(table);
+    var full = tableFull(table);
+    var ownId = ownSeats[table.id] || "";
+    var mine = ownId && table.players.some(function (p) { return p.id === ownId; });
+    var teacher = needsTeacher(table.players);
+    var seatsLabel = taken + " / " + table.seats + " seats";
+    var status = full
+      ? '<p class="gd-full">Full · ' + escapeHtml(seatsLabel) + "</p>"
+      : '<p class="gd-open-seats">' + escapeHtml(seatsLabel) + "</p>";
+    var badge = teacher ? '<p class="gd-badge" role="status">Needs a teacher</p>' : "";
+    var people = table.players.map(function (player) {
+      var yours = mine && player.id === ownId ? ' <span class="gd-yours">You</span>' : "";
+      return (
+        "<li>" +
+          '<span class="gd-seat-name">' + escapeHtml(player.name) + yours + "</span>" +
+          '<span class="gd-seat-exp">' + escapeHtml(experienceLabel(player.experience)) + "</span>" +
+        "</li>"
+      );
+    }).join("");
+    var actions = "";
+    if (mine) {
+      actions = '<button type="button" class="gd-leave" data-leave-table="' + escapeHtml(table.id) + '">Leave table</button>';
+    } else if (!full && state.open) {
+      actions =
+        '<form class="gd-join" data-table="' + escapeHtml(table.id) + '">' +
+          '<label class="gd-field">Your first name <input name="name" required maxlength="80" autocomplete="given-name" autocapitalize="words"></label>' +
+          '<label class="gd-field">Your experience</label>' +
+          experienceChoices("join-" + table.id, "new") +
+          '<button type="submit">Join table</button>' +
+        "</form>";
+    }
+    return (
+      '<section class="gd-card gd-table" id="table-' + escapeHtml(table.id) + '" data-full="' + (full ? "true" : "false") + '">' +
+        "<h3>" + escapeHtml(table.game) + "</h3>" +
+        '<p class="gd-table-time">' + escapeHtml(formatStartTime(table.startTime)) + "</p>" +
+        status +
+        badge +
+        (people ? '<ul class="gd-seats">' + people + "</ul>" : "") +
+        actions +
+      "</section>"
+    );
+  }
+
+  function tablesSection() {
+    if (!state.open || (state.loaded && !state.tablesReady)) {
+      return (
+        '<section class="gd-card" id="gd-tables">' +
+          "<h2>Tables</h2>" +
+          '<p id="gd-tables-soon" role="status">Table sign-ups open soon</p>' +
+          "<p class=\"gd-muted\">Nominate a game, set a start time, and let people claim seats — including who can teach.</p>" +
+        "</section>"
+      );
+    }
+    if (!state.loaded && !state.loadError) {
+      return '<section class="gd-card" id="gd-tables"><h2>Tables</h2><p>Loading tables…</p></section>';
+    }
+    var ownSeats = state.event ? storedTableSeats(state.event.id) : {};
+    var cards = state.tables.map(function (table) { return tableCard(table, ownSeats); }).join("");
+    var empty = state.tables.length ? "" : '<p class="gd-muted" id="gd-tables-empty">No tables yet. Nominate one below.</p>';
+    return (
+      '<section id="gd-tables">' +
+        "<h2>Tables</h2>" +
+        "<p>Want to play something specific? Nominate a table or join one that still has seats.</p>" +
+        empty +
+        cards +
+        nominateForm() +
       "</section>"
     );
   }
@@ -594,6 +907,7 @@
       datePicker(upcoming(), event) +
       closed +
       live +
+      tablesSection() +
       '<section class="gd-food" id="gd-food">' +
         "<h2>Food</h2>" +
         '<p id="gd-food-intro">' + escapeHtml(foodIntro(stats)) + "</p>" +
@@ -601,6 +915,15 @@
         items +
       "</section>" +
       playLinks();
+    fillGameDatalist();
+  }
+
+  function fillGameDatalist() {
+    var list = document.getElementById("gd-game-list");
+    if (!list) return;
+    list.innerHTML = state.catalog.slice(0, 200).map(function (game) {
+      return '<option value="' + escapeHtml(game.name) + '"></option>';
+    }).join("");
   }
 
   function showError(message) {
@@ -637,9 +960,12 @@
       state.loadError = "";
       state.rsvps = (payload.rsvps || []).map(asRsvp).filter(Boolean);
       state.food = (payload.food || []).map(asClaim).filter(Boolean);
+      state.tablesReady = payloadHasTables(payload);
+      state.tables = state.tablesReady ? (payload.tables || []).map(asTable).filter(Boolean) : [];
       state.loaded = true;
       var stored = storedRsvpId(state.event.id);
       if (stored && !state.rsvps.some(function (row) { return row.id === stored; })) forgetRsvp(state.event.id);
+      syncOwnTableSeats();
       render();
     }).catch(function () {
       state.loaded = false;
@@ -665,8 +991,25 @@
   function applyPayload(payload) {
     state.rsvps = (payload.rsvps || []).map(asRsvp).filter(Boolean);
     state.food = (payload.food || []).map(asClaim).filter(Boolean);
+    state.tablesReady = payloadHasTables(payload);
+    state.tables = state.tablesReady ? (payload.tables || []).map(asTable).filter(Boolean) : [];
+    syncOwnTableSeats();
     state.loaded = true;
     state.loadError = "";
+  }
+
+  function syncOwnTableSeats() {
+    if (!state.event) return;
+    var map = storedTableSeats(state.event.id);
+    var changed = false;
+    Object.keys(map).forEach(function (tableId) {
+      var table = state.tables.filter(function (row) { return row.id === tableId; })[0];
+      if (!table || !table.players.some(function (p) { return p.id === map[tableId]; })) {
+        delete map[tableId];
+        changed = true;
+      }
+    });
+    if (changed) storageSet(tableStorageName(state.event.id), JSON.stringify(map));
   }
 
   function currentStatus() {
@@ -824,22 +1167,202 @@
     });
   }
 
+  function chosenExperience(group) {
+    var pressed = document.querySelector('.gd-choice[data-exp-group="' + group + '"][aria-pressed="true"]');
+    var value = pressed ? pressed.getAttribute("data-experience") : "";
+    return EXPERIENCE_LABELS[value] ? value : "";
+  }
+
+  function validatePerson(name) {
+    name = scrub(name);
+    if (!name) return { error: "Enter your first name." };
+    if (name.length > 80) return { error: "That text is too long." };
+    var problem = textProblem(name);
+    if (problem) return { error: problem };
+    if (!/[A-Za-z]/.test(name) && !/[^\u0000-\u007f]/.test(name)) return { error: "Use letters in that name." };
+    return { value: name };
+  }
+
+  function onNominate(form) {
+    var person = validatePerson(form.name.value);
+    if (person.error) {
+      showError(person.error);
+      return;
+    }
+    var game = scrub(form.game.value);
+    if (!game) {
+      showError("Enter a game.");
+      return;
+    }
+    if (game.length > 80) {
+      showError("That text is too long.");
+      return;
+    }
+    var gameProblem = textProblem(game);
+    if (gameProblem) {
+      showError(gameProblem);
+      return;
+    }
+    var startTime = String(form.startTime.value || "");
+    if (START_TIMES.indexOf(startTime) === -1) {
+      showError("Pick a start time.");
+      return;
+    }
+    var seatsText = String(form.seats.value == null ? "" : form.seats.value).trim();
+    if (!/^\d+$/.test(seatsText) || parseInt(seatsText, 10) < 1 || parseInt(seatsText, 10) > 20) {
+      showError("Enter how many seats the table has.");
+      return;
+    }
+    var experience = chosenExperience("nominate");
+    if (!experience) {
+      showError("Pick New to it, Played before, or Can teach.");
+      return;
+    }
+    var tableId = randomId();
+    var playerId = randomId();
+    ui.saving = true;
+    form.querySelector("button[type=submit]").disabled = true;
+    showError("");
+    send({
+      op: "nominate",
+      eventId: state.event.id,
+      id: tableId,
+      playerId: playerId,
+      editKey: deviceKey(),
+      game: game,
+      startTime: startTime,
+      seats: parseInt(seatsText, 10),
+      name: person.value,
+      experience: experience
+    }).then(function (payload) {
+      ui.saving = false;
+      if (!payload || payload.ok === false) {
+        showError((payload && payload.error) || "That didn't save. Try again.");
+        var button = form.querySelector("button[type=submit]");
+        if (button) button.disabled = false;
+        return;
+      }
+      rememberTableSeat(state.event.id, tableId, playerId);
+      ui.gameQuery = "";
+      ui.pickedMax = null;
+      ui.error = "";
+      applyPayload(payload);
+      render();
+    });
+  }
+
+  function onJoin(form) {
+    var tableId = form.getAttribute("data-table") || "";
+    var person = validatePerson(form.name.value);
+    if (person.error) {
+      showError(person.error);
+      return;
+    }
+    var experience = chosenExperience("join-" + tableId);
+    if (!experience) {
+      showError("Pick New to it, Played before, or Can teach.");
+      return;
+    }
+    var playerId = randomId();
+    ui.saving = true;
+    form.querySelector("button[type=submit]").disabled = true;
+    showError("");
+    send({
+      op: "join",
+      eventId: state.event.id,
+      tableId: tableId,
+      id: playerId,
+      editKey: deviceKey(),
+      name: person.value,
+      experience: experience
+    }).then(function (payload) {
+      ui.saving = false;
+      if (!payload || payload.ok === false) {
+        showError((payload && payload.error) || "That didn't save. Try again.");
+        var button = form.querySelector("button[type=submit]");
+        if (button) button.disabled = false;
+        return;
+      }
+      rememberTableSeat(state.event.id, tableId, playerId);
+      ui.error = "";
+      applyPayload(payload);
+      render();
+    });
+  }
+
+  function onLeaveTable(tableId) {
+    if (ui.saving) return;
+    var map = storedTableSeats(state.event.id);
+    var playerId = map[tableId] || "";
+    ui.saving = true;
+    send({
+      op: "leave",
+      eventId: state.event.id,
+      tableId: tableId,
+      id: playerId,
+      editKey: deviceKey()
+    }).then(function (payload) {
+      ui.saving = false;
+      if (!payload || payload.ok === false) {
+        showError((payload && payload.error) || "That didn't save. Try again.");
+        return;
+      }
+      forgetTableSeat(state.event.id, tableId);
+      ui.error = "";
+      applyPayload(payload);
+      render();
+    });
+  }
+
+  function lookupMaxPlayers(name) {
+    var needle = String(name || "").trim().toLowerCase();
+    if (!needle) return null;
+    var i;
+    for (i = 0; i < state.catalog.length; i++) {
+      if (String(state.catalog[i].name || "").toLowerCase() === needle) return state.catalog[i].maxPlayers;
+    }
+    return null;
+  }
+
   mainEl.addEventListener("submit", function (event) {
     var form = event.target;
     if (!form || !mainEl.contains(form)) return;
     event.preventDefault();
     if (ui.saving) return;
     if (form.id === "gd-form") onRsvpSubmit(form);
+    else if (form.id === "gd-nominate") onNominate(form);
     else if (form.classList.contains("gd-claim")) onFoodSubmit(form);
+    else if (form.classList.contains("gd-join")) onJoin(form);
   });
 
   mainEl.addEventListener("click", function (event) {
     var choice = event.target.closest ? event.target.closest(".gd-choice") : null;
     if (choice && mainEl.contains(choice)) {
-      var group = choice.parentNode;
-      Array.prototype.forEach.call(group.querySelectorAll(".gd-choice"), function (other) {
+      var groupName = choice.getAttribute("data-exp-group");
+      var siblings = groupName
+        ? choice.parentNode.querySelectorAll('.gd-choice[data-exp-group="' + groupName + '"]')
+        : choice.parentNode.querySelectorAll(".gd-choice");
+      Array.prototype.forEach.call(siblings, function (other) {
         other.setAttribute("aria-pressed", other === choice ? "true" : "false");
       });
+      return;
+    }
+    var pick = event.target.closest ? event.target.closest(".gd-game-pick") : null;
+    if (pick) {
+      var gameInput = document.getElementById("gd-game");
+      var seatsInput = document.querySelector("#gd-nominate input[name='seats']");
+      var name = pick.getAttribute("data-game") || "";
+      var max = pick.getAttribute("data-max");
+      ui.gameQuery = name;
+      ui.pickedMax = max ? Number(max) : null;
+      if (gameInput) gameInput.value = name;
+      if (seatsInput && ui.pickedMax != null) seatsInput.value = String(ui.pickedMax);
+      var suggestions = document.getElementById("gd-game-suggestions");
+      if (suggestions) {
+        var wrap = document.createElement("div");
+        wrap.innerHTML = gameSuggestions();
+        suggestions.replaceWith(wrap.firstChild);
+      }
       return;
     }
     var edit = event.target.closest ? event.target.closest("[data-edit]") : null;
@@ -854,7 +1377,27 @@
       onRemove(remove.getAttribute("data-remove") || "");
       return;
     }
+    var leave = event.target.closest ? event.target.closest("[data-leave-table]") : null;
+    if (leave) {
+      onLeaveTable(leave.getAttribute("data-leave-table") || "");
+      return;
+    }
     if (event.target.id === "gd-retry") loadRsvps();
+  });
+
+  mainEl.addEventListener("input", function (event) {
+    if (event.target.id !== "gd-game") return;
+    ui.gameQuery = event.target.value || "";
+    ui.pickedMax = lookupMaxPlayers(ui.gameQuery);
+    var seatsInput = document.querySelector("#gd-nominate input[name='seats']");
+    if (seatsInput && ui.pickedMax != null && document.activeElement === event.target) {
+      seatsInput.value = String(ui.pickedMax);
+    }
+    var suggestions = document.getElementById("gd-game-suggestions");
+    if (!suggestions) return;
+    var wrap = document.createElement("div");
+    wrap.innerHTML = gameSuggestions();
+    suggestions.replaceWith(wrap.firstChild);
   });
 
   mainEl.addEventListener("change", function (event) {
@@ -867,9 +1410,13 @@
         state.event = dates[i];
         state.rsvps = [];
         state.food = [];
+        state.tables = [];
+        state.tablesReady = false;
         state.loaded = false;
         ui.editingId = "";
         ui.error = "";
+        ui.gameQuery = "";
+        ui.pickedMax = null;
         try {
           var url = new URL(window.location.href);
           url.searchParams.set("date", id);
@@ -925,26 +1472,42 @@
     }).catch(function () {});
   }
 
+  function loadCatalog() {
+    return fetch("./index.html", { credentials: "same-origin" }).then(function (res) {
+      if (!res.ok) throw new Error("catalog");
+      return res.text();
+    }).then(function (html) {
+      var start = html.indexOf('<script id="games-json"');
+      if (start < 0) return;
+      var open = html.indexOf(">", start);
+      var close = html.indexOf("</script>", open);
+      if (open < 0 || close < 0) return;
+      state.catalog = parseCatalog(JSON.parse(html.slice(open + 1, close)));
+    }).catch(function () {
+      state.catalog = [];
+    });
+  }
+
   function init() {
     initTheme();
-    fetch("./data/game-days.json", { cache: "no-store", credentials: "same-origin" })
-      .then(function (res) {
+    Promise.all([
+      fetch("./data/game-days.json", { cache: "no-store", credentials: "same-origin" }).then(function (res) {
         if (!res.ok) throw new Error("config");
         return res.json();
-      })
-      .then(function (raw) {
-        state.config = parseConfig(raw);
-        state.event = chooseEvent();
-        state.open = endpointOpen(state.config.endpoint);
-        render();
-        registerSw();
-        return loadRsvps();
-      })
-      .catch(function () {
-        state.config = null;
-        render();
-        registerSw();
-      });
+      }),
+      loadCatalog()
+    ]).then(function (results) {
+      state.config = parseConfig(results[0]);
+      state.event = chooseEvent();
+      state.open = endpointOpen(state.config.endpoint);
+      render();
+      registerSw();
+      return loadRsvps();
+    }).catch(function () {
+      state.config = null;
+      render();
+      registerSw();
+    });
   }
 
   init();

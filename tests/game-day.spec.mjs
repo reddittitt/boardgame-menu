@@ -131,7 +131,7 @@ test.beforeEach(function () {
   server.seen.types = [];
 });
 
-test("closed page shows the next Saturday and keeps the location private", async function ({ page }) {
+test("closed page shows the next Saturday and keeps the location private", async function ({ page }, testInfo) {
   await installClosedMock(page);
   await page.goto(ON);
   await expect(page.locator("#gd-date")).toHaveText("Saturday, November 21, 2026");
@@ -142,6 +142,7 @@ test("closed page shows the next Saturday and keeps the location private", async
   await expect(page.getByRole("button", { name: "Save RSVP" })).toHaveCount(0);
   await expect(page.locator('input[type="email"], input[type="tel"]')).toHaveCount(0);
   await expect(page.getByLabel(/phone|email/i)).toHaveCount(0);
+  await expect(page.locator("#gd-tables-soon")).toHaveText("Table sign-ups open soon");
   await expect(page.locator("#food-drinks")).toContainText("about 2 per person");
   await expect(page.locator("#food-drinks")).toContainText("Waiting on RSVPs");
   await expect(page.locator("#gd-play")).toContainText("All Games filters");
@@ -150,6 +151,11 @@ test("closed page shows the next Saturday and keeps the location private", async
     return parseFloat(getComputedStyle(el).fontSize);
   });
   expect(selectSize).toBeGreaterThanOrEqual(16);
+
+  if (testInfo.project.name === "phone") {
+    await page.locator("#gd-tables").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(artifacts, "game-day-tables-empty-phone.png") });
+  }
 
   await page.getByLabel("Date").selectOption("2026-12-19");
   await expect(page.locator("#gd-date")).toHaveText("Saturday, December 19, 2026");
@@ -171,6 +177,8 @@ test("published endpoint opens RSVPs and loads event 2026-11-21 from a mocked fe
   await expect(page.getByRole("button", { name: "Save RSVP" })).toBeVisible();
   await expect(page.locator("#gd-location")).toHaveText("Location shared after you RSVP");
   await expect(page.locator("#food-drinks")).toContainText("Waiting on RSVPs");
+  await expect(page.locator("#gd-tables-soon")).toHaveText("Table sign-ups open soon");
+  await expect(page.locator("#gd-nominate")).toHaveCount(0);
   await expect.poll(function () { return seen.method; }).toBe("GET");
   expect(seen.event).toBe("2026-11-21");
   expect(seen.href).toBe(PUBLISHED_ENDPOINT);
@@ -307,6 +315,74 @@ test("a family can RSVP, edit, and sign up for food", async function ({ page, br
   await expect(page2.getByText("CRPC", { exact: true })).toHaveCount(0);
   await expect(page2.getByText("Your RSVP")).toHaveCount(0);
   await expect(page2.locator("#food-drinks")).toContainText("seltzer");
+  await other.close();
+});
+
+test("tables can be nominated, joined, marked full, and flagged for a teacher", async function ({ page, browser }, testInfo) {
+  await installMock(page);
+  await page.goto(ON);
+  await expect(page.locator("#gd-nominate")).toBeVisible();
+  await expect(page.locator("#gd-tables-soon")).toHaveCount(0);
+
+  const nominate = page.locator("#gd-nominate");
+  await nominate.getByLabel("Your first name").fill("Riley");
+  await nominate.locator("#gd-game").fill("Catan");
+  await nominate.getByLabel("Start time").selectOption("16:00");
+  await nominate.getByLabel("Seats").fill("4");
+  await nominate.getByRole("button", { name: "Can teach", exact: true }).click();
+  await nominate.getByRole("button", { name: "Nominate table" }).click();
+
+  const openTable = page.locator(".gd-table").filter({ hasText: "Catan" });
+  await expect(openTable).toContainText("1 / 4 seats");
+  await expect(openTable).toContainText("Riley");
+  await expect(openTable).toContainText("Can teach");
+  await expect(openTable.locator(".gd-badge")).toHaveCount(0);
+
+  if (testInfo.project.name === "phone") {
+    await openTable.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(artifacts, "game-day-tables-open-phone.png") });
+  }
+
+  const again = page.locator("#gd-nominate");
+  await again.getByLabel("Your first name").fill("Alex");
+  await again.locator("#gd-game").fill("Azul");
+  await again.getByLabel("Start time").selectOption("15:00");
+  await again.getByLabel("Seats").fill("2");
+  await again.getByRole("button", { name: "Played before", exact: true }).click();
+  await again.getByRole("button", { name: "Nominate table" }).click();
+
+  const needsTeacher = page.locator(".gd-table").filter({ hasText: "Azul" });
+  await expect(needsTeacher).toContainText("1 / 2 seats");
+  await expect(needsTeacher).toContainText("Alex");
+  await expect(needsTeacher.locator(".gd-badge")).toHaveText("Needs a teacher");
+
+  if (testInfo.project.name === "phone") {
+    await needsTeacher.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(artifacts, "game-day-tables-needs-teacher-phone.png") });
+  }
+
+  const other = await browser.newContext();
+  const page2 = await other.newPage();
+  await installMock(page2);
+  await page2.goto(ON);
+  const join = page2.locator(".gd-table").filter({ hasText: "Azul" }).locator(".gd-join");
+  await expect(join).toBeVisible();
+  await join.getByLabel("Your first name").fill("Sam");
+  await join.getByRole("button", { name: "New to it", exact: true }).click();
+  await join.getByRole("button", { name: "Join table" }).click();
+  const full = page2.locator(".gd-table").filter({ hasText: "Azul" });
+  await expect(full).toContainText("Full · 2 / 2 seats");
+  await expect(full.getByRole("button", { name: "Join table" })).toHaveCount(0);
+  await expect(full.locator(".gd-badge")).toHaveText("Needs a teacher");
+  await expect(page2.locator(".gd-table").filter({ hasText: "Catan" }).locator(".gd-badge")).toHaveCount(0);
+
+  if (testInfo.project.name === "phone") {
+    await full.scrollIntoViewIfNeeded();
+    await page2.screenshot({ path: path.join(artifacts, "game-day-tables-full-phone.png") });
+  }
+
+  await page2.getByRole("button", { name: "Leave table" }).click();
+  await expect(page2.locator(".gd-table").filter({ hasText: "Azul" })).toContainText("1 / 2 seats");
   await other.close();
 });
 
