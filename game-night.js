@@ -269,7 +269,7 @@
   }
 
   function emptyState() {
-    return { players: "", time: "", kids: false, weightFrom: "", weightTo: "", games: [], pool: null };
+    return { players: "", time: "", kids: false, weightFrom: "", weightTo: "", who: [], games: [], pool: null };
   }
 
   function render(ctx) {
@@ -280,9 +280,27 @@
     var decision = null;
     var query = "";
     var dropped = 0;
+    var ownerNames = (ctx.owners && ctx.owners.length)
+      ? ctx.owners.slice()
+      : ["Cody", "Zeek", "Tim", "John", "Ryan", "Andrew"];
 
     function allowed(code, list) {
       return list.indexOf(code) !== -1 ? code : "";
+    }
+
+    function cleanWho(value) {
+      var allowedNames = {};
+      ownerNames.forEach(function (name) { allowedNames[name.toLowerCase()] = name; });
+      var seen = {};
+      var next = [];
+      String(value || "").split(",").forEach(function (part) {
+        var name = allowedNames[part.trim().toLowerCase()];
+        if (!name || seen[name]) return;
+        seen[name] = true;
+        next.push(name);
+      });
+      next.sort(function (a, b) { return ownerNames.indexOf(a) - ownerNames.indexOf(b); });
+      return next;
     }
 
     function readParams(params) {
@@ -293,6 +311,7 @@
       next.kids = params.get("kids") === "1";
       next.weightFrom = allowed(params.get("w0") || "", WEIGHTS);
       next.weightTo = allowed(params.get("w1") || "", WEIGHTS);
+      next.who = cleanWho(params.get("who") || "");
       normalizeWeights(next);
       var seen = {};
       String(params.get("games") || "").split(",").forEach(function (part) {
@@ -382,7 +401,7 @@
     function paramsHaveState(params) {
       if (!params) return false;
       return params.has("players") || params.has("time") || params.has("kids") ||
-        params.has("w0") || params.has("w1") || params.has("games") || params.has("pool");
+        params.has("w0") || params.has("w1") || params.has("who") || params.has("games") || params.has("pool");
     }
 
     function loadState() {
@@ -398,6 +417,7 @@
         if (saved.kids) params.set("kids", "1");
         if (saved.weightFrom) params.set("w0", saved.weightFrom);
         if (saved.weightTo) params.set("w1", saved.weightTo);
+        if (saved.who && saved.who.length) params.set("who", saved.who.join(","));
         if (saved.games && saved.games.length) params.set("games", saved.games.join(","));
         if (saved.pool) params.set("pool", compactPool(saved.pool));
         return readParams(params);
@@ -422,6 +442,7 @@
       if (state.kids) params.set("kids", "1");
       if (state.weightFrom) params.set("w0", state.weightFrom);
       if (state.weightTo) params.set("w1", state.weightTo);
+      if (state.who.length) params.set("who", state.who.map(function (name) { return name.toLowerCase(); }).join(","));
       if (state.games.length) params.set("games", state.games.join(","));
       if (state.pool && (state.pool.roster.length || state.pool.picks.length)) params.set("pool", compactPool(state.pool));
       var qs = params.toString();
@@ -456,6 +477,14 @@
         if (idx < from || idx > to) return false;
       }
       if (!kidsAllows(game, state.kids, catalogHasAge)) return false;
+      if (state.who.length) {
+        var owners = game.owners || [];
+        var hit = false;
+        for (var i = 0; i < state.who.length; i++) {
+          if (owners.indexOf(state.who[i]) !== -1) hit = true;
+        }
+        if (!hit) return false;
+      }
       return true;
     }
 
@@ -515,7 +544,7 @@
     function fitSentence() {
       var n = 0;
       ctx.games.forEach(function (game) { if (fits(game)) n += 1; });
-      var filtering = !!(state.players || state.time || state.weightFrom || state.weightTo || state.kids);
+      var filtering = !!(state.players || state.time || state.weightFrom || state.weightTo || state.kids || state.who.length);
       if (!filtering) return n + (n === 1 ? " game is in the catalog." : " games are in the catalog.");
       if (n === 0) return "No games fit tonight.";
       if (n === 1) return "1 game fits tonight.";
@@ -557,6 +586,9 @@
       var toChips = WEIGHTS.map(function (value) {
         return chip("w1", value, WEIGHT_LABELS[value], "Weight up to " + WEIGHT_LABELS[value], state.weightTo === value);
       }).join("");
+      var whoChips = ownerNames.map(function (name) {
+        return chip("who", name, name, name + "\u2019s games", state.who.indexOf(name) !== -1);
+      }).join("");
       ctx.appEl.innerHTML =
         '<article class="gn" id="gn-page">' +
           '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>' +
@@ -589,6 +621,10 @@
               '<span class="gn-facet-label" id="gn-w1-label">Up to</span>' +
               '<div class="gn-chips" role="group" aria-labelledby="gn-w1-label">' + toChips + "</div>" +
               '<p id="gn-weight-summary" class="gn-note"></p>' +
+            "</div>" +
+            '<div class="gn-facet">' +
+              '<span class="gn-facet-label" id="gn-who-label">Whose games</span>' +
+              '<div class="gn-chips" role="group" aria-labelledby="gn-who-label">' + whoChips + "</div>" +
             "</div>" +
           "</section>" +
           '<section class="gn-card" aria-labelledby="gn-nom-title">' +
@@ -657,6 +693,7 @@
         else if (facet === "w0") on = state.weightFrom === value;
         else if (facet === "w1") on = state.weightTo === value;
         else if (facet === "kids") on = (value === "1") === !!state.kids;
+        else if (facet === "who") on = state.who.indexOf(value) !== -1;
         btn.setAttribute("aria-pressed", on ? "true" : "false");
       });
     }
@@ -1944,7 +1981,12 @@
       else if (facet === "kids") state.kids = value === "1";
       else if (facet === "w0") state.weightFrom = state.weightFrom === value ? "" : value;
       else if (facet === "w1") state.weightTo = state.weightTo === value ? "" : value;
-      else return;
+      else if (facet === "who") {
+        var at = state.who.indexOf(value);
+        if (at === -1) state.who.push(value);
+        else state.who.splice(at, 1);
+        state.who = cleanWho(state.who.join(","));
+      } else return;
       normalizeWeights(state);
       paintContext();
       paintResults();
