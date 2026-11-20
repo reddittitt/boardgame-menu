@@ -93,3 +93,16 @@ test("selection stays in the game URL", async ({ page }) => {
   await expect(page.locator("#put-it-away .showing-for-text")).toContainText("3 players");
   await expect(page.locator("#put-it-away")).toContainText("Riverfolk Expansion");
 });
+
+test("pathname game URL applies expansion selection", async ({ page }) => {
+  await page.goto("/game/root/?exps=Riverfolk%20Expansion");
+  await expect(page.locator(".title")).toContainText("Root");
+  await page.waitForFunction(function () { return document.querySelector("#put-it-away"); });
+  await expect(page.locator("#exp-controls .exp-chip", { hasText: "Riverfolk Expansion" })).toHaveAttribute("data-active", "true");
+  await expect(page.locator("#put-it-away")).toContainText("Riverfolk Expansion");
+  await page.reload();
+  await expect(page.locator(".title")).toContainText("Root");
+  await page.waitForFunction(function () { return document.querySelector("#put-it-away"); });
+  await expect(page.locator("#exp-controls .exp-chip", { hasText: "Riverfolk Expansion" })).toHaveAttribute("data-active", "true");
+  await expect(page.locator("#put-it-away")).toContainText("Riverfolk Expansion");
+});

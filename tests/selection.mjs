@@ -79,7 +79,7 @@ assert(rootGame.setupVariants[0].setup.bullets[0].variant, "variant retagged");
 assert(rootGame.setupByPlayerCount["2"].bullets[0].players, "players retagged");
 
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.20\.17";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.20\.18";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components shell");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
