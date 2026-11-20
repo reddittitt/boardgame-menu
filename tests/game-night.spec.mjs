@@ -364,6 +364,92 @@ test("picker math stays fair", async ({ page }, testInfo) => {
   expect(result).toEqual([]);
 });
 
+test("everyone picks a weighted wheel and can pass the list by link", async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const dir = "/opt/cursor/artifacts";
+  fs.mkdirSync(dir, { recursive: true });
+  async function shot(name) {
+    if (testInfo.project.name !== "phone") return;
+    await page.screenshot({ path: path.join(dir, name + ".png") });
+  }
+
+  await openNight(page, "/night");
+  await page.getByRole("button", { name: "Spin the wheel" }).click();
+  await page.getByRole("button", { name: "Everyone picks" }).click();
+  const nameSize = await page.locator("#gn-player-name").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(nameSize).toBeGreaterThanOrEqual(16);
+  await expect(page.getByRole("button", { name: "2 picks", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await page.locator("#gn-player-name").fill("Sam");
+  await page.getByRole("button", { name: "Add name" }).click();
+  await page.locator("#gn-player-name").fill("Jo");
+  await page.getByRole("button", { name: "Add name" }).click();
+  await page.locator("#gn-panel").scrollIntoViewIfNeeded();
+  await shot("game-night-phone-everyone-names");
+  await page.getByRole("button", { name: "Start passing the phone" }).click();
+  await expect(page.locator("#gn-cover")).toContainText("Sam");
+  await expect(page.locator("#gn-cover")).not.toContainText("Azul");
+  await page.getByRole("button", { name: "Sam is ready" }).click();
+  const sheet = page.locator("#gn-pick-sheet");
+  await sheet.locator("#gn-pick-search").fill("azul");
+  await sheet.getByRole("button", { name: "Pick Azul", exact: true }).click();
+  await shot("game-night-phone-everyone-pick");
+  await sheet.locator("#gn-pick-search").fill("jaipur");
+  await sheet.getByRole("button", { name: "Pick Jaipur", exact: true }).click();
+  await sheet.getByRole("button", { name: "Done" }).click();
+  await expect(page.locator("#gn-cover")).toContainText("Jo");
+  await expect(page.locator("#gn-cover")).not.toContainText("Azul");
+  await shot("game-night-phone-everyone-pass");
+  await page.getByRole("button", { name: "Jo is ready" }).click();
+  await sheet.locator("#gn-pick-search").fill("azul");
+  await sheet.getByRole("button", { name: "Pick Azul", exact: true }).click();
+  await sheet.locator("#gn-pick-search").fill("codenames");
+  await sheet.getByRole("button", { name: "Pick Codenames", exact: true }).click();
+  await sheet.getByRole("button", { name: "Done" }).click();
+
+  await expect(page.locator("#gn-wheel-wrap")).toHaveAttribute("data-weights", "2,1,1");
+  await expect(page.locator("#gn-dup")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#gn-nominee-list")).toContainText("Picked by Sam, Jo");
+  const shared = decodeURIComponent(page.url());
+  expect(shared).toContain("Sam");
+  expect(shared).toContain("Jo");
+  expect(shared).toContain("azul");
+  await page.locator("#gn-wheel-wrap").scrollIntoViewIfNeeded();
+  await shot("game-night-phone-everyone-wheel");
+
+  await page.getByRole("button", { name: "Duplicates count extra" }).click();
+  await expect(page.locator("#gn-wheel-wrap")).toHaveAttribute("data-weights", "1,1,1");
+  await page.getByRole("button", { name: "Duplicates count extra" }).click();
+  await expect(page.locator("#gn-wheel-wrap")).toHaveAttribute("data-weights", "2,1,1");
+
+  await page.getByRole("button", { name: "Spin", exact: true }).click();
+  const winner = await page.locator("#gn-wheel-wrap").getAttribute("data-winner");
+  expect(["azul", "jaipur", "codenames"]).toContain(winner);
+  await expect(page.locator("#gn-winner-name")).toBeVisible();
+
+  const href = page.url();
+  await page.reload();
+  await expect(page.locator("#gn-nominee-list")).toContainText("Picked by Sam, Jo");
+  await page.goto(href);
+  await page.getByRole("button", { name: "Veto rounds" }).click();
+  await expect(page.getByRole("button", { name: "Strike Azul" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Strike Jaipur" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Strike Codenames" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Spin the wheel" }).click();
+  await page.getByRole("button", { name: "Add my picks" }).click();
+  await page.locator("#gn-player-name").fill("Alex");
+  await page.getByRole("button", { name: "Next" }).click();
+  await sheet.locator("#gn-pick-search").fill("patchwork");
+  await sheet.getByRole("button", { name: "Pick Patchwork", exact: true }).click();
+  await sheet.locator("#gn-pick-search").fill("kingdomino");
+  await sheet.getByRole("button", { name: "Pick Kingdomino", exact: true }).click();
+  await sheet.getByRole("button", { name: "Done" }).click();
+  await expect(page.locator("#gn-nominee-list")).toContainText("Picked by Alex");
+  expect(decodeURIComponent(page.url())).toContain("Alex");
+  const remembered = await page.evaluate(() => JSON.parse(localStorage.getItem("bgq_night_names") || "[]"));
+  expect(remembered).toEqual(expect.arrayContaining(["Sam", "Jo", "Alex"]));
+});
+
 test("phone screenshots of each mode", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "phone", "phone screenshots only");
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -424,12 +510,12 @@ test("game night works offline and the worker still skips other origins", async 
   });
   expect(swText).toContain("url.origin !== self.location.origin");
   expect(swText.indexOf("url.origin !== self.location.origin")).toBeLessThan(swText.indexOf("respondWith"));
-  expect(swText).toContain('VERSION = "2026.11.20.6"');
+  expect(swText).toContain('VERSION = "2026.11.20.11"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.20.6");
+    const cache = await caches.open("bgquick-shell-2026.11.20.11");
     const keys = await cache.keys();
     const urls = keys.map((req) => req.url);
     return urls.some((url) => /index\.html/.test(url)) && urls.some((url) => /game-night\.js/.test(url));
