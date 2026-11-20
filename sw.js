@@ -7,10 +7,11 @@
    the cap does not evict them. Old cache names are deleted on activate.
 
    Cross-origin requests are never intercepted. That includes the rulebook
-   relay, publisher PDFs, cover CDNs, and fonts. Same-origin PDFs are not
-   cached either.
+   relay, publisher PDFs, cover CDNs, fonts, and Game Day RSVPs posted to
+   script.google.com. RSVP and food responses are never cached. Same-origin
+   PDFs are not cached either.
 */
-var VERSION = "2026.11.20.4";
+var VERSION = "2026.11.20.5";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -19,6 +20,8 @@ var IMAGE_CAP = 80;
 var SAVED_CAP = 60;
 var SHELL_FILES = [
   "./index.html",
+  "./game-day.html",
+  "./game-day.js",
   "./offline.html",
   "./manifest.json",
   "./logo.png",
@@ -340,7 +343,9 @@ self.addEventListener("fetch", function (event) {
   } catch (err) {
     return;
   }
-  /* Hard rule: never touch a request that belongs to another origin. */
+  /* Hard rule: never touch a request that belongs to another origin.
+     Game Day calls script.google.com. Leave those requests alone so RSVP
+     and food responses are never cached here. */
   if (url.origin !== self.location.origin) return;
   if (request.method !== "GET") return;
   if (request.cache === "only-if-cached" && request.mode !== "same-origin") return;
@@ -348,6 +353,32 @@ self.addEventListener("fetch", function (event) {
   if (url.pathname.indexOf("/put-away/") !== -1) return;
   if (/\.pdf$/i.test(url.pathname)) return;
   if (/\/sw\.js$/i.test(url.pathname)) return;
+
+  if (/\/game-day\.js$/i.test(url.pathname)) {
+    var scriptGate = gate();
+    event.waitUntil(scriptGate.promise);
+    event.respondWith(fetch(new Request(request.url, {
+      method: "GET",
+      cache: "reload",
+      credentials: "same-origin"
+    })).then(function (response) {
+      if (response && response.ok && response.type === "basic") {
+        caches.open(SHELL).then(function (cache) {
+          return safePut(cache, request.url, response.clone());
+        }).catch(function () {}).then(scriptGate.finish, scriptGate.finish);
+      } else {
+        scriptGate.finish();
+      }
+      if (response) return response;
+      return matchCache(SHELL, request.url);
+    }).catch(function () {
+      scriptGate.finish();
+      return matchCache(SHELL, request.url).then(function (cached) {
+        return cached || new Response("", { status: 504, statusText: "offline" });
+      });
+    }));
+    return;
+  }
 
   if (isHtml(request, url)) {
     var htmlGate = gate();
