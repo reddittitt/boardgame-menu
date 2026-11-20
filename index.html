@@ -2803,6 +2803,82 @@
   .setup-photo img { display:block; width:100%; height:auto; border-radius:12px; }
   .setup-photo figcaption { margin:6px 2px 0; font-size:12px; line-height:1.35; color:var(--muted); }
   .setup-photo figcaption a { color:inherit; }
+  .piece-check { scroll-margin-top:calc(var(--header-h, 64px) + 8px); }
+  .piece-progress {
+    margin-left:auto;
+    color:var(--muted);
+    font-size:0.85rem;
+    font-weight:650;
+  }
+  .piece-source { margin:0 0 8px; color:var(--muted); font-size:0.85rem; }
+  .piece-list { list-style:none; margin:0; padding:0; }
+  .piece-row {
+    display:grid;
+    grid-template-columns:44px auto minmax(0, 1fr);
+    gap:8px;
+    align-items:start;
+    padding:2px 0;
+  }
+  .piece-box {
+    width:44px;
+    height:44px;
+    min-width:44px;
+    border-radius:10px;
+    border:2px solid var(--border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:1.25rem;
+    line-height:1;
+    cursor:pointer;
+  }
+  .piece-box[aria-pressed="true"] {
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#fff;
+  }
+  .piece-count {
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    padding-top:10px;
+  }
+  .piece-name { min-width:0; line-height:1.35; padding-top:10px; }
+  .piece-tools {
+    grid-column:2 / -1;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .piece-missing,
+  .piece-reset {
+    min-height:44px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-weight:700;
+    padding:0 14px;
+    cursor:pointer;
+  }
+  .piece-missing { align-self:flex-start; }
+  .piece-missing[aria-pressed="true"] {
+    border-color:var(--brand);
+  }
+  .piece-note {
+    width:100%;
+    min-height:44px;
+    box-sizing:border-box;
+    font:inherit;
+    font-size:16px;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:inherit;
+  }
+  .piece-actions { display:flex; margin-top:8px; }
   .pack-away { margin-top:8px; }
   .pack-away-title { scroll-margin-top:calc(var(--header-h, 64px) + 8px); }
   .pack-viewer { margin:0; }
@@ -142849,6 +142925,239 @@
     next.addEventListener("click", function () { if (index < frames.length - 1) { index += 1; paint(); } });
     return paint;
   }
+  var pieceCatalog = null;
+  var pieceCatalogPromise = null;
+  function loadPieceCatalog() {
+    if (pieceCatalog) return Promise.resolve(pieceCatalog);
+    if (!pieceCatalogPromise) {
+      pieceCatalogPromise = fetch(basePath() + "/components.json", { cache: "no-store" }).then(function (res) {
+        return res.ok ? res.json() : {};
+      }).then(function (data) {
+        pieceCatalog = data && typeof data === "object" ? data : {};
+        return pieceCatalog;
+      }).catch(function () {
+        pieceCatalog = {};
+        return pieceCatalog;
+      });
+    }
+    return pieceCatalogPromise;
+  }
+  function pieceKey(item) {
+    return String(item.count || "") + "\n" + String(item.name || "");
+  }
+  function readPieceState(slug) {
+    try {
+      var data = JSON.parse(localStorage.getItem("bgqPieces:" + slug) || "{}");
+      return {
+        checked: data && data.checked && typeof data.checked === "object" ? data.checked : {},
+        notes: data && data.notes && typeof data.notes === "object" ? data.notes : {}
+      };
+    } catch (err) {
+      return { checked: {}, notes: {} };
+    }
+  }
+  function writePieceState(slug, state) {
+    try {
+      localStorage.setItem("bgqPieces:" + slug, JSON.stringify({
+        checked: state.checked || {},
+        notes: state.notes || {}
+      }));
+    } catch (err) {}
+  }
+  function pieceSourceText(entry) {
+    if (!entry || entry.source === "bgg") {
+      var label = String(entry && entry.label || "BoardGameGeek");
+      var extra = label.split("·")[1];
+      return extra ? "From BoardGameGeek. " + extra.trim() + "." : "From BoardGameGeek.";
+    }
+    return entry.page ? "From the rulebook, page " + entry.page + "." : "From the rulebook.";
+  }
+  function placePieceCheck(section) {
+    var body = document.querySelector(".detail-body");
+    if (!body || detailSlug == null) return;
+    var pack = body.querySelector(".pack-away");
+    if (pack) body.insertBefore(section, pack);
+    else body.appendChild(section);
+  }
+  function mountPieceCheck(game) {
+    if (!game || !game.slug) return;
+    var slug = game.slug;
+    loadPieceCatalog().then(function (catalog) {
+      if (detailSlug !== slug) return;
+      var entry = catalog && catalog[slug];
+      var items = entry && Array.isArray(entry.items) ? entry.items.filter(function (item) {
+        return item && String(item.count || "").trim() && String(item.name || "").trim();
+      }) : [];
+      if (!items.length) return;
+      var body = document.querySelector(".detail-body");
+      if (!body || body.querySelector(".piece-check")) return;
+      var state = readPieceState(slug);
+      var section = document.createElement("details");
+      section.className = "expansion piece-check";
+      section.id = "piece-check";
+      var summary = document.createElement("summary");
+      var title = document.createElement("span");
+      title.className = "expansion-name";
+      title.textContent = "Components";
+      var progress = document.createElement("span");
+      progress.className = "piece-progress";
+      summary.appendChild(title);
+      summary.appendChild(progress);
+      var wrap = document.createElement("div");
+      wrap.className = "expansion-body";
+      var source = document.createElement("p");
+      source.className = "piece-source";
+      source.textContent = pieceSourceText(entry);
+      var list = document.createElement("ul");
+      list.className = "piece-list";
+      var reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "piece-reset";
+      reset.textContent = "Reset";
+      var actions = document.createElement("div");
+      actions.className = "piece-actions";
+      actions.appendChild(reset);
+      wrap.appendChild(source);
+      wrap.appendChild(list);
+      wrap.appendChild(actions);
+      section.appendChild(summary);
+      section.appendChild(wrap);
+      function checkedCount() {
+        return items.filter(function (item) { return !!state.checked[pieceKey(item)]; }).length;
+      }
+      function paintProgress() {
+        progress.textContent = checkedCount() + " of " + items.length;
+      }
+      function clearConfirm() {
+        reset.removeAttribute("data-confirm");
+        reset.textContent = "Reset";
+      }
+      items.forEach(function (item) {
+        var key = pieceKey(item);
+        var row = document.createElement("li");
+        row.className = "piece-row";
+        var box = document.createElement("button");
+        box.type = "button";
+        box.className = "piece-box";
+        var count = document.createElement("span");
+        count.className = "piece-count";
+        count.textContent = String(item.count);
+        var name = document.createElement("span");
+        name.className = "piece-name";
+        name.textContent = String(item.name);
+        var tools = document.createElement("div");
+        tools.className = "piece-tools";
+        var missing = document.createElement("button");
+        missing.type = "button";
+        missing.className = "piece-missing";
+        missing.textContent = "Missing";
+        var note = document.createElement("input");
+        note.className = "piece-note";
+        note.type = "text";
+        note.maxLength = 160;
+        note.placeholder = "What's missing";
+        note.autocomplete = "off";
+        note.setAttribute("aria-label", "Missing note for " + item.count + " " + item.name);
+        function paintRow() {
+          var on = !!state.checked[key];
+          var text = String(state.notes[key] || "");
+          box.setAttribute("aria-pressed", on ? "true" : "false");
+          box.setAttribute("aria-label", (on ? "Checked. " : "Not checked. ") + item.count + " " + item.name);
+          box.textContent = on ? "\u2713" : "";
+          missing.setAttribute("aria-pressed", text ? "true" : "false");
+          note.value = text;
+          note.hidden = !text && missing.getAttribute("data-open") !== "1";
+        }
+        box.addEventListener("click", function () {
+          clearConfirm();
+          if (state.checked[key]) delete state.checked[key];
+          else state.checked[key] = true;
+          writePieceState(slug, state);
+          paintRow();
+          paintProgress();
+        });
+        missing.addEventListener("click", function () {
+          clearConfirm();
+          var open = missing.getAttribute("data-open") === "1" || note.hidden === false;
+          if (open && !String(state.notes[key] || "")) {
+            missing.removeAttribute("data-open");
+            note.hidden = true;
+            return;
+          }
+          missing.setAttribute("data-open", "1");
+          note.hidden = false;
+          note.focus();
+        });
+        note.addEventListener("input", function () {
+          clearConfirm();
+          var text = note.value.slice(0, 160);
+          if (text.trim()) state.notes[key] = text;
+          else delete state.notes[key];
+          writePieceState(slug, state);
+          missing.setAttribute("aria-pressed", state.notes[key] ? "true" : "false");
+        });
+        tools.appendChild(missing);
+        tools.appendChild(note);
+        row.appendChild(box);
+        row.appendChild(count);
+        row.appendChild(name);
+        row.appendChild(tools);
+        list.appendChild(row);
+        paintRow();
+      });
+      reset.addEventListener("click", function () {
+        if (reset.getAttribute("data-confirm") !== "1") {
+          reset.setAttribute("data-confirm", "1");
+          reset.textContent = "Clear checks?";
+          return;
+        }
+        state.checked = {};
+        state.notes = {};
+        writePieceState(slug, state);
+        Array.prototype.forEach.call(list.querySelectorAll(".piece-missing"), function (button) {
+          button.removeAttribute("data-open");
+        });
+        Array.prototype.forEach.call(list.children, function (row, index) {
+          var item = items[index];
+          var key = pieceKey(item);
+          var box = row.querySelector(".piece-box");
+          var missing = row.querySelector(".piece-missing");
+          var note = row.querySelector(".piece-note");
+          box.setAttribute("aria-pressed", "false");
+          box.setAttribute("aria-label", "Not checked. " + item.count + " " + item.name);
+          box.textContent = "";
+          missing.setAttribute("aria-pressed", "false");
+          note.value = "";
+          note.hidden = true;
+        });
+        clearConfirm();
+        paintProgress();
+      });
+      paintProgress();
+      placePieceCheck(section);
+      revealPieceJump(slug);
+    });
+  }
+  function revealPieceJump(slug) {
+    if (detailSlug !== slug) return;
+    var nav = document.querySelector(".detail .essential-links");
+    var heading = document.getElementById("piece-check");
+    if (!nav || !heading || nav.querySelector("[data-piece-jump]")) return;
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "essential-link";
+    button.setAttribute("data-piece-jump", "1");
+    button.textContent = "Components";
+    button.addEventListener("click", function () {
+      var target = document.getElementById("piece-check");
+      if (!target) return;
+      target.open = true;
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    var putAway = nav.querySelector("[data-put-away-jump]");
+    if (putAway) nav.insertBefore(button, putAway);
+    else nav.appendChild(button);
+  }
   function mountPrivatePacking(game) {
     var unlock = readPackUnlock();
     if (!unlock || !game || !game.slug) return;
@@ -142891,6 +143200,8 @@
       }
       if (!paints.length) return;
       body.appendChild(section);
+      var pieces = body.querySelector(".piece-check");
+      if (pieces) body.insertBefore(pieces, section);
       paints.forEach(function (paint) { paint(); });
       revealPutAwayJump(slug);
     }).catch(function () {});
@@ -143907,6 +144218,7 @@
     mountRulebookSearch(g, rulebookHref);
     paintSetupPhoto(slug, selectedCount, selectedSetupId);
     paintExpansionGuide(slug);
+    mountPieceCheck(g);
     mountPrivatePacking(g);
     bindSaveOffline(slug);
     rememberGameOffline(slug);
