@@ -11,7 +11,7 @@
    script.google.com. RSVP and food responses are never cached. Same-origin
    PDFs are not cached either.
 */
-var VERSION = "2026.11.20.11";
+var VERSION = "2026.11.20.12";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -228,10 +228,10 @@ function cacheOne(raw, pin) {
           if (!ok) return false;
           var indexUrl = new URL("./index.html", self.location.href).href;
           if (href === indexUrl) return true;
-          if (url.pathname.endsWith("/") || /\/index\.html$/i.test(url.pathname)) {
-            return safePut(cache, indexUrl, response);
-          }
-          return true;
+          /* Root-only mirror. A /game/<slug>/ document must not replace the shell. */
+          var rootPath = new URL("./", self.location.href).pathname;
+          if (url.pathname !== rootPath) return true;
+          return safePut(cache, indexUrl, response);
         });
       });
     } else if (kind === "json") {
@@ -329,10 +329,21 @@ function shellDocument() {
   });
 }
 
+function isGameDocument(pathname) {
+  return /\/game\/[^/]+\/index\.html$/i.test(pathname) || /\/game\/[^/]+\/?$/i.test(pathname);
+}
+
 function fromShell(request) {
   return matchCache(SHELL, request.url).then(function (hit) {
-    if (hit) return hit;
-    return shellDocument();
+    if (!hit) return shellDocument();
+    var path = "";
+    try { path = new URL(request.url).pathname; } catch (err) { return hit; }
+    /* A cached stub cannot boot offline by itself. Serve the app shell for that URL. */
+    if (!isGameDocument(path)) return hit;
+    return hit.clone().text().then(function (text) {
+      if (text.indexOf("bgq-game-stub") !== -1) return shellDocument();
+      return hit;
+    }).catch(function () { return shellDocument(); });
   });
 }
 

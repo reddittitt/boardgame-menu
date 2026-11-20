@@ -94,7 +94,11 @@ function serveFile(req, res) {
     res.end();
     return;
   }
-  const file = path.join(root, rel);
+  let file = path.join(root, rel);
+  if (file.startsWith(root) && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
+    rel = path.posix.join(rel, "index.html");
+    file = path.join(root, rel);
+  }
   if (!file.startsWith(root) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
     res.writeHead(404, { "content-type": "text/plain", "cache-control": "no-store" });
     res.end("missing");
@@ -264,7 +268,7 @@ async function main() {
     await page.waitForFunction(function () {
       return document.querySelector("#game-grid").innerText.indexOf("Azul") !== -1;
     });
-    await page.locator('#game-grid a[href="#/game/azul"]').click();
+    await page.locator('#game-grid a[href="/game/azul/"]').click();
     await page.waitForSelector("h2.title");
     assert((await page.locator("h2.title").innerText()) === "Azul", "offline return to game");
 
@@ -357,6 +361,56 @@ async function main() {
     });
     assert(imageCount > 0 && imageCount <= 2, "image cache cap, got " + imageCount);
     await evictContext.close();
+
+    config.drop = false;
+    config.version = "game-urls";
+    config.imageCap = 80;
+    const gameContext = await browser.newContext();
+    const gamePage = await gameContext.newPage();
+    gamePage.setDefaultTimeout(45000);
+    await gamePage.goto(base + "/game/azul/", { waitUntil: "domcontentloaded" });
+    await gamePage.waitForSelector("h2.title");
+    assert((await gamePage.locator("h2.title").innerText()) === "Azul", "clean url title");
+    assert((await gamePage.locator('link[rel="canonical"]').getAttribute("href")) === "https://bgquick.com/game/azul/", "clean url canonical");
+    const cleanPath = new URL(gamePage.url()).pathname;
+    assert(cleanPath === "/game/azul/", "clean url path " + cleanPath);
+    await gamePage.waitForFunction(function () { return navigator.serviceWorker.controller; });
+    await gamePage.waitForFunction(async function () {
+      const names = await caches.keys();
+      const shellName = names.filter(function (name) { return name.indexOf("bgquick-shell-") === 0; })[0];
+      if (!shellName) return false;
+      const cache = await caches.open(shellName);
+      const index = await cache.match(location.origin + "/index.html");
+      if (!index) return false;
+      const text = await index.text();
+      if (text.indexOf("games-json") === -1 || text.indexOf("bgq-game-stub") !== -1) return false;
+      const keys = await cache.keys();
+      return keys.some(function (req) { return req.url.indexOf("/game/azul/") !== -1; });
+    });
+    await goOffline(gamePage, gameContext);
+    await gamePage.reload({ waitUntil: "domcontentloaded" });
+    await gamePage.waitForSelector("h2.title");
+    assert((await gamePage.locator("h2.title").innerText()) === "Azul", "offline clean url");
+    assert(new URL(gamePage.url()).pathname === "/game/azul/", "offline clean url stayed");
+    const shellGame = await gamePage.goto(base + "/game/root/", { waitUntil: "domcontentloaded" });
+    assert(shellGame !== null, "shell navigation to an unvisited game");
+    await gamePage.waitForSelector("h2.title");
+    assert((await gamePage.locator("h2.title").innerText()) === "Root", "offline game via the shell");
+    assert(await gamePage.locator("#games-json").count() === 1, "shell document booted");
+    await goOnline(gamePage, gameContext);
+    await gamePage.goto(base + "/?game=Wingspan", { waitUntil: "domcontentloaded" });
+    await gamePage.waitForSelector("h2.title");
+    assert((await gamePage.locator("h2.title").innerText()) === "Wingspan", "old ?game= link");
+    const legacy = new URL(gamePage.url());
+    assert(legacy.search === "", "old ?game= query stripped");
+    assert(legacy.hash === "#/game/wingspan?action=quicksetup", "old ?game= hash " + legacy.hash);
+    await gamePage.setViewportSize({ width: 390, height: 844 });
+    await gamePage.goto(base + "/game/brass-birmingham/", { waitUntil: "domcontentloaded" });
+    await gamePage.waitForSelector("h2.title");
+    assert((await gamePage.locator("h2.title").innerText()) === "Brass: Birmingham", "phone deep link");
+    const phoneBox = await gamePage.locator("h2.title").boundingBox();
+    assert(phoneBox && phoneBox.y > 0 && phoneBox.y < 700, "phone title on screen");
+    await gameContext.close();
   } catch (err) {
     failures.push(err && err.stack ? err.stack : String(err));
   } finally {

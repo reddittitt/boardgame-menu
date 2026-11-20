@@ -3,6 +3,24 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<script>
+/* A /game/<slug>/ document is this same shell. Point relative assets at the site root before the parser resolves them. */
+(function () {
+  if (document.querySelector("base")) return;
+  var path = location.pathname || "";
+  var m = path.match(/^(.*)\/game\/[^/]+\/index\.html$/i) || path.match(/^(.*)\/game\/[^/]+\/?$/i);
+  if (!m) return;
+  var root = m[1] || "";
+  if (root && !/^\/[A-Za-z0-9._~/-]*$/.test(root)) return;
+  var href = root + "/";
+  if (document.readyState === "loading") document.write('<base href="' + href + '">');
+  else {
+    var base = document.createElement("base");
+    base.setAttribute("href", href);
+    document.head.insertBefore(base, document.head.firstChild);
+  }
+})();
+</script>
 <title>Board Game Quick</title>
 <link rel="icon" type="image/png" href="./favicon.png" />
 <link rel="manifest" href="./manifest.json" />
@@ -135205,6 +135223,14 @@
   var cacheMsgSeq = 0;
   var rememberedOffline = {};
 
+  function gamePathnameSlug(pathname) {
+    var path = pathname == null ? (window.location.pathname || "") : String(pathname);
+    var matched = path.match(/\/game\/([^/]+)\/index\.html$/i);
+    if (!matched) matched = path.match(/\/game\/([^/]+)\/?$/i);
+    if (!matched || !matched[1]) return "";
+    try { return decodeURIComponent(matched[1]).toLowerCase(); }
+    catch (err) { return ""; }
+  }
   function updateIsSafe() {
     var viewer = document.getElementById("rulebook-viewer");
     if (viewer && (viewer.open || viewer.hasAttribute("open"))) return false;
@@ -135212,6 +135238,7 @@
     if (aid && (aid.open || aid.hasAttribute("open"))) return false;
     var hash = window.location.hash || "";
     if (hash.indexOf("#/game/") === 0) return false;
+    if (gamePathnameSlug()) return false;
     return true;
   }
   function showUpdateBanner() {
@@ -135352,9 +135379,10 @@
       if (!abs || urls.indexOf(abs) !== -1) return;
       urls.push(abs);
     }
-    add(new URL("./index.html", window.location.href).href);
-    add(new URL("./offline.html", window.location.href).href);
-    add(new URL("./", window.location.href).href);
+    var rootUrl = new URL((basePath() || "") + "/", window.location.origin);
+    add(new URL("index.html", rootUrl).href);
+    add(new URL("offline.html", rootUrl).href);
+    add(rootUrl.href);
     add(coverUrl(slug));
     var game = DATA[slug];
     if (game && Array.isArray(game.expansions)) {
@@ -135520,8 +135548,30 @@
   }
   function basePath() {
     return window.location.pathname
-      .replace(/\/index\.html$/,"")
-      .replace(/\/$/,"");
+      .replace(/\/index\.html$/i, "")
+      .replace(/\/game\/[^/]+\/index\.html$/i, "")
+      .replace(/\/game\/[^/]+\/?$/i, "")
+      .replace(/\/$/, "");
+  }
+  function gamePath(slug) {
+    return (basePath() || "") + "/game/" + slug + "/";
+  }
+  function absoluteGameUrl(slug) {
+    return new URL(gamePath(slug), window.location.origin).href;
+  }
+  function setCanonical(slug) {
+    var link = document.querySelector('link[rel="canonical"]');
+    if (!slug || !DATA[slug]) {
+      if (link && link.getAttribute("data-bgq") === "game") link.remove();
+      return;
+    }
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "canonical";
+      document.head.appendChild(link);
+    }
+    link.setAttribute("data-bgq", "game");
+    link.href = "https://bgquick.com/game/" + slug + "/";
   }
 
   var DATA = {};
@@ -135629,7 +135679,13 @@
   }
   function teachHref(slug, state) {
     var q = teachQueryString(state);
-    return "#/game/" + slug + "/teach" + (q ? "?" + q : "");
+    return gamePath(slug) + "#/teach" + (q ? "?" + q : "");
+  }
+  function teachHistoryUrl(slug, state) {
+    var q = teachQueryString(state);
+    var suffix = q ? "?" + q : "";
+    if (gamePathnameSlug()) return gamePath(slug) + "#/teach" + suffix;
+    return window.location.pathname + window.location.search + "#/game/" + slug + "/teach" + suffix;
   }
   function renderEssentialLinks(game, rulebookHref, teachHrefValue) {
     var items = [];
@@ -135687,7 +135743,7 @@
     if (g.year) bits.push(g.year);
     var sub = bits.join(" \u2022 ");
     return (
-      '<a class="card fade-in" href="#/game/' + g.slug + '">' +
+      '<a class="card fade-in" href="' + gamePath(g.slug) + '">' +
         '<div class="thumb">' +
           '<img loading="lazy" decoding="async" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
         "</div>" +
@@ -136190,7 +136246,11 @@
       chip.appendChild(span);
 
       chip.addEventListener("click", function() {
-        window.location.hash = "#/game/" + item.slug;
+        var next = gamePath(item.slug);
+        if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
+          history.pushState(null, "", next);
+        }
+        render();
       });
 
       container.appendChild(chip);
@@ -138763,9 +138823,44 @@
     text = String(text || "Rulebook").replace(/\s+/g, " ").trim();
     return text.slice(0, 80) || "Rulebook";
   }
+  function followAppLink(event, link) {
+    if (!link || event.defaultPrevented || event.button !== 0) return false;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    if (link.target && link.target !== "_self") return false;
+    if (link.hasAttribute("download")) return false;
+    var hrefAttr = link.getAttribute("href") || "";
+    if (!hrefAttr || hrefAttr.indexOf("mailto:") === 0 || hrefAttr.indexOf("javascript:") === 0) return false;
+    var url;
+    try { url = new URL(link.href, window.location.href); }
+    catch (err) { return false; }
+    if (url.origin !== window.location.origin) return false;
+    var dest = "";
+    if (hrefAttr.charAt(0) === "#") {
+      if (gamePathnameSlug() && (hrefAttr === "#/" || hrefAttr.indexOf("#/?") === 0 || hrefAttr === "#/night" || hrefAttr.indexOf("#/night?") === 0 || hrefAttr.indexOf("#/game/") === 0)) {
+        dest = (basePath() || "") + "/" + hrefAttr;
+      }
+    } else if (gamePathnameSlug(url.pathname)) {
+      var path = url.pathname.replace(/\/index\.html$/i, "/");
+      if (path.charAt(path.length - 1) !== "/") path += "/";
+      dest = path + url.search + url.hash;
+    }
+    if (!dest) return false;
+    event.preventDefault();
+    event.stopPropagation();
+    var current = window.location.pathname + window.location.search + window.location.hash;
+    if (current !== dest) {
+      history.pushState(null, "", dest);
+      render();
+      if ((waitingWorker || activatedElsewhere) && updateIsSafe()) applyUpdate();
+    } else {
+      scrollPageToTop();
+    }
+    return true;
+  }
   document.addEventListener("click", function (e) {
     var link = e.target && e.target.closest ? e.target.closest("a") : null;
     if (!link) return;
+    if (followAppLink(e, link)) return;
     var href = link.getAttribute("href") || "";
     if (href.indexOf("#/game/") === 0 && window.location.hash === href) scrollPageToTop();
     if (!isRulebookAnchor(link)) return;
@@ -141257,7 +141352,7 @@
     var shareBtn = document.getElementById("share");
     if (shareBtn) {
       shareBtn.addEventListener("click", function() {
-        var u = window.location.href;
+        var u = absoluteGameUrl(g.slug);
         if (navigator.share) {
           navigator.share({
             title: g.name,
@@ -141755,6 +141850,7 @@
   function normalizeIncoming() {
     var q = qp("game");
     if (!q) return false;
+    if (gamePathnameSlug()) return false;
     var want = q.trim();
     var slugged = slugify(want);
     var a = (qp("action") || "quicksetup").toLowerCase();
@@ -141825,6 +141921,40 @@
     return { route:"list" };
   }
 
+  function parseRequest() {
+    var fromPath = gamePathnameSlug();
+    if (!fromPath) return parseHash();
+    if (/\/game\/[^/]+\/index\.html$/i.test(window.location.pathname || "")) {
+      history.replaceState(null, "", gamePath(gameRoute(fromPath).slug) + window.location.search + window.location.hash);
+      fromPath = gamePathnameSlug();
+    }
+    var raw = (window.location.hash || "").replace(/^#\/?/, "");
+    var bits = raw.split("?");
+    var hashPath = bits[0] || "";
+    var params = new URLSearchParams(bits[1] || "");
+    var routed = gameRoute(fromPath);
+    if (hashPath === "teach") {
+      return {
+        route: "teach",
+        slug: routed.slug,
+        expansions: routed.expansions,
+        teachQuery: {
+          has: params.has("count") || params.has("exps") || params.has("chars") || params.has("setup"),
+          count: params.get("count"),
+          exps: params.getAll("exps"),
+          chars: params.getAll("chars"),
+          setup: params.get("setup") || ""
+        }
+      };
+    }
+    return {
+      route: "detail",
+      slug: routed.slug,
+      expansions: routed.expansions,
+      action: (params.get("action") || qp("action") || "quicksetup").toLowerCase()
+    };
+  }
+
   var playMemory = {};
 
   function renderTeachPage(slug, query) {
@@ -141876,8 +142006,7 @@
         setup: setupId || ""
       };
       playMemory[slug] = state;
-      var href = teachHref(slug, state);
-      var next = window.location.pathname + window.location.search + href;
+      var next = teachHistoryUrl(slug, state);
       if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
         history.replaceState(null, "", next);
       }
@@ -141936,7 +142065,7 @@
     var page = null;
     appEl.innerHTML =
       '<article class="detail teach-page">' +
-        '<p class="page-back"><a class="back-link" href="#/game/' + slug + '">\u2190 ' + escapeHtml(g.name) + "</a></p>" +
+        '<p class="page-back"><a class="back-link" href="' + gamePath(slug) + '">\u2190 ' + escapeHtml(g.name) + "</a></p>" +
         '<h2 class="title">Teach it</h2>' +
         '<p class="byline">' + escapeHtml(g.name) + "</p>" +
         controls +
@@ -142115,8 +142244,8 @@
       games: Object.keys(DATA).map(function (key) { return DATA[key]; }),
       coverUrl: coverUrl,
       escapeHtml: escapeHtml,
-      gameHref: function (slug) { return "#/game/" + slug; },
-      teachHref: function (slug) { return "#/game/" + slug + "/teach"; },
+      gameHref: function (slug) { return gamePath(slug); },
+      teachHref: function (slug) { return gamePath(slug) + "#/teach"; },
       playerSpan: playerSpan,
       countIncluded: countIncluded,
       playMinutes: playMinutes,
@@ -142141,22 +142270,32 @@
     }
     setUnlockRobots(false);
     if (normalizeIncoming()) return;
-    var parsed = parseHash();
+    var parsed = parseRequest();
+    if (parsed.route === "detail" || parsed.route === "teach") {
+      var named = DATA[parsed.slug];
+      document.title = (named && named.name ? named.name + " · " : "") + "Board Game Quick";
+      setCanonical(parsed.slug);
+    } else {
+      document.title = "Board Game Quick";
+      setCanonical("");
+    }
     if (parsed.route === "teach") {
       scrollPageToTop();
       renderTeachPage(parsed.slug, Object.assign({ routeExps: parsed.expansions || [] }, parsed.teachQuery || {}));
       requestAnimationFrame(scrollPageToTop);
     } else if (parsed.route === "detail") {
       scrollPageToTop();
-      var requested = ((window.location.hash || "").replace(/^#\/game\//, "").split("?")[0] || "").toLowerCase();
-      var canon = SLUG_ALIASES[requested];
-      if (canon) {
-        var aliasHash = "#/game/" + canon;
-        if (parsed.action && parsed.action !== "quicksetup") {
-          aliasHash += "?action=" + encodeURIComponent(parsed.action);
-        }
-        if ((window.location.hash || "") !== aliasHash) {
-          history.replaceState(null, "", window.location.pathname + window.location.search + aliasHash);
+      if (!gamePathnameSlug()) {
+        var requested = ((window.location.hash || "").replace(/^#\/game\//, "").split("?")[0] || "").toLowerCase();
+        var canon = SLUG_ALIASES[requested];
+        if (canon) {
+          var aliasHash = "#/game/" + canon;
+          if (parsed.action && parsed.action !== "quicksetup") {
+            aliasHash += "?action=" + encodeURIComponent(parsed.action);
+          }
+          if ((window.location.hash || "") !== aliasHash) {
+            history.replaceState(null, "", window.location.pathname + window.location.search + aliasHash);
+          }
         }
       }
       renderDetail(parsed.slug, parsed.action, parsed.expansions);
@@ -142181,6 +142320,10 @@
     });
   });
   window.addEventListener("hashchange", render);
+  window.addEventListener("popstate", function () {
+    render();
+    if ((waitingWorker || activatedElsewhere) && updateIsSafe()) applyUpdate();
+  });
   window.addEventListener("resize", function () {
     syncHeaderOffset();
   });

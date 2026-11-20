@@ -171,8 +171,8 @@ test("quick pick links to the game and Teach it", async ({ page }) => {
   await expect(card.locator("#gn-winner-name")).toBeVisible();
   const slug = await card.getAttribute("data-slug");
   expect(await page.evaluate((value) => window.BGQuickNight.fitsGame(value), slug)).toBe(true);
-  await expect(card.getByRole("link", { name: "Game page" })).toHaveAttribute("href", "#/game/" + slug);
-  await expect(card.getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "#/game/" + slug + "/teach");
+  await expect(card.getByRole("link", { name: "Game page" })).toHaveAttribute("href", "/game/" + slug + "/");
+  await expect(card.getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "/game/" + slug + "/#/teach");
   const title = await card.locator("#gn-winner-name").innerText();
   await card.getByRole("link", { name: "Teach it" }).click();
   await expect(page.locator("h2.title")).toHaveText("Teach it");
@@ -192,7 +192,7 @@ test("spin the wheel is fair, can re-spin, and can drop the winner", async ({ pa
   const first = await page.locator("#gn-wheel-wrap").getAttribute("data-winner");
   expect(["azul", "jaipur", "codenames"]).toContain(first);
   await expect(page.locator("#gn-winner-name")).toHaveText(NAMES[first]);
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "#/game/" + first + "/teach");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "/game/" + first + "/#/teach");
   await expect(page.locator("#gn-wheel-wrap")).toHaveAttribute("data-spinning", "false");
 
   await page.getByRole("button", { name: "Spin again", exact: true }).click();
@@ -242,8 +242,8 @@ test("pass-the-phone vote hides ballots and uses a Borda count", async ({ page }
   await page.getByRole("button", { name: "Rank Patchwork" }).click();
   await page.getByRole("button", { name: "Submit ranking" }).click();
   await expect(page.locator("#gn-winner-name")).toHaveText("Azul");
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Game page" })).toHaveAttribute("href", "#/game/azul");
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "#/game/azul/teach");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Game page" })).toHaveAttribute("href", "/game/azul/");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "/game/azul/#/teach");
   await expect(page.locator(".gn-tally")).toContainText("Azul");
 
   await page.getByRole("button", { name: "Decide another way" }).click();
@@ -272,7 +272,7 @@ test("veto rounds strike games until one remains", async ({ page }) => {
   await page.getByRole("button", { name: "Strike Codenames" }).click();
   await expect(page.locator("#gn-winner-name")).toHaveText("Azul");
   await expect(page.locator(".gn-why")).toContainText("vetoes");
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "#/game/azul/teach");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "/game/azul/#/teach");
 });
 
 test("bracket plays head to head until a winner", async ({ page }) => {
@@ -285,8 +285,8 @@ test("bracket plays head to head until a winner", async ({ page }) => {
   const name = await page.locator("#gn-winner-name").innerText();
   expect(["Azul", "Jaipur", "Codenames"]).toContain(name);
   const slug = await page.locator(".gn-result").getAttribute("data-slug");
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Game page" })).toHaveAttribute("href", "#/game/" + slug);
-  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "#/game/" + slug + "/teach");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Game page" })).toHaveAttribute("href", "/game/" + slug + "/");
+  await expect(page.locator(".gn-result").getByRole("link", { name: "Teach it" })).toHaveAttribute("href", "/game/" + slug + "/#/teach");
   await expect(page.locator(".gn-why")).toContainText("bracket");
 });
 
@@ -510,12 +510,12 @@ test("game night works offline and the worker still skips other origins", async 
   });
   expect(swText).toContain("url.origin !== self.location.origin");
   expect(swText.indexOf("url.origin !== self.location.origin")).toBeLessThan(swText.indexOf("respondWith"));
-  expect(swText).toContain('VERSION = "2026.11.20.11"');
+  expect(swText).toContain('VERSION = "2026.11.20.12"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.20.11");
+    const cache = await caches.open("bgquick-shell-2026.11.20.12");
     const keys = await cache.keys();
     const urls = keys.map((req) => req.url);
     return urls.some((url) => /index\.html/.test(url)) && urls.some((url) => /game-night\.js/.test(url));

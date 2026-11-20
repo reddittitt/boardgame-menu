@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="magic-maze-pocket">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Magic Maze Pocket · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/magic-maze-pocket/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=magic-maze-pocket">Magic Maze Pocket</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=magic-maze-pocket", document.baseURI).href);
+})();
+</script>
+</body>
+</html>
