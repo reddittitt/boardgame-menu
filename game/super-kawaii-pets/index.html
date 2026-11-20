@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="super-kawaii-pets">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super Kawaii Pets · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/super-kawaii-pets/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=super-kawaii-pets">Super Kawaii Pets</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=super-kawaii-pets", document.baseURI).href);
+})();
+</script>
+</body>
+</html>

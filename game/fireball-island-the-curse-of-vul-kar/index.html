@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="fireball-island-the-curse-of-vul-kar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fireball Island: The Curse of Vul-Kar · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/fireball-island-the-curse-of-vul-kar/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=fireball-island-the-curse-of-vul-kar">Fireball Island: The Curse of Vul-Kar</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=fireball-island-the-curse-of-vul-kar", document.baseURI).href);
+})();
+</script>
+</body>
+</html>

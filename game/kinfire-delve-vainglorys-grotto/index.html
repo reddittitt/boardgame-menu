@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="kinfire-delve-vainglorys-grotto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kinfire Delve: Vainglory&#39;s Grotto · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/kinfire-delve-vainglorys-grotto/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=kinfire-delve-vainglorys-grotto">Kinfire Delve: Vainglory&#39;s Grotto</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=kinfire-delve-vainglorys-grotto", document.baseURI).href);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="dont-l-l-a-m-a-dice">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Don&#39;t L.L.A.M.A. Dice · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/dont-l-l-a-m-a-dice/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=dont-l-l-a-m-a-dice">Don&#39;t L.L.A.M.A. Dice</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=dont-l-l-a-m-a-dice", document.baseURI).href);
+})();
+</script>
+</body>
+</html>
