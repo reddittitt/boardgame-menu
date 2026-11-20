@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en" data-look="hig">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Game Day · Board Game Quick</title>
+<link rel="icon" type="image/png" href="./favicon.png" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
+<meta name="theme-color" content="#0b63ff" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="BGQuick" />
+<script>
+try {
+  var savedTheme = localStorage.getItem("theme");
+  if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+} catch (e) {}
+</script>
+<style>
+  :root[data-look="hig"] {
+    --bg:#f2f2f7;
+    --fg:#1c1c1e;
+    --muted:#636366;
+    --card:#ffffff;
+    --border:rgba(60, 60, 67, 0.18);
+    --accent:#007aff;
+    --hig-fill:rgba(118, 118, 128, 0.12);
+    --hig-sep:rgba(60, 60, 67, 0.29);
+    --hig-header:rgba(242, 242, 247, 0.9);
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  }
+  :root[data-look="hig"][data-theme="dark"],
+  :root[data-look="hig"][data-theme="darkwood"],
+  :root[data-look="hig"][data-theme="neongrid"] {
+    --bg:#000000;
+    --fg:#f2f2f7;
+    --muted:#98989d;
+    --card:#1c1c1e;
+    --border:rgba(84, 84, 88, 0.65);
+    --accent:#0a84ff;
+    --hig-fill:rgba(118, 118, 128, 0.24);
+    --hig-sep:rgba(84, 84, 88, 0.65);
+    --hig-header:rgba(28, 28, 30, 0.88);
+  }
+  html { font-size:16px; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  body {
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    line-height:1.35;
+    letter-spacing:-0.011em;
+  }
+  header {
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:var(--hig-header);
+    border-bottom:1px solid var(--hig-sep);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    padding:max(6px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
+  }
+  header .wrap {
+    max-width:40rem;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+  }
+  header h1 {
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+    font-size:1rem;
+    font-weight:600;
+  }
+  .header-home-link {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    color:inherit;
+    text-decoration:none;
+  }
+  .header-logo { height:32px; width:auto; display:block; }
+  header .spacer { flex:1; }
+  header .toggle {
+    appearance:none;
+    border:0;
+    background:transparent;
+    color:var(--accent);
+    min-height:44px;
+    padding:8px 10px;
+    border-radius:8px;
+    font:inherit;
+    font-size:16px;
+    text-decoration:none;
+    white-space:nowrap;
+    cursor:pointer;
+  }
+  main {
+    max-width:40rem;
+    margin:0 auto;
+    padding:12px max(14px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  h2, h3 { font-weight:600; letter-spacing:-0.02em; }
+  h2 { font-size:1.45rem; margin:0 0 8px; }
+  h3 { font-size:1.05rem; margin:0 0 6px; }
+  p { margin:0 0 8px; }
+  .gd-kicker { margin:0; color:var(--accent); font-weight:700; font-size:13px; }
+  #gd-time, .gd-muted { color:var(--muted); }
+  #gd-location { font-weight:650; font-size:1.05rem; }
+  .gd-card, .gd-food {
+    background:var(--card);
+    border:1px solid var(--hig-sep);
+    border-radius:12px;
+    padding:12px;
+    margin:12px 0;
+  }
+  .gd-food { background:transparent; border:0; padding:0; }
+  .gd-field, .gd-pick {
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin:0 0 10px;
+    font-weight:600;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .gd-counts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  input, select, textarea, button { font:inherit; }
+  input, select, textarea {
+    width:100%;
+    box-sizing:border-box;
+    min-height:44px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid var(--hig-sep);
+    background:var(--card);
+    color:var(--fg);
+    font-size:16px;
+    font-weight:400;
+  }
+  textarea { min-height:72px; resize:vertical; }
+  .gd-choices { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; }
+  .gd-choice, .gd-links a, .gd-claim-actions button, #gd-retry {
+    position:relative;
+    z-index:0;
+    appearance:none;
+    border:0;
+    background:transparent;
+    color:var(--fg);
+    min-height:44px;
+    padding:0 14px;
+    border-radius:999px;
+    font-size:16px;
+    font-weight:500;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .gd-choice::before, .gd-links a::before, .gd-claim-actions button::before, #gd-retry::before {
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:0;
+    right:0;
+    top:50%;
+    height:32px;
+    transform:translateY(-50%);
+    border-radius:999px;
+    background:var(--hig-fill);
+  }
+  .gd-choice[aria-pressed="true"] { color:#ffffff; }
+  .gd-choice[aria-pressed="true"]::before { content:""; background:var(--accent); }
+  button[type="submit"], #gd-save {
+    width:100%;
+    min-height:44px;
+    border:0;
+    border-radius:12px;
+    background:var(--accent);
+    color:#ffffff;
+    font-size:16px;
+    font-weight:650;
+    cursor:pointer;
+  }
+  button:disabled { opacity:0.55; }
+  .gd-links { display:flex; flex-wrap:wrap; gap:8px; }
+  ul { margin:0 0 8px; padding-left:1.1rem; }
+  li { margin:6px 0; }
+  .gd-family { font-weight:650; }
+  .gd-yours { color:var(--accent); font-weight:650; font-size:13px; }
+  .gd-note, .gd-suggest, .gd-cover { color:var(--muted); }
+  .gd-cover { font-weight:650; color:var(--fg); }
+  .gd-claim-actions { display:inline-flex; gap:4px; margin-left:6px; vertical-align:middle; }
+  .gd-claim-actions button { min-height:44px; }
+  #gd-error { color:#9f1239; font-weight:650; min-height:0; }
+  #gd-error:empty { display:none; }
+  #gd-unclaimed, #gd-short, li, p, h2, h3 { overflow-wrap:anywhere; }
+  :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  #app-update {
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom:max(12px, env(safe-area-inset-bottom));
+    z-index:30;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    width:min(32rem, calc(100% - 24px));
+    margin:0 auto;
+    padding:12px 14px;
+    border-radius:14px;
+    background:var(--card);
+    color:var(--fg);
+    border:1px solid var(--hig-sep);
+  }
+  #app-update[hidden] { display:none; }
+  #app-update p { margin:0; font-weight:650; }
+  #app-update button {
+    min-height:44px;
+    padding:8px 14px;
+    border:0;
+    border-radius:10px;
+    background:var(--accent);
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+  }
+  @media (min-width:521px) {
+    header h1 {
+      position:static;
+      width:auto;
+      height:auto;
+      margin:0;
+      overflow:visible;
+      clip:auto;
+      white-space:nowrap;
+    }
+  }
+  @media (min-width:841px) {
+    .header-logo { height:36px; }
+  }
+  :root[data-theme="dark"] #gd-error,
+  :root[data-theme="darkwood"] #gd-error,
+  :root[data-theme="neongrid"] #gd-error { color:#fda4af; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="./#/" class="header-home-link">
+      <img src="./logo.png" alt="BGQuick logo" class="header-logo">
+      <h1>Board Game Quick</h1>
+    </a>
+    <div class="spacer"></div>
+    <a class="toggle" href="./#/">All Games</a>
+    <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
+  </div>
+</header>
+<div id="app-update" hidden role="status" aria-live="polite">
+  <p>Update available. Tap to refresh.</p>
+  <button type="button" id="app-update-refresh">Refresh</button>
+</div>
+<main id="gd">
+  <p>Loading Game Day…</p>
+</main>
+<script src="./game-day.js"></script>
+</body>
+</html>
