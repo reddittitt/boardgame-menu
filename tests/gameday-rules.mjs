@@ -26,7 +26,7 @@ function loadGameDay() {
   return context.GameDay;
 }
 
-const EVENT = "2026-11-28";
+const EVENT = "2026-11-21";
 const KEY = "a".repeat(32);
 const OTHER = "b".repeat(32);
 
@@ -63,8 +63,8 @@ function checkScaling(GameDay) {
   same(GameDay.suggestionLine(drinks, 15), "Drinks: about 2 per person, so ~30 cans", "drinks line");
   same(GameDay.suggestionLine(snacks, 15), "Snacks: 4 bags for 15 people", "snacks line");
   same(GameDay.suggestionLine(plates, 15), "Plates, cups, and napkins: about 1 per person, so ~15 place settings", "plates line");
-  same(GameDay.formatDate("2026-11-28"), "Saturday, November 28, 2026", "date format");
-  same(GameDay.nextDate(config.dates, "2026-11-20").id, "2026-11-28", "next date");
+  same(GameDay.formatDate("2026-11-21"), "Saturday, November 21, 2026", "date format");
+  same(GameDay.nextDate(config.dates, "2026-11-20").id, "2026-11-21", "next date");
   assert(GameDay.nextDate(config.dates, "2027-03-01") == null, "no date after the list");
   assert(GameDay.endpointOpen("") === false, "empty endpoint is closed");
   assert(GameDay.endpointOpen("https://script.google.com/macros/s/abc_DEF-123/exec") === true, "exec url opens");
@@ -232,7 +232,7 @@ assert(!/type="email"|type="tel"|phone|email/i.test(page), "page has no contact 
 assert(!/street|avenue|boulevard/i.test(page + script), "no street address in the page");
 assert(script.includes(JSON.stringify("Location shared after you RSVP")), "location stays hidden until an RSVP");
 assert(script.includes(JSON.stringify("CRPC")), "after RSVP the page says CRPC");
-assert(sw.includes('var VERSION = "2026.11.20.5"'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.20.6"'), "service worker version");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
 const respondAt = sw.indexOf("respondWith", fetchAt);

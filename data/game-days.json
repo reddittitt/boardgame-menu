@@ -3,7 +3,7 @@
   "endpoint": "",
   "timeLabel": "3:00–9:00 PM",
   "dates": [
-    { "id": "2026-11-28", "date": "2026-11-28" },
+    { "id": "2026-11-21", "date": "2026-11-21" },
     { "id": "2026-12-19", "date": "2026-12-19", "note": "Third Saturday. The 26th is Christmas weekend." },
     { "id": "2027-01-23", "date": "2027-01-23" },
     { "id": "2027-02-27", "date": "2027-02-27" }

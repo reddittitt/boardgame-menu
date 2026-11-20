@@ -2879,6 +2879,7 @@
   }
 
 </style>
+<link rel="stylesheet" href="./game-night.css">
 </head>
 <body>
 <header>
@@ -2891,6 +2892,7 @@
     <div class="spacer"></div>
 
     <a class="toggle" href="./game-day.html">Game Day</a>
+    <a class="header-night" href="#/night">Game night</a>
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
 </header>
@@ -2900,7 +2902,7 @@
 </div>
 
 <main>
-  <p class="all-games-bar"><a class="home" href="#/">All Games</a></p>
+  <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a></p>
   <div id="app"><noscript>JavaScript required.</noscript></div>
 </main>
 
@@ -135188,6 +135190,7 @@
 }
 </script>
 
+<script src="./game-night.js"></script>
 <script>
 (function() {
   /* --- Installed-app updates and offline saves --- */
@@ -135812,81 +135815,6 @@
     );
   }
 
-  function renderList() {
-    detailSlug = "";
-    clearGameAccent();
-    var linkedCollection = collectionFromHash();
-    if (linkedCollection) collectionView = linkedCollection;
-    appEl.innerHTML =
-      '<a class="game-day-entry" href="./game-day.html">' +
-        '<span class="game-day-entry-kicker">Monthly Game Day</span>' +
-        '<span class="game-day-entry-title">One Saturday a month, 3–9 PM</span>' +
-        '<span class="game-day-entry-sub">RSVP for your family and sign up for food</span>' +
-      "</a>" +
-      '<div class="search-bar">' +
-        '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
-        '<button type="button" id="search-clear" hidden>Clear</button>' +
-      "</div>" +
-      '<div class="collection-filter" role="group" aria-label="Whose games">' +
-        '<button type="button" data-collection="all" aria-pressed="' + (collectionView === "all" ? "true" : "false") + '">All</button>' +
-        '<button type="button" data-collection="group" aria-pressed="' + (collectionView === "group" ? "true" : "false") + '">Group</button>' +
-        '<button type="button" data-collection="mine" aria-pressed="' + (collectionView === "mine" ? "true" : "false") + '">My games</button>' +
-      "</div>" +
-      '<div class="catalog-filters">' +
-        '<div class="catalog-filter-head">' +
-          '<button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="catalog-filter-panel">Filters</button>' +
-          '<p id="filter-summary" class="filter-summary"></p>' +
-          '<button type="button" class="catalog-clear" id="catalog-clear" hidden>Clear</button>' +
-        "</div>" +
-        '<div id="catalog-filter-panel" class="catalog-filter-panel" hidden>' +
-          '<div class="catalog-facet" data-facet="players">' +
-            '<span class="catalog-facet-label" id="players-label">Players</span>' +
-            '<div class="catalog-chips" role="group" aria-labelledby="players-label">' +
-              filterChip("players", "1", "1", "1 player") +
-              filterChip("players", "2", "2", "2 players") +
-              filterChip("players", "3", "3", "3 players") +
-              filterChip("players", "4", "4", "4 players") +
-              filterChip("players", "5", "5", "5 players") +
-              filterChip("players", "6", "6", "6 players") +
-              filterChip("players", "7", "7+", "7 or more players") +
-              filterChip("best", "1", "Best at", "Best at this player count") +
-            "</div>" +
-          "</div>" +
-          '<div class="catalog-facet" data-facet="time">' +
-            '<span class="catalog-facet-label" id="time-label">Time</span>' +
-            '<div class="catalog-chips" role="group" aria-labelledby="time-label">' +
-              filterChip("time", "under30", "Under 30 min", "Under 30 minutes") +
-              filterChip("time", "30-60", "30\u201360", "30 to 60 minutes") +
-              filterChip("time", "60-120", "60\u2013120", "60 to 120 minutes") +
-              filterChip("time", "120", "2h+", "2 hours or more") +
-            "</div>" +
-          "</div>" +
-          '<div class="catalog-facet" data-facet="weight">' +
-            '<span class="catalog-facet-label" id="weight-label">Weight</span>' +
-            '<div class="catalog-chips" role="group" aria-labelledby="weight-label">' +
-              filterChip("weight", "light", "Light", "Light weight") +
-              filterChip("weight", "medium-light", "Medium-light", "Medium-light weight") +
-              filterChip("weight", "medium", "Medium", "Medium weight") +
-              filterChip("weight", "medium-heavy", "Medium-heavy", "Medium-heavy weight") +
-              filterChip("weight", "heavy", "Heavy", "Heavy weight") +
-            "</div>" +
-          "</div>" +
-        "</div>" +
-      "</div>" +
-      '<p id="search-count" class="search-count" aria-live="polite"></p>' +
-      '<section id="game-grid" class="grid"></section>';
-
-    var grid = document.getElementById("game-grid");
-    var search = document.getElementById("search");
-    var clearBtn = document.getElementById("search-clear");
-    var countEl = document.getElementById("search-count");
-    var summaryEl = document.getElementById("filter-summary");
-    var catalogClear = document.getElementById("catalog-clear");
-    var filterToggle = document.getElementById("filter-toggle");
-    var filterPanel = document.getElementById("catalog-filter-panel");
-    var gridToken = 0;
-    var state = filtersFromHash() || readStoredFilters();
-
     /* catalog-filter-parse:start */
     function blankFacet(value) {
       var text = String(value == null ? "" : value).trim();
@@ -135962,6 +135890,82 @@
       return false;
     }
     /* catalog-filter-parse:end */
+
+  function renderList() {
+    detailSlug = "";
+    clearGameAccent();
+    var linkedCollection = collectionFromHash();
+    if (linkedCollection) collectionView = linkedCollection;
+    appEl.innerHTML =
+      '<a class="game-day-entry" href="./game-day.html">' +
+        '<span class="game-day-entry-kicker">Monthly Game Day</span>' +
+        '<span class="game-day-entry-title">One Saturday a month, 3–9 PM</span>' +
+        '<span class="game-day-entry-sub">RSVP for your family and sign up for food</span>' +
+      "</a>" +
+      '<div class="search-bar">' +
+        '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
+        '<button type="button" id="search-clear" hidden>Clear</button>' +
+      "</div>" +
+      '<div class="collection-filter" role="group" aria-label="Whose games">' +
+        '<button type="button" data-collection="all" aria-pressed="' + (collectionView === "all" ? "true" : "false") + '">All</button>' +
+        '<button type="button" data-collection="group" aria-pressed="' + (collectionView === "group" ? "true" : "false") + '">Group</button>' +
+        '<button type="button" data-collection="mine" aria-pressed="' + (collectionView === "mine" ? "true" : "false") + '">My games</button>' +
+      "</div>" +
+      '<div class="catalog-filters">' +
+        '<div class="catalog-filter-head">' +
+          '<button type="button" class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="catalog-filter-panel">Filters</button>' +
+          '<p id="filter-summary" class="filter-summary"></p>' +
+          '<button type="button" class="catalog-clear" id="catalog-clear" hidden>Clear</button>' +
+        "</div>" +
+        '<div id="catalog-filter-panel" class="catalog-filter-panel" hidden>' +
+          '<div class="catalog-facet" data-facet="players">' +
+            '<span class="catalog-facet-label" id="players-label">Players</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="players-label">' +
+              filterChip("players", "1", "1", "1 player") +
+              filterChip("players", "2", "2", "2 players") +
+              filterChip("players", "3", "3", "3 players") +
+              filterChip("players", "4", "4", "4 players") +
+              filterChip("players", "5", "5", "5 players") +
+              filterChip("players", "6", "6", "6 players") +
+              filterChip("players", "7", "7+", "7 or more players") +
+              filterChip("best", "1", "Best at", "Best at this player count") +
+            "</div>" +
+          "</div>" +
+          '<div class="catalog-facet" data-facet="time">' +
+            '<span class="catalog-facet-label" id="time-label">Time</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="time-label">' +
+              filterChip("time", "under30", "Under 30 min", "Under 30 minutes") +
+              filterChip("time", "30-60", "30\u201360", "30 to 60 minutes") +
+              filterChip("time", "60-120", "60\u2013120", "60 to 120 minutes") +
+              filterChip("time", "120", "2h+", "2 hours or more") +
+            "</div>" +
+          "</div>" +
+          '<div class="catalog-facet" data-facet="weight">' +
+            '<span class="catalog-facet-label" id="weight-label">Weight</span>' +
+            '<div class="catalog-chips" role="group" aria-labelledby="weight-label">' +
+              filterChip("weight", "light", "Light", "Light weight") +
+              filterChip("weight", "medium-light", "Medium-light", "Medium-light weight") +
+              filterChip("weight", "medium", "Medium", "Medium weight") +
+              filterChip("weight", "medium-heavy", "Medium-heavy", "Medium-heavy weight") +
+              filterChip("weight", "heavy", "Heavy", "Heavy weight") +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+      "</div>" +
+      '<p id="search-count" class="search-count" aria-live="polite"></p>' +
+      '<section id="game-grid" class="grid"></section>';
+
+    var grid = document.getElementById("game-grid");
+    var search = document.getElementById("search");
+    var clearBtn = document.getElementById("search-clear");
+    var countEl = document.getElementById("search-count");
+    var summaryEl = document.getElementById("filter-summary");
+    var catalogClear = document.getElementById("catalog-clear");
+    var filterToggle = document.getElementById("filter-toggle");
+    var filterPanel = document.getElementById("catalog-filter-panel");
+    var gridToken = 0;
+    var state = filtersFromHash() || readStoredFilters();
+
     function matchesFacets(game, picks) {
       if (picks.players) {
         var source = picks.best ? (game.playerPoll && game.playerPoll.best) : game.players;
@@ -141790,6 +141794,11 @@
     var q = parts[1] || "";
     var pieces = path.split("/");
     var params = new URLSearchParams(q);
+    /* game-night:start */
+    if ((pieces[0] || "").toLowerCase() === "night") {
+      return { route: "night", nightQuery: params };
+    }
+    /* game-night:end */
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
       if ((pieces[2] || "").toLowerCase() === "teach") {
@@ -142091,9 +142100,39 @@
       });
     });
   }
+  /* game-night:start */
+  function renderGameNight(params) {
+    detailSlug = "";
+    clearGameAccent();
+    var nightLink = document.querySelector("header a.header-night");
+    if (nightLink) nightLink.setAttribute("aria-current", "page");
+    if (!window.BGQuickNight || typeof window.BGQuickNight.render !== "function") {
+      appEl.innerHTML = '<article class="detail"><p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p><p>Game night did not load. Refresh and try again.</p></article>';
+      return;
+    }
+    window.BGQuickNight.render({
+      appEl: appEl,
+      games: Object.keys(DATA).map(function (key) { return DATA[key]; }),
+      coverUrl: coverUrl,
+      escapeHtml: escapeHtml,
+      gameHref: function (slug) { return "#/game/" + slug; },
+      teachHref: function (slug) { return "#/game/" + slug + "/teach"; },
+      playerSpan: playerSpan,
+      countIncluded: countIncluded,
+      playMinutes: playMinutes,
+      weightBand: weightBand,
+      timeHits: timeHits,
+      params: params || new URLSearchParams()
+    });
+  }
+  /* game-night:end */
+
   function render() {
     closeRulebookViewer();
     syncHeaderOffset();
+    document.body.style.overflow = "";
+    var nightLink = document.querySelector("header a.header-night");
+    if (nightLink) nightLink.removeAttribute("aria-current");
     if (unlockRequested()) {
       scrollPageToTop();
       renderStorage();
@@ -142121,6 +142160,10 @@
         }
       }
       renderDetail(parsed.slug, parsed.action, parsed.expansions);
+      requestAnimationFrame(scrollPageToTop);
+    } else if (parsed.route === "night") {
+      scrollPageToTop();
+      renderGameNight(parsed.nightQuery);
       requestAnimationFrame(scrollPageToTop);
     } else {
       renderList();
