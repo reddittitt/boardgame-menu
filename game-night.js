@@ -148,10 +148,58 @@
     return -90 + (index + 0.5) * (360 / n);
   }
 
+  /* One slice per game. Weight is how many people picked it, unless duplicates
+     are not supposed to count extra. */
+  function groupPicks(picks, dup) {
+    var order = [];
+    var by = {};
+    (picks || []).forEach(function (pick) {
+      var slug = pick && pick.slug;
+      if (!slug) return;
+      if (!by[slug]) {
+        by[slug] = { slug: slug, who: [], weight: 0 };
+        order.push(by[slug]);
+      }
+      if (pick.name && by[slug].who.indexOf(pick.name) === -1) by[slug].who.push(pick.name);
+      by[slug].weight += 1;
+    });
+    if (!dup) order.forEach(function (seg) { seg.weight = 1; });
+    return order;
+  }
+
+  /* Fair draw where a slice of weight 2 is twice as likely as a slice of weight 1. */
+  function weightedIndex(weights, rng) {
+    var roll = rng || randomIndex;
+    var total = 0;
+    var i = 0;
+    for (; i < weights.length; i += 1) total += weights[i];
+    if (total <= 0) return 0;
+    var pick = roll(total);
+    var acc = 0;
+    for (i = 0; i < weights.length; i += 1) {
+      acc += weights[i];
+      if (pick < acc) return i;
+    }
+    return weights.length - 1;
+  }
+
   /* CSS rotation, in degrees, that parks segment `index` under the top pointer.
+     `n` may be a count of equal slices or an array of weights.
      Extra full turns keep a re-spin moving the same direction. */
   function landingRotation(index, n, fromDeg, turns) {
-    var target = segmentCenterDeg(index, n);
+    var target;
+    if (typeof n === "number") {
+      target = segmentCenterDeg(index, n);
+    } else {
+      var weights = n || [];
+      var total = 0;
+      var before = 0;
+      var i = 0;
+      for (; i < weights.length; i += 1) total += weights[i];
+      for (i = 0; i < index; i += 1) before += weights[i];
+      var mid = total ? (before + weights[index] / 2) / total : 0;
+      target = -90 + mid * 360;
+    }
     var base = -90 - target;
     base = ((base % 360) + 360) % 360;
     if (base !== 0) base -= 360;
@@ -221,7 +269,7 @@
   }
 
   function emptyState() {
-    return { players: "", time: "", kids: false, weightFrom: "", weightTo: "", games: [] };
+    return { players: "", time: "", kids: false, weightFrom: "", weightTo: "", games: [], pool: null };
   }
 
   function render(ctx) {
@@ -257,13 +305,84 @@
         }
         if (next.games.length < MAX_NOMINEES) next.games.push(slug);
       });
+      var pool = readPool(params.get("pool"));
+      if (pool) {
+        next.pool = pool;
+        if (pool.picks.length) {
+          next.games = [];
+          var have = {};
+          pool.picks.forEach(function (pick) {
+            if (have[pick.slug] || next.games.length >= MAX_NOMINEES) return;
+            have[pick.slug] = true;
+            next.games.push(pick.slug);
+          });
+        }
+      }
       return next;
+    }
+
+    function cleanName(raw) {
+      var name = String(raw || "").replace(/\s+/g, " ").trim();
+      if (!name) return "";
+      if (name.length > 24) name = name.slice(0, 24).trim();
+      return name;
+    }
+
+    function readPool(raw) {
+      if (!raw) return null;
+      var data;
+      try { data = JSON.parse(raw); } catch (err) { return null; }
+      if (!data || typeof data !== "object") return null;
+      var per = parseInt(data.n, 10);
+      if (per !== 1 && per !== 2 && per !== 3) per = 2;
+      var roster = [];
+      var seen = {};
+      (Array.isArray(data.r) ? data.r : []).forEach(function (item) {
+        var name = cleanName(item);
+        var key = name.toLowerCase();
+        if (!name || seen[key] || roster.length >= 12) return;
+        seen[key] = true;
+        roster.push(name);
+      });
+      var picks = [];
+      (Array.isArray(data.p) ? data.p : []).forEach(function (pair) {
+        if (!pair || pair.length < 2 || picks.length >= 36) return;
+        var name = cleanName(pair[0]);
+        var slug = String(pair[1] || "").trim().toLowerCase();
+        if (!name || !bySlug[slug]) {
+          if (slug && !bySlug[slug]) dropped += 1;
+          return;
+        }
+        var key = name.toLowerCase();
+        var already = picks.some(function (pick) {
+          return pick.name.toLowerCase() === key && pick.slug === slug;
+        });
+        if (already) return;
+        var count = picks.filter(function (pick) { return pick.name.toLowerCase() === key; }).length;
+        if (count >= per) return;
+        picks.push({ name: name, slug: slug });
+        if (!seen[key] && roster.length < 12) {
+          seen[key] = true;
+          roster.push(name);
+        }
+      });
+      if (!roster.length && !picks.length) return null;
+      return { roster: roster, per: per, dup: data.d !== 0, picks: picks };
+    }
+
+    function compactPool(pool) {
+      return JSON.stringify({
+        r: pool.roster,
+        n: pool.per,
+        d: pool.dup ? 1 : 0,
+        p: pool.picks.map(function (pick) { return [pick.name, pick.slug]; })
+      });
     }
 
     function paramsHaveState(params) {
       if (!params) return false;
       return params.has("players") || params.has("time") || params.has("kids") ||
-        params.has("w0") || params.has("w1") || params.has("games");
+        params.has("w0") || params.has("w1") || params.has("games") || params.has("pool");
     }
 
     function loadState() {
@@ -280,6 +399,7 @@
         if (saved.weightFrom) params.set("w0", saved.weightFrom);
         if (saved.weightTo) params.set("w1", saved.weightTo);
         if (saved.games && saved.games.length) params.set("games", saved.games.join(","));
+        if (saved.pool) params.set("pool", compactPool(saved.pool));
         return readParams(params);
       } catch (err) {
         return emptyState();
@@ -303,6 +423,7 @@
       if (state.weightFrom) params.set("w0", state.weightFrom);
       if (state.weightTo) params.set("w1", state.weightTo);
       if (state.games.length) params.set("games", state.games.join(","));
+      if (state.pool && (state.pool.roster.length || state.pool.picks.length)) params.set("pool", compactPool(state.pool));
       var qs = params.toString();
       var nextHash = "#/night" + (qs ? "?" + qs : "");
       var next = window.location.pathname + window.location.search + nextHash;
@@ -561,10 +682,13 @@
       } else {
         list.innerHTML = state.games.map(function (slug) {
           var game = bySlug[slug];
+          var who = pickersOf(slug);
           return (
             '<li class="gn-row">' +
               '<span><span class="gn-name">' + ctx.escapeHtml(game.name) + "</span>" +
-              '<span class="gn-sub">' + ctx.escapeHtml(metaLine(game)) + "</span></span>" +
+              '<span class="gn-sub">' + ctx.escapeHtml(metaLine(game)) +
+                (who ? " · Picked by " + ctx.escapeHtml(who) : "") +
+              "</span></span>" +
               '<button type="button" data-remove="' + ctx.escapeHtml(slug) + '" aria-label="Remove ' + ctx.escapeHtml(game.name) + '">Remove</button>' +
             "</li>"
           );
@@ -645,6 +769,9 @@
       });
       var changed = next.join(",") !== state.games.join(",");
       state.games = next;
+      if (state.pool) {
+        state.pool.picks = state.pool.picks.filter(function (pick) { return next.indexOf(pick.slug) !== -1; });
+      }
       if (changed && decision) {
         decision = null;
         document.body.style.overflow = "";
@@ -724,14 +851,13 @@
         quickPick();
         return;
       }
-      if (state.games.length < 2) {
+      if (type === "wheel") {
+        decision = freshWheel();
+      } else if (state.games.length < 2) {
         decision = { type: "need", source: type };
         paintModes();
         paintPanel(true);
         return;
-      }
-      if (type === "wheel") {
-        decision = { type: "wheel", source: "wheel", rotation: 0, winner: "", spinning: false };
       } else if (type === "vote") {
         decision = {
           type: "vote",
@@ -776,6 +902,43 @@
       return "Round " + round.round;
     }
 
+    function pickersOf(slug) {
+      if (!state.pool) return "";
+      var names = [];
+      state.pool.picks.forEach(function (pick) {
+        if (pick.slug === slug && names.indexOf(pick.name) === -1) names.push(pick.name);
+      });
+      return names.join(", ");
+    }
+
+    function activeWheelGames() {
+      if (state.pool && state.pool.picks.length) {
+        var dup = state.pool.dup !== false;
+        return groupPicks(state.pool.picks, dup).map(function (seg) {
+          var game = bySlug[seg.slug];
+          return {
+            slug: seg.slug,
+            name: game ? game.name : seg.slug,
+            who: seg.who,
+            weight: seg.weight
+          };
+        });
+      }
+      return nomineeGames().map(function (game) {
+        return { slug: game.slug, name: game.name, who: [], weight: 1 };
+      });
+    }
+
+    function wheelWeights(games) {
+      return games.map(function (game) { return game.weight > 0 ? game.weight : 1; });
+    }
+
+    function wheelChanceText(games) {
+      var weighted = (games || activeWheelGames()).some(function (game) { return game.weight > 1; });
+      if (weighted) return "A bigger slice is more likely. The winner is chosen before the wheel moves.";
+      return "Each nominee has the same chance. The winner is chosen before the wheel moves.";
+    }
+
     function drawWheel(canvas, games, rotationDeg) {
       var g = canvas.getContext("2d");
       var size = canvas.width;
@@ -783,38 +946,53 @@
       var cy = size / 2;
       var radius = size / 2 - 8;
       var n = games.length;
-      var slice = (Math.PI * 2) / n;
+      var weights = wheelWeights(games);
+      var total = 0;
+      var i = 0;
+      for (; i < n; i += 1) total += weights[i];
+      if (!total) total = 1;
       var rot = (rotationDeg || 0) * Math.PI / 180;
       g.clearRect(0, 0, size, size);
-      var i = 0;
-      for (; i < n; i += 1) {
-        var start = -Math.PI / 2 + rot + i * slice;
+      var cursor = 0;
+      for (i = 0; i < n; i += 1) {
+        var sweep = weights[i] / total * Math.PI * 2;
+        var start = -Math.PI / 2 + rot + cursor;
         g.beginPath();
         g.moveTo(cx, cy);
-        g.arc(cx, cy, radius, start, start + slice);
+        g.arc(cx, cy, radius, start, start + sweep);
         g.closePath();
         g.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length];
         g.fill();
         g.lineWidth = 4;
         g.strokeStyle = "#ffffff";
         g.stroke();
+        cursor += sweep;
       }
       /* Names stay upright. The spin uses a CSS rotate, then the settled
          wheel is redrawn so the labels are level again. */
+      cursor = 0;
       for (i = 0; i < n; i += 1) {
-        var mid = -Math.PI / 2 + rot + (i + 0.5) * slice;
-        var dist = radius * (n > 6 ? 0.66 : 0.58);
+        var sweep2 = weights[i] / total * Math.PI * 2;
+        var mid = -Math.PI / 2 + rot + cursor + sweep2 / 2;
+        var dist = radius * (n > 6 ? 0.62 : 0.56);
+        var who = (games[i].who || []).join(", ");
         g.save();
         g.translate(cx + Math.cos(mid) * dist, cy + Math.sin(mid) * dist);
         g.fillStyle = "#ffffff";
-        g.font = "600 " + (n > 6 ? 20 : 28) + "px sans-serif";
         g.textAlign = "center";
         g.textBaseline = "middle";
-        var label = games[i].name;
+        g.font = "600 " + (n > 6 ? 20 : 28) + "px sans-serif";
+        var label = games[i].name || "";
         var maxChars = n > 6 ? 11 : 14;
         if (label.length > maxChars) label = label.slice(0, maxChars - 1) + "\u2026";
-        g.fillText(label, 0, 0);
+        if (who.length > 18) who = who.slice(0, 17) + "\u2026";
+        g.fillText(label, 0, who ? -14 : 0);
+        if (who) {
+          g.font = "600 18px sans-serif";
+          g.fillText(who, 0, 16);
+        }
         g.restore();
+        cursor += sweep2;
       }
       g.beginPath();
       g.arc(cx, cy, 22, 0, Math.PI * 2);
@@ -823,17 +1001,159 @@
     }
 
     function wheelHtml() {
+      if (decision.phase === "names") return namesHtml();
+      if (decision.phase === "join") return joinHtml();
+      if (decision.phase === "cover") return passCoverHtml();
+      if (decision.phase === "pick") return pickHtml();
+      var games = activeWheelGames();
+      var weights = wheelWeights(games).join(",");
+      var few = games.length < 2;
+      var dupOn = !state.pool || state.pool.dup !== false;
+      var poolNote = state.pool && state.pool.picks.length
+        ? '<p class="gn-note">Copy the link so another phone can add picks, then send that link back. There is no server.</p>' +
+          '<button type="button" class="gn-chip" id="gn-dup" aria-pressed="' + (dupOn ? "true" : "false") + '">Duplicates count extra</button>'
+        : "";
       return (
-        '<div class="gn-wheel-wrap" id="gn-wheel-wrap" data-spinning="false">' +
-          '<div class="gn-pointer" aria-hidden="true"></div>' +
-          '<canvas class="gn-wheel-canvas" id="gn-wheel" width="640" height="640" aria-hidden="true"></canvas>' +
-        "</div>" +
-        '<p id="gn-wheel-status" class="gn-note" role="status">Each nominee has the same chance. The winner is chosen before the wheel moves.</p>' +
-        '<div id="gn-wheel-result" hidden></div>' +
         '<div class="gn-actions">' +
-          '<button type="button" class="gn-primary" id="gn-spin">Spin</button>' +
-          '<button type="button" class="gn-btn" id="gn-respin" hidden>Spin again</button>' +
-          '<button type="button" class="gn-btn" id="gn-drop" hidden>Remove winner and spin again</button>' +
+          '<button type="button" class="gn-primary" id="gn-everyone">Everyone picks</button>' +
+          (state.pool && state.pool.picks.length ? '<button type="button" class="gn-btn" id="gn-join">Add my picks</button>' : "") +
+        "</div>" +
+        (few
+          ? "<p>Add at least two nominees first, or have everyone add their own picks.</p>"
+          : '<div class="gn-wheel-wrap" id="gn-wheel-wrap" data-spinning="false" data-weights="' + weights + '">' +
+              '<div class="gn-pointer" aria-hidden="true"></div>' +
+              '<canvas class="gn-wheel-canvas" id="gn-wheel" width="640" height="640" aria-hidden="true"></canvas>' +
+            "</div>" +
+            '<p id="gn-wheel-status" class="gn-note" role="status">' + ctx.escapeHtml(wheelChanceText(games)) + "</p>" +
+            '<div id="gn-wheel-result" hidden></div>' +
+            '<div class="gn-actions">' +
+              '<button type="button" class="gn-primary" id="gn-spin">Spin</button>' +
+              '<button type="button" class="gn-btn" id="gn-respin" hidden>Spin again</button>' +
+              '<button type="button" class="gn-btn" id="gn-drop" hidden>Remove winner and spin again</button>' +
+            "</div>" +
+            poolNote)
+      );
+    }
+
+    var NAMES_KEY = "bgq_night_names";
+
+    function recentNames() {
+      try {
+        var list = JSON.parse(localStorage.getItem(NAMES_KEY) || "[]");
+        return Array.isArray(list) ? list.map(cleanName).filter(Boolean).slice(0, 12) : [];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function rememberName(name) {
+      var clean = cleanName(name);
+      if (!clean) return;
+      var list = recentNames().filter(function (item) { return item.toLowerCase() !== clean.toLowerCase(); });
+      list.unshift(clean);
+      try { localStorage.setItem(NAMES_KEY, JSON.stringify(list.slice(0, 12))); } catch (err) {}
+    }
+
+    function namesHtml() {
+      var roster = decision.roster || [];
+      var recent = recentNames().filter(function (name) {
+        return !roster.some(function (have) { return have.toLowerCase() === name.toLowerCase(); });
+      });
+      var rows = roster.map(function (name) {
+        return '<li class="gn-row"><span class="gn-name">' + ctx.escapeHtml(name) + "</span>" +
+          '<button type="button" data-drop-name="' + ctx.escapeHtml(name) + '" aria-label="Remove ' + ctx.escapeHtml(name) + '">Remove</button></li>';
+      }).join("");
+      var chips = recent.map(function (name) {
+        return '<button type="button" class="gn-chip" data-recent-name="' + ctx.escapeHtml(name) + '">' + ctx.escapeHtml(name) + "</button>";
+      }).join("");
+      var per = decision.per || 2;
+      return (
+        "<h3>Everyone picks</h3>" +
+        "<p>Add each person, then pass the phone. Each person adds their own games.</p>" +
+        '<div class="gn-name-row">' +
+          '<label class="gn-field">Name' +
+            '<input id="gn-player-name" type="text" maxlength="24" autocomplete="name" enterkeyhint="done" placeholder="Sam">' +
+          "</label>" +
+          '<button type="button" class="gn-btn" id="gn-name-add">Add name</button>' +
+        "</div>" +
+        (chips ? '<div class="gn-chips" aria-label="Recent names">' + chips + "</div>" : "") +
+        '<ul class="gn-list">' + (rows || '<li class="gn-note">No names yet.</li>') + "</ul>" +
+        '<div class="gn-facet">' +
+          '<span class="gn-facet-label" id="gn-per-label">Picks per person</span>' +
+          '<div class="gn-chips" role="group" aria-labelledby="gn-per-label">' +
+            chipPer(1, per) + chipPer(2, per) + chipPer(3, per) +
+          "</div>" +
+        "</div>" +
+        '<div class="gn-actions"><button type="button" class="gn-primary" id="gn-pass-start"' + (roster.length ? "" : " disabled") + ">Start passing the phone</button></div>"
+      );
+    }
+
+    function chipPer(n, current) {
+      var label = n === 1 ? "1 pick" : n + " picks";
+      return '<button type="button" class="gn-chip" data-per="' + n + '" aria-pressed="' + (current === n ? "true" : "false") + '" aria-label="' + label + '">' + n + "</button>";
+    }
+
+    function joinHtml() {
+      var recent = recentNames();
+      var chips = recent.map(function (name) {
+        return '<button type="button" class="gn-chip" data-recent-name="' + ctx.escapeHtml(name) + '">' + ctx.escapeHtml(name) + "</button>";
+      }).join("");
+      return (
+        '<div class="gn-cover gn-pick-sheet" id="gn-pick-sheet" role="dialog" aria-modal="true" aria-labelledby="gn-join-title">' +
+          '<h3 id="gn-join-title">Add my picks</h3>' +
+          "<p>Open this link on another phone, add your name, then copy the link back.</p>" +
+          '<label class="gn-field">Your name' +
+            '<input id="gn-player-name" type="text" maxlength="24" autocomplete="name" enterkeyhint="done">' +
+          "</label>" +
+          (chips ? '<div class="gn-chips">' + chips + "</div>" : "") +
+          '<p id="gn-join-note" class="gn-note" role="status"></p>' +
+          '<div class="gn-actions">' +
+            '<button type="button" class="gn-primary" id="gn-join-next">Next</button>' +
+            '<button type="button" class="gn-btn" id="gn-join-back">Back to the wheel</button>' +
+          "</div>" +
+        "</div>"
+      );
+    }
+
+    function passCoverHtml() {
+      var name = currentPickerName();
+      return (
+        '<div class="gn-cover" id="gn-cover" role="dialog" aria-modal="true" aria-labelledby="gn-cover-title">' +
+          '<h3 id="gn-cover-title">Pass the phone</h3>' +
+          "<p>Hand this phone to " + ctx.escapeHtml(name) + ". Picks stay hidden until you hand it over.</p>" +
+          '<button type="button" class="gn-primary" id="gn-ready">' + ctx.escapeHtml(name) + " is ready</button>" +
+        "</div>"
+      );
+    }
+
+    function currentPickerName() {
+      if (decision.picker) return decision.picker;
+      var roster = (state.pool && state.pool.roster) || [];
+      return roster[decision.rosterIndex] || "";
+    }
+
+    function pickHtml() {
+      var name = currentPickerName();
+      var per = (state.pool && state.pool.per) || decision.per || 2;
+      var chosen = (decision.draft || []).map(function (slug, index) {
+        var game = bySlug[slug];
+        return "<li>" + ctx.escapeHtml(game ? game.name : slug) + "</li>";
+      }).join("");
+      var ready = (decision.draft || []).length >= per;
+      return (
+        '<div class="gn-cover gn-pick-sheet" id="gn-pick-sheet" role="dialog" aria-modal="true" aria-labelledby="gn-pick-title">' +
+          '<h3 id="gn-pick-title">' + ctx.escapeHtml(name) + "</h3>" +
+          "<p>Add " + per + (per === 1 ? " pick" : " picks") + ". Search any game, or choose a suggestion.</p>" +
+          (chosen ? '<ol class="gn-ranked" id="gn-my-picks">' + chosen + "</ol>" : '<ol class="gn-ranked" id="gn-my-picks" hidden></ol>') +
+          '<div class="gn-actions">' +
+            '<button type="button" class="gn-btn" id="gn-pick-undo"' + ((decision.draft || []).length ? "" : " disabled") + ">Remove last</button>" +
+            '<button type="button" class="gn-btn" id="gn-pick-suggest">Suggest</button>' +
+          "</div>" +
+          '<label class="gn-field">Search' +
+            '<input id="gn-pick-search" type="search" placeholder="Search the catalog" autocomplete="off" enterkeyhint="search" aria-label="Search games to pick">' +
+          "</label>" +
+          '<ul id="gn-pick-results" class="gn-results"></ul>' +
+          '<div class="gn-actions"><button type="button" class="gn-primary" id="gn-pick-done"' + (ready ? "" : " disabled") + ">Done</button></div>" +
         "</div>"
       );
     }
@@ -845,9 +1165,9 @@
       if (reduce) {
         canvas.style.transition = "none";
         canvas.style.transform = "none";
-        drawWheel(canvas, nomineeGames(), to);
+        drawWheel(canvas, activeWheelGames(), to);
       } else {
-        drawWheel(canvas, nomineeGames(), 0);
+        drawWheel(canvas, activeWheelGames(), 0);
         canvas.style.transition = "none";
         canvas.style.transform = "rotate(" + from + "deg)";
         canvas.getBoundingClientRect();
@@ -866,13 +1186,16 @@
           wrap.setAttribute("data-winner", game.slug);
         }
         if (status) status.textContent = "Winner: " + game.name + ".";
+        var whoLine = (decision.winnerWho || []).join(", ");
+        var why = whoLine ? "Picked by " + whoLine + "." : "Picked by the wheel.";
         canvas.style.transition = "none";
         canvas.style.transform = "none";
-        drawWheel(canvas, nomineeGames(), decision.rotation || 0);
+        drawWheel(canvas, activeWheelGames(), decision.rotation || 0);
+        if (wrap && wrap.isConnected) wrap.setAttribute("data-weights", wheelWeights(activeWheelGames()).join(","));
         var box = document.getElementById("gn-wheel-result");
         if (box) {
           box.hidden = false;
-          box.innerHTML = resultHtml(game, "Picked by the wheel.");
+          box.innerHTML = resultHtml(bySlug[game.slug] || game, why);
         }
         var spinBtn = document.getElementById("gn-spin");
         var again = document.getElementById("gn-respin");
@@ -903,16 +1226,18 @@
 
     function spin() {
       if (!decision || decision.type !== "wheel" || decision.spinning) return;
-      var games = nomineeGames();
+      var games = activeWheelGames();
       if (games.length < 2) {
-        if (games.length === 1) showResult(games[0], "Only one nominee left.", "", "wheel");
+        if (games.length === 1) showResult(bySlug[games[0].slug], "Only one nominee left.", "", "wheel");
         return;
       }
-      var index = randomIndex(games.length);
+      var weights = wheelWeights(games);
+      var index = weightedIndex(weights);
       var from = decision.rotation || 0;
-      var to = landingRotation(index, games.length, from, motionOK() ? 5 : 0);
+      var to = landingRotation(index, weights, from, motionOK() ? 5 : 0);
       decision.winner = games[index].slug;
       decision.rotation = to;
+      decision.winnerWho = games[index].who || [];
       decision.spinning = !motionOK() ? false : true;
       var canvas = document.getElementById("gn-wheel");
       if (!canvas) return;
@@ -927,13 +1252,16 @@
       if (again) again.hidden = true;
       if (drop) drop.hidden = true;
       if (spinBtn) spinBtn.disabled = true;
-      runSpin(canvas, from, to, games[index]);
+      runSpin(canvas, from, to, bySlug[games[index].slug] || games[index]);
     }
 
     function dropWinner() {
       if (!decision || !decision.winner) return;
       var removed = decision.winner;
       var next = state.games.filter(function (slug) { return slug !== removed; });
+      if (state.pool) {
+        state.pool.picks = state.pool.picks.filter(function (pick) { return pick.slug !== removed; });
+      }
       state.games = next;
       paintNominees();
       paintResults();
@@ -1103,16 +1431,18 @@
           "</div>";
       }
       panel.innerHTML = html;
-      var cover = decision && decision.type === "vote" && decision.phase === "cover";
+      var sheet = decision && decision.type === "wheel" && (decision.phase === "cover" || decision.phase === "pick" || decision.phase === "join");
+      var cover = (decision && decision.type === "vote" && decision.phase === "cover") || sheet;
       document.body.style.overflow = cover ? "hidden" : "";
-      if (decision && decision.type === "wheel") {
+      if (decision && decision.type === "wheel" && decision.phase !== "names" && decision.phase !== "cover" && decision.phase !== "pick" && decision.phase !== "join") {
         var canvas = document.getElementById("gn-wheel");
         if (canvas) {
           canvas.style.transition = "none";
           canvas.style.transform = "none";
-          drawWheel(canvas, nomineeGames(), decision.rotation || 0);
+          drawWheel(canvas, activeWheelGames(), decision.rotation || 0);
         }
       }
+      bindPickSheet();
       if (cover) {
         var ready = document.getElementById("gn-ready");
         if (ready) ready.focus();
@@ -1196,12 +1526,272 @@
       paintPanel(false);
     }
 
+    function freshWheel() {
+      return {
+        type: "wheel",
+        source: "wheel",
+        phase: "spin",
+        rotation: 0,
+        winner: "",
+        winnerWho: [],
+        spinning: false,
+        draft: [],
+        suggestions: [],
+        pickQuery: "",
+        roster: [],
+        per: state.pool && state.pool.per ? state.pool.per : 2,
+        rosterIndex: 0,
+        picker: "",
+        single: false
+      };
+    }
+
+    function openEveryone() {
+      if (!decision || decision.type !== "wheel") decision = freshWheel();
+      decision.phase = "names";
+      decision.roster = state.pool ? state.pool.roster.slice() : [];
+      decision.per = state.pool && state.pool.per ? state.pool.per : 2;
+      decision.picker = "";
+      decision.single = false;
+      paintPanel(false);
+    }
+
+    function addRosterName(raw) {
+      var name = cleanName(raw);
+      if (!name) return;
+      decision.roster = decision.roster || [];
+      var exists = decision.roster.some(function (have) { return have.toLowerCase() === name.toLowerCase(); });
+      if (!exists && decision.roster.length < 12) decision.roster.push(name);
+      rememberName(name);
+      paintPanel(false);
+    }
+
+    function addRosterFromInput() {
+      var input = document.getElementById("gn-player-name");
+      addRosterName(input ? input.value : "");
+      if (input) input.value = "";
+    }
+
+    function useRecentName(name) {
+      if (decision.phase === "join") {
+        var input = document.getElementById("gn-player-name");
+        if (input) input.value = name;
+        beginJoin(name);
+        return;
+      }
+      addRosterName(name);
+    }
+
+    function dropRosterName(name) {
+      decision.roster = (decision.roster || []).filter(function (have) { return have !== name; });
+      paintPanel(false);
+    }
+
+    function picksFor(name) {
+      if (!state.pool) return [];
+      return state.pool.picks.filter(function (pick) { return pick.name.toLowerCase() === name.toLowerCase(); });
+    }
+
+    function beginPassing() {
+      if (!decision.roster || !decision.roster.length) return;
+      state.pool = {
+        roster: decision.roster.slice(),
+        per: decision.per || 2,
+        dup: !state.pool || state.pool.dup !== false,
+        picks: []
+      };
+      state.games = [];
+      decision.single = false;
+      decision.rosterIndex = 0;
+      decision.picker = state.pool.roster[0];
+      decision.phase = "cover";
+      paintNominees();
+      paintResults();
+      syncUrl();
+      paintPanel(false);
+    }
+
+    function beginJoin(preset) {
+      var input = document.getElementById("gn-player-name");
+      var name = cleanName(preset || (input ? input.value : ""));
+      var note = document.getElementById("gn-join-note");
+      if (!name) {
+        if (note) note.textContent = "Type a name first.";
+        return;
+      }
+      if (!state.pool) state.pool = { roster: [], per: 2, dup: true, picks: [] };
+      var per = state.pool.per || 2;
+      if (picksFor(name).length >= per) {
+        if (note) note.textContent = name + " already added " + per + (per === 1 ? " pick" : " picks") + ".";
+        return;
+      }
+      var known = state.pool.roster.some(function (have) { return have.toLowerCase() === name.toLowerCase(); });
+      if (!known) state.pool.roster.push(name);
+      rememberName(name);
+      decision.single = true;
+      decision.picker = name;
+      decision.draft = picksFor(name).map(function (pick) { return pick.slug; });
+      state.pool.picks = state.pool.picks.filter(function (pick) { return pick.name.toLowerCase() !== name.toLowerCase(); });
+      decision.pickQuery = "";
+      decision.suggestions = [];
+      decision.phase = "pick";
+      syncUrl();
+      paintPanel(false);
+    }
+
+    function fillSuggestions() {
+      var have = {};
+      (decision.draft || []).forEach(function (slug) { have[slug] = true; });
+      var matches = ctx.games.filter(function (game) { return fits(game) && !have[game.slug]; });
+      decision.suggestions = orderForSuggest(matches, isBestAt).slice(0, 8).map(function (game) { return game.slug; });
+      decision.pickQuery = "";
+      var search = document.getElementById("gn-pick-search");
+      if (search) search.value = "";
+      paintPickResults();
+    }
+
+    function undoDraft() {
+      if (!decision.draft || !decision.draft.length) return;
+      decision.draft.pop();
+      paintPanel(false);
+    }
+
+    function addDraft(slug) {
+      if (!bySlug[slug]) return;
+      decision.draft = decision.draft || [];
+      var per = (state.pool && state.pool.per) || decision.per || 2;
+      if (decision.draft.length >= per) return;
+      if (decision.draft.indexOf(slug) !== -1) return;
+      decision.draft.push(slug);
+      paintPanel(false);
+    }
+
+    function commitPicks() {
+      var name = decision.picker || currentPickerName();
+      var per = (state.pool && state.pool.per) || 2;
+      if (!state.pool || !name || (decision.draft || []).length < per) return;
+      decision.draft.forEach(function (slug) {
+        state.pool.picks.push({ name: name, slug: slug });
+      });
+      rememberName(name);
+      var seen = {};
+      var games = [];
+      state.pool.picks.forEach(function (pick) {
+        if (seen[pick.slug] || games.length >= MAX_NOMINEES) return;
+        seen[pick.slug] = true;
+        games.push(pick.slug);
+      });
+      state.games = games;
+      decision.draft = [];
+      decision.winner = "";
+      decision.rotation = 0;
+      paintNominees();
+      paintResults();
+      syncUrl();
+      if (decision.single) {
+        decision.single = false;
+        decision.phase = "spin";
+        decision.picker = "";
+        paintPanel(true);
+        return;
+      }
+      var next = decision.rosterIndex + 1;
+      if (next >= state.pool.roster.length) {
+        decision.phase = "spin";
+        decision.picker = "";
+        paintPanel(true);
+        return;
+      }
+      decision.rosterIndex = next;
+      decision.picker = state.pool.roster[next];
+      decision.phase = "cover";
+      paintPanel(false);
+    }
+
+    function toggleDup() {
+      if (!state.pool) return;
+      state.pool.dup = state.pool.dup === false;
+      decision.winner = "";
+      decision.rotation = 0;
+      syncUrl();
+      paintPanel(false);
+    }
+
+    function paintPickResults() {
+      var list = document.getElementById("gn-pick-results");
+      if (!list) return;
+      var q = String(decision.pickQuery || "").trim().toLowerCase();
+      var have = {};
+      (decision.draft || []).forEach(function (slug) { have[slug] = true; });
+      var rows = [];
+      if (q) {
+        ctx.games.forEach(function (game) {
+          if (have[game.slug] || rows.length >= 8) return;
+          var named = String(game.name || "").toLowerCase().indexOf(q) !== -1;
+          var alias = Array.isArray(game.aliases) && game.aliases.some(function (item) {
+            return String(item || "").toLowerCase().indexOf(q) !== -1;
+          });
+          if (named || alias) rows.push(game);
+        });
+      } else {
+        (decision.suggestions || []).forEach(function (slug) {
+          if (have[slug] || !bySlug[slug]) return;
+          rows.push(bySlug[slug]);
+        });
+      }
+      if (!rows.length) {
+        list.innerHTML = '<li class="gn-note">' + (q ? "No games match that search." : "Tap Suggest, or search for a game.") + "</li>";
+        return;
+      }
+      list.innerHTML = rows.map(function (game) {
+        return '<li class="gn-row"><span class="gn-name">' + ctx.escapeHtml(game.name) + "</span>" +
+          '<button type="button" data-pick-slug="' + ctx.escapeHtml(game.slug) + '" aria-label="Pick ' + ctx.escapeHtml(game.name) + '">Add</button></li>';
+      }).join("");
+    }
+
+    function bindPickSheet() {
+      var search = document.getElementById("gn-pick-search");
+      if (search && !search.dataset.bound) {
+        search.dataset.bound = "1";
+        search.value = decision.pickQuery || "";
+        search.addEventListener("input", function () {
+          decision.pickQuery = search.value;
+          paintPickResults();
+        });
+      }
+      if (document.getElementById("gn-pick-results")) paintPickResults();
+      var nameInput = document.getElementById("gn-player-name");
+      if (nameInput && !nameInput.dataset.bound) {
+        nameInput.dataset.bound = "1";
+        nameInput.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter") return;
+          event.preventDefault();
+          if (decision.phase === "join") beginJoin();
+          else addRosterFromInput();
+        });
+      }
+    }
+
     function onPanelClick(event) {
       var btn = event.target.closest ? event.target.closest("button") : null;
       if (!btn) return;
       var id = btn.id;
       if (btn.disabled) return;
       if (id === "gn-spin" || id === "gn-respin") { spin(); return; }
+      if (id === "gn-everyone") { openEveryone(); return; }
+      if (id === "gn-name-add") { addRosterFromInput(); return; }
+      if (id === "gn-pass-start") { beginPassing(); return; }
+      if (id === "gn-pick-suggest") { fillSuggestions(); return; }
+      if (id === "gn-pick-undo") { undoDraft(); return; }
+      if (id === "gn-pick-done") { commitPicks(); return; }
+      if (id === "gn-join") { decision.phase = "join"; decision.picker = ""; paintPanel(false); return; }
+      if (id === "gn-join-back") { decision.phase = "spin"; paintPanel(false); return; }
+      if (id === "gn-join-next") { beginJoin(); return; }
+      if (id === "gn-dup") { toggleDup(); return; }
+      if (btn.hasAttribute("data-per")) { decision.per = parseInt(btn.getAttribute("data-per"), 10) || 2; paintPanel(false); return; }
+      if (btn.hasAttribute("data-recent-name")) { useRecentName(btn.getAttribute("data-recent-name")); return; }
+      if (btn.hasAttribute("data-drop-name")) { dropRosterName(btn.getAttribute("data-drop-name")); return; }
+      if (btn.hasAttribute("data-pick-slug")) { addDraft(btn.getAttribute("data-pick-slug")); return; }
       if (id === "gn-drop") { dropWinner(); return; }
       if (id === "gn-vote-start") {
         decision.phase = "cover";
@@ -1212,6 +1802,15 @@
         return;
       }
       if (id === "gn-ready") {
+        if (decision.type === "wheel") {
+          decision.phase = "pick";
+          decision.picker = currentPickerName();
+          decision.draft = [];
+          decision.pickQuery = "";
+          decision.suggestions = [];
+          paintPanel(false);
+          return;
+        }
         decision.phase = "ballot";
         decision.draft = decision.method === "points" ? [null, null, null] : [];
         paintPanel(false);
@@ -1375,6 +1974,8 @@
     recordedMinAge: recordedMinAge,
     kidsAllows: kidsAllows,
     pollText: pollText,
-    landingRotation: landingRotation
+    landingRotation: landingRotation,
+    groupPicks: groupPicks,
+    weightedIndex: weightedIndex
   };
 })();

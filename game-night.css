@@ -359,6 +359,22 @@ header a.header-night:focus-visible {
 }
 .gn-cover h3 { font-size: 1.6rem; }
 .gn-cover .gn-primary { width: min(100%, 320px); }
+.gn-pick-sheet {
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: left;
+  overflow: auto;
+  gap: 10px;
+}
+.gn-pick-sheet h3,
+.gn-pick-sheet > p { text-align: center; }
+.gn-name-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.gn-name-row .gn-field { flex: 1; margin: 0; }
+.gn-name-row .gn-btn { flex: 0 0 auto; }
 .gn-ranked { margin: 0 0 8px; padding-left: 1.2rem; }
 .gn-ranked li { margin: 4px 0; }
 .gn-slot { margin-top: 10px; }
