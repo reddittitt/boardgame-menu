@@ -52,15 +52,50 @@ function listen() {
   });
 }
 
+const PUBLISHED_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbypC0DWIPjsGqwegeym0YKgoNk3XEPzRNZezCqLpJPMXztktWuuC9VqWlQpxYcRNvDuWg/exec";
+
+async function fulfillGameDays(route, endpoint) {
+  const data = JSON.parse(fs.readFileSync(path.join(root, "data/game-days.json"), "utf8"));
+  data.endpoint = endpoint;
+  await route.fulfill({
+    status: 200,
+    contentType: "application/json",
+    headers: { "cache-control": "no-store" },
+    body: JSON.stringify(data)
+  });
+}
+
 async function installMock(page) {
   await page.route("**/data/game-days.json", async function (route) {
-    const data = JSON.parse(fs.readFileSync(path.join(root, "data/game-days.json"), "utf8"));
-    data.endpoint = execUrl;
+    await fulfillGameDays(route, execUrl);
+  });
+}
+
+async function installClosedMock(page) {
+  await page.route("**/data/game-days.json", async function (route) {
+    await fulfillGameDays(route, "");
+  });
+}
+
+async function installPublishedEndpointMock(page, seen) {
+  await page.route("**/data/game-days.json", async function (route) {
+    await fulfillGameDays(route, PUBLISHED_ENDPOINT);
+  });
+  await page.route("**/macros/s/*/exec**", async function (route) {
+    const req = route.request();
+    const url = new URL(req.url());
+    seen.method = req.method();
+    seen.event = url.searchParams.get("event") || "";
+    seen.href = url.origin + url.pathname;
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      headers: { "cache-control": "no-store" },
-      body: JSON.stringify(data)
+      headers: {
+        "access-control-allow-origin": "*",
+        "cache-control": "no-store"
+      },
+      body: JSON.stringify({ ok: true, eventId: "2026-11-21", rsvps: [], food: [] })
     });
   });
 }
@@ -97,6 +132,7 @@ test.beforeEach(function () {
 });
 
 test("closed page shows the next Saturday and keeps the location private", async function ({ page }) {
+  await installClosedMock(page);
   await page.goto(ON);
   await expect(page.locator("#gd-date")).toHaveText("Saturday, November 21, 2026");
   await expect(page.locator("#gd-time")).toHaveText("3:00–9:00 PM");
@@ -126,7 +162,35 @@ test("closed page shows the next Saturday and keeps the location private", async
   await expect(page.locator("#search-count")).toContainText("group");
 });
 
+test("published endpoint opens RSVPs and loads event 2026-11-21 from a mocked fetch", async function ({ page }, testInfo) {
+  const seen = { method: "", event: "", href: "" };
+  await installPublishedEndpointMock(page, seen);
+  await page.goto(ON);
+  await expect(page.locator("#gd-form")).toBeVisible();
+  await expect(page.locator("#gd-closed")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Save RSVP" })).toBeVisible();
+  await expect(page.locator("#gd-location")).toHaveText("Location shared after you RSVP");
+  await expect(page.locator("#food-drinks")).toContainText("Waiting on RSVPs");
+  await expect.poll(function () { return seen.method; }).toBe("GET");
+  expect(seen.event).toBe("2026-11-21");
+  expect(seen.href).toBe(PUBLISHED_ENDPOINT);
+  if (testInfo.project.name === "phone") {
+    await page.screenshot({ path: path.join(artifacts, "game-day-rsvps-open-phone.png"), fullPage: true });
+  }
+});
+
 test("home and header link to Game Day", async function ({ page }, testInfo) {
+  await page.route("**/macros/s/*/exec**", async function (route) {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: {
+        "access-control-allow-origin": "*",
+        "cache-control": "no-store"
+      },
+      body: JSON.stringify({ ok: true, eventId: "2026-11-21", rsvps: [], food: [] })
+    });
+  });
   await page.goto("/#/");
   await waitForList(page);
   await expect(page.getByRole("link", { name: "Game Day", exact: true })).toBeVisible();
@@ -138,6 +202,7 @@ test("home and header link to Game Day", async function ({ page }, testInfo) {
   await page.locator(".game-day-entry").click();
   await expect(page).toHaveURL(/game-day\.html/);
   await expect(page.locator(".gd-kicker")).toHaveText("Monthly Game Day");
+  await expect(page.locator("#gd-form")).toBeVisible();
 
   await page.goto("/#/game/azul");
   await expect(page.locator("h2.title")).toHaveText("Azul");

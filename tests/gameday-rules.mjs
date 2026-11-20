@@ -76,7 +76,11 @@ function checkScaling(GameDay) {
     "1 family going · 10 adults · 10 kids · 20 people",
     "totals"
   );
-  assert(config.endpoint === "", "published endpoint stays empty until the sheet is deployed");
+  assert(
+    config.endpoint === "https://script.google.com/macros/s/AKfycbypC0DWIPjsGqwegeym0YKgoNk3XEPzRNZezCqLpJPMXztktWuuC9VqWlQpxYcRNvDuWg/exec",
+    "published endpoint points at the deployed Apps Script web app"
+  );
+  assert(GameDay.endpointOpen(config.endpoint) === true, "published endpoint opens RSVPs");
   const joined = JSON.stringify(config);
   assert(!/street|avenue|boulevard|drive/i.test(joined), "config has no street address");
   assert(!joined.includes("@"), "config has no email");

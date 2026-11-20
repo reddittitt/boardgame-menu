@@ -1,6 +1,6 @@
 {
   "about": "Edit this file to change Game Day. dates is the Saturday list (usually the 4th Saturday; move any date that conflicts). 2027 dates can be added or changed here. timeLabel is the hours. endpoint is the Apps Script web app URL that ends in /exec. Leave endpoint as an empty string until that app is deployed — the page then says RSVPs aren't open yet. The /exec URL is not a secret. food.kidWeight is how much a child counts for food (0.5 means half an adult). food.maybeWeight is how much a Maybe RSVP counts. A suggestion is the headcount divided by every, times amount, rounded up. Open the page with ?on=YYYY-MM-DD to preview which date would be next on that day.",
-  "endpoint": "",
+  "endpoint": "https://script.google.com/macros/s/AKfycbypC0DWIPjsGqwegeym0YKgoNk3XEPzRNZezCqLpJPMXztktWuuC9VqWlQpxYcRNvDuWg/exec",
   "timeLabel": "3:00–9:00 PM",
   "dates": [
     { "id": "2026-11-21", "date": "2026-11-21" },
