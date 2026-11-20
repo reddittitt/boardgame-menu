@@ -204,6 +204,53 @@ try {
   .gd-cover { font-weight:650; color:var(--fg); }
   .gd-claim-actions { display:inline-flex; gap:4px; margin-left:6px; vertical-align:middle; }
   .gd-claim-actions button { min-height:44px; }
+  #gd-tables { margin:16px 0 8px; }
+  .gd-table { margin-top:10px; }
+  .gd-table-time { font-weight:650; margin:0 0 4px; }
+  .gd-open-seats, .gd-full { margin:0 0 8px; font-weight:650; }
+  .gd-full { color:#9f1239; }
+  .gd-badge {
+    display:inline-flex;
+    align-items:center;
+    min-height:32px;
+    margin:0 0 10px;
+    padding:4px 10px;
+    border-radius:8px;
+    background:rgba(255, 149, 0, 0.16);
+    color:#9a3412;
+    font-size:13px;
+    font-weight:700;
+  }
+  .gd-seats { list-style:none; padding:0; margin:0 0 10px; }
+  .gd-seats li {
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 12px;
+    justify-content:space-between;
+    padding:8px 0;
+    border-top:1px solid var(--hig-sep);
+  }
+  .gd-seat-name { font-weight:650; }
+  .gd-seat-exp { color:var(--muted); }
+  .gd-suggest-list { list-style:none; padding:0; margin:0 0 10px; }
+  .gd-suggest-list li { margin:0; }
+  .gd-game-pick, .gd-leave {
+    appearance:none;
+    width:100%;
+    min-height:44px;
+    margin:0;
+    padding:8px 12px;
+    border:0;
+    border-radius:10px;
+    background:var(--hig-fill);
+    color:var(--fg);
+    font:inherit;
+    font-size:16px;
+    text-align:left;
+    cursor:pointer;
+  }
+  .gd-leave { text-align:center; font-weight:650; margin-top:4px; }
+  .gd-join { margin-top:8px; }
   #gd-error { color:#9f1239; font-weight:650; min-height:0; }
   #gd-error:empty { display:none; }
   #gd-unclaimed, #gd-short, li, p, h2, h3 { overflow-wrap:anywhere; }
@@ -254,7 +301,16 @@ try {
   }
   :root[data-theme="dark"] #gd-error,
   :root[data-theme="darkwood"] #gd-error,
-  :root[data-theme="neongrid"] #gd-error { color:#fda4af; }
+  :root[data-theme="neongrid"] #gd-error,
+  :root[data-theme="dark"] .gd-full,
+  :root[data-theme="darkwood"] .gd-full,
+  :root[data-theme="neongrid"] .gd-full { color:#fda4af; }
+  :root[data-theme="dark"] .gd-badge,
+  :root[data-theme="darkwood"] .gd-badge,
+  :root[data-theme="neongrid"] .gd-badge {
+    background:rgba(255, 159, 10, 0.22);
+    color:#ffd60a;
+  }
 </style>
 </head>
 <body>

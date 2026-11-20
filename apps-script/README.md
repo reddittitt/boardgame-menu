@@ -11,7 +11,7 @@ Anyone with the page can see family names and how many adults and kids are comin
 1. Open [Google Sheets](https://sheets.google.com) while you are signed in to the Google account that should own the RSVPs.
 2. Create a blank spreadsheet.
 3. Name it `BGQuick Game Day`.
-4. Leave the grid empty. The script adds two tabs, `RSVPs` and `Food`, the first time someone uses the page. You can ignore or delete the original `Sheet1` tab. Do not rename `RSVPs` or `Food`, and do not edit the header row the script writes.
+4. Leave the grid empty. The script adds three tabs, `RSVPs`, `Food`, and `Tables`, the first time someone uses the page. You can ignore or delete the original `Sheet1` tab. Do not rename `RSVPs`, `Food`, or `Tables`, and do not edit the header row the script writes.
 
 Keep this spreadsheet private. Do not turn on link sharing. People RSVP through the website, not by opening the spreadsheet.
 
@@ -41,7 +41,7 @@ That `/exec` URL is not a secret. It is fine that it is visible in the websiteâ€
 
 Paste the `/exec` URL into a browser and add `?event=2026-11-21` on the end. You should see text like:
 
-`{"ok":true,"eventId":"2026-11-21","rsvps":[],"food":[]}`
+`{"ok":true,"eventId":"2026-11-21","rsvps":[],"food":[],"tables":[]}`
 
 If you see a Google sign-in page, the access was not set to **Anyone**. Deploy a new version (step 6) and set **Who has access** to **Anyone**.
 
@@ -78,3 +78,7 @@ Those live in `data/game-days.json`, not in the spreadsheet.
 - To preview which date the page would pick, open the Game Day page with `?on=YYYY-MM-DD` on the end.
 
 The script stores at most 40 updates per date every 10 minutes, so a stuck button cannot fill the sheet. A family can change their own RSVP from the same phone or computer. That device keeps a private edit key in its browser. The public list never includes that key.
+
+## Tables
+
+People can nominate a table (game, start time, seat count, host name, and experience), join an open table until it is full, or leave a table they joined. Experience is one of `new`, `played`, or `teach`. Seat limits are checked inside the script lock so two people cannot take the last seat. Post bodies use `op` values `nominate`, `join`, and `leave`. After you change the script, deploy a new web app version (step 6).

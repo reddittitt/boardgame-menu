@@ -227,6 +227,157 @@ function checkScript() {
   assert(otherDay.ok === true, "a different date has its own limit");
 }
 
+function checkTables(GameDay) {
+  same(GameDay.experienceLabel("teach"), "Can teach", "teach label");
+  same(GameDay.formatStartTime("15:30"), "3:30 PM", "start time format");
+  assert(GameDay.needsTeacher([{ experience: "new" }, { experience: "played" }]) === true, "needs teacher");
+  assert(GameDay.needsTeacher([{ experience: "new" }, { experience: "teach" }]) === false, "has teacher");
+  assert(GameDay.tableFull({ seats: 2, players: [{}, {}] }) === true, "full table");
+  assert(GameDay.tableFull({ seats: 3, players: [{}, {}] }) === false, "open table");
+  same(GameDay.maxPlayersFromGame({ players: "2–4" }), 4, "max from players");
+  same(GameDay.maxPlayersFromGame({ players: "3+", playerPoll: { recommended: "3–6" } }), 6, "open uses recommended");
+  const catalog = GameDay.parseCatalog({
+    names: ["Azul", "Mystery Box"],
+    enrich: { azul: { players: "2–4" } }
+  });
+  assert(catalog.length === 2 && catalog[0].maxPlayers === 4, "catalog max seats");
+  assert(catalog[1].maxPlayers == null, "unknown game has no max");
+  same(GameDay.filterGames(catalog, "azu").map(function (g) { return g.name; }), ["Azul"], "game search");
+  assert(GameDay.payloadHasTables({ ok: true, rsvps: [], food: [] }) === false, "live snapshot without tables is not ready");
+  assert(GameDay.payloadHasTables({ ok: true, rsvps: [], food: [], tables: [] }) === true, "empty tables list is ready");
+  assert(GameDay.payloadHasTables({ ok: true, tables: [{ id: "1" }] }) === true, "tables list is ready");
+  assert(GameDay.START_TIMES.indexOf("20:30") !== -1, "late start option");
+}
+
+function checkTableScript() {
+  const backend = createBackend();
+  const host = backend.post({
+    op: "nominate",
+    eventId: EVENT,
+    id: id(50),
+    playerId: id(51),
+    editKey: KEY,
+    game: "Azul",
+    startTime: "15:00",
+    seats: 2,
+    name: "Alex",
+    experience: "played"
+  });
+  assert(host.ok === true, "nominate: " + JSON.stringify(host));
+  assert(host.tables.length === 1, "one table");
+  assert(host.tables[0].players.length === 1, "host seated");
+  assert(host.tables[0].players[0].name === "Alex", "host name");
+  assert(host.tables[0].players[0].experience === "played", "host experience");
+  assert(!JSON.stringify(host.tables).includes(KEY), "table response hides edit keys");
+  assert(host.rsvps && Array.isArray(host.food), "rsvp and food shapes remain");
+
+  const join = backend.post({
+    op: "join",
+    eventId: EVENT,
+    tableId: id(50),
+    id: id(52),
+    editKey: OTHER,
+    name: "Sam",
+    experience: "new"
+  });
+  assert(join.ok === true && join.tables[0].players.length === 2, "join fills last seat");
+  const locked = backend.flags.lockWaits;
+  const overflow = backend.post({
+    op: "join",
+    eventId: EVENT,
+    tableId: id(50),
+    id: id(53),
+    editKey: id(53),
+    name: "Pat",
+    experience: "teach"
+  });
+  assert(overflow.ok === false && /full/i.test(overflow.error), "seat limit: " + JSON.stringify(overflow));
+  assert(backend.flags.lockWaits > locked, "seat limit checked under lock");
+  assert(backend.get(EVENT).tables[0].players.length === 2, "overflow seat was not stored");
+
+  assert(backend.post({
+    op: "join",
+    eventId: EVENT,
+    tableId: id(50),
+    id: id(54),
+    editKey: OTHER,
+    name: "Sam Again",
+    experience: "new"
+  }).ok === false, "same device cannot double join");
+
+  const left = backend.post({
+    op: "leave",
+    eventId: EVENT,
+    tableId: id(50),
+    id: id(52),
+    editKey: OTHER
+  });
+  assert(left.ok === true && left.tables[0].players.length === 1, "leave frees a seat");
+  assert(left.tables[0].players[0].name === "Alex", "host remains");
+
+  assert(backend.post({
+    op: "nominate",
+    eventId: EVENT,
+    id: id(60),
+    playerId: id(61),
+    editKey: KEY,
+    game: "a@b.com",
+    startTime: "15:00",
+    seats: 4,
+    name: "Alex",
+    experience: "teach"
+  }).ok === false, "email in game rejected");
+  assert(backend.post({
+    op: "nominate",
+    eventId: EVENT,
+    id: id(62),
+    playerId: id(63),
+    editKey: KEY,
+    game: "Catan",
+    startTime: "12:00",
+    seats: 4,
+    name: "Alex",
+    experience: "teach"
+  }).ok === false, "start time out of range");
+  assert(backend.post({
+    op: "nominate",
+    eventId: EVENT,
+    id: id(64),
+    playerId: id(65),
+    editKey: KEY,
+    game: "Catan",
+    startTime: "16:00",
+    seats: 4,
+    name: "Alex",
+    experience: "expert"
+  }).ok === false, "bad experience");
+
+  const alone = backend.post({
+    op: "nominate",
+    eventId: EVENT,
+    id: id(70),
+    playerId: id(71),
+    editKey: id(70),
+    game: "Solo Quest",
+    startTime: "16:00",
+    seats: 1,
+    name: "Riley",
+    experience: "teach"
+  });
+  assert(alone.ok === true, "single-seat table");
+  const gone = backend.post({
+    op: "leave",
+    eventId: EVENT,
+    tableId: id(70),
+    id: id(71),
+    editKey: id(70)
+  });
+  assert(gone.ok === true && !gone.tables.some(function (row) { return row.id === id(70); }), "empty table removed");
+
+  const snap = backend.get(EVENT);
+  assert(Array.isArray(snap.tables) && Array.isArray(snap.rsvps) && Array.isArray(snap.food), "snapshot keeps rsvp/food/tables");
+}
+
 const page = fs.readFileSync(path.join(root, "game-day.html"), "utf8");
 const script = fs.readFileSync(path.join(root, "game-day.js"), "utf8");
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
@@ -236,14 +387,19 @@ assert(!/type="email"|type="tel"|phone|email/i.test(page), "page has no contact 
 assert(!/street|avenue|boulevard/i.test(page + script), "no street address in the page");
 assert(script.includes(JSON.stringify("Location shared after you RSVP")), "location stays hidden until an RSVP");
 assert(script.includes(JSON.stringify("CRPC")), "after RSVP the page says CRPC");
-assert(sw.includes('var VERSION = "2026.11.20.12"'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.20.13"'), "service worker version");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
 const respondAt = sw.indexOf("respondWith", fetchAt);
 assert(originAt > fetchAt && originAt < respondAt, "cross-origin requests return before respondWith");
+assert(page.includes("gd-badge") || script.includes("Needs a teacher"), "needs-teacher badge");
+assert(script.includes("Table sign-ups open soon"), "closed tables copy");
+assert(script.includes('op: "nominate"') && script.includes('op: "join"') && script.includes('op: "leave"'), "table client ops");
 
 checkScaling(loadGameDay());
+checkTables(loadGameDay());
 checkScript();
+checkTableScript();
 
 if (failures.length) {
   console.error(failures.join("\n\n"));
