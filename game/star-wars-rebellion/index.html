@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-game="star-wars-rebellion">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Star Wars: Rebellion · Board Game Quick</title>
+<link rel="canonical" href="https://bgquick.com/game/star-wars-rebellion/">
+<meta name="theme-color" content="#0b63ff">
+<base href="../../">
+<!-- bgq-game-stub -->
+</head>
+<body>
+<p><a href="?game=star-wars-rebellion">Star Wars: Rebellion</a></p>
+<script>
+(function () {
+  var shell = new URL("index.html", document.baseURI).href;
+  try {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", shell, false);
+    xhr.send(null);
+    if (xhr.status >= 200 && xhr.status < 300 && xhr.responseText && xhr.responseText.indexOf("games-json") !== -1) {
+      document.open();
+      document.write(xhr.responseText);
+      document.close();
+      return;
+    }
+  } catch (err) {}
+  location.replace(new URL("?game=star-wars-rebellion", document.baseURI).href);
+})();
+</script>
+</body>
+</html>

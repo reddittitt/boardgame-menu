@@ -32,7 +32,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("player, time, and weight chips filter the list and combine with search", async ({ page }) => {
-  await expect(page.locator("#search-count")).toHaveText("741 games");
+  await expect(page.locator("#search-count")).toHaveText("780 games");
   await expect(page.locator("#catalog-filter-panel")).toBeHidden();
   const searchSize = await page.locator("#search").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(searchSize).toBeGreaterThanOrEqual(16);
@@ -45,7 +45,7 @@ test("player, time, and weight chips filter the list and combine with search", a
 
   await page.getByRole("button", { name: "2 players", exact: true }).click();
   await waitForList(page);
-  await expect(page.locator("#search-count")).toContainText("of 741");
+  await expect(page.locator("#search-count")).toContainText("of 780");
   await expect(card(page, "patchwork")).toHaveCount(1);
   await expect(card(page, "azul")).toHaveCount(1);
   await expect(card(page, "flip-7")).toHaveCount(0);
@@ -148,7 +148,7 @@ test("player, time, and weight chips filter the list and combine with search", a
   await page.getByRole("button", { name: "Medium-heavy weight", exact: true }).click();
   await page.getByRole("button", { name: "Heavy weight", exact: true }).click();
   await waitForList(page);
-  await expect(page.locator("#search-count")).toContainText("of 741");
+  await expect(page.locator("#search-count")).toContainText("of 780");
   await expect(card(page, "john-company-second-edition")).toHaveCount(1);
   await expect(card(page, "spirit-island")).toHaveCount(1);
   await expect(card(page, "chess")).toHaveCount(0);
@@ -167,7 +167,7 @@ test("player, time, and weight chips filter the list and combine with search", a
   await waitForList(page);
   await expect(card(page, "azul")).toHaveCount(0);
   await expect(card(page, "patchwork")).toHaveCount(0);
-  await expect(page.locator("#search-count")).toHaveText("0 of 741 games");
+  await expect(page.locator("#search-count")).toHaveText("0 of 780 games");
 
   await page.getByRole("button", { name: "Under 30 minutes", exact: true }).click();
   await page.getByRole("button", { name: "Light weight", exact: true }).click();
@@ -190,9 +190,9 @@ test("player, time, and weight chips filter the list and combine with search", a
   await page.getByRole("button", { name: "2 players", exact: true }).click();
   await page.locator("#catalog-clear").click();
   await waitForList(page);
-  await expect(page.locator("#search-count")).toHaveText("741 games");
+  await expect(page.locator("#search-count")).toHaveText("780 games");
   await expect(page.locator("#catalog-clear")).toBeHidden();
-  await expect(page).not.toHaveURL(/players=|time=|weight=|best=|q=/);
+  await expect(page).not.toHaveURL(/players=|time=|weight=|best=|who=|q=/);
   await expect(card(page, "suburbia")).toHaveCount(1);
   await expect(card(page, "guess-in-10-animal-planet")).toHaveCount(1);
 });
@@ -298,12 +298,12 @@ test("offline list still filters and the worker skips other origins", async ({ p
     return res.text();
   });
   expect(swText).toContain("url.origin !== self.location.origin");
-  expect(swText).toContain('VERSION = "2026.11.20.13"');
+  expect(swText).toContain('VERSION = "2026.11.20.14"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.20.13");
+    const cache = await caches.open("bgquick-shell-2026.11.20.14");
     const keys = await cache.keys();
     return keys.some((req) => /index\.html/.test(req.url));
   });
@@ -322,11 +322,11 @@ test("offline list still filters and the worker skips other origins", async ({ p
 
   await page.reload();
   await waitForList(page);
-  await expect(page.locator("#search-count")).toHaveText("741 games");
+  await expect(page.locator("#search-count")).toHaveText("780 games");
   await openFilters(page);
   await page.getByRole("button", { name: "2 players", exact: true }).click();
   await waitForList(page);
-  await expect(page.locator("#search-count")).toContainText("of 741");
+  await expect(page.locator("#search-count")).toContainText("of 780");
   await expect(card(page, "patchwork")).toHaveCount(1);
   await expect(card(page, "flip-7")).toHaveCount(0);
   await page.getByLabel("Search games").fill("patch");
