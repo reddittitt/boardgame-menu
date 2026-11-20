@@ -106,7 +106,7 @@ function serveFile(req, res) {
   if (rel === "manifest.json") type = "application/manifest+json";
   if (rel === "sw.js") {
     let text = body.toString("utf8");
-    text = text.replace('var VERSION = "2026.11.20.1";', 'var VERSION = "' + config.version + '";');
+    text = text.replace('var VERSION = "2026.11.20.2";', 'var VERSION = "' + config.version + '";');
     text = text.replace(/var IMAGE_CAP = \d+;/, "var IMAGE_CAP = " + config.imageCap + ";");
     body = Buffer.from(text);
   } else if (rel === "index.html") {
@@ -249,7 +249,10 @@ async function main() {
     await page.locator('.pc-btn[data-count="4"]').click();
     assert((await page.locator("#pc-text").innerText()).includes("9 factory"), "offline player chip");
     await page.locator("#teach-link").click();
-    await page.waitForSelector("h2.title");
+    await page.waitForFunction(function () {
+      var title = document.querySelector("h2.title");
+      return title && title.innerText === "Teach it";
+    });
     assert((await page.locator("h2.title").innerText()) === "Teach it", "offline teach page");
     assert((await page.locator("#teach-script").innerText()).includes("palace wall"), "offline teach script");
     await page.locator("a.home").click();
