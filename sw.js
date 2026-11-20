@@ -11,7 +11,7 @@
    script.google.com. RSVP and food responses are never cached. Same-origin
    PDFs are not cached either.
 */
-var VERSION = "2026.11.20.15";
+var VERSION = "2026.11.20.16";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -32,7 +32,8 @@ var SHELL_FILES = [
   "./icons/icon-maskable-512.png",
   "./game-night.js",
   "./game-night.css",
-  "./expansion-guides.json"
+  "./expansion-guides.json",
+  "./components.json"
 ];
 var lastQuota = false;
 
