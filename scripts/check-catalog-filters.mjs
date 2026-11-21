@@ -13,8 +13,11 @@ if (start < 0 || end < 0) {
   process.exit(1);
 }
 const source = html.slice(start, end);
-const { blankFacet, playerSpan, playMinutes, weightBand, timeHits, countIncluded } = new Function(
-  source + "\nreturn { blankFacet, playerSpan, playMinutes, weightBand, timeHits, countIncluded };"
+const {
+  blankFacet, playerSpan, playMinutes, weightBand, timeHits, countIncluded,
+  hiddenMissingCounts, hiddenMissingNote
+} = new Function(
+  source + "\nreturn { blankFacet, playerSpan, playMinutes, weightBand, timeHits, countIncluded, hiddenMissingCounts, hiddenMissingNote };"
 )();
 
 let failed = 0;
@@ -74,6 +77,50 @@ check("missing time misses a bucket", timeHits(null, "under30"), false);
 check("7+ includes 8-10", countIncluded({ min: 8, max: 10 }, "7"), true);
 check("7+ excludes 2-6", countIncluded({ min: 2, max: 6 }, "7"), false);
 check("4 inside 2-4", countIncluded({ min: 2, max: 4 }, "4"), true);
+
+const sample = [
+  { name: "Plain", players: "2–4", time: "30", weight: 1.2, owners: ["Cody"] },
+  { name: "No Weight", players: "2", time: "20", owners: ["Zeek"] },
+  { name: "No Time", players: "4–6", weight: 3 },
+  { name: "No Players", time: "45", weight: 2.2, playerPoll: { best: "3" }, owners: ["Cody"] },
+  { name: "Heavy", players: "1", time: "90", weight: 4.2 }
+];
+const none = { players: "", best: false, time: "", weight: "", who: [] };
+check("any hides nothing", hiddenMissingCounts(sample, none, ""), { games: 0, players: 0, time: 0, weight: 0 });
+check(
+  "weight gap among the rest",
+  hiddenMissingCounts(sample, { players: "", best: false, time: "", weight: "light", who: [] }, ""),
+  { games: 1, players: 0, time: 0, weight: 1 }
+);
+check(
+  "player gap stays when nothing else blocks it",
+  hiddenMissingCounts(sample, { players: "2", best: false, time: "", weight: "", who: [] }, ""),
+  { games: 1, players: 1, time: 0, weight: 0 }
+);
+check(
+  "known mismatch is not counted as missing",
+  hiddenMissingCounts(sample, { players: "2", best: false, time: "", weight: "light", who: [] }, ""),
+  { games: 1, players: 0, time: 0, weight: 1 }
+);
+check(
+  "search narrows the hidden note",
+  hiddenMissingCounts(sample, { players: "", best: false, time: "", weight: "light", who: [] }, "plain"),
+  { games: 0, players: 0, time: 0, weight: 0 }
+);
+check(
+  "whose games narrows the hidden note",
+  hiddenMissingCounts(sample, { players: "", best: false, time: "", weight: "light", who: ["Cody"] }, ""),
+  { games: 0, players: 0, time: 0, weight: 0 }
+);
+check(
+  "best poll gap uses the best label",
+  hiddenMissingNote(hiddenMissingCounts(sample, { players: "4", best: true, time: "", weight: "", who: [] }, ""), true),
+  "4 games hidden (no best player count)"
+);
+check("note singular", hiddenMissingNote({ games: 1, players: 1, time: 0, weight: 0 }, false), "1 game hidden (no player count)");
+check("note two reasons", hiddenMissingNote({ games: 3, players: 1, time: 2, weight: 0 }, false), "3 games hidden (no player count or play time)");
+check("note three reasons", hiddenMissingNote({ games: 6, players: 1, time: 2, weight: 4 }, true), "6 games hidden (no best player count, play time, or weight)");
+check("note empty", hiddenMissingNote({ games: 0, players: 0, time: 0, weight: 0 }, false), "");
 
 const jsonStart = html.indexOf('<script id="games-json"');
 const jsonBody = html.slice(html.indexOf(">", jsonStart) + 1, html.indexOf("</script>", jsonStart));
@@ -140,6 +187,31 @@ console.log("coverage " + JSON.stringify(coverage));
 console.log("missing players " + missing.players.join(", "));
 console.log("missing time " + missing.time.join(", "));
 console.log("missing weight " + missing.weight.length + ": " + missing.weight.join(", "));
+
+const anyPicks = { players: "", best: false, time: "", weight: "", who: [] };
+check("catalog any", hiddenMissingNote(hiddenMissingCounts(catalog, anyPicks, ""), false), "");
+check(
+  "catalog players",
+  hiddenMissingNote(hiddenMissingCounts(catalog, { players: "4", best: false, time: "", weight: "", who: [] }, ""), false),
+  "1 game hidden (no player count)"
+);
+check(
+  "catalog time",
+  hiddenMissingNote(hiddenMissingCounts(catalog, { players: "", best: false, time: "under30", weight: "", who: [] }, ""), false),
+  "2 games hidden (no play time)"
+);
+check(
+  "catalog weight",
+  hiddenMissingNote(hiddenMissingCounts(catalog, { players: "", best: false, time: "", weight: "light", who: [] }, ""), false),
+  "24 games hidden (no weight)"
+);
+check(
+  "catalog search",
+  hiddenMissingNote(hiddenMissingCounts(catalog, { players: "", best: false, time: "", weight: "light", who: [] }, "sea salt"), false),
+  "2 games hidden (no weight)"
+);
+const combined = hiddenMissingCounts(catalog, { players: "2", best: false, time: "under30", weight: "light", who: [] }, "");
+check("catalog combined", hiddenMissingNote(combined, false), "12 games hidden (no play time or weight)");
 
 if (failed) {
   console.error(failed + " check(s) failed");

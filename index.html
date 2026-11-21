@@ -277,6 +277,14 @@
     color:var(--muted);
     font-size:0.85rem;
   }
+  .search-count:has(+ .filter-hidden:not(:empty)) { margin-bottom:2px; }
+  .filter-hidden {
+    margin:0 2px 12px;
+    color:var(--muted);
+    font-size:0.85rem;
+    line-height:1.35;
+  }
+  .filter-hidden:empty { display:none; }
   .collection-filter {
     display:flex;
     flex-wrap:wrap;
@@ -2763,6 +2771,7 @@
     :root[data-look="hig"] .meta-pill,
     :root[data-look="hig"] .essential-link-channel,
     :root[data-look="hig"] .search-count,
+    :root[data-look="hig"] .filter-hidden,
     :root[data-look="hig"] .rulebook-search-status,
     :root[data-look="hig"] .rulebook-hit-text,
     :root[data-look="hig"] .character-aid-label {
@@ -156331,12 +156340,7 @@
     return parts.join(" \u00b7 ");
   }
   function matchesOwners(game, who) {
-    if (!who || !who.length) return true;
-    var owners = (game && game.owners) || [];
-    for (var i = 0; i < who.length; i++) {
-      if (owners.indexOf(who[i]) !== -1) return true;
-    }
-    return false;
+    return ownersHit(game, who);
   }
   function filterChip(facet, value, label, aria) {
     return (
@@ -156420,6 +156424,85 @@
       if (bucket === "120") return max >= 120;
       return false;
     }
+    function ownersHit(game, who) {
+      if (!who || !who.length) return true;
+      var owners = (game && game.owners) || [];
+      for (var i = 0; i < who.length; i++) {
+        if (owners.indexOf(who[i]) !== -1) return true;
+      }
+      return false;
+    }
+    function textHits(game, query) {
+      var filter = String(query || "").toLowerCase();
+      if (!filter) return true;
+      if (!game) return false;
+      if (String(game.name || "").toLowerCase().indexOf(filter) !== -1) return true;
+      var extra = game.aliases;
+      if (!Array.isArray(extra)) return false;
+      return extra.some(function (name) {
+        return String(name || "").toLowerCase().indexOf(filter) !== -1;
+      });
+    }
+    /* "missing" has no stored value. "miss" has a value outside the pick. */
+    function facetFit(game, facet, picks) {
+      if (!game) return "missing";
+      if (facet === "players") {
+        var source = picks.best ? (game.playerPoll && game.playerPoll.best) : game.players;
+        var span = playerSpan(source);
+        if (!span) return "missing";
+        return countIncluded(span, picks.players) ? "match" : "miss";
+      }
+      if (facet === "time") {
+        var time = playMinutes(game, parseInt(picks.players, 10) || 0);
+        if (!time) return "missing";
+        return timeHits(time, picks.time) ? "match" : "miss";
+      }
+      if (facet === "weight") {
+        var band = weightBand(game.weight);
+        if (!band) return "missing";
+        return band === picks.weight ? "match" : "miss";
+      }
+      return "match";
+    }
+    function hiddenMissingCounts(games, picks, query) {
+      var counts = { games: 0, players: 0, time: 0, weight: 0 };
+      picks = picks || {};
+      var facets = [];
+      if (picks.players) facets.push("players");
+      if (picks.time) facets.push("time");
+      if (picks.weight) facets.push("weight");
+      if (!facets.length || !games) return counts;
+      games.forEach(function (game) {
+        if (!textHits(game, query)) return;
+        if (!ownersHit(game, picks.who)) return;
+        var missing = [];
+        var blocked = false;
+        facets.forEach(function (facet) {
+          var fit = facetFit(game, facet, picks);
+          if (fit === "missing") missing.push(facet);
+          else if (fit !== "match") blocked = true;
+        });
+        if (blocked || !missing.length) return;
+        counts.games += 1;
+        missing.forEach(function (facet) { counts[facet] += 1; });
+      });
+      return counts;
+    }
+    function hiddenMissingNote(counts, best) {
+      if (!counts || !counts.games) return "";
+      var reasons = [];
+      if (counts.players) reasons.push(best ? "best player count" : "player count");
+      if (counts.time) reasons.push("play time");
+      if (counts.weight) reasons.push("weight");
+      if (!reasons.length) return "";
+      var noun = counts.games === 1 ? "1 game hidden" : counts.games + " games hidden";
+      var why = reasons.length === 1
+        ? reasons[0]
+        : reasons.length === 2
+          ? reasons[0] + " or " + reasons[1]
+          : reasons.slice(0, -1).join(", ") + ", or " + reasons[reasons.length - 1];
+      return noun + " (no " + why + ")";
+    }
     /* catalog-filter-parse:end */
 
   function renderList() {
@@ -156460,6 +156543,7 @@
           '<div class="catalog-facet" data-facet="players">' +
             '<span class="catalog-facet-label" id="players-label">Players</span>' +
             '<div class="catalog-chips" role="group" aria-labelledby="players-label">' +
+              filterChip("players", "", "Any", "Any player count") +
               filterChip("players", "1", "1", "1 player") +
               filterChip("players", "2", "2", "2 players") +
               filterChip("players", "3", "3", "3 players") +
@@ -156473,6 +156557,7 @@
           '<div class="catalog-facet" data-facet="time">' +
             '<span class="catalog-facet-label" id="time-label">Time</span>' +
             '<div class="catalog-chips" role="group" aria-labelledby="time-label">' +
+              filterChip("time", "", "Any", "Any play time") +
               filterChip("time", "under30", "Under 30 min", "Under 30 minutes") +
               filterChip("time", "30-60", "30\u201360", "30 to 60 minutes") +
               filterChip("time", "60-120", "60\u2013120", "60 to 120 minutes") +
@@ -156482,6 +156567,7 @@
           '<div class="catalog-facet" data-facet="weight">' +
             '<span class="catalog-facet-label" id="weight-label">Weight</span>' +
             '<div class="catalog-chips" role="group" aria-labelledby="weight-label">' +
+              filterChip("weight", "", "Any", "Any weight") +
               filterChip("weight", "light", "Light", "Light weight") +
               filterChip("weight", "medium-light", "Medium-light", "Medium-light weight") +
               filterChip("weight", "medium", "Medium", "Medium weight") +
@@ -156492,12 +156578,14 @@
         "</div>" +
       "</div>" +
       '<p id="search-count" class="search-count" aria-live="polite"></p>' +
+      '<p id="filter-hidden" class="filter-hidden" aria-live="polite"></p>' +
       '<section id="game-grid" class="grid"></section>';
 
     var grid = document.getElementById("game-grid");
     var search = document.getElementById("search");
     var clearBtn = document.getElementById("search-clear");
     var countEl = document.getElementById("search-count");
+    var hiddenEl = document.getElementById("filter-hidden");
     var summaryEl = document.getElementById("filter-summary");
     var catalogClear = document.getElementById("catalog-clear");
     var filterToggle = document.getElementById("filter-toggle");
@@ -156566,13 +156654,7 @@
       refreshFacetVisibility(scoped);
       var games = scoped.filter(function(g) {
         if (!matchesFacets(g, picks)) return false;
-        if (!filter) return true;
-        if (g.name.toLowerCase().indexOf(filter) !== -1) return true;
-        var extra = g.aliases;
-        if (!Array.isArray(extra)) return false;
-        return extra.some(function (name) {
-          return String(name || "").toLowerCase().indexOf(filter) !== -1;
-        });
+        return textHits(g, filter);
       }).sort(function(a, b) {
         return a.name.localeCompare(b.name);
       });
@@ -156588,6 +156670,9 @@
           : (scoped.length + suffix);
       }
       paintPressed();
+      if (hiddenEl) {
+        hiddenEl.textContent = hiddenMissingNote(hiddenMissingCounts(scoped, picks, filter), !!(picks.best && picks.players));
+      }
       if (catalogClear) catalogClear.hidden = !filtersActive(state);
       if (clearBtn) clearBtn.hidden = !filter;
       grid.innerHTML = "";

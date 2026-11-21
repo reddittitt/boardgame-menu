@@ -197,6 +197,88 @@ test("player, time, and weight chips filter the list and combine with search", a
   await expect(card(page, "guess-in-10-animal-planet")).toHaveCount(1);
 });
 
+test("Any keeps games that are missing a value, and a note counts the ones a filter hides", async ({ page }) => {
+  await expect(page.locator("#filter-hidden")).toBeHidden();
+  await expect(page.locator('.filter-chip[data-facet="players"][data-value=""]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('.filter-chip[data-facet="time"][data-value=""]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('.filter-chip[data-facet="weight"][data-value=""]')).toHaveAttribute("aria-pressed", "true");
+
+  await openFilters(page);
+  const any = page.getByRole("button", { name: "Any player count", exact: true });
+  const anyBox = await any.boundingBox();
+  expect(anyBox.height).toBeGreaterThanOrEqual(44);
+  const anySize = await any.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(anySize).toBeGreaterThanOrEqual(16);
+
+  await expect(card(page, "suburbia")).toHaveCount(1);
+  await expect(card(page, "guess-in-10-animal-planet")).toHaveCount(1);
+  await expect(card(page, "jenga-maker")).toHaveCount(1);
+  await expect(card(page, "sea-salt-and-paper")).toHaveCount(1);
+
+  await page.getByRole("button", { name: "4 players", exact: true }).click();
+  await waitForList(page);
+  await expect(card(page, "suburbia")).toHaveCount(0);
+  await expect(card(page, "azul")).toHaveCount(1);
+  await expect(page.locator("#filter-hidden")).toHaveText("1 game hidden (no player count)");
+  await expect(any).toHaveAttribute("aria-pressed", "false");
+  await expect(page).toHaveURL(/players=4/);
+  await expect(page).not.toHaveURL(/hidden=/);
+
+  await any.click();
+  await waitForList(page);
+  await expect(any).toHaveAttribute("aria-pressed", "true");
+  await expect(card(page, "suburbia")).toHaveCount(1);
+  await expect(page.locator("#filter-hidden")).toBeHidden();
+  await expect(page).not.toHaveURL(/players=/);
+
+  await page.getByRole("button", { name: "Under 30 minutes", exact: true }).click();
+  await waitForList(page);
+  await expect(card(page, "guess-in-10-animal-planet")).toHaveCount(0);
+  await expect(card(page, "jenga-maker")).toHaveCount(0);
+  await expect(card(page, "suburbia")).toHaveCount(0);
+  await expect(page.locator("#filter-hidden")).toHaveText("2 games hidden (no play time)");
+
+  await page.getByRole("button", { name: "Any play time", exact: true }).click();
+  await page.getByRole("button", { name: "Light weight", exact: true }).click();
+  await waitForList(page);
+  await expect(card(page, "sea-salt-and-paper")).toHaveCount(0);
+  await expect(card(page, "azul")).toHaveCount(1);
+  await expect(card(page, "suburbia")).toHaveCount(0);
+  await expect(page.locator("#filter-hidden")).toHaveText("24 games hidden (no weight)");
+
+  await page.getByLabel("Search games").fill("sea salt");
+  await waitForList(page);
+  await expect(page.locator("#search-count")).toHaveText("0 of 780 games");
+  await expect(page.locator("#filter-hidden")).toHaveText("2 games hidden (no weight)");
+  await expect(page.locator("#filter-hidden")).not.toContainText(/Cody|Zeek|Tim|John|Ryan|Andrew/);
+
+  await page.locator("#search-clear").click();
+  await page.getByRole("button", { name: "Any weight", exact: true }).click();
+  await page.getByRole("button", { name: "2 players", exact: true }).click();
+  await page.getByRole("button", { name: "Under 30 minutes", exact: true }).click();
+  await page.getByRole("button", { name: "Light weight", exact: true }).click();
+  await waitForList(page);
+  await expect(page.locator("#filter-hidden")).toHaveText("12 games hidden (no play time or weight)");
+  await expect(page.locator("#filter-summary")).toHaveText("2 players · Under 30 min · Light");
+
+  await page.getByRole("button", { name: "Cody’s games", exact: true }).click();
+  await waitForList(page);
+  const note = page.locator("#filter-hidden");
+  await expect(note).toHaveText("7 games hidden (no weight)");
+  await expect(note).not.toContainText(/Cody|Zeek|Tim|John|Ryan|Andrew/);
+  await expect(page.locator("#game-grid")).not.toContainText(/Cody|Zeek|Tim|John|Ryan|Andrew/);
+  await expect(page).toHaveURL(/players=2/);
+  await expect(page).toHaveURL(/time=under30/);
+  await expect(page).toHaveURL(/weight=light/);
+  await expect(page).toHaveURL(/who=cody/);
+
+  await page.reload();
+  await waitForList(page);
+  await expect(page.locator("#filter-summary")).toHaveText("2 players · Under 30 min · Light · Cody");
+  await expect(note).toHaveText("7 games hidden (no weight)");
+  await expect(page.locator("#filter-hidden")).not.toContainText(/Cody|Zeek|Tim|John|Ryan|Andrew/);
+});
+
 test("missing fields stay listed until that filter is on", async ({ page }) => {
   await openFilters(page);
   await expect(card(page, "suburbia")).toHaveCount(1);
@@ -217,6 +299,7 @@ test("missing fields stay listed until that filter is on", async ({ page }) => {
   await page.getByRole("button", { name: "Best at this player count", exact: true }).click();
   await waitForList(page);
   await expect(card(page, "suburbia")).toHaveCount(1);
+  await expect(page.locator("#filter-hidden")).toHaveText("53 games hidden (no best player count)");
 
   await page.getByRole("button", { name: "3 players", exact: true }).click();
   await page.getByRole("button", { name: "Light weight", exact: true }).click();
@@ -275,6 +358,24 @@ test("the filter row stays in the viewport width", async ({ page }, testInfo) =>
   }
 });
 
+test("phone screenshots of Any and the hidden-count note", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "phone", "phone screenshots only");
+  const dir = "/opt/cursor/artifacts";
+  fs.mkdirSync(dir, { recursive: true });
+  await openFilters(page);
+  await page.screenshot({ path: path.join(dir, "filters-any-phone.png") });
+  await page.getByRole("button", { name: "2 players", exact: true }).click();
+  await page.getByRole("button", { name: "Under 30 minutes", exact: true }).click();
+  await page.getByRole("button", { name: "Light weight", exact: true }).click();
+  await waitForList(page);
+  await expect(page.locator("#filter-hidden")).toHaveText("12 games hidden (no play time or weight)");
+  await page.locator("#filter-hidden").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(dir, "filters-hidden-note-phone.png") });
+  await page.locator("#filter-toggle").click();
+  await expect(page.locator("#catalog-filter-panel")).toBeHidden();
+  await page.screenshot({ path: path.join(dir, "filters-hidden-summary-phone.png") });
+});
+
 test("phone filter screenshots", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "phone", "phone screenshots only");
   const dir = path.join(process.cwd(), "test-results", "filter-screens");
@@ -298,12 +399,12 @@ test("offline list still filters and the worker skips other origins", async ({ p
     return res.text();
   });
   expect(swText).toContain("url.origin !== self.location.origin");
-  expect(swText).toContain('VERSION = "2026.11.21.1"');
+  expect(swText).toContain('VERSION = "2026.11.21.2"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.21.1");
+    const cache = await caches.open("bgquick-shell-2026.11.21.2");
     const keys = await cache.keys();
     return keys.some((req) => /index\.html/.test(req.url));
   });
