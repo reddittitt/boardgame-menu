@@ -3120,8 +3120,7 @@
   <div class="rulebook-viewer-stage" id="rulebook-viewer-stage"></div>
 </dialog>
 
-<script id="games-json" type="application/json">
-{
+<script id="games-json" type="application/json">{
   "names": [
     "7 Wonders",
     "7 Wonders Duel",
@@ -8442,7 +8441,135 @@
         "title": "How to Play Arcs in 27 Minutes",
         "channel": "RTFM"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=359871"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=359871",
+      "characters": [
+        {
+          "name": "Elder",
+          "overview": "Beloved and Just are the two powers printed on the card.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are the Elder. Beloved: After defending in battle, you may influence if the attacker took any Trophies. Rivals cannot Ransack the Court when they battle you."
+              },
+              {
+                "lead": "Tyrant",
+                "text": "Just: When you're scoring Tyrant, gain no Power for second place, and gain Power for second place if you get first place. (Don't get bonus city Power.)"
+              },
+              {
+                "lead": "Setup",
+                "text": "Draft one leader and one lore card. Your ships and two resources are the boxes on the card. The book does not number the Elder's boxes."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "When",
+                  "text": "The book says not to play the first game with Leaders and Lore."
+                },
+                {
+                  "lead": "Draft",
+                  "text": "Replace setup steps N through O. Lay out leader cards and lore cards in face-up rows, each with one more card than the number of players. In reverse turn order, each player takes one leader or one lore card until each player has one of each."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Place the starting pieces in the systems marked A, B, and C on the setup card. Pips under a ship icon say how many ships. The two resources on the leader go in the two leftmost resource slots, in the order shown."
+                },
+                {
+                  "lead": "After",
+                  "text": "If a leader has extra setup, do those steps in turn order."
+                },
+                {
+                  "lead": "This card",
+                  "text": "The Elder's starting ships and two resources are the A, B, and C boxes on the card. The book prints the powers and does not number those boxes."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Leaders and Lore does not replace the action cards. A leader adds the powers on the card. Lore is a persistent power with no guild icon and no raid cost, so it does not add to ambitions and cannot be stolen."
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Beloved",
+                  "text": "After defending in battle, you may influence if the attacker took any Trophies. Rivals cannot Ransack the Court when they battle you."
+                },
+                {
+                  "lead": "Just",
+                  "text": "When you're scoring Tyrant, gain no Power for second place, and gain Power for second place if you get first place. (Don't get bonus city Power.)"
+                }
+              ]
+            },
+            "tip": "The Beloved and Just lines above are the card text on page 3, including the parentheses on Just. The draft is page 21. The other six leaders are not printed in this file."
+          }
+        },
+        {
+          "name": "Mystic",
+          "overview": "Attuned adds a Psionic when a copy or a pivot is used to tax. Cryptic covers Material and Fuel Outrage during setup.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are the Mystic. When you copy or pivot in order to tax, you also gain 1 Psionic. In setup, agents go on your Material and Fuel Outrage slots."
+              },
+              {
+                "lead": "Start",
+                "text": "The example gives the Mystic a Psionic and a Relic, and initiative. That places 3 ships and a city in 1A, 3 ships and a starport in 1B, and 2 ships in 1C."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "When",
+                  "text": "The book says not to play the first game with Leaders and Lore."
+                },
+                {
+                  "lead": "Draft",
+                  "text": "Replace setup steps N through O. Lay out leader cards and lore cards in face-up rows, each with one more card than the number of players. In reverse turn order, each player takes one leader or one lore card until each player has one of each."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Place the starting pieces in the systems marked A, B, and C on the setup card. Pips under a ship icon say how many ships. The two resources on the leader go in the two leftmost resource slots, in the order shown."
+                },
+                {
+                  "lead": "After",
+                  "text": "If a leader has extra setup, do those steps in turn order."
+                },
+                {
+                  "lead": "Cryptic",
+                  "text": "In setup, place agents on your Material and Fuel Outrage slots on your player board."
+                },
+                {
+                  "lead": "Example",
+                  "text": "The Mystic starts with a Psionic and a Relic. The example gives them initiative, so they place 3 ships and a city in 1A, 3 ships and a starport in 1B, and 2 ships in 1C."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Leaders and Lore does not replace the action cards. Attuned changes a tax you take by copying or pivoting. Lore you draft is a persistent power with no guild icon and no raid cost."
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Attuned",
+                  "text": "When you Copy or Pivot in order to tax, you gain 1 Psionic along with the taxed resource."
+                },
+                {
+                  "lead": "Cryptic",
+                  "text": "In setup, place agents on your Material and Fuel Outrage slots on your player board."
+                }
+              ]
+            },
+            "tip": "Attuned and Cryptic above are the card text on page 21, with the starting example. Page 3 prints Tool-Priests, the example lore card: Summon (Build): Once per turn, build 1 ship at any city you control. Yes, even Rival cities you control! Tool-Priests is lore, not a leader. A second lore card is an optional extra on page 21, not the normal draft."
+          }
+        }
+      ],
+      "charactersLabel": "Leaders",
+      "charactersAidNote": "Beloved, Just, Attuned, and Cryptic below are the card text. Setup around them is a short paraphrase of page 21. The book says the set has eight leaders. The other six are on their cards and are not reprinted. Lore is a card you draft, not a side. The March 23, 2026 rulebook link on this page opens the file."
     },
     "ark-nova": {
       "bggTime": {
@@ -31068,7 +31195,519 @@
         "title": "Marvel Villainous - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=302336"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=302336",
+      "characters": [
+        {
+          "name": "Hela",
+          "overview": "Have a combination of eight Allies and Soul Marks, and no opposing characters, at Odin's Vault.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Hela. The Domain is Niflheim, Hel, Gjoll, and Odin's Vault. You win with eight Allies and Soul Marks at Odin's Vault, and no opposing characters there."
+              },
+              {
+                "lead": "Turn",
+                "text": "Move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Have a combination of eight Allies and Soul Marks, and no opposing characters, at Odin's Vault."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Niflheim, Hel, Gjoll, and Odin's Vault."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Domain, mover, guide, Villain deck, Fate deck, and reference card. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "Place the mover on the portrait."
+                },
+                {
+                  "lead": "Deck",
+                  "text": "Shuffle the Villain deck and set it face down to the left of the Domain, with room for a discard."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4. The hand stays secret."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Shuffle the Common Fate deck together with the Fate deck of every villain in the game."
+                },
+                {
+                  "lead": "Power",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "First",
+                  "text": "The last player to read a Marvel comic goes first. If that is unclear, the oldest player starts. Read the objective aloud."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Move to a different location in your own Domain. You cannot stay put, and you cannot move to an Event. Then perform that location's actions, each symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A Fate card or an opposing Ally covering a symbol blocks that action until it is cleared."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Have a combination of eight Allies and Soul Marks and no opposing characters at Odin's Vault."
+                },
+                {
+                  "lead": "Draugr Swordsman",
+                  "text": "Draugr Swordsman gains 1 Strength for each Draugr Swordsman in your discard pile. Keep these cards off to the side of your discard pile to help keep track of their Strength. If you must reshuffle your discard pile to replenish your Villain deck, your previously discarded Draugr Swordsmen are no longer in your discard pile and do not grant a Strength bonus."
+                },
+                {
+                  "lead": "Dísir",
+                  "text": "Dísir may be played from your discard pile."
+                },
+                {
+                  "lead": "Angela",
+                  "text": "Soul Marks may not be attached to Angela. When played, remove a Soul Mark from Odin's Vault. She has one of the highest Strengths in the game and makes a dangerous opponent if placed in Odin's Vault."
+                },
+                {
+                  "lead": "Conquer Valhalla",
+                  "text": "When this event is played, Hela may no longer play or find cards in her Villain discard pile. This means she may not play Dísir directly from her discard pile, nor may she add the Strength of discarded Draugr Swordsman to a Swordsman in play. Hela may not find or play any cards in her discard pile. Reward: Hela may immediately attach Soul Marks on all Heroes in all Domains who don't already have one."
+                }
+              ]
+            },
+            "tip": "The objective, the four locations, and the Hela guide are on page 2. The guide is photographed with the components. A separate Villain-guide booklet is in the box and is not reprinted as its own file here."
+          }
+        },
+        {
+          "name": "Killmonger",
+          "overview": "Take control of the mines and relocate two Explosives to any Domain other than your own.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Killmonger. Klaw starts at The Golden City. Defeat Klaw, then get two Explosives into other Domains."
+              },
+              {
+                "lead": "Turn",
+                "text": "Move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Take control of the mines and relocate two Explosives to any Domain other than your own."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Warrior Falls, Institute of Technology, The Great Mound, and The Golden City."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Domain, mover, guide, Villain deck, Fate deck, and reference card. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "Place the mover on the portrait."
+                },
+                {
+                  "lead": "Deck",
+                  "text": "Shuffle the Villain deck and set it face down to the left of the Domain, with room for a discard."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4. The hand stays secret."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Shuffle the Common Fate deck together with the Fate deck of every villain in the game."
+                },
+                {
+                  "lead": "Power",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "First",
+                  "text": "The last player to read a Marvel comic goes first. If that is unclear, the oldest player starts. Read the objective aloud."
+                },
+                {
+                  "lead": "Klaw",
+                  "text": "Klaw starts the game at The Golden City. When Klaw is defeated, flip that tile to Challenge for the Throne and move the stack to the Specialty area."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Move to a different location in your own Domain. You cannot stay put, and you cannot move to an Event. Then perform that location's actions, each symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A Fate card or an opposing Ally covering a symbol blocks that action until it is cleared."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Take control of the mines and relocate two Explosives to any Domain other than your own."
+                },
+                {
+                  "lead": "Control the Mines",
+                  "text": "The tile relocates Explosives to another player's Domain. If Black Panther is in your Domain, flip the tile over."
+                },
+                {
+                  "lead": "Few Allies",
+                  "text": "Killmonger has few Allies, and needs to rely on other means to get rid of Heroes in his way. This is the easiest way to defeat characters who slow you down, but it is not strong enough to defeat Klaw or Black Panther."
+                },
+                {
+                  "lead": "Rage of K'Liluna",
+                  "text": "Before moving your Villain, you may discard a card from your hand to find Killmonger's Fury, then add it to your hand."
+                },
+                {
+                  "lead": "Armored Rhinos",
+                  "text": "Heroes at Killmonger's location lose 1 Strength. This Specialty helps you reduce the Strength of Heroes by 1, making Killmonger's Fury more effective."
+                },
+                {
+                  "lead": "Explosives",
+                  "text": "These Items are part of the objective. You may also remove one to defeat up to two characters at its location. It cannot defeat a character of Strength 5 or more."
+                },
+                {
+                  "lead": "Black Panther",
+                  "text": "He stops Killmonger from controlling the mines and moving Explosives, and he gains 2 Strength in Killmonger's Domain. Other villains may relocate him in and out. Wakanda Forever brings him back even after he was removed or defeated. If he is already in play, that card adds a +1 Strength token and relocates him into Killmonger's Domain."
+                },
+                {
+                  "lead": "Stolen Antiquities",
+                  "text": "While this Event is active, Killmonger cannot play Items, even if Control the Mines is in play. The reward finds any Item in his deck or discard and plays it to his Domain for free."
+                }
+              ]
+            },
+            "tip": "The objective, the locations, Klaw, and the Killmonger guide are on page 2. The tile that says to pay 2 Power is printed beside those tiles. The instructions do not label which of the two Killmonger tiles that cost belongs to, so it is not assigned here."
+          }
+        },
+        {
+          "name": "Taskmaster",
+          "overview": "Have four Allies, each with 5 or more Strength, at four different locations.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Taskmaster. Four locations, four Allies, each at Strength 5 or more."
+              },
+              {
+                "lead": "Turn",
+                "text": "Move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Have four Allies, each with 5 or more Strength, at four different locations."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Solomon Institute, Training Room, Armory, and Camp Hammond."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Domain, mover, guide, Villain deck, Fate deck, and reference card. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "Place the mover on the portrait."
+                },
+                {
+                  "lead": "Deck",
+                  "text": "Shuffle the Villain deck and set it face down to the left of the Domain, with room for a discard."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4. The hand stays secret."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Shuffle the Common Fate deck together with the Fate deck of every villain in the game."
+                },
+                {
+                  "lead": "Power",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "First",
+                  "text": "The last player to read a Marvel comic goes first. If that is unclear, the oldest player starts. Read the objective aloud."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Move to a different location in your own Domain. You cannot stay put, and you cannot move to an Event. Then perform that location's actions, each symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A Fate card or an opposing Ally covering a symbol blocks that action until it is cleared."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Have four Allies, each with 5 or more Strength, at four different locations."
+                },
+                {
+                  "lead": "Photographic Reflexes",
+                  "text": "Photographic Reflexes allows Taskmaster to copy any Effect played by an opponent from their Villain deck. After another Villain plays an Effect, pay 1 Power and attach that Effect to Photographic Reflexes. On your turn, use an activate action to play that Effect as it if were your own, then discard it to its original Villain's discard pile. Photographic Reflexes may have only one Effect attached to it at a time. Fate Effects cannot be copied by Photographic Reflexes."
+                },
+                {
+                  "lead": "Butterball",
+                  "text": "Butterball cannot be defeated. Before moving your Villain, you may pay 3 Power and discard one card from your hand to remove Butterball. Page 2 of the guide also prints: Butterball cannot be defeated via a vanquish action. You must pay 3 Power and discard one card in play to remove him from your Domain."
+                },
+                {
+                  "lead": "Government Work",
+                  "text": "Taskmaster cannot relocate Allies or Items except to this Event. While this event is in play, Taskmaster cannot perform ANY relocate actions except to move Allies to this event. This slows Taskmaster down considerably and makes him susceptible to Heroes' meddling. Reward: Find an Ally from Taskmaster's deck or discard pile and play it immediately for free."
+                }
+              ]
+            },
+            "tip": "The objective and the four locations are on page 2. The Butterball card sentence and the guide sentence quoted above are both on that page."
+          }
+        },
+        {
+          "name": "Thanos",
+          "overview": "Collect the six Infinity Stones.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Thanos. The six Stones start in the center, not on your Domain. You have to go get them. You cannot win while Adam Warlock is in your Domain."
+              },
+              {
+                "lead": "Turn",
+                "text": "Move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Collect the six Infinity Stones."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Sanctuary II, Titan, The Infinity Well, and Knowhere."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Domain, mover, guide, Villain deck, Fate deck, and reference card. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "Place the mover on the portrait."
+                },
+                {
+                  "lead": "Deck",
+                  "text": "Shuffle the Villain deck and set it face down to the left of the Domain, with room for a discard."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4. The hand stays secret."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Shuffle the Common Fate deck together with the Fate deck of every villain in the game."
+                },
+                {
+                  "lead": "Power",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "First",
+                  "text": "The last player to read a Marvel comic goes first. If that is unclear, the oldest player starts. Read the objective aloud."
+                },
+                {
+                  "lead": "Stones",
+                  "text": "The six Infinity Stones start as Items near the Fate deck, in no one's Domain."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Move to a different location in your own Domain. You cannot stay put, and you cannot move to an Event. Then perform that location's actions, each symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A Fate card or an opposing Ally covering a symbol blocks that action until it is cleared."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Collect the six Infinity Stones. Thanos thrives on conflict and cannot win without confronting other villains. While he is playing, the Stone rules apply to every villain."
+                },
+                {
+                  "lead": "Enter play",
+                  "text": "Stones enter through Fate cards and Thanos' Effect cards, almost always outside his Domain. The targeted player takes one at random from the center and attaches it to an Ally. With no Ally in play, they play one from hand for free. With none in hand, they reveal from their Villain deck until they find one and place it in any location for free."
+                },
+                {
+                  "lead": "In a Domain",
+                  "text": "The Stone is an Item with an activated ability, and that Stone can be activated only once per turn. Except for Thanos, a villain may relocate a Stone only inside their own Domain. A Stone, and an Ally with a Stone, cannot be relocated to an Event or to another Domain."
+                },
+                {
+                  "lead": "Stuck",
+                  "text": "A Stone cannot be discarded or removed. If its Ally is defeated or removed, the Stone stays as an unattached Item and cannot be attached to another character. Only Thanos collects it, by sending an Ally to retrieve it. He has it when that Ally returns to his Domain. The villain at that location can vanquish his Allies to stop the retrieval."
+                },
+                {
+                  "lead": "Collecting",
+                  "text": "Thanos may relocate his Allies to any location in any Domain containing a Stone. If you have relocated Allies to a location with an Infinity Stone, you may use a vanquish action to defeat the Ally with the attached Stone. You do not need to defeat all Allies at the location to collect the Stone. If you have at least one remaining Ally at the Stone's location, immediately attach it to that Ally, who may now be relocated back to Thanos' Domain. Once your Ally has a Stone, only you may relocate that Ally. If you do not have an Ally left at the Stone's location, or if Thanos' Ally with an attached Stone is removed or defeated, the Stone stays in the same location in that Villain's Domain. It becomes an unattached Item in that location, placed at the bottom of the Villain's Domain. If Thanos moves an Ally to a location with an unattached Infinity Stone, that Stone immediately attaches itself to Thanos' Ally."
+                },
+                {
+                  "lead": "Specialty",
+                  "text": "When a Stone is in Thanos' Domain, he flips it to its Specialty side. It then follows the Specialty rules, and he is one step closer."
+                },
+                {
+                  "lead": "Adam Warlock",
+                  "text": "Thanos cannot win while Adam Warlock is in his Domain."
+                },
+                {
+                  "lead": "Sacrifices Must Be Made",
+                  "text": "Before he moves to a new location, for each of his Allies in play he pays 1 Power, discards one card, or removes that Ally. The reward removes one Ally controlled by each other villain."
+                },
+                {
+                  "lead": "Avengers Assemble!",
+                  "text": "If that card makes him draw A Stone is Found, he discards A Stone is Found with no effect."
+                }
+              ]
+            },
+            "tip": "The objective and the four locations are on page 2. The Stone rules that affect every villain are on page 15. The guide notes for collecting Stones, Adam Warlock, and Sacrifices Must Be Made are on page 2. Each Stone's own activated ability is printed on that tile."
+          }
+        },
+        {
+          "name": "Ultron",
+          "overview": "Upgrade to Ultron Ultimate and play the Age of Ultron.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Ultron. Upgrade to Ultron Ultimate, then play Age of Ultron. When that card is revealed, you win."
+              },
+              {
+                "lead": "Turn",
+                "text": "Move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Upgrade to Ultron Ultimate and play the Age of Ultron."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Research Lab, Manufacturing Array, Reconfiguration Base, and Stark Industries Industrial Complex."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Domain, mover, guide, Villain deck, Fate deck, and reference card. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "Place the mover on the portrait."
+                },
+                {
+                  "lead": "Deck",
+                  "text": "Shuffle the Villain deck and set it face down to the left of the Domain, with room for a discard."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4. The hand stays secret."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Shuffle the Common Fate deck together with the Fate deck of every villain in the game."
+                },
+                {
+                  "lead": "Power",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "First",
+                  "text": "The last player to read a Marvel comic goes first. If that is unclear, the oldest player starts. Read the objective aloud."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Move to a different location in your own Domain. You cannot stay put, and you cannot move to an Event. Then perform that location's actions, each symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A Fate card or an opposing Ally covering a symbol blocks that action until it is cleared."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Upgrade to Ultron Ultimate and play the Age of Ultron. When Age of Ultron is revealed, you win."
+                },
+                {
+                  "lead": "Sentries",
+                  "text": "Sentries are unique Allies and appear only in Ultron's deck. Alkhema and Jocasta are not Sentries."
+                },
+                {
+                  "lead": "Invasion of Stark Enterprises",
+                  "text": "While this Event is in play, whenever Ultron gains Power he gains 1 fewer, and he may gain none. When the Event is resolved, he immediately gains 6 Power. If Vision and this Event are both revealed, only one takes effect. Resolving, defeating, or removing one makes the other take effect."
+                },
+                {
+                  "lead": "Wonder Man",
+                  "text": "When Wonder Man is defeated, find Vision and play or relocate him to Wonder Man's previous location. This double hit of Heroes can put a real dent in Ultron's plans."
+                }
+              ]
+            },
+            "tip": "The objective, the four locations, and the Ultron guide are on page 2. The four objective tiles are pictured there. Only the Age of Ultron line is written out as its own sentence, so the other three tile abilities stay on the tiles."
+          }
+        }
+      ],
+      "charactersLabel": "Villains",
+      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 664509, USe01. The booklet link on this page opens the file. Card text that the guide does not explain stays on the card."
     },
     "men-nefer": {
       "bggTime": {
@@ -53760,7 +54399,519 @@
         "channel": "Ravensburger North America (ravensburgerna)"
       },
       "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=358800",
-      "cover": "covers/star-wars-villainous.webp"
+      "cover": "covers/star-wars-villainous.webp",
+      "characters": [
+        {
+          "name": "Asajj Ventress",
+          "overview": "Complete 3 Missions. Each finished step adds an Ambition token to the Mission, and a completed Mission pays that Ambition.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Asajj Ventress. Complete three Missions. Each step you finish puts an Ambition token on the Mission card, and a finished Mission pays you that Ambition."
+              },
+              {
+                "lead": "Turn",
+                "text": "Gain 1 Ambition, move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Complete 3 Missions. Each finished step adds an Ambition token to the Mission, and a completed Mission pays that Ambition."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Teth, Dathomir, Kamino, and Coruscant Level 1312. Vehicles go to Deep Space."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Sector, mover, Villain deck, Fate deck, Villain Guide, and reference card, plus any special tokens or tiles. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "The Sector shows the portrait and objective, four locations, and Deep Space. The mover starts on the portrait."
+                },
+                {
+                  "lead": "Decks",
+                  "text": "The Villain deck goes face down to the left, with room for a discard. The Fate deck goes face down above the Sector, where opponents draw from it."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4 from your own Villain deck."
+                },
+                {
+                  "lead": "Credits",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Each villain keeps their own Fate deck. It is not shuffled into a common deck."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Gain 1 Ambition from the Chamber, then move to a different location in your Sector. You cannot stay. Perform each available action symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4, or to a smaller hand if an unengaged Hero Vehicle has reduced it.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A symbol covered by a Fate card cannot be used until that card is moved, vanquished, defeated, or removed."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                },
+                {
+                  "lead": "Win",
+                  "text": "As soon as a player fulfills their objective, the game ends and that player wins."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Missions",
+                  "text": "Complete three Missions. As each step is completed, add an Ambition token to the Mission card. When every step is finished, the Mission is completed and Asajj collects that Ambition."
+                },
+                {
+                  "lead": "The Banshee",
+                  "text": "Look at the top three cards of the Villain deck. Keep one, discard one, and put one on the bottom."
+                },
+                {
+                  "lead": "The Trident",
+                  "text": "Put one random card from the discard pile into your hand."
+                },
+                {
+                  "lead": "Droids",
+                  "text": "B1 Battle Droids gain Strength for every additional Ally at their location. You may pay 1 Ambition for each B2 Super Battle Droid to keep it in play instead of discarding it after a Vanquish. BX-Droid Commandos return to your hand instead of being discarded in a Vanquish."
+                },
+                {
+                  "lead": "Infiltration",
+                  "text": "Move to any location with a Fate card and end the turn. Before the next move, defeat all Fate cards at that location, then take the turn as normal. Defeated and removed cards can count toward Mission tasks. Strange Alliances does not stop Infiltration, because no Vanquish is taking place."
+                },
+                {
+                  "lead": "Strange Alliances",
+                  "text": "Asajj cannot perform Vanquish actions. Remove two Allies from the Sector to remove Strange Alliances."
+                }
+              ]
+            },
+            "tip": "The one-line objective and the four locations are on page 2. The reference card on page 5 is the longer Mission wording. The Banshee, the Trident, the droids, and Infiltration are the guide on page 2."
+          }
+        },
+        {
+          "name": "Darth Vader",
+          "overview": "Defeat Luke Skywalker. Flip him to Conflicted, then pay 6 Ambition with Emperor Palpatine in the Emperor's Throne Room.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Darth Vader. Flip Luke to his Conflicted side. You, Emperor Palpatine, and Conflicted Luke have to be in the Emperor's Throne Room. Then pay 6 Ambition."
+              },
+              {
+                "lead": "Turn",
+                "text": "Gain 1 Ambition, move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Defeat Luke Skywalker. Flip him to Conflicted, then pay 6 Ambition with Emperor Palpatine in the Emperor's Throne Room."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Mustafar, the Death Star, Cloud City, and the Emperor's Throne Room."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Sector, mover, Villain deck, Fate deck, Villain Guide, and reference card, plus any special tokens or tiles. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "The Sector shows the portrait and objective, four locations, and Deep Space. The mover starts on the portrait."
+                },
+                {
+                  "lead": "Decks",
+                  "text": "The Villain deck goes face down to the left, with room for a discard. The Fate deck goes face down above the Sector, where opponents draw from it."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4 from your own Villain deck."
+                },
+                {
+                  "lead": "Credits",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Each villain keeps their own Fate deck. It is not shuffled into a common deck."
+                },
+                {
+                  "lead": "Tiles",
+                  "text": "Take the Luke Skywalker tile. He starts Focused. Heroes at Focused Luke's location cannot be targeted by Vanquish actions."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Gain 1 Ambition from the Chamber, then move to a different location in your Sector. You cannot stay. Perform each available action symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4, or to a smaller hand if an unengaged Hero Vehicle has reduced it.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A symbol covered by a Fate card cannot be used until that card is moved, vanquished, defeated, or removed."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                },
+                {
+                  "lead": "Win",
+                  "text": "As soon as a player fulfills their objective, the game ends and that player wins."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Darth Vader must flip Luke Skywalker to his Conflicted side. Darth Vader, Emperor Palpatine, and Luke Skywalker (Conflicted) must be in the Emperor's Throne Room. Darth Vader then pays 6 Ambition to defeat Luke Skywalker."
+                },
+                {
+                  "lead": "Ambition",
+                  "text": "TIE Advanced X1 and The Power of the Dark Side each gain 2 Ambition. The Power of the Dark Side can be played when another player spends 2 or more Ambition on their turn."
+                },
+                {
+                  "lead": "Obstacles",
+                  "text": "Princess Leia increases every Ambition Ability Cost by 1. More Powerful Than You Can Imagine is a Restriction: Darth Vader cannot perform Ambition actions. During a Discard action he must discard his entire hand to remove it."
+                },
+                {
+                  "lead": "R2-D2",
+                  "text": "May be played to a Hero Vehicle. While attached to an engaged Hero Vehicle, Darth Vader cannot use that Ally Vehicle's Ability."
+                },
+                {
+                  "lead": "Millennium Falcon",
+                  "text": "While it is in play, defeated Heroes go there instead of the discard, which can stop Luke from moving toward the throne room. When the Falcon is defeated, each Hero on board counts for moving Luke. A Fate action may play a Hero from the Falcon to a new location instead of drawing from the Fate deck."
+                }
+              ]
+            },
+            "tip": "Defeat Luke Skywalker is the objective on the Sector, page 2, and the book names those four locations on the overview spread. The 6 Ambition win is the reference card on page 5 and the Darth Vader guide on page 2. The printed page numbers on that spread are 4 and 5."
+          }
+        },
+        {
+          "name": "General Grievous",
+          "overview": "Defeat Heroes in order to collect eight Lightsabers.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are General Grievous. Defeat Heroes and collect eight Lightsabers."
+              },
+              {
+                "lead": "Turn",
+                "text": "Gain 1 Ambition, move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Defeat Heroes in order to collect eight Lightsabers."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Lair of Grievous, Saleucami, Florrum, and Utapau."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Sector, mover, Villain deck, Fate deck, Villain Guide, and reference card, plus any special tokens or tiles. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "The Sector shows the portrait and objective, four locations, and Deep Space. The mover starts on the portrait."
+                },
+                {
+                  "lead": "Decks",
+                  "text": "The Villain deck goes face down to the left, with room for a discard. The Fate deck goes face down above the Sector, where opponents draw from it."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4 from your own Villain deck."
+                },
+                {
+                  "lead": "Credits",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Each villain keeps their own Fate deck. It is not shuffled into a common deck."
+                },
+                {
+                  "lead": "Tokens",
+                  "text": "The box includes 8 Lightsaber tokens."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Gain 1 Ambition from the Chamber, then move to a different location in your Sector. You cannot stay. Perform each available action symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4, or to a smaller hand if an unengaged Hero Vehicle has reduced it.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A symbol covered by a Fate card cannot be used until that card is moved, vanquished, defeated, or removed."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                },
+                {
+                  "lead": "Win",
+                  "text": "As soon as a player fulfills their objective, the game ends and that player wins."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Defeat Heroes in order to collect eight Lightsabers."
+                },
+                {
+                  "lead": "Anakin Skywalker",
+                  "text": "When played, defeat all Allies at his location."
+                },
+                {
+                  "lead": "Obi-Wan Kenobi",
+                  "text": "When played, remove an Ally Vehicle from the Sector."
+                },
+                {
+                  "lead": "Mace Windu",
+                  "text": "When played, all Allies in the Sector get -1 Strength."
+                },
+                {
+                  "lead": "Ahsoka Tano",
+                  "text": "Each time another Hero is played to the Sector, Ahsoka gets +1 Strength. When she is defeated, General Grievous collects one additional Lightsaber."
+                },
+                {
+                  "lead": "Magna Guard",
+                  "text": "Heroes cannot be moved or Maneuvered away from Magna Guard's location."
+                },
+                {
+                  "lead": "Droidekas",
+                  "text": "When you Vanquish, you may pay 1 Ambition to Maneuver Droidekas to that location, and Droidekas must be used in that action. If Droidekas is already there, the Ambition is not required."
+                },
+                {
+                  "lead": "Imperial Officers",
+                  "text": "Remove a Hero Vehicle from the Sector, then remove Imperial Officers. Hero Vehicles can be defeated this way without sacrificing your own Vehicles."
+                }
+              ]
+            },
+            "tip": "Collect eight Lightsabers is the objective on page 2. The reference card on page 5 says the Lightsabers come from defeating Heroes. The Hero notes are the Heroes Fight Back guide on page 2."
+          }
+        },
+        {
+          "name": "Kylo Ren",
+          "overview": "Commit to the Dark Side of the Force by moving all six Destiny tokens to the Dark Side.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Kylo Ren. Six Destiny tokens. Spend Ambition to move all of them to the Dark Side."
+              },
+              {
+                "lead": "Turn",
+                "text": "Gain 1 Ambition, move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Commit to the Dark Side of the Force by moving all six Destiny tokens to the Dark Side."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "D'Qar, Crait, Snoke's Chamber, and the Emperor's Throne Room."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Sector, mover, Villain deck, Fate deck, Villain Guide, and reference card, plus any special tokens or tiles. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "The Sector shows the portrait and objective, four locations, and Deep Space. The mover starts on the portrait."
+                },
+                {
+                  "lead": "Decks",
+                  "text": "The Villain deck goes face down to the left, with room for a discard. The Fate deck goes face down above the Sector, where opponents draw from it."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4 from your own Villain deck."
+                },
+                {
+                  "lead": "Credits",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Each villain keeps their own Fate deck. It is not shuffled into a common deck."
+                },
+                {
+                  "lead": "Tracker",
+                  "text": "Take the Destiny tracker and the 6 Destiny tokens."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Gain 1 Ambition from the Chamber, then move to a different location in your Sector. You cannot stay. Perform each available action symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4, or to a smaller hand if an unengaged Hero Vehicle has reduced it.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A symbol covered by a Fate card cannot be used until that card is moved, vanquished, defeated, or removed."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                },
+                {
+                  "lead": "Win",
+                  "text": "As soon as a player fulfills their objective, the game ends and that player wins."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Commit his Destiny to the Dark Side of the Force. Use Ambition to move all six Destiny tokens to the Dark Side of the Destiny tracker."
+                },
+                {
+                  "lead": "Knights of Ren",
+                  "text": "When they defeat a Hero in a Vanquish, gain Ambition equal to that Hero's Strength."
+                },
+                {
+                  "lead": "The Power of the Dark Side",
+                  "text": "Gain Ambition equal to the number of Destiny tokens on the Dark Side."
+                },
+                {
+                  "lead": "Your Son is Gone",
+                  "text": "Gain 1 Ambition, or gain 3 Ambition and move one Destiny token toward the Light Side."
+                },
+                {
+                  "lead": "I Can Take What I Want",
+                  "text": "When another player gains 1 or more Credits on their turn, you may play this and gain that much Ambition."
+                },
+                {
+                  "lead": "Toward the Light",
+                  "text": "Rey, Come Home, and Every Word You Said Was Wrong move Destiny tokens toward the Light Side. The player taking the Fate action chooses which tokens. Every Word You Said Was Wrong moves one token directly to the Light Side, even from the Dark Side."
+                }
+              ]
+            },
+            "tip": "Commit to the Dark Side of the Force is the objective on page 2. The six-token wording is the reference card on page 5. The Ambition cards and the Fate cards that move Destiny are the guide on page 2."
+          }
+        },
+        {
+          "name": "Moff Gideon",
+          "overview": "Have Grogu, Doctor Pershing, and Laboratory Samples together on the Villain side, then pay 5 Ambition.",
+          "teachingScript": {
+            "bullets": [
+              {
+                "lead": "Say this",
+                "text": "You are Moff Gideon. Get Grogu, Doctor Pershing, and Laboratory Samples onto the Villain side in the same location, then pay 5 Ambition. Grogu can be pulled to the Hero side."
+              },
+              {
+                "lead": "Turn",
+                "text": "Gain 1 Ambition, move to a different location, do each symbol there once, then draw back to 4."
+              },
+              {
+                "lead": "Win",
+                "text": "Have Grogu, Doctor Pershing, and Laboratory Samples together on the Villain side, then pay 5 Ambition."
+              }
+            ]
+          },
+          "aid": {
+            "setup": {
+              "bullets": [
+                {
+                  "lead": "Locations",
+                  "text": "Nevarro City, Old Imperial Base, Tython, and The Bridge."
+                },
+                {
+                  "lead": "Pieces",
+                  "text": "Take that villain's Sector, mover, Villain deck, Fate deck, Villain Guide, and reference card, plus any special tokens or tiles. Return the other villains."
+                },
+                {
+                  "lead": "Mover",
+                  "text": "The Sector shows the portrait and objective, four locations, and Deep Space. The mover starts on the portrait."
+                },
+                {
+                  "lead": "Decks",
+                  "text": "The Villain deck goes face down to the left, with room for a discard. The Fate deck goes face down above the Sector, where opponents draw from it."
+                },
+                {
+                  "lead": "Hand",
+                  "text": "Draw 4 from your own Villain deck."
+                },
+                {
+                  "lead": "Credits",
+                  "text": "The first player starts at 0. The second starts at 1. The third and fourth start at 2 each."
+                },
+                {
+                  "lead": "Fate",
+                  "text": "Each villain keeps their own Fate deck. It is not shuffled into a common deck."
+                }
+              ]
+            },
+            "actions": {
+              "text": "Gain 1 Ambition from the Chamber, then move to a different location in your Sector. You cannot stay. Perform each available action symbol once, in any order. Every action is optional. At the end of the turn, if you have fewer than 4 cards, draw back to 4, or to a smaller hand if an unengaged Hero Vehicle has reduced it.",
+              "bullets": [
+                {
+                  "lead": "Blocked",
+                  "text": "A symbol covered by a Fate card cannot be used until that card is moved, vanquished, defeated, or removed."
+                },
+                {
+                  "lead": "Cards",
+                  "text": "Cards overrule the book. A restriction beats a permission."
+                },
+                {
+                  "lead": "Win",
+                  "text": "As soon as a player fulfills their objective, the game ends and that player wins."
+                }
+              ]
+            },
+            "abilities": {
+              "bullets": [
+                {
+                  "lead": "Win",
+                  "text": "Have Grogu, Doctor Pershing, and Laboratory Samples in play on the Villain side of the Sector. Once all three are in the same location, pay 5 Ambition."
+                },
+                {
+                  "lead": "Grogu taken",
+                  "text": "Fate cards can move Grogu to the Hero side. The Jedi moves him to the Hero side and defeats any Allies at his location, including Dark Troopers. Self-Protection moves him to a location with no Allies, and he stays on the same side of the Sector."
+                },
+                {
+                  "lead": "Unexpected Help",
+                  "text": "Defeat all Allies at Grogu's location and move him to the Hero side. No Allies may be played or Maneuvered there until you remove the card by defeating a Hero."
+                },
+                {
+                  "lead": "Darksaber",
+                  "text": "Once played, it never leaves the Sector. Attach it to an Ally. If that Ally is part of a Vanquish, or is defeated or removed, the Darksaber stays and attaches to the next Hero or Ally at that location. Grogu cannot attach or use it. The first Ally gets +1 Strength, and each new Hero or Ally who claims it grants another +1 Strength."
+                }
+              ]
+            },
+            "tip": "Capture and experiment on Grogu is the objective on page 2. The 5 Ambition win, with Doctor Pershing and Laboratory Samples, is the reference card on page 5. Grogu and the Darksaber are the guide on page 2."
+          }
+        }
+      ],
+      "charactersLabel": "Villains",
+      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 665043, EN01. The booklet link on this page opens the file. One side of the reference card lists every objective. Card text the guide does not explain stays on the card."
     },
     "survive-the-island": {
       "bggTime": {
@@ -155858,8 +157009,7 @@
       "Cody"
     ]
   }
-}
-</script>
+}</script>
 
 <script src="./game-night.js"></script>
 <script>

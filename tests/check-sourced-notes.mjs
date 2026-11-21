@@ -137,7 +137,7 @@ for (const [slug, index, start, end] of quoteSpecs) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.6";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.7";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
