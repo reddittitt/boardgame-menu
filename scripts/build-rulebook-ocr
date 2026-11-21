@@ -14,6 +14,12 @@ from this file.
 Usage:
   scripts/build-rulebook-ocr tiny-towns /path/to/file.pdf
   scripts/build-rulebook-ocr scout
+  scripts/build-rulebook-ocr --tuned clue-master-detective /path/to/file.pdf
+
+--tuned is for a hard scan. It renders the long edge at about 4000 pixels,
+straightens a sideways page, and stretches contrast before Tesseract. A weak
+page is read again with a single-column segmentation, and the clearer read
+is kept. Word boxes are mapped back onto the PDF page the viewer shows.
 """
 
 from __future__ import annotations
@@ -38,6 +44,13 @@ MIN_WORD_CONF = 35
 MIN_LINE_LETTERS = 4
 MIN_LETTER_RATIO = 0.4
 MAX_LINE_CHARS = 200
+
+# Tuned pass for hard scans: render so the long edge is about this many
+# pixels, then correct a sideways page and stretch contrast before reading.
+TUNED_LONG_EDGE = 4000
+TUNED_MIN_DPI = 180
+TUNED_MAX_DPI = 300
+TUNED_MIN_WORD_CONF = 30
 
 USER_AGENTS = (
     "bgquick-rulebook-index/1.0",
@@ -198,10 +211,10 @@ def resolve_pdf(slug: str, given: str | None, enrich: dict) -> Path | str:
     return path
 
 
-def render_page(pdf: Path, page: int, dest: Path) -> None:
+def render_page(pdf: Path, page: int, dest: Path, dpi: int = DPI) -> None:
     prefix = dest.parent / f"page-{page}"
     subprocess.run(
-        ["pdftoppm", "-png", "-r", str(DPI), "-f", str(page), "-l", str(page), "-singlefile", str(pdf), str(prefix)],
+        ["pdftoppm", "-png", "-r", str(dpi), "-f", str(page), "-l", str(page), "-singlefile", str(pdf), str(prefix)],
         check=True,
         capture_output=True,
         timeout=180,
@@ -222,9 +235,32 @@ def ocr_tsv(image: Path) -> str:
     return proc.stdout.decode("utf-8", errors="replace")
 
 
-def words_from_tsv(tsv: str, page_width: float, page_height: float, image_width: int, image_height: int) -> tuple[list[list], list[str]]:
-    sx = page_width / image_width
-    sy = page_height / image_height
+def unrotate_pixel_box(left: int, top: int, width: int, height: int, degrees: int, orig_w: int, orig_h: int) -> tuple[float, float, float, float]:
+    """Map a box on a clockwise-rotated image back onto the rendered page."""
+    if degrees == 90:
+        return top, orig_h - (left + width), height, width
+    if degrees == 180:
+        return orig_w - (left + width), orig_h - (top + height), width, height
+    if degrees == 270:
+        return orig_w - (top + height), left, height, width
+    return left, top, width, height
+
+
+def words_from_tsv(
+    tsv: str,
+    page_width: float,
+    page_height: float,
+    image_width: int,
+    image_height: int,
+    rotation: int = 0,
+    source_width: int | None = None,
+    source_height: int | None = None,
+    min_conf: float = MIN_WORD_CONF,
+) -> tuple[list[list], list[str]]:
+    src_w = source_width or image_width
+    src_h = source_height or image_height
+    sx = page_width / src_w
+    sy = page_height / src_h
     rows: list[tuple[int, int, int, int, float, str]] = []
     for line in tsv.splitlines()[1:]:
         cols = line.split("\t")
@@ -249,8 +285,10 @@ def words_from_tsv(tsv: str, page_width: float, page_height: float, image_width:
             word_no = int(cols[5])
         except ValueError:
             continue
-        if conf < MIN_WORD_CONF:
+        if conf < min_conf:
             continue
+        if rotation:
+            left, top, width, height = unrotate_pixel_box(left, top, width, height, rotation, src_w, src_h)
         if width < 2 or height < 2:
             continue
         # A single glyph that is not a letter or digit is usually a scan speck.
@@ -301,18 +339,153 @@ def image_size(path: Path) -> tuple[int, int]:
     return int(match.group(1)), int(match.group(2))
 
 
-def build(slug: str, pdf: Path) -> dict:
+def passage_score(lines: list[str]) -> tuple[float, float, int]:
+    text = " ".join(lines)
+    tokens = re.findall(r"[A-Za-z']+", text)
+    letters = letter_count(text)
+    if not tokens:
+        return 0.0, 0.0, letters
+    ok = sum(1 for token in tokens if len(token) >= 3 and re.search(r"[aeiouAEIOU]", token))
+    ratio = ok / len(tokens)
+    return ratio * min(letters, 2500), ratio, letters
+
+
+def tuned_dpi(page_width: float, page_height: float) -> int:
+    long_pt = max(page_width, page_height, 1)
+    dpi = round(TUNED_LONG_EDGE / long_pt * 72)
+    return max(TUNED_MIN_DPI, min(TUNED_MAX_DPI, dpi))
+
+
+def read_osd_rotation(image: Path) -> int:
+    """Degrees clockwise that make the page's text upright, or 0."""
+    try:
+        proc = subprocess.run(
+            ["tesseract", str(image), "stdout", "--psm", "0"],
+            capture_output=True,
+            text=True,
+            timeout=90,
+        )
+    except subprocess.TimeoutExpired:
+        return 0
+    text = proc.stdout + "\n" + proc.stderr
+    rot_m = re.search(r"Rotate:\s+(\d+)", text)
+    conf_m = re.search(r"Orientation confidence:\s+([\d.]+)", text)
+    if not rot_m or not conf_m:
+        return 0
+    rotation = int(rot_m.group(1)) % 360
+    if rotation not in (90, 180, 270):
+        return 0
+    if float(conf_m.group(1)) < 8:
+        return 0
+    return rotation
+
+
+def preprocess_image(src: Path, dest: Path) -> None:
+    """Grayscale, stretch contrast, and sharpen without moving any pixel."""
+    subprocess.run(
+        [
+            "convert",
+            str(src),
+            "-colorspace",
+            "Gray",
+            "-contrast-stretch",
+            "0.4%x0.4%",
+            "-unsharp",
+            "0x1",
+            str(dest),
+        ],
+        check=True,
+        capture_output=True,
+        timeout=120,
+    )
+
+
+def rotate_image(src: Path, dest: Path, degrees: int) -> None:
+    subprocess.run(
+        ["convert", str(src), "-rotate", str(degrees), str(dest)],
+        check=True,
+        capture_output=True,
+        timeout=90,
+    )
+
+
+def read_prepared(image: Path, page_width: float, page_height: float, rotation: int, source_width: int, source_height: int, psm: str) -> tuple[list[list], list[str]]:
+    proc = subprocess.run(
+        ["tesseract", str(image), "stdout", "-l", "eng", "--oem", "1", "--psm", psm, "tsv"],
+        check=True,
+        capture_output=True,
+        timeout=180,
+    )
+    tsv = proc.stdout.decode("utf-8", errors="replace")
+    pixel_w, pixel_h = image_size(image)
+    return words_from_tsv(
+        tsv,
+        page_width,
+        page_height,
+        pixel_w,
+        pixel_h,
+        rotation=rotation,
+        source_width=source_width,
+        source_height=source_height,
+        min_conf=TUNED_MIN_WORD_CONF,
+    )
+
+
+def ocr_tuned_page(pdf: Path, page: int, work: Path) -> tuple[list[list], list[str], str]:
+    width_pt, height_pt = page_box(pdf, page)
+    dpi = tuned_dpi(width_pt, height_pt)
+    raw = work / f"{page}.png"
+    render_page(pdf, page, raw, dpi)
+    source_w, source_h = image_size(raw)
+    prepared = work / f"{page}-prep.png"
+    preprocess_image(raw, prepared)
+    rotation = read_osd_rotation(prepared)
+    candidates: list[tuple[float, list[list], list[str], str]] = []
+
+    def consider(image: Path, rot: int, psm: str, label: str) -> None:
+        words, lines = read_prepared(image, width_pt, height_pt, rot, source_w, source_h, psm)
+        score, ratio, letters = passage_score(lines)
+        candidates.append((score, words, lines, f"{label} dpi={dpi} psm={psm} rot={rot} ratio={ratio:.2f} letters={letters}"))
+
+    upright = prepared
+    if rotation:
+        turned = work / f"{page}-rot.png"
+        rotate_image(prepared, turned, rotation)
+        consider(turned, rotation, "3", "rotated")
+        # A confident OSD can still be wrong on a picture page. Keep the
+        # upright read when it is clearly the better of the two.
+        consider(upright, 0, "3", "upright")
+    else:
+        consider(upright, 0, "3", "upright")
+    best = max(candidates, key=lambda item: item[0])
+    # A single-column pass can beat a messy auto pass. Only pay for it when
+    # the best so far is still thin.
+    best_lines = best[2]
+    _score, ratio, letters = passage_score(best_lines)
+    if ratio < 0.7 and letters < 900:
+        if rotation:
+            consider(work / f"{page}-rot.png", rotation, "4", "rotated-psm4")
+        consider(upright, 0, "4", "upright-psm4")
+        best = max(candidates, key=lambda item: item[0])
+    return best[1], best[2], best[3]
+
+
+def build(slug: str, pdf: Path, tuned: bool = False) -> dict:
     count = page_count(pdf)
     pages = []
     with tempfile.TemporaryDirectory(prefix=f"ocr-{slug}-") as tmp:
         work = Path(tmp)
         for page in range(1, count + 1):
-            image = work / f"{page}.png"
-            render_page(pdf, page, image)
-            width_pt, height_pt = page_box(pdf, page)
-            pixel_w, pixel_h = image_size(image)
-            words, lines = words_from_tsv(ocr_tsv(image), width_pt, height_pt, pixel_w, pixel_h)
-            print(f"  page {page}: {len(words)} words, {len(lines)} lines", file=sys.stderr)
+            if tuned:
+                words, lines, how = ocr_tuned_page(pdf, page, work)
+                print(f"  page {page}: {len(words)} words, {len(lines)} lines ({how})", file=sys.stderr)
+            else:
+                image = work / f"{page}.png"
+                render_page(pdf, page, image)
+                width_pt, height_pt = page_box(pdf, page)
+                pixel_w, pixel_h = image_size(image)
+                words, lines = words_from_tsv(ocr_tsv(image), width_pt, height_pt, pixel_w, pixel_h)
+                print(f"  page {page}: {len(words)} words, {len(lines)} lines", file=sys.stderr)
             if words:
                 pages.append({"page": page, "lines": lines, "words": words})
     return {"slug": slug, "pages": pages}
@@ -341,10 +514,15 @@ def write_index(slug: str, payload: dict) -> None:
 
 def main() -> None:
     require_tools()
-    if len(sys.argv) < 2:
-        die("usage: scripts/build-rulebook-ocr <slug> [pdf-or-url]")
-    slug = sys.argv[1]
-    given = sys.argv[2] if len(sys.argv) > 2 else None
+    args = sys.argv[1:]
+    tuned = "--tuned" in args
+    args = [arg for arg in args if arg != "--tuned"]
+    if tuned and not shutil.which("convert"):
+        die("missing tools: convert. Install imagemagick.")
+    if len(args) < 1:
+        die("usage: scripts/build-rulebook-ocr [--tuned] <slug> [pdf-or-url]")
+    slug = args[0]
+    given = args[1] if len(args) > 1 else None
     enrich = load_enrich()
     source = resolve_pdf(slug, given, enrich)
     with tempfile.TemporaryDirectory(prefix=f"ocr-src-{slug}-") as tmp:
@@ -355,7 +533,7 @@ def main() -> None:
             pdf = Path(tmp) / "source.pdf"
             print(f"{slug}: download {source}", file=sys.stderr)
             download(source, pdf)
-        payload = build(slug, pdf)
+        payload = build(slug, pdf, tuned=tuned)
     write_json(OCR_DIR / f"{slug}.json", payload, compact=True)
     write_index(slug, payload)
     words = sum(len(page["words"]) for page in payload["pages"])
