@@ -44,7 +44,7 @@ for (const name of json.names) {
 }
 
 assert(json.names.length === 780, "catalog size " + json.names.length);
-assert(sw.includes('var VERSION = "2026.11.20.18"'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.20.19"'), "service worker version");
 assert(html.includes('data-facet="whose"'), "whose facet");
 assert(html.includes("Whose games"), "whose label");
 assert(html.includes('matchesOwners'), "owner match");
