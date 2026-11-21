@@ -78,8 +78,50 @@ assert(riverfolk.setup.bullets.some((item) => item.faction && item.faction[0] ==
 assert(rootGame.setupVariants[0].setup.bullets[0].variant, "variant retagged");
 assert(rootGame.setupByPlayerCount["2"].bullets[0].players, "players retagged");
 
+const quacks = components["the-quacks-of-quedlinburg"];
+const herb = quacks && quacks.expansions["The Herb Witches"];
+assert(herb && herb.source === "bgg" && /BoardGameGeek/.test(herb.label), "herb witches sourced from BoardGameGeek");
+assert(herb.items.some((item) => item.expansion && item.expansion[0] === "The Herb Witches" && item.count === "1" && /Pot/.test(item.name)), "herb witches pot");
+assert(herb.items.every((item) => quotedCount(item)), "herb witches counts are quoted");
+
+const cities = components.catan.expansions["Catan: Cities & Knights"];
+assert(cities && cities.label === "BoardGameGeek · Mayfair 4th Edition", "cities and knights edition label");
+assert(cities.items.some((item) => item.count === "36" && /Commodity Cards/.test(item.name)), "cities and knights commodities");
+assert(!components.root.expansions.Hirelings, "generic Hirelings chip did not inherit another pack");
+
+const scout = catalog.enrich.scout;
+const scoutTwo = scout.quickStart.bullets.find((item) => item.lead === "Two players");
+const scoutRounds = scout.quickStart.bullets.find((item) => item.lead === "Rounds");
+assert(scoutTwo.players.min === 2 && scoutTwo.players.max === 2, "scout two-player line tagged");
+assert(!scoutRounds.players && !scoutRounds.expansion && !scoutRounds.faction, "scout shared round line stays untagged");
+assert(matchesSelection(scoutTwo, { players: 2 }), "scout two-player shows at 2");
+assert(!matchesSelection(scoutTwo, { players: 4 }), "scout two-player hides at 4");
+assert(matchesSelection(scoutTwo, { players: 4, showAll: true }), "show everything restores scout");
+assert(matchesSelection(scoutRounds, { players: 4 }), "untagged scout line still shows");
+
+const wildlife = catalog.enrich.parks.expansions.find((exp) => exp.name === "Wildlife");
+const nightfall = wildlife.setup.bullets.find((item) => /Nightfall is also in play/.test(item.lead || ""));
+assert(nightfall.expansion[0] === "Nightfall", "wildlife line waits for Nightfall");
+assert(!matchesSelection(nightfall, { expansions: ["Wildlife"] }), "nightfall line hidden without Nightfall");
+assert(matchesSelection(nightfall, { expansions: ["Wildlife", "Nightfall"] }), "nightfall line shows with both");
+
+const azulFactory = catalog.enrich.azul.quickStart.bullets.find((item) => /factory/.test((item.lead || "") + " " + (item.text || "")));
+assert(!azulFactory.players, "mixed player-count line stays untagged");
+
+const watergateSetup = catalog.enrich.watergate.quickStart;
+const watergateBullets = Array.isArray(watergateSetup) ? watergateSetup : watergateSetup.bullets;
+const editor = watergateBullets.find((item) => item.lead === "Editor");
+assert(editor.faction[0] === "Editor", "watergate editor line tagged");
+assert(matchesSelection(editor, { factions: [] }), "no faction selected still shows editor");
+assert(!matchesSelection(editor, { factions: ["Nixon"] }), "nixon selection hides the editor line");
+
+function quotedCount(item) {
+  const line = String((item.lines && item.lines[0]) || "");
+  return line.includes(String(item.count).replace(/x$/i, ""));
+}
+
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.20\.18";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.20\.19";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components shell");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
