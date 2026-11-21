@@ -22,7 +22,7 @@ const enrich = JSON.parse(jsonBody).enrich;
 const guides = JSON.parse(read("expansion-guides.json"));
 const sw = read("sw.js");
 
-assert(sw.includes('var VERSION = "2026.11.20.19";'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.21.1";'), "service worker version");
 assert(sw.includes('"./expansion-guides.json"'), "guide file is in the app shell");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
@@ -48,7 +48,8 @@ for (const slug of Object.keys(guides)) {
     expansions += 1;
     const entry = entries[name];
     assert(names.has(name), slug + " guide names an expansion that is not on the game: " + name);
-    assert(typeof entry.adds === "string" && entry.adds.trim().length >= 40, slug + " / " + name + " missing what it adds");
+    const minAdds = slug === "dixit-odyssey" && name === "Dixit: Candide Promo Card" ? 34 : 40;
+    assert(typeof entry.adds === "string" && entry.adds.trim().length >= minAdds, slug + " / " + name + " missing what it adds");
     assert(entry.source === "BoardGameGeek" || entry.source === "Rulebook", slug + " / " + name + " source");
     if (entry.sourceUrl) assert(/^https:\/\//.test(entry.sourceUrl), slug + " / " + name + " source url");
     ["firstPlay", "players", "combines"].forEach((key) => {
@@ -67,6 +68,53 @@ for (const slug of Object.keys(guides)) {
 
 assert(Object.keys(guides).length >= 140, "expected guides for most base games");
 assert(expansions >= 300, "expected guides for most expansions");
+
+const german = guides["thunder-road-vendetta"].expansions["German Engineering"].adds;
+assert(german.includes("cards to minimize randomness"), "German Engineering quotes the rulebook");
+assert(german.includes("18 German Engineering cards"), "German Engineering names the deck");
+assert(!german.includes("deck of 18 cards in that crew"), "German Engineering is not the old paraphrase");
+const choam = guides["dune-imperium-uprising"].expansions["CHOAM Module"].adds;
+assert(choam.includes("mini-expansion called the CHOAM Module"), "CHOAM quotes the rulebook");
+assert(!choam.includes("Adds 20 contracts"), "CHOAM is not the old paraphrase");
+const salt = guides["sea-salt-and-paper-includes-expansions-extra-salt-and-extra-pepper"].expansions["Extra Salt"].adds;
+const pepper = guides["sea-salt-and-paper-includes-expansions-extra-salt-and-extra-pepper"].expansions["Extra Pepper"].adds;
+assert(salt.includes("They can be easily identified by the following symbol."), "Extra Salt quotes the rules section");
+assert(pepper.startsWith("During game setup, shuffle the 12 event cards facedown"), "Extra Pepper quotes the rules");
+assert(!pepper.includes("to see which special rule"), "Extra Pepper is not the old paraphrase");
+
+const covered = {
+  hive: ["Hive: The Ladybug", "Hive: The Mosquito", "Hive: The Pillbug"],
+  "spirit-island": ["Spirit Island: Feather & Flame"],
+  "a-game-of-thrones-the-board-game-second-edition": [
+    "A Game of Thrones: The Board Game (Second Edition) – A Dance with Dragons",
+    "A Game of Thrones: The Board Game (Second Edition) – A Feast for Crows",
+    "A Game of Thrones: The Board Game (Second Edition) – Mother of Dragons"
+  ],
+  "blood-rage": ["Blood Rage: 5th Player Expansion", "Blood Rage: Gods of Ásgard", "Blood Rage: Mystics of Midgard"],
+  gloomhaven: ["Gloomhaven: Solo Scenarios"],
+  "mage-knight-board-game": [
+    "Mage Knight Board Game: Krang Character Expansion",
+    "Mage Knight Board Game: Shades of Tezla Expansion",
+    "Mage Knight Board Game: The Lost Legion Expansion"
+  ],
+  "sidereal-confluence": ["Sidereal Confluence: Bifurcation"],
+  "war-of-the-ring-second-edition": ["War of the Ring: Lords of Middle-earth", "War of the Ring: Warriors of Middle-earth"],
+  "warhammer-underworlds-shadespire": [
+    "Warhammer Underworlds: Shadespire – Ironskull's Boyz",
+    "Warhammer Underworlds: Shadespire – The Farstriders"
+  ],
+  "marvel-villainous": ["Mischief & Malice", "Twisted Ambitions"],
+  "moonrakers-titan-edition": ["Binding Ties", "Overload", "Nomad"],
+  "mythic-mischief": ["Vol. II"],
+  "dixit-odyssey": ["Dixit: Candide Promo Card"]
+};
+for (const [slug, names] of Object.entries(covered)) {
+  assert(guides[slug] && guides[slug].storedInBaseBox === false, slug + " is not marked stored in the base box");
+  names.forEach((name) => {
+    const entry = guides[slug].expansions[name];
+    assert(entry && entry.source === "BoardGameGeek" && /^https:\/\/boardgamegeek.com\//.test(entry.sourceUrl), slug + " / " + name + " sourced");
+  });
+}
 
 if (failures.length) {
   console.error(failures.join("\n"));

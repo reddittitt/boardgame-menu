@@ -312,6 +312,16 @@
         "adds": "In the first single-villain expansion, Venom is trying to merge with Spiderman to win. His allies, the other symbiotes will assist in this goal, while the dastardly heros, such as the Silver Spider will be obstacles in its path.",
         "source": "BoardGameGeek",
         "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/369671"
+      },
+      "Mischief & Malice": {
+        "adds": "Marvel Villainous: Mischief & Malice is a standalone game that can also be combined with the Infinite Power base game. This \"expandalone\" feature three playable Marvel villains who each have a different goal to achieve in order to win: Loki needs to collect and spend ten \"Mischief\", while Madame Masque needs to defeat eight Marvel heroes, and M.O.D.O.K. must activate the Cosmic Cube.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/335528"
+      },
+      "Twisted Ambitions": {
+        "adds": "In Marvel Villainous: Twisted Ambitions, players can forge their own twisted paths to victory as Doctor Octopus, Titania, and Kang the Conqueror. To win as Doctor Octopus, players must complete five schemes, such as defeating Spider-Man or amassing and paying power. Those who pick Titania will need to gain strength to become empowered and defeat She-Hulk. Finally, Kang the Conqueror will require players to unleash variants of Kang into other villains' decks and conquer four locations in other villain domains with robot duplicates. Each of the characters in Marvel Villainous: Twisted Ambitions can be played on their own or be mixed and matched with villains from previous Marvel Villainous releases.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/379056"
       }
     }
   },
@@ -1062,7 +1072,7 @@
         "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/355996"
       },
       "German Engineering": {
-        "adds": "This expansion replaces the car crew movement dice and the shooting die with cards. Each car crew that uses it gets a deck of 18 cards in that crew's color.",
+        "adds": "This expansion replaces the car crew movement dice and the shooting die with cards to minimize randomness. Each car crew using this expansion gets a deck of 18 German Engineering cards in their crew’s color.",
         "combines": "The Big Rig and the Final Five do not use this expansion, but you can play with either or both of them against cars that do.",
         "combinesSource": "Rulebook",
         "source": "Rulebook",
@@ -1456,6 +1466,11 @@
         "adds": "Dixit: Revelations invites you to go beyond what you see at first glance and discover what lies hidden between — or hidden by — the lines. Featuring art by the French illustrator Marina Coudray, Dixit: Revelations looks utterly unlike any Dixit expansion that has preceded it.",
         "source": "BoardGameGeek",
         "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/205761"
+      },
+      "Dixit: Candide Promo Card": {
+        "adds": "Candide is a promo card for Dixit.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/261026"
       }
     }
   },
@@ -2034,6 +2049,11 @@
         "adds": "When white-sailed ships reach our coastal waters, when would-be colonizers step foot onto the unblighted shores, when they raise blade and plow to claim the land with greed and hunger, nature stirs. When Invaders strike out at the heart of the Island, they draw the attention of Spirits of myth and legend and face power unimaginable.",
         "source": "BoardGameGeek",
         "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/365137"
+      },
+      "Spirit Island: Feather & Flame": {
+        "adds": "Contains: Promo Pack 1 Promo Pack 2 With the onset of the dangerous invaders, blighting the lands with their harmful practices and aggression, we spirits have had to grow and change in ways unanticipated. Whether we are water, fire, beneath, or beyond, we answer — these white-sailed ships must turn and go, or be broken on the rocks of our discontent. Fire and flood, flame and feather; ancient powers waken to free their home from a unique adversary’s influence. Can the island survive such turmoil?",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/356510"
       }
     }
   },
@@ -2521,7 +2541,7 @@
     "storedInBaseBox": true,
     "expansions": {
       "CHOAM Module": {
-        "adds": "Adds 20 contracts, four extra intrigue cards, and four extra Imperium cards. Shaddam Corrino IV may be chosen.",
+        "adds": "DUNE: IMPERIUM — UPRISING comes with a mini-expansion called the CHOAM Module. We recommend that you play without it at least once to familiarize yourself with the game. When you feel comfortable, you can add the CHOAM Module for more strategic depth.",
         "source": "Rulebook"
       }
     }
@@ -2530,14 +2550,194 @@
     "storedInBaseBox": true,
     "expansions": {
       "Extra Salt": {
-        "adds": "During setup, shuffle the new cards together with those from the standard game.",
+        "adds": "During setup, shuffle the new cards together with those from the standard game. They can be easily identified by the following symbol.",
         "source": "Rulebook",
         "sourceUrl": "https://studiobombyx.com/assets/EXTRA_SALT_rules_EN.pdf"
       },
       "Extra Pepper": {
-        "adds": "Shuffle the 12 event cards facedown to form the event deck. At the start of each round, reveal the top card to see which special rule applies to everyone that round.",
+        "adds": "During game setup, shuffle the 12 event cards facedown to form the event deck. At the start of each round, reveal the top card in the event deck to find out which special rule applies to everyone in that round. At the end of the round, count the points scored and add them to those from the previous rounds. Then award the event card according to the pictogram shown: The player with the most points places the card in front of them. The player with the fewest points places the card in front of them. In case of a tie, the event card is discarded. When a player has an event card in front of them, its special rule now applies only to them. The card is kept by the player as long as its conditions are met. For example, if the player received it because they had the fewest points, it is discarded if they are no longer in last position. A player cannot have more than one event card in front of them at a time. If they need to pick up a second card, they choose between the new and the old one for the one they keep.",
         "source": "Rulebook",
         "sourceUrl": "https://studiobombyx.com/assets/EXTRAPEPPER_rules_EN.pdf"
+      }
+    }
+  },
+  "hive": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Hive: The Ladybug": {
+        "adds": "The Ladybug was first introduced to the iPhone version of Hive in 2010. It is included in the \"Carbon\" and \"Pocket\" versions of Hive, and has been released as an expansion for the original Bakelite edition of the Hive base game. The Ladybug moves three spaces; two on top of the Hive, then one down. It must move exactly two on top of the Hive and then move one down on its last move. It may not move around the outside of the Hive and may not end its movement on top of the Hive. Even though it cannot block by landing on top of other pieces like the Beetle, it can move into or out of surrounded spaces. It also has the advantage of being much faster. The expansion consists of two game pieces (one each for the black and for the white player), to be used in addition to the pieces of the base game.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/70704"
+      },
+      "Hive: The Mosquito": {
+        "adds": "The Mosquito pieces can be added to a standard Hive set before the start of the game giving each player 12 pieces to play with. During the game, they are placed in the same way as the other pieces. Once in play, the Mosquito takes on the movement characteristics of any creature it touches at the time, thus changing its characteristics throughout the game. A Mosquito itself has no movement characteristics, so it gives no movement characteristics to an adjacent Mosquito. Hence a Mosquito cannot move if it touches only a Mosquito. Exception: If moved as a Beetle on top of the Hive, a Mosquito continues to move as a Beetle until it climbs down from the Hive.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/30323"
+      },
+      "Hive: The Pillbug": {
+        "adds": "Hive: The Pillbug is a new pair of tiles that can be added to Hive. The pillbug can move one space at a time OR it can move an adjacent unstacked piece (friend or enemy) two spaces: up onto the Pillbug itself, then down into another empty space adjacent to itself. Exceptions: The Pillbug CANNOT move the piece the other player just moved. The Pillbug CANNOT move any piece in a stack of pieces. The Pillbug CANNOT move a piece if it splits the hive (violating the One Hive Rule). The Pillbug CANNOT move a piece through a too-narrow gap of stacked pieces (violating the Freedom to Move Rule). Furthermore: Any piece just moved by the Pillbug CANNOT move OR be moved OR use its special ability on the next player’s turn. IN SUMMARY, when playing with the Pillbug, apply this simple rule of thumb: any piece physically moved is rendered immobile on the next player’s turn: it CANNOT move, OR be moved OR use its special ability. A Pillbug that has used its ability has NOT been physically moved, therefore it CAN be physically moved by the opposing Pillbug on the next player’s turn. The Mosquito can mimic either the movement OR special ability of the Pillbug, EVEN WHEN the Pillbug it is touching has been rendered immobile by the opposing Pillbug (as described above). A Pillbug under a Beetle (or Mosquito acting as a Beetle) CANNOT move OR use its ability, like any piece trapped under a stack.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/139666"
+      }
+    }
+  },
+  "a-game-of-thrones-the-board-game-second-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "A Game of Thrones: The Board Game (Second Edition) – A Dance with Dragons": {
+        "adds": "A Dance with Dragons is the first expansion for A Game of Thrones: The Board Game (Second Edition). This exciting new scenario recasts the intrigues of the game in the time frame of A Dance with Dragons. The expansion consists of forty-two alternate House cards and an alternate setup to reflect each House’s position in Westeros.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/124693"
+      },
+      "A Game of Thrones: The Board Game (Second Edition) – A Feast for Crows": {
+        "adds": "A Feast for Crows is the second expansion for A Game of Thrones: The Board Game (Second Edition). This four-player scenario includes setup instructions and adds house cards for House Arryn. Also introduced is a deck of Objective cards and four Special Objective cards, one for each House, that alter the way players score Victory Points.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/140261"
+      },
+      "A Game of Thrones: The Board Game (Second Edition) – Mother of Dragons": {
+        "adds": "Cross the Narrow Sea with the Mother of Dragons expansion for A Game of Thrones: The Board Game! Clawing their way into power, this expansion includes a side board of the Free Cities of Essos and an overlay of the Eyrie, as well as new characters and mechanics to bring House Targaryen and House Arryn into the fray. As you make your claim to the Iron Throne, you can call other Houses to your cause with the new vassal mechanic, or even ask for aid from the Iron Bank of Braavos. But be cautious, for the Iron Bank will have its due, and if your campaign proves to be a poor investment, the money lenders' retribution will be swift.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/257496"
+      }
+    }
+  },
+  "blood-rage": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Blood Rage: 5th Player Expansion": {
+        "adds": "The Blood Rage: 5th Player Expansion introduces the mighty Ram clan into Blood Rage! This clan comes complete with 8 Warrior figures (in two different sculpts), 1 Leader Figure, 1 Ship figure, 1 Clan Sheet, 1 Plastic Glory Marker, 4 cardboard Clan tokens, 11 small colored bases, and 2 large colored bases. This expansion introduces the option of playing Blood Rage with 5 players. The game board supports this by simply not having any province destroyed by Ragnarök before the beginning of the game. However, more players need more cards, so this expansion box comes with 24 \"Gods' Gifts\" cards (8 for each Age deck). All of these cards have the \"5+\" players pre-requisite listed on them. While most of them are extra copies of cards from the base game, there are a few new ones, like the \"Widespread!\" Quest, where you need to dominate any 2 provinces.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/174506"
+      },
+      "Blood Rage: Gods of Ásgard": {
+        "adds": "The Gods of Ásgard expansion: Only two gods will be part of each game session. Randomly draw two god cards and place them next to the board so all players can see their powers. At the end of the initial setup, shuffle the Ragnarök tokens that are not on the board or on the Age Track and draw two of them. Look at the names of the two provinces listed on the tokens and place one god figure in each of them (these Ragnarök tokens are then put aside). Each god's ability is always in effect, changing the rules of the province they're in. The rest of the provinces are not affected. After a player attempts to pillage a province containing a god figure, whether he succeeds in the pillaging or not, he must then move the god to a different unpillaged province that does not contain a god figure. So the two gods can never occupy the same province, and they never go to a pillaged or destroyed province. At the beginning of the 2nd and 3rd Ages, the two gods are again placed in random provinces, determined by drawing 2 unused Ragnarök tokens. The combination of the two gods used in each game creates a unique texture to that session. They affect draft choices and influence the flow of the battles. Will you try to benefit from a god's power again and again by moving him where you want and always pillaging his province? Or will you do your best to neutralize him by pillaging around his province? Perhaps you'll want to attempt a hopeless pillage on his province just to move him onto another province where he will hinder another player's plans. They add a whole new layer to the game, without adding hardly any complexity to the rules. The miniatures each come with a tarot-sized God card.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/174801"
+      },
+      "Blood Rage: Mystics of Midgard": {
+        "adds": "Known by many names (Seiðmenn, Völva, Vísendakona, etc.) and possessed of different powers granted by their connection to the gods, these warrior-shamans will be a boon to any clan able to recruit them! Mystics are special units (neither Warrior nor Monster) that players can only employ once they've given their clan one of the Mystic Clan Upgrades. Each of these Clan upgrades adds 1 Mystic figure to your clan's reserves, which you can then use to Invade and battle normally. All Mystics have STR 2 and the special ability that allows them to Invade at no Rage cost. Clans are only able to recruit a maximum of 2 Mystics. Besides adding Mystics to your reserves, each of these Clan Upgrades grants your Mystics a special ability. If you collect several different upgrades, each of your Mystics will posses all the abilities you accumulated, making them incredibly resourceful and strategic additions to your clan!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/175100"
+      }
+    }
+  },
+  "gloomhaven": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Gloomhaven: Solo Scenarios": {
+        "adds": "A set of scenarios specifically designed for strategic solo play - scenarios that would highlight the strengths and weaknesses of each class and force players to really get under the hood and learn to play each class masterfully. This includes a 24-page scenario book of 17 all-new solo scenarios and a deck of 17 item cards - rewards for completing each of the missions. These scenarios are locked until the town has achieved prosperity level 3 and two characters have retired. Further, a character entering one of the scenarios must be at least level 5.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/226868"
+      }
+    }
+  },
+  "mage-knight-board-game": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Mage Knight Board Game: Krang Character Expansion": {
+        "adds": "Krang is here! Let Chaos reign! The Mage Knight Board Game: Krang Character Expansion includes all that players need to add Krang, the mysterious and dangerous Orc Chaos Shaman, as a new playable character to the Mage Knight Board Game, including his prepainted miniature, unique starting cards, and skill tokens.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/144763"
+      },
+      "Mage Knight Board Game: Shades of Tezla Expansion": {
+        "adds": "Mage Knight Board Game: Shades of Tezla Expansion is the third expansion to Vlaada Chvátil's critically acclaimed epic fantasy hit of 2011! Battle against two factions as they war for control of the legacy of the Wizard Tezla. Step into the shoes of an all new Mage Knight, the Storm Druid Braevalar, as he emerges from the forest to bring an end to the destruction caused by the war between the Avatars of Tezla.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/176130"
+      },
+      "Mage Knight Board Game: The Lost Legion Expansion": {
+        "adds": "Stories about General Volkare and his Lost Legion are whispered amongst the Atlanteans – some in hope, all with at least a sliver of fear. Now with word of what appears to be Volkare and his Lost Legion reappearing and yet another new Mage Knight to contend with, the scattered forces across the land are deciding which side is likely to be victorious. Are the Mage Knights the lesser of evils, or is Volkare the true savior they have been waiting for? Continuing the saga of the worldwide acclaimed hit Mage Knight Board Game, designer Vlaada Chvatil and WizKids present Mage Knight Board Game: The Lost Legion, an expansion that offers players a new Mage Knight — Wolfhawk — and also adds a new foe for the Mage Knights: the mysterious and powerful General Volkare! Included in the expansion set are new location tiles, enemy/ruin tokens, Unit cards, Advanced Action cards, Artifact cards, Spell cards and a rulebook expansion that features new game scenarios and rules to support play for five players. Whether you and your fellow Mage Knights decide to work together or at cross purposes this expansion supports new play styles and tactics and a new foe that can challenge even the most veteran players.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/130704"
+      }
+    }
+  },
+  "sidereal-confluence": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Sidereal Confluence: Bifurcation": {
+        "adds": "Sidereal Confluence: Bifurcation includes variations on each of the nine original species, providing entirely new mechanisms, new strategies, and new avenues for negotiation! These variants represent different aspects or factions within their societies — from Deep Unity to the Zeth-Charity Syndicate. The alternate versions may be freely intermixed with the originals, but both versions of a species may not be used in the same game. This expansion features iconography and graphic design that match the Remastered Edition of Sidereal Confluence; however, since so few components in the game are randomized, you should be able to use it with the original edition without too much difficulty.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/349344"
+      }
+    }
+  },
+  "war-of-the-ring-second-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "War of the Ring: Lords of Middle-earth": {
+        "adds": "What if the Keepers of the Elven Rings had used their Rings of Power to challenge the might of the Dark Lord? What if the Balrog had risen out of Moria to bring fire and fury to the lands of the Free Peoples? What if the Council of Elrond had decided differently regarding the Fellowship of the Ring? With Lords of Middle-earth, the first expansion for the War of the Ring (second edition) board game, players may explore these possibilities together with many other ones to create fresh gaming opportunities and new strategies. Important personalities, previously featured in the game only through Event Cards, are represented by specific figures and rules. New Characters include Elrond, Galadriel, Sméagol, Gothmog, and the powerful Balrog of Moria, as well as alternate versions of Gandalf, the Witch-king, and the Mouth of Sauron. New special Action Dice are included: Elven Ring Keepers dice for the Free Peoples player and Lesser Minion dice for the Shadow player. New versions of all the Companions of the Fellowship of the Ring are also included, to play the optional \"Council of Rivendell\" rules. As an added bonus, figures for Aragorn and Gandalf the White are provided, accessories to the game that fans have been eagerly awaiting! This is your chance to forge the destiny of an age...",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/122328"
+      },
+      "War of the Ring: Warriors of Middle-earth": {
+        "adds": "War of the Ring: Warriors of Middle-earth includes Ents, Dead Men of Dunharrow, Great Eagles of the Misty Mountains, Corsairs of Umbar, Wild Hilmen from Dunland, and Giant Spiders, and with this new expansion for War of the Ring (second edition), these warriors and creatures of Middle-earth – previously featured only as special Event Cards – will become an essential part of the game, with unique figures and specific abilities. Warriors of Middle-earth also presents new mechanisms to enhance the game. Faction Dice and Faction Events, used together with the new figures, open up new and exciting strategies and make the War of the Ring (second edition) even more challenging and fun.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/179404"
+      }
+    }
+  },
+  "warhammer-underworlds-shadespire": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Warhammer Underworlds: Shadespire – Ironskull's Boyz": {
+        "adds": "Introduce a new and unique warband to your games of Warhammer Underworlds: Shadespire and take advantage of new and different ways to play – whatever warband you use – with this set of miniatures and cards. It includes 4 Orruk miniatures and a deck of 60 cards, 30 of which are universal, to be used by any and every warband – add these cards to your arsenal and build your perfect deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/238542"
+      },
+      "Warhammer Underworlds: Shadespire – Magore's Fiends": {
+        "adds": "The Magore's Fiends expansion for Warhammer Underworlds: Shadespire includes 4 Easy To Build red plastic miniatures - The Blood Warriors Magore Redhand, Ghartok Flayskull and Zharkus the Bloodsighted, and Riptooth, a daemonic Flesh Hound of Khorne. Each is a powerful fighter, heavily armed and armoured, and ready to bring ruin to their foes and honour to the Blood God. Also included are 60 new cards to add to your collection, including 30 universal cards that can be used by any warband - add these cards to your arsenal and build your perfect deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/250462"
+      },
+      "Warhammer Underworlds: Shadespire – Sepulchral Guard": {
+        "adds": "Introduce a new and unique warband to your games of Warhammer Underworlds: Shadespire and take advantage of new and different ways to play – whatever warband you use – with this set of miniatures and cards. It includes 7 Skeleton miniatures and a deck of 60 cards, 30 of which are universal, to be used by any and every warband – add these cards to your arsenal and build your perfect deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/238541"
+      },
+      "Warhammer Underworlds: Shadespire – Spiteclaw's Swarm": {
+        "adds": "Includes 5 Skaven miniatures and a deck of 60 cards, 30 of which are universal, to be used by any and every warband – add these cards to your arsenal and build your perfect deck. - 5 Easy To Build, brown plastic Skaven miniatures: Skritch Spiteclaw, Krrk the Almost-Trusted, Lurking Skaven, Hungering Skaven, and Festering Skaven;",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/246472"
+      },
+      "Warhammer Underworlds: Shadespire – The Chosen Axes": {
+        "adds": "Includes 4 Fyreslayers miniatures and a deck of 60 cards, 30 of which are universal, to be used by any and every warband – add these cards to your arsenal and build your perfect deck. - 4 Easy To Build, orange plastic Fyreslayers miniatures: Fjul-Grimnir, Tef Flamebearer, Mad Maegrim, and Vol Orrukbane;",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/246473"
+      },
+      "Warhammer Underworlds: Shadespire – The Farstriders": {
+        "adds": "The Farstriders expansion for Warhammer Underworlds: Shadespire includes 3 Easy To Build blue plastic miniatures – Sanson Farstrider and his comrades Almeric Eagle-Eye and Elias Swiftblade. These fighters are swift, well armoured and carry ranged weapons, giving them a unique style of play unlike any other warband. Also included are 60 new cards to add to your collection, including 30 universal cards that can be used by any warband - add these cards to your arsenal and build your perfect deck.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/250464"
+      }
+    }
+  },
+  "moonrakers-titan-edition": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Binding Ties": {
+        "adds": "As the UA consolidates power in the surrounding planet clusters, the Moonrakers have finally begun to rise above their petty conflicts and unite under one banner. In the Binding Ties Expansion, players will gain additional rewards from allying with each other as they gain Faction Reputation with the great houses that each player represents. Each player has a new Faction Reputation Terminal on which they track their relationship with the various factions, gaining Reputation when they complete a Contract with a great houses’ champion, or losing it if they fail. The Reputation can mean the difference between completing a Contract or failing, as it can be spent for various rewards like gaining cards or actions, but if carefully saved throughout the game it can even mean gaining additional Prestige.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366450"
+      },
+      "Overload": {
+        "adds": "As the Moonrakers’ influence and population grew, so did the opposition from the Utopian Alliance. Backed into a corner, the Moonrakers entered a new wave of technological advancements. At the center of this innovation was the creation of the IOspheres: a powerful, albeit unstable, energy source that powered a new fleet of ship parts. Armed with these advancements, the Moonrakers are once again emboldened to explore, defend, and even push back into UA territory. The Overload adds new Advanced Action Cards, Contract types, and tokens called IOspheres. Overload also doubles the number of Ship Parts and Crew in the game. Players can discover new synergies and advanced mechanics, allowing them to gain more control of their deck composition.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366451"
+      },
+      "Nomad": {
+        "adds": "The Moonraker’s five factions have continued to grow roots throughout the system: establishing defenses, trade networks, and even a loose intergovernmental organization simply called the Council. The Nomad expansion adds global events, overhauls the Contract system,and adds new prototype Ship Parts to the game. Each turn a new Event card is revealed. These events can provide challenges, rewards, or even allow players to vote on policies that change the rules. Each Moonrakers faction operates out of their own sector and offers Contracts that align with its goals. Players travel between these sectors to find Contracts that fit their strengths.",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgameexpansion/366452"
+      }
+    }
+  },
+  "mythic-mischief": {
+    "storedInBaseBox": false,
+    "expansions": {
+      "Vol. II": {
+        "adds": "In the standalone sequel to Mythic Mischief, you play as a faction of Mythic Manor students competing to get as many of the other students caught by the Groundskeeper as you can without getting caught yourself. The Gargoyles, Gnomes, Werewolves, and Fairies each have their own unique set of abilities to move around the board, move the other factions into the path of the Groundskeeper, and even alter the course of the Groundskeeper by moving hedge walls. Players are able to upgrade their Faction’s abilities throughout the game by collecting powerful Tomes from around the hedge maze. The winner is the first Team to score 10 Mischief Points or the Team with the most points when the Groundskeeper finishes returning all of the Tomes after lunch!",
+        "source": "BoardGameGeek",
+        "sourceUrl": "https://boardgamegeek.com/boardgame/400617"
       }
     }
   }

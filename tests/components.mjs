@@ -74,6 +74,11 @@ Object.keys(data).forEach(function (slug) {
 
 assert(data.cascadia && data.cascadia.source === "rulebook", "cascadia rulebook");
 assert(data.cascadia.items.some(function (item) { return item.count === "85" && /Habitat Tiles/.test(item.name); }), "cascadia 85");
+assert(data.hive.expansions["Hive: The Mosquito"].items.some((item) => item.count === "1" && item.name === "white Mosquito" && item.expansion[0] === "Hive: The Mosquito"), "hive mosquito tile");
+assert(data["blood-rage"].source === "bgg" && data["blood-rage"].expansions["Blood Rage: Mystics of Midgard"].items.some((item) => item.count === "10" && /Mystic miniatures/.test(item.name)), "blood rage mystics");
+assert(data["war-of-the-ring-second-edition"].expansions["War of the Ring: Lords of Middle-earth"].items.some((item) => item.count === "8" && item.name === "plastic figures"), "lords figures");
+assert(data["mage-knight-board-game"].expansions["Mage Knight Board Game: Krang Character Expansion"].bggId === "144763", "krang component list");
+assert(data["mage-knight-board-game"].expansions["Mage Knight Board Game: Shades of Tezla Expansion"].items.some((item) => item.count === "24" && item.name === "Faction Tokens"), "tezla faction tokens");
 assert(data.azul && data.azul.source === "bgg", "azul is the bgg fallback");
 assert(/BoardGameGeek/.test(data.azul.label), "azul labeled");
 assert(!data["sky-team"], "no checklist without a source");
@@ -84,7 +89,7 @@ assert(wiki && wiki.items.length === 3, "wiki parser stops at the next section")
 assert(wiki.items[0].count === "85" && wiki.items[0].name === "Habitat Tiles", "wiki count");
 
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.20\.19";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.21\.1";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components.json is a shell file");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
