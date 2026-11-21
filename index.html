@@ -3035,37 +3035,39 @@
   }
 
   #app-update {
-    position:fixed;
-    left:12px;
-    right:12px;
-    bottom:max(12px, env(safe-area-inset-bottom));
-    z-index:30;
     display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    align-items:center;
-    justify-content:space-between;
-    width:min(520px, calc(100% - 24px));
-    margin:0 auto;
-    padding:12px 14px;
-    border-radius:14px;
-    background:var(--card);
-    color:var(--fg);
-    border:1px solid var(--border);
-    box-shadow:0 8px 28px rgba(0,0,0,0.2);
+    justify-content:center;
+    width:100%;
+    max-width:1000px;
+    margin:8px auto 0;
+    padding:0;
+    border:0;
+    background:transparent;
   }
   #app-update[hidden] { display:none; }
-  #app-update p { margin:0; font-weight:650; }
   #app-update button {
     min-height:44px;
+    max-width:calc(100% - 8px);
     padding:8px 14px;
+    border-radius:999px;
     border:0;
-    border-radius:10px;
-    background:var(--brand);
-    color:#fff;
+    background:#fff;
+    color:#111;
     font:inherit;
-    font-weight:700;
+    font-size:14px;
+    font-weight:650;
   }
+  #offline-flag {
+    margin:0;
+    padding:4px 8px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.16);
+    color:#fff;
+    font-size:12px;
+    font-weight:650;
+    line-height:1.2;
+  }
+  #offline-flag[hidden] { display:none; }
 
 </style>
 <link rel="stylesheet" href="./game-night.css">
@@ -3079,16 +3081,16 @@
     </a>
 
     <div class="spacer"></div>
+    <p id="offline-flag" hidden>Offline</p>
 
     <a class="toggle" href="./game-day.html">Game Day</a>
     <a class="header-night" href="#/night">Game night</a>
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
+  <div id="app-update" hidden role="status" aria-live="polite">
+    <button type="button" id="app-update-refresh">Update available, tap to refresh</button>
+  </div>
 </header>
-<div id="app-update" hidden role="status" aria-live="polite">
-  <p>Update available. Tap to refresh.</p>
-  <button type="button" id="app-update-refresh">Refresh</button>
-</div>
 
 <main>
   <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a></p>
@@ -155798,6 +155800,8 @@
   var updateHooksBound = false;
   var cacheMsgSeq = 0;
   var rememberedOffline = {};
+  var pendingRemote = "";
+  var lastProbe = 0;
 
   function gamePathnameSlug(pathname) {
     var path = pathname == null ? (window.location.pathname || "") : String(pathname);
@@ -155827,18 +155831,133 @@
       return !!(at && Date.now() - at < 15000);
     } catch (err) { return false; }
   }
+  function updateTries() {
+    try { return parseInt(sessionStorage.getItem("bgq_update_tries") || "0", 10) || 0; }
+    catch (err) { return 0; }
+  }
+  function noteUpdateTry() {
+    try { sessionStorage.setItem("bgq_update_tries", String(updateTries() + 1)); } catch (err) {}
+  }
+  function clearUpdateTries() {
+    try { sessionStorage.removeItem("bgq_update_tries"); } catch (err) {}
+  }
+  function alreadyApplied(remote) {
+    try { return sessionStorage.getItem("bgq_updated_to") === remote; }
+    catch (err) { return false; }
+  }
+  function rememberApplied(remote) {
+    try { if (remote) sessionStorage.setItem("bgq_updated_to", remote); } catch (err) {}
+  }
+  function swRegisterUrl() {
+    try {
+      var saved = localStorage.getItem("bgq_sw_script");
+      if (saved && /^\.\/sw\.js\?v=[A-Za-z0-9._-]+$/.test(saved)) return saved;
+    } catch (err) {}
+    return "./sw.js";
+  }
+  function rememberSwScript(url) {
+    try { localStorage.setItem("bgq_sw_script", url); } catch (err) {}
+  }
+  function versionFromScript(text) {
+    var match = String(text || "").match(/var VERSION = "([^"]+)"/);
+    return match ? match[1] : "";
+  }
+  function controllerVersion() {
+    return new Promise(function (resolve) {
+      var worker = ("serviceWorker" in navigator) && navigator.serviceWorker.controller;
+      if (!worker) { resolve(""); return; }
+      var timer = setTimeout(function () {
+        navigator.serviceWorker.removeEventListener("message", onMsg);
+        resolve("");
+      }, 1500);
+      function onMsg(event) {
+        var data = event.data || {};
+        if (data.type !== "VERSION") return;
+        clearTimeout(timer);
+        navigator.serviceWorker.removeEventListener("message", onMsg);
+        resolve(data.version || "");
+      }
+      navigator.serviceWorker.addEventListener("message", onMsg);
+      try { worker.postMessage({ type: "GET_VERSION" }); }
+      catch (err) {
+        clearTimeout(timer);
+        navigator.serviceWorker.removeEventListener("message", onMsg);
+        resolve("");
+      }
+    });
+  }
+  function considerRemote(remote) {
+    if (!remote) return;
+    controllerVersion().then(function (current) {
+      if (!current || remote === current) {
+        pendingRemote = "";
+        if (remote && remote === current) clearUpdateTries();
+        return;
+      }
+      pendingRemote = remote;
+      /* One automatic refresh per version. A game page only shows the prompt. */
+      var auto = updateIsSafe() && !recentlyTriedUpdate() && !alreadyApplied(remote) && updateTries() < 1;
+      if (auto) {
+        noteUpdateTry();
+        applyUpdate();
+        return;
+      }
+      showUpdateBanner();
+    });
+  }
+  function probeRemoteVersion() {
+    /* Bare /sw.js can stay on the edge for hours. A unique query misses that entry. */
+    if (!("serviceWorker" in navigator) || !navigator.serviceWorker.controller) return;
+    var now = Date.now();
+    if (now - lastProbe < 2000) return;
+    lastProbe = now;
+    fetch("./sw.js?bgq-check=" + now, { cache: "no-store", credentials: "same-origin" })
+      .then(function (res) { return res && res.ok ? res.text() : ""; })
+      .then(function (text) { considerRemote(versionFromScript(text)); })
+      .catch(function () {});
+  }
+  function applyVersionedWorker(target) {
+    var scriptUrl = "./sw.js?v=" + encodeURIComponent(target);
+    rememberSwScript(scriptUrl);
+    rememberApplied(target);
+    return navigator.serviceWorker.register(scriptUrl, { updateViaCache: "none" }).then(function (reg) {
+      activeRegistration = reg;
+      function kick(worker) {
+        if (!worker) return;
+        waitingWorker = worker;
+        if (worker.state === "installed") worker.postMessage({ type: "SKIP_WAITING" });
+        else worker.addEventListener("statechange", function () {
+          if (worker.state === "installed") worker.postMessage({ type: "SKIP_WAITING" });
+        });
+      }
+      kick(reg.installing);
+      kick(reg.waiting);
+      reg.addEventListener("updatefound", function () { kick(reg.installing); });
+    });
+  }
   function applyUpdate() {
     if (updateApplied) return;
     updateApplied = true;
     expectReload = true;
     try { sessionStorage.setItem("bgq_skip_auto_update", String(Date.now())); } catch (err) {}
-    if (waitingWorker) waitingWorker.postMessage({ type: "SKIP_WAITING" });
+    var target = pendingRemote;
+    if (waitingWorker) {
+      if (target) rememberApplied(target);
+      waitingWorker.postMessage({ type: "SKIP_WAITING" });
+      setTimeout(function () { window.location.reload(); }, 1500);
+      return;
+    }
+    if (target) {
+      applyVersionedWorker(target).catch(function () {});
+      setTimeout(function () { window.location.reload(); }, 1500);
+      return;
+    }
     setTimeout(function () { window.location.reload(); }, 1500);
   }
   function offerUpdate(worker) {
     if (!worker) return;
     waitingWorker = worker;
-    if (updateIsSafe() && !recentlyTriedUpdate()) applyUpdate();
+    if (updateIsSafe() && !recentlyTriedUpdate() && !alreadyApplied(pendingRemote)) applyUpdate();
     else showUpdateBanner();
   }
   function watchWorker(worker) {
@@ -155863,20 +155982,22 @@
     var refreshBtn = document.getElementById("app-update-refresh");
     if (refreshBtn) refreshBtn.addEventListener("click", applyUpdate);
     window.addEventListener("hashchange", function () {
-      if (!waitingWorker && !activatedElsewhere) return;
+      if (!waitingWorker && !activatedElsewhere && !pendingRemote) return;
       if (!updateIsSafe()) return;
       applyUpdate();
     });
     document.addEventListener("visibilitychange", function () {
-      if (document.visibilityState === "visible" && activeRegistration) {
-        activeRegistration.update().catch(function () {});
-      }
+      if (document.visibilityState !== "visible") return;
+      if (activeRegistration) activeRegistration.update().catch(function () {});
+      probeRemoteVersion();
     });
     window.addEventListener("focus", function () {
       if (activeRegistration) activeRegistration.update().catch(function () {});
+      probeRemoteVersion();
     });
     window.addEventListener("pageshow", function () {
       if (activeRegistration) activeRegistration.update().catch(function () {});
+      probeRemoteVersion();
     });
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.addEventListener("controllerchange", function () {
@@ -155884,7 +156005,12 @@
           hadController = true;
           return;
         }
-        if (expectReload || updateIsSafe()) {
+        var wanted = requestedVersion();
+        /* A tap already asked for this generation, including on a game page. */
+        if (expectReload || updateIsSafe() || wanted) {
+          if (wanted) {
+            try { sessionStorage.removeItem("bgq_updated_to"); } catch (err) {}
+          }
           window.location.reload();
           return;
         }
@@ -155894,19 +156020,49 @@
       });
     }
   }
+  function requestedVersion() {
+    try { return sessionStorage.getItem("bgq_updated_to") || ""; }
+    catch (err) { return ""; }
+  }
+  function finishRequestedUpdate(reg) {
+    var wanted = requestedVersion();
+    if (!wanted || !reg) return;
+    controllerVersion().then(function (current) {
+      if (!requestedVersion()) return;
+      if (current === wanted) {
+        try { sessionStorage.removeItem("bgq_updated_to"); } catch (err) {}
+        clearUpdateTries();
+        return;
+      }
+      function kick(worker) {
+        if (!worker) return;
+        if (worker.state === "installed") worker.postMessage({ type: "SKIP_WAITING" });
+        else worker.addEventListener("statechange", function () {
+          if (worker.state === "installed") worker.postMessage({ type: "SKIP_WAITING" });
+        });
+      }
+      kick(reg.installing);
+      kick(reg.waiting);
+    });
+  }
   function registerSw() {
     if (!("serviceWorker" in navigator) || swAttempts >= 2) return;
     swAttempts += 1;
     bindUpdateHooks();
-    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
+    navigator.serviceWorker.register(swRegisterUrl(), { updateViaCache: "none" }).then(function (reg) {
       activeRegistration = reg;
       watchWorker(reg.installing);
       watchWorker(reg.waiting);
       reg.addEventListener("updatefound", function () { watchWorker(reg.installing); });
-      setTimeout(function () { reg.update().catch(function () {}); }, 5000);
+      finishRequestedUpdate(reg);
+      setTimeout(function () {
+        reg.update().catch(function () {});
+        probeRemoteVersion();
+      }, 5000);
       if (!window._bgqUpdateTimer) {
         window._bgqUpdateTimer = setInterval(function () {
           if (activeRegistration) activeRegistration.update().catch(function () {});
+          probeRemoteVersion();
         }, 60 * 60 * 1000);
       }
     }).catch(function (err) {
@@ -155915,6 +156071,16 @@
     });
   }
   registerSw();
+
+  function syncOfflineFlag() {
+    var el = document.getElementById("offline-flag");
+    if (!el) return;
+    el.hidden = navigator.onLine !== false;
+  }
+  window.addEventListener("online", syncOfflineFlag);
+  window.addEventListener("offline", syncOfflineFlag);
+  window.addEventListener("pageshow", syncOfflineFlag);
+  syncOfflineFlag();
 
   function sameOriginAsset(url) {
     var raw = String(url || "").trim();
@@ -155958,6 +156124,9 @@
     var rootUrl = new URL((basePath() || "") + "/", window.location.origin);
     add(new URL("index.html", rootUrl).href);
     add(new URL("offline.html", rootUrl).href);
+    add(new URL("selection.mjs", rootUrl).href);
+    add(new URL("expansion-guides.json", rootUrl).href);
+    add(absoluteGameUrl(slug));
     add(rootUrl.href);
     add(coverUrl(slug));
     var game = DATA[slug];
@@ -155977,7 +156146,6 @@
       });
     }
     add(basePath() + "/setup-photos/" + encodeURIComponent(slug) + ".json");
-    add(basePath() + "/expansion-guides.json");
     if (includeSearch) add(basePath() + "/rulebooks/index/" + encodeURIComponent(slug) + ".json");
     return loadSetupPhotoSpec(slug).then(function (spec) {
       addSetupSpecImages(spec, add);
@@ -159638,7 +159806,7 @@
     if (current !== dest) {
       history.pushState(null, "", dest);
       render();
-      if ((waitingWorker || activatedElsewhere) && updateIsSafe()) applyUpdate();
+      if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
     } else {
       scrollPageToTop();
     }
@@ -160279,7 +160447,7 @@
   var EXPANSION_MAPPED = {
     name: 1, bggId: 1, setup: 1, quickStart: 1, rules: 1, reminders: 1, scoring: 1,
     teachingScript: 1, playerAids: 1, rulebook: 1, youtube: 1, cover: 1,
-    rulesStatus: 1, bgStatsUrl: 1
+    rulesStatus: 1, bgStatsUrl: 1, owners: 1
   };
   function expansionUnmapped(exp) {
     if (!exp || typeof exp !== "object") return [];
@@ -163807,7 +163975,7 @@
   window.addEventListener("hashchange", render);
   window.addEventListener("popstate", function () {
     render();
-    if ((waitingWorker || activatedElsewhere) && updateIsSafe()) applyUpdate();
+    if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
   });
   window.addEventListener("resize", function () {
     syncHeaderOffset();
@@ -163835,9 +164003,40 @@
       .catch(function () {});
   }
 
+  function warmCollection() {
+    /* Collection pages and their small setup files only. No PDFs, covers, or rulebook indexes. */
+    if (!("serviceWorker" in navigator) || navigator.onLine === false) return;
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn && (conn.saveData || conn.effectiveType === "slow-2g" || conn.effectiveType === "2g")) return;
+    var urls = [];
+    Object.keys(DATA).forEach(function (slug) {
+      var game = DATA[slug];
+      if (!game || game.mine !== true) return;
+      urls.push(absoluteGameUrl(slug));
+      urls.push(new URL((basePath() || "") + "/setup-photos/" + encodeURIComponent(slug) + ".json", window.location.origin).href);
+    });
+    var index = 0;
+    function schedule() {
+      if (navigator.onLine === false || index >= urls.length) return;
+      var run = function () {
+        if (navigator.onLine === false || index >= urls.length) return;
+        var batch = urls.slice(index, index + 6);
+        index += batch.length;
+        cacheUrls(batch, false).then(function (result) {
+          if (result && result.quota) return;
+          schedule();
+        }).catch(function () {});
+      };
+      if (window.requestIdleCallback) requestIdleCallback(run, { timeout: 5000 });
+      else setTimeout(run, 400);
+    }
+    navigator.serviceWorker.ready.then(function () { schedule(); }).catch(function () {});
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     render();
     loadLayoutFixture();
+    warmCollection();
   });
 })();
 </script>

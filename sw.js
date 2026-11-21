@@ -9,9 +9,11 @@
    Cross-origin requests are never intercepted. That includes the rulebook
    relay, publisher PDFs, cover CDNs, fonts, and Game Day RSVPs posted to
    script.google.com. RSVP and food responses are never cached. Same-origin
-   PDFs are not cached either.
+   PDFs are not cached either. A cache-busted read of this file is left
+   to the network so the page can compare it with GET_VERSION. Bare
+   /sw.js may be edge-cached for hours.
 */
-var VERSION = "2026.11.21.4";
+var VERSION = "2026.11.21.5";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
@@ -33,7 +35,9 @@ var SHELL_FILES = [
   "./game-night.js",
   "./game-night.css",
   "./expansion-guides.json",
-  "./components.json"
+  "./components.json",
+  "./selection.mjs",
+  "./data/game-days.json"
 ];
 var lastQuota = false;
 
@@ -204,6 +208,7 @@ function classify(href, response) {
   var type = (response.headers.get("content-type") || "").toLowerCase();
   if (type.indexOf("text/html") !== -1 || /\/(?:index|offline)\.html$/i.test(path) || path.endsWith("/")) return "html";
   if (type.indexOf("json") !== -1 || /\.json$/i.test(path)) return "json";
+  if (/\.(?:mjs|js|css)$/i.test(path) || type.indexOf("javascript") !== -1 || type.indexOf("text/css") !== -1) return "script";
   if (type.indexOf("image/") !== -1 || /\.(?:png|webp|gif|jpe?g|svg|ico|avif)$/i.test(path)) return "image";
   return "";
 }
@@ -236,8 +241,8 @@ function cacheOne(raw, pin) {
           return safePut(cache, indexUrl, response);
         });
       });
-    } else if (kind === "json") {
-      stored = caches.open(DATA).then(function (cache) {
+    } else if (kind === "json" || kind === "script") {
+      stored = caches.open(kind === "script" ? SHELL : DATA).then(function (cache) {
         return safePut(cache, href, response);
       });
     } else {
@@ -283,6 +288,11 @@ function cacheUrlList(urls, pin) {
 
 self.addEventListener("message", function (event) {
   var data = event.data || {};
+  if (data.type === "GET_VERSION") {
+    var reply = { type: "VERSION", version: VERSION };
+    if (event.source && event.source.postMessage) event.source.postMessage(reply);
+    return;
+  }
   if (data.type === "SKIP_WAITING") {
     self.skipWaiting();
     return;
@@ -377,7 +387,7 @@ self.addEventListener("fetch", function (event) {
   /* Same-origin scripts and styles for Game Day and Game Night.
      Cross-origin requests already returned above, including script.google.com,
      and are not cached. */
-  if (/\.(?:js|css)$/i.test(url.pathname)) {
+  if (/\.(?:mjs|js|css)$/i.test(url.pathname)) {
     var assetGate = gate();
     event.waitUntil(assetGate.promise);
     event.respondWith(fetch(new Request(request.url, {

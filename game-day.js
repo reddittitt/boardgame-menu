@@ -1447,29 +1447,138 @@
 
   function registerSw() {
     if (!("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
-      function prompt(worker) {
-        if (!worker || !navigator.serviceWorker.controller) return;
-        var bar = document.getElementById("app-update");
-        var refresh = document.getElementById("app-update-refresh");
-        if (!bar || !refresh) return;
-        bar.hidden = false;
-        refresh.onclick = function () {
-          worker.postMessage({ type: "SKIP_WAITING" });
-          window.location.reload();
-        };
+    var waitingWorker = null;
+    var pendingRemote = "";
+    var lastProbe = 0;
+    var updateApplied = false;
+    var activeRegistration = null;
+    function showUpdateBanner() {
+      var bar = document.getElementById("app-update");
+      if (bar) bar.hidden = false;
+    }
+    function swRegisterUrl() {
+      try {
+        var saved = localStorage.getItem("bgq_sw_script");
+        if (saved && /^\.\/sw\.js\?v=[A-Za-z0-9._-]+$/.test(saved)) return saved;
+      } catch (err) {}
+      return "./sw.js";
+    }
+    function versionFromScript(text) {
+      var match = String(text || "").match(/var VERSION = "([^"]+)"/);
+      return match ? match[1] : "";
+    }
+    function controllerVersion() {
+      return new Promise(function (resolve) {
+        var worker = navigator.serviceWorker.controller;
+        if (!worker) { resolve(""); return; }
+        var timer = setTimeout(function () {
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          resolve("");
+        }, 1500);
+        function onMsg(event) {
+          var data = event.data || {};
+          if (data.type !== "VERSION") return;
+          clearTimeout(timer);
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          resolve(data.version || "");
+        }
+        navigator.serviceWorker.addEventListener("message", onMsg);
+        try { worker.postMessage({ type: "GET_VERSION" }); }
+        catch (err) {
+          clearTimeout(timer);
+          resolve("");
+        }
+      });
+    }
+    function considerRemote(remote) {
+      if (!remote) return;
+      controllerVersion().then(function (current) {
+        if (!current || remote === current) {
+          pendingRemote = "";
+          return;
+        }
+        pendingRemote = remote;
+        showUpdateBanner();
+      });
+    }
+    function probeRemoteVersion() {
+      if (!navigator.serviceWorker.controller) return;
+      var now = Date.now();
+      if (now - lastProbe < 2000) return;
+      lastProbe = now;
+      fetch("./sw.js?bgq-check=" + now, { cache: "no-store", credentials: "same-origin" })
+        .then(function (res) { return res && res.ok ? res.text() : ""; })
+        .then(function (text) { considerRemote(versionFromScript(text)); })
+        .catch(function () {});
+    }
+    function applyUpdate() {
+      if (updateApplied) return;
+      updateApplied = true;
+      var target = pendingRemote;
+      if (waitingWorker) {
+        waitingWorker.postMessage({ type: "SKIP_WAITING" });
+        setTimeout(function () { window.location.reload(); }, 400);
+        return;
       }
-      function watch(worker) {
-        if (!worker) return;
+      if (!target) {
+        window.location.reload();
+        return;
+      }
+      var scriptUrl = "./sw.js?v=" + encodeURIComponent(target);
+      try { localStorage.setItem("bgq_sw_script", scriptUrl); } catch (err) {}
+      try { sessionStorage.setItem("bgq_updated_to", target); } catch (err) {}
+      navigator.serviceWorker.register(scriptUrl, { updateViaCache: "none" }).then(function (reg) {
+        var worker = reg.installing || reg.waiting;
+        if (worker) worker.postMessage({ type: "SKIP_WAITING" });
+      }).catch(function () {});
+      setTimeout(function () { window.location.reload(); }, 1500);
+    }
+    function prompt(worker) {
+      if (!worker || !navigator.serviceWorker.controller) return;
+      waitingWorker = worker;
+      showUpdateBanner();
+      var refresh = document.getElementById("app-update-refresh");
+      if (refresh) refresh.onclick = applyUpdate;
+    }
+    function watch(worker) {
+      if (!worker) return;
+      if (worker.state === "installed") prompt(worker);
+      worker.addEventListener("statechange", function () {
         if (worker.state === "installed") prompt(worker);
-        worker.addEventListener("statechange", function () {
-          if (worker.state === "installed") prompt(worker);
-        });
-      }
+      });
+    }
+    var refresh = document.getElementById("app-update-refresh");
+    if (refresh) refresh.onclick = applyUpdate;
+    navigator.serviceWorker.register(swRegisterUrl(), { updateViaCache: "none" }).then(function (reg) {
+      activeRegistration = reg;
       watch(reg.installing);
       watch(reg.waiting);
       reg.addEventListener("updatefound", function () { watch(reg.installing); });
+      var wanted = "";
+      try { wanted = sessionStorage.getItem("bgq_updated_to") || ""; } catch (err) {}
+      if (wanted) {
+        var pending = reg.installing || reg.waiting;
+        if (pending && pending.state === "installed") pending.postMessage({ type: "SKIP_WAITING" });
+      }
+      setTimeout(probeRemoteVersion, 5000);
     }).catch(function () {});
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      var wanted = "";
+      try { wanted = sessionStorage.getItem("bgq_updated_to") || ""; } catch (err) {}
+      if (!wanted) return;
+      try { sessionStorage.removeItem("bgq_updated_to"); } catch (err) {}
+      window.location.reload();
+    });
+    window.addEventListener("focus", function () {
+      if (activeRegistration) activeRegistration.update().catch(function () {});
+      probeRemoteVersion();
+    });
+  }
+
+  function syncOfflineFlag() {
+    var el = document.getElementById("offline-flag");
+    if (!el) return;
+    el.hidden = navigator.onLine !== false;
   }
 
   function loadCatalog() {
@@ -1490,6 +1599,9 @@
 
   function init() {
     initTheme();
+    window.addEventListener("online", syncOfflineFlag);
+    window.addEventListener("offline", syncOfflineFlag);
+    syncOfflineFlag();
     Promise.all([
       fetch("./data/game-days.json", { cache: "no-store", credentials: "same-origin" }).then(function (res) {
         if (!res.ok) throw new Error("config");
