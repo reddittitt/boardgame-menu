@@ -12,7 +12,7 @@ async function loadChromium() {
 }
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const config = { version: "build-1", imageCap: 80, drop: false };
+const config = { version: "build-1", imageCap: 80, drop: false, freezeBare: false, frozenBare: "" };
 const failures = [];
 
 function assert(cond, message) {
@@ -47,6 +47,13 @@ function checkStatic() {
   assert(fetchAt > 0 && originAt > fetchAt && originAt < respondAt, "cross-origin requests return before respondWith");
   const pdfAt = sw.indexOf("url.pathname)) return;", fetchAt);
   assert(pdfAt > fetchAt && pdfAt < respondAt, "same-origin PDFs are not intercepted");
+  assert(sw.includes("./selection.mjs"), "selection.mjs is precached");
+  assert(sw.includes("./components.json"), "components.json is precached");
+  assert(sw.includes("./expansion-guides.json"), "expansion guide is precached");
+  assert(sw.includes("GET_VERSION"), "worker reports its version");
+  assert(/\\.\(\?:mjs\|js\|css\)/.test(sw), "mjs is cached with scripts");
+  assert(html.includes('id="offline-flag"'), "offline indicator");
+  assert(html.includes("Update available, tap to refresh"), "update prompt copy");
   const offline = read("offline.html").toString("utf8");
   assert(offline.includes("You're offline"), "offline page copy");
   assert(!offline.includes("owner"), "offline page has no owner name");
@@ -112,6 +119,11 @@ function serveFile(req, res) {
     let text = body.toString("utf8");
     text = text.replace(/var VERSION = "[^"]+";/, 'var VERSION = "' + config.version + '";');
     text = text.replace(/var IMAGE_CAP = \d+;/, "var IMAGE_CAP = " + config.imageCap + ";");
+    const bare = req.url.split("?")[0] === req.url;
+    if (config.freezeBare && bare) {
+      if (!config.frozenBare) config.frozenBare = text;
+      text = config.frozenBare;
+    }
     body = Buffer.from(text);
   } else if (rel === "index.html") {
     let text = body.toString("utf8");
@@ -246,6 +258,7 @@ async function main() {
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForSelector("h2.title");
     assert((await page.locator("h2.title").innerText()) === "Azul", "offline game title");
+    assert(await page.locator("#offline-flag").isVisible(), "offline indicator while offline");
     await page.waitForFunction(function () {
       const img = document.querySelector("#setup-photo img");
       return img && img.complete && img.naturalWidth > 0;
@@ -284,6 +297,7 @@ async function main() {
     assert(bumped, "version bump request");
     await page.evaluate(function () { return navigator.serviceWorker.getRegistration().then(function (reg) { return reg.update(); }); });
     await page.waitForSelector("#app-update:not([hidden])");
+    assert((await page.locator("#app-update-refresh").innerText()) === "Update available, tap to refresh", "update prompt");
     assert((await page.locator('meta[name="bgq-build"]').getAttribute("content")) === "build-1", "game page did not reload on its own");
     // The list link in the bar is hidden on a game page; the header mark returns to All Games.
     await page.locator("a.header-home-link").click();
@@ -404,6 +418,76 @@ async function main() {
     const legacy = new URL(gamePage.url());
     assert(legacy.search === "", "old ?game= query stripped");
     assert(legacy.hash === "#/game/wingspan?action=quicksetup", "old ?game= hash " + legacy.hash);
+    config.drop = false;
+    config.freezeBare = true;
+    config.frozenBare = "";
+    config.version = "edge-1";
+    config.imageCap = 80;
+    const edgeContext = await browser.newContext();
+    const edgePage = await edgeContext.newPage();
+    edgePage.setDefaultTimeout(45000);
+    await edgePage.setViewportSize({ width: 390, height: 844 });
+    await edgePage.goto(base + "/#/game/azul", { waitUntil: "domcontentloaded" });
+    await edgePage.waitForSelector("h2.title");
+    await edgePage.waitForFunction(function () { return navigator.serviceWorker.controller; });
+    const edgeBefore = await edgePage.evaluate(function () {
+      return new Promise(function (resolve) {
+        var timer = setTimeout(function () { resolve(""); }, 2000);
+        navigator.serviceWorker.addEventListener("message", function onMsg(event) {
+          if (!event.data || event.data.type !== "VERSION") return;
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          clearTimeout(timer);
+          resolve(event.data.version || "");
+        });
+        navigator.serviceWorker.controller.postMessage({ type: "GET_VERSION" });
+      });
+    });
+    assert(edgeBefore === "edge-1", "edge worker started at edge-1, got " + edgeBefore);
+    const bumpedEdge = await edgePage.evaluate(async function (url) {
+      const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ version: "edge-2" }) });
+      return res.ok;
+    }, base + "/__test/config");
+    assert(bumpedEdge, "edge version bump");
+    await new Promise(function (resolve) { setTimeout(resolve, 2500); });
+    await edgePage.evaluate(function () { window.dispatchEvent(new Event("focus")); });
+    await edgePage.waitForSelector("#app-update:not([hidden])");
+    assert((await edgePage.locator("#app-update-refresh").innerText()) === "Update available, tap to refresh", "edge update prompt");
+    const stillOld = await edgePage.evaluate(function () {
+      return new Promise(function (resolve) {
+        var timer = setTimeout(function () { resolve(""); }, 2000);
+        navigator.serviceWorker.addEventListener("message", function onMsg(event) {
+          if (!event.data || event.data.type !== "VERSION") return;
+          navigator.serviceWorker.removeEventListener("message", onMsg);
+          clearTimeout(timer);
+          resolve(event.data.version || "");
+        });
+        navigator.serviceWorker.controller.postMessage({ type: "GET_VERSION" });
+      });
+    });
+    assert(stillOld === "edge-1", "stale bare sw.js did not replace the open page, got " + stillOld);
+    fs.mkdirSync("/opt/cursor/artifacts", { recursive: true });
+    await edgePage.screenshot({ path: "/opt/cursor/artifacts/update-available-phone.png" });
+    await edgePage.locator("#app-update-refresh").click();
+    await edgePage.waitForFunction(function () {
+      return new Promise(function (resolve) {
+        var timer = setTimeout(function () { resolve(false); }, 2000);
+        function ask() {
+          if (!navigator.serviceWorker.controller) { resolve(false); return; }
+          navigator.serviceWorker.addEventListener("message", function onMsg(event) {
+            if (!event.data || event.data.type !== "VERSION") return;
+            navigator.serviceWorker.removeEventListener("message", onMsg);
+            clearTimeout(timer);
+            resolve(event.data.version === "edge-2");
+          });
+          navigator.serviceWorker.controller.postMessage({ type: "GET_VERSION" });
+        }
+        ask();
+      });
+    });
+    await edgeContext.close();
+    config.freezeBare = false;
+    config.frozenBare = "";
+
     await gamePage.setViewportSize({ width: 390, height: 844 });
     await gamePage.goto(base + "/game/brass-birmingham/", { waitUntil: "domcontentloaded" });
     await gamePage.waitForSelector("h2.title");
