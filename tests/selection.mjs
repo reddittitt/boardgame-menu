@@ -121,7 +121,7 @@ function quotedCount(item) {
 }
 
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.21\.1";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.21\.2";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components shell");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
