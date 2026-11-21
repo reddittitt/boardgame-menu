@@ -399,12 +399,12 @@ test("offline list still filters and the worker skips other origins", async ({ p
     return res.text();
   });
   expect(swText).toContain("url.origin !== self.location.origin");
-  expect(swText).toContain('VERSION = "2026.11.21.5"');
+  expect(swText).toContain('VERSION = "2026.11.21.6"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.21.5");
+    const cache = await caches.open("bgquick-shell-2026.11.21.6");
     const keys = await cache.keys();
     return keys.some((req) => /index\.html/.test(req.url));
   });

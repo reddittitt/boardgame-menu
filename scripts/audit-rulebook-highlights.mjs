@@ -149,8 +149,13 @@ for (const [slug, list] of bySlug) {
       const viewport = page.getViewport({ scale: 1 });
       let items = tc.items;
       let styles = tc.styles;
-      const letters = (api.textRunsFromItems(items).raw.match(/[A-Za-z]/g) || []).length;
-      if (letters < 80 && ocr) {
+      const raw = api.textRunsFromItems(items).raw;
+      const letters = (raw.match(/[A-Za-z]/g) || []).length;
+      const repl = (raw.match(/\uFFFD/g) || []).length;
+      const longWords = raw.match(/[A-Za-z']{4,}/g) || [];
+      const voiced = longWords.filter((word) => /[aeiou]/i.test(word)).length;
+      const broken = repl >= 12 || (longWords.length >= 12 && voiced / longWords.length < 0.72);
+      if ((letters < 80 || broken) && ocr) {
         const pageData = (ocr.pages || []).find((entry) => entry.page === n);
         if (pageData && pageData.words && pageData.words.length) {
           items = api.ocrItemsFromWords(pageData.words);
