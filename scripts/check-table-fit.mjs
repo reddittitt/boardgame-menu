@@ -49,7 +49,17 @@ const arcs = {
 };
 check("rulebook time wins for that count", fns.formatPlayTime(arcs, 2).text, "about 30 min per player");
 check("rulebook source", fns.formatPlayTime(arcs, 2).source, "rulebook");
+check("count time is marked", fns.formatPlayTime(arcs, 2).counted, true);
 check("no count uses BGG", fns.formatPlayTime(arcs, null).text, "60–120 min");
+
+const brink = {
+  time: "90–120",
+  bggTime: { min: 60, max: 150 },
+  rulebookTime: "90–120 min",
+  playTimeSource: "rulebook"
+};
+check("overall rulebook time", fns.formatPlayTime(brink, 4), { text: "90–120 min", source: "rulebook", counted: false });
+check("overall rulebook time ignores the count", fns.formatPlayTime(brink, null), { text: "90–120 min", source: "rulebook", counted: false });
 
 check("none is left out", fns.formatPlayTime({ time: "None" }, 4).text, "");
 check("no poll is left out", fns.playerFitText({ time: "30" }), "");

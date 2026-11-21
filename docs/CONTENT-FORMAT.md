@@ -251,7 +251,14 @@ Optional. The header time follows the selected player-count button.
 "playTimeSource": "box"
 ```
 
-Write the map value as the words to show, including `min` when you want it. A count with no entry falls back to `time`, and the page adds ` min` to that fallback the way it always has. The source label shows only next to a count-specific time. That count-specific time is shown in the accent color, and its accessible name includes the selected player count. With no player-count buttons, the header keeps `time` and does not guess a count. Leave the map off when no source states a time for a count. Do not invent one.
+Write the map value as the words to show, including `min` when you want it. A count with no entry falls back to `time`, and the page adds ` min` to that fallback the way it always has. The source label shows next to a count-specific time and next to `rulebookTime`. Only a count-specific time is shown in the accent color, and only its accessible name includes the selected player count. With no player-count buttons, the header keeps `time` or `rulebookTime` and does not guess a count. Leave the map off when no source states a time for a count. Do not invent one.
+
+A single duration that the rulebook or box states for the whole game is `rulebookTime`, not a copy of that duration on every count. The header shows it with `playTimeSource` and does not treat it as the selected count. Use the count map when the source gives a different time for different counts, including a per-player rate stored on each count.
+
+```json
+"rulebookTime": "90–120 min",
+"playTimeSource": "rulebook"
+```
 
 ## Teach it
 

@@ -12371,12 +12371,7 @@
       "bggRating": 5.95,
       "players": "2–5",
       "time": "90–120",
-      "playTimeByPlayerCount": {
-        "2": "90–120 min",
-        "3": "90–120 min",
-        "4": "90–120 min",
-        "5": "90–120 min"
-      },
+      "rulebookTime": "90–120 min",
       "playTimeSource": "rulebook",
       "year": "2024",
       "bggId": "415078",
@@ -22394,12 +22389,7 @@
       "bggRating": 7.14,
       "players": "3–6",
       "time": "20–30",
-      "playTimeByPlayerCount": {
-        "3": "20–30 min",
-        "4": "20–30 min",
-        "5": "20–30 min",
-        "6": "20–30 min"
-      },
+      "rulebookTime": "20–30 min",
       "playTimeSource": "rulebook",
       "year": "1997",
       "bggId": "172",
@@ -22878,12 +22868,7 @@
       "bggRating": 7.47,
       "players": "2–5",
       "time": "60",
-      "playTimeByPlayerCount": {
-        "2": "60 min",
-        "3": "60 min",
-        "4": "60 min",
-        "5": "60 min"
-      },
+      "rulebookTime": "60 min",
       "playTimeSource": "rulebook",
       "year": "2023",
       "bggId": "391163",
@@ -24380,11 +24365,7 @@
       "bggRating": 5.68,
       "players": "3–5",
       "time": "40",
-      "playTimeByPlayerCount": {
-        "3": "about 40 min",
-        "4": "about 40 min",
-        "5": "about 40 min"
-      },
+      "rulebookTime": "about 40 min",
       "playTimeSource": "rulebook",
       "year": "2025",
       "bggId": "445423",
@@ -32975,12 +32956,7 @@
       "bggRating": 6.09,
       "players": "2–5",
       "time": "30–45",
-      "playTimeByPlayerCount": {
-        "2": "30–45 min",
-        "3": "30–45 min",
-        "4": "30–45 min",
-        "5": "30–45 min"
-      },
+      "rulebookTime": "30–45 min",
       "playTimeSource": "rulebook",
       "year": "2024",
       "bggId": "405923",
@@ -47776,12 +47752,7 @@
       "bggRating": 7.33,
       "players": "1–4",
       "time": "30–45",
-      "playTimeByPlayerCount": {
-        "1": "30 min",
-        "2": "30 min",
-        "3": "30 min",
-        "4": "30 min"
-      },
+      "rulebookTime": "30 min",
       "playTimeSource": "rulebook",
       "year": "2017",
       "bggId": "199561",
@@ -54066,11 +54037,7 @@
       "bggRating": 6.51,
       "players": "1–6",
       "time": "60–90",
-      "playTimeByPlayerCount": {
-        "1": "60–90 min",
-        "2": "60–90 min",
-        "7+": "60–90 min"
-      },
+      "rulebookTime": "60–90 min",
       "playTimeSource": "rulebook",
       "year": "2024",
       "bggId": "427388",
@@ -65309,13 +65276,7 @@
       "cover": "covers/celestia.webp",
       "players": "2–6",
       "time": "30",
-      "playTimeByPlayerCount": {
-        "2": "30 min",
-        "3": "30 min",
-        "4": "30 min",
-        "5": "30 min",
-        "6": "30 min"
-      },
+      "rulebookTime": "30 min",
       "playTimeSource": "rulebook",
       "year": "2015",
       "bggId": "175117",
@@ -96888,7 +96849,13 @@
       "players": "1–7",
       "time": "30–210",
       "playTimeByPlayerCount": {
-        "2": "about 30 min per player"
+        "1": "about 30 min per player",
+        "2": "about 30 min per player",
+        "3": "about 30 min per player",
+        "4": "about 30 min per player",
+        "5": "about 30 min per player",
+        "6": "about 30 min per player",
+        "7": "about 30 min per player"
       },
       "playTimeSource": "rulebook",
       "year": "2013",
@@ -160010,6 +159977,11 @@
     if (specific) {
       var source = game.playTimeSource ? String(game.playTimeSource).trim() : "";
       return { text: specific, source: source, counted: true };
+    }
+    var overall = game && game.rulebookTime != null ? String(game.rulebookTime).trim() : "";
+    if (overall) {
+      var overallSource = game.playTimeSource ? String(game.playTimeSource).trim() : "";
+      return { text: overall, source: overallSource, counted: false };
     }
     var perPlayer = listedPerPlayerMinutes(game, count);
     if (perPlayer) return { text: perPlayer, source: "", counted: false };

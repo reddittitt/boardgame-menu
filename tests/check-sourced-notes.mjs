@@ -64,30 +64,37 @@ function mistakeTexts(value, out) {
   return out;
 }
 
-const playTimes = [
-  { slug: "brink", text: "90–120 min", counts: ["2", "3", "4", "5"], index: "brink", must: ["PLAYERS: 2-5", "MINUTES: 90-120"] },
-  { slug: "for-sale", text: "20–30 min", counts: ["3", "4", "5", "6"], index: "for-sale", must: ["Duration: 20 - 30 minutes"] },
-  { slug: "sagrada", text: "30 min", counts: ["1", "2", "3", "4"], index: "sagrada", must: ["1 TO 4 PLAYERS - 30 MINUTES"] },
-  { slug: "forest-shuffle", text: "60 min", counts: ["2", "3", "4", "5"], index: "forest-shuffle", must: ["Playing time: 60 minutes", "2-5 players"] },
-  { slug: "moonrollers", text: "30–45 min", counts: ["2", "3", "4", "5"], index: "moonrollers", must: ["2-5 players that takes", "30-45 minutes"] },
-  { slug: "celestia", text: "30 min", counts: ["2", "3", "4", "5", "6"], index: "celestia", must: ["2 – 6 players", "30 minutes"] },
-  { slug: "graft", text: "about 40 min", counts: ["3", "4", "5"], index: "graft", must: ["approximately 40 minutes to play"] },
-  { slug: "tend", text: "60–90 min", counts: ["1", "2", "7+"], index: "tend", must: ["Players: 1-6+", "Playtime: 60-90 minutes"] },
+const overallTimes = [
+  { slug: "brink", text: "90–120 min", index: "brink", must: ["PLAYERS: 2-5", "MINUTES: 90-120"] },
+  { slug: "for-sale", text: "20–30 min", index: "for-sale", must: ["Duration: 20 - 30 minutes"] },
+  { slug: "sagrada", text: "30 min", index: "sagrada", must: ["1 TO 4 PLAYERS - 30 MINUTES"] },
+  { slug: "forest-shuffle", text: "60 min", index: "forest-shuffle", must: ["Playing time: 60 minutes", "2-5 players"] },
+  { slug: "moonrollers", text: "30–45 min", index: "moonrollers", must: ["2-5 players that takes", "30-45 minutes"] },
+  { slug: "celestia", text: "30 min", index: "celestia", must: ["2 – 6 players", "30 minutes"] },
+  { slug: "graft", text: "about 40 min", index: "graft", must: ["approximately 40 minutes to play"] },
+  { slug: "tend", text: "60–90 min", index: "tend", must: ["Players: 1-6+", "Playtime: 60-90 minutes"] }
+];
+const perPlayerTimes = [
   { slug: "agricola", text: "half an hour per player, shorter as a Family game", counts: ["1", "2", "3", "4", "5"], index: "agricola", must: ["Half an hour per player, shorter as a Family game"] },
-  { slug: "caverna-the-cave-farmers", text: "about 30 min per player", counts: ["2"], index: "caverna-the-cave-farmers", must: ["about 30 minutes per player"] }
+  { slug: "caverna-the-cave-farmers", text: "about 30 min per player", counts: ["1", "2", "3", "4", "5", "6", "7"], index: "caverna-the-cave-farmers", must: ["about 30 minutes per player"] }
 ];
 
-for (const row of playTimes) {
+function rulebookHas(index, must) {
+  return indexPages(index).some((page) => {
+    const text = page.lines.join(" ").replace(/\s+/g, " ");
+    return must.every((bit) => text.includes(bit));
+  });
+}
+for (const row of overallTimes) {
+  const game = games[row.slug];
+  check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
+  check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must));
+}
+for (const row of perPlayerTimes) {
   const game = games[row.slug];
   const map = game && game.playTimeByPlayerCount;
-  check(row.slug + " source is the rulebook", game && game.playTimeSource === "rulebook");
-  check(row.slug + " time is on every selected count", !!map && row.counts.every((count) => map[count] === row.text) && Object.keys(map).length === row.counts.length);
-  const pages = indexPages(row.index);
-  const found = pages.some((page) => {
-    const text = page.lines.join(" ").replace(/\s+/g, " ");
-    return row.must.every((bit) => text.includes(bit));
-  });
-  check(row.slug + " rulebook states that duration", found);
+  check(row.slug + " per-player rule on every count", !!map && game.playTimeSource === "rulebook" && row.counts.every((count) => map[count] === row.text) && Object.keys(map).length === row.counts.length);
+  check(row.slug + " rulebook states the per-player time", rulebookHas(row.index, row.must));
 }
 
 const quoteSpecs = [
@@ -162,7 +169,8 @@ const forSale = (await page.locator("#play-time-value").innerText()).trim();
 const forSaleSource = (await page.locator("#play-time-source").innerText()).trim();
 check("for sale shows the rulebook duration", forSale === "20–30 min");
 check("for sale labels the rulebook", forSaleSource.toLowerCase() === "rulebook");
-check("for sale time is the selected count", ((await page.locator("#play-time-value").getAttribute("class")) || "").includes("is-count-time"));
+check("for sale is not a count time", !((await page.locator("#play-time-value").getAttribute("class")) || "").includes("is-count-time"));
+check("for sale has no count in the name", !(await page.locator("#play-time-value").getAttribute("aria-label")));
 await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-for-sale-phone.png") });
 
 await page.goto(origin + "/index.html#/game/agricola", { waitUntil: "domcontentloaded" });
