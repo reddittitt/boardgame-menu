@@ -28,7 +28,6 @@ function pageText(slug, pageNum) {
 
 const photos = {
   "bomb-busters": "Example setup from the Bomb Busters rulebook",
-  "air-land-and-sea": "Setup diagram from the Air, Land & Sea rulebook",
   mycelia: "Shared setup from the Mycelia rulebook",
   "moon-colony-bloodbath": "Setup overview from the Moon Colony Bloodbath rulebook",
   "star-wars-villainous": "Player setup diagram from the Star Wars Villainous rulebook"
@@ -51,7 +50,7 @@ for (const [slug, altStart] of Object.entries(photos)) {
 const chips = [
   [3, "Place your Villain mover on the Villain portrait"],
   [6, "Actions covered this way are blocked."],
-  [6, "As soon as a player fulfills their Villain's Objective, the game ends and that player wins"],
+  [6, "As soon as a player fulfills their Villain's Objective, the game ends and that player wins!"],
   [3, "The first player does not start with any Credits. The second player starts with 1 Credit."],
   [3, "The third and fourth players start with 2 Credits each."]
 ];
