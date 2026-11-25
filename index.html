@@ -231,6 +231,76 @@
       transform:translateY(0);
     }
   }
+  button,
+  .essential-link,
+  a.card,
+  .pc-btn,
+  .exp-chip,
+  .filter-chip,
+  .gn-btn,
+  .gn-primary,
+  .back-link {
+    transition:transform 80ms ease, opacity 80ms ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #app[data-page-motion="in"] > .detail {
+      animation:bgqSlideIn 280ms cubic-bezier(.2,.7,.2,1);
+    }
+    #app[data-page-motion="back"] > .game-day-entry,
+    #app[data-page-motion="back"] > .search-bar,
+    #app[data-page-motion="back"] > .grid {
+      animation:bgqSlideBack 280ms cubic-bezier(.2,.7,.2,1);
+    }
+    .detail.is-leaving {
+      animation:bgqSlideOut 220ms cubic-bezier(.4,0,.2,1) forwards;
+    }
+    button:active,
+    .essential-link:active,
+    a.card:active,
+    .pc-btn:active,
+    .exp-chip:active,
+    .filter-chip:active,
+    .gn-btn:active,
+    .gn-primary:active,
+    .back-link:active {
+      transform:scale(0.97);
+      opacity:0.82;
+    }
+  }
+  @keyframes bgqSlideIn {
+    from { transform:translateX(28px); opacity:0.45; }
+    to { transform:none; opacity:1; }
+  }
+  @keyframes bgqSlideOut {
+    to { transform:translateX(32px); opacity:0; }
+  }
+  @keyframes bgqSlideBack {
+    from { transform:translateX(-22px); opacity:0.5; }
+    to { transform:none; opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in,
+    .detail.is-leaving,
+    #app[data-page-motion="in"] > .detail,
+    #app[data-page-motion="back"] > .game-day-entry,
+    #app[data-page-motion="back"] > .search-bar,
+    #app[data-page-motion="back"] > .grid {
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+    }
+    button,
+    .essential-link,
+    a.card,
+    .pc-btn,
+    .exp-chip,
+    .filter-chip,
+    .gn-btn,
+    .gn-primary,
+    .back-link {
+      transition:none;
+    }
+  }
 
   .expansion-text-block p {
   margin:0 0 0.4rem;
@@ -161745,6 +161815,61 @@
     text = String(text || "Rulebook").replace(/\s+/g, " ").trim();
     return text.slice(0, 80) || "Rulebook";
   }
+  var pageMotion = "";
+  var navFromPath = window.location.pathname;
+  function classifyMotion(fromPath, toPath) {
+    var fromGame = !!gamePathnameSlug(fromPath);
+    var toGame = !!gamePathnameSlug(toPath);
+    if (!fromGame && toGame) return "in";
+    if (fromGame && !toGame) return "out";
+    return "";
+  }
+  function applyPageMotion() {
+    var motion = pageMotion;
+    pageMotion = "";
+    if (!appEl) return;
+    if (motion === "in" || motion === "out") {
+      document.documentElement.setAttribute("data-page-arrived", motion === "in" ? "in" : "back");
+      appEl.setAttribute("data-page-motion", motion === "in" ? "in" : "back");
+    }
+    if (!motion) return;
+    var node = appEl.querySelector(".detail, .search-bar");
+    function clear() {
+      if (appEl) appEl.removeAttribute("data-page-motion");
+    }
+    if (node) node.addEventListener("animationend", clear, { once: true });
+    setTimeout(clear, 420);
+  }
+  function leaveThen(next) {
+    if (pageMotion !== "out" || motionReduced()) {
+      next();
+      return;
+    }
+    var detail = appEl && appEl.querySelector(".detail");
+    if (!detail) {
+      next();
+      return;
+    }
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      next();
+    }
+    detail.classList.add("is-leaving");
+    detail.addEventListener("animationend", finish);
+    setTimeout(finish, 280);
+  }
+  function goRoute(dest) {
+    function go() {
+      history.pushState(null, "", dest);
+      try { navFromPath = new URL(dest, window.location.href).pathname; } catch (err) {}
+      render();
+      applyPageMotion();
+      if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
+    }
+    leaveThen(go);
+  }
   function followAppLink(event, link) {
     if (!link || event.defaultPrevented || event.button !== 0) return false;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
@@ -161771,9 +161896,10 @@
     event.stopPropagation();
     var current = window.location.pathname + window.location.search + window.location.hash;
     if (current !== dest) {
-      history.pushState(null, "", dest);
-      render();
-      if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
+      var toPath = window.location.pathname;
+      try { toPath = new URL(dest, window.location.href).pathname; } catch (err) {}
+      pageMotion = classifyMotion(window.location.pathname, toPath);
+      goRoute(dest);
     } else {
       scrollPageToTop();
     }
@@ -167370,8 +167496,14 @@
   });
   window.addEventListener("hashchange", render);
   window.addEventListener("popstate", function () {
-    render();
-    if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
+    var toPath = window.location.pathname;
+    pageMotion = classifyMotion(navFromPath, toPath);
+    navFromPath = toPath;
+    leaveThen(function () {
+      render();
+      applyPageMotion();
+      if ((waitingWorker || activatedElsewhere || pendingRemote) && updateIsSafe()) applyUpdate();
+    });
   });
   window.addEventListener("resize", function () {
     syncHeaderOffset();
