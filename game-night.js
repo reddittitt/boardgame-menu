@@ -646,6 +646,9 @@
             '<p id="gn-suggest-note" class="gn-note gn-status" role="status"></p>' +
             '<p id="gn-dropped" class="gn-note"' + (dropped ? "" : " hidden") + "></p>" +
             '<ul id="gn-nominee-list" class="gn-list"></ul>' +
+            (typeof ctx.packForNight === "function"
+              ? '<p class="gn-actions"><button type="button" class="gn-btn" id="gn-pack"' + (state.games.length ? "" : " hidden") + ">Pack for game night</button></p>"
+              : "") +
             '<label class="gn-field" for="gn-search">Add a game' +
               '<input id="gn-search" type="search" placeholder="Search the catalog" autocomplete="off" enterkeyhint="search" aria-label="Add a game">' +
             "</label>" +
@@ -743,6 +746,8 @@
       }
       var clear = document.getElementById("gn-clear");
       if (clear) clear.hidden = !state.games.length;
+      var pack = document.getElementById("gn-pack");
+      if (pack) pack.hidden = !state.games.length;
       var missing = document.getElementById("gn-dropped");
       if (missing) {
         missing.hidden = !dropped;
@@ -1946,6 +1951,10 @@
       var btn = event.target.closest ? event.target.closest("button") : null;
       if (!btn || (document.getElementById("gn-panel") && document.getElementById("gn-panel").contains(btn))) return;
       if (btn.id === "gn-suggest") { onSuggest(); return; }
+      if (btn.id === "gn-pack") {
+        if (typeof ctx.packForNight === "function") ctx.packForNight(state.games.slice());
+        return;
+      }
       if (btn.id === "gn-clear") { setSuggestNote(""); setNominees([]); return; }
       if (btn.id === "gn-share") {
         syncUrl();

@@ -53,7 +53,7 @@ function checkStatic() {
   assert(sw.includes("GET_VERSION"), "worker reports its version");
   assert(/\\.\(\?:mjs\|js\|css\)/.test(sw), "mjs is cached with scripts");
   assert(html.includes('id="offline-flag"'), "offline indicator");
-  assert(html.includes("Update available, tap to refresh"), "update prompt copy");
+  assert(html.includes("Updated, tap to reload"), "update prompt copy");
   const offline = read("offline.html").toString("utf8");
   assert(offline.includes("You're offline"), "offline page copy");
   assert(!offline.includes("owner"), "offline page has no owner name");
@@ -297,7 +297,7 @@ async function main() {
     assert(bumped, "version bump request");
     await page.evaluate(function () { return navigator.serviceWorker.getRegistration().then(function (reg) { return reg.update(); }); });
     await page.waitForSelector("#app-update:not([hidden])");
-    assert((await page.locator("#app-update-refresh").innerText()) === "Update available, tap to refresh", "update prompt");
+    assert((await page.locator("#app-update-refresh").innerText()) === "Updated, tap to reload", "update prompt");
     assert((await page.locator('meta[name="bgq-build"]').getAttribute("content")) === "build-1", "game page did not reload on its own");
     // The list link in the bar is hidden on a game page; the header mark returns to All Games.
     await page.locator("a.header-home-link").click();
@@ -451,7 +451,7 @@ async function main() {
     await new Promise(function (resolve) { setTimeout(resolve, 2500); });
     await edgePage.evaluate(function () { window.dispatchEvent(new Event("focus")); });
     await edgePage.waitForSelector("#app-update:not([hidden])");
-    assert((await edgePage.locator("#app-update-refresh").innerText()) === "Update available, tap to refresh", "edge update prompt");
+    assert((await edgePage.locator("#app-update-refresh").innerText()) === "Updated, tap to reload", "edge update prompt");
     const stillOld = await edgePage.evaluate(function () {
       return new Promise(function (resolve) {
         var timer = setTimeout(function () { resolve(""); }, 2000);

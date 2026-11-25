@@ -38,6 +38,7 @@ function check(name, ok) {
 }
 
 await page.goto(origin + "/index.html#/game/wingspan", { waitUntil: "domcontentloaded" });
+await page.locator('#chapter-pager [aria-label="On your turn"]').click();
 await page.waitForSelector("#questions-slot");
 const questions = page.locator("#questions-slot");
 const questionNote = questions.locator("details");
@@ -87,6 +88,7 @@ check("four player falls back", (await solo.innerText()).includes("30"));
 check("fallback is not highlighted", !((await solo.getAttribute("class") || "").includes("is-count-time")));
 
 await page.goto(origin + "/index.html#/game/container", { waitUntil: "domcontentloaded" });
+await page.locator('#chapter-pager [aria-label="On your turn"]').click();
 await page.waitForSelector("#mistakes-slot");
 check("container mistakes filled", (await page.locator("#mistakes-slot").evaluate((el) => el.textContent)).includes("Container Island"));
 check("container deep only", await page.locator("#questions-slot").isHidden());
@@ -94,7 +96,7 @@ check("container go deeper present", (await page.locator("#go-deeper").count()) 
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 check("worker ignores other origins", /url\.origin !== self\.location\.origin\) return;/.test(sw));
-check("cache version bumped", /var VERSION = "2026\.11\.21\.13"/.test(sw));
+check("cache version bumped", /var VERSION = "2026\.11\.21\.14"/.test(sw));
 
 await browser.close();
 server.close();
