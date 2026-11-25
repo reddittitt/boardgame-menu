@@ -648,6 +648,46 @@
     outline:3px solid var(--brand);
     outline-offset:2px;
   }
+  .mini-bar {
+    position:fixed;
+    left:0;
+    right:0;
+    top:var(--header-h, 64px);
+    z-index:6;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-sizing:border-box;
+    min-height:44px;
+    padding:4px max(12px, env(safe-area-inset-right)) 4px max(12px, env(safe-area-inset-left));
+    background:color-mix(in srgb, var(--bg) 92%, var(--card));
+    border-bottom:1px solid var(--hig-sep, var(--border));
+    box-shadow:0 6px 16px -14px rgba(0,0,0,0.5);
+  }
+  .mini-bar[hidden] { display:none; }
+  .mini-bar-name {
+    margin:0;
+    min-width:0;
+    flex:1 1 auto;
+    font-weight:700;
+    font-size:15px;
+    line-height:1.2;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .mini-bar-actions {
+    display:flex;
+    gap:6px;
+    flex:0 0 auto;
+  }
+  .mini-bar .essential-link {
+    width:auto;
+    height:36px;
+    min-height:36px;
+    padding:0 12px;
+    font-size:14px;
+  }
 
   /* Rulebook search. Shown only for games with rulebooks/index/<slug>.json. */
   .rulebook-search {
@@ -166882,9 +166922,11 @@
       refreshChapters();
     }
     function paintTeach() {
+      var href = teachHref(g.slug, currentTeachState());
       var link = document.getElementById("teach-link");
-      if (!link) return;
-      link.setAttribute("href", teachHref(g.slug, currentTeachState()));
+      if (link) link.setAttribute("href", href);
+      var mini = document.getElementById("mini-teach");
+      if (mini) mini.setAttribute("href", href);
     }
     function paintAids(selected) {
       var slot = document.getElementById("player-aids-slot");
@@ -166988,6 +167030,7 @@
     rememberGameOffline(slug);
     bindChapterSwipe();
     syncChapterPager();
+    mountMiniBar(g);
   }
 
   function normalizeIncoming() {
@@ -167415,8 +167458,73 @@
   }
   /* game-night:end */
 
+  function clearMiniBar() {
+    var old = document.getElementById("mini-bar");
+    if (old) old.remove();
+    miniLinks = null;
+    document.documentElement.style.setProperty("--mini-h", "0px");
+  }
+  var miniLinks = null;
+  function placeMiniBar() {
+    var bar = document.getElementById("mini-bar");
+    if (!bar || !miniLinks || !miniLinks.isConnected) {
+      if (bar) bar.hidden = true;
+      document.documentElement.style.setProperty("--mini-h", "0px");
+      return;
+    }
+    var header = document.querySelector("header");
+    var line = header ? header.getBoundingClientRect().bottom : 0;
+    var past = miniLinks.getBoundingClientRect().bottom <= line + 1;
+    bar.hidden = !past;
+    document.documentElement.style.setProperty("--mini-h", past ? bar.offsetHeight + "px" : "0px");
+  }
+  function mountMiniBar(game) {
+    clearMiniBar();
+    var links = document.querySelector(".detail .essential-links");
+    if (!links || !game) return;
+    var rule = links.querySelector("a[data-check='rulebook']");
+    var teach = document.getElementById("teach-link");
+    if (!rule && !teach) return;
+    var bar = document.createElement("div");
+    bar.id = "mini-bar";
+    bar.className = "mini-bar";
+    bar.hidden = true;
+    var name = document.createElement("p");
+    name.className = "mini-bar-name";
+    name.textContent = game.name;
+    var actions = document.createElement("div");
+    actions.className = "mini-bar-actions";
+    if (rule) {
+      var rb = document.createElement("a");
+      rb.className = "essential-link";
+      rb.href = rule.getAttribute("href") || rule.href;
+      rb.setAttribute("data-check", "rulebook");
+      rb.textContent = "Rulebook";
+      actions.appendChild(rb);
+    }
+    if (teach) {
+      var teachLink = document.createElement("a");
+      teachLink.className = "essential-link";
+      teachLink.id = "mini-teach";
+      teachLink.href = teach.getAttribute("href") || teach.href;
+      teachLink.textContent = "Teach it";
+      actions.appendChild(teachLink);
+    }
+    bar.appendChild(name);
+    bar.appendChild(actions);
+    document.body.appendChild(bar);
+    miniLinks = links;
+    if (!window._bgqMini) {
+      window._bgqMini = true;
+      window.addEventListener("scroll", placeMiniBar, { passive: true });
+      window.addEventListener("resize", placeMiniBar);
+    }
+    placeMiniBar();
+  }
+
   function render() {
     closeRulebookViewer();
+    clearMiniBar();
     syncHeaderOffset();
     document.body.style.overflow = "";
     var nightLink = document.querySelector("header a.header-night");
