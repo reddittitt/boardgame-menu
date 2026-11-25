@@ -3356,8 +3356,7 @@
     font-weight:650;
     white-space:nowrap;
   }
-  .bag-add { display:flex; flex-direction:column; gap:4px; min-width:0; position:relative; }
-  .bag-add-label { margin:0; font-size:16px; font-weight:650; }
+  .bag-add { display:flex; flex-direction:column; gap:0; min-width:0; position:relative; }
   .bag-add-input {
     width:100%;
     box-sizing:border-box;
@@ -165909,8 +165908,7 @@
           '<p class="bag-count">' + escapeHtml(countLabel) + "</p>" +
         "</div>" +
         '<div class="bag-add">' +
-          '<label class="bag-add-label" for="bag-add-' + id + '">Add game</label>' +
-          '<input id="bag-add-' + id + '" class="bag-add-input" data-bag-add-to="' + id + '" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Add game" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="bag-add-list-' + id + '" enterkeyhint="search">' +
+          '<input id="bag-add-' + id + '" class="bag-add-input" data-bag-add-to="' + id + '" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Add game" aria-label="Add game" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="bag-add-list-' + id + '" enterkeyhint="search">' +
           '<ul class="bag-add-list" id="bag-add-list-' + id + '" role="listbox" hidden></ul>' +
         "</div>" +
         (items ? '<ul class="bag-games">' + items + "</ul>" : '<p class="bag-empty">' + empty + "</p>") +

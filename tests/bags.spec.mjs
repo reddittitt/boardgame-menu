@@ -665,6 +665,16 @@ test("free carry is a third location and old bag data still loads", async functi
 test("typing a game name adds it and moves it when it is already packed", async function ({ page }) {
   await unlock(page);
   await page.goto("/#/bags");
+  await expect(page.locator(".bag-add-label")).toHaveCount(0);
+  await expect(page.locator(".bag-card").getByText("Add game", { exact: true })).toHaveCount(0);
+  const addBoxes = page.getByRole("combobox", { name: "Add game" });
+  await expect(addBoxes).toHaveCount(3);
+  const addHeight = await page.locator(".bag-card--big .bag-add").evaluate(function (el) {
+    var add = el.getBoundingClientRect();
+    var input = el.querySelector("input").getBoundingClientRect();
+    return { add: Math.round(add.height), input: Math.round(input.height) };
+  });
+  expect(addHeight.add).toBe(addHeight.input);
   const bigInput = page.locator("#bag-add-big");
   const fontSize = await bigInput.evaluate(function (el) {
     return parseFloat(getComputedStyle(el).fontSize);
