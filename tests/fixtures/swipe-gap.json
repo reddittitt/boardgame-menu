@@ -1,0 +1,9 @@
+{
+  "games": {
+    "swipe-gap": {
+      "name": "Swipe Gap",
+      "quickStart": "Lay out the board.",
+      "endOfGame": "Most points wins."
+    }
+  }
+}

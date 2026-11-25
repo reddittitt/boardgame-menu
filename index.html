@@ -2127,6 +2127,88 @@
   }
   .chapter-slot[hidden] { display:none; }
   .rule-chapter[hidden] { display:none; }
+  .chapter-deck { min-width:0; }
+  .chapter-pager {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    position:sticky;
+    top:calc(var(--header-h, 64px) + var(--mini-h, 0px) + 6px);
+    z-index:4;
+    width:fit-content;
+    max-width:100%;
+    margin:0 auto 10px;
+    padding:4px;
+    border-radius:999px;
+    background:color-mix(in srgb, var(--card) 88%, var(--bg));
+    border:1px solid var(--hig-sep, var(--border));
+    box-shadow:0 6px 16px -12px rgba(0,0,0,0.45);
+  }
+  .chapter-pager[hidden] { display:none; }
+  .chapter-dot {
+    appearance:none;
+    -webkit-appearance:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-width:36px;
+    min-height:36px;
+    margin:0;
+    padding:0 8px;
+    border:0;
+    border-radius:999px;
+    background:transparent;
+    color:var(--muted);
+    font:inherit;
+    font-size:14px;
+    font-weight:700;
+    line-height:1;
+    cursor:pointer;
+  }
+  .chapter-dot[aria-current="true"] {
+    background:var(--brand);
+    color:#fff;
+    padding:0 12px;
+  }
+  .chapter-dot-mark {
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:currentColor;
+    flex:0 0 auto;
+  }
+  .chapter-deck[data-paged] .rule-chapter.is-chapter-aside { display:none; }
+  .chapter-deck[data-paged] .rule-chapter { touch-action:pan-y; }
+  .chapter-deck .table-scroll,
+  .chapter-deck .playercount-controls,
+  .chapter-deck .expansion-controls,
+  .chapter-deck .chip-groups,
+  .chapter-deck .pack-chips { touch-action:manipulation; }
+  .chapter-dot:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .chapter-deck[data-chapter-dir="next"] .rule-chapter:not(.is-chapter-aside) {
+      animation:chapterSlideNext 220ms ease;
+    }
+    .chapter-deck[data-chapter-dir="prev"] .rule-chapter:not(.is-chapter-aside) {
+      animation:chapterSlidePrev 220ms ease;
+    }
+  }
+  @keyframes chapterSlideNext {
+    from { transform:translateX(18px); opacity:0.35; }
+    to { transform:none; opacity:1; }
+  }
+  @keyframes chapterSlidePrev {
+    from { transform:translateX(-18px); opacity:0.35; }
+    to { transform:none; opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chapter-deck[data-chapter-dir] .rule-chapter { animation:none; }
+  }
   .rule-empty {
     margin:0;
     color:var(--muted);
@@ -165528,8 +165610,184 @@
     loadExpansionGuides().then(draw);
   }
 
+  var chapterPagerId = "setup-chapter";
+  var chapterSwipeSuppress = false;
+  function chapterNodes() {
+    return ["setup-chapter", "turn-chapter", "end-chapter"].map(function (id) {
+      return document.getElementById(id);
+    }).filter(function (el) { return !!el; });
+  }
+  function visibleChapters() {
+    return chapterNodes().filter(function (el) { return !el.hidden; });
+  }
+  function chapterTitle(el) {
+    var name = el && el.querySelector ? el.querySelector(".expansion-name") : null;
+    return name ? String(name.textContent || "").trim() : "Chapter";
+  }
+  function motionReduced() {
+    try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+    catch (err) { return false; }
+  }
+  function syncChapterPager() {
+    var deck = document.getElementById("chapter-deck");
+    var pager = document.getElementById("chapter-pager");
+    if (!deck || !pager) return;
+    var chapters = visibleChapters();
+    chapterNodes().forEach(function (el) { el.classList.remove("is-chapter-aside"); });
+    if (chapters.length < 2) {
+      pager.hidden = true;
+      pager.innerHTML = "";
+      deck.removeAttribute("data-paged");
+      deck.removeAttribute("data-chapter-dir");
+      return;
+    }
+    var current = null;
+    chapters.forEach(function (el) { if (el.id === chapterPagerId) current = el; });
+    if (!current) current = chapters[0];
+    chapterPagerId = current.id;
+    deck.setAttribute("data-paged", "true");
+    pager.hidden = false;
+    pager.innerHTML = chapters.map(function (el) {
+      var on = el === current;
+      var title = chapterTitle(el);
+      return '<button type="button" class="chapter-dot" role="tab" data-chapter="' + el.id + '" aria-selected="' +
+        (on ? "true" : "false") + '"' + (on ? ' aria-current="true"' : "") +
+        ' aria-label="' + escapeHtml(title) + '">' +
+        '<span class="chapter-dot-mark" aria-hidden="true"></span>' +
+        (on ? '<span class="chapter-dot-label">' + escapeHtml(title) + "</span>" : "") +
+        "</button>";
+    }).join("");
+    chapters.forEach(function (el) {
+      el.classList.toggle("is-chapter-aside", el !== current);
+    });
+  }
+  function showChapter(id, dir) {
+    var chapters = visibleChapters();
+    var next = null;
+    chapters.forEach(function (el) { if (el.id === id) next = el; });
+    if (!next || next.id === chapterPagerId) return;
+    chapterPagerId = next.id;
+    var deck = document.getElementById("chapter-deck");
+    if (deck) {
+      if (dir && !motionReduced()) deck.setAttribute("data-chapter-dir", dir);
+      else deck.removeAttribute("data-chapter-dir");
+    }
+    syncChapterPager();
+    if (!deck) return;
+    var topBar = 0;
+    var header = document.querySelector("header");
+    if (header) topBar += header.offsetHeight;
+    var mini = document.getElementById("mini-bar");
+    if (mini && !mini.hidden) topBar += mini.offsetHeight;
+    var rect = deck.getBoundingClientRect();
+    if (rect.top < topBar) window.scrollTo(0, Math.max(0, window.scrollY + rect.top - topBar - 8));
+  }
+  function chapterStep(delta) {
+    var chapters = visibleChapters();
+    if (chapters.length < 2) return;
+    var index = 0;
+    chapters.forEach(function (el, i) { if (el.id === chapterPagerId) index = i; });
+    var next = chapters[(index + delta + chapters.length) % chapters.length];
+    showChapter(next.id, delta > 0 ? "next" : "prev");
+  }
+  function chapterGestureBlocked(target) {
+    if (!target || !target.closest) return true;
+    if (target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .catalog-chips, .gn-chips, .playercount-controls, .recent-list, .chapter-dot, input, textarea, select")) return true;
+    var node = target;
+    while (node && node !== document.body) {
+      try {
+        var style = window.getComputedStyle(node);
+        var ox = style.overflowX;
+        if ((ox === "auto" || ox === "scroll" || ox === "overlay") && node.scrollWidth > node.clientWidth + 8) return true;
+      } catch (err) {}
+      node = node.parentElement;
+    }
+    var viewer = document.getElementById("rulebook-viewer");
+    if (viewer && (viewer.open || viewer.hasAttribute("open"))) return true;
+    return false;
+  }
+  function bindChapterSwipe() {
+    var deck = document.getElementById("chapter-deck");
+    if (!deck || deck.getAttribute("data-swipe") === "1") return;
+    deck.setAttribute("data-swipe", "1");
+    var tracking = false;
+    var decided = false;
+    var horizontal = false;
+    var startX = 0;
+    var startY = 0;
+    var pointerId = null;
+    var dx = 0;
+    deck.addEventListener("click", function (event) {
+      if (chapterSwipeSuppress) {
+        chapterSwipeSuppress = false;
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      var btn = event.target.closest ? event.target.closest(".chapter-dot") : null;
+      if (!btn || !deck.contains(btn)) return;
+      var id = btn.getAttribute("data-chapter") || "";
+      var chapters = visibleChapters();
+      var from = 0;
+      var to = 0;
+      chapters.forEach(function (el, i) {
+        if (el.id === chapterPagerId) from = i;
+        if (el.id === id) to = i;
+      });
+      showChapter(id, to > from ? "next" : "prev");
+    });
+    deck.addEventListener("pointerdown", function (event) {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (chapterGestureBlocked(event.target)) return;
+      tracking = true;
+      decided = false;
+      horizontal = false;
+      dx = 0;
+      startX = event.clientX;
+      startY = event.clientY;
+      pointerId = event.pointerId;
+    });
+    deck.addEventListener("pointermove", function (event) {
+      if (!tracking) return;
+      if (pointerId != null && event.pointerId !== pointerId) return;
+      dx = event.clientX - startX;
+      var dy = event.clientY - startY;
+      if (!decided) {
+        if (Math.abs(dx) < 12 && Math.abs(dy) < 12) return;
+        decided = true;
+        horizontal = Math.abs(dx) > Math.abs(dy) * 1.2;
+        if (!horizontal) {
+          tracking = false;
+          return;
+        }
+        if (deck.setPointerCapture) {
+          try { deck.setPointerCapture(event.pointerId); } catch (err) {}
+        }
+      }
+      if (horizontal && event.cancelable) event.preventDefault();
+    });
+    function endSwipe(event) {
+      if (!tracking) return;
+      if (event && pointerId != null && event.pointerId !== pointerId) return;
+      var go = horizontal && Math.abs(dx) >= 48;
+      var dir = dx < 0 ? 1 : -1;
+      tracking = false;
+      horizontal = false;
+      if (!go) return;
+      chapterSwipeSuppress = true;
+      setTimeout(function () { chapterSwipeSuppress = false; }, 400);
+      chapterStep(dir);
+    }
+    deck.addEventListener("pointerup", endSwipe);
+    deck.addEventListener("pointercancel", function () {
+      tracking = false;
+      horizontal = false;
+    });
+  }
+
   function renderDetail(slug, action, presetExpansions, detailQuery) {
     detailSlug = "";
+    chapterPagerId = "setup-chapter";
     if (action === void 0) action = "quicksetup";
     detailQuery = detailQuery || {};
     var showAllSelection = false;
@@ -165897,7 +166155,10 @@
           '<div class="actions">' +
             (expansionNoteHtml ? '<div class="rules-notes">' + expansionNoteHtml + "</div>" : "") +
             '<div id="expansion-guide-slot"></div>' +
-            quickBlocksHtml +
+            '<div id="chapter-deck" class="chapter-deck">' +
+              '<div class="chapter-pager" id="chapter-pager" role="tablist" aria-label="Chapters" hidden></div>' +
+              quickBlocksHtml +
+            "</div>" +
             '<div id="player-aids-slot">' + renderPlayerAids(g, []) + "</div>" +
             componentsHtml +
             rulesGlossaryHtml +
@@ -166119,6 +166380,7 @@
         chapter.hidden = !any;
         if (any) chapter.open = true;
       });
+      syncChapterPager();
     }
     function currentTeachState() {
       var chars = [];
@@ -166503,6 +166765,8 @@
     bindBagPack(slug);
     bindSaveOffline(slug);
     rememberGameOffline(slug);
+    bindChapterSwipe();
+    syncChapterPager();
   }
 
   function normalizeIncoming() {
