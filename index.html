@@ -3018,6 +3018,145 @@
   }
   .storage-actions { display:flex; flex-wrap:wrap; gap:8px; }
   .storage-status { margin:0; }
+  /* Owner bag tracker. Hidden until the same unlock as private Put it away. */
+  .bag-label {
+    display:inline-flex;
+    align-items:center;
+    align-self:flex-start;
+    margin:6px 0 0;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:650;
+    line-height:1.3;
+    letter-spacing:0.01em;
+  }
+  .bag-label[hidden] { display:none; }
+  .bag-label--big {
+    color:var(--accent);
+    background:color-mix(in srgb, var(--accent) 16%, var(--card));
+    border:1px solid color-mix(in srgb, var(--accent) 42%, var(--hig-sep, var(--border)));
+  }
+  .bag-label--small {
+    color:#0f766e;
+    background:color-mix(in srgb, #0f766e 14%, var(--card));
+    border:1px solid color-mix(in srgb, #0f766e 40%, var(--hig-sep, var(--border)));
+  }
+  :root[data-theme="dark"] .bag-label--small,
+  :root[data-look="hig"][data-theme="dark"] .bag-label--small,
+  :root[data-look="hig"][data-theme="darkwood"] .bag-label--small,
+  :root[data-look="hig"][data-theme="neongrid"] .bag-label--small {
+    color:#5eead4;
+    background:color-mix(in srgb, #2dd4bf 18%, var(--card));
+    border-color:color-mix(in srgb, #2dd4bf 45%, var(--border));
+  }
+  .bag-pack { display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .bag-pack-label { margin:4px 0 0; font-weight:700; font-size:16px; }
+  .bag-pack-actions { display:flex; flex-direction:column; gap:10px; min-width:0; }
+  .bag-pack-actions .btn[aria-pressed="true"],
+  :root[data-look="hig"] .bag-pack-actions .btn[aria-pressed="true"] {
+    background:var(--brand);
+    color:#ffffff;
+    border-color:transparent;
+  }
+  .bags-page { display:flex; flex-direction:column; gap:12px; min-width:0; max-width:100%; }
+  .bag-card {
+    background:var(--card);
+    border:1px solid var(--hig-sep, var(--border));
+    border-radius:12px;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  .bag-card--big { border-left:4px solid var(--accent); }
+  .bag-card--small { border-left:4px solid #0f766e; }
+  :root[data-theme="dark"] .bag-card--small,
+  :root[data-look="hig"][data-theme="dark"] .bag-card--small,
+  :root[data-look="hig"][data-theme="darkwood"] .bag-card--small,
+  :root[data-look="hig"][data-theme="neongrid"] .bag-card--small {
+    border-left-color:#5eead4;
+  }
+  .bag-card-head {
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:8px;
+    min-width:0;
+  }
+  .bag-card-head h3 { margin:0; font-size:1.12rem; }
+  .bag-count {
+    margin:0;
+    color:var(--muted);
+    font-size:16px;
+    font-weight:650;
+    white-space:nowrap;
+  }
+  .bag-games {
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    min-width:0;
+  }
+  .bag-game { display:flex; flex-direction:column; gap:10px; min-width:0; }
+  .bag-game-link {
+    color:var(--accent);
+    font-weight:650;
+    font-size:16px;
+    line-height:1.3;
+    text-decoration:none;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    overflow-wrap:anywhere;
+  }
+  .bag-game-link:hover { text-decoration:underline; }
+  .bag-game-actions { display:flex; flex-direction:column; gap:10px; min-width:0; }
+  .bag-empty { margin:0; color:var(--muted); font-size:16px; }
+  .bag-card > .btn[disabled] { opacity:0.45; cursor:default; }
+  header a.header-bags {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    min-height:44px;
+    padding:8px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    font-size:16px;
+    color:#fff;
+  }
+  :root[data-look="hig"] header a.header-bags {
+    color:var(--brand);
+    font-weight:400;
+  }
+  header a.header-bags[aria-current="page"] {
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  header a.header-bags:focus-visible,
+  .all-games-bar a.bags-entry:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
+  .all-games-bar a.bags-entry {
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+    padding:6px 2px;
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:700;
+    font-size:16px;
+  }
+  .all-games-bar a.bags-entry:hover { text-decoration:underline; }
   .teach-page .byline { margin-top:0; }
   .teach-script {
     background:var(--card);
@@ -3030,7 +3169,11 @@
   :root[data-look="hig"] .rulebook-search input,
   :root[data-look="hig"] .rulebook-ask input,
   :root[data-look="hig"] #rulebook-viewer-find-input,
-  :root[data-look="hig"] textarea {
+  :root[data-look="hig"] textarea,
+  :root[data-look="hig"] .bag-pack input,
+  :root[data-look="hig"] .bag-pack select,
+  :root[data-look="hig"] .bags-page input,
+  :root[data-look="hig"] .bags-page select {
     font-size:max(1rem, 16px);
   }
 
@@ -161058,7 +161201,7 @@
     if (url.origin !== window.location.origin) return false;
     var dest = "";
     if (hrefAttr.charAt(0) === "#") {
-      if (gamePathnameSlug() && (hrefAttr === "#/" || hrefAttr.indexOf("#/?") === 0 || hrefAttr === "#/night" || hrefAttr.indexOf("#/night?") === 0 || hrefAttr.indexOf("#/game/") === 0)) {
+      if (gamePathnameSlug() && (hrefAttr === "#/" || hrefAttr.indexOf("#/?") === 0 || hrefAttr === "#/night" || hrefAttr.indexOf("#/night?") === 0 || hrefAttr === "#/bags" || hrefAttr.indexOf("#/bags?") === 0 || hrefAttr.indexOf("#/game/") === 0)) {
         dest = (basePath() || "") + "/" + hrefAttr;
       }
     } else if (gamePathnameSlug(url.pathname)) {
@@ -163664,6 +163807,231 @@
     nav.appendChild(button);
   }
 
+  /* Bag packing is owner-only, using the same unlock as private Put it away
+     photos. That GitHub token is Contents read-only, and the rulebook worker
+     does not store anything, so the list stays in this browser. */
+  var BAG_STORAGE_KEY = "bgqBags";
+  function ownerUnlocked() {
+    return !!readPackUnlock();
+  }
+  function readBagState() {
+    try {
+      var data = JSON.parse(localStorage.getItem(BAG_STORAGE_KEY) || "{}");
+      var raw = data && data.games;
+      var games = {};
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) return games;
+      Object.keys(raw).forEach(function (slug) {
+        var bag = raw[slug];
+        if ((bag === "big" || bag === "small") && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+          games[slug] = bag;
+        }
+      });
+      return games;
+    } catch (err) {
+      return {};
+    }
+  }
+  function writeBagState(games) {
+    try {
+      localStorage.setItem(BAG_STORAGE_KEY, JSON.stringify({ games: games }));
+    } catch (err) {}
+  }
+  function bagName(id) {
+    if (id === "big") return "Big bag";
+    if (id === "small") return "Small bag";
+    return "";
+  }
+  function otherBag(id) {
+    return id === "big" ? "small" : "big";
+  }
+  function setGameBag(slug, bag) {
+    if (!ownerUnlocked() || !slug || !DATA[slug]) return;
+    var games = readBagState();
+    if (bag === "big" || bag === "small") games[slug] = bag;
+    else delete games[slug];
+    writeBagState(games);
+  }
+  function clearOneBag(id) {
+    if (!ownerUnlocked()) return;
+    if (id !== "big" && id !== "small") return;
+    var games = readBagState();
+    Object.keys(games).forEach(function (slug) {
+      if (games[slug] === id) delete games[slug];
+    });
+    writeBagState(games);
+  }
+  function bagLabelHtml(slug) {
+    if (!ownerUnlocked()) return "";
+    var bag = readBagState()[slug] || "";
+    if (bag !== "big" && bag !== "small") {
+      return '<p class="bag-label" id="bag-label" hidden></p>';
+    }
+    return '<p class="bag-label bag-label--' + bag + '" id="bag-label">' + escapeHtml(bagName(bag)) + "</p>";
+  }
+  function bagPackButton(id, label, current) {
+    var on = (current || "") === id;
+    return '<button type="button" class="btn" data-bag="' + escapeHtml(id) + '" aria-pressed="' +
+      (on ? "true" : "false") + '">' + escapeHtml(label) + "</button>";
+  }
+  function bagPackHtml(slug) {
+    if (!ownerUnlocked()) return "";
+    var current = readBagState()[slug] || "";
+    return '<div class="bag-pack" id="bag-pack">' +
+      '<p class="bag-pack-label" id="bag-pack-label">Pack in bag</p>' +
+      '<div class="bag-pack-actions" role="group" aria-labelledby="bag-pack-label">' +
+        bagPackButton("big", "Big bag", current) +
+        bagPackButton("small", "Small bag", current) +
+        bagPackButton("", "Not packed", current) +
+      "</div></div>";
+  }
+  function paintBagLabel(slug) {
+    var el = document.getElementById("bag-label");
+    if (!el || !ownerUnlocked()) return;
+    var bag = readBagState()[slug] || "";
+    if (bag !== "big" && bag !== "small") {
+      el.hidden = true;
+      el.textContent = "";
+      el.className = "bag-label";
+      return;
+    }
+    el.hidden = false;
+    el.textContent = bagName(bag);
+    el.className = "bag-label bag-label--" + bag;
+  }
+  function paintBagPack(slug) {
+    var root = document.getElementById("bag-pack");
+    if (!root) return;
+    var current = readBagState()[slug] || "";
+    Array.prototype.forEach.call(root.querySelectorAll("button[data-bag]"), function (button) {
+      var on = (button.getAttribute("data-bag") || "") === current;
+      button.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    paintBagLabel(slug);
+  }
+  function bindBagPack(slug) {
+    var root = document.getElementById("bag-pack");
+    if (!root || !ownerUnlocked() || root.getAttribute("data-bound") === "1") return;
+    root.setAttribute("data-bound", "1");
+    root.addEventListener("click", function (event) {
+      var button = event.target.closest ? event.target.closest("button[data-bag]") : null;
+      if (!button || !root.contains(button)) return;
+      var bag = button.getAttribute("data-bag") || "";
+      if (bag !== "big" && bag !== "small") bag = "";
+      setGameBag(slug, bag);
+      paintBagPack(slug);
+    });
+  }
+  function onOwnerNavClick(event) {
+    if (!new URL(window.location.href).searchParams.has("unlock")) return;
+    if (event.defaultPrevented) return;
+    event.preventDefault();
+    var href = "#/bags";
+    var dest = gamePathnameSlug() ? ((basePath() || "") + "/" + href) : (window.location.pathname + href);
+    history.pushState(null, "", dest);
+    render();
+  }
+  function syncOwnerNav() {
+    var on = ownerUnlocked();
+    var headerLink = document.querySelector("header a.header-bags");
+    if (on && !headerLink) {
+      var theme = document.getElementById("themeToggle");
+      var night = document.querySelector("header a.header-night");
+      var link = document.createElement("a");
+      link.className = "header-bags";
+      link.href = "#/bags";
+      link.textContent = "Bags";
+      if (theme && theme.parentNode) theme.parentNode.insertBefore(link, theme.nextSibling);
+      else if (night && night.parentNode) night.parentNode.insertBefore(link, night.nextSibling);
+      link.addEventListener("click", onOwnerNavClick);
+    } else if (!on && headerLink) {
+      headerLink.remove();
+    }
+    var bar = document.querySelector(".all-games-bar");
+    var barLink = bar && bar.querySelector("a.bags-entry");
+    if (on && bar && !barLink) {
+      var entry = document.createElement("a");
+      entry.className = "bags-entry";
+      entry.href = "#/bags";
+      entry.textContent = "Bags";
+      bar.appendChild(entry);
+      entry.addEventListener("click", onOwnerNavClick);
+    } else if (!on && barLink) {
+      barLink.remove();
+    }
+  }
+  function bagGameItems(id, games) {
+    return Object.keys(games).filter(function (slug) {
+      return games[slug] === id && DATA[slug];
+    }).sort(function (a, b) {
+      return String(DATA[a].name || a).localeCompare(String(DATA[b].name || b), undefined, { sensitivity: "base" });
+    });
+  }
+  function renderBags() {
+    detailSlug = "";
+    clearGameAccent();
+    setUnlockRobots(true);
+    var headerLink = document.querySelector("header a.header-bags");
+    if (headerLink) headerLink.setAttribute("aria-current", "page");
+    var games = readBagState();
+    function section(id) {
+      var name = bagName(id);
+      var slugs = bagGameItems(id, games);
+      var count = slugs.length;
+      var countLabel = count === 1 ? "1 game" : count + " games";
+      var items = slugs.map(function (slug) {
+        var dest = otherBag(id);
+        var gameName = DATA[slug].name || slug;
+        return '<li class="bag-game">' +
+          '<a class="bag-game-link" href="' + escapeHtml(gamePath(slug)) + '">' + escapeHtml(gameName) + "</a>" +
+          '<div class="bag-game-actions">' +
+            '<button type="button" class="btn" data-bag-remove="' + escapeHtml(slug) + '" aria-label="Remove ' + escapeHtml(gameName) + '">Remove</button>' +
+            '<button type="button" class="btn" data-bag-move="' + escapeHtml(slug) + '" data-bag-to="' + dest + '" aria-label="Move ' + escapeHtml(gameName) + " to " + escapeHtml(bagName(dest)) + '">Move to ' + escapeHtml(bagName(dest)) + "</button>" +
+          "</div></li>";
+      }).join("");
+      return '<section class="bag-card bag-card--' + id + '" data-bag-id="' + id + '" aria-labelledby="bag-heading-' + id + '">' +
+        '<div class="bag-card-head">' +
+          '<h3 id="bag-heading-' + id + '">' + escapeHtml(name) + "</h3>" +
+          '<p class="bag-count">' + escapeHtml(countLabel) + "</p>" +
+        "</div>" +
+        (items ? '<ul class="bag-games">' + items + "</ul>" : '<p class="bag-empty">Nothing packed.</p>') +
+        '<button type="button" class="btn" data-bag-clear="' + id + '"' + (count ? "" : " disabled") + ">Clear bag</button>" +
+      "</section>";
+    }
+    appEl.innerHTML =
+      '<article class="detail bags-page">' +
+        '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>' +
+        '<h2 class="title">Bags</h2>' +
+        '<p class="exp-note">On this device only. A game is in one bag at a time.</p>' +
+        section("big") +
+        section("small") +
+      "</article>";
+    var page = appEl.querySelector(".bags-page");
+    if (!page) return;
+    page.addEventListener("click", function (event) {
+      var move = event.target.closest ? event.target.closest("[data-bag-move]") : null;
+      if (move && page.contains(move)) {
+        var to = move.getAttribute("data-bag-to") || "";
+        setGameBag(move.getAttribute("data-bag-move"), to === "big" || to === "small" ? to : "");
+        renderBags();
+        return;
+      }
+      var remove = event.target.closest ? event.target.closest("[data-bag-remove]") : null;
+      if (remove && page.contains(remove)) {
+        setGameBag(remove.getAttribute("data-bag-remove"), "");
+        renderBags();
+        return;
+      }
+      var clearBtn = event.target.closest ? event.target.closest("[data-bag-clear]") : null;
+      if (!clearBtn || !page.contains(clearBtn) || clearBtn.disabled) return;
+      var id = clearBtn.getAttribute("data-bag-clear") || "";
+      var label = bagName(id);
+      if (!label) return;
+      if (!window.confirm("Clear " + label + "? Every game comes out of this bag.")) return;
+      clearOneBag(id);
+      renderBags();
+    });
+  }
+
   var expansionGuides = null;
   var expansionGuidesPromise = null;
   function loadExpansionGuides() {
@@ -164130,6 +164498,7 @@
           "</figure>" +
           '<div class="detail-head-text">' +
             '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
+            bagLabelHtml(g.slug) +
             buildMetaBar(g, selectedCount) +
           "</div>" +
         "</div>" +
@@ -164158,6 +164527,7 @@
             componentsHtml +
             rulesGlossaryHtml +
             renderGoDeeper(g) +
+            bagPackHtml(g.slug) +
             '<button class="btn" type="button" id="save-offline" aria-live="polite">Save for offline</button>' +
             '<button class="btn" id="share">Share / Copy Link</button>' +
           "</div>" +
@@ -164755,6 +165125,7 @@
       showAll: showAllSelection
     });
     mountPrivatePacking(g);
+    bindBagPack(slug);
     bindSaveOffline(slug);
     rememberGameOffline(slug);
   }
@@ -164805,6 +165176,9 @@
     /* game-night:start */
     if ((pieces[0] || "").toLowerCase() === "night") {
       return { route: "night", nightQuery: params };
+    }
+    if ((pieces[0] || "").toLowerCase() === "bags") {
+      return { route: "bags" };
     }
     /* game-night:end */
     if (pieces[0] === "game" && pieces[1]) {
@@ -165125,9 +165499,11 @@
       writePackUnlock(next);
       form.token.value = "";
       status.textContent = "Saved.";
+      syncOwnerNav();
     });
     document.getElementById("storage-forget").addEventListener("click", function () {
       clearPackUnlock();
+      syncOwnerNav();
       form.owner.value = "reddittitt";
       form.repo.value = "bgquick-storage";
       form.token.value = "";
@@ -165182,6 +165558,9 @@
     document.body.style.overflow = "";
     var nightLink = document.querySelector("header a.header-night");
     if (nightLink) nightLink.removeAttribute("aria-current");
+    syncOwnerNav();
+    var bagsLink = document.querySelector("header a.header-bags");
+    if (bagsLink) bagsLink.removeAttribute("aria-current");
     if (unlockRequested()) {
       scrollPageToTop();
       renderStorage();
@@ -165195,6 +165574,9 @@
       var named = DATA[parsed.slug];
       document.title = (named && named.name ? named.name + " · " : "") + "Board Game Quick";
       setCanonical(parsed.slug);
+    } else if (parsed.route === "bags" && ownerUnlocked()) {
+      document.title = "Bags · Board Game Quick";
+      setCanonical("");
     } else {
       document.title = "Board Game Quick";
       setCanonical("");
@@ -165224,6 +165606,15 @@
       scrollPageToTop();
       renderGameNight(parsed.nightQuery);
       requestAnimationFrame(scrollPageToTop);
+    } else if (parsed.route === "bags") {
+      if (!ownerUnlocked()) {
+        history.replaceState(null, "", window.location.pathname + window.location.search + "#/");
+        renderList();
+      } else {
+        scrollPageToTop();
+        renderBags();
+        requestAnimationFrame(scrollPageToTop);
+      }
     } else {
       renderList();
     }
