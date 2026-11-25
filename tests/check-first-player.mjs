@@ -5,13 +5,13 @@ import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rules = JSON.parse(fs.readFileSync(path.join(root, "first-player.json"), "utf8"));
-const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const failures = [];
 
 function check(name, ok) {
   if (!ok) failures.push(name);
 }
 
+/* Same hyphen-join as scripts/extract-first-player.mjs pageBlob. */
 function pageBlob(slug, pageNum) {
   const file = path.join(root, "rulebooks/index", slug + ".json");
   check(slug + " has an index", fs.existsSync(file));
@@ -20,7 +20,17 @@ function pageBlob(slug, pageNum) {
   const page = (index.pages || []).find((item) => item.page === pageNum);
   check(slug + " page " + pageNum, !!page);
   if (!page) return "";
-  return (page.lines || []).join(" ").replace(/\u0007/g, " ").replace(/\s+/g, " ").toLowerCase();
+  const parts = [];
+  (page.lines || []).forEach((line) => {
+    let text = String(line || "").replace(/\u0007/g, "").trim();
+    if (!text) return;
+    if (parts.length && /[A-Za-z]-$/.test(parts[parts.length - 1]) && /^[a-z]/.test(text)) {
+      parts[parts.length - 1] = parts[parts.length - 1].slice(0, -1) + text;
+      return;
+    }
+    parts.push(text);
+  });
+  return parts.join(" ").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
 const slugs = Object.keys(rules);
@@ -32,20 +42,14 @@ slugs.forEach((slug) => {
   check(slug + " page number", Number.isInteger(row.page) && row.page >= 1);
   check(slug + " not a win condition", !/\bfirst player to\b/i.test(row.text));
   const blob = pageBlob(slug, row.page);
+  const bare = String(row.text).replace(/[.!?]+$/, "").toLowerCase();
+  check(slug + " text is on the page", blob.includes(bare));
   check(slug + " query is on the page", blob.includes(String(row.query).toLowerCase()));
-  if (row.from === "index") {
-    const bare = String(row.text).replace(/[.!?]$/, "").toLowerCase();
-    check(slug + " text is on the page", blob.includes(bare));
-  } else if (row.from === "rules") {
-    check(slug + " text is in the catalog rules", html.includes(row.text));
-  } else {
-    check(slug + " source", false);
-  }
 });
 
 console.log("first player rules " + slugs.length);
 if (failures.length) {
-  console.error(failures.slice(0, 30).join("\n"));
+  console.error(failures.slice(0, 40).join("\n"));
   process.exit(1);
 }
 console.log("ok first player rules");

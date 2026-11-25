@@ -3980,7 +3980,8 @@
 
   .play-tonight-open {
     position:fixed;
-    z-index:7;
+    z-index:50;
+    box-sizing:border-box;
     left:max(12px, env(safe-area-inset-left));
     right:max(12px, env(safe-area-inset-right));
     bottom:calc(10px + env(safe-area-inset-bottom));
@@ -4000,6 +4001,9 @@
   body:has(#catalog-filter-panel:not([hidden])) .play-tonight-open { display:none; }
   body:has(#app-update:not([hidden])) .play-tonight-open {
     bottom:calc(76px + env(safe-area-inset-bottom));
+  }
+  body:has(#play-tonight-open:not([hidden])) main {
+    padding-bottom:calc(64px + env(safe-area-inset-bottom));
   }
   .play-tonight-dialog {
     width:min(520px, calc(100vw - 24px));
@@ -4244,6 +4248,8 @@
 <div id="app-update" hidden role="status" aria-live="polite">
   <button type="button" id="app-update-refresh">Updated, tap to reload</button>
 </div>
+<button type="button" id="play-tonight-open" class="play-tonight-open" hidden>What should we play?</button>
+<dialog id="play-tonight-dialog" class="play-tonight-dialog" aria-labelledby="play-tonight-title"></dialog>
 
 <main>
   <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a></p>
@@ -159621,9 +159627,7 @@
     var who = OWNER_NAMES.map(function (name) {
       return tonightChip("who", name, name, "Tonight, " + name + "\u2019s games");
     }).join("");
-    return '<button type="button" id="play-tonight-open" class="play-tonight-open">What should we play?</button>' +
-      '<dialog id="play-tonight-dialog" class="play-tonight-dialog" aria-labelledby="play-tonight-title">' +
-      '<section id="play-tonight" class="play-tonight" aria-labelledby="play-tonight-title">' +
+    return '<section id="play-tonight" class="play-tonight" aria-labelledby="play-tonight-title">' +
       '<h2 id="play-tonight-title">What should we play?</h2>' +
       '<p class="play-tonight-lead">Pick a player count and a time. Weight and whose games are optional.</p>' +
       '<div class="play-tonight-facet">' +
@@ -159647,7 +159651,24 @@
       '<p id="play-tonight-note" class="play-tonight-note">Pick a player count and a time.</p>' +
       '<ul id="play-tonight-list"></ul>' +
       '<p class="play-tonight-actions"><button type="button" id="play-tonight-close">Close</button></p>' +
-    "</section></dialog>";
+    "</section>";
+  }
+  function placePlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    if (!opener) return;
+    var vv = window.visualViewport;
+    var gap = vv ? Math.max(0, window.innerHeight - vv.offsetTop - vv.height) : 0;
+    var update = document.getElementById("app-update");
+    if (update && !update.hidden) gap += 66;
+    opener.style.bottom = "calc(" + (10 + gap) + "px + env(safe-area-inset-bottom, 0px))";
+  }
+  function hidePlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    var dialog = document.getElementById("play-tonight-dialog");
+    if (opener) opener.hidden = true;
+    if (!dialog) return;
+    if (dialog.open && typeof dialog.close === "function") dialog.close();
+    else dialog.removeAttribute("open");
   }
   function tonightMeta(game) {
     var bits = [];
@@ -159715,14 +159736,29 @@
     }).join("");
   }
   function mountPlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    var dialog = document.getElementById("play-tonight-dialog");
+    if (opener) opener.hidden = false;
+    placePlayTonight();
+    if (!window._bgqTonightPlace) {
+      window._bgqTonightPlace = true;
+      window.addEventListener("resize", placePlayTonight);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", placePlayTonight);
+        window.visualViewport.addEventListener("scroll", placePlayTonight);
+      }
+    }
+    if (dialog && !document.getElementById("play-tonight")) dialog.innerHTML = playTonightMarkup();
     var section = document.getElementById("play-tonight");
-    if (!section || section.getAttribute("data-bound") === "1") return;
+    if (!section) return;
+    if (section.getAttribute("data-bound") === "1") {
+      refreshTonight(false);
+      return;
+    }
     section.setAttribute("data-bound", "1");
     window.BGQuickPlayTonight = {
       fits: function (slug) { return tonightMatches(DATA[slug], readTonight()); }
     };
-    var opener = document.getElementById("play-tonight-open");
-    var dialog = document.getElementById("play-tonight-dialog");
     var closer = document.getElementById("play-tonight-close");
     if (opener && dialog) {
       opener.addEventListener("click", function () {
@@ -159777,7 +159813,6 @@
         '<span class="game-day-entry-title">One Saturday a month, 3–9 PM</span>' +
         '<span class="game-day-entry-sub">RSVP for your family and sign up for food</span>' +
       "</a>" +
-      playTonightMarkup() +
       '<section id="recently-opened" class="recent-row" hidden>' +
         '<div class="recent-row-head">' +
           '<h2>Recently opened</h2>' +
@@ -168565,6 +168600,7 @@
 
   function render() {
     closeRulebookViewer();
+    hidePlayTonight();
     clearMiniBar();
     syncHeaderOffset();
     document.body.style.overflow = "";

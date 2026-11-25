@@ -12,10 +12,10 @@
     "from": "index"
   },
   "agent-avenue": {
-    "text": "The starting player is whoever watched a spy movie most recently.",
+    "text": "The player who watched a spy movie most recently is the starting player.",
     "page": 4,
     "query": "spy movie most recently",
-    "from": "rules"
+    "from": "index"
   },
   "agricola": {
     "text": "Players choose a starting player who receives the Starting player marker and 2 Food.",
@@ -138,10 +138,10 @@
     "from": "index"
   },
   "castle-combo": {
-    "text": "Pick a first player at random.",
+    "text": "Randomly select a first player.",
     "page": 4,
     "query": "Randomly select a first player",
-    "from": "rules"
+    "from": "index"
   },
   "catan": {
     "text": "The player with the highest roll is the first player.",
@@ -156,10 +156,10 @@
     "from": "index"
   },
   "cellulose-a-plant-cell-biology-game": {
-    "text": "Give the First Player Marker to the last one to water a plant, or decide randomly.",
+    "text": "Give the First Player Marker to the last one to water a plant (or decide randomly).",
     "page": 4,
     "query": "Give the First Player Marker to the last one to water a plant",
-    "from": "rules"
+    "from": "index"
   },
   "century-golem-edition": {
     "text": "The player with the symbol on his Caravan card is the first player.",
@@ -276,10 +276,10 @@
     "from": "index"
   },
   "harmonies": {
-    "text": "The first player is whoever last saw a magnificent landscape. Point the central board's arrow at that player.",
+    "text": "The player to have last seen a magnificent landscape is the first player. Point the Central Board's arrow toward them.",
     "page": 2,
     "query": "magnificent landscape is the first player",
-    "from": "rules"
+    "from": "index"
   },
   "hypothetically": {
     "text": "Choose a starting player by any method, or by the most recent person to have seen a chicken.",
@@ -324,16 +324,16 @@
     "from": "rules"
   },
   "moonrakers": {
-    "text": "The first player is whoever rolls the fewest hazards on all four hazard dice.",
+    "text": "The player that rolls the least D Hazard goes first.",
     "page": 14,
     "query": "least D Hazard goes first",
-    "from": "rules"
+    "from": "index"
   },
   "moonrollers": {
-    "text": "The first player is whoever last won a game of Moonrakers, or a player chosen at random.",
+    "text": "The first player is the player who last won a game of Moonrakers (or is chosen randomly).",
     "page": 4,
     "query": "last won a game of Moonrakers",
-    "from": "rules"
+    "from": "index"
   },
   "my-little-scythe": {
     "text": "Determine first player.",
@@ -342,10 +342,10 @@
     "from": "index"
   },
   "mycelia-2024": {
-    "text": "The first player is whoever saw a mushroom in the wild last.",
+    "text": "The first player is determined by whoever saw a mushroom in the wild last, or you can put a spore from each player into a hat and see whose is drawn first, or argue about it for 15 minutes.",
     "page": 3,
     "query": "mushroom in the wild",
-    "from": "rules"
+    "from": "index"
   },
   "new-york-1901": {
     "text": "Determine a starting player.",
@@ -360,10 +360,10 @@
     "from": "rules"
   },
   "night-at-the-zoo": {
-    "text": "Choose a first player, perhaps whoever most recently saw or helped an animal.",
+    "text": "Choose a first player.",
     "page": 4,
-    "query": "saw or helped",
-    "from": "rules"
+    "query": "Choose a first player",
+    "from": "index"
   },
   "nocturne": {
     "text": "Select a starting player at random and you are ready.",
