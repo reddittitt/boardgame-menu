@@ -485,6 +485,63 @@
     margin:8px 0;
     color:var(--muted);
   }
+  .recent-row { margin:0 0 12px; min-width:0; }
+  .recent-row[hidden] { display:none; }
+  .recent-row-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin:0 0 6px;
+  }
+  .recent-row-head h2 {
+    margin:0;
+    font-size:1rem;
+  }
+  #recent-clear {
+    min-height:44px;
+    margin:0;
+    padding:0 4px;
+    border:0;
+    background:transparent;
+    color:var(--accent);
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .recent-list {
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:0 0 4px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .recent-chip {
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-height:44px;
+    max-width:220px;
+    padding:4px 12px 4px 4px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:inherit;
+    text-decoration:none;
+    font-weight:650;
+  }
+  .recent-chip img {
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    object-fit:cover;
+  }
+  .recent-chip span {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
   .grid {
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -158948,6 +159005,13 @@
         '<span class="game-day-entry-title">One Saturday a month, 3–9 PM</span>' +
         '<span class="game-day-entry-sub">RSVP for your family and sign up for food</span>' +
       "</a>" +
+      '<section id="recently-opened" class="recent-row" hidden>' +
+        '<div class="recent-row-head">' +
+          '<h2>Recently opened</h2>' +
+          '<button type="button" id="recent-clear">Clear recent</button>' +
+        '</div>' +
+        '<div id="recently-opened-list" class="recent-list"></div>' +
+      '</section>' +
       '<div class="search-bar">' +
         '<input id="search" placeholder="Search your collection..." aria-label="Search games" autocomplete="off" enterkeyhint="search">' +
         '<button type="button" id="search-clear" hidden>Clear</button>' +
@@ -159012,6 +159076,10 @@
       '<p id="search-count" class="search-count" aria-live="polite"></p>' +
       '<p id="filter-hidden" class="filter-hidden" aria-live="polite"></p>' +
       '<section id="game-grid" class="grid"></section>';
+
+    var recentClear = document.getElementById("recent-clear");
+    if (recentClear) recentClear.addEventListener("click", clearRecent);
+    renderRecentlyViewed(readRecent());
 
     var grid = document.getElementById("game-grid");
     var search = document.getElementById("search");
@@ -159224,79 +159292,69 @@
     return coverUrl(gameSlug + "--" + es);
   }
 
-  /* --- Recently viewed helpers --- */
+  /* --- Recently opened. This browser only, last five games. --- */
   var RECENT_KEY = "bgq_recent";
-
+  var RECENT_LIMIT = 5;
+  function readRecent() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
+      if (!Array.isArray(raw)) return [];
+      var slugs = [];
+      raw.forEach(function (item) {
+        var slug = typeof item === "string" ? item : (item && item.slug);
+        if (!slug || !DATA[slug] || slugs.indexOf(slug) !== -1) return;
+        slugs.push(slug);
+      });
+      return slugs.slice(0, RECENT_LIMIT);
+    } catch (e) { return []; }
+  }
+  function writeRecent(slugs) {
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(slugs.slice(0, RECENT_LIMIT))); }
+    catch (e) {}
+  }
   function renderRecentlyViewed(list) {
-    var section = document.getElementById("recentlyViewed");
-    var container = document.getElementById("recentlyViewedList");
+    var section = document.getElementById("recently-opened");
+    var container = document.getElementById("recently-opened-list");
     if (!section || !container) return;
-
+    var slugs = [];
+    (list || []).forEach(function (item) {
+      var slug = typeof item === "string" ? item : (item && item.slug);
+      if (!slug || !DATA[slug] || slugs.indexOf(slug) !== -1) return;
+      slugs.push(slug);
+    });
+    slugs = slugs.slice(0, RECENT_LIMIT);
     container.innerHTML = "";
-    if (!list || !list.length) {
+    if (!slugs.length) {
       section.hidden = true;
       return;
     }
-
     section.hidden = false;
-
-    list.forEach(function(item) {
-      var chip = document.createElement("button");
+    slugs.forEach(function (slug) {
+      var game = DATA[slug];
+      var chip = document.createElement("a");
       chip.className = "recent-chip";
-      chip.type = "button";
-
+      chip.href = gamePath(slug);
       var img = document.createElement("img");
-      img.src = item.cover;
-      img.alt = item.name + " cover";
-
+      img.src = coverUrl(slug);
+      img.alt = "";
       var span = document.createElement("span");
-      span.textContent = item.name;
-
+      span.textContent = game.name;
       chip.appendChild(img);
       chip.appendChild(span);
-
-      chip.addEventListener("click", function() {
-        var next = gamePath(item.slug);
-        if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
-          history.pushState(null, "", next);
-        }
-        render();
-      });
-
       container.appendChild(chip);
     });
   }
-
   function markRecentlyViewed(game) {
-    try {
-      var raw = localStorage.getItem(RECENT_KEY);
-      var list = raw ? JSON.parse(raw) : [];
-
-      list = list.filter(function(item) { return item.slug !== game.slug; });
-
-      list.unshift({
-        slug: game.slug,
-        name: game.name,
-        cover: coverUrl(game.slug)
-      });
-
-      if (list.length > 8) list = list.slice(0, 8);
-
-      localStorage.setItem(RECENT_KEY, JSON.stringify(list));
-      renderRecentlyViewed(list);
-    } catch (e) {
-      // Ignore failures
-    }
+    if (!game || !game.slug || !DATA[game.slug]) return;
+    var list = readRecent().filter(function (slug) { return slug !== game.slug; });
+    list.unshift(game.slug);
+    writeRecent(list);
+    renderRecentlyViewed(list);
   }
-
-  (function initRecentOnLoad() {
-    try {
-      var raw = localStorage.getItem(RECENT_KEY);
-      if (raw) {
-        renderRecentlyViewed(JSON.parse(raw));
-      }
-    } catch (e) {}
-  })();
+  function clearRecent() {
+    try { localStorage.removeItem(RECENT_KEY); } catch (e) {}
+    renderRecentlyViewed([]);
+  }
 
   /* --- Rulebook search (index is fetched only when the box is used) --- */
   var detailSlug = "";
