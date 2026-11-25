@@ -412,3 +412,226 @@ test("contact details are rejected and a decline is not a headcount", async func
   await expect(page.locator("#gd-list")).toContainText("Can't make it");
   await expect(page.locator("#food-snacks")).toContainText("Waiting on RSVPs");
 });
+
+function execFulfillHeaders() {
+  return {
+    "access-control-allow-origin": "*",
+    "cache-control": "no-store"
+  };
+}
+
+async function installNominateMock(page, onPost) {
+  const live = [];
+  page.on("request", function (req) {
+    if (/script\.google(usercontent)?\.com/i.test(req.url())) live.push(req.method() + " " + req.url());
+  });
+  await page.route(/script\.google(usercontent)?\.com/i, function (route) {
+    return route.abort();
+  });
+  await page.route("**/data/game-days.json", async function (route) {
+    await fulfillGameDays(route, execUrl);
+  });
+  await page.route(function (url) {
+    return url.href.indexOf(execUrl) === 0;
+  }, async function (route) {
+    const req = route.request();
+    if (/script\.google(usercontent)?\.com/i.test(req.url())) {
+      await route.abort();
+      return;
+    }
+    if (req.method() === "GET") {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        headers: execFulfillHeaders(),
+        body: JSON.stringify({ ok: true, eventId: "2026-11-21", rsvps: [], food: [], tables: [] })
+      });
+      return;
+    }
+    if (req.method() === "POST") {
+      let body = {};
+      try { body = JSON.parse(req.postData() || "{}"); }
+      catch (err) { body = {}; }
+      await onPost(route, body);
+      return;
+    }
+    await route.abort();
+  });
+  return live;
+}
+
+async function fillNominate(page) {
+  const nominate = page.locator("#gd-nominate");
+  await expect(nominate).toBeVisible();
+  await nominate.getByLabel("Your first name").fill("Riley");
+  await nominate.locator("#gd-game").fill("Catan");
+  await nominate.getByLabel("Start time").selectOption("16:00");
+  await nominate.getByLabel("Seats").fill("4");
+  await nominate.getByRole("button", { name: "Can teach", exact: true }).click();
+  return nominate;
+}
+
+async function expectInViewport(locator) {
+  await expect(locator).toBeVisible();
+  const box = await locator.boundingBox();
+  const view = locator.page().viewportSize();
+  expect(box).toBeTruthy();
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + box.height).toBeLessThanOrEqual(view.height + 1);
+  expect(box.x + box.width).toBeLessThanOrEqual(view.width + 1);
+}
+
+function tableSnapshot(body) {
+  return {
+    ok: true,
+    eventId: body.eventId || "2026-11-21",
+    rsvps: [],
+    food: [],
+    tables: [{
+      id: body.id,
+      game: body.game,
+      startTime: body.startTime,
+      seats: body.seats,
+      players: [{ id: body.playerId, name: body.name, experience: body.experience }]
+    }]
+  };
+}
+
+test("nominate posts the table, then shows the card without an error", async function ({ page }, testInfo) {
+  let posted = null;
+  const live = await installNominateMock(page, async function (route, body) {
+    posted = body;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: execFulfillHeaders(),
+      body: JSON.stringify(tableSnapshot(body))
+    });
+  });
+  await page.goto(ON);
+  const nominate = await fillNominate(page);
+  await nominate.getByRole("button", { name: "Nominate table" }).click();
+
+  await expect(page.locator(".gd-table").filter({ hasText: "Catan" })).toBeVisible();
+  await expect(page.locator("#gd-tables-status")).toHaveText("Table added");
+  await expect(page.locator("#gd-error")).toBeHidden();
+  await expect(page.locator("#gd-tables-error")).toBeHidden();
+  expect(posted).toMatchObject({
+    op: "nominate",
+    eventId: "2026-11-21",
+    name: "Riley",
+    game: "Catan",
+    startTime: "16:00",
+    seats: 4,
+    experience: "teach"
+  });
+  expect(posted.id).toMatch(/^[a-f0-9]{32}$/);
+  expect(posted.playerId).toMatch(/^[a-f0-9]{32}$/);
+  expect(live).toEqual([]);
+
+  if (testInfo.project.name === "phone") {
+    await page.evaluate(function () {
+      var status = document.getElementById("gd-tables-status");
+      var header = document.querySelector("header");
+      if (!status) return;
+      var headerH = header ? header.getBoundingClientRect().height : 0;
+      var top = status.getBoundingClientRect().top + window.scrollY - headerH - 8;
+      window.scrollTo(0, Math.max(0, top));
+    });
+    await page.screenshot({ path: path.join(artifacts, "game-day-nominate-success-phone.png") });
+  }
+});
+
+test("a failed nominate keeps the form and shows the error in view", async function ({ page }, testInfo) {
+  const live = await installNominateMock(page, async function (route) {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: execFulfillHeaders(),
+      body: JSON.stringify({ ok: false, error: "Something went wrong. Try again." })
+    });
+  });
+  await page.goto(ON);
+  const nominate = await fillNominate(page);
+  await nominate.getByRole("button", { name: "Nominate table" }).click();
+
+  const alert = page.locator("#gd-tables-error");
+  await expect(alert).toHaveText("Something went wrong. Try again.");
+  await expect(page.locator("#gd-error")).toHaveText("Something went wrong. Try again.");
+  await expectInViewport(alert);
+  await expect(nominate.getByLabel("Your first name")).toHaveValue("Riley");
+  await expect(nominate.locator("#gd-game")).toHaveValue("Catan");
+  await expect(nominate.getByLabel("Start time")).toHaveValue("16:00");
+  await expect(nominate.getByLabel("Seats")).toHaveValue("4");
+  await expect(nominate.getByRole("button", { name: "Can teach", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(nominate.getByRole("button", { name: "Nominate table" })).toBeEnabled();
+  await expect(page.locator(".gd-table")).toHaveCount(0);
+  expect(live).toEqual([]);
+
+  if (testInfo.project.name === "phone") {
+    await page.screenshot({ path: path.join(artifacts, "game-day-nominate-error-phone.png") });
+  }
+});
+
+test("the update toast sits at the bottom and a nominate click still posts", async function ({ page }) {
+  let posted = null;
+  const dialogs = [];
+  page.on("dialog", async function (dialog) {
+    dialogs.push(dialog.message());
+    await dialog.dismiss();
+  });
+  const live = await installNominateMock(page, async function (route, body) {
+    posted = body;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: execFulfillHeaders(),
+      body: JSON.stringify(tableSnapshot(body))
+    });
+  });
+  await page.goto(ON);
+  const nominate = await fillNominate(page);
+  await page.evaluate(function () { window.__gdBoot = "stay"; });
+  await page.evaluate(function () {
+    document.getElementById("app-update").hidden = false;
+  });
+  await expect(page.locator("html")).toHaveClass(/gd-update-open/);
+
+  const hit = await page.evaluate(function () {
+    var button = document.querySelector("#gd-nominate button[type=submit]");
+    button.scrollIntoView({ block: "end", inline: "nearest" });
+    var rect = button.getBoundingClientRect();
+    var x = rect.left + rect.width / 2;
+    var y = rect.top + rect.height / 2;
+    var top = document.elementsFromPoint(x, y)[0];
+    var toast = document.getElementById("app-update").getBoundingClientRect();
+    return {
+      x: x,
+      y: y,
+      topIsButton: top === button,
+      topId: top ? top.id : "",
+      topTag: top ? top.tagName : "",
+      buttonBottom: rect.bottom,
+      toastTop: toast.top,
+      viewHeight: window.innerHeight
+    };
+  });
+  if (!hit.topIsButton) throw new Error("nominate button covered: " + JSON.stringify(hit));
+  expect(hit.toastTop).toBeGreaterThan(hit.viewHeight * 0.5);
+  expect(hit.buttonBottom).toBeLessThanOrEqual(hit.toastTop + 1);
+
+  await page.mouse.click(hit.x, hit.y);
+  await expect.poll(function () { return posted && posted.op; }).toBe("nominate");
+  expect(posted).toMatchObject({
+    op: "nominate",
+    name: "Riley",
+    game: "Catan",
+    startTime: "16:00",
+    seats: 4,
+    experience: "teach"
+  });
+  expect(await page.evaluate(function () { return window.__gdBoot; })).toBe("stay");
+  expect(dialogs).toEqual([]);
+  expect(live).toEqual([]);
+  await expect(nominate).toBeVisible();
+});

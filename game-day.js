@@ -319,7 +319,7 @@
     loaded: false,
     loadError: ""
   };
-  var ui = { editingId: "", error: "", saving: false, gameQuery: "", pickedMax: null };
+  var ui = { editingId: "", error: "", status: "", saving: false, gameQuery: "", pickedMax: null, touched: false, actionHost: null, statusTimer: 0 };
   var drafts = {};
   var mainEl = document.getElementById("gd");
 
@@ -730,6 +730,8 @@
       '<section id="gd-tables">' +
         "<h2>Tables</h2>" +
         "<p>Want to play something specific? Nominate a table or join one that still has seats.</p>" +
+        '<p id="gd-tables-error" role="alert">' + escapeHtml(ui.error) + "</p>" +
+        '<p id="gd-tables-status" role="status">' + escapeHtml(ui.status) + "</p>" +
         empty +
         cards +
         nominateForm() +
@@ -864,6 +866,7 @@
   }
 
   function render() {
+    ui.touched = false;
     if (!state.config) {
       mainEl.innerHTML = '<p role="alert">Game Day couldn\'t be loaded.</p>';
       return;
@@ -926,11 +929,116 @@
     }).join("");
   }
 
+  function intersectsViewport(el) {
+    if (!el || !el.getBoundingClientRect) return false;
+    var rect = el.getBoundingClientRect();
+    if (rect.width <= 0 && rect.height <= 0) return false;
+    var height = window.innerHeight || document.documentElement.clientHeight || 0;
+    var width = window.innerWidth || document.documentElement.clientWidth || 0;
+    return rect.bottom > 0 && rect.top < height && rect.right > 0 && rect.left < width;
+  }
+
+  function fieldOffscreen(field) {
+    return !intersectsViewport(field);
+  }
+
+  function firstInvalidControl(form) {
+    var controls = form && form.elements;
+    if (!controls) return null;
+    var i;
+    for (i = 0; i < controls.length; i++) {
+      var control = controls[i];
+      if (control && control.willValidate && !control.validity.valid) return control;
+    }
+    return null;
+  }
+
+  function placeTablesError(tablesError) {
+    var host = ui.actionHost;
+    var tables = document.getElementById("gd-tables");
+    if (!tablesError || !tables || !host || !tables.contains(host)) return;
+    var anchor = host.closest ? (host.closest("form") || host) : host;
+    if (!anchor || !anchor.parentNode || anchor === tablesError) return;
+    if (tablesError.contains && tablesError.contains(anchor)) return;
+    anchor.parentNode.insertBefore(tablesError, anchor);
+  }
+
+  function clearStatusNow() {
+    ui.status = "";
+    if (ui.statusTimer) {
+      clearTimeout(ui.statusTimer);
+      ui.statusTimer = 0;
+    }
+    var node = document.getElementById("gd-tables-status");
+    if (node) node.textContent = "";
+  }
+
+  function clearStatusSoon() {
+    if (ui.statusTimer) clearTimeout(ui.statusTimer);
+    if (!ui.status) {
+      ui.statusTimer = 0;
+      return;
+    }
+    ui.statusTimer = setTimeout(function () {
+      ui.statusTimer = 0;
+      ui.status = "";
+      var node = document.getElementById("gd-tables-status");
+      if (node) node.textContent = "";
+    }, 4000);
+  }
+
   function showError(message) {
     ui.error = message || "";
-    var el = document.getElementById("gd-error");
-    if (el) el.textContent = ui.error;
-    else render();
+    if (ui.error) clearStatusNow();
+    var mainError = document.getElementById("gd-error");
+    var tables = document.getElementById("gd-tables");
+    var tablesError = document.getElementById("gd-tables-error");
+    if (!mainError && !tablesError) {
+      render();
+      mainError = document.getElementById("gd-error");
+      tables = document.getElementById("gd-tables");
+      tablesError = document.getElementById("gd-tables-error");
+    }
+    var tablesAction = !!(ui.actionHost && tables && tables.contains(ui.actionHost));
+    var tablesOnScreen = intersectsViewport(tables);
+    var mirror = !!(tablesError && ui.error && (tablesAction || tablesOnScreen));
+    if (mainError) mainError.textContent = ui.error;
+    if (tablesError) {
+      if (mirror && tablesAction) placeTablesError(tablesError);
+      tablesError.textContent = mirror ? ui.error : "";
+    }
+    if (!ui.error) return;
+    var target = null;
+    if (tablesAction && tablesError) target = tablesError;
+    else if (mainError && mainError.textContent) target = mainError;
+    else if (tablesError && tablesError.textContent) target = tablesError;
+    if (target && typeof target.scrollIntoView === "function") target.scrollIntoView({ block: "center" });
+  }
+
+  function controlIsDirty(field) {
+    if (!field || field.disabled) return false;
+    if (field.tagName === "SELECT") {
+      var options = field.options || [];
+      var j;
+      for (j = 0; j < options.length; j++) {
+        if (options[j].selected !== options[j].defaultSelected) return true;
+      }
+      return false;
+    }
+    if (field.type === "checkbox" || field.type === "radio") return field.checked !== field.defaultChecked;
+    if (typeof field.defaultValue === "string") return field.value !== field.defaultValue;
+    return false;
+  }
+
+  function formHasUnsavedInput() {
+    if (ui.touched) return true;
+    if (!mainEl) return false;
+    var fields = mainEl.querySelectorAll("input, textarea, select");
+    var i;
+    for (i = 0; i < fields.length; i++) {
+      if (controlIsDirty(fields[i])) return true;
+    }
+    return false;
   }
 
   function readJson(res, fallback) {
@@ -1020,6 +1128,7 @@
   }
 
   function onRsvpSubmit(form) {
+    ui.actionHost = form;
     var family = scrub(form.family.value);
     var note = scrub(form.note.value);
     var problem = textProblem(family) || textProblem(note);
@@ -1089,6 +1198,7 @@
   }
 
   function onFoodSubmit(form) {
+    ui.actionHost = form;
     var itemId = form.getAttribute("data-item") || "";
     var name = scrub(form.name.value);
     var bringing = scrub(form.bringing.value);
@@ -1147,6 +1257,7 @@
 
   function onRemove(id) {
     if (ui.saving) return;
+    ui.actionHost = document.getElementById("gd-food");
     ui.saving = true;
     send({
       op: "unclaim",
@@ -1184,6 +1295,7 @@
   }
 
   function onNominate(form) {
+    ui.actionHost = form;
     var person = validatePerson(form.name.value);
     if (person.error) {
       showError(person.error);
@@ -1220,8 +1332,9 @@
     }
     var tableId = randomId();
     var playerId = randomId();
+    var submit = form.querySelector("button[type=submit]");
     ui.saving = true;
-    form.querySelector("button[type=submit]").disabled = true;
+    if (submit) submit.disabled = true;
     showError("");
     send({
       op: "nominate",
@@ -1238,20 +1351,27 @@
       ui.saving = false;
       if (!payload || payload.ok === false) {
         showError((payload && payload.error) || "That didn't save. Try again.");
-        var button = form.querySelector("button[type=submit]");
-        if (button) button.disabled = false;
+        if (submit) submit.disabled = false;
         return;
       }
       rememberTableSeat(state.event.id, tableId, playerId);
       ui.gameQuery = "";
       ui.pickedMax = null;
       ui.error = "";
+      ui.status = "Table added";
+      ui.actionHost = null;
       applyPayload(payload);
       render();
+      var card = document.getElementById("table-" + tableId);
+      var statusEl = document.getElementById("gd-tables-status");
+      var reveal = card || statusEl;
+      if (reveal && reveal.scrollIntoView) reveal.scrollIntoView({ block: "center" });
+      clearStatusSoon();
     });
   }
 
   function onJoin(form) {
+    ui.actionHost = form;
     var tableId = form.getAttribute("data-table") || "";
     var person = validatePerson(form.name.value);
     if (person.error) {
@@ -1264,8 +1384,9 @@
       return;
     }
     var playerId = randomId();
+    var submit = form.querySelector("button[type=submit]");
     ui.saving = true;
-    form.querySelector("button[type=submit]").disabled = true;
+    if (submit) submit.disabled = true;
     showError("");
     send({
       op: "join",
@@ -1279,8 +1400,7 @@
       ui.saving = false;
       if (!payload || payload.ok === false) {
         showError((payload && payload.error) || "That didn't save. Try again.");
-        var button = form.querySelector("button[type=submit]");
-        if (button) button.disabled = false;
+        if (submit) submit.disabled = false;
         return;
       }
       rememberTableSeat(state.event.id, tableId, playerId);
@@ -1290,11 +1410,13 @@
     });
   }
 
-  function onLeaveTable(tableId) {
+  function onLeaveTable(tableId, button) {
     if (ui.saving) return;
+    ui.actionHost = button || document.getElementById("gd-tables");
     var map = storedTableSeats(state.event.id);
     var playerId = map[tableId] || "";
     ui.saving = true;
+    if (button) button.disabled = true;
     send({
       op: "leave",
       eventId: state.event.id,
@@ -1305,6 +1427,7 @@
       ui.saving = false;
       if (!payload || payload.ok === false) {
         showError((payload && payload.error) || "That didn't save. Try again.");
+        if (button) button.disabled = false;
         return;
       }
       forgetTableSeat(state.event.id, tableId);
@@ -1335,9 +1458,25 @@
     else if (form.classList.contains("gd-join")) onJoin(form);
   });
 
+  mainEl.addEventListener("invalid", function (event) {
+    var field = event.target;
+    if (!field || !mainEl.contains(field) || !field.form) return;
+    var first = firstInvalidControl(field.form);
+    if (!first || first !== field || !fieldOffscreen(first)) return;
+    window.requestAnimationFrame(function () {
+      if (!first.isConnected) return;
+      if (first.scrollIntoView) first.scrollIntoView({ block: "center" });
+      try { first.focus({ preventScroll: true }); }
+      catch (err) {
+        try { first.focus(); } catch (e) {}
+      }
+    });
+  }, true);
+
   mainEl.addEventListener("click", function (event) {
     var choice = event.target.closest ? event.target.closest(".gd-choice") : null;
     if (choice && mainEl.contains(choice)) {
+      var wasPressed = choice.getAttribute("aria-pressed") === "true";
       var groupName = choice.getAttribute("data-exp-group");
       var siblings = groupName
         ? choice.parentNode.querySelectorAll('.gd-choice[data-exp-group="' + groupName + '"]')
@@ -1345,6 +1484,7 @@
       Array.prototype.forEach.call(siblings, function (other) {
         other.setAttribute("aria-pressed", other === choice ? "true" : "false");
       });
+      if (!wasPressed && choice.closest && choice.closest("form")) ui.touched = true;
       return;
     }
     var pick = event.target.closest ? event.target.closest(".gd-game-pick") : null;
@@ -1379,7 +1519,7 @@
     }
     var leave = event.target.closest ? event.target.closest("[data-leave-table]") : null;
     if (leave) {
-      onLeaveTable(leave.getAttribute("data-leave-table") || "");
+      onLeaveTable(leave.getAttribute("data-leave-table") || "", leave);
       return;
     }
     if (event.target.id === "gd-retry") loadRsvps();
@@ -1415,6 +1555,12 @@
         state.loaded = false;
         ui.editingId = "";
         ui.error = "";
+        ui.status = "";
+        ui.actionHost = null;
+        if (ui.statusTimer) {
+          clearTimeout(ui.statusTimer);
+          ui.statusTimer = 0;
+        }
         ui.gameQuery = "";
         ui.pickedMax = null;
         try {
@@ -1511,8 +1657,26 @@
         .then(function (text) { considerRemote(versionFromScript(text)); })
         .catch(function () {});
     }
+    var updateWait = false;
     function applyUpdate() {
       if (updateApplied) return;
+      if (ui.saving) {
+        if (updateWait) return;
+        updateWait = true;
+        var waitTimer = setInterval(function () {
+          if (ui.saving) return;
+          clearInterval(waitTimer);
+          updateWait = false;
+          applyUpdate();
+        }, 150);
+        return;
+      }
+      if (formHasUnsavedInput()) {
+        var reloadAnyway = false;
+        try { reloadAnyway = window.confirm("You have unsaved Game Day details. Reload anyway?"); }
+        catch (err) { reloadAnyway = false; }
+        if (!reloadAnyway) return;
+      }
       updateApplied = true;
       var target = pendingRemote;
       if (waitingWorker) {
@@ -1575,6 +1739,19 @@
     });
   }
 
+  function watchUpdateToast() {
+    var bar = document.getElementById("app-update");
+    if (!bar) return;
+    function sync() {
+      document.documentElement.classList.toggle("gd-update-open", !bar.hidden);
+    }
+    sync();
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(sync);
+      observer.observe(bar, { attributes: true, attributeFilter: ["hidden"] });
+    }
+  }
+
   function syncOfflineFlag() {
     var el = document.getElementById("offline-flag");
     if (!el) return;
@@ -1613,11 +1790,13 @@
       state.event = chooseEvent();
       state.open = endpointOpen(state.config.endpoint);
       render();
+      watchUpdateToast();
       registerSw();
       return loadRsvps();
     }).catch(function () {
       state.config = null;
       render();
+      watchUpdateToast();
       registerSw();
     });
   }
