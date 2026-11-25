@@ -183,6 +183,60 @@
     align-items:center;
     justify-content:center;
   }
+  header .quick-search-open,
+  .mini-bar .quick-search-open {
+    width:44px;
+    min-width:44px;
+    padding:8px;
+  }
+  .mini-bar .quick-search-open {
+    color:inherit;
+    background:transparent;
+    border:1px solid var(--border);
+  }
+  .quick-search-open svg { display:block; }
+  .quick-search {
+    width:min(520px, calc(100vw - 24px));
+    margin:12vh auto auto;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:var(--bg);
+    color:inherit;
+  }
+  .quick-search::backdrop { background:rgba(0,0,0,0.45); }
+  .quick-search-card { padding:12px; }
+  .quick-search-bar { display:flex; gap:8px; }
+  .quick-search-bar input {
+    flex:1;
+    min-width:0;
+    min-height:44px;
+    font-size:16px;
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:inherit;
+  }
+  .quick-search-results {
+    list-style:none;
+    margin:8px 0 0;
+    padding:0;
+    max-height:50vh;
+    overflow:auto;
+  }
+  .quick-search-results a {
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    padding:8px 10px;
+    border-radius:10px;
+    color:inherit;
+    text-decoration:none;
+    font-weight:650;
+  }
+  .quick-search-results a[aria-selected="true"],
+  .quick-search-results a:hover { background:color-mix(in srgb, var(--accent) 16%, transparent); }
   .all-games-bar { margin:0 0 4px; }
   main:has(a.back-link[href="#/"]) .all-games-bar { display:none; }
   .all-games-bar a.home {
@@ -594,6 +648,24 @@
     overflow:hidden;
     text-overflow:ellipsis;
   }
+  .catalog-swipe {
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+    min-width:0;
+  }
+  .catalog-swipe .bag-swipe { width:100%; background:transparent; }
+  .catalog-swipe .card { width:100%; }
+  .catalog-swipe .card:hover { transform:none; }
+  .catalog-swipe .bag-swipe-reveal--pack {
+    right:0;
+    justify-content:flex-end;
+    padding:0 8px 0 0;
+    background:#3a5f8f;
+  }
+  .catalog-swipe.bag-game--swipe-left .bag-swipe-reveal--pack { visibility:visible; }
+  .catalog-swipe.bag-game--swipe-commit.bag-game--swipe-left .bag-swipe-reveal--pack,
+  .catalog-swipe.bag-game--swipe-commit.bag-game--swipe-right .bag-swipe-reveal--move { background:#1d4ed8; }
 
   #rules-glossary .glossary-item {
   margin-bottom: 0.4rem;
@@ -2487,7 +2559,7 @@
   }
   @media (max-width:520px) {
     header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
-    header .wrap { gap:6px; }
+    header .wrap { gap:6px; flex-wrap:nowrap; }
     header .toggle {
       padding:6px 8px;
       font-size:0.92rem;
@@ -3906,6 +3978,251 @@
   }
   #offline-flag[hidden] { display:none; }
 
+  .play-tonight-open {
+    position:fixed;
+    z-index:50;
+    box-sizing:border-box;
+    left:max(12px, env(safe-area-inset-left));
+    right:max(12px, env(safe-area-inset-right));
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    min-height:44px;
+    margin:0;
+    padding:10px 14px;
+    border:0;
+    border-radius:999px;
+    background:#007aff;
+    color:#ffffff;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+    box-shadow:0 8px 24px rgba(0,0,0,0.28);
+    cursor:pointer;
+  }
+  body:has(#catalog-filter-panel:not([hidden])) .play-tonight-open { display:none; }
+  body:has(#app-update:not([hidden])) .play-tonight-open {
+    bottom:calc(76px + env(safe-area-inset-bottom));
+  }
+  body:has(#play-tonight-open:not([hidden])) main {
+    padding-bottom:calc(64px + env(safe-area-inset-bottom));
+  }
+  .play-tonight-dialog {
+    width:min(520px, calc(100vw - 24px));
+    max-height:min(86vh, 760px);
+    margin:auto;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:var(--bg);
+    color:inherit;
+  }
+  .play-tonight-dialog::backdrop { background:rgba(0,0,0,0.45); }
+  .play-tonight {
+    margin:0;
+    padding:12px;
+    background:var(--bg);
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+  }
+  .play-tonight h2 { margin:0 0 4px; font-size:1.25rem; }
+  .play-tonight-lead,
+  .play-tonight-note { margin:0 0 8px; color:var(--muted); font-size:16px; }
+  .play-tonight-note[hidden] { display:none; }
+  .play-tonight-facet { margin:0 0 8px; min-width:0; }
+  .play-tonight-label { display:block; font-size:13px; font-weight:700; margin:0 0 4px; }
+  .play-tonight-chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .play-tonight-chip,
+  #play-tonight-shuffle {
+    appearance:none;
+    min-height:44px;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:650;
+    cursor:pointer;
+  }
+  .play-tonight-chip[aria-pressed="true"],
+  #play-tonight-shuffle {
+    background:#007aff;
+    color:#ffffff;
+    border-color:#007aff;
+  }
+  #play-tonight-close {
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:650;
+  }
+  #play-tonight-list {
+    list-style:none;
+    margin:8px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  #play-tonight-list a {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+    min-height:44px;
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    text-decoration:none;
+    color:inherit;
+  }
+  .play-tonight-name,
+  .play-tonight-meta {
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .play-tonight-name { font-weight:700; }
+  .play-tonight-meta { color:var(--muted); font-size:16px; }
+  .play-tonight-packed {
+    color:var(--accent);
+    font-size:12px;
+    font-weight:700;
+  }
+  #first-player-slot:empty { display:none; }
+  .first-player-rule {
+    margin:8px 0 0;
+    font-size:16px;
+    line-height:1.35;
+  }
+  .first-player-label { font-weight:700; }
+  .first-player-open,
+  #play-tonight-pick,
+  #first-player-go,
+  #first-player-again,
+  #first-player-close {
+    appearance:none;
+    min-height:44px;
+    margin:8px 8px 0 0;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  #first-player-go { background:#007aff; color:#fff; border-color:#007aff; }
+  .fp-picker {
+    width:min(520px, calc(100vw - 24px));
+    max-height:min(92vh, 760px);
+    margin:auto;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:var(--bg);
+    color:inherit;
+  }
+  .fp-picker::backdrop { background:rgba(0,0,0,0.5); }
+  .fp-picker-card { padding:14px; }
+  .fp-picker h2 { margin:0 0 6px; font-size:1.25rem; }
+  .fp-help, .fp-alt { margin:0 0 8px; font-size:16px; }
+  .fp-pad {
+    position:relative;
+    min-height:240px;
+    border-radius:12px;
+    border:1px dashed var(--border);
+    background:color-mix(in srgb, var(--card) 80%, var(--bg));
+    touch-action:none;
+    overflow:hidden;
+  }
+  .fp-finger {
+    position:absolute;
+    width:64px;
+    height:64px;
+    margin:-32px 0 0 -32px;
+    border-radius:50%;
+    border:3px solid #fff;
+    background:#007aff;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:20px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+    pointer-events:none;
+  }
+  .fp-finger--winner {
+    background:#34c759;
+    transform:scale(1.12);
+    z-index:2;
+  }
+  .fp-count {
+    margin:8px 0 0;
+    font-size:2rem;
+    font-weight:800;
+    text-align:center;
+  }
+  .teach-progress-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin:0 0 8px;
+  }
+  #teach-progress { margin:0; font-weight:700; font-size:16px; }
+  #teach-reset {
+    appearance:none;
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+  }
+  .teach-script li.teach-step,
+  .teach-script p.teach-step {
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    list-style:none;
+  }
+  .teach-tick {
+    appearance:none;
+    flex:0 0 auto;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:2px solid var(--border);
+    background:transparent;
+    color:inherit;
+    font:inherit;
+    font-size:20px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .teach-step[data-taught="true"] .teach-tick {
+    background:#34c759;
+    color:#fff;
+    border-color:#34c759;
+  }
+
 </style>
 <link rel="stylesheet" href="./game-night.css">
 </head>
@@ -3922,12 +4239,17 @@
 
     <a class="toggle" href="./game-day.html">Game Day</a>
     <a class="header-night" href="#/night">Game night</a>
+    <button type="button" id="quick-search-open" class="toggle quick-search-open" aria-label="Jump to a game">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
 </header>
 <div id="app-update" hidden role="status" aria-live="polite">
   <button type="button" id="app-update-refresh">Updated, tap to reload</button>
 </div>
+<button type="button" id="play-tonight-open" class="play-tonight-open" hidden>What should we play?</button>
+<dialog id="play-tonight-dialog" class="play-tonight-dialog" aria-labelledby="play-tonight-title"></dialog>
 
 <main>
   <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a></p>
@@ -3955,6 +4277,32 @@
     <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-next">Next</button>
   </div>
   <div class="rulebook-viewer-stage" id="rulebook-viewer-stage"></div>
+</dialog>
+
+<dialog id="quick-search" class="quick-search" aria-labelledby="quick-search-title">
+  <div class="quick-search-card">
+    <h2 id="quick-search-title" class="u-hidden-text">Jump to a game</h2>
+    <div class="quick-search-bar">
+      <input id="quick-search-input" type="search" placeholder="Jump to a game" aria-label="Type a game name" autocomplete="off" enterkeyhint="search">
+      <button type="button" id="quick-search-close">Close</button>
+    </div>
+    <ul id="quick-search-results" class="quick-search-results" role="listbox"></ul>
+  </div>
+</dialog>
+
+<dialog id="first-player-picker" class="fp-picker" aria-labelledby="first-player-picker-title">
+  <div class="fp-picker-card">
+    <h2 id="first-player-picker-title">Pick a first player</h2>
+    <p class="fp-help" id="fp-help">Everyone put a finger on the screen. On a desktop, tap once for each player.</p>
+    <div id="first-player-pad" class="fp-pad"></div>
+    <p id="first-player-count" class="fp-count" hidden></p>
+    <p id="first-player-alt" class="fp-alt" hidden></p>
+    <div>
+      <button type="button" id="first-player-go">Pick</button>
+      <button type="button" id="first-player-again" hidden>Again</button>
+      <button type="button" id="first-player-close">Close</button>
+    </div>
+  </div>
 </dialog>
 
 <script id="games-json" type="application/json">{
@@ -158729,10 +159077,10 @@
     if (g.time) bits.push(g.time + " min");
     if (g.year) bits.push(g.year);
     var sub = bits.join(" \u2022 ");
-    return (
-      '<a class="card fade-in" href="' + gamePath(g.slug) + '">' +
+    var card = (
+      '<a class="card fade-in" draggable="false" href="' + gamePath(g.slug) + '">' +
         '<div class="thumb">' +
-          '<img loading="lazy" decoding="async" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
+          '<img draggable="false" loading="lazy" decoding="async" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
         "</div>" +
         '<div class="metaWrap">' +
           "<h2>" + g.name + "</h2>" +
@@ -158740,6 +159088,164 @@
         "</div>" +
       "</a>"
     );
+    if (!ownerUnlocked()) return card;
+    var cue = bagSwipeGlyph("move") + '<span class="bag-swipe-label">Pack</span>';
+    return '<div class="catalog-swipe bag-game">' +
+      '<div class="bag-swipe-reveal bag-swipe-reveal--move" aria-hidden="true"><span class="bag-swipe-cue">' + cue + "</span></div>" +
+      '<div class="bag-swipe-reveal bag-swipe-reveal--pack" aria-hidden="true"><span class="bag-swipe-cue">' + cue + "</span></div>" +
+      '<div class="bag-swipe catalog-swipe-row" data-pack-slug="' + escapeHtml(g.slug) + '">' + card + "</div></div>";
+  }
+
+  var catalogPickerOpenedAt = 0;
+  var suppressLinkUntil = 0;
+  function hapticTap() {
+    try {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (navigator.vibrate) navigator.vibrate(10);
+    } catch (err) {}
+  }
+  function closeCatalogPicker() {
+    var picker = document.getElementById("bag-picker");
+    if (picker) picker.setAttribute("data-state", "closed");
+    document.body.style.overflow = "";
+    if (!picker) return;
+    if (picker.open && typeof picker.close === "function") picker.close();
+    else picker.removeAttribute("open");
+  }
+  function openCatalogBagPicker(slug) {
+    if (!ownerUnlocked() || !slug) return;
+    var picker = document.getElementById("bag-picker");
+    if (!picker) {
+      appEl.insertAdjacentHTML("beforeend", bagPickerHtml(slug));
+      picker = document.getElementById("bag-picker");
+      if (!picker) return;
+      picker.addEventListener("click", function (event) {
+        var button = event.target && event.target.closest ? event.target.closest("button[data-bag]") : null;
+        if (!button && Date.now() - catalogPickerOpenedAt < 400) return;
+        if (button && picker.contains(button)) {
+          event.preventDefault();
+          event.stopPropagation();
+          var target = picker.getAttribute("data-slug") || "";
+          var bag = button.getAttribute("data-bag") || "";
+          if (!isBagId(bag)) bag = "";
+          if (target) setGameBag(target, bag);
+          hapticTap();
+          setTimeout(closeCatalogPicker, 0);
+          return;
+        }
+        if (event.target === picker) closeCatalogPicker();
+      });
+      picker.addEventListener("cancel", function (event) {
+        if (Date.now() - catalogPickerOpenedAt < 500) {
+          event.preventDefault();
+          return;
+        }
+        closeCatalogPicker();
+      });
+    }
+    picker.setAttribute("data-slug", slug);
+    catalogPickerOpenedAt = Date.now();
+    document.body.style.overflow = "hidden";
+    if (typeof picker.showModal === "function" && !picker.open) {
+      try { picker.showModal(); } catch (err) { picker.setAttribute("open", ""); }
+    } else if (!picker.open) {
+      picker.setAttribute("open", "");
+    }
+    try { paintBagPack(slug); } catch (err) {}
+  }
+  function bindCatalogSwipe() {
+    var grid = document.getElementById("game-grid");
+    if (!grid || !ownerUnlocked() || grid.getAttribute("data-pack-swipe") === "1") return;
+    grid.setAttribute("data-pack-swipe", "1");
+    var tracking = false;
+    var decided = false;
+    var horizontal = false;
+    var row = null;
+    var startX = 0;
+    var startY = 0;
+    var dx = 0;
+    var pointerId = null;
+    var suppressUntil = 0;
+    function paint(target, delta) {
+      var game = target && target.parentElement;
+      if (!game) return;
+      var abs = Math.abs(delta);
+      game.classList.toggle("bag-game--swipe-left", delta < 0);
+      game.classList.toggle("bag-game--swipe-right", delta > 0);
+      game.classList.toggle("bag-game--swipe-commit", abs >= 56);
+      game.style.setProperty("--bag-reveal", abs <= 0 ? "0" : String(Math.min(1, abs / 56)));
+      game.style.setProperty("--bag-reveal-px", Math.min(120, abs) + "px");
+    }
+    function reset(target) {
+      if (!target) return;
+      target.style.transform = "";
+      var game = target.parentElement;
+      if (!game) return;
+      game.classList.remove("bag-game--swipe-left", "bag-game--swipe-right", "bag-game--swipe-commit");
+      game.style.removeProperty("--bag-reveal");
+      game.style.removeProperty("--bag-reveal-px");
+    }
+    grid.addEventListener("pointerdown", function (event) {
+      if (event.button != null && event.button !== 0) return;
+      var found = event.target && event.target.closest ? event.target.closest(".catalog-swipe-row") : null;
+      if (!found || !grid.contains(found)) return;
+      tracking = true;
+      decided = false;
+      horizontal = false;
+      row = found;
+      startX = event.clientX;
+      startY = event.clientY;
+      dx = 0;
+      pointerId = event.pointerId;
+    });
+    grid.addEventListener("pointermove", function (event) {
+      if (!tracking || !row) return;
+      if (pointerId != null && event.pointerId != null && event.pointerId !== pointerId) return;
+      dx = event.clientX - startX;
+      var dy = event.clientY - startY;
+      if (!decided) {
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+        decided = true;
+        horizontal = Math.abs(dx) > Math.abs(dy);
+        if (!horizontal) {
+          tracking = false;
+          reset(row);
+          row = null;
+          return;
+        }
+      }
+      if (!horizontal) return;
+      if (event.cancelable) event.preventDefault();
+      row.style.transform = "translateX(" + Math.max(-120, Math.min(120, dx)) + "px)";
+      paint(row, dx);
+    }, { passive: false });
+    function finish(event) {
+      if (!tracking || !row) return;
+      if (event && pointerId != null && event.pointerId != null && event.pointerId !== pointerId) return;
+      var held = row;
+      var slug = held.getAttribute("data-pack-slug") || "";
+      var go = horizontal && Math.abs(dx) >= 56;
+      tracking = false;
+      row = null;
+      reset(held);
+      if (!go || !slug) return;
+      hapticTap();
+      suppressUntil = Date.now() + 800;
+      suppressLinkUntil = suppressUntil;
+      setTimeout(function () { openCatalogBagPicker(slug); }, 0);
+    }
+    grid.addEventListener("pointerup", finish);
+    grid.addEventListener("pointercancel", function () {
+      tracking = false;
+      reset(row);
+      row = null;
+    });
+    grid.addEventListener("click", function (event) {
+      if (Date.now() < suppressUntil) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
   }
 
   var collectionView = "all";
@@ -159035,6 +159541,267 @@
     }
     /* catalog-filter-parse:end */
 
+  var TONIGHT_KEY = "bgq_play_tonight";
+  var TONIGHT_WEIGHT_LABELS = {
+    light: "Light",
+    "medium-light": "Medium-light",
+    medium: "Medium",
+    "medium-heavy": "Medium-heavy",
+    heavy: "Heavy"
+  };
+
+  function defaultTonight() {
+    return { players: "", time: "", weight: "", who: [], slugs: [], key: "" };
+  }
+  function readTonight() {
+    var next = defaultTonight();
+    try {
+      var raw = JSON.parse(sessionStorage.getItem(TONIGHT_KEY) || "null");
+      if (!raw || typeof raw !== "object") return next;
+      if (PLAYER_PICKS[raw.players]) next.players = String(raw.players);
+      if (TIME_PICKS[raw.time]) next.time = String(raw.time);
+      if (WEIGHT_PICKS[raw.weight]) next.weight = String(raw.weight);
+      next.who = orderOwners(Array.isArray(raw.who) ? raw.who : []);
+      if (Array.isArray(raw.slugs)) {
+        next.slugs = raw.slugs.filter(function (slug) { return !!(DATA[slug]); }).slice(0, 5);
+      }
+      if (typeof raw.key === "string") next.key = raw.key;
+    } catch (err) {}
+    return next;
+  }
+  function writeTonight(state) {
+    try { sessionStorage.setItem(TONIGHT_KEY, JSON.stringify(state)); } catch (err) {}
+  }
+  function packedTonight() {
+    var lookup = {};
+    if (!ownerUnlocked()) return lookup;
+    var bags = readBagState();
+    Object.keys(bags).forEach(function (slug) {
+      if (isBagId(bags[slug])) lookup[slug] = true;
+    });
+    return lookup;
+  }
+  function tonightMatches(game, picks) {
+    if (!game) return false;
+    if (picks.players && !countIncluded(playerSpan(game.players), picks.players)) return false;
+    if (picks.time && !timeHits(playMinutes(game, parseInt(picks.players, 10) || 0), picks.time)) return false;
+    if (picks.weight && weightBand(game.weight) !== picks.weight) return false;
+    if (!ownersHit(game, picks.who)) return false;
+    return true;
+  }
+  function tonightKey(state) {
+    return [
+      state.players,
+      state.time,
+      state.weight,
+      (state.who || []).join(","),
+      Object.keys(packedTonight()).sort().join(",")
+    ].join("|");
+  }
+  function tonightChip(facet, value, label, aria) {
+    return '<button type="button" class="play-tonight-chip" data-facet="' + facet + '" data-value="' + escapeHtml(value) + '" aria-pressed="false" aria-label="' + escapeHtml(aria) + '">' + escapeHtml(label) + "</button>";
+  }
+  function playTonightMarkup() {
+    var players = [
+      ["1", "1", "Tonight, 1 player"],
+      ["2", "2", "Tonight, 2 players"],
+      ["3", "3", "Tonight, 3 players"],
+      ["4", "4", "Tonight, 4 players"],
+      ["5", "5", "Tonight, 5 players"],
+      ["6", "6", "Tonight, 6 players"],
+      ["7", "7+", "Tonight, 7 or more players"]
+    ].map(function (row) { return tonightChip("players", row[0], row[1], row[2]); }).join("");
+    var times = [
+      ["under30", "Under 30", "Tonight, under 30 minutes"],
+      ["30-60", "30\u201360", "Tonight, 30 to 60 minutes"],
+      ["60-120", "60\u2013120", "Tonight, 60 to 120 minutes"],
+      ["120", "2h+", "Tonight, 2 hours or more"]
+    ].map(function (row) { return tonightChip("time", row[0], row[1], row[2]); }).join("");
+    var weights = [
+      ["light", "Light", "Tonight, light weight"],
+      ["medium-light", "Medium-light", "Tonight, medium-light weight"],
+      ["medium", "Medium", "Tonight, medium weight"],
+      ["medium-heavy", "Medium-heavy", "Tonight, medium-heavy weight"],
+      ["heavy", "Heavy", "Tonight, heavy weight"]
+    ].map(function (row) { return tonightChip("weight", row[0], row[1], row[2]); }).join("");
+    var who = OWNER_NAMES.map(function (name) {
+      return tonightChip("who", name, name, "Tonight, " + name + "\u2019s games");
+    }).join("");
+    return '<section id="play-tonight" class="play-tonight" aria-labelledby="play-tonight-title">' +
+      '<h2 id="play-tonight-title">What should we play?</h2>' +
+      '<p class="play-tonight-lead">Pick a player count and a time. Weight and whose games are optional.</p>' +
+      '<div class="play-tonight-facet">' +
+        '<span class="play-tonight-label" id="play-tonight-players-label">Players</span>' +
+        '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-players-label">' + players + "</div>" +
+      "</div>" +
+      '<div class="play-tonight-facet">' +
+        '<span class="play-tonight-label" id="play-tonight-time-label">Time</span>' +
+        '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-time-label">' + times + "</div>" +
+      "</div>" +
+      '<div class="play-tonight-facet">' +
+        '<span class="play-tonight-label" id="play-tonight-weight-label">Weight</span>' +
+        '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-weight-label">' + weights + "</div>" +
+      "</div>" +
+      '<div class="play-tonight-facet">' +
+        '<span class="play-tonight-label" id="play-tonight-who-label">Whose games</span>' +
+        '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-who-label">' + who + "</div>" +
+      "</div>" +
+      '<p class="play-tonight-actions"><button type="button" id="play-tonight-shuffle">Shuffle</button>' +
+      '<button type="button" id="play-tonight-pick">Pick a first player</button></p>' +
+      '<p id="play-tonight-note" class="play-tonight-note">Pick a player count and a time.</p>' +
+      '<ul id="play-tonight-list"></ul>' +
+      '<p class="play-tonight-actions"><button type="button" id="play-tonight-close">Close</button></p>' +
+    "</section>";
+  }
+  function placePlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    if (!opener) return;
+    var vv = window.visualViewport;
+    var gap = vv ? Math.max(0, window.innerHeight - vv.offsetTop - vv.height) : 0;
+    var update = document.getElementById("app-update");
+    if (update && !update.hidden) gap += 66;
+    opener.style.bottom = "calc(" + (10 + gap) + "px + env(safe-area-inset-bottom, 0px))";
+  }
+  function hidePlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    var dialog = document.getElementById("play-tonight-dialog");
+    if (opener) opener.hidden = true;
+    if (!dialog) return;
+    if (dialog.open && typeof dialog.close === "function") dialog.close();
+    else dialog.removeAttribute("open");
+  }
+  function tonightMeta(game) {
+    var bits = [];
+    if (game.players) bits.push(String(game.players));
+    if (game.time) {
+      var time = String(game.time);
+      bits.push(/min|hour|hr/i.test(time) ? time : time + " min");
+    }
+    var band = weightBand(game.weight);
+    if (band && TONIGHT_WEIGHT_LABELS[band]) bits.push(TONIGHT_WEIGHT_LABELS[band]);
+    return bits.join(" \u00b7 ");
+  }
+  function refreshTonight(force) {
+    var saved = readTonight();
+    var list = document.getElementById("play-tonight-list");
+    var note = document.getElementById("play-tonight-note");
+    var ready = !!(saved.players && saved.time);
+    Array.prototype.forEach.call(document.querySelectorAll("#play-tonight .play-tonight-chip"), function (btn) {
+      var facet = btn.getAttribute("data-facet");
+      var value = btn.getAttribute("data-value");
+      var on = facet === "who" ? saved.who.indexOf(value) !== -1 : saved[facet] === value;
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (!list || !note) return;
+    if (!ready) {
+      saved.slugs = [];
+      saved.key = tonightKey(saved);
+      writeTonight(saved);
+      list.innerHTML = "";
+      note.hidden = false;
+      note.textContent = "Pick a player count and a time.";
+      return;
+    }
+    var key = tonightKey(saved);
+    var reuse = !force && saved.key === key && saved.slugs.length;
+    if (!reuse) {
+      var matches = Object.keys(DATA).map(function (slug) { return DATA[slug]; }).filter(function (game) {
+        return tonightMatches(game, saved);
+      });
+      var picked = window.BGQuickNight && typeof window.BGQuickNight.tonightPicks === "function"
+        ? window.BGQuickNight.tonightPicks(matches, packedTonight())
+        : matches.slice(0, 5);
+      saved.slugs = picked.map(function (game) { return game.slug; });
+      saved.key = key;
+      writeTonight(saved);
+    }
+    if (!saved.slugs.length) {
+      list.innerHTML = "";
+      note.hidden = false;
+      note.textContent = "No games fit.";
+      return;
+    }
+    var packed = packedTonight();
+    note.hidden = true;
+    note.textContent = "";
+    list.innerHTML = saved.slugs.map(function (slug) {
+      var game = DATA[slug];
+      if (!game) return "";
+      var tag = packed[slug] ? '<span class="play-tonight-packed">Packed</span>' : "";
+      return "<li><a data-slug=\"" + escapeHtml(slug) + "\" href=\"" + escapeHtml(gamePath(slug)) + "\">" +
+        '<span class="play-tonight-name">' + escapeHtml(game.name) + "</span>" +
+        tag +
+        '<span class="play-tonight-meta">' + escapeHtml(tonightMeta(game)) + "</span>" +
+      "</a></li>";
+    }).join("");
+  }
+  function mountPlayTonight() {
+    var opener = document.getElementById("play-tonight-open");
+    var dialog = document.getElementById("play-tonight-dialog");
+    if (opener) opener.hidden = false;
+    placePlayTonight();
+    if (!window._bgqTonightPlace) {
+      window._bgqTonightPlace = true;
+      window.addEventListener("resize", placePlayTonight);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", placePlayTonight);
+        window.visualViewport.addEventListener("scroll", placePlayTonight);
+      }
+    }
+    if (dialog && !document.getElementById("play-tonight")) dialog.innerHTML = playTonightMarkup();
+    var section = document.getElementById("play-tonight");
+    if (!section) return;
+    if (section.getAttribute("data-bound") === "1") {
+      refreshTonight(false);
+      return;
+    }
+    section.setAttribute("data-bound", "1");
+    window.BGQuickPlayTonight = {
+      fits: function (slug) { return tonightMatches(DATA[slug], readTonight()); }
+    };
+    var closer = document.getElementById("play-tonight-close");
+    if (opener && dialog) {
+      opener.addEventListener("click", function () {
+        if (typeof dialog.showModal === "function") dialog.showModal();
+        else dialog.setAttribute("open", "");
+      });
+    }
+    if (closer && dialog) {
+      closer.addEventListener("click", function () {
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+      });
+    }
+    section.addEventListener("click", function (event) {
+      var btn = event.target && event.target.closest ? event.target.closest("button") : null;
+      if (!btn || !section.contains(btn)) return;
+      if (btn.id === "play-tonight-shuffle") {
+        refreshTonight(true);
+        return;
+      }
+      if (btn.id === "play-tonight-pick") {
+        openFirstPlayerPicker();
+        return;
+      }
+      var facet = btn.getAttribute("data-facet");
+      if (!facet) return;
+      var saved = readTonight();
+      var value = btn.getAttribute("data-value") || "";
+      if (facet === "who") {
+        var at = saved.who.indexOf(value);
+        if (at === -1) saved.who.push(value);
+        else saved.who.splice(at, 1);
+        saved.who = orderOwners(saved.who);
+      } else if (saved[facet] === value) saved[facet] = "";
+      else saved[facet] = value;
+      saved.slugs = [];
+      saved.key = "";
+      writeTonight(saved);
+      refreshTonight(true);
+    });
+    refreshTonight(false);
+  }
+
   function renderList() {
     detailSlug = "";
     clearGameAccent();
@@ -159118,6 +159885,8 @@
       '<p id="filter-hidden" class="filter-hidden" aria-live="polite"></p>' +
       '<section id="game-grid" class="grid"></section>';
 
+    mountPlayTonight();
+    bindCatalogSwipe();
     var recentClear = document.getElementById("recent-clear");
     if (recentClear) recentClear.addEventListener("click", clearRecent);
     renderRecentlyViewed(readRecent());
@@ -162046,6 +162815,11 @@
   }
   document.addEventListener("click", function (e) {
     var link = e.target && e.target.closest ? e.target.closest("a") : null;
+    if (link && Date.now() < suppressLinkUntil) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (!link) return;
     if (followAppLink(e, link)) return;
     var href = link.getAttribute("href") || "";
@@ -165185,6 +165959,7 @@
         var bag = button.getAttribute("data-bag") || "";
         if (!isBagId(bag)) bag = "";
         setGameBag(slug, bag);
+        hapticTap();
         paintBagPack(slug);
         closePicker();
         return;
@@ -165647,6 +166422,7 @@
       row = null;
       resetRow(held);
       if (!go || !slug) return;
+      hapticTap();
       armBagSuppressClick();
       if (dir === "left") removeGameWithUndo(slug);
       else openBagMoveSheet(slug, "move");
@@ -166587,6 +167363,8 @@
             '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
             bagLabelHtml(g.slug) +
             buildMetaBar(g, selectedCount) +
+            '<div id="first-player-slot">' + firstPlayerHtml(g) + "</div>" +
+            '<p class="first-player-actions"><button type="button" class="first-player-open" id="first-player-open">Pick a first player</button></p>' +
           "</div>" +
         "</div>" +
         renderEssentialLinks(g, rulebookHref, gameHasTeach(g) ? teachHref(g.slug, {
@@ -167346,6 +168124,80 @@
 
   var playMemory = {};
 
+  var TEACH_CHECK_KEY = "bgq_teach_checks";
+  function readTeachChecks(slug) {
+    try {
+      var all = JSON.parse(sessionStorage.getItem(TEACH_CHECK_KEY) || "{}");
+      var list = all && all[slug];
+      return Array.isArray(list) ? list.map(function (n) { return parseInt(n, 10); }).filter(function (n) { return n >= 0; }) : [];
+    } catch (err) { return []; }
+  }
+  function writeTeachChecks(slug, indexes) {
+    var all = {};
+    try { all = JSON.parse(sessionStorage.getItem(TEACH_CHECK_KEY) || "{}") || {}; } catch (err) { all = {}; }
+    all[slug] = indexes;
+    try { sessionStorage.setItem(TEACH_CHECK_KEY, JSON.stringify(all)); } catch (err) {}
+  }
+  function teachStepNodes(root) {
+    var steps = [];
+    Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
+      if (li.closest("details")) return;
+      if (li.parentElement && li.parentElement.closest && li.parentElement.closest("li")) return;
+      steps.push(li);
+    });
+    if (steps.length) return steps;
+    Array.prototype.forEach.call(root.querySelectorAll("p"), function (p) {
+      if (p.closest("details") || p.closest("li") || p.classList.contains("rule-empty")) return;
+      steps.push(p);
+    });
+    return steps;
+  }
+  function decorateTeach(slug) {
+    var body = document.getElementById("teach-script");
+    var progress = document.getElementById("teach-progress");
+    if (!body) return;
+    var saved = {};
+    readTeachChecks(slug).forEach(function (index) { saved[index] = true; });
+    var steps = teachStepNodes(body);
+    var done = 0;
+    steps.forEach(function (step, index) {
+      var on = !!saved[index];
+      if (on) done += 1;
+      step.classList.add("teach-step");
+      step.setAttribute("data-teach-step", String(index));
+      if (on) step.setAttribute("data-taught", "true");
+      else step.removeAttribute("data-taught");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "teach-tick";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.setAttribute("aria-label", "Mark this step taught");
+      btn.textContent = on ? "\u2713" : "";
+      step.insertBefore(btn, step.firstChild);
+    });
+    if (progress) progress.textContent = done + "/" + steps.length + " taught";
+  }
+  function toggleTeachStep(slug, index) {
+    var step = document.querySelector('#teach-script .teach-step[data-teach-step="' + index + '"]');
+    if (!step) return;
+    var on = step.getAttribute("data-taught") !== "true";
+    var saved = readTeachChecks(slug).filter(function (n) { return n !== index; });
+    if (on) saved.push(index);
+    saved.sort(function (a, b) { return a - b; });
+    writeTeachChecks(slug, saved);
+    if (on) step.setAttribute("data-taught", "true");
+    else step.removeAttribute("data-taught");
+    var btn = step.querySelector(".teach-tick");
+    if (btn) {
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.textContent = on ? "\u2713" : "";
+    }
+    var progress = document.getElementById("teach-progress");
+    var total = document.querySelectorAll("#teach-script .teach-step").length;
+    var done = document.querySelectorAll('#teach-script .teach-step[data-taught="true"]').length;
+    if (progress) progress.textContent = done + "/" + total + " taught";
+  }
+
   function renderTeachPage(slug, query) {
     detailSlug = slug;
     var g = DATA[slug];
@@ -167423,6 +168275,7 @@
       }
       body.innerHTML = html || '<p class="rule-empty">No teaching script for this selection yet.</p>';
       wrapWideTables(body);
+      decorateTeach(slug);
     }
     function chipButton(cls, attr, value, label, on) {
       return '<button type="button" class="' + cls + '" ' + attr + '="' + escapeHtml(value) + '"' +
@@ -167458,6 +168311,10 @@
         '<h2 class="title">Teach it</h2>' +
         '<p class="byline">' + escapeHtml(g.name) + "</p>" +
         controls +
+        '<div class="teach-progress-row">' +
+          '<p id="teach-progress" aria-live="polite">0/0 taught</p>' +
+          '<button type="button" id="teach-reset">Reset</button>' +
+        "</div>" +
         '<div class="teach-script rule-body" id="teach-script"></div>' +
       "</article>";
     page = appEl.querySelector(".teach-page");
@@ -167465,6 +168322,19 @@
     rememberGameOffline(slug);
     if (!page) return;
     page.addEventListener("click", function (e) {
+      var tick = e.target.closest ? e.target.closest(".teach-tick") : null;
+      if (tick && page.contains(tick)) {
+        var step = tick.closest(".teach-step");
+        var index = step ? parseInt(step.getAttribute("data-teach-step"), 10) : NaN;
+        if (!isNaN(index)) toggleTeachStep(slug, index);
+        return;
+      }
+      var reset = e.target.closest ? e.target.closest("#teach-reset") : null;
+      if (reset && page.contains(reset)) {
+        writeTeachChecks(slug, []);
+        paint();
+        return;
+      }
       var setupBtn = e.target.closest ? e.target.closest(".setup-variant-btn") : null;
       if (setupBtn && page.contains(setupBtn)) {
         setupId = setupBtn.getAttribute("data-setup") || "";
@@ -167647,6 +168517,11 @@
       timeHits: timeHits,
       owners: OWNER_NAMES,
       params: params || new URLSearchParams(),
+      packedSlugs: function () {
+        if (!ownerUnlocked()) return [];
+        var bags = readBagState();
+        return Object.keys(bags).filter(function (slug) { return isBagId(bags[slug]); });
+      },
       packForNight: ownerUnlocked() ? function (slugs) { openPackNight(slugs); } : null
     });
   }
@@ -167704,7 +168579,14 @@
       teachLink.textContent = "Teach it";
       actions.appendChild(teachLink);
     }
+    var searchBtn = document.createElement("button");
+    searchBtn.type = "button";
+    searchBtn.className = "toggle quick-search-open";
+    searchBtn.setAttribute("aria-label", "Jump to a game");
+    searchBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    searchBtn.addEventListener("click", openQuickSearch);
     bar.appendChild(name);
+    bar.appendChild(searchBtn);
     bar.appendChild(actions);
     document.body.appendChild(bar);
     miniLinks = links;
@@ -167718,6 +168600,7 @@
 
   function render() {
     closeRulebookViewer();
+    hidePlayTonight();
     clearMiniBar();
     syncHeaderOffset();
     document.body.style.overflow = "";
@@ -167863,8 +168746,289 @@
     navigator.serviceWorker.ready.then(function () { schedule(); }).catch(function () {});
   }
 
+  var FIRST_PLAYER = {};
+  function firstPlayerHtml(game) {
+    if (!game) return "";
+    var row = FIRST_PLAYER[game.slug];
+    if (!row || !row.text || row.page == null || row.page === "" || !row.query) return "";
+    var chip = renderRulebookRef({ source: { page: row.page, query: row.query, snippet: row.query } });
+    if (!chip) return "";
+    return '<p class="first-player-rule" id="first-player-rule"><span class="first-player-label">First player</span> ' +
+      escapeHtml(String(row.text)) + chip + "</p>";
+  }
+  function paintFirstPlayer() {
+    var slot = document.getElementById("first-player-slot");
+    if (!slot || !detailSlug || !DATA[detailSlug]) return;
+    slot.innerHTML = firstPlayerHtml(DATA[detailSlug]);
+  }
+  function loadFirstPlayerRules() {
+    var url = (basePath() || ".") + "/first-player.json";
+    return fetch(url, { credentials: "same-origin" }).then(function (res) {
+      return res && res.ok ? res.json() : {};
+    }).then(function (data) {
+      FIRST_PLAYER = data && typeof data === "object" ? data : {};
+      paintFirstPlayer();
+    }).catch(function () {});
+  }
+
+  var fpLive = [];
+  var fpTaps = [];
+  var fpSeq = 0;
+  var fpTimer = 0;
+  var fpLocked = false;
+  function cryptoIndex(n) {
+    var count = n | 0;
+    if (count <= 1) return 0;
+    if (window.BGQuickNight && typeof window.BGQuickNight.randomIndex === "function") {
+      return window.BGQuickNight.randomIndex(count);
+    }
+    var limit = Math.floor(0x100000000 / count) * count;
+    var buf = new Uint32Array(1);
+    var value = 0;
+    do {
+      crypto.getRandomValues(buf);
+      value = buf[0];
+    } while (value >= limit);
+    return value % count;
+  }
+  function fpAll() {
+    return fpLive.concat(fpTaps);
+  }
+  function fpClearTimer() {
+    if (fpTimer) clearTimeout(fpTimer);
+    fpTimer = 0;
+  }
+  function fpRender() {
+    var pad = document.getElementById("first-player-pad");
+    if (!pad) return;
+    pad.innerHTML = "";
+    fpAll().forEach(function (finger, index) {
+      var dot = document.createElement("span");
+      dot.className = "fp-finger" + (finger.winner ? " fp-finger--winner" : "");
+      dot.textContent = finger.winner ? "First" : String(index + 1);
+      dot.style.left = finger.x + "px";
+      dot.style.top = finger.y + "px";
+      pad.appendChild(dot);
+    });
+  }
+  function fpPoint(event) {
+    var pad = document.getElementById("first-player-pad");
+    var box = pad.getBoundingClientRect();
+    return {
+      x: Math.max(32, Math.min(box.width - 32, event.clientX - box.left)),
+      y: Math.max(32, Math.min(box.height - 32, event.clientY - box.top))
+    };
+  }
+  function fpResetWinner() {
+    fpLocked = false;
+    fpAll().forEach(function (finger) { finger.winner = false; });
+    var count = document.getElementById("first-player-count");
+    var again = document.getElementById("first-player-again");
+    if (count) { count.hidden = true; count.textContent = ""; }
+    if (again) again.hidden = true;
+    fpRender();
+  }
+  function fpFinish() {
+    var fingers = fpAll();
+    var countEl = document.getElementById("first-player-count");
+    if (fingers.length < 2) {
+      if (countEl) {
+        countEl.hidden = false;
+        countEl.textContent = "Add at least two players.";
+      }
+      return;
+    }
+    fingers.forEach(function (finger) { finger.winner = false; });
+    fingers[cryptoIndex(fingers.length)].winner = true;
+    fpLocked = true;
+    hapticTap();
+    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    var again = document.getElementById("first-player-again");
+    if (again) again.hidden = false;
+    fpRender();
+  }
+  function fpCountdown(step) {
+    var countEl = document.getElementById("first-player-count");
+    if (!countEl) return;
+    if (fpAll().length < 2) {
+      fpFinish();
+      return;
+    }
+    if (step <= 0) {
+      fpFinish();
+      return;
+    }
+    countEl.hidden = false;
+    countEl.textContent = String(step);
+    fpTimer = setTimeout(function () { fpCountdown(step - 1); }, 400);
+  }
+  function openFirstPlayerPicker() {
+    var tonight = document.getElementById("play-tonight-dialog");
+    if (tonight && tonight.open && typeof tonight.close === "function") tonight.close();
+    var picker = document.getElementById("first-player-picker");
+    if (!picker) return;
+    fpLive = [];
+    fpTaps = [];
+    fpLocked = false;
+    fpClearTimer();
+    var alt = document.getElementById("first-player-alt");
+    var row = detailSlug && FIRST_PLAYER[detailSlug];
+    if (alt) {
+      if (row && row.text) {
+        alt.hidden = false;
+        alt.textContent = "Or use the game's rule: " + row.text;
+      } else {
+        alt.hidden = true;
+        alt.textContent = "";
+      }
+    }
+    var again = document.getElementById("first-player-again");
+    if (again) again.hidden = true;
+    var countEl = document.getElementById("first-player-count");
+    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    fpRender();
+    if (typeof picker.showModal === "function") {
+      try { picker.showModal(); } catch (err) { picker.setAttribute("open", ""); }
+    } else picker.setAttribute("open", "");
+  }
+  function bindFirstPlayerPicker() {
+    var picker = document.getElementById("first-player-picker");
+    var pad = document.getElementById("first-player-pad");
+    if (!picker || !pad || picker.getAttribute("data-bound") === "1") return;
+    picker.setAttribute("data-bound", "1");
+    document.addEventListener("click", function (event) {
+      var open = event.target && event.target.closest ? event.target.closest("#first-player-open") : null;
+      if (open) openFirstPlayerPicker();
+    });
+    pad.addEventListener("pointerdown", function (event) {
+      if (fpLocked) return;
+      if (event.pointerType === "touch") {
+        var at = fpPoint(event);
+        fpLive.push({ id: event.pointerId, x: at.x, y: at.y, winner: false });
+        fpClearTimer();
+        fpRender();
+      }
+    });
+    pad.addEventListener("pointermove", function (event) {
+      if (event.pointerType !== "touch" || fpLocked) return;
+      var finger = null;
+      fpLive.forEach(function (item) { if (item.id === event.pointerId) finger = item; });
+      if (!finger) return;
+      var at = fpPoint(event);
+      finger.x = at.x;
+      finger.y = at.y;
+      fpRender();
+    });
+    pad.addEventListener("pointerup", function (event) {
+      if (event.pointerType === "touch") {
+        if (fpLocked) return;
+        fpLive = fpLive.filter(function (item) { return item.id !== event.pointerId; });
+        fpClearTimer();
+        fpRender();
+        return;
+      }
+      if (fpLocked || event.pointerType === "touch") return;
+      var at = fpPoint(event);
+      fpSeq += 1;
+      fpTaps.push({ id: "tap-" + fpSeq, x: at.x, y: at.y, winner: false });
+      fpClearTimer();
+      fpRender();
+    });
+    document.getElementById("first-player-go").addEventListener("click", function () {
+      fpClearTimer();
+      fpResetWinner();
+      fpCountdown(3);
+    });
+    document.getElementById("first-player-again").addEventListener("click", function () {
+      fpClearTimer();
+      fpResetWinner();
+      fpCountdown(3);
+    });
+    document.getElementById("first-player-close").addEventListener("click", function () {
+      fpClearTimer();
+      if (typeof picker.close === "function") picker.close();
+      else picker.removeAttribute("open");
+    });
+  }
+
+  function quickSearchGames(query) {
+    var q = String(query || "").trim().toLowerCase();
+    if (!q) return [];
+    var games = Object.keys(DATA).map(function (key) { return DATA[key]; }).filter(function (game) {
+      if (!game) return false;
+      if (String(game.name || "").toLowerCase().indexOf(q) !== -1) return true;
+      var aliases = game.aliases;
+      return Array.isArray(aliases) && aliases.some(function (name) {
+        return String(name || "").toLowerCase().indexOf(q) !== -1;
+      });
+    });
+    games.sort(function (a, b) {
+      var aStart = String(a.name || "").toLowerCase().indexOf(q) === 0 ? 0 : 1;
+      var bStart = String(b.name || "").toLowerCase().indexOf(q) === 0 ? 0 : 1;
+      if (aStart !== bStart) return aStart - bStart;
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    return games.slice(0, 12);
+  }
+  function paintQuickSearch(query) {
+    var list = document.getElementById("quick-search-results");
+    if (!list) return;
+    var games = quickSearchGames(query);
+    list.innerHTML = games.map(function (game) {
+      return '<li role="presentation"><a role="option" href="' + escapeHtml(gamePath(game.slug)) + '">' + escapeHtml(game.name) + "</a></li>";
+    }).join("");
+  }
+  function openQuickSearch() {
+    var dialog = document.getElementById("quick-search");
+    var input = document.getElementById("quick-search-input");
+    if (!dialog || !input) return;
+    input.value = "";
+    paintQuickSearch("");
+    if (typeof dialog.showModal === "function") {
+      try { dialog.showModal(); } catch (err) { dialog.setAttribute("open", ""); }
+    } else dialog.setAttribute("open", "");
+    input.focus();
+  }
+  function bindQuickSearch() {
+    var openBtn = document.getElementById("quick-search-open");
+    var dialog = document.getElementById("quick-search");
+    var input = document.getElementById("quick-search-input");
+    var closeBtn = document.getElementById("quick-search-close");
+    if (!openBtn || !dialog || !input || openBtn.getAttribute("data-bound") === "1") return;
+    openBtn.setAttribute("data-bound", "1");
+    openBtn.addEventListener("click", openQuickSearch);
+    if (closeBtn) closeBtn.addEventListener("click", function () {
+      if (typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+    });
+    input.addEventListener("input", function () { paintQuickSearch(input.value); });
+    input.addEventListener("keydown", function (event) {
+      var options = Array.prototype.slice.call(dialog.querySelectorAll(".quick-search-results a"));
+      var current = dialog.querySelector(".quick-search-results a[aria-selected='true']");
+      var index = current ? options.indexOf(current) : -1;
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!options.length) return;
+        index += event.key === "ArrowDown" ? 1 : -1;
+        if (index < 0) index = options.length - 1;
+        if (index >= options.length) index = 0;
+        options.forEach(function (option, i) { option.setAttribute("aria-selected", i === index ? "true" : "false"); });
+        return;
+      }
+      if (event.key === "Enter") {
+        var chosen = current || options[0];
+        if (!chosen) return;
+        event.preventDefault();
+        chosen.click();
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    bindQuickSearch();
+    bindFirstPlayerPicker();
     render();
+    loadFirstPlayerRules();
     loadLayoutFixture();
     warmCollection();
   });

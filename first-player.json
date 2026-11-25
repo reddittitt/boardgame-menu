@@ -1,0 +1,662 @@
+{
+  "7-wonders-duel": {
+    "text": "Choose a first player.",
+    "page": 7,
+    "query": "Choose a first player",
+    "from": "index"
+  },
+  "a-place-for-all-my-books": {
+    "text": "The player who most recently acquired a new book will be the first player.",
+    "page": 3,
+    "query": "The player who most recently acquired a",
+    "from": "index"
+  },
+  "agent-avenue": {
+    "text": "The player who watched a spy movie most recently is the starting player.",
+    "page": 4,
+    "query": "spy movie most recently",
+    "from": "index"
+  },
+  "agricola": {
+    "text": "Players choose a starting player who receives the Starting player marker and 2 Food.",
+    "page": 3,
+    "query": "Players choose a starting player who receives",
+    "from": "index"
+  },
+  "archaeology-the-new-expedition": {
+    "text": "The first player is the last person to have put their feet in the sand.",
+    "page": 5,
+    "query": "The first player is the last person",
+    "from": "index"
+  },
+  "atlantis-rising-second-edition": {
+    "text": "The player who most recently went swimming becomes the starting player and takes the starting player marker.",
+    "page": 4,
+    "query": "most recently went swimming becomes the starting player",
+    "from": "rules"
+  },
+  "azul": {
+    "text": "The player who most recently visited Portugal takes the starting player marker (F).",
+    "page": 2,
+    "query": "The player who most recently visited Portugal",
+    "from": "index"
+  },
+  "azul-duel": {
+    "text": "Randomly determine a starting player.",
+    "page": 3,
+    "query": "Randomly determine a starting player",
+    "from": "index"
+  },
+  "biblios": {
+    "text": "Select the first player through a method of your choice (oldest player, for example).",
+    "page": 3,
+    "query": "Select the first player through a method",
+    "from": "index"
+  },
+  "bohnanza": {
+    "text": "Pick a starting player and give them the starting player card.",
+    "page": 2,
+    "query": "Pick a starting player and give them",
+    "from": "rules"
+  },
+  "boop": {
+    "text": "The player who most recently pet a cat will be the first player - or choose a first player at random.",
+    "page": 2,
+    "query": "The player who most recently pet a",
+    "from": "index"
+  },
+  "brink": {
+    "text": "Give the first player token to the player who most recently bartered for goods.",
+    "page": 6,
+    "query": "bartered for goods",
+    "from": "rules"
+  },
+  "burgle-bros-2-the-casino-capers": {
+    "text": "The first player is whoever gambled last—or choose randomly!",
+    "page": 6,
+    "query": "The first player is whoever gambled last—or",
+    "from": "index"
+  },
+  "bus": {
+    "text": "Randomly determine a starting player and give that player the start-bus.",
+    "page": 1,
+    "query": "Randomly determine a starting player and give",
+    "from": "index"
+  },
+  "calico": {
+    "text": "The person who most recently pet a cat will be the first player.",
+    "page": 4,
+    "query": "The person who most recently pet a",
+    "from": "index"
+  },
+  "camel-up": {
+    "text": "Give the starting player marker to the youngest player and let the race begin!",
+    "page": 1,
+    "query": "Give the starting player marker to the",
+    "from": "index"
+  },
+  "camel-up-second-edition": {
+    "text": "Give the starting player marker to the youngest player and let the race begin!",
+    "page": 1,
+    "query": "Give the starting player marker to the youngest player and let the race begin!",
+    "from": "rules"
+  },
+  "canopy": {
+    "text": "The last player to water a plant is the first player.",
+    "page": 2,
+    "query": "The last player to water a plant",
+    "from": "index"
+  },
+  "carcassonne-the-city": {
+    "text": "Players choose a starting player, who begins by drawing the top-most tile from the 1st stack and placing it face up in the middle of the table.",
+    "page": 2,
+    "query": "players choose a starting player, who begins",
+    "from": "index"
+  },
+  "carcassonne-the-discovery": {
+    "text": "Players choose a starting player using any method they want.",
+    "page": 1,
+    "query": "players choose a starting player using any",
+    "from": "index"
+  },
+  "carpe-diem": {
+    "text": "Give the starting player token to the youngest player.",
+    "page": 3,
+    "query": "Give the starting player token to the",
+    "from": "index"
+  },
+  "cartagena": {
+    "text": "THE GAME Choose the starting player using any preferred method.",
+    "page": 2,
+    "query": "THE GAME Choose the starting player using any preferred method.",
+    "from": "rules"
+  },
+  "cascadia": {
+    "text": "Player who most recently saw one of the wildlife in the game will be the first player.",
+    "page": 4,
+    "query": "player who most recently saw one of",
+    "from": "index"
+  },
+  "castle-combo": {
+    "text": "Randomly select a first player.",
+    "page": 4,
+    "query": "Randomly select a first player",
+    "from": "index"
+  },
+  "catan": {
+    "text": "The player with the highest roll is the first player.",
+    "page": 5,
+    "query": "The player with the highest roll is",
+    "from": "index"
+  },
+  "caverna-the-cave-farmers": {
+    "text": "Randomly determine the player who gets the Starting player token.",
+    "page": 2,
+    "query": "Randomly determine the player who gets the",
+    "from": "index"
+  },
+  "cellulose-a-plant-cell-biology-game": {
+    "text": "Give the First Player Marker to the last one to water a plant (or decide randomly).",
+    "page": 4,
+    "query": "Give the First Player Marker to the last one to water a plant",
+    "from": "index"
+  },
+  "century-golem-edition": {
+    "text": "The player with the symbol on his Caravan card is the first player.",
+    "page": 1,
+    "query": "The player with the symbol on his",
+    "from": "index"
+  },
+  "cloud-city": {
+    "text": "The first player is the person whose head is the most in the clouds.",
+    "page": 1,
+    "query": "whose head is the most in the clouds",
+    "from": "rules"
+  },
+  "cosmic-encounter": {
+    "text": "Choose First Player: If this is the players’ first game, the youngest player is the first player and takes the first turn when the game begins.",
+    "page": 5,
+    "query": "Choose First Player: If this is the",
+    "from": "index"
+  },
+  "costa-rica": {
+    "text": "Choose a starting player (the player who has most recently visited a rainforest (Costa Rica wins all), or use the explorers in one group to randomly select a player).",
+    "page": 1,
+    "query": "Choose a starting player (the player who has most recently visited a",
+    "from": "rules"
+  },
+  "cytosis-a-cell-biology-board-game": {
+    "text": "The player who most recently looked into a microscope receives the First Player Marker.",
+    "page": 4,
+    "query": "most recently looked into a microscope receives the First Player Marker.",
+    "from": "rules"
+  },
+  "dandelions": {
+    "text": "Randomly choose a starting player and place their Dandelion Pawn on the start space ( ).",
+    "page": 2,
+    "query": "Randomly choose a starting player and place",
+    "from": "index"
+  },
+  "deep-regrets": {
+    "text": "Give the first player marker to the person who has had the most regrettable day.",
+    "page": 4,
+    "query": "most regrettable day",
+    "from": "rules"
+  },
+  "dinosaur-island": {
+    "text": "The player who most recently extracted DNA from a mosquito trapped in amber will be the first player.",
+    "page": 5,
+    "query": "The player who most recently extracted DNA",
+    "from": "index"
+  },
+  "distilled": {
+    "text": "Randomly choose a player to take the first player token or give it to whoever last visited a distillery.",
+    "page": 4,
+    "query": "Randomly choose a player to take the",
+    "from": "index"
+  },
+  "dominion": {
+    "text": "Randomly choose a starting player.",
+    "page": 4,
+    "query": "Randomly choose a starting player",
+    "from": "index"
+  },
+  "encyclopedia": {
+    "text": "The first player is determined randomly.",
+    "page": 21,
+    "query": "the first player is determined randomly",
+    "from": "index"
+  },
+  "ezra-and-nehemiah": {
+    "text": "Randomly determine a first player.",
+    "page": 7,
+    "query": "Randomly determine a first player",
+    "from": "index"
+  },
+  "factory-funner": {
+    "text": "Choose a starting player, that player chooses.",
+    "page": 4,
+    "query": "Choose a starting player, that player chooses",
+    "from": "index"
+  },
+  "flamecraft": {
+    "text": "Choose the first player.",
+    "page": 5,
+    "query": "choose the first player",
+    "from": "index"
+  },
+  "fliptoons": {
+    "text": "Give the player who most recently watched a cartoon the first player card.",
+    "page": 4,
+    "query": "most recently watched a cartoon",
+    "from": "rules"
+  },
+  "fliptoons-season-2": {
+    "text": "Give the player who most recently watched a cartoon the first player card.",
+    "page": 4,
+    "query": "Give the player who most recently watched a cartoon the first player card.",
+    "from": "rules"
+  },
+  "frogriders": {
+    "text": "Choose a starting player, who begins the game with her turn.",
+    "page": 2,
+    "query": "Choose a starting player, who begins the",
+    "from": "index"
+  },
+  "gem": {
+    "text": "The player to the left of the dealer is the starting player and bids first.",
+    "page": 1,
+    "query": "The player to the left of the",
+    "from": "index"
+  },
+  "great-western-trail": {
+    "text": "Determine a starting player.",
+    "page": 5,
+    "query": "determine a starting player",
+    "from": "index"
+  },
+  "harmonies": {
+    "text": "The player to have last seen a magnificent landscape is the first player. Point the Central Board's arrow toward them.",
+    "page": 2,
+    "query": "magnificent landscape is the first player",
+    "from": "index"
+  },
+  "hypothetically": {
+    "text": "Choose a starting player by any method, or by the most recent person to have seen a chicken.",
+    "page": 2,
+    "query": "Choose a starting player by any method",
+    "from": "rules"
+  },
+  "jaipur": {
+    "text": "Pick a starting player.",
+    "page": 2,
+    "query": "Pick a starting player",
+    "from": "index"
+  },
+  "kanagawa": {
+    "text": "Choose the first player however you like.",
+    "page": 7,
+    "query": "Choose the first player however you like",
+    "from": "index"
+  },
+  "machi-koro-legacy": {
+    "text": "Determine the first player by having each player roll two dice; the player who rolls the highest number is the first player.",
+    "page": 6,
+    "query": "determine the first player by having each",
+    "from": "index"
+  },
+  "marabunta": {
+    "text": "Randomly determine the first player and give them the dice.",
+    "page": 2,
+    "query": "randomly determine the first player and give",
+    "from": "index"
+  },
+  "medici": {
+    "text": "Randomly choose a starting player for the first day.",
+    "page": 4,
+    "query": "randomly choose a starting player for the",
+    "from": "index"
+  },
+  "men-nefer": {
+    "text": "Randomly decide who will be the starting player, and this player places their Water Lily on position 1 of the Turn Order Track.",
+    "page": 6,
+    "query": "Water Lily on position 1",
+    "from": "rules"
+  },
+  "moonrakers": {
+    "text": "The player that rolls the least D Hazard goes first.",
+    "page": 14,
+    "query": "least D Hazard goes first",
+    "from": "index"
+  },
+  "moonrollers": {
+    "text": "The first player is the player who last won a game of Moonrakers (or is chosen randomly).",
+    "page": 4,
+    "query": "last won a game of Moonrakers",
+    "from": "index"
+  },
+  "my-little-scythe": {
+    "text": "Determine first player.",
+    "page": 3,
+    "query": "determine first player",
+    "from": "index"
+  },
+  "mycelia-2024": {
+    "text": "The first player is determined by whoever saw a mushroom in the wild last, or you can put a spore from each player into a hat and see whose is drawn first, or argue about it for 15 minutes.",
+    "page": 3,
+    "query": "mushroom in the wild",
+    "from": "index"
+  },
+  "new-york-1901": {
+    "text": "Determine a starting player.",
+    "page": 3,
+    "query": "Determine a starting player",
+    "from": "index"
+  },
+  "new-york-zoo": {
+    "text": "Pick a starting player.",
+    "page": 3,
+    "query": "Pick a starting player",
+    "from": "rules"
+  },
+  "night-at-the-zoo": {
+    "text": "Choose a first player.",
+    "page": 4,
+    "query": "Choose a first player",
+    "from": "index"
+  },
+  "nocturne": {
+    "text": "Select a starting player at random and you are ready.",
+    "page": 6,
+    "query": "Select a starting player at random and",
+    "from": "index"
+  },
+  "paladins-of-the-west-kingdom": {
+    "text": "Randomly determine a starting player and give them the Start Player Marker.",
+    "page": 7,
+    "query": "give them the Start Player Marker",
+    "from": "rules"
+  },
+  "pan-am": {
+    "text": "The first player is the person who most recently flew on an airplane.",
+    "page": 4,
+    "query": "The first player is the person who",
+    "from": "index"
+  },
+  "petrichor": {
+    "text": "Give the first player marker to the poor soul who was most recently caught in the rain.",
+    "page": 9,
+    "query": "Give the first player marker to the",
+    "from": "index"
+  },
+  "photosynthesis": {
+    "text": "The youngest player starts the game, making sure to take the First Player Token.",
+    "page": 2,
+    "query": "The youngest player starts the game, making sure to take the First",
+    "from": "rules"
+  },
+  "pillars-of-fate": {
+    "text": "Choose a starting player and give them the 1st player marker.",
+    "page": 3,
+    "query": "1st player marker",
+    "from": "rules"
+  },
+  "power-grid": {
+    "text": "The first player is the player with the most cities in his network (first house on the scoring track).",
+    "page": 3,
+    "query": "The first player is the player with",
+    "from": "index"
+  },
+  "puerto-rico": {
+    "text": "Players choose a starting player using any method they choose.",
+    "page": 2,
+    "query": "players choose a starting player using any",
+    "from": "index"
+  },
+  "raiders-of-scythia": {
+    "text": "Randomly decide on a starting player for the game.",
+    "page": 4,
+    "query": "Randomly decide on a starting player",
+    "from": "rules"
+  },
+  "raiders-of-the-north-sea": {
+    "text": "Each player rolls both dice to determine a starting player.",
+    "page": 3,
+    "query": "rolls both dice to determine a starting player",
+    "from": "rules"
+  },
+  "rent-a-hero": {
+    "text": "Randomly choose the starting player.",
+    "page": 3,
+    "query": "Randomly choose the starting player",
+    "from": "index"
+  },
+  "rivals-for-catan": {
+    "text": "The high roller is the starting player and draws the 3 top cards from one of the 4 draw stacks.",
+    "page": 6,
+    "query": "The high roller is the starting player and draws the 3 top",
+    "from": "rules"
+  },
+  "root": {
+    "text": "Players Determine the seating order and the first player randomly.",
+    "page": 22,
+    "query": "Players Determine the seating order and the",
+    "from": "index"
+  },
+  "scales-of-fate": {
+    "text": "Choose a starting player randomly and give them the first player marker.",
+    "page": 4,
+    "query": "Choose a starting player randomly and give",
+    "from": "index"
+  },
+  "sea-salt-and-paper-includes-expansions-extra-salt-and-extra-pepper": {
+    "text": "Choose the first player at random.",
+    "page": 1,
+    "query": "Choose the first player at random.",
+    "from": "rules"
+  },
+  "seti": {
+    "text": "Determine a starting player at random.",
+    "page": 22,
+    "query": "Determine a starting player at random",
+    "from": "index"
+  },
+  "shallow-regrets": {
+    "text": "The player who had the most remorseful day is the first player.",
+    "page": 1,
+    "query": "The player who had the most remorseful",
+    "from": "index"
+  },
+  "skull": {
+    "text": "The player to have most recently given someone flowers (or a skull) is the first player.",
+    "page": 3,
+    "query": "The player to have most recently given",
+    "from": "index"
+  },
+  "sol-last-days-of-a-star": {
+    "text": "Whoever has been closest to the Sun most recently is the first player!",
+    "page": 5,
+    "query": "been closest to the Sun most recently",
+    "from": "index"
+  },
+  "splendor-duel": {
+    "text": "Choose the first player randomly.",
+    "page": 2,
+    "query": "Choose the first player randomly",
+    "from": "index"
+  },
+  "stroganov": {
+    "text": "Randomly determine the starting player, and place their Cossack on the right side of the starting tile.",
+    "page": 4,
+    "query": "Randomly determine the starting player, and place",
+    "from": "index"
+  },
+  "survive-escape-from-atlantis": {
+    "text": "Choose or randomly select the player who will play first (quite logically called “first player” from here on).",
+    "page": 3,
+    "query": "Choose or randomly select the player who",
+    "from": "index"
+  },
+  "tabannusi-builders-of-ur": {
+    "text": "Determine the starting player, who immediately takes the Starting Player token, keeping it until the end of the game.",
+    "page": 8,
+    "query": "determine the starting player, who immediately takes",
+    "from": "index"
+  },
+  "tang-garden": {
+    "text": "Select the first player randomly.",
+    "page": 2,
+    "query": "select the first player randomly",
+    "from": "index"
+  },
+  "tekhenu-obelisk-of-the-sun": {
+    "text": "Select a starting player.",
+    "page": 8,
+    "query": "select a starting player",
+    "from": "index"
+  },
+  "tenby": {
+    "text": "Whoever most recently went for a walk on a beach is the first player.",
+    "page": 5,
+    "query": "Whoever most recently went for a walk",
+    "from": "index"
+  },
+  "teotihuacan-city-of-gods": {
+    "text": "Randomly determine the first player.",
+    "page": 7,
+    "query": "Randomly determine the first player",
+    "from": "index"
+  },
+  "terraforming-mars": {
+    "text": "The player who most recently won a game of Terraforming Mars is given the first player marker.",
+    "page": 7,
+    "query": "The player who most recently won a",
+    "from": "index"
+  },
+  "thats-a-question": {
+    "text": "Choose a starting player.",
+    "page": 4,
+    "query": "Choose a starting player",
+    "from": "index"
+  },
+  "thats-pretty-clever": {
+    "text": "Randomly choose a starting player, who picks up the 6 dice.",
+    "page": 1,
+    "query": "Randomly choose a starting player, who picks up the 6 dice.",
+    "from": "rules"
+  },
+  "the-lord-of-the-rings-the-card-game": {
+    "text": "Determine First Player: Select a first player.",
+    "page": 6,
+    "query": "Determine First Player: Select a first player",
+    "from": "index"
+  },
+  "tianxia": {
+    "text": "Randomly determine the First player.",
+    "page": 4,
+    "query": "Randomly determine the First player",
+    "from": "index"
+  },
+  "ticket-to-ride-europe": {
+    "text": "Determine the first player by a method of your choosing.",
+    "page": 3,
+    "query": "Determine the first player by a method",
+    "from": "index"
+  },
+  "tiny-towns": {
+    "text": "The starting player is the player who most recently constructed something (in real life), Give that player the Master Builder hammer.",
+    "page": 2,
+    "query": "The starting player is the player who",
+    "from": "index"
+  },
+  "toy-battle": {
+    "text": "Randomly choose the starting player.",
+    "page": 2,
+    "query": "Randomly choose the starting player",
+    "from": "index"
+  },
+  "trails": {
+    "text": "Randomly determine the first player.",
+    "page": 3,
+    "query": "Randomly determine the first player",
+    "from": "index"
+  },
+  "trains": {
+    "text": "The player who most recently traveled by train is the starting player, naturally.",
+    "page": 4,
+    "query": "The player who most recently traveled by train is the starting player,",
+    "from": "rules"
+  },
+  "trash-pandas": {
+    "text": "Whoever took out the trash is the first player.",
+    "page": 1,
+    "query": "took out the trash is the first",
+    "from": "index"
+  },
+  "tybor-the-builder": {
+    "text": "Randomly determine a player to get the First Player card.",
+    "page": 2,
+    "query": "Randomly determine a player to get the",
+    "from": "index"
+  },
+  "tzolkin-the-mayan-calendar": {
+    "text": "Give the Starting Player Marker to the player who most recently sacrificed something.",
+    "page": 4,
+    "query": "Give the Starting Player Marker to the",
+    "from": "index"
+  },
+  "valley-of-the-kings": {
+    "text": "DETERMINE STARTING PLAYER Select a starting player at random.",
+    "page": 3,
+    "query": "DETERMINE STARTING PLAYER Select a starting player",
+    "from": "index"
+  },
+  "viral": {
+    "text": "Choose the First Player randomly.",
+    "page": 4,
+    "query": "Choose the First Player randomly",
+    "from": "index"
+  },
+  "wayfarers-of-the-south-tigris": {
+    "text": "Randomly decide on a first player.",
+    "page": 5,
+    "query": "Randomly decide on a first player",
+    "from": "index"
+  },
+  "whale-riders": {
+    "text": "Randomly select the starting player.",
+    "page": 2,
+    "query": "Randomly select the starting player",
+    "from": "index"
+  },
+  "wingspan": {
+    "text": "Randomly select the first player and give them the first-player token.",
+    "page": 2,
+    "query": "Randomly select the first player and give",
+    "from": "index"
+  },
+  "wingspan-asia": {
+    "text": "Randomly select the first player and give them the first-player token.",
+    "page": 2,
+    "query": "Randomly select the first player and give",
+    "from": "index"
+  },
+  "wingspan-pocket": {
+    "text": "Randomly select the first player.",
+    "page": 3,
+    "query": "Randomly select the first player",
+    "from": "index"
+  },
+  "winnie-the-pooh-serious-detective": {
+    "text": "Determine the first player in any way you like.",
+    "page": 3,
+    "query": "Determine the first player in any way",
+    "from": "index"
+  },
+  "sea-salt-and-paper": {
+    "text": "Choose the first player at random.",
+    "page": 1,
+    "query": "Choose the first player at random",
+    "from": "index"
+  }
+}

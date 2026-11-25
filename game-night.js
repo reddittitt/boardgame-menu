@@ -140,6 +140,25 @@
     return 4 + roll(max - 4 + 1);
   }
 
+  /* About five games. Packed slugs, when the caller passes them, stay in front. */
+  function tonightPicks(matches, packed, rng) {
+    var roll = rng || randomIndex;
+    var lookup = {};
+    if (Array.isArray(packed)) {
+      packed.forEach(function (slug) { if (slug) lookup[slug] = true; });
+    } else if (packed && typeof packed === "object") {
+      Object.keys(packed).forEach(function (slug) { if (packed[slug]) lookup[slug] = true; });
+    }
+    var first = [];
+    var rest = [];
+    (matches || []).forEach(function (game) {
+      if (!game || !game.slug) return;
+      if (lookup[game.slug]) first.push(game);
+      else rest.push(game);
+    });
+    return shuffle(first, roll).concat(shuffle(rest, roll)).slice(0, Math.min(5, first.length + rest.length));
+  }
+
   function pollText(names) {
     return names.filter(function (name) { return String(name || "").trim(); }).join("\n");
   }
@@ -280,6 +299,7 @@
     var decision = null;
     var query = "";
     var dropped = 0;
+    var pickMemo = { key: "", slugs: null };
     var resultsToken = 0;
     var ownerNames = (ctx.owners && ctx.owners.length)
       ? ctx.owners.slice()
@@ -637,6 +657,15 @@
               '<div class="gn-chips" role="group" aria-labelledby="gn-who-label">' + whoChips + "</div>" +
             "</div>" +
           "</section>" +
+          '<section class="gn-card" id="gn-picks" aria-labelledby="gn-picks-title">' +
+            '<h3 id="gn-picks-title">What should we play?</h3>' +
+            '<p class="gn-note">About five games that fit.</p>' +
+            '<div class="gn-actions">' +
+              '<button type="button" class="gn-primary" id="gn-shuffle">Shuffle</button>' +
+            "</div>" +
+            '<p id="gn-picks-note" class="gn-note">Pick a player count and a time.</p>' +
+            '<ul id="gn-picks-list" class="gn-list"></ul>' +
+          "</section>" +
           '<section class="gn-card" aria-labelledby="gn-nom-title">' +
             '<h3 id="gn-nom-title">Nominees</h3>' +
             '<div class="gn-actions">' +
@@ -722,6 +751,84 @@
       }
       var summary = document.getElementById("gn-weight-summary");
       if (summary) summary.textContent = weightSummary();
+      paintPicks(false);
+    }
+
+    function packedLookup() {
+      var lookup = {};
+      var list = [];
+      try {
+        if (typeof ctx.packedSlugs === "function") list = ctx.packedSlugs() || [];
+      } catch (err) {
+        list = [];
+      }
+      if (!Array.isArray(list)) return lookup;
+      list.forEach(function (slug) { if (slug) lookup[slug] = true; });
+      return lookup;
+    }
+
+    function picksReady() {
+      return !!(state.players && state.time);
+    }
+
+    function pickFilterKey() {
+      return [
+        state.players,
+        state.time,
+        state.weightFrom,
+        state.weightTo,
+        state.kids ? "1" : "0",
+        state.who.join(","),
+        Object.keys(packedLookup()).sort().join(",")
+      ].join("|");
+    }
+
+    function computePicks(force) {
+      var key = pickFilterKey();
+      if (!picksReady()) {
+        pickMemo = { key: key, slugs: [] };
+        return [];
+      }
+      if (!force && pickMemo.slugs && pickMemo.key === key) return pickMemo.slugs;
+      var picked = tonightPicks(ctx.games.filter(fits), packedLookup());
+      pickMemo = {
+        key: key,
+        slugs: picked.map(function (game) { return game.slug; })
+      };
+      return pickMemo.slugs;
+    }
+
+    function paintPicks(force) {
+      var list = document.getElementById("gn-picks-list");
+      var note = document.getElementById("gn-picks-note");
+      if (!list || !note) return;
+      var slugs = computePicks(!!force);
+      if (!picksReady()) {
+        list.innerHTML = "";
+        note.hidden = false;
+        note.textContent = "Pick a player count and a time.";
+        return;
+      }
+      if (!slugs.length) {
+        list.innerHTML = "";
+        note.hidden = false;
+        note.textContent = "No games fit.";
+        return;
+      }
+      var packed = packedLookup();
+      note.hidden = true;
+      note.textContent = "";
+      list.innerHTML = slugs.map(function (slug) {
+        var game = bySlug[slug];
+        if (!game) return "";
+        var tag = packed[slug] ? '<span class="gn-packed">Packed</span>' : "";
+        return '<li class="gn-row">' +
+          '<a class="gn-pick" data-slug="' + ctx.escapeHtml(slug) + '" href="' + ctx.escapeHtml(ctx.gameHref(slug)) + '">' +
+            '<span class="gn-name">' + ctx.escapeHtml(game.name) + "</span>" +
+            tag +
+            '<span class="gn-sub">' + ctx.escapeHtml(metaLine(game)) + "</span>" +
+          "</a></li>";
+      }).join("");
     }
 
     function paintNominees() {
@@ -1951,6 +2058,7 @@
       var btn = event.target.closest ? event.target.closest("button") : null;
       if (!btn || (document.getElementById("gn-panel") && document.getElementById("gn-panel").contains(btn))) return;
       if (btn.id === "gn-suggest") { onSuggest(); return; }
+      if (btn.id === "gn-shuffle") { paintPicks(true); return; }
       if (btn.id === "gn-pack") {
         if (typeof ctx.packForNight === "function") ctx.packForNight(state.games.slice());
         return;
@@ -2055,6 +2163,7 @@
     sortByLongestSincePlayed: sortByLongestSincePlayed,
     orderForSuggest: orderForSuggest,
     suggestCount: suggestCount,
+    tonightPicks: tonightPicks,
     recordedMinAge: recordedMinAge,
     kidsAllows: kidsAllows,
     pollText: pollText,
