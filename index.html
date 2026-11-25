@@ -3120,6 +3120,81 @@
   .bag-game-actions { display:flex; flex-direction:column; gap:10px; min-width:0; }
   .bag-empty { margin:0; color:var(--muted); font-size:16px; }
   .bag-card > .btn[disabled] { opacity:0.45; cursor:default; }
+  .bag-set-sheet {
+    border:none;
+    padding:0;
+    background:transparent;
+    color:var(--fg);
+    width:min(100vw, 520px);
+    max-width:calc(100vw - 16px);
+    max-height:calc(100dvh - 12px);
+    margin:auto 0 0;
+    box-sizing:border-box;
+    overflow:visible;
+  }
+  .bag-set-sheet::backdrop { background:rgba(0, 0, 0, 0.48); }
+  .bag-set-sheet:focus { outline:none; }
+  .bag-set-card {
+    width:100%;
+    max-height:calc(100dvh - 12px);
+    box-sizing:border-box;
+    overflow:auto;
+    background:var(--card);
+    color:var(--fg);
+    border:1px solid var(--hig-sep, var(--border));
+    border-radius:16px 16px 0 0;
+    padding:16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    box-shadow:0 12px 40px rgba(0, 0, 0, 0.24);
+    font-size:16px;
+    line-height:1.35;
+  }
+  .bag-set-card h2 { margin:0 0 12px; font-size:1.25rem; }
+  .bag-set-lead { margin:0 0 4px; font-size:16px; font-weight:650; }
+  .bag-set-block + .bag-set-block {
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px solid var(--hig-sep, var(--border));
+  }
+  .bag-set-games {
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    min-width:0;
+  }
+  .bag-set-games li {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    min-height:44px;
+    min-width:0;
+    font-size:16px;
+  }
+  .bag-set-name { overflow-wrap:anywhere; font-weight:650; min-width:0; }
+  .bag-set-missing { flex:0 0 auto; color:var(--muted); font-weight:650; font-size:16px; }
+  .bag-set-empty {
+    margin:0;
+    color:var(--muted);
+    font-size:16px;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+  }
+  .bag-set-actions { display:flex; flex-direction:column; gap:10px; margin-top:12px; min-width:0; }
+  .bag-set-actions .btn { font-size:16px; touch-action:manipulation; }
+  .bag-set-actions .btn.primary,
+  :root[data-look="hig"] .bag-set-actions .btn.primary {
+    background:var(--brand);
+    color:#ffffff;
+    border-color:transparent;
+  }
+  @media (min-width:720px) {
+    .bag-set-sheet { margin:auto; width:min(480px, calc(100vw - 32px)); }
+    .bag-set-card { border-radius:16px; padding:16px; }
+  }
   header a.header-bags {
     display:inline-flex;
     align-items:center;
@@ -163808,33 +163883,314 @@
   }
 
   /* Bag packing is owner-only, using the same unlock as private Put it away
-     photos. That GitHub token is Contents read-only, and the rulebook worker
-     does not store anything, so the list stays in this browser. */
+     photos. Assignments live in localStorage under bgqBags. When that token
+     can write Contents, the same list is also stored as bags.json in the
+     unlocked repository. The token stays in bgqStorage and is sent only as
+     an Authorization header, the same way Put it away reads manifests.
+     A set link replaces one or both bags after confirm:
+     #/bags?big=azul,root&small=  (omit a bag to leave it, empty clears it). */
   var BAG_STORAGE_KEY = "bgqBags";
+  var BAG_REMOTE_PATH = "bags.json";
+  var bagSync = {
+    mode: "local",
+    sha: null,
+    writing: false,
+    dirty: false,
+    readOnly: false,
+    booted: false
+  };
+  var bagSetBusy = false;
   function ownerUnlocked() {
     return !!readPackUnlock();
   }
-  function readBagState() {
+  function emptyBagDoc() {
+    return { games: {}, at: {}, gone: {} };
+  }
+  function copyBagTimes(raw, dest) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return;
+    Object.keys(raw).forEach(function (slug) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+      var t = Number(raw[slug]);
+      if (!isFinite(t) || t < 0) return;
+      dest[slug] = t;
+    });
+  }
+  function readBagDoc() {
+    var doc = emptyBagDoc();
     try {
       var data = JSON.parse(localStorage.getItem(BAG_STORAGE_KEY) || "{}");
       var raw = data && data.games;
-      var games = {};
-      if (!raw || typeof raw !== "object" || Array.isArray(raw)) return games;
-      Object.keys(raw).forEach(function (slug) {
-        var bag = raw[slug];
-        if ((bag === "big" || bag === "small") && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-          games[slug] = bag;
-        }
-      });
-      return games;
-    } catch (err) {
-      return {};
-    }
-  }
-  function writeBagState(games) {
-    try {
-      localStorage.setItem(BAG_STORAGE_KEY, JSON.stringify({ games: games }));
+      if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+        Object.keys(raw).forEach(function (slug) {
+          var bag = raw[slug];
+          if ((bag === "big" || bag === "small") && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+            doc.games[slug] = bag;
+          }
+        });
+      }
+      copyBagTimes(data && data.at, doc.at);
+      copyBagTimes(data && data.gone, doc.gone);
     } catch (err) {}
+    return doc;
+  }
+  function writeBagDoc(doc) {
+    try {
+      var games = {};
+      var at = {};
+      var gone = {};
+      Object.keys(doc.games || {}).sort().forEach(function (slug) {
+        var bag = doc.games[slug];
+        if ((bag !== "big" && bag !== "small") || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+        games[slug] = bag;
+        if (typeof doc.at[slug] === "number" && isFinite(doc.at[slug])) at[slug] = doc.at[slug];
+      });
+      Object.keys(doc.gone || {}).sort().forEach(function (slug) {
+        if (games[slug] || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+        var t = doc.gone[slug];
+        if (typeof t === "number" && isFinite(t) && t > 0) gone[slug] = t;
+      });
+      localStorage.setItem(BAG_STORAGE_KEY, JSON.stringify({ games: games, at: at, gone: gone }));
+    } catch (err) {}
+  }
+  function readBagState() {
+    return readBagDoc().games;
+  }
+  function bagStateOf(doc, slug) {
+    var bag = doc.games && doc.games[slug];
+    var packed = bag === "big" || bag === "small";
+    var at = doc.at && typeof doc.at[slug] === "number" && isFinite(doc.at[slug]) ? doc.at[slug] : 0;
+    var gone = doc.gone && typeof doc.gone[slug] === "number" && isFinite(doc.gone[slug]) ? doc.gone[slug] : 0;
+    if (!packed && !(gone > 0)) return null;
+    if (packed && at >= gone) return { bag: bag, at: at, packed: true };
+    if (gone > at) return { bag: "", at: gone, packed: false };
+    if (packed) return { bag: bag, at: at, packed: true };
+    return { bag: "", at: gone, packed: false };
+  }
+  function mergeBagDocs(local, remote) {
+    var doc = emptyBagDoc();
+    var slugs = {};
+    [local, remote].forEach(function (src) {
+      ["games", "at", "gone"].forEach(function (key) {
+        Object.keys(src[key] || {}).forEach(function (slug) { slugs[slug] = true; });
+      });
+    });
+    Object.keys(slugs).forEach(function (slug) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+      var left = bagStateOf(local, slug);
+      var right = bagStateOf(remote, slug);
+      if (!left && !right) return;
+      var win = left && right ? (right.at > left.at ? right : left) : (left || right);
+      if (win.packed) {
+        doc.games[slug] = win.bag;
+        doc.at[slug] = win.at;
+      } else if (win.at > 0) {
+        doc.gone[slug] = win.at;
+      }
+    });
+    return doc;
+  }
+  function stampBagTimes(doc) {
+    var now = Date.now();
+    Object.keys(doc.games).forEach(function (slug) {
+      if (typeof doc.at[slug] !== "number") doc.at[slug] = now;
+    });
+    return doc;
+  }
+  function encodeBagFile(doc) {
+    var slugs = {};
+    Object.keys(doc.games || {}).forEach(function (slug) { slugs[slug] = true; });
+    Object.keys(doc.gone || {}).forEach(function (slug) { slugs[slug] = true; });
+    var games = {};
+    Object.keys(slugs).sort().forEach(function (slug) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+      var view = bagStateOf(doc, slug);
+      if (!view) return;
+      if (view.packed) games[slug] = { bag: view.bag, at: view.at };
+      else if (view.at > 0) games[slug] = { bag: "", at: view.at };
+    });
+    return JSON.stringify({ v: 1, games: games });
+  }
+  function docFromBagFile(text) {
+    var doc = emptyBagDoc();
+    var data = null;
+    try { data = JSON.parse(text); } catch (err) { return doc; }
+    var games = data && data.games;
+    if (!games || typeof games !== "object" || Array.isArray(games)) return doc;
+    Object.keys(games).forEach(function (slug) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+      var entry = games[slug];
+      var bag = "";
+      var at = 0;
+      if (entry && typeof entry === "object" && !Array.isArray(entry)) {
+        bag = entry.bag;
+        at = Number(entry.at);
+      } else if (typeof entry === "string") {
+        bag = entry;
+      } else {
+        return;
+      }
+      if (!isFinite(at) || at < 0) at = 0;
+      if (bag === "big" || bag === "small") {
+        doc.games[slug] = bag;
+        doc.at[slug] = at;
+      } else if (at > 0) {
+        doc.gone[slug] = at;
+      }
+    });
+    return doc;
+  }
+  function utf8ToBase64(text) {
+    var bytes = new TextEncoder().encode(String(text));
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+  function base64ToUtf8(b64) {
+    var clean = String(b64 || "").replace(/[^A-Za-z0-9+/=]/g, "");
+    if (!clean) return "";
+    var bin = atob(clean);
+    var bytes = new Uint8Array(bin.length);
+    for (var j = 0; j < bin.length; j++) bytes[j] = bin.charCodeAt(j);
+    return new TextDecoder().decode(bytes);
+  }
+  function sameUnlock(unlock) {
+    var current = readPackUnlock();
+    return !!(current && unlock && current.owner === unlock.owner && current.repo === unlock.repo && current.token === unlock.token);
+  }
+  function bagRemoteAllowed(unlock) {
+    return !!(unlock && unlock.owner === "reddittitt" && unlock.repo === "bgquick-storage");
+  }
+  function bagSyncSentence() {
+    return (bagSync.mode === "synced" ? "Synced" : "On this device only") + ". A game is in one bag at a time.";
+  }
+  function paintBagSync() {
+    var state = bagSync.writing ? "pending" : bagSync.mode;
+    if (document.documentElement) document.documentElement.setAttribute("data-bag-sync", state);
+    var note = document.getElementById("bag-sync-note");
+    if (note) note.textContent = bagSyncSentence();
+  }
+  function resetBagSync() {
+    bagSync.mode = "local";
+    bagSync.sha = null;
+    bagSync.dirty = false;
+    bagSync.readOnly = false;
+    bagSync.booted = false;
+    if (document.documentElement) document.documentElement.removeAttribute("data-bag-sync");
+  }
+  function readRemoteBags(unlock) {
+    if (!bagRemoteAllowed(unlock) || !sameUnlock(unlock)) return Promise.resolve(null);
+    return fetch(packApi(unlock, BAG_REMOTE_PATH), {
+      redirect: "error",
+      headers: {
+        Authorization: "Bearer " + unlock.token,
+        Accept: "application/vnd.github+json"
+      }
+    }).then(function (res) {
+      if (!sameUnlock(unlock)) return null;
+      if (res.status === 404) return { doc: emptyBagDoc(), sha: null, missing: true };
+      if (res.status === 401 || res.status === 403) {
+        bagSync.readOnly = true;
+        return null;
+      }
+      if (!res.ok) return null;
+      return res.json().then(function (data) {
+        if (!data || data.encoding === "none" || data.content == null) return { skip: true };
+        bagSync.sha = data.sha || null;
+        return {
+          doc: docFromBagFile(base64ToUtf8(data.content)),
+          sha: data.sha || null,
+          missing: false
+        };
+      }).catch(function () { return null; });
+    }).catch(function () { return null; });
+  }
+  function writeRemoteBags(unlock, doc, sha) {
+    if (!bagRemoteAllowed(unlock) || !sameUnlock(unlock)) return Promise.resolve(null);
+    var payload = {
+      message: "Update bags",
+      content: utf8ToBase64(encodeBagFile(doc))
+    };
+    if (sha) payload.sha = sha;
+    return fetch(packApi(unlock, BAG_REMOTE_PATH), {
+      method: "PUT",
+      redirect: "error",
+      headers: {
+        Authorization: "Bearer " + unlock.token,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    }).catch(function () { return null; });
+  }
+  function refreshBagsAfterPull(beforeGames) {
+    var afterGames = JSON.stringify(readBagDoc().games);
+    if (beforeGames === afterGames) return;
+    if (document.getElementById("bag-set-sheet")) return;
+    if (document.querySelector(".bags-page")) {
+      renderBags();
+      return;
+    }
+    if (detailSlug && document.getElementById("bag-pack")) paintBagPack(detailSlug);
+  }
+  function pushBagSync(unlock, attempt) {
+    if (!sameUnlock(unlock)) return Promise.resolve(false);
+    return readRemoteBags(unlock).then(function (remote) {
+      if (!remote || remote.skip || !sameUnlock(unlock)) return false;
+      var beforeGames = JSON.stringify(readBagDoc().games);
+      var merged = stampBagTimes(mergeBagDocs(readBagDoc(), remote.doc));
+      writeBagDoc(merged);
+      refreshBagsAfterPull(beforeGames);
+      if (encodeBagFile(merged) === encodeBagFile(remote.doc)) return false;
+      return writeRemoteBags(unlock, merged, remote.sha).then(function (res) {
+        if (!res || !sameUnlock(unlock)) return false;
+        if (res.status === 409 || res.status === 422) {
+          if (attempt >= 1) return false;
+          return pushBagSync(unlock, attempt + 1);
+        }
+        if (res.status === 401 || res.status === 403) {
+          bagSync.readOnly = true;
+          return false;
+        }
+        if (!res.ok) return false;
+        return res.json().then(function (data) {
+          if (data && data.content && data.content.sha) bagSync.sha = data.content.sha;
+          return true;
+        }).catch(function () { return true; });
+      });
+    });
+  }
+  function scheduleBagSync() {
+    if (!ownerUnlocked() || bagSync.readOnly) return;
+    if (bagSync.writing) {
+      bagSync.dirty = true;
+      return;
+    }
+    var unlock = readPackUnlock();
+    if (!unlock) return;
+    bagSync.writing = true;
+    bagSync.dirty = false;
+    paintBagSync();
+    pushBagSync(unlock, 0).then(function (synced) {
+      bagSync.writing = false;
+      if (!sameUnlock(unlock)) {
+        paintBagSync();
+        if (bagSync.dirty && ownerUnlocked() && !bagSync.readOnly) scheduleBagSync();
+        return;
+      }
+      bagSync.mode = synced ? "synced" : "local";
+      paintBagSync();
+      if (bagSync.dirty && !bagSync.readOnly) scheduleBagSync();
+    }).catch(function () {
+      bagSync.writing = false;
+      if (sameUnlock(unlock)) bagSync.mode = "local";
+      paintBagSync();
+      if (bagSync.dirty && ownerUnlocked() && !bagSync.readOnly) scheduleBagSync();
+    });
+  }
+  function ensureBagSync() {
+    if (!ownerUnlocked() || bagSync.booted) return;
+    bagSync.booted = true;
+    scheduleBagSync();
   }
   function bagName(id) {
     if (id === "big") return "Big bag";
@@ -163846,19 +164202,38 @@
   }
   function setGameBag(slug, bag) {
     if (!ownerUnlocked() || !slug || !DATA[slug]) return;
-    var games = readBagState();
-    if (bag === "big" || bag === "small") games[slug] = bag;
-    else delete games[slug];
-    writeBagState(games);
+    var doc = readBagDoc();
+    var at = Date.now();
+    if (bag === "big" || bag === "small") {
+      doc.games[slug] = bag;
+      doc.at[slug] = at;
+      delete doc.gone[slug];
+    } else if (doc.games[slug]) {
+      delete doc.games[slug];
+      delete doc.at[slug];
+      doc.gone[slug] = at;
+    } else {
+      return;
+    }
+    writeBagDoc(doc);
+    scheduleBagSync();
   }
   function clearOneBag(id) {
     if (!ownerUnlocked()) return;
     if (id !== "big" && id !== "small") return;
-    var games = readBagState();
-    Object.keys(games).forEach(function (slug) {
-      if (games[slug] === id) delete games[slug];
+    var doc = readBagDoc();
+    var at = Date.now();
+    var changed = false;
+    Object.keys(doc.games).forEach(function (slug) {
+      if (doc.games[slug] !== id) return;
+      delete doc.games[slug];
+      delete doc.at[slug];
+      doc.gone[slug] = at;
+      changed = true;
     });
-    writeBagState(games);
+    if (!changed) return;
+    writeBagDoc(doc);
+    scheduleBagSync();
   }
   function bagLabelHtml(slug) {
     if (!ownerUnlocked()) return "";
@@ -163966,6 +164341,129 @@
       return String(DATA[a].name || a).localeCompare(String(DATA[b].name || b), undefined, { sensitivity: "base" });
     });
   }
+  function parseBagSlugList(raw) {
+    var seen = {};
+    var found = [];
+    var missing = [];
+    String(raw || "").split(",").forEach(function (part) {
+      if (found.length + missing.length >= 100) return;
+      var slug = part.trim().toLowerCase();
+      if (!slug || seen[slug]) return;
+      seen[slug] = true;
+      if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) && DATA[slug]) {
+        found.push({ slug: slug, name: DATA[slug].name || slug });
+      } else {
+        missing.push(slug);
+      }
+    });
+    return { found: found, missing: missing };
+  }
+  function parseBagSetLink() {
+    var params = new URLSearchParams((window.location.hash || "").split("?")[1] || "");
+    if (!params.has("big") && !params.has("small")) return null;
+    var plan = {
+      big: params.has("big") ? parseBagSlugList(params.get("big")) : null,
+      small: params.has("small") ? parseBagSlugList(params.get("small")) : null
+    };
+    if (plan.big && plan.small) {
+      var inSmall = {};
+      plan.small.found.forEach(function (item) { inSmall[item.slug] = true; });
+      plan.big.found = plan.big.found.filter(function (item) { return !inSmall[item.slug]; });
+    }
+    return plan;
+  }
+  function bagReplaceQuestion(id, count) {
+    var name = bagName(id);
+    if (count === 1) return "Replace " + name + " with this 1 game?";
+    return "Replace " + name + " with these " + count + " games?";
+  }
+  function bagSetListHtml(part) {
+    var items = part.found.map(function (item) {
+      return '<li data-bag-set-found="' + escapeHtml(item.slug) + '"><span class="bag-set-name">' + escapeHtml(item.name) + "</span></li>";
+    }).join("");
+    var missing = part.missing.map(function (slug) {
+      return '<li data-bag-set-missing="' + escapeHtml(slug) + '"><span class="bag-set-name">' + escapeHtml(slug) + '</span><span class="bag-set-missing">not found</span></li>';
+    }).join("");
+    if (!items && !missing) return '<p class="bag-set-empty">The bag will be empty.</p>';
+    return '<ul class="bag-set-games">' + items + missing + "</ul>";
+  }
+  function bagSetBlockHtml(id, part) {
+    return '<section class="bag-set-block" data-bag-set-bag="' + id + '">' +
+      '<p class="bag-set-lead" data-bag-set-for="' + id + '">' + escapeHtml(bagReplaceQuestion(id, part.found.length)) + "</p>" +
+      bagSetListHtml(part) +
+      "</section>";
+  }
+  function bagSetSheetHtml(plan) {
+    var blocks = "";
+    if (plan.big) blocks += bagSetBlockHtml("big", plan.big);
+    if (plan.small) blocks += bagSetBlockHtml("small", plan.small);
+    return '<dialog class="bag-set-sheet" id="bag-set-sheet" aria-labelledby="bag-set-title">' +
+      '<div class="bag-set-card">' +
+        '<h2 id="bag-set-title">Update bags</h2>' +
+        blocks +
+        '<div class="bag-set-actions">' +
+          '<button type="button" class="btn" data-bag-set-cancel>Cancel</button>' +
+          '<button type="button" class="btn primary" data-bag-set-confirm>Confirm</button>' +
+        "</div></div></dialog>";
+  }
+  function applyBagSet(plan) {
+    if (!ownerUnlocked() || !plan) return;
+    var doc = readBagDoc();
+    var at = Date.now();
+    var next = {};
+    ["big", "small"].forEach(function (id) {
+      var part = plan[id];
+      if (!part) return;
+      part.found.forEach(function (item) {
+        if (DATA[item.slug]) next[item.slug] = id;
+      });
+    });
+    ["big", "small"].forEach(function (id) {
+      if (!plan[id]) return;
+      Object.keys(doc.games).forEach(function (slug) {
+        if (doc.games[slug] !== id || next[slug]) return;
+        delete doc.games[slug];
+        delete doc.at[slug];
+        doc.gone[slug] = at;
+      });
+    });
+    Object.keys(next).forEach(function (slug) {
+      doc.games[slug] = next[slug];
+      doc.at[slug] = at;
+      delete doc.gone[slug];
+    });
+    writeBagDoc(doc);
+    scheduleBagSync();
+  }
+  function finishBagSet(apply, plan) {
+    if (bagSetBusy) return;
+    bagSetBusy = true;
+    try {
+      if (apply) applyBagSet(plan);
+      history.replaceState(null, "", window.location.pathname + window.location.search + "#/bags");
+    } finally {
+      bagSetBusy = false;
+    }
+    render();
+  }
+  function bindBagSetSheet(plan) {
+    var sheet = document.getElementById("bag-set-sheet");
+    if (!sheet) return;
+    if (typeof sheet.showModal === "function") {
+      try { sheet.showModal(); } catch (err) {}
+    }
+    var confirmBtn = sheet.querySelector("[data-bag-set-confirm]");
+    var cancelBtn = sheet.querySelector("[data-bag-set-cancel]");
+    if (confirmBtn) confirmBtn.addEventListener("click", function () { finishBagSet(true, plan); });
+    if (cancelBtn) cancelBtn.addEventListener("click", function () { finishBagSet(false, plan); });
+    sheet.addEventListener("cancel", function (event) {
+      event.preventDefault();
+      finishBagSet(false, plan);
+    });
+    sheet.addEventListener("click", function (event) {
+      if (event.target === sheet) finishBagSet(false, plan);
+    });
+  }
   function renderBags() {
     detailSlug = "";
     clearGameAccent();
@@ -163973,6 +164471,7 @@
     var headerLink = document.querySelector("header a.header-bags");
     if (headerLink) headerLink.setAttribute("aria-current", "page");
     var games = readBagState();
+    var plan = parseBagSetLink();
     function section(id) {
       var name = bagName(id);
       var slugs = bagGameItems(id, games);
@@ -164001,9 +164500,10 @@
       '<article class="detail bags-page">' +
         '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>' +
         '<h2 class="title">Bags</h2>' +
-        '<p class="exp-note">On this device only. A game is in one bag at a time.</p>' +
+        '<p class="exp-note" id="bag-sync-note">' + escapeHtml(bagSyncSentence()) + "</p>" +
         section("big") +
         section("small") +
+        (plan ? bagSetSheetHtml(plan) : "") +
       "</article>";
     var page = appEl.querySelector(".bags-page");
     if (!page) return;
@@ -164030,6 +164530,10 @@
       clearOneBag(id);
       renderBags();
     });
+    if (plan) {
+      document.body.style.overflow = "hidden";
+      bindBagSetSheet(plan);
+    }
   }
 
   var expansionGuides = null;
@@ -165460,7 +165964,7 @@
     appEl.innerHTML =
       '<article class="detail fade-in">' +
         '<h2 class="title">Private storage</h2>' +
-        '<p>Use a fine-grained token with Contents read-only on this one repository. The token stays in this browser.</p>' +
+        '<p>Use a fine-grained token on this one repository. Contents read-only is enough for Put it away. Bags sync when the token also has Contents read and write. The token stays in this browser.</p>' +
         '<form class="storage-form" id="storage-form" method="post" action="#">' +
           '<label>Owner <input name="owner" autocomplete="off" value="' + escapeHtml(saved ? saved.owner : "reddittitt") + '"></label>' +
           '<label>Repository <input name="repo" autocomplete="off" value="' + escapeHtml(saved ? saved.repo : "bgquick-storage") + '"></label>' +
@@ -165499,10 +166003,13 @@
       writePackUnlock(next);
       form.token.value = "";
       status.textContent = "Saved.";
+      resetBagSync();
       syncOwnerNav();
+      ensureBagSync();
     });
     document.getElementById("storage-forget").addEventListener("click", function () {
       clearPackUnlock();
+      resetBagSync();
       syncOwnerNav();
       form.owner.value = "reddittitt";
       form.repo.value = "bgquick-storage";
@@ -165559,6 +166066,7 @@
     var nightLink = document.querySelector("header a.header-night");
     if (nightLink) nightLink.removeAttribute("aria-current");
     syncOwnerNav();
+    ensureBagSync();
     var bagsLink = document.querySelector("header a.header-bags");
     if (bagsLink) bagsLink.removeAttribute("aria-current");
     if (unlockRequested()) {
