@@ -3637,28 +3637,55 @@
   }
 
   #app-update {
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index:60;
     display:flex;
     justify-content:center;
-    width:100%;
-    max-width:1000px;
-    margin:8px auto 0;
+    width:auto;
+    max-width:420px;
+    margin:0 auto;
     padding:0;
     border:0;
     background:transparent;
+    pointer-events:none;
   }
   #app-update[hidden] { display:none; }
   #app-update button {
+    pointer-events:auto;
+    width:100%;
     min-height:44px;
-    max-width:calc(100% - 8px);
-    padding:8px 14px;
+    max-width:420px;
+    padding:10px 16px;
     border-radius:999px;
     border:0;
-    background:#fff;
-    color:#111;
+    background:#111;
+    color:#fff;
+    box-shadow:0 10px 28px rgba(0,0,0,0.28);
     font:inherit;
-    font-size:14px;
-    font-weight:650;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
   }
+  #pull-refresh {
+    position:fixed;
+    left:50%;
+    top:calc(var(--header-h, 64px) + 8px);
+    transform:translateX(-50%);
+    z-index:70;
+    margin:0;
+    padding:8px 14px;
+    border-radius:999px;
+    background:var(--card);
+    color:var(--fg);
+    border:1px solid var(--border);
+    font-size:14px;
+    font-weight:700;
+    box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  }
+  #pull-refresh[hidden] { display:none; }
   #offline-flag {
     margin:0;
     padding:4px 8px;
@@ -3690,7 +3717,7 @@
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
   <div id="app-update" hidden role="status" aria-live="polite">
-    <button type="button" id="app-update-refresh">Update available, tap to refresh</button>
+    <button type="button" id="app-update-refresh">Updated, tap to reload</button>
   </div>
 </header>
 
@@ -157918,6 +157945,74 @@
     });
   }
   registerSw();
+
+  function isStandalone() {
+    try {
+      if (window.matchMedia("(display-mode: standalone)").matches) return true;
+      if (window.navigator.standalone === true) return true;
+    } catch (err) {}
+    return false;
+  }
+  function mountPullToRefresh() {
+    if (document.getElementById("pull-refresh")) return;
+    var el = document.createElement("div");
+    el.id = "pull-refresh";
+    el.hidden = true;
+    el.setAttribute("role", "status");
+    el.textContent = "Pull to refresh";
+    document.body.appendChild(el);
+    var pull = { on: false, x: 0, y: 0, id: null, ready: false };
+    function hide() {
+      el.hidden = true;
+      el.textContent = "Pull to refresh";
+    }
+    function blocked(target) {
+      if (!target || !target.closest) return false;
+      return !!target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .playercount-controls, .catalog-chips, .gn-chips, .recent-list, .chapter-pager, .table-bar, .pc-btn, .exp-chip, .filter-chip, input, textarea, select");
+    }
+    window.addEventListener("pointerdown", function (event) {
+      if (!isStandalone()) return;
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      var top = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (top > 2) return;
+      if (blocked(event.target)) return;
+      pull.on = true;
+      pull.ready = false;
+      pull.x = event.clientX;
+      pull.y = event.clientY;
+      pull.id = event.pointerId;
+    });
+    window.addEventListener("pointermove", function (event) {
+      if (!pull.on || event.pointerId !== pull.id) return;
+      var dx = event.clientX - pull.x;
+      var dy = event.clientY - pull.y;
+      if (dy < 16) return;
+      if (Math.abs(dx) > dy) {
+        pull.on = false;
+        hide();
+        return;
+      }
+      el.hidden = false;
+      pull.ready = dy > 72;
+      el.textContent = pull.ready ? "Release to refresh" : "Pull to refresh";
+      if (pull.ready && event.cancelable) event.preventDefault();
+    });
+    function finish(event) {
+      if (!pull.on || (event && event.pointerId !== pull.id)) return;
+      var ready = pull.ready;
+      pull.on = false;
+      pull.ready = false;
+      hide();
+      if (ready) window.location.reload();
+    }
+    window.addEventListener("pointerup", finish);
+    window.addEventListener("pointercancel", function () {
+      pull.on = false;
+      pull.ready = false;
+      hide();
+    });
+  }
+  mountPullToRefresh();
 
   function syncOfflineFlag() {
     var el = document.getElementById("offline-flag");
