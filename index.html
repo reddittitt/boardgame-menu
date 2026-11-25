@@ -594,6 +594,24 @@
     overflow:hidden;
     text-overflow:ellipsis;
   }
+  .catalog-swipe {
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+    min-width:0;
+  }
+  .catalog-swipe .bag-swipe { width:100%; background:transparent; }
+  .catalog-swipe .card { width:100%; }
+  .catalog-swipe .card:hover { transform:none; }
+  .catalog-swipe .bag-swipe-reveal--pack {
+    right:0;
+    justify-content:flex-end;
+    padding:0 8px 0 0;
+    background:#3a5f8f;
+  }
+  .catalog-swipe.bag-game--swipe-left .bag-swipe-reveal--pack { visibility:visible; }
+  .catalog-swipe.bag-game--swipe-commit.bag-game--swipe-left .bag-swipe-reveal--pack,
+  .catalog-swipe.bag-game--swipe-commit.bag-game--swipe-right .bag-swipe-reveal--move { background:#1d4ed8; }
 
   #rules-glossary .glossary-item {
   margin-bottom: 0.4rem;
@@ -158982,10 +159000,10 @@
     if (g.time) bits.push(g.time + " min");
     if (g.year) bits.push(g.year);
     var sub = bits.join(" \u2022 ");
-    return (
-      '<a class="card fade-in" href="' + gamePath(g.slug) + '">' +
+    var card = (
+      '<a class="card fade-in" draggable="false" href="' + gamePath(g.slug) + '">' +
         '<div class="thumb">' +
-          '<img loading="lazy" decoding="async" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
+          '<img draggable="false" loading="lazy" decoding="async" src="' + coverUrl(g.slug) + '" onerror="this.parentNode.style.display=\'none\'">' +
         "</div>" +
         '<div class="metaWrap">' +
           "<h2>" + g.name + "</h2>" +
@@ -158993,6 +159011,156 @@
         "</div>" +
       "</a>"
     );
+    if (!ownerUnlocked()) return card;
+    var cue = bagSwipeGlyph("move") + '<span class="bag-swipe-label">Pack</span>';
+    return '<div class="catalog-swipe bag-game">' +
+      '<div class="bag-swipe-reveal bag-swipe-reveal--move" aria-hidden="true"><span class="bag-swipe-cue">' + cue + "</span></div>" +
+      '<div class="bag-swipe-reveal bag-swipe-reveal--pack" aria-hidden="true"><span class="bag-swipe-cue">' + cue + "</span></div>" +
+      '<div class="bag-swipe catalog-swipe-row" data-pack-slug="' + escapeHtml(g.slug) + '">' + card + "</div></div>";
+  }
+
+  var catalogPickerOpenedAt = 0;
+  var suppressLinkUntil = 0;
+  function closeCatalogPicker() {
+    var picker = document.getElementById("bag-picker");
+    if (picker) picker.setAttribute("data-state", "closed");
+    document.body.style.overflow = "";
+    if (!picker) return;
+    if (picker.open && typeof picker.close === "function") picker.close();
+    else picker.removeAttribute("open");
+  }
+  function openCatalogBagPicker(slug) {
+    if (!ownerUnlocked() || !slug) return;
+    var picker = document.getElementById("bag-picker");
+    if (!picker) {
+      appEl.insertAdjacentHTML("beforeend", bagPickerHtml(slug));
+      picker = document.getElementById("bag-picker");
+      if (!picker) return;
+      picker.addEventListener("click", function (event) {
+        var button = event.target && event.target.closest ? event.target.closest("button[data-bag]") : null;
+        if (!button && Date.now() - catalogPickerOpenedAt < 400) return;
+        if (button && picker.contains(button)) {
+          event.preventDefault();
+          event.stopPropagation();
+          var target = picker.getAttribute("data-slug") || "";
+          var bag = button.getAttribute("data-bag") || "";
+          if (!isBagId(bag)) bag = "";
+          if (target) setGameBag(target, bag);
+          setTimeout(closeCatalogPicker, 0);
+          return;
+        }
+        if (event.target === picker) closeCatalogPicker();
+      });
+      picker.addEventListener("cancel", function (event) {
+        if (Date.now() - catalogPickerOpenedAt < 500) {
+          event.preventDefault();
+          return;
+        }
+        closeCatalogPicker();
+      });
+    }
+    picker.setAttribute("data-slug", slug);
+    catalogPickerOpenedAt = Date.now();
+    document.body.style.overflow = "hidden";
+    if (typeof picker.showModal === "function" && !picker.open) {
+      try { picker.showModal(); } catch (err) { picker.setAttribute("open", ""); }
+    } else if (!picker.open) {
+      picker.setAttribute("open", "");
+    }
+    try { paintBagPack(slug); } catch (err) {}
+  }
+  function bindCatalogSwipe() {
+    var grid = document.getElementById("game-grid");
+    if (!grid || !ownerUnlocked() || grid.getAttribute("data-pack-swipe") === "1") return;
+    grid.setAttribute("data-pack-swipe", "1");
+    var tracking = false;
+    var decided = false;
+    var horizontal = false;
+    var row = null;
+    var startX = 0;
+    var startY = 0;
+    var dx = 0;
+    var pointerId = null;
+    var suppressUntil = 0;
+    function paint(target, delta) {
+      var game = target && target.parentElement;
+      if (!game) return;
+      var abs = Math.abs(delta);
+      game.classList.toggle("bag-game--swipe-left", delta < 0);
+      game.classList.toggle("bag-game--swipe-right", delta > 0);
+      game.classList.toggle("bag-game--swipe-commit", abs >= 56);
+      game.style.setProperty("--bag-reveal", abs <= 0 ? "0" : String(Math.min(1, abs / 56)));
+      game.style.setProperty("--bag-reveal-px", Math.min(120, abs) + "px");
+    }
+    function reset(target) {
+      if (!target) return;
+      target.style.transform = "";
+      var game = target.parentElement;
+      if (!game) return;
+      game.classList.remove("bag-game--swipe-left", "bag-game--swipe-right", "bag-game--swipe-commit");
+      game.style.removeProperty("--bag-reveal");
+      game.style.removeProperty("--bag-reveal-px");
+    }
+    grid.addEventListener("pointerdown", function (event) {
+      if (event.button != null && event.button !== 0) return;
+      var found = event.target && event.target.closest ? event.target.closest(".catalog-swipe-row") : null;
+      if (!found || !grid.contains(found)) return;
+      tracking = true;
+      decided = false;
+      horizontal = false;
+      row = found;
+      startX = event.clientX;
+      startY = event.clientY;
+      dx = 0;
+      pointerId = event.pointerId;
+    });
+    grid.addEventListener("pointermove", function (event) {
+      if (!tracking || !row) return;
+      if (pointerId != null && event.pointerId != null && event.pointerId !== pointerId) return;
+      dx = event.clientX - startX;
+      var dy = event.clientY - startY;
+      if (!decided) {
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+        decided = true;
+        horizontal = Math.abs(dx) > Math.abs(dy);
+        if (!horizontal) {
+          tracking = false;
+          reset(row);
+          row = null;
+          return;
+        }
+      }
+      if (!horizontal) return;
+      if (event.cancelable) event.preventDefault();
+      row.style.transform = "translateX(" + Math.max(-120, Math.min(120, dx)) + "px)";
+      paint(row, dx);
+    }, { passive: false });
+    function finish(event) {
+      if (!tracking || !row) return;
+      if (event && pointerId != null && event.pointerId != null && event.pointerId !== pointerId) return;
+      var held = row;
+      var slug = held.getAttribute("data-pack-slug") || "";
+      var go = horizontal && Math.abs(dx) >= 56;
+      tracking = false;
+      row = null;
+      reset(held);
+      if (!go || !slug) return;
+      suppressUntil = Date.now() + 800;
+      suppressLinkUntil = suppressUntil;
+      setTimeout(function () { openCatalogBagPicker(slug); }, 0);
+    }
+    grid.addEventListener("pointerup", finish);
+    grid.addEventListener("pointercancel", function () {
+      tracking = false;
+      reset(row);
+      row = null;
+    });
+    grid.addEventListener("click", function (event) {
+      if (Date.now() < suppressUntil) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, true);
   }
 
   var collectionView = "all";
@@ -159604,6 +159772,7 @@
       '<section id="game-grid" class="grid"></section>';
 
     mountPlayTonight();
+    bindCatalogSwipe();
     var recentClear = document.getElementById("recent-clear");
     if (recentClear) recentClear.addEventListener("click", clearRecent);
     renderRecentlyViewed(readRecent());
@@ -162532,6 +162701,11 @@
   }
   document.addEventListener("click", function (e) {
     var link = e.target && e.target.closest ? e.target.closest("a") : null;
+    if (link && Date.now() < suppressLinkUntil) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (!link) return;
     if (followAppLink(e, link)) return;
     var href = link.getAttribute("href") || "";
