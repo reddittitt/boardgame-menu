@@ -3168,17 +3168,77 @@
     overflow-x:hidden;
   }
   .bag-game {
+    position:relative;
     min-width:0;
     overflow:hidden;
     border-top:1px solid var(--hig-sep, var(--border));
   }
   .bag-game:first-child { border-top:0; }
+  .bag-swipe-reveal {
+    position:absolute;
+    top:0;
+    bottom:0;
+    z-index:0;
+    display:flex;
+    align-items:center;
+    box-sizing:border-box;
+    width:var(--bag-reveal-px, 0px);
+    color:#ffffff;
+    visibility:hidden;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .bag-swipe-reveal--remove {
+    right:0;
+    justify-content:flex-end;
+    padding:0 8px 0 0;
+    background:#894d4d;
+  }
+  .bag-swipe-reveal--move {
+    left:0;
+    justify-content:flex-start;
+    padding:0 0 0 8px;
+    background:#3a5f8f;
+  }
+  .bag-game--swipe-left .bag-swipe-reveal--remove,
+  .bag-game--swipe-right .bag-swipe-reveal--move { visibility:visible; }
+  .bag-game--swipe-commit.bag-game--swipe-left .bag-swipe-reveal--remove { background:#b91c1c; }
+  .bag-game--swipe-commit.bag-game--swipe-right .bag-swipe-reveal--move { background:#1d4ed8; }
+  .bag-swipe-cue {
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    min-width:0;
+    opacity:var(--bag-reveal, 0);
+  }
+  .bag-swipe-reveal--remove .bag-swipe-cue { flex-direction:row-reverse; }
+  .bag-game--swipe-commit .bag-swipe-cue { opacity:1; }
+  .bag-game--swipe-commit .bag-swipe-icon { transform:scale(1.12); }
+  .bag-swipe-icon { display:block; width:22px; height:22px; flex:0 0 auto; }
+  .bag-swipe-label {
+    font-size:16px;
+    font-weight:700;
+    line-height:1;
+    white-space:nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bag-swipe-cue { opacity:1; }
+    .bag-game--swipe-commit .bag-swipe-icon {
+      transform:none;
+      outline:2px solid #ffffff;
+      outline-offset:2px;
+      border-radius:4px;
+    }
+  }
   .bag-swipe {
+    position:relative;
+    z-index:1;
     display:flex;
     align-items:center;
     gap:4px;
     min-width:0;
     min-height:44px;
+    background:var(--card);
     touch-action:pan-y;
     user-select:none;
     -webkit-user-select:none;
@@ -164877,8 +164937,26 @@
       if (!found || !page.contains(found)) return null;
       return found;
     }
+    function paintBagReveal(target, delta) {
+      var game = target && target.parentElement;
+      if (!game || !game.classList || !game.classList.contains("bag-game")) return;
+      var abs = Math.abs(delta);
+      game.classList.toggle("bag-game--swipe-left", delta < 0);
+      game.classList.toggle("bag-game--swipe-right", delta > 0);
+      game.classList.toggle("bag-game--swipe-commit", abs >= 56);
+      game.style.setProperty("--bag-reveal", abs <= 0 ? "0" : String(Math.min(1, abs / 56)));
+      game.style.setProperty("--bag-reveal-px", Math.min(120, abs) + "px");
+    }
+    function clearBagReveal(target) {
+      var game = target && target.parentElement;
+      if (!game || !game.classList) return;
+      game.classList.remove("bag-game--swipe-left", "bag-game--swipe-right", "bag-game--swipe-commit");
+      game.style.removeProperty("--bag-reveal");
+      game.style.removeProperty("--bag-reveal-px");
+    }
     function resetRow(target) {
       if (target) target.style.transform = "";
+      clearBagReveal(target);
     }
     page.addEventListener("pointerdown", function (event) {
       if (event.button != null && event.button !== 0) return;
@@ -164926,6 +165004,7 @@
       if (!horizontal) return;
       if (event.cancelable) event.preventDefault();
       row.style.transform = "translateX(" + Math.max(-120, Math.min(120, dx)) + "px)";
+      paintBagReveal(row, dx);
     });
     function finishGesture(event) {
       if (!tracking || !row) return;
@@ -165017,6 +165096,17 @@
       renderBags();
     }, true);
   }
+  function bagSwipeGlyph(kind) {
+    var path = kind === "remove"
+      ? '<path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7M7 7l1 13h8l1-13M10 11v6M14 11v6"/>'
+      : '<path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15M13 6l6 6-6 6"/>';
+    return '<svg class="bag-swipe-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">' + path + "</svg>";
+  }
+  function bagSwipeReveal(kind, label) {
+    return '<div class="bag-swipe-reveal bag-swipe-reveal--' + kind + '" aria-hidden="true">' +
+      '<span class="bag-swipe-cue">' + bagSwipeGlyph(kind) +
+      '<span class="bag-swipe-label">' + label + "</span></span></div>";
+  }
   function renderBags(focusId) {
     clearBagGesture();
     detailSlug = "";
@@ -165034,6 +165124,8 @@
       var items = slugs.map(function (slug) {
         var gameName = DATA[slug].name || slug;
         return '<li class="bag-game">' +
+          bagSwipeReveal("move", "Move") +
+          bagSwipeReveal("remove", "Remove") +
           '<div class="bag-swipe" data-bag-slug="' + escapeHtml(slug) + '">' +
             '<a class="bag-game-link" draggable="false" href="' + escapeHtml(gamePath(slug)) + '">' + escapeHtml(gameName) + "</a>" +
             '<button type="button" class="bag-overflow" aria-haspopup="dialog" aria-label="Actions for ' + escapeHtml(gameName) + '">' +

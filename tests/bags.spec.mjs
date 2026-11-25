@@ -61,6 +61,30 @@ async function swipeRow(locator, direction) {
   await page.mouse.up();
 }
 
+async function holdSwipe(locator, direction, distance) {
+  await locator.scrollIntoViewIfNeeded();
+  const box = await locator.boundingBox();
+  if (!box) throw new Error("missing row");
+  const y = box.y + box.height / 2;
+  const startX = box.x + Math.min(box.width * 0.42, box.width - 64);
+  const page = locator.page();
+  await page.mouse.move(startX, y);
+  await page.mouse.down();
+  const endX = startX + (direction === "left" ? -distance : distance);
+  await page.mouse.move(endX, y, { steps: 12 });
+  return { page: page, startX: startX, y: y };
+}
+
+async function releaseShort(held, direction) {
+  const back = held.startX + (direction === "left" ? -28 : 28);
+  await held.page.mouse.move(back, held.y, { steps: 6 });
+  await held.page.mouse.up();
+}
+
+function rgbOf(color) {
+  return String(color || "").replace(/\s+/g, "");
+}
+
 test.beforeEach(async function ({ page }) {
   await blockLiveWrites(page);
 });
@@ -734,6 +758,156 @@ test("swiping a row removes with undo or moves to another location", async funct
   await page.locator("#bag-move-sheet").getByRole("button", { name: "Cancel" }).click();
   await expect(page.locator("#bag-move-sheet")).toHaveCount(0);
   await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+});
+
+test("swipe reveal shows the action and a short drag does nothing", async function ({ page }, testInfo) {
+  const live = [];
+  page.on("request", function (req) {
+    const url = req.url();
+    if (url.indexOf("script.google.com") !== -1 || url.indexOf("script.googleusercontent.com") !== -1 || /\/exec(\?|$)/.test(url)) {
+      live.push(req.method() + " " + url);
+    }
+  });
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({
+      games: { "air-land-and-sea-critters-at-war": "big", azul: "small", root: "free" }
+    }));
+  });
+  await page.goto("/#/bags");
+  const row = page.locator(".bag-card--big .bag-swipe");
+  const game = page.locator(".bag-card--big .bag-game");
+  const gameName = "Air, Land & Sea: Critters at War";
+  await expect(row).toBeVisible();
+  await expect(row.locator("a")).toHaveText(gameName);
+  await expect(game.locator(".bag-swipe-reveal")).toHaveCount(2);
+
+  async function bandState(selector) {
+    return game.locator(selector).evaluate(function (el) {
+      var style = getComputedStyle(el);
+      var gameBox = el.parentElement.getBoundingClientRect();
+      var box = el.getBoundingClientRect();
+      var label = el.querySelector(".bag-swipe-label");
+      var labelBox = label ? label.getBoundingClientRect() : null;
+      var icon = el.querySelector(".bag-swipe-icon");
+      var iconStyle = icon ? getComputedStyle(icon) : null;
+      return {
+        text: el.textContent || "",
+        bg: style.backgroundColor,
+        color: style.color,
+        visibility: style.visibility,
+        width: Math.round(box.width),
+        leftGap: Math.round(box.left - gameBox.left),
+        rightGap: Math.round(gameBox.right - box.right),
+        labelInside: !labelBox || (labelBox.left >= box.left - 1 && labelBox.right <= box.right + 1),
+        svg: el.querySelector("svg") ? el.querySelector("svg").outerHTML : "",
+        iconTransform: iconStyle ? iconStyle.transform : "",
+        iconOutline: iconStyle ? iconStyle.outlineWidth : ""
+      };
+    });
+  }
+
+  const shortLeft = await holdSwipe(row, "left", 36);
+  await expect(game).toHaveClass(/bag-game--swipe-left/);
+  await expect(game).not.toHaveClass(/bag-game--swipe-commit/);
+  await expect(game).not.toHaveClass(/bag-game--swipe-right/);
+  let remove = await bandState(".bag-swipe-reveal--remove");
+  let move = await bandState(".bag-swipe-reveal--move");
+  expect(remove.visibility).toBe("visible");
+  expect(move.visibility).toBe("hidden");
+  expect(remove.text).toContain("Remove");
+  expect(remove.svg).toContain("<svg");
+  expect(remove.svg).not.toMatch(/https?:/);
+  expect(rgbOf(remove.bg)).toBe("rgb(137,77,77)");
+  expect(rgbOf(remove.color)).toBe("rgb(255,255,255)");
+  expect(remove.rightGap).toBeLessThanOrEqual(2);
+  expect(remove.leftGap).toBeGreaterThan(40);
+  expect(remove.width).toBeGreaterThan(20);
+  expect(remove.width).toBeLessThan(56);
+  await shortLeft.page.mouse.up();
+  await expect(game).not.toHaveClass(/bag-game--swipe-left/);
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText(gameName);
+  await expect(page.locator("#bag-toast")).toHaveCount(0);
+  await expect(page.locator("#bag-move-sheet")).toHaveCount(0);
+
+  const shortRight = await holdSwipe(row, "right", 36);
+  await expect(game).toHaveClass(/bag-game--swipe-right/);
+  await expect(game).not.toHaveClass(/bag-game--swipe-commit/);
+  await expect(game).not.toHaveClass(/bag-game--swipe-left/);
+  move = await bandState(".bag-swipe-reveal--move");
+  remove = await bandState(".bag-swipe-reveal--remove");
+  expect(move.visibility).toBe("visible");
+  expect(remove.visibility).toBe("hidden");
+  expect(move.text).toContain("Move");
+  expect(move.svg).toContain("<svg");
+  expect(move.svg).not.toMatch(/https?:/);
+  expect(rgbOf(move.bg)).toBe("rgb(58,95,143)");
+  expect(rgbOf(move.color)).toBe("rgb(255,255,255)");
+  expect(move.leftGap).toBeLessThanOrEqual(2);
+  expect(move.rightGap).toBeGreaterThan(40);
+  expect(move.width).toBeGreaterThan(20);
+  expect(move.width).toBeLessThan(56);
+  await shortRight.page.mouse.up();
+  await expect(game).not.toHaveClass(/bag-game--swipe-right/);
+  await expect(page.locator("#bag-move-sheet")).toHaveCount(0);
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText(gameName);
+
+  const fullLeft = await holdSwipe(row, "left", 120);
+  await expect(game).toHaveClass(/bag-game--swipe-commit/);
+  await expect(game).toHaveClass(/bag-game--swipe-left/);
+  remove = await bandState(".bag-swipe-reveal--remove");
+  expect(rgbOf(remove.bg)).toBe("rgb(185,28,28)");
+  expect(remove.labelInside).toBe(true);
+  expect(remove.iconTransform).not.toBe("none");
+  if (testInfo.project.name === "phone") {
+    const dir = "/opt/cursor/artifacts";
+    fs.mkdirSync(dir, { recursive: true });
+    await page.screenshot({ path: dir + "/bags_swipe_remove_phone.png", animations: "disabled" });
+  }
+  await releaseShort(fullLeft, "left");
+  await expect(game).not.toHaveClass(/bag-game--swipe-left/);
+  await expect(page.locator("#bag-toast")).toHaveCount(0);
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText(gameName);
+
+  const fullRight = await holdSwipe(row, "right", 120);
+  await expect(game).toHaveClass(/bag-game--swipe-commit/);
+  await expect(game).toHaveClass(/bag-game--swipe-right/);
+  move = await bandState(".bag-swipe-reveal--move");
+  expect(rgbOf(move.bg)).toBe("rgb(29,78,216)");
+  expect(move.labelInside).toBe(true);
+  expect(move.iconTransform).not.toBe("none");
+  if (testInfo.project.name === "phone") {
+    const dir = "/opt/cursor/artifacts";
+    fs.mkdirSync(dir, { recursive: true });
+    await page.screenshot({ path: dir + "/bags_swipe_move_phone.png", animations: "disabled" });
+  }
+  await releaseShort(fullRight, "right");
+  await expect(page.locator("#bag-move-sheet")).toHaveCount(0);
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText(gameName);
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.evaluate(function () {
+    document.documentElement.setAttribute("data-theme", "dark");
+  });
+  const reduced = await holdSwipe(row, "left", 90);
+  await expect(game).toHaveClass(/bag-game--swipe-commit/);
+  remove = await bandState(".bag-swipe-reveal--remove");
+  expect(rgbOf(remove.bg)).toBe("rgb(185,28,28)");
+  expect(rgbOf(remove.color)).toBe("rgb(255,255,255)");
+  expect(remove.iconTransform === "none" || remove.iconTransform === "matrix(1, 0, 0, 1, 0, 0)").toBe(true);
+  expect(parseFloat(remove.iconOutline)).toBeGreaterThanOrEqual(2);
+  await releaseShort(reduced, "left");
+  await expect(page.locator("#bag-toast")).toHaveCount(0);
+
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored).toEqual({
+    "air-land-and-sea-critters-at-war": "big",
+    azul: "small",
+    root: "free"
+  });
+  expect(live).toEqual([]);
 });
 
 test("a set link can replace free carry", async function ({ page }) {
