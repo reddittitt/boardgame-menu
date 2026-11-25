@@ -2559,7 +2559,7 @@
   }
   @media (max-width:520px) {
     header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
-    header .wrap { gap:6px; }
+    header .wrap { gap:6px; flex-wrap:nowrap; }
     header .toggle {
       padding:6px 8px;
       font-size:0.92rem;
@@ -3998,6 +3998,9 @@
     cursor:pointer;
   }
   body:has(#catalog-filter-panel:not([hidden])) .play-tonight-open { display:none; }
+  body:has(#app-update:not([hidden])) .play-tonight-open {
+    bottom:calc(76px + env(safe-area-inset-bottom));
+  }
   .play-tonight-dialog {
     width:min(520px, calc(100vw - 24px));
     max-height:min(86vh, 760px);
