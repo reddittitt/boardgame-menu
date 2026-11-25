@@ -37,6 +37,30 @@ async function metrics(locator) {
   });
 }
 
+async function pickBag(page, name) {
+  const trigger = page.locator("#bag-pack");
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  const picker = page.locator("#bag-picker");
+  await expect(picker).toBeVisible();
+  await picker.getByRole("button", { name: name, exact: true }).click();
+  await expect(picker).toBeHidden();
+}
+
+async function swipeRow(locator, direction) {
+  const box = await locator.boundingBox();
+  if (!box) throw new Error("missing row");
+  const y = box.y + box.height / 2;
+  const startX = box.x + Math.min(box.width * 0.45, box.width - 56);
+  const delta = Math.max(96, Math.min(140, box.width * 0.5));
+  const endX = direction === "left" ? startX - delta : Math.min(startX + delta, box.x + box.width - 8);
+  const page = locator.page();
+  await page.mouse.move(startX, y);
+  await page.mouse.down();
+  await page.mouse.move(endX, y, { steps: 12 });
+  await page.mouse.up();
+}
+
 test.beforeEach(async function ({ page }) {
   await blockLiveWrites(page);
 });
@@ -46,8 +70,11 @@ test("public visitors do not see bags", async function ({ page }) {
   await expect(page.locator("#search")).toBeVisible();
   await expect(page.getByRole("link", { name: "Bags", exact: true })).toHaveCount(0);
   await expect(page.getByText("Pack in bag")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Pack in bag" })).toHaveCount(0);
   await expect(page.getByText("Big bag")).toHaveCount(0);
   await expect(page.getByText("Small bag")).toHaveCount(0);
+  await expect(page.getByText("Free carry")).toHaveCount(0);
+  await expect(page.locator(".bag-add-input")).toHaveCount(0);
 
   await page.goto("/#/bags");
   await expect(page.locator("#search")).toBeVisible();
@@ -62,8 +89,11 @@ test("public visitors do not see bags", async function ({ page }) {
   await expect(page.locator(".title")).toContainText("Wingspan");
   await expect(page.locator("#bag-pack")).toHaveCount(0);
   await expect(page.locator("#bag-label")).toHaveCount(0);
+  await expect(page.locator("#bag-picker")).toHaveCount(0);
   await expect(page.getByText("Pack in bag")).toHaveCount(0);
   await expect(page.getByText("Big bag")).toHaveCount(0);
+  await expect(page.getByText("Free carry")).toHaveCount(0);
+  await expect(page.locator(".bag-add-input")).toHaveCount(0);
 });
 
 test("owner can pack a game in one bag and manage both bags", async function ({ page }, testInfo) {
@@ -74,34 +104,41 @@ test("owner can pack a game in one bag and manage both bags", async function ({ 
 
   await page.goto("/#/game/wingspan");
   await expect(page.locator(".title")).toContainText("Wingspan");
-  const pack = page.locator("#bag-pack");
+  const pack = page.locator(".essential-links #bag-pack");
   await expect(pack).toBeVisible();
-  await expect(pack.getByRole("button", { name: "Big bag" })).toBeVisible();
-  await expect(pack.getByRole("button", { name: "Small bag" })).toBeVisible();
-  await expect(pack.getByRole("button", { name: "Not packed" })).toBeVisible();
-  await expect(page.locator(".bag-pack input, .bag-pack select, .bags-page input, .bags-page select")).toHaveCount(0);
+  await expect(pack).toHaveText("Pack in bag");
+  await expect(page.locator(".actions #bag-pack, .bag-pack")).toHaveCount(0);
+  await expect(page.locator("#bag-picker")).toBeHidden();
+  const rulebook = page.locator(".essential-links a.essential-link").first();
+  const packBox = await metrics(pack);
+  const linkBox = await metrics(rulebook);
+  expect(packBox.height).toBe(linkBox.height);
+  expect(packBox.width).toBe(linkBox.width);
+  expect(packBox.height).toBeGreaterThanOrEqual(44);
+  expect(packBox.fontSize).toBe(linkBox.fontSize);
 
-  const share = await metrics(page.locator("#share"));
-  const save = await metrics(page.locator("#save-offline"));
-  const bigBtn = await metrics(pack.getByRole("button", { name: "Big bag" }));
-  const smallBtn = await metrics(pack.getByRole("button", { name: "Small bag" }));
-  const noneBtn = await metrics(pack.getByRole("button", { name: "Not packed" }));
-  expect(bigBtn).toEqual(share);
-  expect(smallBtn).toEqual(share);
-  expect(noneBtn).toEqual(share);
-  expect(save.height).toBe(share.height);
-  expect(save.width).toBe(share.width);
-
-  await pack.getByRole("button", { name: "Big bag" }).click();
-  await expect(pack.getByRole("button", { name: "Big bag" })).toHaveAttribute("aria-pressed", "true");
-  await expect(pack.getByRole("button", { name: "Small bag" })).toHaveAttribute("aria-pressed", "false");
+  await pack.click();
+  const picker = page.locator("#bag-picker");
+  await expect(picker).toBeVisible();
+  await expect(pack).toHaveAttribute("aria-expanded", "true");
+  await expect(picker.getByRole("button", { name: "Big bag", exact: true })).toBeVisible();
+  await expect(picker.getByRole("button", { name: "Small bag", exact: true })).toBeVisible();
+  await expect(picker.getByRole("button", { name: "Free carry", exact: true })).toBeVisible();
+  await expect(picker.getByRole("button", { name: "Not packed", exact: true })).toBeVisible();
+  const freeOption = await metrics(picker.getByRole("button", { name: "Free carry", exact: true }));
+  expect(freeOption.height).toBeGreaterThanOrEqual(44);
+  expect(parseFloat(freeOption.fontSize)).toBeGreaterThanOrEqual(16);
+  await picker.getByRole("button", { name: "Big bag", exact: true }).click();
+  await expect(picker).toBeHidden();
   await expect(page.locator("#bag-label")).toHaveText("Big bag");
   await expect(page.locator("#bag-label")).toHaveClass(/bag-label--big/);
 
-  await pack.getByRole("button", { name: "Small bag" }).click();
+  await pack.click();
+  await expect(picker.getByRole("button", { name: "Big bag", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(picker.getByRole("button", { name: "Small bag", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await picker.getByRole("button", { name: "Small bag", exact: true }).click();
   await expect(page.locator("#bag-label")).toHaveText("Small bag");
   await expect(page.locator("#bag-label")).toHaveClass(/bag-label--small/);
-  await expect(pack.getByRole("button", { name: "Big bag" })).toHaveAttribute("aria-pressed", "false");
   const stored = await page.evaluate(function () {
     return JSON.parse(localStorage.getItem("bgqBags") || "{}");
   });
@@ -110,7 +147,7 @@ test("owner can pack a game in one bag and manage both bags", async function ({ 
 
   await page.goto("/#/game/azul");
   await expect(page.locator(".title")).toContainText("Azul");
-  await page.locator("#bag-pack").getByRole("button", { name: "Big bag" }).click();
+  await pickBag(page, "Big bag");
   await expect(page.locator("#bag-label")).toHaveText("Big bag");
 
   await page.locator("header a.header-bags").click();
@@ -126,16 +163,21 @@ test("owner can pack a game in one bag and manage both bags", async function ({ 
   await expect(big.locator("a.bag-game-link")).toHaveAttribute("href", "/game/azul/");
   await expect(small.locator("a.bag-game-link")).toHaveText("Wingspan");
 
-  const remove = await metrics(small.getByRole("button", { name: "Remove Wingspan" }));
-  const move = await metrics(small.getByRole("button", { name: "Move Wingspan to Big bag" }));
+  await expect(page.locator(".bag-card--free h3")).toHaveText("Free carry");
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--free")).toContainText("Nothing carried.");
+  await expect(page.getByRole("button", { name: /Remove |Move / })).toHaveCount(0);
+  await expect(small.locator(".bag-game-actions")).toHaveCount(0);
   const clearSmall = await metrics(small.getByRole("button", { name: "Clear bag" }));
-  expect(remove.height).toBe(share.height);
-  expect(move.height).toBe(share.height);
-  expect(clearSmall.height).toBe(share.height);
-  expect(remove.width).toBe(move.width);
-  expect(move.width).toBe(clearSmall.width);
+  expect(clearSmall.height).toBeGreaterThanOrEqual(44);
 
-  await small.getByRole("button", { name: "Move Wingspan to Big bag" }).click();
+  await small.getByRole("button", { name: "Actions for Wingspan" }).click();
+  const moveSheet = page.locator("#bag-move-sheet");
+  await expect(moveSheet).toBeVisible();
+  await expect(moveSheet.getByRole("button", { name: "Big bag", exact: true })).toBeVisible();
+  await expect(moveSheet.getByRole("button", { name: "Free carry", exact: true })).toBeVisible();
+  await expect(moveSheet.getByRole("button", { name: "Small bag", exact: true })).toHaveCount(0);
+  await moveSheet.getByRole("button", { name: "Big bag", exact: true }).click();
   await expect(big.locator(".bag-count")).toHaveText("2 games");
   await expect(small.locator(".bag-count")).toHaveText("0 games");
   await expect(small.getByText("Nothing packed.")).toBeVisible();
@@ -160,10 +202,12 @@ test("owner can pack a game in one bag and manage both bags", async function ({ 
   await expect(small.locator(".bag-count")).toHaveText("0 games");
 
   await page.goto("/#/game/wingspan");
-  await page.locator("#bag-pack").getByRole("button", { name: "Small bag" }).click();
+  await pickBag(page, "Small bag");
   await page.locator("header a.header-bags").click();
   await expect(page.locator(".bag-card--small .bag-count")).toHaveText("1 game");
-  await page.locator(".bag-card--small").getByRole("button", { name: "Remove Wingspan" }).click();
+  await page.locator(".bag-card--small").getByRole("button", { name: "Actions for Wingspan" }).click();
+  await page.locator("#bag-move-sheet").getByRole("button", { name: "Remove", exact: true }).click();
+  await expect(page.locator("#bag-toast")).toContainText("Removed Wingspan");
   await expect(page.locator(".bag-card--small .bag-count")).toHaveText("0 games");
 
   const overflow = await page.evaluate(function () {
@@ -175,10 +219,14 @@ test("owner can pack a game in one bag and manage both bags", async function ({ 
     const dir = "/opt/cursor/artifacts";
     fs.mkdirSync(dir, { recursive: true });
     await page.goto("/#/game/azul");
-    await page.locator("#bag-pack").getByRole("button", { name: "Big bag" }).click();
+    await expect(page.locator("#bag-pack")).toBeVisible();
+    await page.locator(".essential-links").screenshot({ path: dir + "/bags-phone-pack.png" });
+    await page.locator("#bag-pack").click();
+    await expect(page.locator("#bag-picker")).toBeVisible();
+    await page.locator("#bag-picker").screenshot({ path: dir + "/bags-phone-picker.png" });
+    await page.locator("#bag-picker").getByRole("button", { name: "Big bag", exact: true }).click();
     await expect(page.locator("#bag-label")).toBeVisible();
     await page.locator(".detail-head").screenshot({ path: dir + "/bags-phone-label.png" });
-    await page.locator("#bag-pack").screenshot({ path: dir + "/bags-phone-pack.png" });
     await page.locator("header a.header-bags").click();
     await expect(page.locator(".bag-card--big")).toBeVisible();
     await page.evaluate(function () { window.scrollTo(0, 0); });
@@ -199,7 +247,7 @@ test("Bags in the header leaves a game page", async function ({ page }) {
   await unlock(page);
   await page.goto("/#/game/azul");
   await expect(page.locator(".title")).toContainText("Azul");
-  await page.locator("#bag-pack").getByRole("button", { name: "Small bag" }).click();
+  await pickBag(page, "Small bag");
   const card = page.locator('a.card[href="/game/azul/"]');
   await page.goto("/");
   await card.click();
@@ -260,13 +308,15 @@ test("a set link does nothing for a public visitor", async function ({ page }) {
   await page.addInitScript(function () {
     localStorage.setItem("bgqBags", JSON.stringify({ games: { wingspan: "big" } }));
   });
-  await page.goto("/#/bags?big=azul,root&small=");
+  await page.goto("/#/bags?big=azul,root&small=&free=wingspan");
   await expect(page.locator("#search")).toBeVisible();
   await expect(page).toHaveURL(/#\/$/);
   await expect(page.locator("#bag-set-sheet")).toHaveCount(0);
   await expect(page.getByText("Replace Big bag")).toHaveCount(0);
   await expect(page.getByText("Big bag")).toHaveCount(0);
   await expect(page.getByText("Small bag")).toHaveCount(0);
+  await expect(page.getByText("Free carry")).toHaveCount(0);
+  await expect(page.locator(".bag-add-input")).toHaveCount(0);
   const stored = await page.evaluate(function () {
     return JSON.parse(localStorage.getItem("bgqBags"));
   });
@@ -382,7 +432,7 @@ test("a writable token syncs bags.json and shows Synced", async function ({ page
   await page.goto("/#/game/wingspan");
   await waitForBagSyncSettled(page);
   expect(puts).toHaveLength(0);
-  await page.locator("#bag-pack").getByRole("button", { name: "Small bag" }).click();
+  await pickBag(page, "Small bag");
   await page.waitForFunction(function () {
     return document.documentElement.getAttribute("data-bag-sync") === "synced";
   });
@@ -391,7 +441,7 @@ test("a writable token syncs bags.json and shows Synced", async function ({ page
   expect(puts[0].games.wingspan.bag).toBe("small");
   expect(page.url()).not.toContain(TOKEN.token);
   await page.locator("header a.header-bags").click();
-  await expect(page.locator("#bag-sync-note")).toHaveText("Synced. A game is in one bag at a time.");
+  await expect(page.locator("#bag-sync-note")).toHaveText("Synced. A game is in one location at a time.");
   await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Wingspan");
   if (testInfo.project.name === "phone") {
     const dir = "/opt/cursor/artifacts";
@@ -426,7 +476,7 @@ test("a read-only token keeps bags on this device", async function ({ page }) {
   const denied = page.waitForResponse(function (res) {
     return res.url().indexOf("/contents/bags.json") !== -1 && res.request().method() === "PUT" && res.status() === 403;
   });
-  await page.locator("#bag-pack").getByRole("button", { name: "Big bag" }).click();
+  await pickBag(page, "Big bag");
   await denied;
   await page.waitForFunction(function () {
     return document.documentElement.getAttribute("data-bag-sync") === "local";
@@ -436,7 +486,7 @@ test("a read-only token keeps bags on this device", async function ({ page }) {
     return document.documentElement.getAttribute("data-bag-sync");
   })).toBe("local");
   await page.locator("header a.header-bags").click();
-  await expect(page.locator("#bag-sync-note")).toHaveText("On this device only. A game is in one bag at a time.");
+  await expect(page.locator("#bag-sync-note")).toHaveText("On this device only. A game is in one location at a time.");
   const stored = await page.evaluate(function () {
     return JSON.parse(localStorage.getItem("bgqBags"));
   });
@@ -488,7 +538,7 @@ test("a 409 on bags.json is retried and the newest change wins", async function 
   await waitForBagSyncSettled(page);
   expect(gets).toBe(1);
   expect(puts).toHaveLength(0);
-  await page.locator("#bag-pack").getByRole("button", { name: "Small bag" }).click();
+  await pickBag(page, "Small bag");
   await page.waitForFunction(function () {
     return document.documentElement.getAttribute("data-bag-sync") === "synced";
   });
@@ -502,7 +552,7 @@ test("a 409 on bags.json is retried and the newest change wins", async function 
   expect(puts[1].json.games.root).toEqual({ bag: "big", at: 9999999999999 });
   expect(page.url()).not.toContain(TOKEN.token);
   await page.locator("header a.header-bags").click();
-  await expect(page.locator("#bag-sync-note")).toHaveText("Synced. A game is in one bag at a time.");
+  await expect(page.locator("#bag-sync-note")).toHaveText("Synced. A game is in one location at a time.");
   await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Root");
   await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText(["Azul", "Wingspan"]);
   const stored = await page.evaluate(function () {
@@ -526,9 +576,10 @@ test("another repository never calls GitHub for bags", async function ({ page })
   });
   await page.goto("/#/bags");
   await waitForBagSyncSettled(page);
-  await expect(page.locator("#bag-sync-note")).toHaveText("On this device only. A game is in one bag at a time.");
+  await expect(page.locator("#bag-sync-note")).toHaveText("On this device only. A game is in one location at a time.");
   await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Azul");
-  await page.locator(".bag-card--big").getByRole("button", { name: "Remove Azul" }).click();
+  await page.locator(".bag-card--big").getByRole("button", { name: "Actions for Azul" }).click();
+  await page.locator("#bag-move-sheet").getByRole("button", { name: "Remove", exact: true }).click();
   await expect(page.locator(".bag-card--big .bag-count")).toHaveText("0 games");
   await page.waitForFunction(function () {
     return document.documentElement.getAttribute("data-bag-sync") === "local";
@@ -539,4 +590,235 @@ test("another repository never calls GitHub for bags", async function ({ page })
   });
   expect(stored.azul).toBeUndefined();
   expect(page.url()).not.toContain("bgq_test_token");
+});
+
+test("free carry is a third location and old bag data still loads", async function ({ page }) {
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({ games: { wingspan: "big", azul: "small" } }));
+  });
+  await page.goto("/#/bags");
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+  await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Azul");
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--free")).toContainText("Nothing carried.");
+
+  await page.goto("/#/game/wingspan");
+  await pickBag(page, "Free carry");
+  await expect(page.locator("#bag-label")).toHaveText("Free carry");
+  await expect(page.locator("#bag-label")).toHaveClass(/bag-label--free/);
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored).toEqual({ azul: "small", wingspan: "free" });
+
+  await page.locator("header a.header-bags").click();
+  await expect(page.locator(".bag-card--free a.bag-game-link")).toHaveText("Wingspan");
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("1 game");
+  await expect(page.locator(".bag-card--big .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Azul");
+  const colors = await page.evaluate(function () {
+    return ["big", "small", "free"].map(function (id) {
+      return getComputedStyle(document.querySelector(".bag-card--" + id)).borderLeftColor;
+    });
+  });
+  expect(colors[2]).not.toBe(colors[0]);
+  expect(colors[2]).not.toBe(colors[1]);
+  expect(colors[0]).not.toBe(colors[1]);
+
+  page.once("dialog", function (dialog) {
+    expect(dialog.message()).toContain("Clear Free carry");
+    return dialog.accept();
+  });
+  await page.locator(".bag-card--free").getByRole("button", { name: "Clear", exact: true }).click();
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Azul");
+});
+
+test("typing a game name adds it and moves it when it is already packed", async function ({ page }) {
+  await unlock(page);
+  await page.goto("/#/bags");
+  const bigInput = page.locator("#bag-add-big");
+  const fontSize = await bigInput.evaluate(function (el) {
+    return parseFloat(getComputedStyle(el).fontSize);
+  });
+  expect(fontSize).toBeGreaterThanOrEqual(16);
+  await bigInput.fill("air, land & sea");
+  const air = page.locator("#bag-add-list-big").getByRole("option", { name: "Air, Land & Sea: Critters at War" });
+  await expect(air).toBeVisible();
+  await air.click();
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Air, Land & Sea: Critters at War");
+  await expect(page.locator("#bag-add-big")).toHaveValue("");
+
+  await page.locator("#bag-add-small").fill("BRASS: birmingham");
+  await page.locator("#bag-add-list-small").getByRole("option", { name: "Brass: Birmingham", exact: true }).click();
+  await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Brass: Birmingham");
+
+  await page.locator("#bag-add-big").fill("brass birmingham");
+  await page.locator("#bag-add-list-big").getByRole("option", { name: "Brass: Birmingham", exact: true }).click();
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText([
+    "Air, Land & Sea: Critters at War",
+    "Brass: Birmingham"
+  ]);
+  await expect(page.locator(".bag-card--small .bag-count")).toHaveText("0 games");
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored["brass-birmingham"]).toBe("big");
+  expect(stored["air-land-and-sea-critters-at-war"]).toBe("big");
+  const overflow = await page.evaluate(function () {
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  });
+  expect(overflow).toBe(false);
+});
+
+test("swiping a row removes with undo or moves to another location", async function ({ page }) {
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({ games: { wingspan: "big", azul: "small", root: "free" } }));
+  });
+  await page.goto("/#/bags");
+  const bigRow = page.locator(".bag-card--big .bag-swipe");
+  await expect(bigRow).toBeVisible();
+  const touch = await bigRow.evaluate(function (el) {
+    return {
+      row: getComputedStyle(el).touchAction,
+      link: getComputedStyle(el.querySelector("a")).touchAction
+    };
+  });
+  expect(touch.row).toBe("pan-y");
+  expect(touch.link).toBe("pan-y");
+
+  await bigRow.locator("a").click();
+  await expect(page).toHaveURL(/\/game\/wingspan/);
+  await page.locator("header a.header-bags").click();
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+
+  const row = page.locator(".bag-card--big .bag-swipe");
+  const box = await row.boundingBox();
+  await page.mouse.move(box.x + 30, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 36, box.y + box.height / 2 + 90, { steps: 8 });
+  await page.mouse.up();
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+
+  await swipeRow(row, "left");
+  await expect(page.locator(".bag-card--big .bag-count")).toHaveText("0 games");
+  await expect(page.locator("#bag-toast")).toContainText("Removed Wingspan");
+  await page.locator("#bag-toast").getByRole("button", { name: "Undo" }).click();
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+  await expect(page.locator("#bag-toast")).toHaveCount(0);
+
+  await swipeRow(page.locator(".bag-card--small .bag-swipe"), "right");
+  const sheet = page.locator("#bag-move-sheet");
+  await expect(sheet).toBeVisible();
+  await expect(sheet.getByRole("button", { name: "Remove", exact: true })).toHaveCount(0);
+  await expect(sheet.getByRole("button", { name: "Big bag", exact: true })).toBeVisible();
+  await expect(sheet.getByRole("button", { name: "Free carry", exact: true })).toBeVisible();
+  await expect(sheet.getByRole("button", { name: "Small bag", exact: true })).toHaveCount(0);
+  await sheet.getByRole("button", { name: "Free carry", exact: true }).click();
+  await expect(page.locator(".bag-card--free a.bag-game-link")).toHaveText(["Azul", "Root"]);
+  await expect(page.locator(".bag-card--small .bag-count")).toHaveText("0 games");
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored).toEqual({ azul: "free", root: "free", wingspan: "big" });
+
+  const held = page.locator(".bag-card--big .bag-swipe");
+  const heldBox = await held.boundingBox();
+  await page.mouse.move(heldBox.x + 40, heldBox.y + heldBox.height / 2);
+  await page.mouse.down();
+  await expect(page.locator("#bag-move-sheet")).toBeVisible();
+  await page.mouse.up();
+  await expect(page.locator("#bag-move-sheet").getByRole("button", { name: "Remove", exact: true })).toBeVisible();
+  await page.locator("#bag-move-sheet").getByRole("button", { name: "Cancel" }).click();
+  await expect(page.locator("#bag-move-sheet")).toHaveCount(0);
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+});
+
+test("a set link can replace free carry", async function ({ page }) {
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({
+      games: { azul: "big", wingspan: "small", root: "free" }
+    }));
+  });
+  await page.goto("/#/bags?big=azul&free=azul,wingspan");
+  const sheet = page.locator("#bag-set-sheet");
+  await expect(sheet).toBeVisible();
+  await expect(sheet.locator('[data-bag-set-for="free"]')).toHaveText("Replace Free carry with these 2 games?");
+  await expect(sheet.locator('[data-bag-set-bag="free"] [data-bag-set-found]')).toHaveText(["Azul", "Wingspan"]);
+  await expect(sheet.locator('[data-bag-set-for="big"]')).toHaveText("Replace Big bag with these 0 games?");
+  await expect(sheet.getByText("The bag will be empty.")).toBeVisible();
+  await expect(sheet.locator('[data-bag-set-for="small"]')).toHaveCount(0);
+  const before = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(before).toEqual({ azul: "big", wingspan: "small", root: "free" });
+  await sheet.getByRole("button", { name: "Confirm" }).click();
+  await expect(page).toHaveURL(/#\/bags$/);
+  expect(new URL(page.url()).hash).toBe("#/bags");
+  await expect(page.locator(".bag-card--free a.bag-game-link")).toHaveText(["Azul", "Wingspan"]);
+  await expect(page.locator(".bag-card--big .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--small .bag-count")).toHaveText("0 games");
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored).toEqual({ azul: "free", wingspan: "free" });
+
+  await page.goto("/#/bags?free=");
+  await expect(page.locator('[data-bag-set-for="free"]')).toHaveText("Replace Free carry with these 0 games?");
+  await expect(page.getByText("Nothing will be carried.")).toBeVisible();
+  await page.locator("#bag-set-sheet").getByRole("button", { name: "Confirm" }).click();
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("0 games");
+  await expect(page).toHaveURL(/#\/bags$/);
+});
+
+test("free carry syncs through bags.json and old files still merge", async function ({ page }) {
+  const puts = [];
+  await mockGithub(page, async function (route, req) {
+    if (req.method() === "GET") {
+      await route.fulfill(bagFile({
+        v: 1,
+        games: {
+          azul: { bag: "small", at: 40 },
+          catan: "free"
+        }
+      }, "sha-free"));
+      return;
+    }
+    if (req.method() === "PUT") {
+      puts.push(decodePut(req.postData()).json);
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ content: { sha: "sha-free-next" } })
+      });
+      return;
+    }
+    await route.fulfill({ status: 404, contentType: "application/json", body: "{}" });
+  });
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({ games: { wingspan: "big" } }));
+  });
+  await page.goto("/#/bags");
+  await page.waitForFunction(function () {
+    return document.documentElement.getAttribute("data-bag-sync") === "synced";
+  });
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Wingspan");
+  await expect(page.locator(".bag-card--small a.bag-game-link")).toHaveText("Azul");
+  await expect(page.locator(".bag-card--free a.bag-game-link")).toHaveText("Catan");
+  await page.goto("/#/game/root");
+  await pickBag(page, "Free carry");
+  await page.waitForFunction(function () {
+    return document.documentElement.getAttribute("data-bag-sync") === "synced";
+  });
+  const last = puts[puts.length - 1];
+  expect(last.v).toBe(1);
+  expect(last.games.root.bag).toBe("free");
+  expect(last.games.wingspan.bag).toBe("big");
+  expect(last.games.azul.bag).toBe("small");
+  expect(last.games.catan.bag).toBe("free");
+  expect(page.url()).not.toContain(TOKEN.token);
 });
