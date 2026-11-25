@@ -3249,17 +3249,108 @@
     color:var(--accent);
     font-weight:650;
     font-size:16px;
-    line-height:1.3;
+    line-height:44px;
     text-decoration:none;
     min-height:44px;
     min-width:0;
-    display:flex;
-    align-items:center;
-    overflow-wrap:anywhere;
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
     touch-action:pan-y;
     -webkit-touch-callout:none;
   }
   .bag-game-link:hover { text-decoration:underline; }
+  .bag-game-chips {
+    display:flex;
+    flex:0 0 auto;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:4px;
+    max-width:62%;
+    min-width:0;
+  }
+  .bag-chip {
+    display:inline-flex;
+    align-items:center;
+    padding:1px 6px;
+    border-radius:999px;
+    background:color-mix(in srgb, var(--fg) 8%, var(--card));
+    color:var(--muted);
+    font-size:12px;
+    font-weight:650;
+    line-height:1.45;
+    white-space:nowrap;
+  }
+  .bag-chip--where {
+    color:var(--fg);
+    background:color-mix(in srgb, var(--accent) 16%, var(--card));
+  }
+  .bag-filters {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    min-width:0;
+    max-width:100%;
+  }
+  .bag-filter-row,
+  .bag-filter-meta {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:6px;
+    min-width:0;
+    max-width:100%;
+  }
+  .bag-filter-label {
+    flex:0 0 auto;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    font-size:16px;
+    font-weight:700;
+    color:var(--muted);
+  }
+  .bag-filter-chip,
+  .bag-filter-where,
+  .bag-filter-clear {
+    appearance:none;
+    box-sizing:border-box;
+    min-height:44px;
+    padding:0 12px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:650;
+    line-height:1.15;
+    cursor:pointer;
+    touch-action:manipulation;
+  }
+  .bag-filter-chip[aria-pressed="true"],
+  .bag-filter-where[aria-pressed="true"] {
+    background:#1d4ed8;
+    color:#ffffff;
+    border-color:transparent;
+  }
+  .bag-filter-chip:focus-visible,
+  .bag-filter-where:focus-visible,
+  .bag-filter-clear:focus-visible {
+    outline:3px solid var(--brand);
+    outline-offset:2px;
+  }
+  .bag-filter-clear:disabled { opacity:0.45; cursor:default; }
+  .bag-filter-count {
+    margin:0;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    font-size:16px;
+    font-weight:700;
+  }
+  .bag-filter-count[hidden] { display:none; }
   .bag-overflow {
     flex:0 0 44px;
     width:44px;
@@ -164107,6 +164198,7 @@
      A slug named in more than one location stays in Free carry, then
      Small bag, then Big bag. A game is in one location at a time. */
   var BAG_STORAGE_KEY = "bgqBags";
+  var BAG_FILTER_KEY = "bgqBagFilters";
   var BAG_REMOTE_PATH = "bags.json";
   var bagSync = {
     mode: "local",
@@ -165060,6 +165152,27 @@
         event.stopPropagation();
         return;
       }
+      var filterBtn = event.target.closest ? event.target.closest("[data-bag-filter]") : null;
+      if (filterBtn && page.contains(filterBtn) && !filterBtn.disabled) {
+        var kind = filterBtn.getAttribute("data-bag-filter") || "";
+        var current = readBagFilter();
+        if (kind === "clear") {
+          writeBagFilter({ players: "", time: "", where: false });
+        } else if (kind === "where") {
+          current.where = !current.where;
+          writeBagFilter(current);
+        } else if (kind === "players") {
+          var picked = filterBtn.getAttribute("data-value") || "";
+          current.players = current.players === picked ? "" : picked;
+          writeBagFilter(current);
+        } else if (kind === "time") {
+          var pickedTime = filterBtn.getAttribute("data-value") || "";
+          current.time = current.time === pickedTime ? "" : pickedTime;
+          writeBagFilter(current);
+        }
+        renderBags();
+        return;
+      }
       var undo = event.target.closest ? event.target.closest("[data-bag-undo]") : null;
       if (undo && page.contains(undo)) {
         var item = bagUndo;
@@ -165096,6 +165209,113 @@
       renderBags();
     }, true);
   }
+  function readBagFilter() {
+    var empty = { players: "", time: "", where: false };
+    try {
+      var raw = JSON.parse(sessionStorage.getItem(BAG_FILTER_KEY) || "null");
+      if (!raw || typeof raw !== "object") return empty;
+      var players = String(raw.players || "");
+      var time = String(raw.time || "");
+      if (["1", "2", "3", "4", "5", "6"].indexOf(players) < 0) players = "";
+      if (["30", "45", "60", "90"].indexOf(time) < 0) time = "";
+      return { players: players, time: time, where: raw.where === true };
+    } catch (err) {
+      return empty;
+    }
+  }
+  function writeBagFilter(next) {
+    try { sessionStorage.setItem(BAG_FILTER_KEY, JSON.stringify(next)); } catch (err) {}
+  }
+  function bagFilterCount(filter) {
+    if (!filter || filter.players !== "6") return parseInt(filter && filter.players, 10) || 0;
+    return 6;
+  }
+  function bagGameFits(game, filter) {
+    if (!filter || (!filter.players && !filter.time)) return true;
+    if (!game) return false;
+    if (filter.players) {
+      var span = playerSpan(game.players);
+      if (!span) return false;
+      if (filter.players === "6") {
+        if (span.max < 6) return false;
+      } else if (!countIncluded(span, filter.players)) {
+        return false;
+      }
+    }
+    if (filter.time) {
+      var minutes = playMinutes(game, bagFilterCount(filter));
+      var cap = parseInt(filter.time, 10);
+      if (!minutes || !(minutes.min <= minutes.max) || minutes.max > cap) return false;
+    }
+    return true;
+  }
+  function bagPlayerChip(game) {
+    var span = playerSpan(game && game.players);
+    if (!span) return "";
+    if (span.open) return span.min + "+p";
+    if (span.min === span.max) return span.min + "p";
+    return span.min + "\u2013" + span.max + "p";
+  }
+  function bagTimeChip(game) {
+    if (!game) return "";
+    var text = String(game.time != null ? game.time : "").trim();
+    if (text && !blankFacet(text)) {
+      var per = text.match(/^(\d+)\s*per\s+player$/i);
+      if (per) return per[1] + " min/player";
+      var listed = playMinutes(game, 0);
+      var label = listed ? minutesLabel(listed.min, listed.max) : "";
+      if (label) return label;
+    }
+    return bggTimeLabel(game);
+  }
+  function bagChipsHtml(slug, bagId, filter) {
+    var game = DATA[slug];
+    var bits = [];
+    var players = bagPlayerChip(game);
+    var time = bagTimeChip(game);
+    if (players) bits.push('<span class="bag-chip" data-bag-chip="players">' + escapeHtml(players) + "</span>");
+    if (time) bits.push('<span class="bag-chip" data-bag-chip="time">' + escapeHtml(time) + "</span>");
+    if (filter && filter.where) {
+      bits.push('<span class="bag-chip bag-chip--where" data-bag-chip="where">' + escapeHtml(bagName(bagId)) + "</span>");
+    }
+    if (!bits.length) return "";
+    return '<span class="bag-game-chips">' + bits.join("") + "</span>";
+  }
+  function bagFilterButton(kind, value, label, aria, pressed) {
+    return '<button type="button" class="bag-filter-chip" data-bag-filter="' + kind + '" data-value="' + value + '" aria-pressed="' +
+      (pressed ? "true" : "false") + '" aria-label="' + escapeHtml(aria) + '">' + label + "</button>";
+  }
+  function bagFilterHtml(filter, fitCount) {
+    var players = ["1", "2", "3", "4", "5", "6"].map(function (value) {
+      var label = value === "6" ? "6+" : value;
+      var aria = value === "6" ? "6 or more players" : (value === "1" ? "1 player" : value + " players");
+      return bagFilterButton("players", value, label, aria, filter.players === value);
+    }).join("");
+    var times = [
+      ["30", "\u226430", "30 minutes or less"],
+      ["45", "\u226445", "45 minutes or less"],
+      ["60", "\u226460", "60 minutes or less"],
+      ["90", "\u226490", "90 minutes or less"],
+      ["", "Any", "Any play time"]
+    ].map(function (item) {
+      return bagFilterButton("time", item[0], item[1], item[2], filter.time === item[0]);
+    }).join("");
+    var narrowing = !!(filter.players || filter.time);
+    var fitLabel = fitCount === 1 ? "1 game fits" : fitCount + " games fit";
+    var dirty = narrowing || filter.where;
+    return '<section class="bag-filters" aria-label="Filter bags">' +
+      '<div class="bag-filter-row" role="group" aria-label="Players">' +
+        '<span class="bag-filter-label">Players</span>' + players +
+      "</div>" +
+      '<div class="bag-filter-row" role="group" aria-label="Maximum time">' +
+        '<span class="bag-filter-label">Time</span>' + times +
+      "</div>" +
+      '<div class="bag-filter-meta">' +
+        '<p class="bag-filter-count" id="bag-filter-count"' + (narrowing ? "" : " hidden") + ">" + escapeHtml(fitLabel) + "</p>" +
+        '<button type="button" class="bag-filter-where" data-bag-filter="where" aria-pressed="' + (filter.where ? "true" : "false") + '">Show where it is</button>' +
+        '<button type="button" class="bag-filter-clear" data-bag-filter="clear" aria-label="Clear filters"' + (dirty ? "" : " disabled") + ">Clear</button>" +
+      "</div></section>";
+  }
   function bagSwipeGlyph(kind) {
     var path = kind === "remove"
       ? '<path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7M7 7l1 13h8l1-13M10 11v6M14 11v6"/>'
@@ -165116,24 +165336,34 @@
     if (headerLink) headerLink.setAttribute("aria-current", "page");
     var games = readBagState();
     var plan = parseBagSetLink();
+    var bagFilter = readBagFilter();
+    var filtering = !!(bagFilter.players || bagFilter.time);
+    var fitCount = 0;
     function section(id) {
       var name = bagName(id);
       var slugs = bagGameItems(id, games);
-      var count = slugs.length;
+      var shown = slugs.filter(function (slug) {
+        return bagGameFits(DATA[slug], bagFilter);
+      });
+      fitCount += shown.length;
+      var count = filtering ? shown.length : slugs.length;
       var countLabel = count === 1 ? "1 game" : count + " games";
-      var items = slugs.map(function (slug) {
+      var items = shown.map(function (slug) {
         var gameName = DATA[slug].name || slug;
         return '<li class="bag-game">' +
           bagSwipeReveal("move", "Move") +
           bagSwipeReveal("remove", "Remove") +
           '<div class="bag-swipe" data-bag-slug="' + escapeHtml(slug) + '">' +
             '<a class="bag-game-link" draggable="false" href="' + escapeHtml(gamePath(slug)) + '">' + escapeHtml(gameName) + "</a>" +
+            bagChipsHtml(slug, id, bagFilter) +
             '<button type="button" class="bag-overflow" aria-haspopup="dialog" aria-label="Actions for ' + escapeHtml(gameName) + '">' +
               '<span aria-hidden="true">\u22ef</span>' +
             "</button>" +
           "</div></li>";
       }).join("");
-      var empty = id === "free" ? "Nothing carried." : "Nothing packed.";
+      var empty = slugs.length
+        ? "None fit."
+        : (id === "free" ? "Nothing carried." : "Nothing packed.");
       var clearLabel = id === "free" ? "Clear" : "Clear bag";
       return '<section class="bag-card bag-card--' + id + '" data-bag-id="' + id + '" aria-labelledby="bag-heading-' + id + '">' +
         '<div class="bag-card-head">' +
@@ -165146,17 +165376,21 @@
           '<ul class="bag-add-list" id="bag-add-list-' + id + '" role="listbox" hidden></ul>' +
         "</div>" +
         (items ? '<ul class="bag-games">' + items + "</ul>" : '<p class="bag-empty">' + empty + "</p>") +
-        '<button type="button" class="btn" data-bag-clear="' + id + '"' + (count ? "" : " disabled") + ">" + clearLabel + "</button>" +
+        '<button type="button" class="btn" data-bag-clear="' + id + '"' + (slugs.length ? "" : " disabled") + ">" + clearLabel + "</button>" +
       "</section>";
     }
+    var bigHtml = section("big");
+    var smallHtml = section("small");
+    var freeHtml = section("free");
     appEl.innerHTML =
       '<article class="detail bags-page">' +
         '<p class="page-back"><a class="back-link" href="#/">\u2190 All games</a></p>' +
         '<h2 class="title">Bags</h2>' +
         '<p class="exp-note" id="bag-sync-note">' + escapeHtml(bagSyncSentence()) + "</p>" +
-        section("big") +
-        section("small") +
-        section("free") +
+        bagFilterHtml(bagFilter, fitCount) +
+        bigHtml +
+        smallHtml +
+        freeHtml +
         bagToastHtml() +
         (plan ? bagSetSheetHtml(plan) : "") +
       "</article>";

@@ -48,6 +48,7 @@ async function pickBag(page, name) {
 }
 
 async function swipeRow(locator, direction) {
+  await locator.evaluate(function (el) { el.scrollIntoView({ block: "center" }); });
   const box = await locator.boundingBox();
   if (!box) throw new Error("missing row");
   const y = box.y + box.height / 2;
@@ -62,7 +63,7 @@ async function swipeRow(locator, direction) {
 }
 
 async function holdSwipe(locator, direction, distance) {
-  await locator.scrollIntoViewIfNeeded();
+  await locator.evaluate(function (el) { el.scrollIntoView({ block: "center" }); });
   const box = await locator.boundingBox();
   if (!box) throw new Error("missing row");
   const y = box.y + box.height / 2;
@@ -118,6 +119,8 @@ test("public visitors do not see bags", async function ({ page }) {
   await expect(page.getByText("Big bag")).toHaveCount(0);
   await expect(page.getByText("Free carry")).toHaveCount(0);
   await expect(page.locator(".bag-add-input")).toHaveCount(0);
+  await expect(page.locator(".bag-filters")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Show where it is" })).toHaveCount(0);
 });
 
 test("owner can pack a game in one bag and manage both bags", async function ({ page }, testInfo) {
@@ -995,4 +998,153 @@ test("free carry syncs through bags.json and old files still merge", async funct
   expect(last.games.azul.bag).toBe("small");
   expect(last.games.catan.bag).toBe("free");
   expect(page.url()).not.toContain(TOKEN.token);
+});
+
+test("bag rows show stored chips and a session filter across every location", async function ({ page }, testInfo) {
+  const live = [];
+  page.on("request", function (req) {
+    const url = req.url();
+    if (url.indexOf("script.google.com") !== -1 || url.indexOf("script.googleusercontent.com") !== -1 || /\/exec(\?|$)/.test(url)) {
+      live.push(req.method() + " " + url);
+    }
+  });
+  await unlock(page);
+  await page.addInitScript(function () {
+    localStorage.setItem("bgqBags", JSON.stringify({
+      games: {
+        wingspan: "big",
+        azul: "big",
+        "marvel-villainous": "big",
+        "air-land-and-sea-critters-at-war": "small",
+        "guess-in-10-animal-planet": "small",
+        root: "free",
+        suburbia: "free",
+        "flip-7": "free"
+      }
+    }));
+  });
+  await page.goto("/#/bags");
+  const wing = page.locator('.bag-swipe[data-bag-slug="wingspan"]');
+  const azul = page.locator('.bag-swipe[data-bag-slug="azul"]');
+  const villain = page.locator('.bag-swipe[data-bag-slug="marvel-villainous"]');
+  const air = page.locator('.bag-swipe[data-bag-slug="air-land-and-sea-critters-at-war"]');
+  const guess = page.locator('.bag-swipe[data-bag-slug="guess-in-10-animal-planet"]');
+  const root = page.locator('.bag-swipe[data-bag-slug="root"]');
+  const suburb = page.locator('.bag-swipe[data-bag-slug="suburbia"]');
+  const flip = page.locator('.bag-swipe[data-bag-slug="flip-7"]');
+  await expect(wing.locator("a")).toHaveText("Wingspan");
+  await expect(wing.locator('[data-bag-chip="players"]')).toHaveText("1\u20135p");
+  await expect(wing.locator('[data-bag-chip="time"]')).toHaveText("40\u201370 min");
+  await expect(azul.locator('[data-bag-chip="players"]')).toHaveText("2\u20134p");
+  await expect(azul.locator('[data-bag-chip="time"]')).toHaveText("30\u201345 min");
+  await expect(villain.locator('[data-bag-chip="time"]')).toHaveText("20 min/player");
+  await expect(suburb.locator('[data-bag-chip="players"]')).toHaveCount(0);
+  await expect(suburb.locator('[data-bag-chip="time"]')).toHaveText("60\u201390 min");
+  await expect(guess.locator('[data-bag-chip="players"]')).toHaveText("2\u20136p");
+  await expect(guess.locator('[data-bag-chip="time"]')).toHaveCount(0);
+  await expect(flip.locator('[data-bag-chip="players"]')).toHaveText("3+p");
+  await expect(flip.locator('[data-bag-chip="time"]')).toHaveText("20 min");
+  await expect(page.locator(".bag-chip--where")).toHaveCount(0);
+  await expect(page.locator("#bag-filter-count")).toBeHidden();
+  await expect(page.getByRole("button", { name: "Any play time" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Clear filters" })).toBeDisabled();
+  const chipSize = await wing.locator('[data-bag-chip="players"]').evaluate(function (el) {
+    return getComputedStyle(el).fontSize;
+  });
+  expect(chipSize).toBe("12px");
+
+  if (testInfo.project.name === "phone") {
+    const dir = "/opt/cursor/artifacts";
+    fs.mkdirSync(dir, { recursive: true });
+    await page.evaluate(function () { window.scrollTo(0, 0); });
+    await page.screenshot({ path: dir + "/bags_row_chips_phone.png", animations: "disabled" });
+  }
+
+  await page.getByRole("button", { name: "2 players", exact: true }).click();
+  await expect(page.locator("#bag-filter-count")).toHaveText("6 games fit");
+  await expect(suburb).toHaveCount(0);
+  await expect(flip).toHaveCount(0);
+  await expect(wing).toBeVisible();
+  await expect(root).toBeVisible();
+
+  await page.getByRole("button", { name: "30 minutes or less", exact: true }).click();
+  await expect(page.locator("#bag-filter-count")).toHaveText("1 game fits");
+  await expect(air).toBeVisible();
+  await expect(villain).toHaveCount(0);
+  await expect(azul).toHaveCount(0);
+
+  await page.getByRole("button", { name: "45 minutes or less", exact: true }).click();
+  await expect(page.locator("#bag-filter-count")).toHaveText("3 games fit");
+  await expect(azul).toBeVisible();
+  await expect(air).toBeVisible();
+  await expect(villain).toBeVisible();
+  await expect(wing).toHaveCount(0);
+  await expect(root).toHaveCount(0);
+  await expect(guess).toHaveCount(0);
+  await expect(page.locator(".bag-card--big .bag-count")).toHaveText("2 games");
+  await expect(page.locator(".bag-card--small .bag-count")).toHaveText("1 game");
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("0 games");
+  await expect(page.locator(".bag-card--free").getByRole("button", { name: "Clear", exact: true })).toBeEnabled();
+
+  await page.getByRole("button", { name: "Show where it is" }).click();
+  await expect(azul.locator(".bag-chip--where")).toHaveText("Big bag");
+  await expect(villain.locator(".bag-chip--where")).toHaveText("Big bag");
+  await expect(air.locator(".bag-chip--where")).toHaveText("Small bag");
+  const saved = await page.evaluate(function () {
+    return JSON.parse(sessionStorage.getItem("bgqBagFilters"));
+  });
+  expect(saved).toEqual({ players: "2", time: "45", where: true });
+
+  const overflow = await page.evaluate(function () {
+    return document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  });
+  expect(overflow).toBe(false);
+  if (testInfo.project.name === "phone") {
+    const dir = "/opt/cursor/artifacts";
+    fs.mkdirSync(dir, { recursive: true });
+    await page.evaluate(function () { window.scrollTo(0, 0); });
+    await page.screenshot({ path: dir + "/bags_filter_phone.png", animations: "disabled" });
+  }
+
+  await page.goto("/#/game/azul");
+  await expect(page.locator(".title")).toContainText("Azul");
+  await page.locator("header a.header-bags").click();
+  await expect(page.locator("#bag-filter-count")).toHaveText("3 games fit");
+  await expect(page.getByRole("button", { name: "2 players", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "45 minutes or less" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Show where it is" })).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await expect(page.locator("#bag-filter-count")).toHaveText("3 games fit");
+  await expect(azul.locator(".bag-chip--where")).toHaveText("Big bag");
+
+  await page.getByRole("button", { name: "Clear filters" }).click();
+  await expect(page.locator("#bag-filter-count")).toBeHidden();
+  await expect(page.locator(".bag-chip--where")).toHaveCount(0);
+  await expect(wing).toBeVisible();
+  await expect(suburb).toBeVisible();
+  await expect(flip).toBeVisible();
+  await expect(page.getByRole("button", { name: "2 players", exact: true })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.getByRole("button", { name: "Any play time" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Clear filters" })).toBeDisabled();
+  await page.reload();
+  await expect(wing).toBeVisible();
+  await expect(page.getByRole("button", { name: "2 players", exact: true })).toHaveAttribute("aria-pressed", "false");
+
+  await page.getByRole("button", { name: "6 or more players" }).click();
+  await expect(page.locator("#bag-filter-count")).toHaveText("2 games fit");
+  await expect(flip).toBeVisible();
+  await expect(guess).toBeVisible();
+  await expect(wing).toHaveCount(0);
+  await expect(azul).toHaveCount(0);
+  await expect(page.locator(".bag-card--big")).toContainText("None fit.");
+  await expect(page.locator(".bag-card--free .bag-count")).toHaveText("1 game");
+
+  const game = page.locator('.bag-game:has([data-bag-slug="flip-7"])');
+  const held = await holdSwipe(flip, "left", 36);
+  await expect(game).toHaveClass(/bag-game--swipe-left/);
+  await expect(game.locator(".bag-swipe-reveal--remove")).toBeVisible();
+  await held.page.mouse.up();
+  await expect(flip).toBeVisible();
+  await expect(page.locator("#bag-toast")).toHaveCount(0);
+  expect(live).toEqual([]);
 });
