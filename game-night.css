@@ -234,7 +234,8 @@ header a.header-night:focus-visible {
 }
 .gn-list,
 .gn-results,
-.gn-tally {
+.gn-tally,
+#gn-picks-list {
   list-style: none;
   margin: 8px 0 0;
   padding: 0;
@@ -284,6 +285,33 @@ header a.header-night:focus-visible {
 .gn-name {
   font-weight: 650;
   overflow-wrap: anywhere;
+}
+.gn-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+.gn-pick .gn-name,
+.gn-pick .gn-sub {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gn-packed {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
 }
 .gn-sub,
 .gn-outside {
