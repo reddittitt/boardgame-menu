@@ -242,6 +242,33 @@ header a.header-night:focus-visible {
   flex-direction: column;
   gap: 8px;
 }
+/* Full filter matches scroll inside the page. Rows must not shrink to fit a
+   max-height, or the extra games get squeezed away with nothing to scroll.
+   Momentum scrolling is the native touch scroll; scroll-behavior stays auto
+   so a fling is not animated out from under a tap. */
+#gn-results.gn-fit-scroll {
+  box-sizing: border-box;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 70vh;
+  max-height: min(72dvh, 720px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  padding-bottom: 16px;
+  scroll-padding-top: 4px;
+  scroll-padding-bottom: 16px;
+  scrollbar-width: thin;
+  overflow-anchor: none;
+}
+#gn-results.gn-fit-scroll > li {
+  flex: 0 0 auto;
+}
+.gn-card:has(#gn-results.gn-fit-scroll) {
+  overflow: visible;
+}
 .gn-row,
 .gn-tally li {
   display: flex;
@@ -265,7 +292,11 @@ header a.header-night:focus-visible {
   font-size: 16px;
   font-weight: 400;
 }
-.gn-row button { flex: 0 0 auto; }
+.gn-row button {
+  flex: 0 0 auto;
+  scroll-margin-top: calc(var(--header-h, 72px) + 12px);
+  scroll-margin-bottom: 12px;
+}
 .gn-choice { width: 100%; }
 .gn-stepper {
   display: flex;
@@ -388,6 +419,16 @@ header a.header-night:focus-visible {
 .gn-row button:focus-visible {
   outline: 3px solid var(--brand);
   outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  /* The phone column clips stray horizontal overflow. That must not turn the
+     fit list into a box the page cannot scroll through. */
+  main:has(#gn-results.gn-fit-scroll) {
+    overflow: visible;
+  }
+  #gn-results.gn-fit-scroll {
+    max-height: min(68dvh, 640px);
+  }
 }
 @media (min-width: 720px) {
   .gn-modes,

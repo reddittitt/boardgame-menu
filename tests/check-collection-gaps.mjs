@@ -68,7 +68,7 @@ check("villainous win chip page", villain.endOfGame.bullets[0].source.page === 6
 check("two-player credits chip", villain.setupByPlayerCount["2"][0].source.page === 3);
 check("four-player credits chip", villain.setupByPlayerCount["4"][0].source.page === 3);
 
-check("worker version", sw.includes('var VERSION = "2026.11.21.11";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.12";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
