@@ -251,8 +251,10 @@ try {
   }
   .gd-leave { text-align:center; font-weight:650; margin-top:4px; }
   .gd-join { margin-top:8px; }
-  #gd-error { color:#9f1239; font-weight:650; min-height:0; }
-  #gd-error:empty { display:none; }
+  #gd-error, #gd-tables-error { color:#9f1239; font-weight:650; min-height:0; margin:0 0 8px; }
+  #gd-error:empty, #gd-tables-error:empty { display:none; }
+  #gd-tables-status { color:var(--accent); font-weight:700; margin:0 0 8px; }
+  #gd-tables-status:empty { display:none; }
   #gd-unclaimed, #gd-short, li, p, h2, h3 { overflow-wrap:anywhere; }
   :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
   #app-update {
@@ -272,6 +274,20 @@ try {
     pointer-events:none;
   }
   #app-update[hidden] { display:none; }
+  html:has(#app-update:not([hidden])),
+  html.gd-update-open {
+    scroll-padding-bottom:calc(120px + env(safe-area-inset-bottom, 0px));
+  }
+  html:has(#app-update:not([hidden])) main,
+  html.gd-update-open main {
+    padding-bottom:calc(136px + env(safe-area-inset-bottom, 0px));
+  }
+  html:has(#app-update:not([hidden])) #gd-nominate button[type="submit"],
+  html:has(#app-update:not([hidden])) .gd-join button[type="submit"],
+  html.gd-update-open #gd-nominate button[type="submit"],
+  html.gd-update-open .gd-join button[type="submit"] {
+    scroll-margin-bottom:calc(120px + env(safe-area-inset-bottom, 0px));
+  }
   #app-update button {
     pointer-events:auto;
     width:100%;
@@ -316,6 +332,9 @@ try {
   :root[data-theme="dark"] #gd-error,
   :root[data-theme="darkwood"] #gd-error,
   :root[data-theme="neongrid"] #gd-error,
+  :root[data-theme="dark"] #gd-tables-error,
+  :root[data-theme="darkwood"] #gd-tables-error,
+  :root[data-theme="neongrid"] #gd-tables-error,
   :root[data-theme="dark"] .gd-full,
   :root[data-theme="darkwood"] .gd-full,
   :root[data-theme="neongrid"] .gd-full { color:#fda4af; }
@@ -339,10 +358,10 @@ try {
     <a class="toggle" href="./#/">All Games</a>
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
-  <div id="app-update" hidden role="status" aria-live="polite">
-    <button type="button" id="app-update-refresh">Updated, tap to reload</button>
-  </div>
 </header>
+<div id="app-update" hidden role="status" aria-live="polite">
+  <button type="button" id="app-update-refresh">Updated, tap to reload</button>
+</div>
 <main id="gd">
   <p>Loading Game Day…</p>
 </main>
