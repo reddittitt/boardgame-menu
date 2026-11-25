@@ -22,7 +22,7 @@ const enrich = JSON.parse(jsonBody).enrich;
 const guides = JSON.parse(read("expansion-guides.json"));
 const sw = read("sw.js");
 
-assert(sw.includes('var VERSION = "2026.11.21.14";'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.21.15";'), "service worker version");
 assert(sw.includes('"./expansion-guides.json"'), "guide file is in the app shell");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
