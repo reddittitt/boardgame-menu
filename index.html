@@ -3622,6 +3622,48 @@
     outline-offset:2px;
   }
   .bag-empty { margin:0; color:var(--muted); font-size:16px; }
+  .pack-night {
+    border:0;
+    padding:0;
+    background:transparent;
+    width:min(440px, calc(100vw - 24px));
+    max-width:calc(100vw - 24px);
+  }
+  .pack-night::backdrop { background:rgba(0,0,0,0.55); }
+  .pack-night-card {
+    background:var(--card);
+    color:var(--fg);
+    border:1px solid var(--hig-sep, var(--border));
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-height:min(80vh, 640px);
+    overflow:auto;
+    box-sizing:border-box;
+  }
+  .pack-night-card h2 { margin:0; font-size:1.2rem; }
+  .pack-night-card > p { margin:0; }
+  .pack-night-game h3 { margin:0; font-size:1rem; }
+  .pack-night-where { margin:2px 0 0; font-weight:650; }
+  .pack-night-choices { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .pack-night-choices button {
+    min-height:44px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+    padding:0 12px;
+  }
+  .pack-night-choices button[aria-pressed="true"] {
+    background:var(--brand);
+    border-color:transparent;
+    color:#fff;
+  }
   .bag-card > .btn[disabled] { opacity:0.45; cursor:default; }
   .bag-toast {
     position:fixed;
@@ -158135,7 +158177,7 @@
     }
     function blocked(target) {
       if (!target || !target.closest) return false;
-      return !!target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .playercount-controls, .catalog-chips, .gn-chips, .recent-list, .chapter-pager, .table-bar, .pc-btn, .exp-chip, .filter-chip, input, textarea, select");
+      return !!target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .bag-filters, .bag-filter-row, .bag-game-chips, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .playercount-controls, .catalog-chips, .gn-chips, .recent-list, .chapter-pager, .table-bar, .pc-btn, .exp-chip, .filter-chip, input, textarea, select");
     }
     window.addEventListener("pointerdown", function (event) {
       if (!isStandalone()) return;
@@ -164909,6 +164951,101 @@
     bagSync.booted = true;
     scheduleBagSync();
   }
+  function packLocationName(slug) {
+    var bag = readBagState()[slug] || "";
+    if (bag === "big") return "Big bag";
+    if (bag === "small") return "Small bag";
+    if (bag === "free") return "Free carry";
+    return "Not packed";
+  }
+  function savePackedOffline(slugs) {
+    var packed = (slugs || []).filter(function (slug) {
+      return !!(DATA[slug] && isBagId(readBagState()[slug] || ""));
+    });
+    packed.forEach(function (slug) {
+      collectGameAssets(slug, false).then(function (urls) {
+        var same = (urls || []).filter(function (url) {
+          try { return new URL(url).origin === window.location.origin && !/\.pdf$/i.test(new URL(url).pathname); }
+          catch (err) { return false; }
+        });
+        return cacheUrls(same, true);
+      }).then(function (result) {
+        if (result && result.saved > 0) document.documentElement.setAttribute("data-packed-cached", slug);
+      }).catch(function () {});
+    });
+  }
+  function openPackNight(slugs) {
+    if (!ownerUnlocked()) return;
+    var list = [];
+    (slugs || []).forEach(function (slug) {
+      if (DATA[slug] && list.indexOf(slug) === -1) list.push(slug);
+    });
+    if (!list.length) return;
+    var old = document.getElementById("pack-night");
+    if (old) old.remove();
+    var dialog = document.createElement("dialog");
+    dialog.id = "pack-night";
+    dialog.className = "pack-night";
+    dialog.setAttribute("aria-labelledby", "pack-night-title");
+    function choice(slug, id, label, current) {
+      var on = (current || "") === id;
+      return '<button type="button" data-pack-slug="' + escapeHtml(slug) + '" data-pack-bag="' + escapeHtml(id) + '" aria-pressed="' +
+        (on ? "true" : "false") + '">' + escapeHtml(label) + "</button>";
+    }
+    function paint() {
+      var rows = list.map(function (slug) {
+        var current = readBagState()[slug] || "";
+        return '<section class="pack-night-game" data-pack-game="' + escapeHtml(slug) + '">' +
+          "<h3>" + escapeHtml(DATA[slug].name) + "</h3>" +
+          '<p class="pack-night-where">' + escapeHtml(packLocationName(slug)) + "</p>" +
+          '<div class="pack-night-choices" role="group" aria-label="Where is ' + escapeHtml(DATA[slug].name) + '">' +
+            choice(slug, "big", "Big bag", current) +
+            choice(slug, "small", "Small bag", current) +
+            choice(slug, "free", "Free carry", current) +
+            choice(slug, "", "Not packed", current) +
+          "</div></section>";
+      }).join("");
+      dialog.innerHTML =
+        '<div class="pack-night-card">' +
+          '<h2 id="pack-night-title">Pack for game night</h2>' +
+          "<p>Where each game is going tonight.</p>" +
+          rows +
+          '<button type="button" class="btn" id="pack-night-close">Done</button>' +
+        "</div>";
+    }
+    paint();
+    dialog.addEventListener("click", function (event) {
+      var close = event.target.closest ? event.target.closest("#pack-night-close") : null;
+      if (close) {
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.remove();
+        return;
+      }
+      var button = event.target.closest ? event.target.closest("[data-pack-bag]") : null;
+      if (!button || !dialog.contains(button)) {
+        if (event.target === dialog && typeof dialog.close === "function") dialog.close();
+        return;
+      }
+      var slug = button.getAttribute("data-pack-slug") || "";
+      var bag = button.getAttribute("data-pack-bag") || "";
+      if (!isBagId(bag)) bag = "";
+      setGameBag(slug, bag);
+      if (isBagId(bag)) savePackedOffline([slug]);
+      paint();
+    });
+    dialog.addEventListener("cancel", function (event) {
+      event.preventDefault();
+      if (typeof dialog.close === "function") dialog.close();
+    });
+    dialog.addEventListener("close", function () {
+      if (dialog.parentNode) dialog.remove();
+    });
+    document.body.appendChild(dialog);
+    if (typeof dialog.showModal === "function") {
+      try { dialog.showModal(); } catch (err) { dialog.setAttribute("open", ""); }
+    } else dialog.setAttribute("open", "");
+    savePackedOffline(list);
+  }
   function bagName(id) {
     if (id === "big") return "Big bag";
     if (id === "small") return "Small bag";
@@ -166011,7 +166148,7 @@
   }
   function chapterGestureBlocked(target) {
     if (!target || !target.closest) return true;
-    if (target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .catalog-chips, .gn-chips, .playercount-controls, .recent-list, .chapter-dot, input, textarea, select")) return true;
+    if (target.closest("#rulebook-viewer, .rulebook-viewer, .bag-swipe, .bag-picker, .bag-move-sheet, .bag-filters, .bag-filter-row, .bag-game-chips, .aid-lightbox, .table-scroll, .pack-chips, .expansion-controls, .chip-groups, .catalog-chips, .gn-chips, .playercount-controls, .recent-list, .chapter-dot, input, textarea, select")) return true;
     var node = target;
     while (node && node !== document.body) {
       try {
@@ -167511,7 +167648,8 @@
       weightBand: weightBand,
       timeHits: timeHits,
       owners: OWNER_NAMES,
-      params: params || new URLSearchParams()
+      params: params || new URLSearchParams(),
+      packForNight: ownerUnlocked() ? function (slugs) { openPackNight(slugs); } : null
     });
   }
   /* game-night:end */

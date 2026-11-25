@@ -137,7 +137,7 @@ for (const [slug, index, start, end] of quoteSpecs) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.13";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.14";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -180,6 +180,7 @@ check("agricola shows half an hour per player", (await page.locator("#play-time-
 await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-agricola-phone.png") });
 
 await page.goto(origin + "/index.html#/game/7-wonders-duel", { waitUntil: "domcontentloaded" });
+await page.locator('#chapter-pager [aria-label="On your turn"]').click();
 await page.waitForSelector("#mistakes-slot summary");
 const note = page.locator("#mistakes-slot details");
 if ((await note.getAttribute("open")) === null) await note.locator("summary").click();
@@ -189,6 +190,7 @@ check("duel quote links to the rulebook", (await page.locator("#mistakes-slot .r
 await page.locator("#mistakes-slot").screenshot({ path: path.join(shots, "mistakes-7-wonders-duel-phone.png") });
 
 await page.goto(origin + "/index.html#/game/catan", { waitUntil: "domcontentloaded" });
+await page.locator('#chapter-pager [aria-label="On your turn"]').click();
 await page.waitForSelector("#mistakes-slot summary");
 const catanNote = page.locator("#mistakes-slot details");
 if ((await catanNote.getAttribute("open")) === null) await catanNote.locator("summary").click();
