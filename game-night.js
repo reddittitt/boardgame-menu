@@ -280,6 +280,7 @@
     var decision = null;
     var query = "";
     var dropped = 0;
+    var resultsToken = 0;
     var ownerNames = (ctx.owners && ctx.owners.length)
       ? ctx.owners.slice()
       : ["Cody", "Zeek", "Tim", "John", "Ryan", "Andrew"];
@@ -541,14 +542,23 @@
       return "Games with a listed minimum age of 12 or older are hidden. Games with no age listed stay in the list.";
     }
 
+    function filtersActive() {
+      return !!(state.players || state.time || state.weightFrom || state.weightTo || state.kids || state.who.length);
+    }
+
     function fitSentence() {
       var n = 0;
       ctx.games.forEach(function (game) { if (fits(game)) n += 1; });
-      var filtering = !!(state.players || state.time || state.weightFrom || state.weightTo || state.kids || state.who.length);
-      if (!filtering) return n + (n === 1 ? " game is in the catalog." : " games are in the catalog.");
+      if (!filtersActive()) return n + (n === 1 ? " game is in the catalog." : " games are in the catalog.");
       if (n === 0) return "No games fit tonight.";
       if (n === 1) return "1 game fits tonight.";
       return n + " games fit tonight.";
+    }
+
+    function fitListLabel(n) {
+      if (n === 0) return "No games fit";
+      if (n === 1) return "1 game fits";
+      return n + " games fit";
     }
 
     function resultHtml(game, why) {
@@ -639,8 +649,8 @@
             '<label class="gn-field" for="gn-search">Add a game' +
               '<input id="gn-search" type="search" placeholder="Search the catalog" autocomplete="off" enterkeyhint="search" aria-label="Add a game">' +
             "</label>" +
-            '<p id="gn-results-label" class="gn-note">Fits tonight</p>' +
-            '<ul id="gn-results" class="gn-results"></ul>' +
+            '<p id="gn-results-label" class="gn-note" aria-live="polite">Fits tonight</p>' +
+            '<ul id="gn-results" class="gn-results" aria-labelledby="gn-results-label"></ul>' +
             '<div class="gn-actions">' +
               '<button type="button" class="gn-btn" id="gn-share">Copy link</button>' +
               '<button type="button" class="gn-btn" id="gn-poll">Copy as poll</button>' +
@@ -742,6 +752,19 @@
       }
     }
 
+    function resultRow(game, q) {
+      var outside = q && !fits(game);
+      return (
+        '<li class="gn-row">' +
+          '<span><span class="gn-name">' + ctx.escapeHtml(game.name) + "</span>" +
+          '<span class="gn-sub">' + ctx.escapeHtml(metaLine(game)) +
+            (outside ? '<span class="gn-outside">Outside tonight\u2019s filters</span>' : "") +
+          "</span></span>" +
+          '<button type="button" data-add="' + ctx.escapeHtml(game.slug) + '" aria-label="Add ' + ctx.escapeHtml(game.name) + '">Add</button>' +
+        "</li>"
+      );
+    }
+
     function paintResults() {
       var list = document.getElementById("gn-results");
       var label = document.getElementById("gn-results-label");
@@ -756,25 +779,35 @@
           return String(name || "").toLowerCase().indexOf(q) !== -1;
         });
       });
+      /* Alphabetical, same as before. Search stays a short list. With tonight's
+         filters on, every match is listed so the first names are not the only ones. */
       pool.sort(function (a, b) { return String(a.name).localeCompare(String(b.name)); });
-      pool = pool.slice(0, q ? 12 : 8);
-      if (label) label.textContent = q ? "Matches" : "Fits tonight";
+      var showAll = !q && filtersActive();
+      if (q) pool = pool.slice(0, 12);
+      else if (!showAll) pool = pool.slice(0, 8);
+      list.classList.toggle("gn-fit-scroll", showAll);
+      if (label) label.textContent = q ? "Matches" : (showAll ? fitListLabel(pool.length) : "Fits tonight");
+      var token = ++resultsToken;
+      var keepScroll = showAll ? list.scrollTop : 0;
       if (!pool.length) {
         list.innerHTML = '<li class="gn-note">' + (q ? "No games match that search." : "Nothing else fits tonight.") + "</li>";
         return;
       }
-      list.innerHTML = pool.map(function (game) {
-        var outside = q && !fits(game);
-        return (
-          '<li class="gn-row">' +
-            '<span><span class="gn-name">' + ctx.escapeHtml(game.name) + "</span>" +
-            '<span class="gn-sub">' + ctx.escapeHtml(metaLine(game)) +
-              (outside ? '<span class="gn-outside">Outside tonight\u2019s filters</span>' : "") +
-            "</span></span>" +
-            '<button type="button" data-add="' + ctx.escapeHtml(game.slug) + '" aria-label="Add ' + ctx.escapeHtml(game.name) + '">Add</button>' +
-          "</li>"
-        );
-      }).join("");
+      /* First screen is sync so a search can replace a long list immediately.
+         The rest arrives in frames so a few hundred matches do not freeze the phone.
+         scrollTop is restored after each chunk so Add does not jump the list. */
+      list.innerHTML = "";
+      var i = 0;
+      function paintChunk() {
+        if (token !== resultsToken || !list.isConnected) return;
+        var html = "";
+        var end = Math.min(i + 40, pool.length);
+        for (; i < end; i++) html += resultRow(pool[i], q);
+        list.insertAdjacentHTML("beforeend", html);
+        if (keepScroll) list.scrollTop = keepScroll;
+        if (i < pool.length) requestAnimationFrame(paintChunk);
+      }
+      paintChunk();
     }
 
     function paintModes() {

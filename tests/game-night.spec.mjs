@@ -17,12 +17,22 @@ async function openNight(page, hash) {
 }
 
 async function addGame(page, query, name) {
-  await page.getByLabel("Add a game").fill(query);
+  await page.getByLabel("Add a game", { exact: true }).fill(query);
   await page.getByRole("button", { name: "Add " + name, exact: true }).click();
 }
 
 function nominee(page, slug) {
   return page.locator('#gn-nominee-list [data-remove="' + slug + '"]');
+}
+
+async function blockLiveGameDay(page) {
+  const live = [];
+  page.on("request", function (req) {
+    if (/script\.google(usercontent)?\.com/i.test(req.url())) live.push(req.method() + " " + req.url());
+  });
+  await page.route("**/*script.google.com/**", function (route) { return route.abort(); });
+  await page.route("**/*script.googleusercontent.com/**", function (route) { return route.abort(); });
+  return live;
 }
 
 test("entry points, tonight's context, and the shared link", async ({ page }) => {
@@ -34,7 +44,7 @@ test("entry points, tonight's context, and the shared link", async ({ page }) =>
   await expect(page.locator("#gn-page")).not.toContainText("reddittitt");
   await expect(page.locator("#gn-page")).toContainText("there is no server");
 
-  const searchSize = await page.getByLabel("Add a game").evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  const searchSize = await page.getByLabel("Add a game", { exact: true }).evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
   expect(searchSize).toBeGreaterThanOrEqual(16);
   const chip = page.getByRole("button", { name: "4 players", exact: true });
   const chipBox = await chip.boundingBox();
@@ -67,10 +77,10 @@ test("entry points, tonight's context, and the shared link", async ({ page }) =>
   await page.getByRole("button", { name: "Weight from Light", exact: true }).click();
   await page.getByRole("button", { name: "Weight up to Light", exact: true }).click();
   await expect(page.locator("#gn-weight-summary")).toHaveText("Light");
-  await page.getByLabel("Add a game").fill("john company");
+  await page.getByLabel("Add a game", { exact: true }).fill("john company");
   await expect(page.locator("#gn-results").getByRole("button", { name: "Add John Company: Second Edition" })).toBeVisible();
   await expect(page.locator("#gn-results li", { hasText: "John Company: Second Edition" })).toContainText("Outside tonight");
-  await page.getByLabel("Add a game").fill("azul");
+  await page.getByLabel("Add a game", { exact: true }).fill("azul");
   const azulRow = page.locator("#gn-results li").filter({
     has: page.getByRole("button", { name: "Add Azul", exact: true })
   });
@@ -145,12 +155,12 @@ test("a shared URL restores context and skips unknown games", async ({ page }) =
 test("kids present uses a stored minimum age and leaves unknown games in", async ({ page }) => {
   await page.goto("/?fixture=night-age#/night?players=4");
   await expect.poll(async () => {
-    const input = page.getByLabel("Add a game");
+    const input = page.getByLabel("Add a game", { exact: true });
     if (await input.count() !== 1) return 0;
     await input.fill("Night Teen");
     return page.getByRole("button", { name: "Add Night Teen Only" }).count();
   }).toBe(1);
-  await page.getByLabel("Add a game").fill("");
+  await page.getByLabel("Add a game", { exact: true }).fill("");
   const before = Number((await page.locator("#gn-fit").innerText()).match(/(\d+)/)[1]);
   await page.getByRole("button", { name: "Kids present: yes", exact: true }).click();
   await expect(page.locator("#gn-kids-note")).toHaveText(
@@ -158,9 +168,9 @@ test("kids present uses a stored minimum age and leaves unknown games in", async
   );
   const after = Number((await page.locator("#gn-fit").innerText()).match(/(\d+)/)[1]);
   expect(after).toBe(before - 1);
-  await page.getByLabel("Add a game").fill("Night Teen");
+  await page.getByLabel("Add a game", { exact: true }).fill("Night Teen");
   await expect(page.locator("#gn-results li", { hasText: "Night Teen Only" })).toContainText("Outside tonight");
-  await page.getByLabel("Add a game").fill("Night Kid");
+  await page.getByLabel("Add a game", { exact: true }).fill("Night Kid");
   await expect(page.locator("#gn-results li", { hasText: "Night Kid Ok" })).not.toContainText("Outside tonight");
 });
 
@@ -450,6 +460,113 @@ test("everyone picks a weighted wheel and can pass the list by link", async ({ p
   expect(remembered).toEqual(expect.arrayContaining(["Sam", "Jo", "Alex"]));
 });
 
+test("every filtered game can be reached on phone and desktop", async ({ page }) => {
+  test.setTimeout(120000);
+  const live = await blockLiveGameDay(page);
+  await openNight(page, "/night?who=zeek");
+  await expect(page.getByRole("button", { name: "Zeek’s games", exact: true })).toHaveAttribute("aria-pressed", "true");
+
+  const label = page.locator("#gn-results-label");
+  await expect(label).toHaveText(/^\d+ games fit$/);
+  const listed = Number((await label.innerText()).match(/(\d+)/)[1]);
+  expect(listed).toBeGreaterThan(10);
+
+  const rows = page.locator("#gn-results > li.gn-row");
+  await expect(rows).toHaveCount(listed);
+  const fitCount = Number((await page.locator("#gn-fit").innerText()).match(/(\d+)/)[1]);
+  expect(fitCount).toBe(listed);
+
+  const reach = await page.locator("#gn-results").evaluate(function (list) {
+    const rows = Array.prototype.slice.call(list.querySelectorAll(":scope > li.gn-row"));
+    const names = rows.map(function (row) { return row.querySelector(".gn-name").textContent; });
+    const sorted = names.slice().sort(function (a, b) { return a.localeCompare(b); });
+    const failures = [];
+    const header = document.querySelector("header");
+    rows.forEach(function (row, i) {
+      const button = row.querySelector("button");
+      button.scrollIntoView({ block: "center", inline: "nearest" });
+      const rect = button.getBoundingClientRect();
+      const headerBottom = header ? header.getBoundingClientRect().bottom : 0;
+      const fullyInView = rect.height > 30 && rect.width > 30 &&
+        rect.top >= headerBottom - 1 &&
+        rect.bottom <= window.innerHeight + 1 &&
+        rect.left >= -1 &&
+        rect.right <= window.innerWidth + 1;
+      let clippedBy = "";
+      let node = button.parentElement;
+      while (node && node !== document.documentElement) {
+        const style = getComputedStyle(node);
+        const oy = style.overflowY;
+        const ox = style.overflowX;
+        const scrolls = oy === "hidden" || oy === "clip" || ox === "hidden" || ox === "clip" || oy === "auto" || oy === "scroll" || ox === "auto" || ox === "scroll";
+        if (scrolls) {
+          const box = node.getBoundingClientRect();
+          if (rect.top < box.top - 2 || rect.bottom > box.bottom + 2 || rect.left < box.left - 2 || rect.right > box.right + 2) {
+            clippedBy = node.id || node.tagName;
+            break;
+          }
+        }
+        node = node.parentElement;
+      }
+      if (!fullyInView || clippedBy) {
+        failures.push({
+          i: i,
+          name: names[i],
+          fullyInView: fullyInView,
+          clippedBy: clippedBy,
+          top: Math.round(rect.top),
+          bottom: Math.round(rect.bottom),
+          height: Math.round(rect.height)
+        });
+      }
+    });
+    const style = getComputedStyle(list);
+    return {
+      count: rows.length,
+      names: names,
+      sorted: names.join("\n") === sorted.join("\n"),
+      pastOldCap: names.length > 8 ? names[8] : "",
+      failures: failures,
+      scrollHeight: list.scrollHeight,
+      clientHeight: list.clientHeight,
+      overflowY: style.overflowY,
+      pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+    };
+  });
+
+  expect(reach.count).toBe(listed);
+  expect(reach.sorted).toBe(true);
+  expect(reach.pastOldCap).not.toBe("");
+  expect(reach.failures).toEqual([]);
+  expect(reach.overflowY).toMatch(/auto|scroll/);
+  expect(reach.scrollHeight).toBeGreaterThan(reach.clientHeight);
+  expect(reach.pageOverflow).toBeLessThanOrEqual(1);
+
+  const slugs = await rows.evaluateAll(function (els) {
+    return els.map(function (el) { return el.querySelector("button").getAttribute("data-add"); });
+  });
+  const fitting = await page.evaluate(function (list) {
+    return list.every(function (slug) { return window.BGQuickNight.fitsGame(slug); });
+  }, slugs);
+  expect(fitting).toBe(true);
+
+  const lastSlug = slugs[slugs.length - 1];
+  const lastName = reach.names[reach.names.length - 1];
+  const lastButton = rows.last().getByRole("button", { name: "Add " + lastName, exact: true });
+  await lastButton.scrollIntoViewIfNeeded();
+  await lastButton.click();
+  await expect(nominee(page, lastSlug)).toHaveCount(1);
+  await expect(page.locator('#gn-results [data-add="' + lastSlug + '"]')).toHaveCount(0);
+  await expect(label).toHaveText((listed - 1) + " games fit");
+  await expect(rows).toHaveCount(listed - 1);
+
+  await page.getByRole("button", { name: "Remove " + lastName, exact: true }).click();
+  await expect(nominee(page, lastSlug)).toHaveCount(0);
+  await expect(page.locator('#gn-results [data-add="' + lastSlug + '"]')).toHaveCount(1);
+  await expect(label).toHaveText(listed + " games fit");
+  expect(live).toEqual([]);
+});
+
 test("phone screenshots of each mode", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "phone", "phone screenshots only");
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -510,12 +627,12 @@ test("game night works offline and the worker still skips other origins", async 
   });
   expect(swText).toContain("url.origin !== self.location.origin");
   expect(swText.indexOf("url.origin !== self.location.origin")).toBeLessThan(swText.indexOf("respondWith"));
-  expect(swText).toContain('VERSION = "2026.11.21.11"');
+  expect(swText).toContain('VERSION = "2026.11.21.12"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.21.11");
+    const cache = await caches.open("bgquick-shell-2026.11.21.12");
     const keys = await cache.keys();
     const urls = keys.map((req) => req.url);
     return urls.some((url) => /index\.html/.test(url)) && urls.some((url) => /game-night\.js/.test(url));
