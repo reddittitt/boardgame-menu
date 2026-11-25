@@ -163852,6 +163852,7 @@
     writeBagState(games);
   }
   function clearOneBag(id) {
+    if (!ownerUnlocked()) return;
     if (id !== "big" && id !== "small") return;
     var games = readBagState();
     Object.keys(games).forEach(function (slug) {
