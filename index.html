@@ -159021,6 +159021,12 @@
 
   var catalogPickerOpenedAt = 0;
   var suppressLinkUntil = 0;
+  function hapticTap() {
+    try {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (navigator.vibrate) navigator.vibrate(10);
+    } catch (err) {}
+  }
   function closeCatalogPicker() {
     var picker = document.getElementById("bag-picker");
     if (picker) picker.setAttribute("data-state", "closed");
@@ -159046,6 +159052,7 @@
           var bag = button.getAttribute("data-bag") || "";
           if (!isBagId(bag)) bag = "";
           if (target) setGameBag(target, bag);
+          hapticTap();
           setTimeout(closeCatalogPicker, 0);
           return;
         }
@@ -159145,6 +159152,7 @@
       row = null;
       reset(held);
       if (!go || !slug) return;
+      hapticTap();
       suppressUntil = Date.now() + 800;
       suppressLinkUntil = suppressUntil;
       setTimeout(function () { openCatalogBagPicker(slug); }, 0);
@@ -165845,6 +165853,7 @@
         var bag = button.getAttribute("data-bag") || "";
         if (!isBagId(bag)) bag = "";
         setGameBag(slug, bag);
+        hapticTap();
         paintBagPack(slug);
         closePicker();
         return;
@@ -166307,6 +166316,7 @@
       row = null;
       resetRow(held);
       if (!go || !slug) return;
+      hapticTap();
       armBagSuppressClick();
       if (dir === "left") removeGameWithUndo(slug);
       else openBagMoveSheet(slug, "move");
@@ -168717,6 +168727,7 @@
     fingers.forEach(function (finger) { finger.winner = false; });
     fingers[cryptoIndex(fingers.length)].winner = true;
     fpLocked = true;
+    hapticTap();
     if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
     var again = document.getElementById("first-player-again");
     if (again) again.hidden = false;
