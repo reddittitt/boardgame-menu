@@ -121,7 +121,7 @@ function quotedCount(item) {
 }
 
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.21\.9";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.21\.10";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components shell");
 assert(sw.includes("./selection.mjs"), "selection module is in the app shell");
 assert(sw.includes("./expansion-guides.json"), "expansion guide is in the app shell");

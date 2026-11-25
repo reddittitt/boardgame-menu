@@ -510,3 +510,33 @@ test("a 409 on bags.json is retried and the newest change wins", async function 
   });
   expect(stored).toEqual({ azul: "small", root: "big", wingspan: "small" });
 });
+
+test("another repository never calls GitHub for bags", async function ({ page }) {
+  const hits = [];
+  page.on("request", function (req) {
+    if (req.url().indexOf("api.github.com") !== -1) hits.push(req.method() + " " + req.url());
+  });
+  await page.addInitScript(function (saved) {
+    localStorage.setItem("bgqStorage", JSON.stringify(saved));
+    localStorage.setItem("bgqBags", JSON.stringify({ games: { azul: "big" } }));
+  }, {
+    owner: "someoneelse",
+    repo: "not-storage",
+    token: "bgq_test_token_not_a_real_secret_01"
+  });
+  await page.goto("/#/bags");
+  await waitForBagSyncSettled(page);
+  await expect(page.locator("#bag-sync-note")).toHaveText("On this device only. A game is in one bag at a time.");
+  await expect(page.locator(".bag-card--big a.bag-game-link")).toHaveText("Azul");
+  await page.locator(".bag-card--big").getByRole("button", { name: "Remove Azul" }).click();
+  await expect(page.locator(".bag-card--big .bag-count")).toHaveText("0 games");
+  await page.waitForFunction(function () {
+    return document.documentElement.getAttribute("data-bag-sync") === "local";
+  });
+  expect(hits).toEqual([]);
+  const stored = await page.evaluate(function () {
+    return JSON.parse(localStorage.getItem("bgqBags")).games;
+  });
+  expect(stored.azul).toBeUndefined();
+  expect(page.url()).not.toContain("bgq_test_token");
+});

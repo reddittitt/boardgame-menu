@@ -164057,6 +164057,9 @@
     var current = readPackUnlock();
     return !!(current && unlock && current.owner === unlock.owner && current.repo === unlock.repo && current.token === unlock.token);
   }
+  function bagRemoteAllowed(unlock) {
+    return !!(unlock && unlock.owner === "reddittitt" && unlock.repo === "bgquick-storage");
+  }
   function bagSyncSentence() {
     return (bagSync.mode === "synced" ? "Synced" : "On this device only") + ". A game is in one bag at a time.";
   }
@@ -164075,7 +164078,7 @@
     if (document.documentElement) document.documentElement.removeAttribute("data-bag-sync");
   }
   function readRemoteBags(unlock) {
-    if (!sameUnlock(unlock)) return Promise.resolve(null);
+    if (!bagRemoteAllowed(unlock) || !sameUnlock(unlock)) return Promise.resolve(null);
     return fetch(packApi(unlock, BAG_REMOTE_PATH), {
       redirect: "error",
       headers: {
@@ -164102,7 +164105,7 @@
     }).catch(function () { return null; });
   }
   function writeRemoteBags(unlock, doc, sha) {
-    if (!sameUnlock(unlock)) return Promise.resolve(null);
+    if (!bagRemoteAllowed(unlock) || !sameUnlock(unlock)) return Promise.resolve(null);
     var payload = {
       message: "Update bags",
       content: utf8ToBase64(encodeBagFile(doc))
