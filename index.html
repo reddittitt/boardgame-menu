@@ -4097,6 +4097,52 @@
     font-weight:800;
     text-align:center;
   }
+  .teach-progress-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin:0 0 8px;
+  }
+  #teach-progress { margin:0; font-weight:700; font-size:16px; }
+  #teach-reset {
+    appearance:none;
+    min-height:44px;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+  }
+  .teach-script li.teach-step,
+  .teach-script p.teach-step {
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    list-style:none;
+  }
+  .teach-tick {
+    appearance:none;
+    flex:0 0 auto;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:2px solid var(--border);
+    background:transparent;
+    color:inherit;
+    font:inherit;
+    font-size:20px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .teach-step[data-taught="true"] .teach-tick {
+    background:#34c759;
+    color:#fff;
+    border-color:#34c759;
+  }
 
 </style>
 <link rel="stylesheet" href="./game-night.css">
@@ -167788,6 +167834,80 @@
 
   var playMemory = {};
 
+  var TEACH_CHECK_KEY = "bgq_teach_checks";
+  function readTeachChecks(slug) {
+    try {
+      var all = JSON.parse(sessionStorage.getItem(TEACH_CHECK_KEY) || "{}");
+      var list = all && all[slug];
+      return Array.isArray(list) ? list.map(function (n) { return parseInt(n, 10); }).filter(function (n) { return n >= 0; }) : [];
+    } catch (err) { return []; }
+  }
+  function writeTeachChecks(slug, indexes) {
+    var all = {};
+    try { all = JSON.parse(sessionStorage.getItem(TEACH_CHECK_KEY) || "{}") || {}; } catch (err) { all = {}; }
+    all[slug] = indexes;
+    try { sessionStorage.setItem(TEACH_CHECK_KEY, JSON.stringify(all)); } catch (err) {}
+  }
+  function teachStepNodes(root) {
+    var steps = [];
+    Array.prototype.forEach.call(root.querySelectorAll("li"), function (li) {
+      if (li.closest("details")) return;
+      if (li.parentElement && li.parentElement.closest && li.parentElement.closest("li")) return;
+      steps.push(li);
+    });
+    if (steps.length) return steps;
+    Array.prototype.forEach.call(root.querySelectorAll("p"), function (p) {
+      if (p.closest("details") || p.closest("li") || p.classList.contains("rule-empty")) return;
+      steps.push(p);
+    });
+    return steps;
+  }
+  function decorateTeach(slug) {
+    var body = document.getElementById("teach-script");
+    var progress = document.getElementById("teach-progress");
+    if (!body) return;
+    var saved = {};
+    readTeachChecks(slug).forEach(function (index) { saved[index] = true; });
+    var steps = teachStepNodes(body);
+    var done = 0;
+    steps.forEach(function (step, index) {
+      var on = !!saved[index];
+      if (on) done += 1;
+      step.classList.add("teach-step");
+      step.setAttribute("data-teach-step", String(index));
+      if (on) step.setAttribute("data-taught", "true");
+      else step.removeAttribute("data-taught");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "teach-tick";
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.setAttribute("aria-label", "Mark this step taught");
+      btn.textContent = on ? "\u2713" : "";
+      step.insertBefore(btn, step.firstChild);
+    });
+    if (progress) progress.textContent = done + "/" + steps.length + " taught";
+  }
+  function toggleTeachStep(slug, index) {
+    var step = document.querySelector('#teach-script .teach-step[data-teach-step="' + index + '"]');
+    if (!step) return;
+    var on = step.getAttribute("data-taught") !== "true";
+    var saved = readTeachChecks(slug).filter(function (n) { return n !== index; });
+    if (on) saved.push(index);
+    saved.sort(function (a, b) { return a - b; });
+    writeTeachChecks(slug, saved);
+    if (on) step.setAttribute("data-taught", "true");
+    else step.removeAttribute("data-taught");
+    var btn = step.querySelector(".teach-tick");
+    if (btn) {
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.textContent = on ? "\u2713" : "";
+    }
+    var progress = document.getElementById("teach-progress");
+    var total = document.querySelectorAll("#teach-script .teach-step").length;
+    var done = document.querySelectorAll('#teach-script .teach-step[data-taught="true"]').length;
+    if (progress) progress.textContent = done + "/" + total + " taught";
+  }
+
   function renderTeachPage(slug, query) {
     detailSlug = slug;
     var g = DATA[slug];
@@ -167865,6 +167985,7 @@
       }
       body.innerHTML = html || '<p class="rule-empty">No teaching script for this selection yet.</p>';
       wrapWideTables(body);
+      decorateTeach(slug);
     }
     function chipButton(cls, attr, value, label, on) {
       return '<button type="button" class="' + cls + '" ' + attr + '="' + escapeHtml(value) + '"' +
@@ -167900,6 +168021,10 @@
         '<h2 class="title">Teach it</h2>' +
         '<p class="byline">' + escapeHtml(g.name) + "</p>" +
         controls +
+        '<div class="teach-progress-row">' +
+          '<p id="teach-progress" aria-live="polite">0/0 taught</p>' +
+          '<button type="button" id="teach-reset">Reset</button>' +
+        "</div>" +
         '<div class="teach-script rule-body" id="teach-script"></div>' +
       "</article>";
     page = appEl.querySelector(".teach-page");
@@ -167907,6 +168032,19 @@
     rememberGameOffline(slug);
     if (!page) return;
     page.addEventListener("click", function (e) {
+      var tick = e.target.closest ? e.target.closest(".teach-tick") : null;
+      if (tick && page.contains(tick)) {
+        var step = tick.closest(".teach-step");
+        var index = step ? parseInt(step.getAttribute("data-teach-step"), 10) : NaN;
+        if (!isNaN(index)) toggleTeachStep(slug, index);
+        return;
+      }
+      var reset = e.target.closest ? e.target.closest("#teach-reset") : null;
+      if (reset && page.contains(reset)) {
+        writeTeachChecks(slug, []);
+        paint();
+        return;
+      }
       var setupBtn = e.target.closest ? e.target.closest(".setup-variant-btn") : null;
       if (setupBtn && page.contains(setupBtn)) {
         setupId = setupBtn.getAttribute("data-setup") || "";
