@@ -4020,6 +4020,83 @@
     font-size:12px;
     font-weight:700;
   }
+  #first-player-slot:empty { display:none; }
+  .first-player-rule {
+    margin:8px 0 0;
+    font-size:16px;
+    line-height:1.35;
+  }
+  .first-player-label { font-weight:700; }
+  .first-player-open,
+  #play-tonight-pick,
+  #first-player-go,
+  #first-player-again,
+  #first-player-close {
+    appearance:none;
+    min-height:44px;
+    margin:8px 8px 0 0;
+    padding:8px 14px;
+    border-radius:999px;
+    border:1px solid var(--btn-border);
+    background:var(--btn);
+    color:inherit;
+    font:inherit;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  #first-player-go { background:#007aff; color:#fff; border-color:#007aff; }
+  .fp-picker {
+    width:min(520px, calc(100vw - 24px));
+    max-height:min(92vh, 760px);
+    margin:auto;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:var(--bg);
+    color:inherit;
+  }
+  .fp-picker::backdrop { background:rgba(0,0,0,0.5); }
+  .fp-picker-card { padding:14px; }
+  .fp-picker h2 { margin:0 0 6px; font-size:1.25rem; }
+  .fp-help, .fp-alt { margin:0 0 8px; font-size:16px; }
+  .fp-pad {
+    position:relative;
+    min-height:240px;
+    border-radius:12px;
+    border:1px dashed var(--border);
+    background:color-mix(in srgb, var(--card) 80%, var(--bg));
+    touch-action:none;
+    overflow:hidden;
+  }
+  .fp-finger {
+    position:absolute;
+    width:64px;
+    height:64px;
+    margin:-32px 0 0 -32px;
+    border-radius:50%;
+    border:3px solid #fff;
+    background:#007aff;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:20px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+    pointer-events:none;
+  }
+  .fp-finger--winner {
+    background:#34c759;
+    transform:scale(1.12);
+    z-index:2;
+  }
+  .fp-count {
+    margin:8px 0 0;
+    font-size:2rem;
+    font-weight:800;
+    text-align:center;
+  }
 
 </style>
 <link rel="stylesheet" href="./game-night.css">
@@ -4070,6 +4147,21 @@
     <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-next">Next</button>
   </div>
   <div class="rulebook-viewer-stage" id="rulebook-viewer-stage"></div>
+</dialog>
+
+<dialog id="first-player-picker" class="fp-picker" aria-labelledby="first-player-picker-title">
+  <div class="fp-picker-card">
+    <h2 id="first-player-picker-title">Pick a first player</h2>
+    <p class="fp-help" id="fp-help">Everyone put a finger on the screen. On a desktop, tap once for each player.</p>
+    <div id="first-player-pad" class="fp-pad"></div>
+    <p id="first-player-count" class="fp-count" hidden></p>
+    <p id="first-player-alt" class="fp-alt" hidden></p>
+    <div>
+      <button type="button" id="first-player-go">Pick</button>
+      <button type="button" id="first-player-again" hidden>Again</button>
+      <button type="button" id="first-player-close">Close</button>
+    </div>
+  </div>
 </dialog>
 
 <script id="games-json" type="application/json">{
@@ -159257,7 +159349,8 @@
         '<span class="play-tonight-label" id="play-tonight-who-label">Whose games</span>' +
         '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-who-label">' + who + "</div>" +
       "</div>" +
-      '<p class="play-tonight-actions"><button type="button" id="play-tonight-shuffle">Shuffle</button></p>' +
+      '<p class="play-tonight-actions"><button type="button" id="play-tonight-shuffle">Shuffle</button>' +
+      '<button type="button" id="play-tonight-pick">Pick a first player</button></p>' +
       '<p id="play-tonight-note" class="play-tonight-note">Pick a player count and a time.</p>' +
       '<ul id="play-tonight-list"></ul>' +
       '<p class="play-tonight-actions"><button type="button" id="play-tonight-close">Close</button></p>' +
@@ -159355,6 +159448,10 @@
       if (!btn || !section.contains(btn)) return;
       if (btn.id === "play-tonight-shuffle") {
         refreshTonight(true);
+        return;
+      }
+      if (btn.id === "play-tonight-pick") {
+        openFirstPlayerPicker();
         return;
       }
       var facet = btn.getAttribute("data-facet");
@@ -166930,6 +167027,8 @@
             '<h2 class="title">' + escapeHtml(g.name) + "</h2>" +
             bagLabelHtml(g.slug) +
             buildMetaBar(g, selectedCount) +
+            '<div id="first-player-slot">' + firstPlayerHtml(g) + "</div>" +
+            '<p class="first-player-actions"><button type="button" class="first-player-open" id="first-player-open">Pick a first player</button></p>' +
           "</div>" +
         "</div>" +
         renderEssentialLinks(g, rulebookHref, gameHasTeach(g) ? teachHref(g.slug, {
@@ -168211,8 +168310,214 @@
     navigator.serviceWorker.ready.then(function () { schedule(); }).catch(function () {});
   }
 
+  var FIRST_PLAYER = {};
+  function firstPlayerHtml(game) {
+    if (!game) return "";
+    var row = FIRST_PLAYER[game.slug];
+    if (!row || !row.text || row.page == null || row.page === "" || !row.query) return "";
+    var chip = renderRulebookRef({ source: { page: row.page, query: row.query, snippet: row.query } });
+    if (!chip) return "";
+    return '<p class="first-player-rule" id="first-player-rule"><span class="first-player-label">First player</span> ' +
+      escapeHtml(String(row.text)) + chip + "</p>";
+  }
+  function paintFirstPlayer() {
+    var slot = document.getElementById("first-player-slot");
+    if (!slot || !detailSlug || !DATA[detailSlug]) return;
+    slot.innerHTML = firstPlayerHtml(DATA[detailSlug]);
+  }
+  function loadFirstPlayerRules() {
+    var url = (basePath() || ".") + "/first-player.json";
+    return fetch(url, { credentials: "same-origin" }).then(function (res) {
+      return res && res.ok ? res.json() : {};
+    }).then(function (data) {
+      FIRST_PLAYER = data && typeof data === "object" ? data : {};
+      paintFirstPlayer();
+    }).catch(function () {});
+  }
+
+  var fpLive = [];
+  var fpTaps = [];
+  var fpSeq = 0;
+  var fpTimer = 0;
+  var fpLocked = false;
+  function cryptoIndex(n) {
+    var count = n | 0;
+    if (count <= 1) return 0;
+    if (window.BGQuickNight && typeof window.BGQuickNight.randomIndex === "function") {
+      return window.BGQuickNight.randomIndex(count);
+    }
+    var limit = Math.floor(0x100000000 / count) * count;
+    var buf = new Uint32Array(1);
+    var value = 0;
+    do {
+      crypto.getRandomValues(buf);
+      value = buf[0];
+    } while (value >= limit);
+    return value % count;
+  }
+  function fpAll() {
+    return fpLive.concat(fpTaps);
+  }
+  function fpClearTimer() {
+    if (fpTimer) clearTimeout(fpTimer);
+    fpTimer = 0;
+  }
+  function fpRender() {
+    var pad = document.getElementById("first-player-pad");
+    if (!pad) return;
+    pad.innerHTML = "";
+    fpAll().forEach(function (finger, index) {
+      var dot = document.createElement("span");
+      dot.className = "fp-finger" + (finger.winner ? " fp-finger--winner" : "");
+      dot.textContent = finger.winner ? "First" : String(index + 1);
+      dot.style.left = finger.x + "px";
+      dot.style.top = finger.y + "px";
+      pad.appendChild(dot);
+    });
+  }
+  function fpPoint(event) {
+    var pad = document.getElementById("first-player-pad");
+    var box = pad.getBoundingClientRect();
+    return {
+      x: Math.max(32, Math.min(box.width - 32, event.clientX - box.left)),
+      y: Math.max(32, Math.min(box.height - 32, event.clientY - box.top))
+    };
+  }
+  function fpResetWinner() {
+    fpLocked = false;
+    fpAll().forEach(function (finger) { finger.winner = false; });
+    var count = document.getElementById("first-player-count");
+    var again = document.getElementById("first-player-again");
+    if (count) { count.hidden = true; count.textContent = ""; }
+    if (again) again.hidden = true;
+    fpRender();
+  }
+  function fpFinish() {
+    var fingers = fpAll();
+    var countEl = document.getElementById("first-player-count");
+    if (fingers.length < 2) {
+      if (countEl) {
+        countEl.hidden = false;
+        countEl.textContent = "Add at least two players.";
+      }
+      return;
+    }
+    fingers.forEach(function (finger) { finger.winner = false; });
+    fingers[cryptoIndex(fingers.length)].winner = true;
+    fpLocked = true;
+    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    var again = document.getElementById("first-player-again");
+    if (again) again.hidden = false;
+    fpRender();
+  }
+  function fpCountdown(step) {
+    var countEl = document.getElementById("first-player-count");
+    if (!countEl) return;
+    if (fpAll().length < 2) {
+      fpFinish();
+      return;
+    }
+    if (step <= 0) {
+      fpFinish();
+      return;
+    }
+    countEl.hidden = false;
+    countEl.textContent = String(step);
+    fpTimer = setTimeout(function () { fpCountdown(step - 1); }, 400);
+  }
+  function openFirstPlayerPicker() {
+    var tonight = document.getElementById("play-tonight-dialog");
+    if (tonight && tonight.open && typeof tonight.close === "function") tonight.close();
+    var picker = document.getElementById("first-player-picker");
+    if (!picker) return;
+    fpLive = [];
+    fpTaps = [];
+    fpLocked = false;
+    fpClearTimer();
+    var alt = document.getElementById("first-player-alt");
+    var row = detailSlug && FIRST_PLAYER[detailSlug];
+    if (alt) {
+      if (row && row.text) {
+        alt.hidden = false;
+        alt.textContent = "Or use the game's rule: " + row.text;
+      } else {
+        alt.hidden = true;
+        alt.textContent = "";
+      }
+    }
+    var again = document.getElementById("first-player-again");
+    if (again) again.hidden = true;
+    var countEl = document.getElementById("first-player-count");
+    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    fpRender();
+    if (typeof picker.showModal === "function") {
+      try { picker.showModal(); } catch (err) { picker.setAttribute("open", ""); }
+    } else picker.setAttribute("open", "");
+  }
+  function bindFirstPlayerPicker() {
+    var picker = document.getElementById("first-player-picker");
+    var pad = document.getElementById("first-player-pad");
+    if (!picker || !pad || picker.getAttribute("data-bound") === "1") return;
+    picker.setAttribute("data-bound", "1");
+    document.addEventListener("click", function (event) {
+      var open = event.target && event.target.closest ? event.target.closest("#first-player-open") : null;
+      if (open) openFirstPlayerPicker();
+    });
+    pad.addEventListener("pointerdown", function (event) {
+      if (fpLocked) return;
+      if (event.pointerType === "touch") {
+        var at = fpPoint(event);
+        fpLive.push({ id: event.pointerId, x: at.x, y: at.y, winner: false });
+        fpClearTimer();
+        fpRender();
+      }
+    });
+    pad.addEventListener("pointermove", function (event) {
+      if (event.pointerType !== "touch" || fpLocked) return;
+      var finger = null;
+      fpLive.forEach(function (item) { if (item.id === event.pointerId) finger = item; });
+      if (!finger) return;
+      var at = fpPoint(event);
+      finger.x = at.x;
+      finger.y = at.y;
+      fpRender();
+    });
+    pad.addEventListener("pointerup", function (event) {
+      if (event.pointerType === "touch") {
+        if (fpLocked) return;
+        fpLive = fpLive.filter(function (item) { return item.id !== event.pointerId; });
+        fpClearTimer();
+        fpRender();
+        return;
+      }
+      if (fpLocked || event.pointerType === "touch") return;
+      var at = fpPoint(event);
+      fpSeq += 1;
+      fpTaps.push({ id: "tap-" + fpSeq, x: at.x, y: at.y, winner: false });
+      fpClearTimer();
+      fpRender();
+    });
+    document.getElementById("first-player-go").addEventListener("click", function () {
+      fpClearTimer();
+      fpResetWinner();
+      fpCountdown(3);
+    });
+    document.getElementById("first-player-again").addEventListener("click", function () {
+      fpClearTimer();
+      fpResetWinner();
+      fpCountdown(3);
+    });
+    document.getElementById("first-player-close").addEventListener("click", function () {
+      fpClearTimer();
+      if (typeof picker.close === "function") picker.close();
+      else picker.removeAttribute("open");
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    bindFirstPlayerPicker();
     render();
+    loadFirstPlayerRules();
     loadLayoutFixture();
     warmCollection();
   });

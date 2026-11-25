@@ -34,6 +34,7 @@ var SHELL_FILES = [
   "./icons/icon-maskable-512.png",
   "./game-night.js",
   "./game-night.css",
+  "./first-player.json",
   "./expansion-guides.json",
   "./components.json",
   "./selection.mjs",
