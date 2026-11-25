@@ -183,6 +183,60 @@
     align-items:center;
     justify-content:center;
   }
+  header .quick-search-open,
+  .mini-bar .quick-search-open {
+    width:44px;
+    min-width:44px;
+    padding:8px;
+  }
+  .mini-bar .quick-search-open {
+    color:inherit;
+    background:transparent;
+    border:1px solid var(--border);
+  }
+  .quick-search-open svg { display:block; }
+  .quick-search {
+    width:min(520px, calc(100vw - 24px));
+    margin:12vh auto auto;
+    padding:0;
+    border:0;
+    border-radius:16px;
+    background:var(--bg);
+    color:inherit;
+  }
+  .quick-search::backdrop { background:rgba(0,0,0,0.45); }
+  .quick-search-card { padding:12px; }
+  .quick-search-bar { display:flex; gap:8px; }
+  .quick-search-bar input {
+    flex:1;
+    min-width:0;
+    min-height:44px;
+    font-size:16px;
+    padding:8px 12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:inherit;
+  }
+  .quick-search-results {
+    list-style:none;
+    margin:8px 0 0;
+    padding:0;
+    max-height:50vh;
+    overflow:auto;
+  }
+  .quick-search-results a {
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    padding:8px 10px;
+    border-radius:10px;
+    color:inherit;
+    text-decoration:none;
+    font-weight:650;
+  }
+  .quick-search-results a[aria-selected="true"],
+  .quick-search-results a:hover { background:color-mix(in srgb, var(--accent) 16%, transparent); }
   .all-games-bar { margin:0 0 4px; }
   main:has(a.back-link[href="#/"]) .all-games-bar { display:none; }
   .all-games-bar a.home {
@@ -4178,6 +4232,9 @@
 
     <a class="toggle" href="./game-day.html">Game Day</a>
     <a class="header-night" href="#/night">Game night</a>
+    <button type="button" id="quick-search-open" class="toggle quick-search-open" aria-label="Jump to a game">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
     <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Theme</button>
   </div>
 </header>
@@ -4211,6 +4268,17 @@
     <button type="button" class="rulebook-viewer-step" id="rulebook-viewer-next">Next</button>
   </div>
   <div class="rulebook-viewer-stage" id="rulebook-viewer-stage"></div>
+</dialog>
+
+<dialog id="quick-search" class="quick-search" aria-labelledby="quick-search-title">
+  <div class="quick-search-card">
+    <h2 id="quick-search-title" class="u-hidden-text">Jump to a game</h2>
+    <div class="quick-search-bar">
+      <input id="quick-search-input" type="search" placeholder="Jump to a game" aria-label="Type a game name" autocomplete="off" enterkeyhint="search">
+      <button type="button" id="quick-search-close">Close</button>
+    </div>
+    <ul id="quick-search-results" class="quick-search-results" role="listbox"></ul>
+  </div>
 </dialog>
 
 <dialog id="first-player-picker" class="fp-picker" aria-labelledby="first-player-picker-title">
@@ -168473,7 +168541,14 @@
       teachLink.textContent = "Teach it";
       actions.appendChild(teachLink);
     }
+    var searchBtn = document.createElement("button");
+    searchBtn.type = "button";
+    searchBtn.className = "toggle quick-search-open";
+    searchBtn.setAttribute("aria-label", "Jump to a game");
+    searchBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    searchBtn.addEventListener("click", openQuickSearch);
     bar.appendChild(name);
+    bar.appendChild(searchBtn);
     bar.appendChild(actions);
     document.body.appendChild(bar);
     miniLinks = links;
@@ -168837,7 +168912,81 @@
     });
   }
 
+  function quickSearchGames(query) {
+    var q = String(query || "").trim().toLowerCase();
+    if (!q) return [];
+    var games = Object.keys(DATA).map(function (key) { return DATA[key]; }).filter(function (game) {
+      if (!game) return false;
+      if (String(game.name || "").toLowerCase().indexOf(q) !== -1) return true;
+      var aliases = game.aliases;
+      return Array.isArray(aliases) && aliases.some(function (name) {
+        return String(name || "").toLowerCase().indexOf(q) !== -1;
+      });
+    });
+    games.sort(function (a, b) {
+      var aStart = String(a.name || "").toLowerCase().indexOf(q) === 0 ? 0 : 1;
+      var bStart = String(b.name || "").toLowerCase().indexOf(q) === 0 ? 0 : 1;
+      if (aStart !== bStart) return aStart - bStart;
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    return games.slice(0, 12);
+  }
+  function paintQuickSearch(query) {
+    var list = document.getElementById("quick-search-results");
+    if (!list) return;
+    var games = quickSearchGames(query);
+    list.innerHTML = games.map(function (game) {
+      return '<li role="presentation"><a role="option" href="' + escapeHtml(gamePath(game.slug)) + '">' + escapeHtml(game.name) + "</a></li>";
+    }).join("");
+  }
+  function openQuickSearch() {
+    var dialog = document.getElementById("quick-search");
+    var input = document.getElementById("quick-search-input");
+    if (!dialog || !input) return;
+    input.value = "";
+    paintQuickSearch("");
+    if (typeof dialog.showModal === "function") {
+      try { dialog.showModal(); } catch (err) { dialog.setAttribute("open", ""); }
+    } else dialog.setAttribute("open", "");
+    input.focus();
+  }
+  function bindQuickSearch() {
+    var openBtn = document.getElementById("quick-search-open");
+    var dialog = document.getElementById("quick-search");
+    var input = document.getElementById("quick-search-input");
+    var closeBtn = document.getElementById("quick-search-close");
+    if (!openBtn || !dialog || !input || openBtn.getAttribute("data-bound") === "1") return;
+    openBtn.setAttribute("data-bound", "1");
+    openBtn.addEventListener("click", openQuickSearch);
+    if (closeBtn) closeBtn.addEventListener("click", function () {
+      if (typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+    });
+    input.addEventListener("input", function () { paintQuickSearch(input.value); });
+    input.addEventListener("keydown", function (event) {
+      var options = Array.prototype.slice.call(dialog.querySelectorAll(".quick-search-results a"));
+      var current = dialog.querySelector(".quick-search-results a[aria-selected='true']");
+      var index = current ? options.indexOf(current) : -1;
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (!options.length) return;
+        index += event.key === "ArrowDown" ? 1 : -1;
+        if (index < 0) index = options.length - 1;
+        if (index >= options.length) index = 0;
+        options.forEach(function (option, i) { option.setAttribute("aria-selected", i === index ? "true" : "false"); });
+        return;
+      }
+      if (event.key === "Enter") {
+        var chosen = current || options[0];
+        if (!chosen) return;
+        event.preventDefault();
+        chosen.click();
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    bindQuickSearch();
     bindFirstPlayerPicker();
     render();
     loadFirstPlayerRules();
