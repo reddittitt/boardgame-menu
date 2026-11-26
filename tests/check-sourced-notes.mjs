@@ -148,8 +148,153 @@ for (const [slug, index, start, end] of quoteSpecs) {
   }
 }
 
+function firstGameBullets(value, out) {
+  out = out || [];
+  if (!value) return out;
+  if (Array.isArray(value)) {
+    value.forEach((item) => firstGameBullets(item, out));
+    return out;
+  }
+  if (typeof value === "object") {
+    if (typeof value.text === "string" && value.text) out.push(value);
+    if (Array.isArray(value.bullets)) firstGameBullets(value.bullets, out);
+  }
+  return out;
+}
+function occurrences(text, query) {
+  let count = 0;
+  let from = 0;
+  while (query) {
+    const at = text.indexOf(query, from);
+    if (at < 0) break;
+    count += 1;
+    from = at + query.length;
+  }
+  return count;
+}
+
+const firstGames = [
+  {
+    slug: "pandemic",
+    bullets: [
+      { page: 3, text: "Use 4 Epidemic cards for your first game.", query: "Use 4 Epidemic cards for your first game." },
+      { page: 7, text: "When playing the Introductory game (4 Epidemic cards), place your cards face up in front of you, for all players to see.", query: "place your cards face up in front of you, for all players to see." }
+    ]
+  },
+  {
+    slug: "acquire",
+    bullets: [
+      { page: 4, text: "If this is your first game, we recommend Tycoon Mode.", query: "we recommend Tycoon Mode." },
+      { page: 4, text: "If it is your first time playing, we recommend displaying stocks and money.", query: "we recommend displaying stocks and money." }
+    ]
+  },
+  {
+    slug: "wandering-towers",
+    bullets: [
+      { page: 3, text: "For your first game: Place the 2 magic spells, Advance a Wizard and Advance a Tower (see Magic Spells, p. 8), face up near the circular path. Return the other 6 magic spells to the box.", query: "Return the other 6 magic spells to the box." }
+    ]
+  },
+  {
+    slug: "flamecraft",
+    bullets: [
+      { page: 5, text: "Choose either the Purple or Golden Enchantment deck (we recommend Purple for your first game).", query: "we recommend Purple for your first game" }
+    ]
+  },
+  {
+    slug: "arcs",
+    bullets: [
+      { page: 21, text: "Really, don’t play your first game with Leaders and Lore.", query: "don’t play your first game with Leaders and Lore." }
+    ]
+  },
+  {
+    slug: "seti",
+    bullets: [
+      { page: 22, text: "If this is your first game of SETI, consider choosing the 1-star difficulty. The lack of objectives will help ease you into the game as you won't need to learn everything at once.", query: "consider choosing the 1-star difficulty." }
+    ]
+  },
+  {
+    slug: "7-wonders-duel",
+    bullets: [
+      { page: 7, text: "For your first game, ignore the Wonders Selection phase and take the following Wonders tiles: Player 1: the Pyramids the Great Lighthouse the Temple of Artemis the Statue of Zeus Player 2: Circus Maximus Piraeus the Appian Way the Colossus", query: "ignore the Wonders Selection phase" }
+    ]
+  },
+  {
+    slug: "heat-pedal-to-the-metal",
+    bullets: [
+      { page: 3, text: "for your first game use the USA track, and consider only racing 1 lap as a learning experience instead of the regular 2 laps as printed on the board", query: "use the USA track, and consider only racing 1 lap" }
+    ]
+  },
+  {
+    slug: "rebel-princess-deluxe-edition",
+    bullets: [
+      { page: 5, text: "If this is your first game, we recommend starting with Round cards a, b,c, d, and e.", query: "Round cards a, b,c, d, and e." }
+    ]
+  },
+  {
+    slug: "parks",
+    bullets: [
+      { page: 3, text: "For your first game, just deal one to each player. Return any unused Year cards facedown to the box.", query: "just deal one to each player." }
+    ]
+  },
+  {
+    slug: "moon-colony-bloodbath",
+    bullets: [
+      { page: 3, text: "for your first game, use two Twists with the word “Twist” in white (they’re simpler).", query: "two Twists with the word “Twist” in white" }
+    ]
+  },
+  {
+    slug: "brass-birmingham",
+    bullets: [
+      { page: 7, text: "some players may prefer to play a shorter introductory game for their first experience. The introductory game plays exactly like the full game, except you only play the Canal Era and there are additional scoring rules to make players’ scores more closely reflect their success in the Canal Era.", query: "you only play the Canal Era" }
+    ]
+  },
+  {
+    slug: "catan",
+    bullets: [
+      { page: 4, text: "If this is your first time playing CATAN®, we recommend using the setup shown here.", query: "we recommend using the setup shown here." }
+    ]
+  },
+  {
+    slug: "tend",
+    bullets: [
+      { page: 7, text: "If this is your first time playing Tend, we recommend removing the task cards marked as \"advanced\".", query: "removing the task cards marked as \"advanced\"." }
+    ]
+  },
+  {
+    slug: "tiny-towns",
+    bullets: [
+      { page: 2, text: "For your first game, you may want to play without monuments.", query: "you may want to play without monuments." }
+    ]
+  }
+];
+
+check("fifteen new first-game games", firstGames.length >= 12 && firstGames.length <= 15);
+for (const row of firstGames) {
+  const game = games[row.slug];
+  const stored = firstGameBullets(game && game.firstGameSetup);
+  const section = game && game.firstGameSetup && Array.isArray(game.firstGameSetup.bullets);
+  check(row.slug + " has first-game notes", !!game && game.mine === true && section && stored.length === row.bullets.length);
+  row.bullets.forEach((spec, index) => {
+    const item = stored[index];
+    const blob = pageBlob(row.slug, spec.page);
+    const query = item && item.source && item.source.query;
+    check(
+      row.slug + " first-game quote " + (index + 1) + " is on page " + spec.page,
+      !!item &&
+        item.text === spec.text &&
+        blob.includes(item.text) &&
+        item.source &&
+        item.source.page === spec.page &&
+        query === spec.query &&
+        item.text.includes(query) &&
+        blob.includes(query) &&
+        occurrences(blob, query) === 1
+    );
+  });
+}
+
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.20";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.21";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -293,6 +438,44 @@ const catanNote = page.locator("#mistakes-slot details");
 if ((await catanNote.getAttribute("open")) === null) await catanNote.locator("summary").click();
 check("catan shows the robber quote", (await page.locator("#mistakes-slot").innerText()).includes("A hex with the robber does not produce resources"));
 await page.locator("#mistakes-slot").screenshot({ path: path.join(shots, "mistakes-catan-phone.png") });
+
+for (const row of firstGames) {
+  await page.goto(origin + "/index.html#/game/" + row.slug, { waitUntil: "domcontentloaded" });
+  const slot = page.locator("#first-game-slot");
+  const summary = slot.locator("summary");
+  await summary.waitFor();
+  const note = slot.locator("details.chapter-note");
+  check(row.slug + " first game box is visible", await summary.isVisible());
+  check(row.slug + " first game starts closed", (await note.getAttribute("open")) === null);
+  check(row.slug + " first game title", (await summary.innerText()).trim() === "First game");
+  if (row.slug === "7-wonders-duel") {
+    check("duel has no player-count buttons", await page.locator(".pc-btn[data-count]").count() === 0);
+  }
+  await summary.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await summary.click();
+  const shown = await slot.innerText();
+  for (const spec of row.bullets) {
+    check(row.slug + " shows the first-game quote", shown.includes(spec.text));
+  }
+  const chips = slot.locator(".rulebook-ref");
+  check(row.slug + " first-game rulebook chips", await chips.count() === row.bullets.length);
+  for (let index = 0; index < row.bullets.length; index += 1) {
+    check(row.slug + " chip " + (index + 1) + " says Rulebook", (await chips.nth(index).innerText()).trim() === "Rulebook");
+    check(row.slug + " chip " + (index + 1) + " cites the page", (await chips.nth(index).getAttribute("data-page")) === String(row.bullets[index].page));
+  }
+  if (row.slug === "7-wonders-duel" || row.slug === "pandemic" || row.slug === "heat-pedal-to-the-metal") {
+    await slot.screenshot({ path: path.join(shots, "first-game-" + row.slug + "-phone.png") });
+  }
+  if (row.slug === "pandemic") {
+    await page.locator('.pc-btn[data-count="2"]').click();
+    check("pandemic first game stays closed after a count change", (await slot.locator("details.chapter-note").getAttribute("open")) === null);
+    await slot.locator("summary").click();
+    const again = await slot.innerText();
+    check("pandemic keeps the epidemic quote at 2 players", again.includes(row.bullets[0].text));
+    check("pandemic keeps the face-up quote at 2 players", again.includes(row.bullets[1].text));
+    await slot.screenshot({ path: path.join(shots, "first-game-pandemic-2-phone.png") });
+  }
+}
 
 check("no production exec request", execSeen.length === 0);
 await browser.close();
