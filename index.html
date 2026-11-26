@@ -2560,6 +2560,7 @@
   @media (max-width:520px) {
     header { padding:6px max(10px, env(safe-area-inset-right)) 6px max(10px, env(safe-area-inset-left)); }
     header .wrap { gap:6px; flex-wrap:nowrap; }
+    header .wrap:has(a.header-bags) { flex-wrap:wrap; }
     header .toggle {
       padding:6px 8px;
       font-size:0.92rem;
@@ -3566,21 +3567,63 @@
   }
   .bag-game-link {
     flex:1 1 auto;
+    align-self:stretch;
     color:var(--accent);
     font-weight:650;
     font-size:16px;
-    line-height:44px;
+    line-height:1.2;
     text-decoration:none;
     min-height:44px;
     min-width:0;
-    display:block;
+    display:flex;
+    align-items:center;
+    gap:8px;
     overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
     touch-action:pan-y;
     -webkit-touch-callout:none;
   }
-  .bag-game-link:hover { text-decoration:underline; }
+  .bag-game-name {
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .bag-game-link:hover .bag-game-name { text-decoration:underline; }
+  .bag-cover {
+    flex:0 0 44px;
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+    display:block;
+    background:color-mix(in srgb, var(--fg) 8%, var(--card));
+  }
+  .bag-cover img {
+    width:44px;
+    height:44px;
+    max-width:44px;
+    object-fit:cover;
+    object-position:center;
+    border-radius:8px;
+  }
+  .bag-cover--empty {
+    background:var(--bag-cover-fill, hsl(var(--bag-cover-hue, 210), 46%, 38%));
+    color:#ffffff;
+  }
+  .bag-cover--empty::before {
+    content:attr(data-letter);
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    font-size:18px;
+    font-weight:700;
+    line-height:1;
+  }
   .bag-game-chips {
     display:flex;
     flex:0 0 auto;
@@ -3716,7 +3759,20 @@
   }
   .pack-night-card h2 { margin:0; font-size:1.2rem; }
   .pack-night-card > p { margin:0; }
-  .pack-night-game h3 { margin:0; font-size:1rem; }
+  .pack-night-head {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .pack-night-id { min-width:0; flex:1 1 auto; }
+  .pack-night-game h3 {
+    margin:0;
+    font-size:1rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
   .pack-night-where { margin:2px 0 0; font-weight:650; }
   .pack-night-choices { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
   .pack-night-choices button {
@@ -3821,14 +3877,14 @@
   .bag-set-games li {
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:12px;
+    justify-content:flex-start;
+    gap:10px;
     min-height:44px;
     min-width:0;
     font-size:16px;
   }
-  .bag-set-name { overflow-wrap:anywhere; font-weight:650; min-width:0; }
-  .bag-set-missing { flex:0 0 auto; color:var(--muted); font-weight:650; font-size:16px; }
+  .bag-set-name { flex:1 1 auto; overflow-wrap:anywhere; font-weight:650; min-width:0; }
+  .bag-set-missing { flex:0 0 auto; margin-left:auto; color:var(--muted); font-weight:650; font-size:16px; }
   .bag-set-empty {
     margin:0;
     color:var(--muted);
@@ -166279,8 +166335,12 @@
       var rows = list.map(function (slug) {
         var current = readBagState()[slug] || "";
         return '<section class="pack-night-game" data-pack-game="' + escapeHtml(slug) + '">' +
-          "<h3>" + escapeHtml(DATA[slug].name) + "</h3>" +
-          '<p class="pack-night-where">' + escapeHtml(packLocationName(slug)) + "</p>" +
+          '<div class="pack-night-head">' +
+            bagCoverHtml(slug, DATA[slug].name) +
+            '<div class="pack-night-id">' +
+              "<h3>" + escapeHtml(DATA[slug].name) + "</h3>" +
+              '<p class="pack-night-where">' + escapeHtml(packLocationName(slug)) + "</p>" +
+            "</div></div>" +
           '<div class="pack-night-choices" role="group" aria-label="Where is ' + escapeHtml(DATA[slug].name) + '">' +
             choice(slug, "big", "Big bag", current) +
             choice(slug, "small", "Small bag", current) +
@@ -166570,9 +166630,30 @@
     if (count === 1) return "Replace " + name + " with this 1 game?";
     return "Replace " + name + " with these " + count + " games?";
   }
+  function bagCoverHtml(slug, name) {
+    var text = String(name || slug || "?").trim();
+    var chars = Array.from(text);
+    var letter = chars.length ? chars[0].toUpperCase() : "?";
+    var game = DATA && DATA[slug];
+    var accent = game && game.themeColor ? String(game.themeColor).trim() : "";
+    var style = "--bag-cover-hue:" + hashHue(slug);
+    if (/^#[0-9a-fA-F]{3}$/.test(accent) || /^#[0-9a-fA-F]{6}$/.test(accent)) {
+      style += ";--bag-cover-fill:" + accent;
+    }
+    var src = "";
+    try { src = coverUrl(slug) || ""; } catch (err) { src = ""; }
+    var open = '<span class="bag-cover' + (src ? "" : " bag-cover--empty") + '" data-bag-cover="' + escapeHtml(slug) +
+      '" data-letter="' + escapeHtml(letter) + '" style="' + style + '" aria-hidden="true">';
+    if (!src) return open + "</span>";
+    return open +
+      '<img draggable="false" alt="" width="44" height="44" loading="lazy" decoding="async" src="' + escapeHtml(src) +
+      '" onerror="this.parentNode.classList.add(\'bag-cover--empty\');this.remove()">' +
+      "</span>";
+  }
   function bagSetListHtml(id, part) {
     var items = part.found.map(function (item) {
-      return '<li data-bag-set-found="' + escapeHtml(item.slug) + '"><span class="bag-set-name">' + escapeHtml(item.name) + "</span></li>";
+      return '<li data-bag-set-found="' + escapeHtml(item.slug) + '">' + bagCoverHtml(item.slug, item.name) +
+        '<span class="bag-set-name">' + escapeHtml(item.name) + "</span></li>";
     }).join("");
     var missing = part.missing.map(function (slug) {
       return '<li data-bag-set-missing="' + escapeHtml(slug) + '"><span class="bag-set-name">' + escapeHtml(slug) + '</span><span class="bag-set-missing">not found</span></li>';
@@ -167177,7 +167258,9 @@
           bagSwipeReveal("move", "Move") +
           bagSwipeReveal("remove", "Remove") +
           '<div class="bag-swipe" data-bag-slug="' + escapeHtml(slug) + '">' +
-            '<a class="bag-game-link" draggable="false" href="' + escapeHtml(gamePath(slug)) + '">' + escapeHtml(gameName) + "</a>" +
+            '<a class="bag-game-link" draggable="false" href="' + escapeHtml(gamePath(slug)) + '">' +
+              bagCoverHtml(slug, gameName) +
+              '<span class="bag-game-name">' + escapeHtml(gameName) + "</span></a>" +
             bagChipsHtml(slug, id, bagFilter) +
             '<button type="button" class="bag-overflow" aria-haspopup="dialog" aria-label="Actions for ' + escapeHtml(gameName) + '">' +
               '<span aria-hidden="true">\u22ef</span>' +
