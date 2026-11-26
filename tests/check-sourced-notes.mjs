@@ -72,11 +72,23 @@ const overallTimes = [
   { slug: "moonrollers", text: "30–45 min", index: "moonrollers", must: ["2-5 players that takes", "30-45 minutes"] },
   { slug: "celestia", text: "30 min", index: "celestia", must: ["2 – 6 players", "30 minutes"] },
   { slug: "graft", text: "about 40 min", index: "graft", must: ["approximately 40 minutes to play"] },
-  { slug: "tend", text: "60–90 min", index: "tend", must: ["Players: 1-6+", "Playtime: 60-90 minutes"] }
+  { slug: "tend", text: "60–90 min", index: "tend", must: ["Players: 1-6+", "Playtime: 60-90 minutes"] },
+  { slug: "battle-line", text: "30 min", index: "battle-line", must: ["Playing Time: 30 minutes"] },
+  { slug: "bohnanza", text: "about 45 min", index: "bohnanza", must: ["Duration: approx. 45 minutes"] },
+  { slug: "carpe-diem", text: "45–75 min", index: "carpe-diem", must: ["Playing Time: 45-75 minutes"] },
+  { slug: "costa-rica", text: "30–45 min", index: "costa-rica", must: ["Play time: 30-45 minutes"] },
+  { slug: "illusion", text: "about 15 min", index: "illusion", must: ["Duration: app. 15 min."] },
+  { slug: "l-l-a-m-a", text: "about 20 min", index: "l-l-a-m-a", must: ["Duration: about 20 minutes"] },
+  { slug: "oh-my-goods", text: "30 min", index: "oh-my-goods", must: ["Playing time: 30 minutes"] },
+  { slug: "silver-and-gold", text: "about 20 min", index: "silver-and-gold", must: ["Duration: approx. 20 min."] },
+  { slug: "the-mind", text: "about 15 min", index: "the-mind", must: ["Duration: app. 15 min."] }
 ];
 const perPlayerTimes = [
   { slug: "agricola", text: "half an hour per player, shorter as a Family game", counts: ["1", "2", "3", "4", "5"], index: "agricola", must: ["Half an hour per player, shorter as a Family game"] },
-  { slug: "caverna-the-cave-farmers", text: "about 30 min per player", counts: ["1", "2", "3", "4", "5", "6", "7"], index: "caverna-the-cave-farmers", must: ["about 30 minutes per player"] }
+  { slug: "caverna-the-cave-farmers", text: "about 30 min per player", counts: ["1", "2", "3", "4", "5", "6", "7"], index: "caverna-the-cave-farmers", must: ["about 30 minutes per player"] },
+  { slug: "the-gallerist", text: "30 min per player", counts: ["1", "2", "3", "4"], index: "the-gallerist", must: ["1 to 4 Players", "30 MIN per Player"] },
+  { slug: "star-wars-villainous", text: "20 min per player", counts: ["2", "3", "4"], index: "star-wars-villainous", must: ["2 to 4 Players", "20 Minutes per Player"] },
+  { slug: "marvel-villainous", text: "20 min per player", counts: ["2", "3", "4"], index: "marvel-villainous", must: ["2 to 4 Players", "20 Minutes per Player"] }
 ];
 
 function rulebookHas(index, must) {
@@ -137,7 +149,7 @@ for (const [slug, index, start, end] of quoteSpecs) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.19";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.20";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -161,6 +173,19 @@ const origin = "http://127.0.0.1:" + server.address().port;
 const { chromium } = await import("playwright");
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+const execSeen = [];
+function noteExec(url) {
+  if (/\/exec(\?|$)/.test(url)) execSeen.push(url);
+}
+page.on("request", (req) => noteExec(req.url()));
+await page.route("**/*script.google.com/**", (route) => {
+  noteExec(route.request().url());
+  return route.abort();
+});
+await page.route("**/*script.googleusercontent.com/**", (route) => {
+  noteExec(route.request().url());
+  return route.abort();
+});
 
 await page.goto(origin + "/index.html#/game/for-sale", { waitUntil: "domcontentloaded" });
 await page.waitForSelector("#play-time-value");
@@ -178,6 +203,75 @@ await page.waitForSelector("#play-time-value");
 await page.locator('.pc-btn[data-count="3"]').click();
 check("agricola shows half an hour per player", (await page.locator("#play-time-value").innerText()).includes("half an hour per player"));
 await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-agricola-phone.png") });
+
+await page.goto(origin + "/index.html#/game/the-mind", { waitUntil: "domcontentloaded" });
+await page.waitForSelector("#play-time-value");
+await page.locator('.pc-btn[data-count="4"]').click();
+const mind = page.locator("#play-time-value");
+check("the mind shows the book duration", (await mind.innerText()).trim() === "about 15 min");
+check("the mind labels the rulebook", ((await page.locator("#play-time-source").innerText()).trim().toLowerCase()) === "rulebook");
+check("the mind is not a count time", !((await mind.getAttribute("class")) || "").includes("is-count-time"));
+check("the mind has no count in the name", !(await mind.getAttribute("aria-label")));
+await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-the-mind-phone.png") });
+
+await page.goto(origin + "/index.html#/game/battle-line", { waitUntil: "domcontentloaded" });
+await page.waitForSelector("#play-time-value");
+check("battle line shows 30 min", (await page.locator("#play-time-value").innerText()).trim() === "30 min");
+check("battle line labels the rulebook", ((await page.locator("#play-time-source").innerText()).trim().toLowerCase()) === "rulebook");
+check("battle line is not a count time", !((await page.locator("#play-time-value").getAttribute("class")) || "").includes("is-count-time"));
+check("battle line has no player-count buttons", await page.locator('.pc-btn[data-count]').count() === 0);
+
+async function countRate(slug, fileSlug) {
+  await page.goto(origin + "/index.html#/game/" + slug, { waitUntil: "domcontentloaded" });
+  await page.waitForSelector("#play-time-value");
+  const value = page.locator("#play-time-value");
+  await page.locator('.pc-btn[data-count="2"]').click();
+  check(slug + " shows the rulebook rate", (await value.innerText()).trim() === "20 min per player");
+  check(slug + " labels the rulebook", ((await page.locator("#play-time-source").innerText()).trim().toLowerCase()) === "rulebook");
+  check(slug + " is a count time", ((await value.getAttribute("class")) || "").includes("is-count-time"));
+  check(slug + " names 2 players", (await value.getAttribute("aria-label") || "") === "20 min per player at 2 players");
+  await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-" + fileSlug + "-2-phone.png") });
+  await page.locator("#table-bar").screenshot({ path: path.join(shots, "play-time-" + fileSlug + "-buttons-2-phone.png") });
+  await page.locator('.pc-btn[data-count="4"]').click();
+  check(slug + " keeps the rate at 4", (await value.innerText()).trim() === "20 min per player");
+  check(slug + " stays a count time", ((await value.getAttribute("class")) || "").includes("is-count-time"));
+  check(slug + " names 4 players", (await value.getAttribute("aria-label") || "") === "20 min per player at 4 players");
+  await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-" + fileSlug + "-4-phone.png") });
+  await page.locator("#table-bar").screenshot({ path: path.join(shots, "play-time-" + fileSlug + "-buttons-4-phone.png") });
+}
+await countRate("star-wars-villainous", "star-wars-villainous");
+await countRate("marvel-villainous", "marvel-villainous");
+
+await page.goto(origin + "/index.html#/game/the-gallerist", { waitUntil: "domcontentloaded" });
+await page.waitForSelector("#play-time-value");
+const galleristStored = await page.evaluate(() => {
+  const raw = JSON.parse(document.getElementById("games-json").textContent);
+  const game = raw.enrich["the-gallerist"] || {};
+  return {
+    source: game.playTimeSource || "",
+    overall: game.rulebookTime || "",
+    map: game.playTimeByPlayerCount || null
+  };
+});
+check("gallerist page carries the rulebook rate", galleristStored.source === "rulebook" && !galleristStored.overall && galleristStored.map && ["1", "2", "3", "4"].every((count) => galleristStored.map[count] === "30 min per player") && Object.keys(galleristStored.map).length === 4);
+const galleristCounts = await page.locator('.pc-btn[data-count]').count();
+const gallerist = page.locator("#play-time-value");
+if (galleristCounts) {
+  await page.locator('.pc-btn[data-count="1"]').click();
+  check("gallerist shows the rulebook rate", (await gallerist.innerText()).trim() === "30 min per player");
+  check("gallerist labels the rulebook", ((await page.locator("#play-time-source").innerText()).trim().toLowerCase()) === "rulebook");
+  check("gallerist is a count time", ((await gallerist.getAttribute("class")) || "").includes("is-count-time"));
+  check("gallerist names 1 player", (await gallerist.getAttribute("aria-label") || "") === "30 min per player at 1 player");
+  await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-the-gallerist-phone.png") });
+  await page.locator("#table-bar").screenshot({ path: path.join(shots, "play-time-the-gallerist-buttons-phone.png") });
+  await page.locator('.pc-btn[data-count="4"]').click();
+  check("gallerist keeps the rate at 4", (await gallerist.innerText()).trim() === "30 min per player");
+  check("gallerist names 4 players", (await gallerist.getAttribute("aria-label") || "") === "30 min per player at 4 players");
+  await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-the-gallerist-4-phone.png") });
+} else {
+  check("gallerist does not guess a count", !((await gallerist.getAttribute("class")) || "").includes("is-count-time"));
+  check("gallerist has no count in the name", !(await gallerist.getAttribute("aria-label")));
+}
 
 await page.goto(origin + "/index.html#/game/7-wonders-duel", { waitUntil: "domcontentloaded" });
 await page.locator('#chapter-pager [aria-label="On your turn"]').click();
@@ -197,6 +291,7 @@ if ((await catanNote.getAttribute("open")) === null) await catanNote.locator("su
 check("catan shows the robber quote", (await page.locator("#mistakes-slot").innerText()).includes("A hex with the robber does not produce resources"));
 await page.locator("#mistakes-slot").screenshot({ path: path.join(shots, "mistakes-catan-phone.png") });
 
+check("no production exec request", execSeen.length === 0);
 await browser.close();
 server.close();
 
