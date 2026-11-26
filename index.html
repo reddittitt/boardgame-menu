@@ -4125,29 +4125,84 @@
     cursor:pointer;
   }
   #first-player-go { background:#007aff; color:#fff; border-color:#007aff; }
-  .fp-picker {
-    width:min(520px, calc(100vw - 24px));
-    max-height:min(92vh, 760px);
-    margin:auto;
+  dialog.fp-picker,
+  dialog.fp-picker:modal {
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    height:100dvh;
+    max-width:none;
+    max-height:100dvh;
+    margin:0;
     padding:0;
     border:0;
-    border-radius:16px;
+    border-radius:0;
     background:var(--bg);
     color:inherit;
+    overflow:hidden;
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  .fp-picker,
+  .fp-picker * {
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
   }
   .fp-picker::backdrop { background:rgba(0,0,0,0.5); }
-  .fp-picker-card { padding:14px; }
-  .fp-picker h2 { margin:0 0 6px; font-size:1.25rem; }
-  .fp-help, .fp-alt { margin:0 0 8px; font-size:16px; }
-  .fp-pad {
+  .fp-picker-card {
     position:relative;
-    min-height:240px;
-    border-radius:12px;
-    border:1px dashed var(--border);
-    background:color-mix(in srgb, var(--card) 80%, var(--bg));
+    width:100%;
+    height:100%;
+    min-height:100%;
+    padding:0;
     touch-action:none;
     overflow:hidden;
   }
+  .fp-chrome,
+  .fp-chrome * {
+    pointer-events:none;
+  }
+  .fp-chrome {
+    position:absolute;
+    z-index:3;
+    left:0;
+    right:0;
+    top:0;
+    padding:max(12px, env(safe-area-inset-top)) 14px 0;
+  }
+  .fp-picker h2 { margin:0 0 6px; font-size:1.25rem; }
+  .fp-help, .fp-alt { margin:0 0 8px; font-size:16px; }
+  .fp-pad {
+    position:absolute;
+    inset:0;
+    min-height:100%;
+    border:0;
+    border-radius:0;
+    background:color-mix(in srgb, var(--card) 80%, var(--bg));
+    touch-action:none;
+    overflow:hidden;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  .fp-actions,
+  .fp-actions * {
+    pointer-events:none;
+  }
+  .fp-actions {
+    position:absolute;
+    z-index:3;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:0 14px max(12px, env(safe-area-inset-bottom));
+  }
+  .fp-actions button,
+  .fp-actions button * { pointer-events:auto; }
   .fp-finger {
     position:absolute;
     width:64px;
@@ -4164,17 +4219,39 @@
     font-size:20px;
     box-shadow:0 6px 16px rgba(0,0,0,0.25);
     pointer-events:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
   }
+  .fp-finger,
+  .fp-finger * { pointer-events:none; }
   .fp-finger--winner {
     background:#34c759;
     transform:scale(1.12);
     z-index:2;
   }
   .fp-count {
-    margin:8px 0 0;
-    font-size:2rem;
+    position:absolute;
+    z-index:3;
+    left:0;
+    right:0;
+    top:42%;
+    margin:0;
+    font-size:4rem;
     font-weight:800;
     text-align:center;
+    pointer-events:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  .fp-count,
+  .fp-count * { pointer-events:none; }
+  .fp-count[hidden] { display:none; }
+  .fp-count--note {
+    top:auto;
+    bottom:calc(64px + env(safe-area-inset-bottom));
+    font-size:1.25rem;
   }
   .teach-progress-row {
     display:flex;
@@ -4292,12 +4369,14 @@
 
 <dialog id="first-player-picker" class="fp-picker" aria-labelledby="first-player-picker-title">
   <div class="fp-picker-card">
-    <h2 id="first-player-picker-title">Pick a first player</h2>
-    <p class="fp-help" id="fp-help">Everyone put a finger on the screen. On a desktop, tap once for each player.</p>
     <div id="first-player-pad" class="fp-pad"></div>
-    <p id="first-player-count" class="fp-count" hidden></p>
-    <p id="first-player-alt" class="fp-alt" hidden></p>
-    <div>
+    <div class="fp-chrome">
+      <h2 id="first-player-picker-title">Pick a first player</h2>
+      <p class="fp-help" id="fp-help">Everyone put a finger down and hold still. On a desktop, tap once for each player, then Pick.</p>
+      <p id="first-player-alt" class="fp-alt" hidden></p>
+    </div>
+    <p id="first-player-count" class="fp-count" hidden aria-live="polite"></p>
+    <div class="fp-actions">
       <button type="button" id="first-player-go">Pick</button>
       <button type="button" id="first-player-again" hidden>Again</button>
       <button type="button" id="first-player-close">Close</button>
@@ -159542,6 +159621,7 @@
     /* catalog-filter-parse:end */
 
   var TONIGHT_KEY = "bgq_play_tonight";
+  var TONIGHT_WEIGHT_ORDER = ["light", "medium-light", "medium", "medium-heavy", "heavy"];
   var TONIGHT_WEIGHT_LABELS = {
     light: "Light",
     "medium-light": "Medium-light",
@@ -159550,8 +159630,23 @@
     heavy: "Heavy"
   };
 
+  function tonightWeights(value) {
+    var list = Array.isArray(value) ? value : (value ? [value] : []);
+    var seen = {};
+    var next = [];
+    list.forEach(function (item) {
+      var band = String(item || "");
+      if (!WEIGHT_PICKS[band] || seen[band]) return;
+      seen[band] = true;
+      next.push(band);
+    });
+    next.sort(function (a, b) {
+      return TONIGHT_WEIGHT_ORDER.indexOf(a) - TONIGHT_WEIGHT_ORDER.indexOf(b);
+    });
+    return next;
+  }
   function defaultTonight() {
-    return { players: "", time: "", weight: "", who: [], slugs: [], key: "" };
+    return { players: "", time: "", weight: [], who: [], slugs: [], key: "" };
   }
   function readTonight() {
     var next = defaultTonight();
@@ -159560,7 +159655,7 @@
       if (!raw || typeof raw !== "object") return next;
       if (PLAYER_PICKS[raw.players]) next.players = String(raw.players);
       if (TIME_PICKS[raw.time]) next.time = String(raw.time);
-      if (WEIGHT_PICKS[raw.weight]) next.weight = String(raw.weight);
+      next.weight = tonightWeights(raw.weight);
       next.who = orderOwners(Array.isArray(raw.who) ? raw.who : []);
       if (Array.isArray(raw.slugs)) {
         next.slugs = raw.slugs.filter(function (slug) { return !!(DATA[slug]); }).slice(0, 5);
@@ -159585,7 +159680,8 @@
     if (!game) return false;
     if (picks.players && !countIncluded(playerSpan(game.players), picks.players)) return false;
     if (picks.time && !timeHits(playMinutes(game, parseInt(picks.players, 10) || 0), picks.time)) return false;
-    if (picks.weight && weightBand(game.weight) !== picks.weight) return false;
+    var weights = tonightWeights(picks.weight);
+    if (weights.length && weights.indexOf(weightBand(game.weight)) === -1) return false;
     if (!ownersHit(game, picks.who)) return false;
     return true;
   }
@@ -159593,7 +159689,7 @@
     return [
       state.players,
       state.time,
-      state.weight,
+      tonightWeights(state.weight).join(","),
       (state.who || []).join(","),
       Object.keys(packedTonight()).sort().join(",")
     ].join("|");
@@ -159629,7 +159725,7 @@
     }).join("");
     return '<section id="play-tonight" class="play-tonight" aria-labelledby="play-tonight-title">' +
       '<h2 id="play-tonight-title">What should we play?</h2>' +
-      '<p class="play-tonight-lead">Pick a player count and a time. Weight and whose games are optional.</p>' +
+      '<p class="play-tonight-lead">Pick a player count and a time. Each weight toggles on its own. None means any weight.</p>' +
       '<div class="play-tonight-facet">' +
         '<span class="play-tonight-label" id="play-tonight-players-label">Players</span>' +
         '<div class="play-tonight-chips" role="group" aria-labelledby="play-tonight-players-label">' + players + "</div>" +
@@ -159689,7 +159785,10 @@
     Array.prototype.forEach.call(document.querySelectorAll("#play-tonight .play-tonight-chip"), function (btn) {
       var facet = btn.getAttribute("data-facet");
       var value = btn.getAttribute("data-value");
-      var on = facet === "who" ? saved.who.indexOf(value) !== -1 : saved[facet] === value;
+      var on = false;
+      if (facet === "who") on = saved.who.indexOf(value) !== -1;
+      else if (facet === "weight") on = tonightWeights(saved.weight).indexOf(value) !== -1;
+      else on = saved[facet] === value;
       btn.setAttribute("aria-pressed", on ? "true" : "false");
     });
     if (!list || !note) return;
@@ -159792,6 +159891,12 @@
         if (at === -1) saved.who.push(value);
         else saved.who.splice(at, 1);
         saved.who = orderOwners(saved.who);
+      } else if (facet === "weight") {
+        var weights = tonightWeights(saved.weight);
+        var weightAt = weights.indexOf(value);
+        if (weightAt === -1) weights.push(value);
+        else weights.splice(weightAt, 1);
+        saved.weight = tonightWeights(weights);
       } else if (saved[facet] === value) saved[facet] = "";
       else saved[facet] = value;
       saved.slugs = [];
@@ -168811,45 +168916,158 @@
       pad.appendChild(dot);
     });
   }
-  function fpPoint(event) {
+  var fpPageLocked = false;
+  var fpPageOverflow = "";
+  function fpPoint(source) {
     var pad = document.getElementById("first-player-pad");
     var box = pad.getBoundingClientRect();
+    var width = box.width || pad.clientWidth || 64;
+    var height = box.height || pad.clientHeight || 64;
     return {
-      x: Math.max(32, Math.min(box.width - 32, event.clientX - box.left)),
-      y: Math.max(32, Math.min(box.height - 32, event.clientY - box.top))
+      x: Math.max(32, Math.min(Math.max(32, width - 32), source.clientX - box.left)),
+      y: Math.max(32, Math.min(Math.max(32, height - 32), source.clientY - box.top))
     };
+  }
+  function fpFind(id) {
+    var finger = null;
+    fpLive.forEach(function (item) {
+      if (item.id === id) finger = item;
+    });
+    return finger;
+  }
+  function fpShowCount(text, note) {
+    var countEl = document.getElementById("first-player-count");
+    if (!countEl) return;
+    countEl.textContent = text || "";
+    countEl.hidden = !text;
+    countEl.classList.toggle("fp-count--note", !!note);
+  }
+  function fpAnchor() {
+    fpLive.forEach(function (finger) {
+      finger.holdX = finger.x;
+      finger.holdY = finger.y;
+    });
+  }
+  function fpArmHold() {
+    if (fpLocked) return;
+    fpClearTimer();
+    fpAnchor();
+    if (fpLive.length < 2) {
+      fpShowCount("", false);
+      return;
+    }
+    fpCountdown(3);
+  }
+  function fpOnButton(event) {
+    return !!(event.target && event.target.closest && event.target.closest("button"));
+  }
+  function fpTouches(event) {
+    return event.changedTouches ? Array.prototype.slice.call(event.changedTouches) : [];
+  }
+  function fpAddTouches(event) {
+    if (fpLocked) return;
+    var added = false;
+    fpTouches(event).forEach(function (touch) {
+      if (fpFind(touch.identifier)) return;
+      if (fpLive.length >= 8) return;
+      var at = fpPoint(touch);
+      fpLive.push({ id: touch.identifier, x: at.x, y: at.y, winner: false });
+      added = true;
+    });
+    if (!added) return;
+    fpRender();
+    fpArmHold();
+  }
+  function fpMoveTouches(event) {
+    if (fpLocked) return;
+    var render = false;
+    var restart = false;
+    fpTouches(event).forEach(function (touch) {
+      var finger = fpFind(touch.identifier);
+      if (!finger) return;
+      var at = fpPoint(touch);
+      var dx = at.x - finger.x;
+      var dy = at.y - finger.y;
+      if (dx * dx + dy * dy < 4) return;
+      finger.x = at.x;
+      finger.y = at.y;
+      render = true;
+      var hx = finger.holdX == null ? finger.x : finger.holdX;
+      var hy = finger.holdY == null ? finger.y : finger.holdY;
+      var ddx = at.x - hx;
+      var ddy = at.y - hy;
+      if (ddx * ddx + ddy * ddy > 144) restart = true;
+    });
+    if (restart) {
+      fpRender();
+      fpArmHold();
+      return;
+    }
+    if (render) fpRender();
+  }
+  function fpDropTouches(event) {
+    var gone = {};
+    fpTouches(event).forEach(function (touch) { gone[touch.identifier] = true; });
+    if (fpLocked) {
+      fpLive.forEach(function (finger) {
+        if (gone[finger.id]) finger.up = true;
+      });
+      return;
+    }
+    var before = fpLive.length;
+    fpLive = fpLive.filter(function (finger) { return !gone[finger.id]; });
+    if (fpLive.length === before) return;
+    fpRender();
+    fpArmHold();
+  }
+  function fpFit() {
+    var picker = document.getElementById("first-player-picker");
+    if (!picker) return;
+    var vv = window.visualViewport;
+    if (!vv) return;
+    picker.style.top = vv.offsetTop + "px";
+    picker.style.left = vv.offsetLeft + "px";
+    picker.style.width = vv.width + "px";
+    picker.style.height = vv.height + "px";
+  }
+  function fpLockPage(on) {
+    if (!document.body) return;
+    if (on) {
+      if (fpPageLocked) return;
+      fpPageLocked = true;
+      fpPageOverflow = document.body.style.overflow || "";
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    if (!fpPageLocked) return;
+    fpPageLocked = false;
+    document.body.style.overflow = fpPageOverflow;
   }
   function fpResetWinner() {
     fpLocked = false;
     fpAll().forEach(function (finger) { finger.winner = false; });
-    var count = document.getElementById("first-player-count");
+    fpShowCount("", false);
     var again = document.getElementById("first-player-again");
-    if (count) { count.hidden = true; count.textContent = ""; }
     if (again) again.hidden = true;
     fpRender();
   }
   function fpFinish() {
     var fingers = fpAll();
-    var countEl = document.getElementById("first-player-count");
     if (fingers.length < 2) {
-      if (countEl) {
-        countEl.hidden = false;
-        countEl.textContent = "Add at least two players.";
-      }
+      fpShowCount("Add at least two players.", true);
       return;
     }
     fingers.forEach(function (finger) { finger.winner = false; });
     fingers[cryptoIndex(fingers.length)].winner = true;
     fpLocked = true;
+    fpClearTimer();
     hapticTap();
-    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    fpShowCount("", false);
     var again = document.getElementById("first-player-again");
     if (again) again.hidden = false;
     fpRender();
   }
   function fpCountdown(step) {
-    var countEl = document.getElementById("first-player-count");
-    if (!countEl) return;
     if (fpAll().length < 2) {
       fpFinish();
       return;
@@ -168858,8 +169076,7 @@
       fpFinish();
       return;
     }
-    countEl.hidden = false;
-    countEl.textContent = String(step);
+    fpShowCount(String(step), false);
     fpTimer = setTimeout(function () { fpCountdown(step - 1); }, 400);
   }
   function openFirstPlayerPicker() {
@@ -168867,6 +169084,7 @@
     if (tonight && tonight.open && typeof tonight.close === "function") tonight.close();
     var picker = document.getElementById("first-player-picker");
     if (!picker) return;
+    if (picker.parentNode !== document.body) document.body.appendChild(picker);
     fpLive = [];
     fpTaps = [];
     fpLocked = false;
@@ -168884,35 +169102,70 @@
     }
     var again = document.getElementById("first-player-again");
     if (again) again.hidden = true;
-    var countEl = document.getElementById("first-player-count");
-    if (countEl) { countEl.hidden = true; countEl.textContent = ""; }
+    fpShowCount("", false);
     fpRender();
+    fpLockPage(true);
+    fpFit();
     if (typeof picker.showModal === "function") {
       try { picker.showModal(); } catch (err) { picker.setAttribute("open", ""); }
     } else picker.setAttribute("open", "");
+    fpFit();
   }
   function bindFirstPlayerPicker() {
     var picker = document.getElementById("first-player-picker");
     var pad = document.getElementById("first-player-pad");
     if (!picker || !pad || picker.getAttribute("data-bound") === "1") return;
     picker.setAttribute("data-bound", "1");
+    if (picker.parentNode !== document.body) document.body.appendChild(picker);
+    window.addEventListener("resize", fpFit);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", fpFit);
+      window.visualViewport.addEventListener("scroll", fpFit);
+    }
     document.addEventListener("click", function (event) {
       var open = event.target && event.target.closest ? event.target.closest("#first-player-open") : null;
       if (open) openFirstPlayerPicker();
     });
+    picker.addEventListener("touchstart", function (event) {
+      if (fpOnButton(event)) return;
+      if (event.cancelable) event.preventDefault();
+      fpAddTouches(event);
+    }, { passive: false, capture: true });
+    picker.addEventListener("touchmove", function (event) {
+      if (fpOnButton(event)) return;
+      if (event.cancelable) event.preventDefault();
+      fpMoveTouches(event);
+    }, { passive: false, capture: true });
+    picker.addEventListener("touchend", function (event) {
+      if (!fpOnButton(event) && event.cancelable) event.preventDefault();
+      fpDropTouches(event);
+    }, { passive: false });
+    picker.addEventListener("touchcancel", function (event) {
+      if (!fpOnButton(event) && event.cancelable) event.preventDefault();
+      fpDropTouches(event);
+    }, { passive: false });
+    ["gesturestart", "gesturechange", "gestureend"].forEach(function (type) {
+      picker.addEventListener(type, function (event) {
+        event.preventDefault();
+      }, { passive: false });
+    });
+    picker.addEventListener("selectstart", function (event) { event.preventDefault(); });
+    picker.addEventListener("contextmenu", function (event) { event.preventDefault(); });
+    picker.addEventListener("pointerdown", function (event) {
+      if (event.pointerType !== "touch" || !event.isTrusted) return;
+      if (fpOnButton(event)) return;
+      try { pad.setPointerCapture(event.pointerId); } catch (err) {}
+    });
     pad.addEventListener("pointerdown", function (event) {
-      if (fpLocked) return;
-      if (event.pointerType === "touch") {
-        var at = fpPoint(event);
-        fpLive.push({ id: event.pointerId, x: at.x, y: at.y, winner: false });
-        fpClearTimer();
-        fpRender();
-      }
+      if (fpLocked || event.pointerType !== "touch" || event.isTrusted) return;
+      var at = fpPoint(event);
+      fpLive.push({ id: event.pointerId, x: at.x, y: at.y, winner: false });
+      fpClearTimer();
+      fpRender();
     });
     pad.addEventListener("pointermove", function (event) {
-      if (event.pointerType !== "touch" || fpLocked) return;
-      var finger = null;
-      fpLive.forEach(function (item) { if (item.id === event.pointerId) finger = item; });
+      if (event.pointerType !== "touch" || fpLocked || event.isTrusted) return;
+      var finger = fpFind(event.pointerId);
       if (!finger) return;
       var at = fpPoint(event);
       finger.x = at.x;
@@ -168921,18 +169174,22 @@
     });
     pad.addEventListener("pointerup", function (event) {
       if (event.pointerType === "touch") {
-        if (fpLocked) return;
+        if (fpLocked || event.isTrusted) return;
         fpLive = fpLive.filter(function (item) { return item.id !== event.pointerId; });
         fpClearTimer();
         fpRender();
         return;
       }
-      if (fpLocked || event.pointerType === "touch") return;
+      if (fpLocked) return;
       var at = fpPoint(event);
       fpSeq += 1;
       fpTaps.push({ id: "tap-" + fpSeq, x: at.x, y: at.y, winner: false });
       fpClearTimer();
       fpRender();
+    });
+    picker.addEventListener("close", function () {
+      fpClearTimer();
+      fpLockPage(false);
     });
     document.getElementById("first-player-go").addEventListener("click", function () {
       fpClearTimer();
@@ -168940,13 +169197,16 @@
       fpCountdown(3);
     });
     document.getElementById("first-player-again").addEventListener("click", function () {
+      fpLive = fpLive.filter(function (finger) { return !finger.up; });
       fpClearTimer();
       fpResetWinner();
-      fpCountdown(3);
+      if (fpLive.length >= 2) fpArmHold();
+      else fpCountdown(3);
     });
     document.getElementById("first-player-close").addEventListener("click", function () {
       fpClearTimer();
-      if (typeof picker.close === "function") picker.close();
+      fpLockPage(false);
+      if (typeof picker.close === "function" && picker.open) picker.close();
       else picker.removeAttribute("open");
     });
   }

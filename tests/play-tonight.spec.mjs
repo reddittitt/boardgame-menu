@@ -176,6 +176,64 @@ test("packed games lead the list only after unlock", async function ({ page }) {
   expect(nightSlugs.slice(0, nightSplit).sort()).toEqual(["kingdomino", "patchwork"]);
 });
 
+test("weight choices toggle independently and stay for the session", async function ({ page }) {
+  await page.goto("/#/");
+  const tonight = await openTonight(page);
+  await tonight.getByRole("button", { name: "Tonight, 2 players", exact: true }).click();
+  await tonight.getByRole("button", { name: "Tonight, under 30 minutes", exact: true }).click();
+  const light = tonight.getByRole("button", { name: "Tonight, light weight", exact: true });
+  const medium = tonight.getByRole("button", { name: "Tonight, medium weight", exact: true });
+  const mid = tonight.getByRole("button", { name: "Tonight, medium-light weight", exact: true });
+  await light.click();
+  await medium.click();
+  await expect(light).toHaveAttribute("aria-pressed", "true");
+  await expect(medium).toHaveAttribute("aria-pressed", "true");
+  await expect(mid).toHaveAttribute("aria-pressed", "false");
+  expect(await page.evaluate(function () {
+    return JSON.parse(sessionStorage.getItem("bgq_play_tonight")).weight;
+  })).toEqual(["light", "medium"]);
+
+  async function fits(slug) {
+    return page.evaluate(function (name) {
+      return window.BGQuickPlayTonight.fits(name);
+    }, slug);
+  }
+  expect(await fits("codenames")).toBe(true);
+  expect(await fits("turing-machine")).toBe(true);
+  expect(await fits("hive-pocket")).toBe(false);
+
+  const shown = await page.locator("#play-tonight-list .play-tonight-meta").allInnerTexts();
+  expect(shown.length).toBeGreaterThan(0);
+  shown.forEach(function (text) {
+    expect(["Light", "Medium"]).toContain(text.split("·").pop().trim());
+  });
+
+  await light.click();
+  await expect(light).toHaveAttribute("aria-pressed", "false");
+  await expect(medium).toHaveAttribute("aria-pressed", "true");
+  expect(await fits("codenames")).toBe(false);
+  expect(await fits("turing-machine")).toBe(true);
+  expect(await fits("hive-pocket")).toBe(false);
+
+  await medium.click();
+  await expect(medium).toHaveAttribute("aria-pressed", "false");
+  expect(await fits("codenames")).toBe(true);
+  expect(await fits("turing-machine")).toBe(true);
+  expect(await fits("hive-pocket")).toBe(true);
+
+  await light.click();
+  await medium.click();
+  await page.locator("#play-tonight-close").click();
+  await page.reload();
+  await openTonight(page);
+  await expect(page.getByRole("button", { name: "Tonight, light weight", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Tonight, medium weight", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Tonight, 2 players", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Tonight, under 30 minutes", exact: true })).toHaveAttribute("aria-pressed", "true");
+  expect(await fits("hive-pocket")).toBe(false);
+  expect(await fits("codenames")).toBe(true);
+});
+
 test("phone screenshots of what should we play", async function ({ page }, testInfo) {
   test.skip(testInfo.project.name !== "phone", "phone screenshots only");
   await page.goto("/#/");
@@ -186,6 +244,12 @@ test("phone screenshots of what should we play", async function ({ page }, testI
   const dir = "/opt/cursor/artifacts";
   fs.mkdirSync(dir, { recursive: true });
   await page.locator("#play-tonight-dialog").screenshot({ path: dir + "/play_tonight_home_phone.png" });
+  await tonight.getByRole("button", { name: "Tonight, light weight", exact: true }).click();
+  await tonight.getByRole("button", { name: "Tonight, medium weight", exact: true }).click();
+  await expect(tonight.getByRole("button", { name: "Tonight, light weight", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(tonight.getByRole("button", { name: "Tonight, medium weight", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#play-tonight-list a").first()).toBeVisible();
+  await page.locator("#play-tonight-dialog").screenshot({ path: dir + "/play_tonight_weights_phone.png" });
   await page.goto("/#/night?players=4&time=30-60");
   await expect(page.locator("#gn-picks-list a")).toHaveCount(5);
   await page.locator("#gn-picks").screenshot({ path: dir + "/play_tonight_night_phone.png" });
