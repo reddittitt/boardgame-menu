@@ -200,7 +200,7 @@ assert(stacks && stacks.text.includes("15 tiles each"), "suburbia bullet wording
 assert(stacks.source && stacks.source.page === 2, "suburbia stacks chip page");
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-assert(sw.includes('var VERSION = "2026.11.21.26";'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.21.27";'), "service worker version");
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 assert(originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt), "cross-origin fetch returns before other work");
