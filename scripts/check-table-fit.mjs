@@ -50,7 +50,15 @@ const arcs = {
 check("rulebook time wins for that count", fns.formatPlayTime(arcs, 2).text, "about 30 min per player");
 check("rulebook source", fns.formatPlayTime(arcs, 2).source, "rulebook");
 check("count time is marked", fns.formatPlayTime(arcs, 2).counted, true);
-check("no count uses BGG", fns.formatPlayTime(arcs, null).text, "60–120 min");
+check("uniform rate shows without a count", fns.formatPlayTime(arcs, null), { text: "about 30 min per player", source: "rulebook", counted: false });
+const mixed = {
+  time: "60–120",
+  bggTime: { min: 60, max: 120 },
+  playTimeByPlayerCount: { "2": "30 min", "4": "60 min" },
+  playTimeSource: "rulebook"
+};
+check("mixed counts stay on BGG without a count", fns.formatPlayTime(mixed, null).text, "60–120 min");
+check("mixed count stays specific", fns.formatPlayTime(mixed, 4), { text: "60 min", source: "rulebook", counted: true });
 
 const brink = {
   time: "90–120",
