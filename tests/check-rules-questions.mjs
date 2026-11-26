@@ -96,7 +96,7 @@ check("container go deeper present", (await page.locator("#go-deeper").count()) 
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
 check("worker ignores other origins", /url\.origin !== self\.location\.origin\) return;/.test(sw));
-check("cache version bumped", /var VERSION = "2026\.11\.21\.27"/.test(sw));
+check("cache version bumped", /var VERSION = "2026\.11\.21\.28"/.test(sw));
 
 await browser.close();
 server.close();
