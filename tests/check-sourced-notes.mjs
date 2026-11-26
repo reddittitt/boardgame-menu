@@ -90,6 +90,20 @@ const perPlayerTimes = [
   { slug: "star-wars-villainous", text: "20 min per player", counts: ["2", "3", "4"], index: "star-wars-villainous", must: ["2 to 4 Players", "20 Minutes per Player"] },
   { slug: "marvel-villainous", text: "20 min per player", counts: ["2", "3", "4"], index: "marvel-villainous", must: ["2 to 4 Players", "20 Minutes per Player"] }
 ];
+const overallTimesBatch2 = [
+  { slug: "onitama", text: "usually 15 min", index: "onitama", must: ["Each game is quick, usually 15 minutes in length."] },
+  { slug: "ravine", text: "20 min", index: "ravine", must: ["3-6 PLAYERS 20 MINUTES"] },
+  { slug: "shallow-regrets", text: "15 min", index: "shallow-regrets", must: ["2-3 PLAYERS | AGES 8+ | 15 MINUTES"] },
+  { slug: "kinfire-delve-vainglorys-grotto", text: "around 1 hour", index: "kinfire-delve-vainglorys-grotto", must: ["Kinfire Delve: Vainglory\u2019s Grotto is a game for 1-2 players that takes around 1 hour to play."] },
+  { slug: "dont-l-l-a-m-a-dice", text: "about 20 min", index: "dont-l-l-a-m-a-dice", must: ["Playing time: about 20 minutes"] },
+  { slug: "wits-and-wagers", text: "25 min", index: "wits-and-wagers", must: ["Playing Time: 25 minutes"] },
+  { slug: "zooloretto", text: "45 min", index: "zooloretto", must: ["playing time 45 minutes"] },
+  { slug: "spirit-island", text: "about 90\u2013120 min", index: "spirit-island", must: ["Spirit Island takes about 90-120 minutes to play"] },
+  { slug: "scythe", text: "115 min", index: "scythe", must: ["1-5 PLAYERS \u2022 115 MINUTES"] },
+  { slug: "mr-jack-pocket", text: "about 15 min", index: "mr-jack-pocket", must: ["A game lasts about fifteen minutes and takes a maximum of eight turns."] },
+  { slug: "no-thanks", text: "about 20 min", index: "no-thanks", must: ["about 20 minutes"] },
+  { slug: "monza", text: "approximately 15 min", index: "monza", must: ["Length of the game: approximately 15 minutes"] }
+];
 
 function rulebookHas(index, must) {
   return indexPages(index).some((page) => {
@@ -107,6 +121,12 @@ for (const row of perPlayerTimes) {
   const map = game && game.playTimeByPlayerCount;
   check(row.slug + " per-player rule on every count", !!map && game.playTimeSource === "rulebook" && row.counts.every((count) => map[count] === row.text) && Object.keys(map).length === row.counts.length);
   check(row.slug + " rulebook states the per-player time", rulebookHas(row.index, row.must));
+}
+check("twelve more rulebook durations", overallTimesBatch2.length === 12);
+for (const row of overallTimesBatch2) {
+  const game = games[row.slug];
+  check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
+  check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must));
 }
 
 const quoteSpecs = [
@@ -397,7 +417,7 @@ for (const row of firstGamesBatch2) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.23";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.24";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -620,6 +640,45 @@ for (const row of firstGamesBatch2) {
     }
   }
 }
+
+async function overallHeader(slug, text, counts) {
+  await page.goto(origin + "/index.html#/game/" + slug, { waitUntil: "domcontentloaded" });
+  await page.waitForSelector("#play-time-value");
+  const value = page.locator("#play-time-value");
+  const source = page.locator("#play-time-source");
+  const head = page.locator(".detail-head");
+  const title = (await page.locator(".detail-head .title").innerText()).trim();
+  check(slug + " header is on screen", await head.isVisible() && title.length > 0);
+  check(slug + " shows the rulebook duration", (await value.innerText()).trim() === text && await value.isVisible());
+  check(slug + " labels the rulebook", ((await source.innerText()).trim().toLowerCase()) === "rulebook" && await source.isVisible());
+  check(slug + " is not a count time", !((await value.getAttribute("class")) || "").includes("is-count-time"));
+  await head.screenshot({ path: path.join(shots, "play-time-" + slug + "-phone.png") });
+  const buttons = page.locator(".pc-btn[data-count]");
+  const buttonCount = await buttons.count();
+  if (slug === "onitama") {
+    check("onitama has no player-count buttons", buttonCount === 0);
+    check("onitama play time is not blank", (await value.innerText()).trim().length > 0);
+  }
+  const picks = counts && counts.length ? counts : [];
+  if (!picks.length && buttonCount) {
+    picks.push(await buttons.first().getAttribute("data-count"));
+  }
+  if (counts && counts.length) check(slug + " has player-count buttons", buttonCount > 0);
+  for (const count of picks) {
+    await page.locator('.pc-btn[data-count="' + count + '"]').click();
+    check(slug + " keeps the overall time at " + count, (await value.innerText()).trim() === text && await value.isVisible());
+    check(slug + " still labels the rulebook at " + count, ((await source.innerText()).trim().toLowerCase()) === "rulebook");
+    check(slug + " stays an overall time at " + count, !((await value.getAttribute("class")) || "").includes("is-count-time"));
+    check(slug + " selected " + count, (await page.locator('.pc-btn[data-count="' + count + '"]').getAttribute("data-active")) === "true");
+    await head.screenshot({ path: path.join(shots, "play-time-" + slug + "-" + count + "-phone.png") });
+    const bar = page.locator("#table-bar");
+    if (await bar.count()) await bar.screenshot({ path: path.join(shots, "play-time-" + slug + "-buttons-" + count + "-phone.png") });
+  }
+}
+await overallHeader("onitama", "usually 15 min");
+await overallHeader("spirit-island", "about 90\u2013120 min");
+await overallHeader("scythe", "115 min");
+await overallHeader("kinfire-delve-vainglorys-grotto", "around 1 hour", ["1", "2"]);
 
 check("no production exec request", execSeen.length === 0);
 await browser.close();
