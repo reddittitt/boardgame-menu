@@ -163284,6 +163284,19 @@
     if (good && good !== best) parts.push("Good " + good);
     return parts.join(" \u00b7 ");
   }
+  function uniformPlayTime(map) {
+    if (!map || typeof map !== "object" || Array.isArray(map)) return "";
+    var keys = Object.keys(map);
+    if (!keys.length) return "";
+    var shared = "";
+    for (var i = 0; i < keys.length; i++) {
+      var value = String(map[keys[i]] == null ? "" : map[keys[i]]).trim();
+      if (!value) return "";
+      if (!shared) shared = value;
+      else if (value !== shared) return "";
+    }
+    return shared;
+  }
   function formatPlayTime(game, count) {
     var map = game && game.playTimeByPlayerCount;
     var specific = "";
@@ -163293,6 +163306,13 @@
     if (specific) {
       var source = game.playTimeSource ? String(game.playTimeSource).trim() : "";
       return { text: specific, source: source, counted: true };
+    }
+    if (count == null) {
+      var shared = uniformPlayTime(map);
+      if (shared) {
+        var sharedSource = game.playTimeSource ? String(game.playTimeSource).trim() : "";
+        return { text: shared, source: sharedSource, counted: false };
+      }
     }
     var overall = game && game.rulebookTime != null ? String(game.rulebookTime).trim() : "";
     if (overall) {

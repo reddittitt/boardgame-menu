@@ -269,8 +269,11 @@ if (galleristCounts) {
   check("gallerist names 4 players", (await gallerist.getAttribute("aria-label") || "") === "30 min per player at 4 players");
   await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-the-gallerist-4-phone.png") });
 } else {
+  check("gallerist shows the rulebook rate", (await gallerist.innerText()).trim() === "30 min per player");
+  check("gallerist labels the rulebook", ((await page.locator("#play-time-source").innerText()).trim().toLowerCase()) === "rulebook");
   check("gallerist does not guess a count", !((await gallerist.getAttribute("class")) || "").includes("is-count-time"));
   check("gallerist has no count in the name", !(await gallerist.getAttribute("aria-label")));
+  await page.locator(".game-meta-bar").screenshot({ path: path.join(shots, "play-time-the-gallerist-phone.png") });
 }
 
 await page.goto(origin + "/index.html#/game/7-wonders-duel", { waitUntil: "domcontentloaded" });
