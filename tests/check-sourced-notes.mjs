@@ -104,6 +104,20 @@ const overallTimesBatch2 = [
   { slug: "no-thanks", text: "about 20 min", index: "no-thanks", must: ["about 20 minutes"] },
   { slug: "monza", text: "approximately 15 min", index: "monza", must: ["Length of the game: approximately 15 minutes"] }
 ];
+const overallTimesBatch3 = [
+  { slug: "photosynthesis", text: "45\u201360 min", index: "photosynthesis", page: 1, must: ["45-60 Minutes"] },
+  { slug: "small-world", text: "40\u201380 min", index: "small-world", page: 1, must: ["40-80 minutes"] },
+  { slug: "worlds-fair-1893", text: "40 min", index: "worlds-fair-1893", page: 1, must: ["2-4 Players | 40 Minutes"] },
+  { slug: "colosseum", text: "60\u201390 min", index: "colosseum", page: 1, must: ["60\u201390 Minutes"] },
+  { slug: "iberia", text: "45 min", index: "iberia", page: 1, must: ["45 minutes."] },
+  { slug: "whale-riders", text: "45 min", index: "whale-riders", page: 1, must: ["2-6 players / 45 minutes"] },
+  { slug: "take-5", text: "about 45 min", index: "take-5", page: 1, must: ["2\u201310 players about 45 minutes"] },
+  { slug: "word-on-the-street", text: "20\u201330 min", index: "word-on-the-street", page: 1, must: ["2\u201310 Players 20\u201330 Minutes"] },
+  { slug: "new-york-1901", text: "30\u201360 min", index: "new-york-1901", page: 1, must: ["30-60 Minutes"] },
+  { slug: "race-to-the-treasure", text: "20 min", index: "race-to-the-treasure", page: 1, must: ["2-4 players 20 minutes"] },
+  { slug: "the-ancient-world-second-edition", text: "90 min", index: "the-ancient-world-second-edition", page: 2, must: ["2-4 Players 90 Minutes"] },
+  { slug: "rhino-hero", text: "approx. 5\u201315 min", index: "rhino-hero", page: 2, must: ["approx. 5 - 15 minutes"] }
+];
 
 function rulebookHas(index, must) {
   return indexPages(index).some((page) => {
@@ -127,6 +141,12 @@ for (const row of overallTimesBatch2) {
   const game = games[row.slug];
   check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
   check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must));
+}
+check("twelve rulebook durations in batch 3", overallTimesBatch3.length === 12);
+for (const row of overallTimesBatch3) {
+  const game = games[row.slug];
+  check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
+  check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must) && pageBlob(row.index, row.page).includes(row.must[0]));
 }
 
 const quoteSpecs = [
@@ -417,7 +437,7 @@ for (const row of firstGamesBatch2) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.24";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.25";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -679,6 +699,10 @@ await overallHeader("onitama", "usually 15 min");
 await overallHeader("spirit-island", "about 90\u2013120 min");
 await overallHeader("scythe", "115 min");
 await overallHeader("kinfire-delve-vainglorys-grotto", "around 1 hour", ["1", "2"]);
+await overallHeader("photosynthesis", "45\u201360 min", ["2"]);
+await overallHeader("worlds-fair-1893", "40 min", ["4"]);
+await overallHeader("rhino-hero", "approx. 5\u201315 min", ["2"]);
+await overallHeader("colosseum", "60\u201390 min");
 
 check("no production exec request", execSeen.length === 0);
 await browser.close();
