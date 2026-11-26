@@ -118,6 +118,20 @@ const overallTimesBatch3 = [
   { slug: "the-ancient-world-second-edition", text: "90 min", index: "the-ancient-world-second-edition", page: 2, must: ["2-4 Players 90 Minutes"] },
   { slug: "rhino-hero", text: "approx. 5\u201315 min", index: "rhino-hero", page: 2, must: ["approx. 5 - 15 minutes"] }
 ];
+const overallTimesBatch4 = [
+  { slug: "horrified", text: "60 min", index: "horrified", page: 1, must: ["1 TO 5 PLAYERS \u2022 AGES 10 AND UP \u2022 60 MINUTES"] },
+  { slug: "gingerbread-house", text: "30\u201345 min", index: "gingerbread-house", page: 1, must: ["Playing time: 30 to 45 minutes"] },
+  { slug: "icecool2", text: "30 min", index: "icecool2", page: 2, must: ["with a playing time of 30 minutes"] },
+  { slug: "kings-forge", text: "60 min", index: "kings-forge", page: 2, must: ["2-4 players 60 minutes"] },
+  { slug: "medici", text: "60 min", index: "medici", page: 1, must: ["60 minutes to play"] },
+  { slug: "trains", text: "45 min", index: "trains", page: 2, must: ["Play Time: 45 minutes"] },
+  { slug: "viral", text: "60\u201390 min", index: "viral", page: 2, must: ["incubating for 60 to 90 minutes"] },
+  { slug: "the-grizzled", text: "roughly 30 min", index: "the-grizzled", page: 2, must: ["with a length of roughly 30 minutes"] },
+  { slug: "tybor-the-builder", text: "about 30 min", index: "tybor-the-builder", page: 1, must: ["Playing time: ~30 minutes"] },
+  { slug: "archaeology-the-new-expedition", text: "20 min", index: "archaeology-the-new-expedition", page: 2, must: ["playing time of 20 minutes"] },
+  { slug: "blokus-3d", text: "typically 15\u201320 min", index: "blokus-3d", page: 1, must: ["Games typically last 15 to 20 minutes."] },
+  { slug: "blokus-trigon", text: "typically 20\u201330 min", index: "blokus-trigon", page: 1, must: ["Games typically last 20 to 30 minutes."] }
+];
 
 function rulebookHas(index, must) {
   return indexPages(index).some((page) => {
@@ -144,6 +158,12 @@ for (const row of overallTimesBatch2) {
 }
 check("twelve rulebook durations in batch 3", overallTimesBatch3.length === 12);
 for (const row of overallTimesBatch3) {
+  const game = games[row.slug];
+  check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
+  check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must) && pageBlob(row.index, row.page).includes(row.must[0]));
+}
+check("twelve rulebook durations in batch 4", overallTimesBatch4.length === 12);
+for (const row of overallTimesBatch4) {
   const game = games[row.slug];
   check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
   check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must) && pageBlob(row.index, row.page).includes(row.must[0]));
@@ -437,7 +457,7 @@ for (const row of firstGamesBatch2) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.25";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.26";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -703,6 +723,10 @@ await overallHeader("photosynthesis", "45\u201360 min", ["2"]);
 await overallHeader("worlds-fair-1893", "40 min", ["4"]);
 await overallHeader("rhino-hero", "approx. 5\u201315 min", ["2"]);
 await overallHeader("colosseum", "60\u201390 min");
+await overallHeader("horrified", "60 min");
+await overallHeader("medici", "60 min", ["2"]);
+await overallHeader("blokus-3d", "typically 15\u201320 min");
+await overallHeader("gingerbread-house", "30\u201345 min", ["2"]);
 
 check("no production exec request", execSeen.length === 0);
 await browser.close();
