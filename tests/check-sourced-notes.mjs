@@ -293,8 +293,111 @@ for (const row of firstGames) {
   });
 }
 
+
+const firstGamesBatch2 = [
+  {
+    slug: "7-wonders-second-edition",
+    bullets: [
+      { page: 4, text: "At the start of your first game, we recommend paying attention to everyone’s actions, playing one after another, to familiarize yourself with the game.", query: "we recommend paying attention to everyone’s actions" }
+    ]
+  },
+  {
+    slug: "root",
+    bullets: [
+      { page: 4, text: "If any players are new to the game, use the Standard Setup (5.1) If everyone has played and you want more variety, use the Advanced Setup (Appendix A).", query: "If any players are new to the game" }
+    ]
+  },
+  {
+    slug: "targi",
+    bullets: [
+      { page: 1, text: "During the first game, rather than learning the symbols before playing the game, you can simply place the cards with the back sides facing up to show the writing.", query: "place the cards with the back sides facing up" }
+    ]
+  },
+  {
+    slug: "sniper-elite-the-board-game",
+    bullets: [
+      { page: 4, text: "If anyone at the table is playing for the first time, we suggest using the Launch Facility map.", query: "we suggest using the Launch Facility map." },
+      { page: 4, text: "For your first game you may want to assign loadout cards and specialists at random, until you learn what cards suit your play style.", query: "assign loadout cards and specialists at random" }
+    ]
+  },
+  {
+    slug: "oath",
+    bullets: [
+      { page: 2, text: "If you are playing for the first time, use the setup in the Playbook instead.", query: "use the setup in the Playbook instead." }
+    ]
+  },
+  {
+    slug: "sky-team",
+    bullets: [
+      { page: 3, text: "NOTE: This is the setup for the basic game. All other components not mentioned here (in the closed compartment) are part of the game’s advanced modules; you can leave these in the box for now.", query: "you can leave these in the box for now." }
+    ]
+  },
+  {
+    slug: "turing-machine",
+    bullets: [
+      { page: 2, text: "Choose a Problem to solve (on the next page). Numbers are introductory problems, perfect for new players.", query: "introductory problems, perfect for new players" }
+    ]
+  },
+  {
+    slug: "celestia",
+    bullets: [
+      { page: 7, text: "Variant Beginner Adventurers The Power cards are discarded and will not be used in the game. The Magic Spyglass cards are discarded, too. Nevertheless, the Turbo cards are used. The end of the game is different: At the beginning of a new journey, players check the number of different Treasure cards they own. The game ends as soon as a player has 5 different types of treasure. Then the points are counted as in the normal game.", query: "The Power cards are discarded and will not be used in the game" }
+    ]
+  },
+  {
+    slug: "chronicles-of-crime",
+    bullets: [
+      { page: 4, text: "Try the short tutorial investigation to get familiar with the game. Instructions are explained in this scenario to understand how the game works.", query: "Try the short tutorial investigation" }
+    ]
+  },
+  {
+    slug: "ravine",
+    bullets: [
+      { page: 2, text: "DIFFICULTY is controlled by the number of Night cards you decide to play with; follow the recommendations below as a guide: BEGINNER: 8 | NORMAL: 12 | DIFFICULT: 16+", query: "BEGINNER: 8 | NORMAL: 12 | DIFFICULT: 16+" }
+    ]
+  },
+  {
+    slug: "container",
+    bullets: [
+      { page: 20, text: "As such, we recommend first-time players use the default rules rather than the Classic Variant.", query: "As such, we recommend first-time players use the default rules rather than the Classic Variant." }
+    ]
+  },
+  {
+    slug: "raccoon-tycoon",
+    bullets: [
+      { page: 12, text: "Beginning Gamers and First-Time Players of Raccoon Tycoon: If any of the players is young or new to these kinds of games, remove the ‘Advanced Buildings’ from play. This will make the game easier to learn and play.", query: "remove the ‘Advanced Buildings’ from play" }
+    ]
+  }
+];
+
+check("twelve more first-game games", firstGamesBatch2.length === 12);
+for (const row of firstGamesBatch2) {
+  const game = games[row.slug];
+  const stored = firstGameBullets(game && game.firstGameSetup);
+  const setup = game && game.firstGameSetup;
+  const section = !!setup && !Array.isArray(setup) && Array.isArray(setup.bullets) && !Object.keys(setup).some((key) => /^\d+$/.test(key) || key === "*");
+  check(row.slug + " has a first-game section", !!game && game.mine === true && section && stored.length === row.bullets.length);
+  row.bullets.forEach((spec, index) => {
+    const item = stored[index];
+    const blob = pageBlob(row.slug, spec.page);
+    const query = item && item.source && item.source.query;
+    check(
+      row.slug + " first-game quote " + (index + 1) + " is on page " + spec.page,
+      !!item &&
+        item.text === spec.text &&
+        blob.includes(item.text) &&
+        item.source &&
+        item.source.page === spec.page &&
+        query === spec.query &&
+        item.text.includes(query) &&
+        blob.includes(query) &&
+        occurrences(blob, query) === 1
+    );
+  });
+}
+
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.21";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.22";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -474,6 +577,47 @@ for (const row of firstGames) {
     check("pandemic keeps the epidemic quote at 2 players", again.includes(row.bullets[0].text));
     check("pandemic keeps the face-up quote at 2 players", again.includes(row.bullets[1].text));
     await slot.screenshot({ path: path.join(shots, "first-game-pandemic-2-phone.png") });
+  }
+}
+
+
+const noCountGames = new Set(["targi", "sky-team", "chronicles-of-crime", "ravine"]);
+const switchCounts = { root: "4", "7-wonders-second-edition": "4" };
+for (const row of firstGamesBatch2) {
+  await page.goto(origin + "/index.html#/game/" + row.slug, { waitUntil: "domcontentloaded" });
+  const slot = page.locator("#first-game-slot");
+  const summary = slot.locator("summary");
+  await summary.waitFor();
+  const note = slot.locator("details.chapter-note");
+  check(row.slug + " first game box is visible", await summary.isVisible());
+  check(row.slug + " first game starts closed", (await note.getAttribute("open")) === null);
+  check(row.slug + " first game title", (await summary.innerText()).trim() === "First game");
+  if (noCountGames.has(row.slug)) {
+    check(row.slug + " has no player-count buttons", await page.locator(".pc-btn[data-count]").count() === 0);
+  }
+  await summary.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await summary.click();
+  const shown = await slot.innerText();
+  for (const spec of row.bullets) {
+    check(row.slug + " shows the first-game quote", shown.includes(spec.text));
+  }
+  const chips = slot.locator(".rulebook-ref");
+  check(row.slug + " first-game rulebook chips", await chips.count() === row.bullets.length);
+  for (let index = 0; index < row.bullets.length; index += 1) {
+    check(row.slug + " chip " + (index + 1) + " says Rulebook", (await chips.nth(index).innerText()).trim() === "Rulebook");
+    check(row.slug + " chip " + (index + 1) + " cites the page", (await chips.nth(index).getAttribute("data-page")) === String(row.bullets[index].page));
+  }
+  if (row.slug === "targi" || row.slug === "sky-team" || row.slug === "root") {
+    await slot.screenshot({ path: path.join(shots, "first-game-" + row.slug + "-phone.png") });
+  }
+  if (switchCounts[row.slug]) {
+    await page.locator('.pc-btn[data-count="' + switchCounts[row.slug] + '"]').click();
+    check(row.slug + " first game stays closed after a count change", (await slot.locator("details.chapter-note").getAttribute("open")) === null);
+    await slot.locator("summary").click();
+    const again = await slot.innerText();
+    for (const spec of row.bullets) {
+      check(row.slug + " keeps the first-game quote after a count change", again.includes(spec.text));
+    }
   }
 }
 
