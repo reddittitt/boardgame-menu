@@ -13,7 +13,7 @@
    to the network so the page can compare it with GET_VERSION. Bare
    /sw.js may be edge-cached for hours.
 */
-var VERSION = "2026.11.21.45";
+var VERSION = "2026.11.21.46";
 var SHELL = "bgquick-shell-" + VERSION;
 var DATA = "bgquick-data";
 var IMAGES = "bgquick-images";
