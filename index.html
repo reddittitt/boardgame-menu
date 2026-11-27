@@ -4336,6 +4336,11 @@
     align-items:flex-start;
     list-style:none;
   }
+  /* Tick and body are the only flex items, so the lead stays in normal flow. */
+  .teach-step-body {
+    flex:1 1 auto;
+    min-width:0;
+  }
   .teach-tick {
     appearance:none;
     flex:0 0 auto;
@@ -177161,6 +177166,14 @@
     });
     return steps;
   }
+  function teachStepDirect(step, className) {
+    var el = step.firstElementChild;
+    while (el) {
+      if (el.classList.contains(className)) return el;
+      el = el.nextElementSibling;
+    }
+    return null;
+  }
   function decorateTeach(slug) {
     var body = document.getElementById("teach-script");
     var progress = document.getElementById("teach-progress");
@@ -177176,13 +177189,27 @@
       step.setAttribute("data-teach-step", String(index));
       if (on) step.setAttribute("data-taught", "true");
       else step.removeAttribute("data-taught");
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "teach-tick";
+      var btn = teachStepDirect(step, "teach-tick");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "teach-tick";
+        btn.setAttribute("aria-label", "Mark this step taught");
+        step.insertBefore(btn, step.firstChild);
+      }
       btn.setAttribute("aria-pressed", on ? "true" : "false");
-      btn.setAttribute("aria-label", "Mark this step taught");
       btn.textContent = on ? "\u2713" : "";
-      step.insertBefore(btn, step.firstChild);
+      if (!teachStepDirect(step, "teach-step-body")) {
+        var wrap = document.createElement("div");
+        wrap.className = "teach-step-body";
+        var node = btn.nextSibling;
+        while (node) {
+          var next = node.nextSibling;
+          wrap.appendChild(node);
+          node = next;
+        }
+        step.appendChild(wrap);
+      }
     });
     if (progress) progress.textContent = done + "/" + steps.length + " taught";
   }
