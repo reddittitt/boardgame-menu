@@ -17,11 +17,6 @@ const games = JSON.parse(html.slice(open, html.indexOf("</script>", open)));
 const owners = ["Cody", "Zeek", "Tim", "John", "Ryan", "Andrew"];
 
 const bgg = {
-  "ostia-mariner-edition": {
-    count: "4",
-    credit: "Photo: MoreCheesePlease on BoardGameGeek",
-    href: "https://boardgamegeek.com/image/9762791/ostia-mariner-edition"
-  },
   cartographers: {
     count: "1",
     credit: "Photo: DefinitelyDeWitt on BoardGameGeek",
