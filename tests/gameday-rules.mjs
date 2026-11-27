@@ -387,7 +387,7 @@ assert(!/type="email"|type="tel"|phone|email/i.test(page), "page has no contact 
 assert(!/street|avenue|boulevard/i.test(page + script), "no street address in the page");
 assert(script.includes(JSON.stringify("Location shared after you RSVP")), "location stays hidden until an RSVP");
 assert(script.includes(JSON.stringify("CRPC")), "after RSVP the page says CRPC");
-assert(sw.includes('var VERSION = "2026.11.21.39"'), "service worker version");
+assert(sw.includes('var VERSION = "2026.11.21.40"'), "service worker version");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
 const respondAt = sw.indexOf("respondWith", fetchAt);
