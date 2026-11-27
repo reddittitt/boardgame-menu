@@ -132,6 +132,20 @@ const overallTimesBatch4 = [
   { slug: "blokus-3d", text: "typically 15\u201320 min", index: "blokus-3d", page: 1, must: ["Games typically last 15 to 20 minutes."] },
   { slug: "blokus-trigon", text: "typically 20\u201330 min", index: "blokus-trigon", page: 1, must: ["Games typically last 20 to 30 minutes."] }
 ];
+const overallTimesBatch5 = [
+  { slug: "deadwood-1876", text: "20\u201340 min", index: "deadwood-1876", page: 1, must: ["2 - 9 PLAYERS AGES 13+ 20 - 40 MINUTES"] },
+  { slug: "disney-villainous-the-worst-takes-it-all", text: "50 min", index: "disney-villainous-the-worst-takes-it-all", page: 1, must: ["2 to 6 Players \u2022 Ages 10 and Up \u2022 50 Minutes"] },
+  { slug: "flip-city", text: "30\u201350 min", index: "flip-city", page: 1, must: ["1-4 Players 8+Years. 30-50 Mins."] },
+  { slug: "ghosts-of-christmas", text: "40 min", index: "ghosts-of-christmas", page: 1, must: ["3-4 Players 40 Mins"] },
+  { slug: "9-lives", text: "15 min", index: "9-lives", page: 1, must: ["3-4 Players 15 Mins"] },
+  { slug: "dandelions", text: "15 min", index: "dandelions", page: 1, must: ["2-3 Players 15 Mins"] },
+  { slug: "joraku", text: "40\u201360 min", index: "joraku", page: 2, must: ["Players: 3-4 Time: 40-60min"] },
+  { slug: "my-little-scythe", text: "45\u201360 min", index: "my-little-scythe", page: 1, must: ["1-6 players | 45-60 minutes | ages 8+"] },
+  { slug: "on-tour", text: "20 min", index: "on-tour", page: 1, must: ["1 - 4+ players | 20 min"] },
+  { slug: "planet", text: "30 min", index: "planet", page: 1, must: ["2 to 4 players \u2013 8 and up \u2013 30 Minutes"] },
+  { slug: "vivid-memories", text: "30\u201360 min", index: "vivid-memories", page: 1, must: ["30\u201360 min"] },
+  { slug: "10-days-in-europe", text: "20\u201330 min", index: "10-days-in-europe", page: 1, must: ["2-4 Players Ages 8 to Adult 20-30 Minutes per Game"] }
+];
 
 function rulebookHas(index, must) {
   return indexPages(index).some((page) => {
@@ -164,6 +178,12 @@ for (const row of overallTimesBatch3) {
 }
 check("twelve rulebook durations in batch 4", overallTimesBatch4.length === 12);
 for (const row of overallTimesBatch4) {
+  const game = games[row.slug];
+  check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
+  check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must) && pageBlob(row.index, row.page).includes(row.must[0]));
+}
+check("twelve rulebook durations in batch 5", overallTimesBatch5.length === 12);
+for (const row of overallTimesBatch5) {
   const game = games[row.slug];
   check(row.slug + " is one rulebook duration", game && game.rulebookTime === row.text && game.playTimeSource === "rulebook" && !game.playTimeByPlayerCount);
   check(row.slug + " rulebook states that duration", rulebookHas(row.index, row.must) && pageBlob(row.index, row.page).includes(row.must[0]));
@@ -457,7 +477,7 @@ for (const row of firstGamesBatch2) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.30";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.31";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -681,6 +701,7 @@ for (const row of firstGamesBatch2) {
   }
 }
 
+const phoneOverflowSlugs = new Set(["deadwood-1876", "joraku", "my-little-scythe", "planet"]);
 async function overallHeader(slug, text, counts) {
   await page.goto(origin + "/index.html#/game/" + slug, { waitUntil: "domcontentloaded" });
   await page.waitForSelector("#play-time-value");
@@ -692,6 +713,10 @@ async function overallHeader(slug, text, counts) {
   check(slug + " shows the rulebook duration", (await value.innerText()).trim() === text && await value.isVisible());
   check(slug + " labels the rulebook", ((await source.innerText()).trim().toLowerCase()) === "rulebook" && await source.isVisible());
   check(slug + " is not a count time", !((await value.getAttribute("class")) || "").includes("is-count-time"));
+  if (phoneOverflowSlugs.has(slug)) {
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    check(slug + " has no horizontal overflow", overflow <= 1);
+  }
   await head.screenshot({ path: path.join(shots, "play-time-" + slug + "-phone.png") });
   const buttons = page.locator(".pc-btn[data-count]");
   const buttonCount = await buttons.count();
@@ -709,6 +734,10 @@ async function overallHeader(slug, text, counts) {
     check(slug + " keeps the overall time at " + count, (await value.innerText()).trim() === text && await value.isVisible());
     check(slug + " still labels the rulebook at " + count, ((await source.innerText()).trim().toLowerCase()) === "rulebook");
     check(slug + " stays an overall time at " + count, !((await value.getAttribute("class")) || "").includes("is-count-time"));
+    if (phoneOverflowSlugs.has(slug)) {
+      const overflowAt = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      check(slug + " has no horizontal overflow at " + count, overflowAt <= 1);
+    }
     check(slug + " selected " + count, (await page.locator('.pc-btn[data-count="' + count + '"]').getAttribute("data-active")) === "true");
     await head.screenshot({ path: path.join(shots, "play-time-" + slug + "-" + count + "-phone.png") });
     const bar = page.locator("#table-bar");
@@ -727,6 +756,10 @@ await overallHeader("horrified", "60 min");
 await overallHeader("medici", "60 min", ["2"]);
 await overallHeader("blokus-3d", "typically 15\u201320 min");
 await overallHeader("gingerbread-house", "30\u201345 min", ["2"]);
+await overallHeader("deadwood-1876", "20\u201340 min");
+await overallHeader("joraku", "40\u201360 min", ["3"]);
+await overallHeader("my-little-scythe", "45\u201360 min");
+await overallHeader("planet", "30 min");
 
 check("no production exec request", execSeen.length === 0);
 await browser.close();
