@@ -476,8 +476,106 @@ for (const row of firstGamesBatch2) {
   });
 }
 
+
+const firstGamesBatch3 = [
+  {
+    slug: "azul-duel",
+    bullets: [
+      { page: 2, lead: "Scoring tablets", text: "For your first game, find the 3 Scoring tablets and place them,", query: "find the 3 Scoring tablets" },
+      { page: 2, lead: "Then choose", text: "Once you are familiar with the game, choose or randomly determine which sides and which 3 (or 4) Scoring tablets to use.", query: "Once you are familiar with the game" }
+    ]
+  },
+  {
+    slug: "cover-your-assets",
+    bullets: [
+      { page: 3, lead: "Classic rules", text: "We recommend starting with the classic rules.", query: "We recommend starting with the classic rules." }
+    ]
+  },
+  {
+    slug: "dune-imperium-uprising",
+    bullets: [
+      { page: 16, lead: "Skip CHOAM", text: "We recommend that you play without it at least once to familiarize yourself with the game.", query: "play without it at least once" }
+    ]
+  },
+  {
+    slug: "new-york-zoo",
+    bullets: [
+      { page: 1, lead: "Skip the overview", text: "When you read the rules for the first time, you can simply ignore it.", query: "you can simply ignore it." }
+    ]
+  },
+  {
+    slug: "pan-am",
+    bullets: [
+      { page: 11, lead: "First round", text: "For the first round, try to claim a Route during the Resolution phase by assigning an Engineer to the Routes", query: "try to claim a Route during the Resolution phase" }
+    ]
+  },
+  {
+    slug: "burgle-bros-2-the-casino-capers",
+    bullets: [
+      { page: 3, lead: "Suspicion", text: "For your first heist, you start at 6 Suspicion.", query: "you start at 6 Suspicion." }
+    ]
+  },
+  {
+    slug: "the-crew-the-quest-for-planet-nine",
+    bullets: [
+      { page: 11, lead: "Mission 1", text: "You now know all the basic rules and can start with your first mission. To do so, flip this book over and read the logbook.", query: "flip this book over and read the logbook." }
+    ]
+  },
+  {
+    slug: "kingdomino",
+    bullets: [
+      { page: 2, lead: "Castles", text: "Before your first game, assemble the 4 3D castles.", query: "assemble the 4 3D castles." }
+    ]
+  },
+  {
+    slug: "bomb-busters",
+    bullets: [
+      { page: 1, lead: "Dial", text: "Install the dial on the board before the first game", query: "Install the dial on the board" }
+    ]
+  },
+  {
+    slug: "thunder-road-vendetta",
+    bullets: [
+      { page: 2, lead: "Rotors", text: "BEFORE YOUR FIRST GAME Carefully push the rotors onto the choppers.", query: "push the rotors onto the choppers." }
+    ]
+  },
+  {
+    slug: "jaipur",
+    bullets: [
+      { page: 4, lead: "Advice later", text: "NB: it is best to read this after your first game.", query: "read this after your first game." }
+    ]
+  }
+];
+
+check("eleven more first-game games", firstGamesBatch3.length === 11);
+for (const row of firstGamesBatch3) {
+  const game = games[row.slug];
+  const stored = firstGameBullets(game && game.firstGameSetup);
+  const setup = game && game.firstGameSetup;
+  const section = !!setup && !Array.isArray(setup) && Array.isArray(setup.bullets) && !Object.keys(setup).some((key) => /^\d+$/.test(key) || key === "*");
+  check(row.slug + " has a first-game section", !!game && game.mine === true && section && stored.length === row.bullets.length);
+  row.bullets.forEach((spec, index) => {
+    const item = stored[index];
+    const blob = pageBlob(row.slug, spec.page);
+    const query = item && item.source && item.source.query;
+    check(
+      row.slug + " first-game quote " + (index + 1) + " is on page " + spec.page,
+      !!item &&
+        item.lead === spec.lead &&
+        item.text === spec.text &&
+        blob.includes(item.text) &&
+        item.source &&
+        item.source.page === spec.page &&
+        query === spec.query &&
+        item.text.includes(query) &&
+        blob.includes(query) &&
+        occurrences(blob, query) === 1
+    );
+  });
+}
+
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.32";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.33";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
@@ -493,7 +591,33 @@ const server = http.createServer((req, res) => {
     res.end("missing");
     return;
   }
-  res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+  const isPdf = rel.toLowerCase().endsWith(".pdf");
+  const type = isPdf ? "application/pdf" : "text/html; charset=utf-8";
+  if (isPdf && req.headers.range) {
+    const stat = fs.statSync(file);
+    const match = /bytes=(\d+)-(\d*)/.exec(String(req.headers.range));
+    if (match) {
+      const start = parseInt(match[1], 10);
+      const end = match[2] ? Math.min(parseInt(match[2], 10), stat.size - 1) : stat.size - 1;
+      if (start <= end && start < stat.size) {
+        res.writeHead(206, {
+          "content-type": type,
+          "accept-ranges": "bytes",
+          "content-range": "bytes " + start + "-" + end + "/" + stat.size,
+          "content-length": end - start + 1
+        });
+        fs.createReadStream(file, { start, end }).pipe(res);
+        return;
+      }
+    }
+  }
+  const headers = { "content-type": type };
+  if (isPdf) {
+    const stat = fs.statSync(file);
+    headers["accept-ranges"] = "bytes";
+    headers["content-length"] = stat.size;
+  }
+  res.writeHead(200, headers);
   fs.createReadStream(file).pipe(res);
 });
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -513,6 +637,45 @@ await page.route("**/*script.google.com/**", (route) => {
 await page.route("**/*script.googleusercontent.com/**", (route) => {
   noteExec(route.request().url());
   return route.abort();
+});
+const relayPdf = new Map();
+await page.route("**/*bgquick-rulebooks-relay.bgquick.workers.dev/**", async (route) => {
+  const request = route.request();
+  if (request.method() === "OPTIONS") {
+    await route.fulfill({ status: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-headers": "*" } });
+    return;
+  }
+  const pdfUrl = request.url().split("#")[0];
+  if (!relayPdf.has(pdfUrl)) {
+    const res = await fetch(pdfUrl);
+    if (!res.ok) throw new Error("relay " + res.status + " " + pdfUrl);
+    relayPdf.set(pdfUrl, Buffer.from(await res.arrayBuffer()));
+  }
+  const buf = relayPdf.get(pdfUrl);
+  const range = request.headers()["range"];
+  const match = range && /bytes=(\d+)-(\d*)/.exec(range);
+  if (match) {
+    const start = parseInt(match[1], 10);
+    const end = match[2] ? Math.min(parseInt(match[2], 10), buf.length - 1) : buf.length - 1;
+    const slice = buf.subarray(start, end + 1);
+    await route.fulfill({
+      status: 206,
+      contentType: "application/pdf",
+      headers: {
+        "accept-ranges": "bytes",
+        "content-range": "bytes " + start + "-" + end + "/" + buf.length,
+        "content-length": String(slice.length)
+      },
+      body: slice
+    });
+    return;
+  }
+  await route.fulfill({
+    status: 200,
+    contentType: "application/pdf",
+    headers: { "accept-ranges": "bytes", "content-length": String(buf.length) },
+    body: buf
+  });
 });
 
 await page.goto(origin + "/index.html#/game/for-sale", { waitUntil: "domcontentloaded" });
@@ -697,6 +860,68 @@ for (const row of firstGamesBatch2) {
     const again = await slot.innerText();
     for (const spec of row.bullets) {
       check(row.slug + " keeps the first-game quote after a count change", again.includes(spec.text));
+    }
+  }
+}
+
+
+const firstGameSmoke = new Set(["azul-duel", "kingdomino", "pan-am"]);
+for (const row of firstGamesBatch3) {
+  await page.goto(origin + "/index.html#/game/" + row.slug, { waitUntil: "domcontentloaded" });
+  const slot = page.locator("#first-game-slot");
+  const summary = slot.locator("summary");
+  await summary.waitFor();
+  const note = slot.locator("details.chapter-note");
+  check(row.slug + " first game box is visible", await summary.isVisible());
+  check(row.slug + " first game starts closed", (await note.getAttribute("open")) === null);
+  check(row.slug + " first game title", (await summary.innerText()).trim() === "First game");
+  await summary.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await summary.click();
+  const shown = await slot.innerText();
+  for (const spec of row.bullets) {
+    check(row.slug + " shows the first-game quote", shown.includes(spec.text));
+    check(row.slug + " shows the first-game lead", shown.includes(spec.lead));
+  }
+  const chips = slot.locator(".rulebook-ref");
+  const leads = slot.locator(".rule-lead");
+  check(row.slug + " first-game rulebook chips", await chips.count() === row.bullets.length);
+  check(row.slug + " first-game leads", await leads.count() === row.bullets.length);
+  for (let index = 0; index < row.bullets.length; index += 1) {
+    check(row.slug + " chip " + (index + 1) + " says Rulebook", (await chips.nth(index).innerText()).trim() === "Rulebook");
+    check(row.slug + " chip " + (index + 1) + " cites the page", (await chips.nth(index).getAttribute("data-page")) === String(row.bullets[index].page));
+    check(row.slug + " lead " + (index + 1), (await leads.nth(index).innerText()).trim() === row.bullets[index].lead);
+  }
+  if (firstGameSmoke.has(row.slug)) {
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    check(row.slug + " has no horizontal overflow", overflow <= 1);
+    await slot.screenshot({ path: path.join(shots, "first-game-" + row.slug + "-phone.png") });
+    for (let index = 0; index < row.bullets.length; index += 1) {
+      const spec = row.bullets[index];
+      const chip = chips.nth(index);
+      check(row.slug + " chip " + (index + 1) + " carries the query", (await chip.getAttribute("data-query")) === spec.query);
+      await chip.evaluate((el) => el.scrollIntoView({ block: "center" }));
+      await chip.click();
+      const viewer = page.locator("#rulebook-viewer");
+      await viewer.waitFor({ state: "visible", timeout: 15000 });
+      await page.waitForFunction(({ pageNum, query }) => {
+        const title = document.getElementById("rulebook-viewer-title");
+        const marked = document.querySelector("#rulebook-viewer .rulebook-viewer-note");
+        const sheet = document.querySelector('#rulebook-viewer .rulebook-viewer-sheet[data-page="' + pageNum + '"]');
+        const focus = sheet && sheet.querySelector(".rulebook-hl--focus");
+        if (!title || !marked || !focus) return false;
+        const noteText = marked.textContent || "";
+        const titleText = title.textContent.trim();
+        return titleText.indexOf("\u00b7 " + pageNum + " / ") !== -1 && noteText.includes("Marked") && noteText.includes(query);
+      }, { pageNum: spec.page, query: spec.query }, { timeout: 120000 });
+      const title = (await page.locator("#rulebook-viewer-title").innerText()).trim();
+      const marked = (await page.locator("#rulebook-viewer .rulebook-viewer-note").innerText()).trim();
+      const focusOnPage = await page.locator('#rulebook-viewer .rulebook-viewer-sheet[data-page="' + spec.page + '"] .rulebook-hl--focus').count();
+      check(row.slug + " chip " + (index + 1) + " opens page " + spec.page, title.indexOf("\u00b7 " + spec.page + " / ") !== -1 && marked.includes("Marked") && marked.includes(spec.query) && focusOnPage > 0);
+      await viewer.screenshot({ path: path.join(shots, "first-game-" + row.slug + "-rulebook-" + (index + 1) + "-phone.png") });
+      await page.locator("#rulebook-viewer-close").click();
+      await viewer.waitFor({ state: "hidden", timeout: 15000 });
+      const overflowAfter = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      check(row.slug + " has no horizontal overflow after the rulebook", overflowAfter <= 1);
     }
   }
 }
