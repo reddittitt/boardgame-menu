@@ -69,7 +69,12 @@ for (const slug of slugs) {
   const miss = bullets.filter((bullet) => bullet.lead === "New players miss");
   const subs = miss.length === 1 && Array.isArray(miss[0].bullets) ? miss[0].bullets : null;
   check(slug + " has one New players miss with 2 to 4 sub-bullets", !!(subs && subs.length >= 2 && subs.length <= 4 && bullets[bullets.length - 1] === miss[0]));
-  const lines = bullets.concat(subs || []);
+  function linesOf(bullet) {
+    const out = [bullet];
+    for (const sub of bullet.bullets || []) out.push(...linesOf(sub));
+    return out;
+  }
+  const lines = bullets.flatMap(linesOf);
   for (const bullet of lines) {
     chips += 1;
     const label = slug + " / " + (bullet.lead || bullet.text.slice(0, 24));
