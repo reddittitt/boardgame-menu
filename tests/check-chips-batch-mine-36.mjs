@@ -1,4 +1,4 @@
-/* Verified Rulebook chips added in sw 2026.11.21.36.
+/* Verified Rulebook chips added in the previous shell.
    For every new chip, the page is in the index and the query occurs once
    on the folded page text, or a snippet does and contains the query.
    node tests/check-chips-batch-mine-36.mjs */
