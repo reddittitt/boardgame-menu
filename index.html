@@ -4363,6 +4363,235 @@
 
 </style>
 <link rel="stylesheet" href="./game-night.css">
+<style id="picker-css">
+.pick-page {
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: calc(148px + env(safe-area-inset-bottom, 0px));
+}
+.pick-lead,
+.pick-hidden,
+.pick-empty,
+.pick-count,
+.pick-share-status {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.pick-lead,
+.pick-hidden,
+.pick-empty,
+.pick-meta,
+.pick-share-status { color: var(--muted); }
+.pick-lead { margin: 0 0 12px; }
+.pick-facet {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 12px;
+  min-width: 0;
+  max-width: 100%;
+}
+.pick-label,
+.pick-search {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.pick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+.pick-chip,
+.pick-heart,
+.pick-footer-btn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.pick-chip {
+  appearance: none;
+  border: 0;
+  background: var(--hig-fill, rgba(118, 118, 128, 0.12));
+  color: var(--fg);
+  min-height: 44px;
+  min-width: 44px;
+  max-width: 100%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  white-space: normal;
+  text-align: center;
+}
+.pick-chip[aria-pressed="true"],
+.pick-footer-btn[aria-pressed="true"],
+.pick-heart[aria-pressed="true"] {
+  background: var(--accent, #007aff);
+  color: #fff;
+}
+.pick-search {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.pick-search input {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--hig-sep, var(--border));
+  border-radius: 12px;
+}
+.pick-hidden:empty,
+.pick-share-status:empty { display: none; }
+.pick-hidden { margin: 0 0 8px; }
+.pick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+.pick-card {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+  background: var(--card);
+  border: 1px solid var(--hig-sep, var(--border));
+  border-radius: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.pick-card-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.pick-cover {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--hig-fill, rgba(118, 118, 128, 0.12));
+}
+.pick-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-top: 2px;
+}
+.pick-name {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.pick-blurb {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 1.35;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+.pick-meta {
+  font-size: 16px;
+  line-height: 1.3;
+}
+.pick-heart {
+  appearance: none;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--hig-fill, rgba(118, 118, 128, 0.12));
+  color: var(--accent, #007aff);
+  font-size: 22px;
+  line-height: 1;
+  padding: 0;
+}
+.pick-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 25;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--bg);
+  border-top: 1px solid var(--hig-sep, var(--border));
+}
+.pick-count { font-weight: 700; color: var(--fg); }
+.pick-footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.pick-footer-btn {
+  appearance: none;
+  flex: 1 1 140px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--hig-sep, var(--border));
+  background: var(--hig-fill, rgba(118, 118, 128, 0.12));
+  color: inherit;
+}
+.pick-footer-btn--primary {
+  border: 0;
+  background: var(--accent, #007aff);
+  color: #fff;
+}
+.pick-share-url {
+  margin: 8px 0 0;
+  padding: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.35;
+  background: var(--card);
+  border: 1px solid var(--hig-sep, var(--border));
+  border-radius: 12px;
+}
+.pick-chip:focus-visible,
+.pick-heart:focus-visible,
+.pick-footer-btn:focus-visible,
+.pick-search input:focus-visible,
+.pick-card-link:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+</style>
 </head>
 <body>
 <header>
@@ -4390,7 +4619,7 @@
 <dialog id="play-tonight-dialog" class="play-tonight-dialog" aria-labelledby="play-tonight-title"></dialog>
 
 <main>
-  <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a></p>
+  <p class="all-games-bar"><a class="home" href="#/">All Games</a><a class="night-entry" href="#/night">What should we play?</a><a class="night-entry pick-entry" href="#/pick">New to games? Find one to play</a></p>
   <div id="app"><noscript>JavaScript required.</noscript></div>
 </main>
 
@@ -8020,7 +8249,11 @@
         "title": "7 Wonders Duel - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=173346"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=173346",
+      "picker": {
+        "blurb": "Play three ages against one opponent, and win at once by reaching their capital or by collecting six different science symbols.",
+        "kinds": ["card","duel"]
+      }
     },
     "acquire": {
       "bggTime": {
@@ -8502,7 +8735,11 @@
         "title": "How to Play Acquire (Rules School)",
         "channel": "Game Boy Geek"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=5"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=5",
+      "picker": {
+        "blurb": "Place one building tile, buy stock in the chains that grow, and try to hold the most money when the chains are safe.",
+        "kinds": ["strategy"]
+      }
     },
     "air-land-and-sea-critters-at-war": {
       "rulebookSearchable": true,
@@ -8711,6 +8948,10 @@
         "url": "https://www.youtube.com/watch?v=SkSyagfMK4c",
         "title": "Air, Land, and Sea Critters at War Board Game Tutroial - The Game Flames",
         "channel": "The Fanily"
+      },
+      "picker": {
+        "blurb": "Play a card into a theater or withdraw, and be the first to reach 12 points.",
+        "kinds": ["card","duel"]
       }
     },
     "altera": {
@@ -9214,7 +9455,11 @@
         "title": "How to Play Archduke",
         "channel": "Archduke"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=332943"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=332943",
+      "picker": {
+        "blurb": "Draw from the deck or the discard, swap cards in your hand, and finish each round with the lowest total.",
+        "kinds": ["card"]
+      }
     },
     "arcs": {
       "bggTime": {
@@ -10096,7 +10341,11 @@
         }
       ],
       "charactersLabel": "Leaders",
-      "charactersAidNote": "Beloved, Just, Attuned, and Cryptic below are the card text. Setup around them is a short paraphrase of page 21. The book says the set has eight leaders. The other six are on their cards and are not reprinted. Lore is a card you draft, not a side. The March 23, 2026 rulebook link on this page opens the file."
+      "charactersAidNote": "Beloved, Just, Attuned, and Cryptic below are the card text. Setup around them is a short paraphrase of page 21. The book says the set has eight leaders. The other six are on their cards and are not reprinted. Lore is a card you draft, not a side. The March 23, 2026 rulebook link on this page opens the file.",
+      "picker": {
+        "blurb": "Lead fleets, play an action card for its pips, and score ambitions until the most Power wins.",
+        "kinds": ["card","strategy"]
+      }
     },
     "ark-nova": {
       "bggTime": {
@@ -10921,7 +11170,11 @@
         "title": "Ark Nova - Board Game Tutorial. Start Playing in 13 Minutes",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=342942"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=342942",
+      "picker": {
+        "blurb": "Build a zoo, raise your appeal, and support conservation projects until the highest score wins.",
+        "kinds": ["strategy"]
+      }
     },
     "azul": {
       "bggTime": {
@@ -11417,7 +11670,11 @@
         "title": "How to Play Azul in 3 Minutes - Rules Girl",
         "channel": "The Rules Girl"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=230802"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=230802",
+      "picker": {
+        "blurb": "Draft colored tiles, fill pattern lines, and move them onto a palace wall until someone finishes a row of five.",
+        "kinds": ["puzzle"]
+      }
     },
     "azul-duel": {
       "bggTime": {
@@ -11851,7 +12108,11 @@
         "title": "Azul Duel - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=431038"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=431038",
+      "picker": {
+        "blurb": "Fill a dome with tiles over five rounds, scoring each tile as it lands, and finish with the most points.",
+        "kinds": ["puzzle","duel"]
+      }
     },
     "backgammon": {
       "teachingScript": {
@@ -12406,7 +12667,11 @@
         "title": "How To Play Backgammon Correctly! - A Full Tutorial",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2397"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2397",
+      "picker": {
+        "blurb": "Roll two dice, move your counters into your home board, and be the first to bear them all off.",
+        "kinds": ["dice","duel"]
+      }
     },
     "blokus": {
       "teachingScript": {
@@ -12749,7 +13014,11 @@
         "title": "How to play Blokus",
         "channel": "Triple S Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2453"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2453",
+      "picker": {
+        "blurb": "Lay one piece so it touches your color only at the corners, and cover as many squares as you can.",
+        "kinds": ["puzzle"]
+      }
     },
     "bomb-busters": {
       "bggTime": {
@@ -13322,7 +13591,11 @@
         "title": "How to Play Bomb Busters in 10 Minutes",
         "channel": "The Dice Tower"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=413246"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=413246",
+      "picker": {
+        "blurb": "As one bomb-disposal team, cut wires together before a red wire or the detonator ends the mission.",
+        "kinds": ["coop"]
+      }
     },
     "brass-birmingham": {
       "bggTime": {
@@ -14030,7 +14303,11 @@
         "title": "Brass: Birmingham - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=224517"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=224517",
+      "picker": {
+        "blurb": "Build links and flip industry tiles through a canal era and a rail era, then finish with the most points.",
+        "kinds": ["strategy"]
+      }
     },
     "brass-pittsburgh": {
       "bggTime": {
@@ -14322,6 +14599,10 @@
         "url": "https://www.youtube.com/watch?v=tkCnIR9TW6c",
         "title": "Brass: Pittsburgh - Teach & Playthrough",
         "channel": "Before You Play"
+      },
+      "picker": {
+        "blurb": "Take two card actions each turn, then score your train links after the second era ends.",
+        "kinds": ["strategy"]
       }
     },
     "brink": {
@@ -15710,7 +15991,11 @@
         "title": "Brink — How to Play",
         "channel": "IV Studio"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=415078"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=415078",
+      "picker": {
+        "blurb": "Place ships to explore and gather over three rounds, then finish with the most prestige.",
+        "kinds": ["strategy"]
+      }
     },
     "camel-up": {
       "teachingScript": {
@@ -16409,7 +16694,11 @@
         "title": "Camel Up (Second Edition) - How to Play. A Board Game Tutorial",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=153938"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=153938",
+      "picker": {
+        "blurb": "Take a betting ticket or shake a die out of the pyramid so a camel moves, and try to profit from the race.",
+        "kinds": ["dice"]
+      }
     },
     "caper-europe": {
       "teachingScript": {
@@ -16746,7 +17035,11 @@
         "title": "Caper: Europe - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=328565"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=328565",
+      "picker": {
+        "blurb": "Play a card or exchange your whole hand across three heist locations, and finish with the most points.",
+        "kinds": ["card","duel"]
+      }
     },
     "castle-combo": {
       "bggTime": {
@@ -17216,7 +17509,11 @@
         "title": "Castle Combo - How to Play. A board game tutorial, including cards explanation",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=416851"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=416851",
+      "picker": {
+        "blurb": "Spend a key if you want, buy a character card, and fill a three-by-three grid until the most points wins.",
+        "kinds": ["card"]
+      }
     },
     "catan": {
       "bggTime": {
@@ -17770,7 +18067,11 @@
         "title": "Catan - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=13"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=13",
+      "picker": {
+        "blurb": "Collect resources when the dice match a hex, spend them to build, and be the first to 10 points on your turn.",
+        "kinds": ["dice","strategy"]
+      }
     },
     "century-golem-edition": {
       "bggTime": {
@@ -18224,7 +18525,11 @@
         "title": "Century: Golem Edition | How to Play",
         "channel": "LonelyMan BGs"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=232832"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=232832",
+      "picker": {
+        "blurb": "Trade crystals, claim golem cards, and finish the round with the highest total once enough cards are claimed.",
+        "kinds": ["card"]
+      }
     },
     "chess": {
       "playerPoll": {
@@ -18477,7 +18782,11 @@
         "title": "How To Play Chess: The Ultimate Beginner Guide",
         "channel": "GothamChess"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=171"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=171",
+      "picker": {
+        "blurb": "Move one piece on your turn, and win by attacking the opposing king so it has no legal move.",
+        "kinds": ["strategy","duel"]
+      }
     },
     "chronicles-of-crime": {
       "rulebookSearchable": true,
@@ -18763,7 +19072,11 @@
         "title": "Chronicles of Crime - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=239188"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=239188",
+      "picker": {
+        "blurb": "Discuss the case, scan a card, follow the app, and close it when you answer the questions at the station.",
+        "kinds": ["coop"]
+      }
     },
     "codenames": {
       "bggTime": {
@@ -19325,7 +19638,11 @@
         "title": "Codenames - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=178900"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=178900",
+      "picker": {
+        "blurb": "Give your team a clue for their words, cover those words, and avoid the assassin that loses at once.",
+        "kinds": ["party","word"]
+      }
     },
     "cover-your-assets": {
       "teachingScript": {
@@ -20005,7 +20322,11 @@
         "title": "How to Play Cover Your Assets",
         "channel": "Grandpa Beck's Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=121193"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=121193",
+      "picker": {
+        "blurb": "Collect sets of asset cards, stack each new set in front of you, and try to become the first millionaire.",
+        "kinds": ["card"]
+      }
     },
     "critters-at-war-flies-lies-and-supplies": {
       "bggTime": {
@@ -20126,6 +20447,10 @@
         "url": "https://www.youtube.com/watch?v=OhvVl9yvQsg",
         "title": "How to Play Critters at War Flies Lies and Supplies",
         "channel": "Tabletop Gaming Guild"
+      },
+      "picker": {
+        "blurb": "Play one card into a matching theater or withdraw, and be the first to 12 points.",
+        "kinds": ["card","duel"]
       }
     },
     "deep-regrets": {
@@ -20750,7 +21075,11 @@
         "title": "Deep Regrets - How to Play. Complete, Clear, Concise Board Game Tutorial",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=397931"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=397931",
+      "picker": {
+        "blurb": "Over six days, choose sea or port, fish a shoal or sell and shop, and finish with the highest score.",
+        "kinds": ["strategy"]
+      }
     },
     "dune-imperium-uprising": {
       "bggTime": {
@@ -21762,7 +22091,11 @@
         "title": "Dune Imperium: Uprising (And CHOAM Module) - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=397598"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=397598",
+      "picker": {
+        "blurb": "Chase points through combat, faction influence, and alliances, and finish with the highest total.",
+        "kinds": ["card","strategy"]
+      }
     },
     "dutch-blitz": {
       "bggTime": {
@@ -21990,7 +22323,11 @@
         "title": "How to Play Dutch Blitz®",
         "channel": "Dutch Blitz"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=148203"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=148203",
+      "picker": {
+        "blurb": "Race to play cards onto shared piles from 1 to 10, shout when your pile is empty, and be first to 75.",
+        "kinds": ["card"]
+      }
     },
     "earth": {
       "bggTime": {
@@ -22462,7 +22799,11 @@
         "title": "How to Play Earth - Official Tutorial video",
         "channel": "Gaming Rules!"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=350184"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=350184",
+      "picker": {
+        "blurb": "Choose one of four actions, plant cards into a four-by-four island, and everyone else takes the weaker version.",
+        "kinds": ["card","strategy"]
+      }
     },
     "everdell": {
       "bggTime": {
@@ -24542,7 +24883,11 @@
         "title": "The Fellowship of the Ring: Trick-Taking Game - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=429293"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=429293",
+      "picker": {
+        "blurb": "Play cards together through the chapters, follow the led card when you can, and meet every chosen character's goal.",
+        "kinds": ["card","coop"]
+      }
     },
     "five-crowns": {
       "bggTime": {
@@ -25055,7 +25400,11 @@
         "title": "How to Play Five Crowns | Full Tutorial and Rules Explanation",
         "channel": "Nights Around a Table"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1472"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1472",
+      "picker": {
+        "blurb": "Draw a card, make books and runs in your hand, and finish eleven rounds with the lowest score.",
+        "kinds": ["card"]
+      }
     },
     "fire-tower": {
       "teachingScript": {
@@ -25558,7 +25907,11 @@
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/fire-tower",
       "rulebookPublisher": "https://www.runawayparade.com/s/Rules_SpecialEdition_FORPRINT_withBleed.pdf",
       "rulebookSearchable": true,
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=226605"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=226605",
+      "picker": {
+        "blurb": "Play a card to spread fire or protect your tower, and be the last tower still standing.",
+        "kinds": ["card"]
+      }
     },
     "flip-7": {
       "bggTime": {
@@ -25980,7 +26333,11 @@
         "title": "Flip 7 - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=420087"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=420087",
+      "picker": {
+        "blurb": "Take another number card or stay, bank the total in front of you, and race to 200 points.",
+        "kinds": ["card"]
+      }
     },
     "for-sale": {
       "bggTime": {
@@ -26436,6 +26793,10 @@
         "url": "https://www.youtube.com/watch?v=OZ0RLgnBp6o",
         "title": "How to Play: For Sale",
         "channel": "The Pensky File"
+      },
+      "picker": {
+        "blurb": "Bid coins for properties or pass, then sell those properties for currency cards and earn the most money.",
+        "kinds": ["card"]
       }
     },
     "forbidden-island": {
@@ -27091,7 +27452,11 @@
         "title": "Forest Shuffle🌳🦌 - How to Play - Complete, Clear, Concise. With Tips!",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=391163"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=391163",
+      "picker": {
+        "blurb": "Plant cards from a shared clearing into your forest, and score every visible card when the third winter appears.",
+        "kinds": ["card"]
+      }
     },
     "foundations-of-metropolis": {
       "teachingScript": {
@@ -27709,7 +28074,11 @@
         "title": "Foundations Of Metropolis - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=412865"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=412865",
+      "picker": {
+        "blurb": "Take income or build on lots, since bigger buildings need more lots and bring more glory.",
+        "kinds": ["strategy"]
+      }
     },
     "a-gest-of-robin-hood": {
       "bggTime": {
@@ -28137,7 +28506,11 @@
         "title": "A Gest Of Robin Hood - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=338376"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=338376",
+      "picker": {
+        "blurb": "One of you plays Robin Hood and the other the Sheriff, playing one event card to shift Justice or Order.",
+        "kinds": ["card","duel"]
+      }
     },
     "graft": {
       "teachingScript": {
@@ -28683,6 +29056,10 @@
         "url": "https://www.youtube.com/watch?v=p3T__tzfYKM",
         "title": "All the Games with Steph: Graft - Teach",
         "channel": "Steph Hodge"
+      },
+      "picker": {
+        "blurb": "Choose a card in secret, reveal together, and pack high-value goods onto your manifest or start that manifest over.",
+        "kinds": ["card"]
       }
     },
     "harmonies": {
@@ -29874,7 +30251,11 @@
         "title": "Harmonies - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=414317"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=414317",
+      "picker": {
+        "blurb": "Stack landscapes and place animals on your board, then score both once someone has almost no empty spaces.",
+        "kinds": ["puzzle"]
+      }
     },
     "harvest": {
       "bggTime": {
@@ -30061,7 +30442,11 @@
         "title": "How to Play Harvest",
         "channel": "Keymaster"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=395623"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=395623",
+      "picker": {
+        "blurb": "Play four rounds of sunrise, actions, and sunset on your farm, and finish with the most points.",
+        "kinds": ["strategy"]
+      }
     },
     "heat-pedal-to-the-metal": {
       "bggTime": {
@@ -31125,7 +31510,11 @@
         "title": "Heat: Pedal To The Metal - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=366013"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=366013",
+      "picker": {
+        "blurb": "Race your car around the track and be the first across the line after the laps printed on it.",
+        "kinds": ["strategy"]
+      }
     },
     "hive-pocket": {
       "teachingScript": {
@@ -31538,6 +31927,10 @@
         "url": "https://www.youtube.com/watch?v=4dAQpwwTfhE",
         "title": "Hive Pocket: Unboxing and rules",
         "channel": "Gen42games"
+      },
+      "picker": {
+        "blurb": "Place or move a piece, and be the first to surround the opposing Queen Bee on every side.",
+        "kinds": ["puzzle","duel"]
       }
     },
     "honors-end": {
@@ -32024,7 +32417,11 @@
         "title": "Jaipur - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=54043"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=54043",
+      "picker": {
+        "blurb": "Take turns taking goods or selling them, and try to be the richer trader at the end of each week.",
+        "kinds": ["card","duel"]
+      }
     },
     "john-company-second-edition": {
       "bggTime": {
@@ -33759,6 +34156,10 @@
             }
           ]
         }
+      },
+      "picker": {
+        "blurb": "Hold offices in one shared company, make deals, and score reputation rather than the cash in front of you.",
+        "kinds": ["strategy"]
       }
     },
     "kingdomino": {
@@ -34335,7 +34736,11 @@
         "title": "Kingdomino - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=204583"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=204583",
+      "picker": {
+        "blurb": "Draft dominoes and connect matching terrain into a kingdom, scoring each group by its squares and crowns.",
+        "kinds": ["puzzle"]
+      }
     },
     "kingdomino-origins": {
       "bggTime": {
@@ -34555,6 +34960,10 @@
         "url": "https://www.youtube.com/watch?v=XPnoLpD7-ic",
         "title": "Kingdomino Origins - How to play",
         "channel": "BlueOrangeUSA"
+      },
+      "picker": {
+        "blurb": "Take dominoes in turn, starting with discovery, and score the grid after the last domino is placed.",
+        "kinds": ["puzzle"]
       }
     },
     "the-two-towers-trick-taking-game": {
@@ -35065,7 +35474,11 @@
         "title": "The Lord of the Rings: The Two Towers – Trick-Taking Game - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=448271"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=448271",
+      "picker": {
+        "blurb": "Play cards together across 18 chapters, follow the led card, and meet the goals before the hands run out.",
+        "kinds": ["card","coop"]
+      }
     },
     "marvel-villainous": {
       "bggTime": {
@@ -35865,7 +36278,11 @@
         }
       ],
       "charactersLabel": "Villains",
-      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 664509, USe01. The booklet link on this page opens the file. Card text that the guide does not explain stays on the card."
+      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 664509, USe01. The booklet link on this page opens the file. Card text that the guide does not explain stays on the card.",
+      "picker": {
+        "blurb": "Move to a new location in your own domain, take the actions there, and be first to meet your villain's goal.",
+        "kinds": ["card"]
+      }
     },
     "men-nefer": {
       "bggTime": {
@@ -36094,7 +36511,11 @@
         "title": "How to play Men-Nefer Ludonova",
         "channel": "Ludonova · Editorial de juegos de mesa"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=404431"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=404431",
+      "picker": {
+        "blurb": "Move through flood, sowing, and harvest over three eras, and finish with the most prestige.",
+        "kinds": ["strategy"]
+      }
     },
     "money": {
       "bggTime": {
@@ -36591,7 +37012,11 @@
         "title": "How to Play Money",
         "channel": "Bitewing Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=125"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=125",
+      "picker": {
+        "blurb": "Secretly bid money cards, then swap that bid with the market or another player to build your currencies.",
+        "kinds": ["card"]
+      }
     },
     "monkey-palace": {
       "teachingScript": {
@@ -36998,7 +37423,11 @@
         "title": "Monkey Palace - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=412911"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=412911",
+      "picker": {
+        "blurb": "Build one staircase from your bricks, note the ground color where it starts, and score as many banana points as you can.",
+        "kinds": ["puzzle"]
+      }
     },
     "monopoly-deal": {
       "teachingScript": {
@@ -37643,7 +38072,11 @@
         "title": "How to Play Monopoly Deal",
         "channel": "Triple S Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=40398"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=40398",
+      "picker": {
+        "blurb": "Draw two cards, collect property sets, and win as soon as you complete three full sets of different colors.",
+        "kinds": ["card"]
+      }
     },
     "moonrakers-titan-edition": {
       "bggTime": {
@@ -38029,7 +38462,11 @@
           }
         ]
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=438924"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=438924",
+      "picker": {
+        "blurb": "Negotiate a contract, resolve its hazards and rewards, and be the first player to reach 10 prestige.",
+        "kinds": ["card","strategy"]
+      }
     },
     "moonrollers": {
       "teachingScript": {
@@ -38875,6 +39312,10 @@
         "url": "https://www.youtube.com/watch?v=qP7HfNaHlnw",
         "title": "Moonrollers | How to Play",
         "channel": "IV Studio"
+      },
+      "picker": {
+        "blurb": "Roll five dice, then hire a crew card that matches what you rolled and earn prestige on contracts.",
+        "kinds": ["dice"]
       }
     },
     "my-lil-everdell": {
@@ -39054,7 +39495,11 @@
         "Most points after round 4 wins.",
         "Tie: most points on cards.",
         "Every 2 leftover resources become 1 point."
-      ]
+      ],
+      "picker": {
+        "blurb": "Roll the resource dice, gather goodies, and play three turns each round before everyone heads home.",
+        "kinds": ["dice"]
+      }
     },
     "mycelia": {
       "bggTime": {
@@ -39187,6 +39632,10 @@
         "url": "https://www.youtube.com/watch?v=Znn6f-W95_M",
         "title": "Mycelia - How to Play. Basic and Advance Rules, and Icons Explanation Included. A 🍄Race Puzzle.",
         "channel": "Meeple University"
+      },
+      "picker": {
+        "blurb": "Play all three cards in any order, move dewdrops, and be the first to clear your board.",
+        "kinds": ["card"]
       }
     },
     "mythic-mischief": {
@@ -40309,7 +40758,11 @@
             }
           }
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Take a mythic phase and a tomekeeper phase with your team, and be the first team to 10 mischief.",
+        "kinds": ["strategy"]
+      }
     },
     "new-york-zoo": {
       "teachingScript": {
@@ -41194,7 +41647,11 @@
         "title": "How to Play New York Zoo",
         "channel": "Capstone Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=300877"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=300877",
+      "picker": {
+        "blurb": "Design an animal park and be the first to cover every construction space with enclosures and attractions.",
+        "kinds": ["puzzle"]
+      }
     },
     "the-old-kings-crown": {
       "bggTime": {
@@ -41426,7 +41883,11 @@
       "scoringSummary": [
         "Most influence in supply at the end of the last round wins.",
         "Tie: the Kingdom's Favour, then the order track."
-      ]
+      ],
+      "picker": {
+        "blurb": "Bid for kingdom cards, place them beside regions, and play the recommended five rounds for influence.",
+        "kinds": ["card","strategy"]
+      }
     },
     "onitama": {
       "bggTime": {
@@ -41883,7 +42344,11 @@
         "title": "Onitama - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=160477"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=160477",
+      "picker": {
+        "blurb": "Choose one of your two cards and move a student or the master the way that card shows.",
+        "kinds": ["card","duel"]
+      }
     },
     "paladins-of-the-west-kingdom": {
       "bggTime": {
@@ -42283,7 +42748,11 @@
         "title": "How to Play Paladins of the West Kingdom (Rules School) with the Game Boy Geek",
         "channel": "Game Boy Geek"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266810"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266810",
+      "picker": {
+        "blurb": "Take one action or pass, continue clockwise for seven rounds, and finish with the highest total.",
+        "kinds": ["strategy"]
+      }
     },
     "pan-am": {
       "teachingScript": {
@@ -42772,6 +43241,10 @@
         "url": "https://www.youtube.com/watch?v=KuiTqEbyLU8",
         "title": "How to Play Pan Am",
         "channel": "Geek & Sundry"
+      },
+      "picker": {
+        "blurb": "Claim airline routes, spend the income on Pan Am stock, and hold the most stock after seven rounds.",
+        "kinds": ["strategy"]
       }
     },
     "pandemic": {
@@ -43261,7 +43734,11 @@
         "title": "Pandemic - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=30549"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=30549",
+      "picker": {
+        "blurb": "You win or lose together, and you win as soon as cures have been discovered for all four diseases.",
+        "kinds": ["coop"]
+      }
     },
     "parks": {
       "bggTime": {
@@ -44347,7 +44824,11 @@
         "title": "How to Play PARKS",
         "channel": "Keymaster"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266524"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266524",
+      "picker": {
+        "blurb": "Hike the trail, visit parks, and after four seasons score the parks, photos, and the year card.",
+        "kinds": ["strategy"]
+      }
     },
     "parks-second-edition": {
       "rulebookSearchable": true,
@@ -44582,7 +45063,11 @@
         "title": "Parks (2nd Edition) - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=437306"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=437306",
+      "picker": {
+        "blurb": "Move one hiker forward along the trail, stop at a site, and take that site's action over three seasons.",
+        "kinds": ["strategy"]
+      }
     },
     "patchwork": {
       "bggTime": {
@@ -44883,7 +45368,11 @@
         "title": "How to Play Patchwork in 2 Minutes - The Rules Girl",
         "channel": "The Rules Girl"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=163412"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=163412",
+      "picker": {
+        "blurb": "Buy patches and sew them into your quilt while you race along a time board, and finish with the higher score.",
+        "kinds": ["puzzle","duel"]
+      }
     },
     "pillars-of-fate": {
       "teachingScript": {
@@ -45370,7 +45859,11 @@
         "title": "Pillars of Fate: How to Play",
         "channel": "IV Studio"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=440941"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=440941",
+      "picker": {
+        "blurb": "Play one card into a lane, win quests for renown, and hold the most renown after three ages.",
+        "kinds": ["card","duel"]
+      }
     },
     "play-nine": {
       "teachingScript": {
@@ -45783,7 +46276,11 @@
         "title": "How To Play | Play Nine, The Card Game Of Golf",
         "channel": "Play Nine: The Card Game of Golf"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=22950"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=22950",
+      "picker": {
+        "blurb": "Draw a card, replace one of yours or flip one face up, and shoot the lowest score over nine holes.",
+        "kinds": ["card"]
+      }
     },
     "project-l": {
       "bggTime": {
@@ -46678,7 +47175,11 @@
         "title": "Project L - How To Play (in under 9 minutes)",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=260180"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=260180",
+      "picker": {
+        "blurb": "Take three actions to fill puzzle recesses with pieces, and finish with the most points.",
+        "kinds": ["puzzle"]
+      }
     },
     "the-quacks-of-quedlinburg": {
       "bggTime": {
@@ -47607,7 +48108,11 @@
         "title": "The Quacks Of Quedlinburg - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=244521"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=244521",
+      "picker": {
+        "blurb": "Draw chips from your bag into the pot for nine turns, and finish with the marker farthest along the track.",
+        "kinds": ["dice"]
+      }
     },
     "raccoon-tycoon": {
       "teachingScript": {
@@ -48466,7 +48971,11 @@
         "title": "How to Play Raccoon Tycoon (Rules School) with the Game Boy Geek",
         "channel": "Game Boy Geek"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=254386"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=254386",
+      "picker": {
+        "blurb": "Produce commodities, sell them or build towns with them, and win with the best towns and railroads.",
+        "kinds": ["strategy"]
+      }
     },
     "radlands": {
       "bggTime": {
@@ -48653,6 +49162,10 @@
         "url": "https://www.youtube.com/watch?v=DHj57pV1vfw",
         "title": "Rage How To Play",
         "channel": "Shuffle Up and Deal"
+      },
+      "picker": {
+        "blurb": "Bid how many hands you will win, follow the led color, and hold the highest score after ten rounds.",
+        "kinds": ["card"]
       }
     },
     "ravine": {
@@ -49119,6 +49632,10 @@
         "url": "https://www.youtube.com/watch?v=A2DaX6uzSTY",
         "title": "Ravine: How to Play",
         "channel": "Stellar Factory"
+      },
+      "picker": {
+        "blurb": "Work together to survive until rescue, and each day forage at the same time before you reveal those cards.",
+        "kinds": ["coop"]
       }
     },
     "rook": {
@@ -49710,7 +50227,11 @@
         "title": "How to play Rook",
         "channel": "Triple S Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1260"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1260",
+      "picker": {
+        "blurb": "With your partner, capture the scoring counters in each hand and be the first side to reach 300 points.",
+        "kinds": ["card"]
+      }
     },
     "root": {
       "bggTime": {
@@ -53725,7 +54246,11 @@
         "title": "Learn to Play Root in 24 Minutes (with updated rules)",
         "channel": "RTFM"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=237182"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=237182",
+      "picker": {
+        "blurb": "Take a turn of birdsong, daylight, and evening, and be the first player to reach 30 points.",
+        "kinds": ["strategy"]
+      }
     },
     "rummikub": {
       "bggTime": {
@@ -54417,7 +54942,11 @@
         "title": "Sagrada (NEW) - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=199561"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=199561",
+      "picker": {
+        "blurb": "Draft colored dice into a private window for ten rounds, and keep matching colors or values from sharing an edge.",
+        "kinds": ["dice","puzzle"]
+      }
     },
     "sail": {
       "bggTime": {
@@ -54946,6 +55475,10 @@
         "url": "https://www.youtube.com/watch?v=C-3cZE6Mu5E",
         "title": "How to Play Sail | Complete Rules Tutorial & Board Game Guide",
         "channel": "The Dice Brigade"
+      },
+      "picker": {
+        "blurb": "Read each other and play cards together that move the ship or fight the Kraken.",
+        "kinds": ["card","coop","duel"]
       }
     },
     "scales-of-fate": {
@@ -55424,7 +55957,11 @@
         "title": "Scales of Fate: How to Play",
         "channel": "IV Studio"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=437356"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=437356",
+      "picker": {
+        "blurb": "Place a demigod on an open action and take it at once, gaining or losing renown across three ages.",
+        "kinds": ["strategy","duel"]
+      }
     },
     "scout": {
       "rulebookSearchable": true,
@@ -55912,6 +56449,10 @@
         "url": "https://www.youtube.com/watch?v=3KRCDbphajw",
         "title": "How to play SCOUT card game (official rules, instructions and gameplay) | boardgamesTV",
         "channel": "boardgamesTV"
+      },
+      "picker": {
+        "blurb": "Play sets from a hand you cannot reorder, capture cards from the table, and finish the rounds with the high score.",
+        "kinds": ["card"]
       }
     },
     "sequence": {
@@ -56456,7 +56997,11 @@
         "title": "How to Play Sequence in 2 Minutes - The Rules Girl",
         "channel": "The Dice Tower"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2375"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=2375",
+      "picker": {
+        "blurb": "Play one card, then place a chip on a matching free space, and complete the sequences your table needs.",
+        "kinds": ["card"]
+      }
     },
     "seti": {
       "bggTime": {
@@ -57026,7 +57571,11 @@
         "title": "SETI: Search for Extraterrestrial Intelligence - A Quick Start Tutorial in around 10 Minutes.",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=418059"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=418059",
+      "picker": {
+        "blurb": "Take one main action a turn, launch probes and scan, and hold the most points after five rounds.",
+        "kinds": ["strategy"]
+      }
     },
     "shallow-regrets": {
       "rulebookSearchable": true,
@@ -57292,6 +57841,10 @@
         "url": "https://www.youtube.com/watch?v=8M7fYUjElZg",
         "title": "How to Play Shallow Regrets | Judson Cowan | The small Deep Regrets Card Game | Button Shy Games",
         "channel": "Fun With Boxes"
+      },
+      "picker": {
+        "blurb": "Draw two fish, catch one if you can, throw the rest back, and finish with the highest score.",
+        "kinds": ["card"]
       }
     },
     "skip-bo": {
@@ -57750,7 +58303,11 @@
         "title": "How to Play Skip-Bo",
         "channel": "Triple S Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1269"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=1269",
+      "picker": {
+        "blurb": "Draw five cards and build piles from 1 through 12, racing to play every card in your stock pile.",
+        "kinds": ["card"]
+      }
     },
     "sky-team": {
       "bggTime": {
@@ -58513,7 +59070,11 @@
         "title": "Sky Team - Official How To Play",
         "channel": "Before You Play"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=373106"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=373106",
+      "picker": {
+        "blurb": "Land the plane together on the basic Montreal approach, and you either win that landing or you do not.",
+        "kinds": ["coop","duel"]
+      }
     },
     "sniper-elite-the-board-game": {
       "bggTime": {
@@ -59275,7 +59836,11 @@
         "title": "Sniper Elite: The Board Game - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=295262"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=295262",
+      "picker": {
+        "blurb": "One player sneaks on a hidden board to finish both objectives, while the others win by wounding that sniper twice.",
+        "kinds": ["strategy"]
+      }
     },
     "soar": {
       "teachingScript": {
@@ -59744,7 +60309,11 @@
         "title": "Soar - How To Play",
         "channel": "IV Studio"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=464147"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=464147",
+      "picker": {
+        "blurb": "Play bid tokens onto quests, score the most points from the bids you win, and watch the lowest score take a final boost.",
+        "kinds": ["strategy"]
+      }
     },
     "splendor": {
       "bggTime": {
@@ -60327,7 +60896,11 @@
         "title": "Splendor - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=148228"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=148228",
+      "picker": {
+        "blurb": "Collect gems, buy developments, and after someone reaches 15 prestige finish the round with the most prestige.",
+        "kinds": ["card"]
+      }
     },
     "square-one": {
       "bggTime": {
@@ -60670,7 +61243,11 @@
         "title": "STAR WARS: The Deckbuilding Game | OFFICIAL How To Play",
         "channel": "Fantasy Flight Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=374173"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=374173",
+      "picker": {
+        "blurb": "One of you leads the Rebels and the other the Empire, gaining resources and trying to destroy three opposing bases.",
+        "kinds": ["card","duel"]
+      }
     },
     "star-wars-villainous": {
       "bggTime": {
@@ -61339,7 +61916,11 @@
         }
       ],
       "charactersLabel": "Villains",
-      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 665043, EN01. The booklet link on this page opens the file. One side of the reference card lists every objective. Card text the guide does not explain stays on the card."
+      "charactersAidNote": "A short paraphrase of that villain from the Ravensburger instructions, file 665043, EN01. The booklet link on this page opens the file. One side of the reference card lists every objective. Card text the guide does not explain stays on the card.",
+      "picker": {
+        "blurb": "Move to a different location, take each action there once, and be the first to meet your villain's objective.",
+        "kinds": ["card"]
+      }
     },
     "survive-the-island": {
       "teachingScript": {
@@ -61791,6 +62372,10 @@
         "url": "https://www.youtube.com/watch?v=iuaXh_pNqCc",
         "title": "Survive The Island 🏝️🦈 | How to Play",
         "channel": "Studio Zygomatic"
+      },
+      "picker": {
+        "blurb": "Move adventurers and rafts toward the rescue islands, and get them off before the third volcano is revealed.",
+        "kinds": ["strategy"]
       }
     },
     "tend": {
@@ -62415,7 +63000,11 @@
         "title": "Tend — How to Play",
         "channel": "IV Studio"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=427388"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=427388",
+      "picker": {
+        "blurb": "Mark the same shared tasks at the same time for 12 rounds, then total the sheet after one last neighbor phase.",
+        "kinds": ["strategy"]
+      }
     },
     "ticket-to-ride": {
       "bggTime": {
@@ -62969,7 +63558,11 @@
         "title": "Ticket to Ride - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=9209"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=9209",
+      "picker": {
+        "blurb": "Lay train routes between cities on the North America map, and score your tickets after the last round.",
+        "kinds": ["strategy"]
+      }
     },
     "time-to-panic": {
       "teachingScript": {
@@ -63646,6 +64239,10 @@
         "url": "https://www.youtube.com/watch?v=Vtrq3bA4igU",
         "title": "How to Play - Time to Panic",
         "channel": "Board Gaming Crew"
+      },
+      "picker": {
+        "blurb": "Work together to put the timeline in order from the smallest number to the largest, with fewer mistakes scoring better.",
+        "kinds": ["coop"]
       }
     },
     "tiny-towns": {
@@ -64786,7 +65383,11 @@
         "title": "Tiny Towns - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=265736"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=265736",
+      "picker": {
+        "blurb": "The builder names a resource and everyone places that cube, trying to build the most prosperous tiny town.",
+        "kinds": ["puzzle"]
+      }
     },
     "toy-battle": {
       "teachingScript": {
@@ -65090,7 +65691,11 @@
         "title": "Toy Battle - How to Play. Complete, Clear, Concise Board Game Tutorial",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=434654"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=434654",
+      "picker": {
+        "blurb": "Draw troops onto your rack or place one and use its effect, trying to take the enemy headquarters or earn medals.",
+        "kinds": ["duel"]
+      }
     },
     "trio": {
       "teachingScript": {
@@ -65523,6 +66128,10 @@
         "url": "https://www.youtube.com/watch?v=3DeKzlOe6ZA",
         "title": "How to Play TRIO in 4 Minutes",
         "channel": "The Dice Tower"
+      },
+      "picker": {
+        "blurb": "Reveal numbered cards one by one, stop when two numbers differ, and try to win sets of three matching cards.",
+        "kinds": ["card"]
       }
     },
     "turing-machine": {
@@ -66004,7 +66613,11 @@
         "title": "Turing Machine - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=356123"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=356123",
+      "picker": {
+        "blurb": "Propose a three-digit code, question up to three verifiers, and be the first to find the only code that passes.",
+        "kinds": ["puzzle"]
+      }
     },
     "vinhos-deluxe-edition": {
       "bggTime": {
@@ -66367,7 +66980,11 @@
           }
         ]
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=175640"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=175640",
+      "picker": {
+        "blurb": "Produce wine for a Portuguese house, take two actions each year, and finish with the most prestige.",
+        "kinds": ["strategy"]
+      }
     },
     "wandering-towers": {
       "teachingScript": {
@@ -67729,7 +68346,11 @@
         "title": "How to Play Wandering Towers",
         "channel": "Capstone Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=355483"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=355483",
+      "picker": {
+        "blurb": "Play two cards to move towers and wizards, fill your potion bottles, and get every wizard into Ravenskeep.",
+        "kinds": ["card"]
+      }
     },
     "watergate": {
       "bggTime": {
@@ -68712,7 +69333,11 @@
         "title": "Watergate - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=274364"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=274364",
+      "picker": {
+        "blurb": "One of you plays the editor and the other Nixon, playing cards each round until a momentum track is decided.",
+        "kinds": ["card","duel"]
+      }
     },
     "welcome-to-the-moon": {
       "bggTime": {
@@ -69217,6 +69842,10 @@
         "url": "https://www.youtube.com/watch?v=tszt0Igwqgw",
         "title": "Welcome to the Moon - GameNight! Se10 Ep28 - How to Play and Playthrough",
         "channel": "BoardGameGeek"
+      },
+      "picker": {
+        "blurb": "Everyone writes a number from one of three flipped cards and may take its action, then the most points wins that adventure.",
+        "kinds": ["strategy"]
       }
     },
     "wingspan": {
@@ -70100,7 +70729,11 @@
         "title": "Wingspan - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266192"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=266192",
+      "picker": {
+        "blurb": "Fill three habitats with birds over four rounds, and finish with the most points from birds, eggs, and goals.",
+        "kinds": ["card","strategy"]
+      }
     },
     "7-wonders-second-edition": {
       "bggTime": {
@@ -71096,7 +71729,11 @@
         "title": "7 Wonders (Second Edition) - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=316377"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=316377",
+      "picker": {
+        "blurb": "Play cards at the same time over three ages, build your city or your wonder, and score points after the third age.",
+        "kinds": ["card"]
+      }
     },
     "7-wonders-dice": {
       "teachingScript": {
@@ -71746,7 +72383,11 @@
         "title": "Learn the Rules of 7 Wonders Dice in 7 minutes!",
         "channel": "Repos Production"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=446231"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=446231",
+      "picker": {
+        "blurb": "Roll and choose dice to construct one of the seven cities, then count victory points and take the highest score.",
+        "kinds": ["dice"]
+      }
     },
     "agent-avenue": {
       "teachingScript": {
@@ -72347,7 +72988,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play two differently named cards, one face up and one face down, and catch the other meeple before they catch yours.",
+        "kinds": ["card"]
+      }
     },
     "brick-like-this": {
       "teachingScript": {
@@ -73077,7 +73722,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Teams race at the same time to build models from bricks, and the team with the most points after six rounds wins.",
+        "kinds": ["party"]
+      }
     },
     "burgle-bros-2-the-casino-capers": {
       "bggTime": {
@@ -73430,7 +74079,11 @@
         "title": "Burgle Bros 2: The Casino Capers - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=286537"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=286537",
+      "picker": {
+        "blurb": "The crew hits a casino together, and you win by cracking the safe and finishing the finale before anyone reaches 6 heat.",
+        "kinds": ["coop"]
+      }
     },
     "burgle-bros": {
       "bggTime": {
@@ -73853,6 +74506,10 @@
         "url": "https://www.youtube.com/watch?v=loj9Qmh4rq0",
         "title": "How to Play Burgle Bros",
         "channel": "The Board & Barrel"
+      },
+      "picker": {
+        "blurb": "Sneak a crew through three hidden floors, open every safe, and get everyone to the roof with the loot.",
+        "kinds": ["coop"]
       }
     },
     "burgle-bros-3-future-flip": {
@@ -74393,7 +75050,11 @@
         "Most money when a camel reaches the finish wins.",
         "A tie is shared.",
         "You can never have less than 1 pound."
-      ]
+      ],
+      "picker": {
+        "blurb": "Bet on a camel race nobody owns, taking one race-track action and optionally one betting action on your turn.",
+        "kinds": ["card"]
+      }
     },
     "cant-stop": {
       "bggTime": {
@@ -74734,6 +75395,10 @@
         "url": "https://www.youtube.com/watch?v=--JNyjcY6-k",
         "title": "How to Play the Classic Push Your Luck  Game - Can’t Stop! | Sid Sackson | Published by Playte Games",
         "channel": "Fun With Boxes"
+      },
+      "picker": {
+        "blurb": "Roll four dice, split them into two sums, and decide whether to keep climbing those columns or stop.",
+        "kinds": ["dice"]
       }
     },
     "candy-land-bluey": {
@@ -75426,7 +76091,11 @@
         "title": "Cartographers - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=263918"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=263918",
+      "picker": {
+        "blurb": "Draw shapes onto your map of the northern lands over four seasons, and earn the most reputation stars.",
+        "kinds": ["puzzle"]
+      }
     },
     "celestia": {
       "teachingScript": {
@@ -75924,7 +76593,11 @@
         "title": "Celestia - How to Play in 4 minutes - Explainer - Push-your-luck - Bluffing",
         "channel": "BoardgameNinja"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=175117"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=175117",
+      "picker": {
+        "blurb": "Share one aircraft, pay the captain's dice with equipment to fly farther, and bring home the most valuable treasures.",
+        "kinds": ["dice"]
+      }
     },
     "container": {
       "bggTime": {
@@ -76448,7 +77121,11 @@
         "title": "Container - How to Play. Complete, Clear, Concise Board Game Tutorial",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=453740"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=453740",
+      "picker": {
+        "blurb": "Take two actions to build, produce, buy, sail, or reprice, and hold the most cash when two container colors run out.",
+        "kinds": ["strategy"]
+      }
     },
     "cozy-stickerville": {
       "teachingScript": {
@@ -76881,7 +77558,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draw one village event and take one action, changing the village together over ten years, with no way to lose.",
+        "kinds": ["coop"]
+      }
     },
     "the-crew-journey-to-the-ends-of-the-earth": {
       "bggTime": {
@@ -77688,6 +78369,10 @@
         "url": "https://www.youtube.com/watch?v=VDdaRjQCPiU",
         "title": "The Crew: Journey to the Ends of the Earth | How to Play",
         "channel": "One Rule Wrong"
+      },
+      "picker": {
+        "blurb": "You win or lose together: deal the cards, assign the task, and play out the hand for that stage.",
+        "kinds": ["card","coop"]
       }
     },
     "the-crew-mission-deep-sea": {
@@ -78541,7 +79226,11 @@
         "title": "The Crew Mission deep sea in about 3 minutes",
         "channel": "3 Minute Board Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=324856"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=324856",
+      "picker": {
+        "blurb": "You win together or lose together, playing each logbook mission's tasks as one voyage.",
+        "kinds": ["card","coop"]
+      }
     },
     "the-crew-the-quest-for-planet-nine": {
       "bggTime": {
@@ -79175,7 +79864,11 @@
         "title": "The Crew The Quest for Planet Nine Board Game - How to Play - Our BEST Trick Taking manual?",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=284083"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=284083",
+      "picker": {
+        "blurb": "Play cards together across 50 missions, and you win only when every task is completed by the player holding it.",
+        "kinds": ["card","coop"]
+      }
     },
     "cryptid": {
       "bggTime": {
@@ -79692,7 +80385,11 @@
         "title": "Cryptid Board Game – How to Play & Setup (CONCISE rules, so you can drop the rulebook!)",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=246784"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=246784",
+      "picker": {
+        "blurb": "Each of you holds one clue, question a space or search it, and be first to find the habitat every clue shares.",
+        "kinds": ["puzzle"]
+      }
     },
     "flamecraft": {
       "bggTime": {
@@ -80890,7 +81587,11 @@
         "title": "Flamecraft - How to Play Board Game",
         "channel": "Meeple University"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=336986"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=336986",
+      "picker": {
+        "blurb": "Enchant shops in a dragon town, and end with your heart farthest along the track.",
+        "kinds": ["strategy"]
+      }
     },
     "fliptoons": {
       "teachingScript": {
@@ -81487,7 +82188,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Shuffle and flip a grid of toon cards, then compete to have the most fame in that grid.",
+        "kinds": ["card"]
+      }
     },
     "fliptoons-season-2": {
       "teachingScript": {
@@ -82190,7 +82895,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Flip a grid of toon cards and spend fame to hire new toons or dismiss cards, chasing the most fame.",
+        "kinds": ["card"]
+      }
     },
     "for-sale-autorama": {
       "teachingScript": {
@@ -82688,7 +83397,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Hire advisors, use them to find vehicles, sell those vehicles, and end with the most money.",
+        "kinds": ["card"]
+      }
     },
     "the-fox-in-the-forest": {
       "teachingScript": {
@@ -83074,7 +83787,11 @@
         "title": "How to Play Fox in the Forest (Rules School) with the Game Boy Geek",
         "channel": "Game Boy Geek"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=221965"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=221965",
+      "picker": {
+        "blurb": "Play cards over several rounds, score the cards you capture, and finish with the most points.",
+        "kinds": ["card","duel"]
+      }
     },
     "got-five": {
       "bggTime": {
@@ -83463,7 +84180,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draw a hidden number tile, announce it, and be the first to work out your five numbers and guess them.",
+        "kinds": ["puzzle"]
+      }
     },
     "gruntz": {
       "teachingScript": {
@@ -83801,7 +84522,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Move two units and deploy one unit, and be the first to earn three victory stars.",
+        "kinds": ["duel"]
+      }
     },
     "hanabi": {
       "bggTime": {
@@ -84425,6 +85150,10 @@
         "url": "https://www.youtube.com/watch?v=d_js_3S_7K8",
         "title": "How to Play Hanabi | Roll For Crit",
         "channel": "Roll For Crit"
+      },
+      "picker": {
+        "blurb": "Work together as firework makers, and build five colored fireworks that each rise from 1 to 5.",
+        "kinds": ["card","coop"]
       }
     },
     "hypothetically": {
@@ -85064,7 +85793,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "One player answers a prompt about themselves, everyone else writes the number they expect, and the most points wins.",
+        "kinds": ["party"]
+      }
     },
     "inkling": {
       "teachingScript": {
@@ -85492,7 +86225,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Pass secret clue words to the players beside you, and decipher their words with ink cards, even by turning a letter.",
+        "kinds": ["word"]
+      }
     },
     "kinfire-delve-vainglorys-grotto": {
       "bggTime": {
@@ -85980,7 +86717,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Choose one of the four cards around the master, sharing one pool of health, and you lose together if it hits zero.",
+        "kinds": ["card","coop"]
+      }
     },
     "light-speed-arena": {
       "teachingScript": {
@@ -86582,7 +87323,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Place and aim your tiles in real time, then a picture lets the companion app resolve the battle.",
+        "kinds": ["puzzle"]
+      }
     },
     "the-lord-of-the-rings-duel-for-middle-earth": {
       "bggTime": {
@@ -87375,7 +88120,11 @@
         "title": "The Lord Of The Rings: Duel For Middle-earth - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=421006"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=421006",
+      "picker": {
+        "blurb": "Play three chapters as the Fellowship or as Sauron, and win at once by the quest, six races, or all seven regions.",
+        "kinds": ["card","duel"]
+      }
     },
     "lost-cities": {
       "bggTime": {
@@ -87746,7 +88495,11 @@
         "title": "How to Play Lost Cities in 3 Minutes - Rules Girl",
         "channel": "The Rules Girl"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=50"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=50",
+      "picker": {
+        "blurb": "Play cards to start expedition routes, bet on an expedition with wager cards, and lead after three games.",
+        "kinds": ["card","duel"]
+      }
     },
     "magic-maze-pocket": {
       "teachingScript": {
@@ -88350,7 +89103,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Move heroes in real time with only your own action, and everyone wins if each hero steals an item and leaves in time.",
+        "kinds": ["coop"]
+      }
     },
     "magical-athlete": {
       "teachingScript": {
@@ -88673,7 +89430,11 @@
         "Most points after four races wins.",
         "A tie is shared.",
         "Each race ends when the second racer finishes."
-      ]
+      ],
+      "picker": {
+        "blurb": "Roll your die and move that many spaces, race four times, and finish with the most points.",
+        "kinds": ["dice"]
+      }
     },
     "moon-colony-bloodbath": {
       "bggTime": {
@@ -89106,7 +89867,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Reveal the next progress card and everyone follows it, many of them fatal, then the most survivors wins.",
+        "kinds": ["card"]
+      }
     },
     "moonrakers": {
       "bggTime": {
@@ -89564,7 +90329,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Build a deck and attempt contracts alone or with temporary allies, and be first to 10 prestige.",
+        "kinds": ["card"]
+      }
     },
     "night-at-the-zoo": {
       "teachingScript": {
@@ -90233,7 +91002,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draft tiles and lay a path that guides your animals back to the zoo, then score after three rounds.",
+        "kinds": ["puzzle"]
+      }
     },
     "oath": {
       "bggTime": {
@@ -91185,7 +91958,11 @@
         "title": "How to Play Oath in 30 Minutes",
         "channel": "RTFM"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=291572"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=291572",
+      "picker": {
+        "blurb": "The chancellor and the exiles take turns of wake, act, and rest, trying to hold the oath long enough to win.",
+        "kinds": ["strategy"]
+      }
     },
     "ostia-mariner-edition": {
       "rulebookSearchable": true,
@@ -91661,7 +92438,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Choose a harbor, produce goods, sail those ships onward, and finish as the merchant with the most points.",
+        "kinds": ["strategy"]
+      }
     },
     "a-place-for-all-my-books": {
       "bggTime": {
@@ -91857,6 +92638,10 @@
             "max": 4
           }
         }
+      },
+      "picker": {
+        "blurb": "Move your meeple to a different action and do what it says, and you cannot repeat that action next turn.",
+        "kinds": ["strategy"]
       }
     },
     "point-city": {
@@ -92385,6 +93170,10 @@
         "url": "https://www.youtube.com/watch?v=0useZSTYDIE",
         "title": "How To Play Point City",
         "channel": "Board to Learn"
+      },
+      "picker": {
+        "blurb": "Collect resources and construct buildings in your own city, since those buildings add resources, bonuses, and points.",
+        "kinds": ["card"]
       }
     },
     "point-galaxy": {
@@ -92880,6 +93669,10 @@
         "url": "https://www.youtube.com/watch?v=AhLrMQ-ZgIg",
         "title": "Point Galaxy | How to Play | Learn to Play in 7 Minutes!",
         "channel": "kovray"
+      },
+      "picker": {
+        "blurb": "Draft planets, suns, and moons into solar systems, place planets in number order, and build the highest-scoring galaxy.",
+        "kinds": ["card"]
       }
     },
     "point-salad": {
@@ -93270,7 +94063,11 @@
         "title": "How to Play Point Salad",
         "channel": "Geek & Sundry"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=274960"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=274960",
+      "picker": {
+        "blurb": "Draft either one point card or two veggie cards, and score the most points for the ingredients in your salad.",
+        "kinds": ["card"]
+      }
     },
     "rebel-princess-deluxe-edition": {
       "rulebookSearchable": true,
@@ -93773,7 +94570,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play through a five-day party, avoid the princes' proposals, and finish the party with the fewest proposals.",
+        "kinds": ["card"]
+      }
     },
     "splendor-duel": {
       "bggTime": {
@@ -94522,7 +95323,11 @@
         "title": "Splendor Duel - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=364073"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=364073",
+      "picker": {
+        "blurb": "Race one opponent, and win at the end of your turn with 20 prestige, 10 crowns, or 10 prestige in one color.",
+        "kinds": ["card","duel"]
+      }
     },
     "tacta": {
       "teachingScript": {
@@ -95029,7 +95834,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Connect your cards so you cover opposing dots and protect your own, and show the most dots when the last card is played.",
+        "kinds": ["card"]
+      }
     },
     "tag-team": {
       "teachingScript": {
@@ -95562,7 +96371,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Fight, then build, and you win at the end of a flip if you drop an opposing fighter onto the knockout space.",
+        "kinds": ["card","duel"]
+      }
     },
     "targi": {
       "bggTime": {
@@ -95971,7 +96784,11 @@
         "title": "How to Play Targi (Rules School) with the Game Boy Geek",
         "channel": "Game Boy Geek"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=118048"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=118048",
+      "picker": {
+        "blurb": "Lead a Tuareg tribe, compete for the most prosperous tribe, and finish with the most victory points.",
+        "kinds": ["strategy","duel"]
+      }
     },
     "tenby": {
       "bggTime": {
@@ -96508,7 +97325,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draft day cards, build streets of terraces, piers, and landmarks, and finish with the most points.",
+        "kinds": ["card"]
+      }
     },
     "thunder-road-ignition": {
       "teachingScript": {
@@ -97076,7 +97897,11 @@
         "title": "Thunder Road: Ignition - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=464729"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=464729",
+      "picker": {
+        "blurb": "Race your cars through hazards, and be the first to get two of them across the finish line.",
+        "kinds": ["dice"]
+      }
     },
     "thunder-road-vendetta": {
       "teachingScript": {
@@ -98363,7 +99188,11 @@
         "title": "Thunder Road: Vendetta - How To Play",
         "channel": "Watch It Played"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=342070"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=342070",
+      "picker": {
+        "blurb": "Race, dodge hazards, slam, and shoot, and win by reaching the finish line or by being the last crew still running.",
+        "kinds": ["dice"]
+      }
     },
     "ticket-to-ride-first-journey-u-s": {
       "bggTime": {
@@ -98914,7 +99743,11 @@
         "title": "How to play Ticket to Ride First Journey",
         "channel": "Triple S Games"
       },
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=205125"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=205125",
+      "picker": {
+        "blurb": "Draw two train cards or play cards to claim a route, and be the first to complete six tickets.",
+        "kinds": ["card"]
+      }
     },
     "unicorn-glitterluck-cloud-stacking": {
       "bggTime": {
@@ -99025,6 +99858,10 @@
         "url": "https://www.youtube.com/watch?v=RVPIxNfeRCo",
         "title": "How to Play Unicorn Glitterluck Cloud Stacking",
         "channel": "Game Like A Mother"
+      },
+      "picker": {
+        "blurb": "Stack pieces together on the clouds, and if nothing falls, everyone wins.",
+        "kinds": ["coop","puzzle"]
       }
     },
     "wingspan-pocket": {
@@ -99541,7 +100378,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Compete to gather the best flock of birds from around the world.",
+        "kinds": ["card"]
+      }
     },
     "winnie-the-pooh-serious-detective": {
       "teachingScript": {
@@ -99810,7 +100651,11 @@
       ],
       "rulebook": "https://bgquick-rulebooks-relay.bgquick.workers.dev/winnie-the-pooh-serious-detective",
       "rulebookSearchable": true,
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=449448"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=449448",
+      "picker": {
+        "blurb": "Play together as detectives and tackle the three cases in order, where solving the case is the goal.",
+        "kinds": ["coop"]
+      }
     },
     "corps-of-discovery-duo": {
       "bggTime": {
@@ -99896,7 +100741,11 @@
         "Once both fort spaces on the rules board are filled, a player may place the fort instead of a normal turn, if all ten terrains are on the map."
       ],
       "rulebook": "https://c.tabletopia.com/games/corps-of-discovery-duo/rules/cod-duo-rules/en",
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=462207"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=462207",
+      "picker": {
+        "blurb": "Each of you plays map cards onto one shared map, and you may place the fort once both fort spaces are ready.",
+        "kinds": ["card","duel"]
+      }
     },
     "corps-of-discovery-ultimate-edition": {
       "bggTime": {
@@ -100145,6 +100994,10 @@
         "url": "https://www.youtube.com/watch?v=is5q61atCpo",
         "title": "How To Setup and Play Lairs Board Game",
         "channel": "How Board"
+      },
+      "picker": {
+        "blurb": "Secretly build a lair, then explore your rival's lair and draw a map while they build in return.",
+        "kinds": ["duel"]
       }
     },
     "parks-europe": {
@@ -100274,6 +101127,10 @@
         "url": "https://www.youtube.com/watch?v=1ji74B70fxQ",
         "title": "Ra: The Dice Game — How to Play, and Why It's a Gem",
         "channel": "Board Gems"
+      },
+      "picker": {
+        "blurb": "Take turns clockwise through three epochs, and finish the current turn when Ra reaches the last sun space.",
+        "kinds": ["dice"]
       }
     },
     "tag-team-arthurs-legacy": {
@@ -100338,7 +101195,11 @@
         "Reducing an opposing fighter to KO wins at the end of that simultaneous flip."
       ],
       "rulebook": "https://games-for-you.oozmi-cdn.com/products/440323ce-0d91-4a65-8a0b-169989b01c26/pdfs/tag-team-rulebook-en.pdf",
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=460556"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=460556",
+      "picker": {
+        "blurb": "Fight, then build, with six Arthurian fighters, and you win when an opposing fighter is reduced to a knockout.",
+        "kinds": ["card","duel"]
+      }
     },
     "tag-team-snk-arcade-legends": {
       "cover": "covers/tag-team-snk-arcade-legends.webp",
@@ -100805,7 +101666,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Assign a movement die to a car, then move and shoot, and win by reaching the finish or by being the last one running.",
+        "kinds": ["dice"]
+      }
     },
     "sea-salt-and-paper": {
       "bggTime": {
@@ -101123,7 +101988,11 @@
         "channel": "Watch It Played"
       },
       "bggId": "367220",
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=367220"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=367220",
+      "picker": {
+        "blurb": "Collect sets from a shared deck, and either score the most points or win at once with four mermaids.",
+        "kinds": ["card"]
+      }
     },
     "wyrmspan": {
       "bggTime": {
@@ -101493,7 +102362,11 @@
       },
       "bggId": "410201",
       "cover": "covers/wyrmspan.webp",
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=410201"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=410201",
+      "picker": {
+        "blurb": "Fill three caves with dragons over four rounds, and finish with the most victory points.",
+        "kinds": ["card","strategy"]
+      }
     },
     "finspan": {
       "bggTime": {
@@ -102033,7 +102906,11 @@
       },
       "bggId": "436126",
       "cover": "covers/finspan.webp",
-      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=436126"
+      "bgStatsUrl": "https://app.bgstatsapp.com/addPlay.html?gameId=436126",
+      "picker": {
+        "blurb": "Play a game about an ocean for four weeks, and finish week four with the most points.",
+        "kinds": ["card"]
+      }
     },
     "explorers-of-navoria": {
       "bggTime": {
@@ -102111,7 +102988,11 @@
           "lead": "Resources",
           "text": "Gather resources onto your board and spend them for the bonuses that ask for them."
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draft a card with a token, then send those tokens out as workers to explore and gather resources.",
+        "kinds": ["card"]
+      }
     },
     "fractured-sky": {
       "bggTime": {
@@ -102298,6 +103179,10 @@
         "url": "https://www.youtube.com/watch?v=zBuOi--xiaA",
         "title": "Learn to play Fractured Sky | How to Play",
         "channel": "IV Studio"
+      },
+      "picker": {
+        "blurb": "Place airships and build on floating platforms, then score regions by troop power over five rounds.",
+        "kinds": ["strategy"]
       }
     },
     "10-days-in-europe": {
@@ -105142,7 +106027,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play one card face up into its theater, cover what is already there, and win the battle or withdraw.",
+        "kinds": ["card","duel"]
+      }
     },
     "air-land-and-sea-spies-lies-and-supplies": {
       "bggTime": {
@@ -105381,7 +106270,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play one card into its theater so its ability happens now, and the battle ends when someone withdraws or both hands are empty.",
+        "kinds": ["card","duel"]
+      }
     },
     "alibis": {
       "bggTime": {
@@ -123461,7 +124354,11 @@
           "bggId": "261142",
           "rulesStatus": "pending"
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play cards and gather resources clockwise, and once you pass you sit out while everyone else keeps playing.",
+        "kinds": ["card","strategy"]
+      }
     },
     "exit-the-game-adventures-on-catan": {
       "bggTime": {
@@ -140978,7 +141875,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Take two different actions, such as move, spore, or explore, and end by decaying every slot on your mat.",
+        "kinds": ["strategy"]
+      }
     },
     "mysterium": {
       "commonMistakes": [
@@ -151909,7 +152810,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Draw two cards and keep one, or take a discard, and placing all four mermaids wins at once.",
+        "kinds": ["card"]
+      }
     },
     "seaside": {
       "bggTime": {
@@ -158171,7 +159076,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Be the fastest to spot the one matching symbol shared by two cards and call that symbol out.",
+        "kinds": ["party"]
+      }
     },
     "spy": {
       "bggTime": {
@@ -169736,7 +170645,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Take two actions to move, scheme, or attack, and defeat the opposing hero to win.",
+        "kinds": ["card"]
+      }
     },
     "unsurmountable": {
       "bggTime": {
@@ -171923,7 +172836,11 @@
             }
           ]
         }
-      ]
+      ],
+      "picker": {
+        "blurb": "Play birds over four rounds in this smaller Wingspan game, and finish with the most points.",
+        "kinds": ["card","strategy"]
+      }
     },
     "wits-and-wagers": {
       "bggTime": {
@@ -181395,7 +182312,7 @@
     if (url.origin !== window.location.origin) return false;
     var dest = "";
     if (hrefAttr.charAt(0) === "#") {
-      if (gamePathnameSlug() && (hrefAttr === "#/" || hrefAttr.indexOf("#/?") === 0 || hrefAttr === "#/night" || hrefAttr.indexOf("#/night?") === 0 || hrefAttr === "#/bags" || hrefAttr.indexOf("#/bags?") === 0 || hrefAttr.indexOf("#/game/") === 0)) {
+      if (gamePathnameSlug() && (hrefAttr === "#/" || hrefAttr.indexOf("#/?") === 0 || hrefAttr === "#/night" || hrefAttr.indexOf("#/night?") === 0 || hrefAttr === "#/pick" || hrefAttr.indexOf("#/pick?") === 0 || hrefAttr === "#/bags" || hrefAttr.indexOf("#/bags?") === 0 || hrefAttr.indexOf("#/game/") === 0)) {
         dest = (basePath() || "") + "/" + hrefAttr;
       }
     } else if (gamePathnameSlug(url.pathname)) {
@@ -186705,6 +187622,9 @@
     if ((pieces[0] || "").toLowerCase() === "bags") {
       return { route: "bags" };
     }
+    if ((pieces[0] || "").toLowerCase() === "pick") {
+      return { route: "pick", pickQuery: params };
+    }
     /* game-night:end */
     if (pieces[0] === "game" && pieces[1]) {
       var routed = gameRoute(pieces[1].toLowerCase());
@@ -187167,6 +188087,429 @@
     });
   }
   /* game-night:start */
+  var PICK_KEY = "bgq_picker_picks";
+  var PICK_DIFFICULTY = { easy: 1, medium: 1, heavy: 1 };
+  var PICK_KIND_ROWS = [
+    ["party", "Party"],
+    ["coop", "Cooperative"],
+    ["strategy", "Strategy"],
+    ["card", "Card game"],
+    ["puzzle", "Puzzle / tile"],
+    ["dice", "Dice"],
+    ["word", "Trivia / word"],
+    ["duel", "Two-player duel"]
+  ];
+  var PICK_KIND_LABEL = {};
+  PICK_KIND_ROWS.forEach(function (row) { PICK_KIND_LABEL[row[0]] = row[1]; });
+
+  function pickerDifficulty(game) {
+    var band = weightBand(game && game.weight);
+    if (band === "light" || band === "medium-light") return "easy";
+    if (band === "medium") return "medium";
+    if (band === "medium-heavy" || band === "heavy") return "heavy";
+    return "";
+  }
+  function pickerDifficultyLabel(id) {
+    if (id === "easy") return "Easy";
+    if (id === "medium") return "Medium";
+    if (id === "heavy") return "Heavy";
+    return "";
+  }
+  function parsePickSlugs(raw) {
+    var seen = {};
+    var next = [];
+    String(raw || "").split(",").forEach(function (part) {
+      if (next.length >= 100) return;
+      var slug = String(part || "").trim().toLowerCase();
+      if (!slug || seen[slug] || !DATA[slug]) return;
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return;
+      seen[slug] = true;
+      next.push(slug);
+    });
+    return next;
+  }
+  function readStoredPicks() {
+    try {
+      var raw = JSON.parse(localStorage.getItem(PICK_KEY) || "null");
+      if (!Array.isArray(raw)) return [];
+      return parsePickSlugs(raw.map(function (item) { return String(item || ""); }).join(","));
+    } catch (err) {
+      return [];
+    }
+  }
+  function writeStoredPicks(slugs) {
+    try { localStorage.setItem(PICK_KEY, JSON.stringify(slugs)); } catch (err) {}
+  }
+  function copyPickText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return false; });
+    }
+    return Promise.resolve(false);
+  }
+  function normalizePickerLink() {
+    var hash = window.location.hash || "";
+    if (hash && hash !== "#") return;
+    var params;
+    try { params = new URLSearchParams(window.location.search || ""); }
+    catch (err) { return; }
+    if (!params.has("pick")) return;
+    var who = cleanWho(params.has("who") ? params.get("who") : (params.get("owner") || ""));
+    if (!who.length) who = ["Cody"];
+    var next = new URLSearchParams();
+    next.set("who", who.map(function (name) { return name.toLowerCase(); }).join(","));
+    ["players", "time", "difficulty", "kind", "q", "picks"].forEach(function (key) {
+      var value = params.get(key);
+      if (value) next.set(key, value);
+    });
+    history.replaceState(null, "", window.location.pathname + "#/pick?" + next.toString());
+  }
+  function pickTimeLabel(value) {
+    var time = String(value || "");
+    if (!time) return "";
+    return /min|hour|hr/i.test(time) ? time : time + " min";
+  }
+  function pickKindLabels(game) {
+    var kinds = game && game.picker && Array.isArray(game.picker.kinds) ? game.picker.kinds : [];
+    var labels = [];
+    kinds.forEach(function (id) {
+      if (labels.length >= 2) return;
+      if (PICK_KIND_LABEL[id]) labels.push(PICK_KIND_LABEL[id]);
+    });
+    return labels;
+  }
+  function pickFacetFit(game, facet, state) {
+    if (!game) return "missing";
+    if (facet === "players") {
+      var span = playerSpan(game.players);
+      if (!span) return "missing";
+      return countIncluded(span, state.players) ? "match" : "miss";
+    }
+    if (facet === "time") {
+      var minutes = playMinutes(game, parseInt(state.players, 10) || 0);
+      if (!minutes) return "missing";
+      return timeHits(minutes, state.time) ? "match" : "miss";
+    }
+    if (facet === "difficulty") {
+      var difficulty = pickerDifficulty(game);
+      if (!difficulty) return "missing";
+      return difficulty === state.difficulty ? "match" : "miss";
+    }
+    if (facet === "kind") {
+      var kinds = game.picker && Array.isArray(game.picker.kinds) ? game.picker.kinds : [];
+      if (!kinds.length) return "missing";
+      return kinds.indexOf(state.kind) !== -1 ? "match" : "miss";
+    }
+    return "match";
+  }
+  function pickHiddenNote(games, state) {
+    var facets = [];
+    if (state.players) facets.push("players");
+    if (state.time) facets.push("time");
+    if (state.difficulty) facets.push("difficulty");
+    if (state.kind) facets.push("kind");
+    if (!facets.length) return "";
+    var counts = { games: 0, players: 0, time: 0, difficulty: 0, kind: 0 };
+    games.forEach(function (game) {
+      if (!textHits(game, state.q)) return;
+      if (!ownersHit(game, state.who)) return;
+      var missing = [];
+      var blocked = false;
+      facets.forEach(function (facet) {
+        var fit = pickFacetFit(game, facet, state);
+        if (fit === "missing") missing.push(facet);
+        else if (fit !== "match") blocked = true;
+      });
+      if (blocked || !missing.length) return;
+      counts.games += 1;
+      missing.forEach(function (facet) { counts[facet] += 1; });
+    });
+    if (!counts.games) return "";
+    var reasons = [];
+    if (counts.players) reasons.push("player count");
+    if (counts.time) reasons.push("play time");
+    if (counts.difficulty) reasons.push("difficulty");
+    if (counts.kind) reasons.push("kind of game");
+    if (!reasons.length) return "";
+    var noun = counts.games === 1 ? "1 game hidden" : counts.games + " games hidden";
+    var why = reasons.length === 1
+      ? reasons[0]
+      : reasons.length === 2
+        ? reasons[0] + " or " + reasons[1]
+        : reasons.slice(0, -1).join(", ") + ", or " + reasons[reasons.length - 1];
+    return noun + " (no " + why + ")";
+  }
+  function pickMatches(game, state) {
+    if (!ownersHit(game, state.who)) return false;
+    if (!textHits(game, state.q)) return false;
+    if (state.players && pickFacetFit(game, "players", state) !== "match") return false;
+    if (state.time && pickFacetFit(game, "time", state) !== "match") return false;
+    if (state.difficulty && pickFacetFit(game, "difficulty", state) !== "match") return false;
+    if (state.kind && pickFacetFit(game, "kind", state) !== "match") return false;
+    return true;
+  }
+  function pickByName(a, b) {
+    return String(a.name || "").localeCompare(String(b.name || ""), undefined, { sensitivity: "base" });
+  }
+  function pickChip(facet, value, label, aria, pressed) {
+    return '<button type="button" class="pick-chip" data-pick-facet="' + facet + '" data-pick-value="' + escapeHtml(value) + '" aria-pressed="' + (pressed ? "true" : "false") + '" aria-label="' + escapeHtml(aria) + '">' + escapeHtml(label) + "</button>";
+  }
+  function pickCard(game, saved) {
+    var bits = pickKindLabels(game);
+    if (game.players) bits.push(String(game.players));
+    if (game.time) bits.push(pickTimeLabel(game.time));
+    var difficulty = pickerDifficultyLabel(pickerDifficulty(game));
+    if (difficulty) bits.push(difficulty);
+    var blurb = game.picker && game.picker.blurb ? String(game.picker.blurb).trim() : "";
+    var heart = saved
+      ? "Remove " + game.name + " from your list"
+      : "Save " + game.name + " to your list";
+    return '<article class="pick-card" data-pick-slug="' + escapeHtml(game.slug) + '">' +
+      '<a class="pick-card-link" href="' + escapeHtml(gamePath(game.slug)) + '">' +
+        '<img class="pick-cover" alt="" width="72" height="72" loading="lazy" decoding="async" src="' + escapeHtml(coverUrl(game.slug)) + '">' +
+        '<span class="pick-card-body">' +
+          '<span class="pick-name">' + escapeHtml(game.name) + "</span>" +
+          (blurb ? '<span class="pick-blurb">' + escapeHtml(blurb) + "</span>" : "") +
+          (bits.length ? '<span class="pick-meta">' + escapeHtml(bits.join(" \u00b7 ")) + "</span>" : "") +
+        "</span>" +
+      "</a>" +
+      '<button type="button" class="pick-heart" data-pick-heart="' + escapeHtml(game.slug) + '" aria-pressed="' + (saved ? "true" : "false") + '" aria-label="' + escapeHtml(heart) + '">' +
+        (saved ? "\u2665" : "\u2661") +
+      "</button>" +
+    "</article>";
+  }
+  function readPickState(params) {
+    params = params || new URLSearchParams();
+    var whoSource = params.has("who") ? params.get("who") : (params.has("owner") ? params.get("owner") : null);
+    var who = whoSource == null ? ["Cody"] : cleanWho(whoSource);
+    if (!who.length) who = ["Cody"];
+    var players = String(params.get("players") || "");
+    var time = String(params.get("time") || "");
+    var difficulty = String(params.get("difficulty") || "");
+    var kind = String(params.get("kind") || "");
+    var fromUrl = params.has("picks");
+    return {
+      who: who,
+      players: PLAYER_PICKS[players] ? players : "",
+      time: TIME_PICKS[time] ? time : "",
+      difficulty: PICK_DIFFICULTY[difficulty] ? difficulty : "",
+      kind: PICK_KIND_LABEL[kind] ? kind : "",
+      q: String(params.get("q") || ""),
+      picks: fromUrl ? parsePickSlugs(params.get("picks")) : readStoredPicks(),
+      shortlist: fromUrl,
+      urlPicks: fromUrl
+    };
+  }
+  function writePickHash(state) {
+    var params = new URLSearchParams();
+    if (state.who.length) params.set("who", state.who.map(function (name) { return name.toLowerCase(); }).join(","));
+    if (state.players) params.set("players", state.players);
+    if (state.time) params.set("time", state.time);
+    if (state.difficulty) params.set("difficulty", state.difficulty);
+    if (state.kind) params.set("kind", state.kind);
+    if (state.q) params.set("q", state.q);
+    if (state.urlPicks && state.picks.length) params.set("picks", state.picks.join(","));
+    var nextHash = "#/pick?" + params.toString();
+    var next = window.location.pathname + window.location.search + nextHash;
+    if ((window.location.pathname + window.location.search + window.location.hash) !== next) {
+      history.replaceState(null, "", next);
+    }
+  }
+  function pickShareUrl(state) {
+    var params = new URLSearchParams();
+    var who = state.who.length ? state.who : ["Cody"];
+    params.set("who", who.map(function (name) { return name.toLowerCase(); }).join(","));
+    if (state.picks.length) params.set("picks", state.picks.join(","));
+    var path = window.location.pathname || "/";
+    return window.location.origin + path + "#/pick?" + params.toString();
+  }
+  function pickCountText(count) {
+    if (!count) return "No games on your list yet";
+    if (count === 1) return "1 game you'd like";
+    return count + " games you'd like";
+  }
+  function renderPicker(params) {
+    detailSlug = "";
+    clearGameAccent();
+    var pickLink = document.querySelector(".all-games-bar a.pick-entry");
+    if (pickLink) pickLink.setAttribute("aria-current", "page");
+    var state = readPickState(params);
+    var catalog = Object.keys(DATA).map(function (slug) { return DATA[slug]; });
+    function visibleGames() {
+      var list = state.shortlist
+        ? state.picks.map(function (slug) { return DATA[slug]; }).filter(Boolean)
+        : catalog.filter(function (game) { return pickMatches(game, state); });
+      return list.slice().sort(pickByName);
+    }
+    function paint() {
+      Array.prototype.forEach.call(document.querySelectorAll("#pick-page .pick-chip"), function (btn) {
+        var facet = btn.getAttribute("data-pick-facet");
+        var value = btn.getAttribute("data-pick-value") || "";
+        var on = false;
+        if (facet === "who") on = state.who.indexOf(value) !== -1;
+        else on = (state[facet] || "") === value;
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      var search = document.getElementById("pick-q");
+      if (search && document.activeElement !== search && search.value !== state.q) search.value = state.q;
+      var note = document.getElementById("pick-hidden");
+      if (note) note.textContent = state.shortlist ? "" : pickHiddenNote(catalog, state);
+      var games = visibleGames();
+      var list = document.getElementById("pick-list");
+      if (list) {
+        if (!games.length) {
+          list.innerHTML = '<p class="pick-empty">' + (state.shortlist ? "No games on your list yet" : "No games match.") + "</p>";
+        } else {
+          var saved = {};
+          state.picks.forEach(function (slug) { saved[slug] = true; });
+          list.innerHTML = games.map(function (game) { return pickCard(game, !!saved[game.slug]); }).join("");
+        }
+      }
+      var count = document.getElementById("pick-count");
+      if (count) count.textContent = pickCountText(state.picks.length);
+      var toggle = document.getElementById("pick-your-list");
+      if (toggle) toggle.setAttribute("aria-pressed", state.shortlist ? "true" : "false");
+    }
+    var whoChips = OWNER_NAMES.map(function (name) {
+      return pickChip("who", name, name, name + "\u2019s games", state.who.indexOf(name) !== -1);
+    }).join("");
+    var playerRows = [
+      ["", "Any", "Any player count"],
+      ["1", "1", "1 player"],
+      ["2", "2", "2 players"],
+      ["3", "3", "3 players"],
+      ["4", "4", "4 players"],
+      ["5", "5", "5 players"],
+      ["6", "6", "6 players"],
+      ["7", "7+", "7 or more players"]
+    ];
+    var timeRows = [
+      ["", "Any", "Any play time"],
+      ["under30", "Under 30 min", "Under 30 minutes"],
+      ["30-60", "About an hour (30\u201360)", "About an hour, 30 to 60 minutes"],
+      ["60-120", "Longer (1\u20132 hours)", "Longer, 1 to 2 hours"],
+      ["120", "Long (2+ hours)", "Long, 2 or more hours"]
+    ];
+    var difficultyRows = [
+      ["", "Any", "Any difficulty"],
+      ["easy", "Easy", "Easy"],
+      ["medium", "Medium", "Medium"],
+      ["heavy", "Heavy", "Heavy"]
+    ];
+    function rows(facet, list) {
+      return list.map(function (row) {
+        return pickChip(facet, row[0], row[1], row[2], (state[facet] || "") === row[0]);
+      }).join("");
+    }
+    var kindRows = [["", "Any", "Any kind of game"]].concat(PICK_KIND_ROWS.map(function (row) {
+      return [row[0], row[1], row[1]];
+    }));
+    appEl.innerHTML =
+      '<article class="pick-page" id="pick-page">' +
+        '<h2 class="title">Find a game to play</h2>' +
+        '<p class="pick-lead" id="pick-lead">Browse the collection and heart the games you\'d like to try. You can copy a link to send the list back.</p>' +
+        '<div class="pick-facet">' +
+          '<span class="pick-label" id="pick-who-label">Whose games</span>' +
+          '<div class="pick-chips" role="group" aria-labelledby="pick-who-label">' + whoChips + "</div>" +
+        "</div>" +
+        '<div class="pick-facet">' +
+          '<span class="pick-label" id="pick-players-label">Players</span>' +
+          '<div class="pick-chips" role="group" aria-labelledby="pick-players-label">' + rows("players", playerRows) + "</div>" +
+        "</div>" +
+        '<div class="pick-facet">' +
+          '<span class="pick-label" id="pick-time-label">Time</span>' +
+          '<div class="pick-chips" role="group" aria-labelledby="pick-time-label">' + rows("time", timeRows) + "</div>" +
+        "</div>" +
+        '<div class="pick-facet">' +
+          '<span class="pick-label" id="pick-difficulty-label">Difficulty</span>' +
+          '<div class="pick-chips" role="group" aria-labelledby="pick-difficulty-label">' + rows("difficulty", difficultyRows) + "</div>" +
+        "</div>" +
+        '<div class="pick-facet">' +
+          '<span class="pick-label" id="pick-kind-label">Kind of game</span>' +
+          '<div class="pick-chips" role="group" aria-labelledby="pick-kind-label">' + rows("kind", kindRows) + "</div>" +
+        "</div>" +
+        '<label class="pick-search" for="pick-q">Search' +
+          '<input id="pick-q" type="search" value="' + escapeHtml(state.q) + '" autocomplete="off" enterkeyhint="search" aria-label="Search games">' +
+        "</label>" +
+        '<p id="pick-hidden" class="pick-hidden" role="status"></p>' +
+        '<div id="pick-list" class="pick-list"></div>' +
+        '<div class="pick-footer" id="pick-footer">' +
+          '<p id="pick-count" class="pick-count">No games on your list yet</p>' +
+          '<div class="pick-footer-actions">' +
+            '<button type="button" class="pick-footer-btn" id="pick-your-list" aria-pressed="false">Your list</button>' +
+            '<button type="button" class="pick-footer-btn pick-footer-btn--primary" id="pick-copy">Copy link</button>' +
+          "</div>" +
+          '<p id="pick-share-status" class="pick-share-status" role="status"></p>' +
+          '<p id="pick-share-url" class="pick-share-url" hidden></p>' +
+        "</div>" +
+      "</article>";
+    paint();
+    writePickHash(state);
+    var page = document.getElementById("pick-page");
+    if (!page) return;
+    page.addEventListener("click", function (event) {
+      var heart = event.target.closest ? event.target.closest("[data-pick-heart]") : null;
+      if (heart && page.contains(heart)) {
+        event.preventDefault();
+        event.stopPropagation();
+        var slug = heart.getAttribute("data-pick-heart") || "";
+        if (!DATA[slug]) return;
+        var at = state.picks.indexOf(slug);
+        if (at === -1) {
+          if (state.picks.length >= 100) return;
+          state.picks.push(slug);
+        } else {
+          state.picks.splice(at, 1);
+        }
+        state.urlPicks = true;
+        writeStoredPicks(state.picks);
+        writePickHash(state);
+        paint();
+        return;
+      }
+      var btn = event.target.closest ? event.target.closest("button") : null;
+      if (!btn || !page.contains(btn)) return;
+      if (btn.id === "pick-your-list") {
+        state.shortlist = !state.shortlist;
+        paint();
+        return;
+      }
+      if (btn.id === "pick-copy") {
+        var url = pickShareUrl(state);
+        var box = document.getElementById("pick-share-url");
+        var status = document.getElementById("pick-share-status");
+        if (box) {
+          box.hidden = false;
+          box.textContent = url;
+        }
+        copyPickText(url).then(function (ok) {
+          if (status) status.textContent = ok ? "Link copied." : "Select the link below and copy it.";
+        });
+        return;
+      }
+      var facet = btn.getAttribute("data-pick-facet");
+      if (!facet) return;
+      var value = btn.getAttribute("data-pick-value") || "";
+      if (facet === "who") {
+        var names = state.who.slice();
+        var index = names.indexOf(value);
+        if (index === -1) names.push(value);
+        else names.splice(index, 1);
+        state.who = cleanWho(names);
+      } else if (facet === "players" || facet === "time" || facet === "difficulty" || facet === "kind") {
+        state[facet] = state[facet] === value ? "" : value;
+      } else return;
+      writePickHash(state);
+      paint();
+    });
+    var search = document.getElementById("pick-q");
+    if (search) {
+      search.addEventListener("input", function () {
+        state.q = search.value || "";
+        writePickHash(state);
+        paint();
+      });
+    }
+  }
   function renderGameNight(params) {
     detailSlug = "";
     clearGameAccent();
@@ -187279,6 +188622,8 @@
     document.body.style.overflow = "";
     var nightLink = document.querySelector("header a.header-night");
     if (nightLink) nightLink.removeAttribute("aria-current");
+    var pickLink = document.querySelector(".all-games-bar a.pick-entry");
+    if (pickLink) pickLink.removeAttribute("aria-current");
     syncOwnerNav();
     ensureBagSync();
     var bagsLink = document.querySelector("header a.header-bags");
@@ -187291,6 +188636,7 @@
     }
     setUnlockRobots(false);
     if (normalizeIncoming()) return;
+    normalizePickerLink();
     var parsed = parseRequest();
     if (parsed.route === "detail" || parsed.route === "teach") {
       var named = DATA[parsed.slug];
@@ -187298,6 +188644,9 @@
       setCanonical(parsed.slug);
     } else if (parsed.route === "bags" && ownerUnlocked()) {
       document.title = "Bags · Board Game Quick";
+      setCanonical("");
+    } else if (parsed.route === "pick") {
+      document.title = "Find a game to play · Board Game Quick";
       setCanonical("");
     } else {
       document.title = "Board Game Quick";
@@ -187327,6 +188676,10 @@
     } else if (parsed.route === "night") {
       scrollPageToTop();
       renderGameNight(parsed.nightQuery);
+      requestAnimationFrame(scrollPageToTop);
+    } else if (parsed.route === "pick") {
+      scrollPageToTop();
+      renderPicker(parsed.pickQuery);
       requestAnimationFrame(scrollPageToTop);
     } else if (parsed.route === "bags") {
       if (!ownerUnlocked()) {

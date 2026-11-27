@@ -353,7 +353,7 @@ test("the filter row stays in the viewport width", async ({ page }, testInfo) =>
     await page.locator("#filter-toggle").click();
     await expect(page.locator("#catalog-filter-panel")).toBeHidden();
     const collapsedTop = await page.locator("#game-grid").evaluate((el) => el.getBoundingClientRect().top);
-    expect(collapsedTop).toBeLessThan(460);
+    expect(collapsedTop).toBeLessThan(520);
     expect(collapsedTop).toBeLessThan(gridTop);
   }
 });
@@ -399,12 +399,12 @@ test("offline list still filters and the worker skips other origins", async ({ p
     return res.text();
   });
   expect(swText).toContain("url.origin !== self.location.origin");
-  expect(swText).toContain('VERSION = "2026.11.21.47"');
+  expect(swText).toContain('VERSION = "2026.11.21.48"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.21.47");
+    const cache = await caches.open("bgquick-shell-2026.11.21.48");
     const keys = await cache.keys();
     return keys.some((req) => /index\.html/.test(req.url));
   });

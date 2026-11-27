@@ -222,6 +222,30 @@ Leave a flag off when it does not apply. A game that was already on the menu, an
 
 The menu uses the flags for two filters besides search. **All** is the default and shows every game. **Group** shows games with `group: true`. **My games** shows games with `mine: true`, and games that have neither flag. A game with `group: true` and no `mine` stays out of My games.
 
+## Newcomer picker
+
+Optional `picker` on `enrich.<slug>`. The Find a game page (`#/pick`) shows the blurb and up to two kind labels. Leave the object off when you do not have a sourced blurb. The card still shows the name, and players, time, and difficulty when those values exist.
+
+```json
+"picker": {
+  "blurb": "Two of you take turns claiming goods and camels, trying to make the better sales.",
+  "kinds": ["card", "duel"]
+}
+```
+
+`blurb` is one plain sentence of what the game is about and what you do. `kinds` stores ids from the closed set below. The page shows the label, not the id.
+
+| id | Label |
+| --- | --- |
+| `party` | Party |
+| `coop` | Cooperative |
+| `strategy` | Strategy |
+| `card` | Card game |
+| `puzzle` | Puzzle / tile |
+| `dice` | Dice |
+| `word` | Trivia / word |
+| `duel` | Two-player duel |
+
 ## Default player count
 
 Optional `defaultPlayerCount`. The page opens on this count when the game has a `setupByPlayerCount` entry for it. Use the same key as that map (`"4"`, not `"4p"`). Leave it off when no count is the usual one. The page then opens on the lowest count, as it always has.
