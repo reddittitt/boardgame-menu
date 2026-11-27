@@ -627,12 +627,12 @@ test("game night works offline and the worker still skips other origins", async 
   });
   expect(swText).toContain("url.origin !== self.location.origin");
   expect(swText.indexOf("url.origin !== self.location.origin")).toBeLessThan(swText.indexOf("respondWith"));
-  expect(swText).toContain('VERSION = "2026.11.21.29"');
+  expect(swText).toContain('VERSION = "2026.11.21.30"');
 
   await page.waitForFunction(async () => {
     const ready = await navigator.serviceWorker.ready;
     if (!ready.active) return false;
-    const cache = await caches.open("bgquick-shell-2026.11.21.29");
+    const cache = await caches.open("bgquick-shell-2026.11.21.30");
     const keys = await cache.keys();
     const urls = keys.map((req) => req.url);
     return urls.some((url) => /index\.html/.test(url)) && urls.some((url) => /game-night\.js/.test(url));
