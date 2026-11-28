@@ -131,7 +131,7 @@ const dune = games["dune-imperium-uprising"];
 check("dune has no character row", dune && !dune.characters);
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("sw version", /var VERSION = "2026\.11\.21\.53";/.test(sw));
+check("sw version", /var VERSION = "2026\.11\.21\.54";/.test(sw));
 check("sw cross-origin return", sw.includes("if (url.origin !== self.location.origin) return;"));
 check("sw no pdf added", !fs.existsSync(path.join(root, "rulebooks/marvel-villainous.pdf")));
 
