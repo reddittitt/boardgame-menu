@@ -210,6 +210,52 @@ test("the phone page has no horizontal overflow and a visible footer", async fun
   }
 });
 
+test("the longest blurb is fully visible at 390px", async function ({ page }) {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/#/pick?who=cody");
+  await expect(page.locator(".pick-blurb").first()).toBeVisible();
+  const measured = await page.evaluate(function () {
+    function measure(el) {
+      var style = getComputedStyle(el);
+      return {
+        text: (el.textContent || "").trim(),
+        scroll: el.scrollHeight,
+        client: el.clientHeight,
+        lineClamp: style.getPropertyValue("-webkit-line-clamp"),
+        textOverflow: style.textOverflow,
+        overflowY: style.overflowY,
+        maxHeight: style.maxHeight
+      };
+    }
+    var blurbs = Array.prototype.slice.call(document.querySelectorAll(".pick-blurb"));
+    blurbs.sort(function (a, b) {
+      return (b.textContent || "").length - (a.textContent || "").length;
+    });
+    var blurb = blurbs[0];
+    var card = blurb.closest(".pick-card");
+    return {
+      blurb: measure(blurb),
+      name: measure(card.querySelector(".pick-name")),
+      meta: measure(card.querySelector(".pick-meta"))
+    };
+  });
+  expect(measured.blurb.text.length).toBeGreaterThan(80);
+  expect(measured.blurb.scroll).toBeLessThanOrEqual(measured.blurb.client);
+  expect(measured.blurb.lineClamp === "none" || measured.blurb.lineClamp === "").toBe(true);
+  expect(measured.blurb.textOverflow).not.toBe("ellipsis");
+  expect(measured.blurb.overflowY).not.toBe("hidden");
+  expect(measured.blurb.maxHeight).toBe("none");
+  for (const part of [measured.name, measured.meta]) {
+    expect(part.scroll).toBeLessThanOrEqual(part.client);
+    expect(part.lineClamp === "none" || part.lineClamp === "").toBe(true);
+    expect(part.textOverflow).not.toBe("ellipsis");
+    expect(part.maxHeight).toBe("none");
+  }
+  const heart = await page.locator(".pick-heart").first().boundingBox();
+  expect(heart.height).toBeGreaterThanOrEqual(44);
+  expect(heart.width).toBeGreaterThanOrEqual(44);
+});
+
 test("a locked visit has no pack or bags controls in the picker", async function ({ page }) {
   await page.goto("/#/pick?who=cody");
   await expect(page.locator("#pick-page .bag-swipe, #pick-page .bag-pack, #pick-page [data-pack-slug], #pick-page #bag-pack")).toHaveCount(0);
