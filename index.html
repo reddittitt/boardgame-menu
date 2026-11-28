@@ -113355,10 +113355,10 @@
                 }
               },
               {
-                "text": "Any Dynamite you roll cannot be rerolled.",
+                "text": "Three or more Dynamite means you cannot reroll any more dice this turn, and you lose one life. The other dice still resolve, unless that Dynamite eliminated you.",
                 "source": {
                   "page": 1,
-                  "query": "Any Dynamite rolled cannot be re-rolled"
+                  "query": "If you roll three or more Dynamites, you cannot reroll anymore dice this turn, and you lose one life point. All your other dice results are then resolved as normal unless you are eliminated by the Dynamite!"
                 }
               },
               {
@@ -113373,6 +113373,13 @@
                 "source": {
                   "page": 1,
                   "query": "Choose the player exactly two places to your left or right. That player loses one life point."
+                }
+              },
+              {
+                "text": "If only two or three players are left, that two-place shot is treated as a one-place shot.",
+                "source": {
+                  "page": 1,
+                  "query": "If there are only two or three players left in the game, treat this as"
                 }
               },
               {
@@ -113624,7 +113631,11 @@
           },
           {
             "lead": "Dynamite",
-            "text": "Three or more dynamite ends your turn at once. You lose 1 life. The other dice still resolve."
+            "text": "Three or more Dynamite means you cannot reroll any more dice this turn, and you lose one life. The other dice still resolve, unless that Dynamite eliminated you.",
+            "source": {
+              "page": 1,
+              "query": "If you roll three or more Dynamites, you cannot reroll anymore dice this turn, and you lose one life point. All your other dice results are then resolved as normal unless you are eliminated by the Dynamite!"
+            }
           },
           {
             "lead": "Shoot",
@@ -131444,7 +131455,11 @@
           },
           {
             "lead": "Deal",
-            "text": "Shuffle the rest and deal 4 cards to each player. Then deal 1 Defuse, so each hand is 5."
+            "text": "Deal 7 cards face down to each player. With the Defuse already dealt, each hand is 8.",
+            "source": {
+              "page": 1,
+              "query": "deal 7 cards face down to each player. Everyone now has a hand of 8 cards total"
+            }
           },
           {
             "lead": "Kittens",
@@ -131452,14 +131467,18 @@
           },
           {
             "lead": "Defuse",
-            "text": "Shuffle the remaining Defuse cards into the deck."
+            "text": "Shuffle 2 leftover Defuses back into the deck and remove the rest. In a 5-player game, only 1 extra Defuse goes back.",
+            "source": {
+              "page": 1,
+              "query": "Shuffle 2 of the extras back into the deck, and remove the rest from the game. (In the case of a 5 player game, you’ll only have 1 extra Defuse to shuffle back into the deck.)"
+            }
           },
           {
             "lead": "First",
             "text": "Pick a player to go first."
           }
         ],
-        "details": "Exploding Kittens original-edition rules sheet, ©2017, hosted by 1jour-1jeu."
+        "details": "Exploding Kittens Original Edition rules sheet, ©2025."
       },
       "turnStructure": {
         "bullets": [
@@ -131534,13 +131553,17 @@
         "3": {
           "bullets": [
             {
-              "lead": "Kittens",
-              "text": "Put 2 Exploding Kittens back."
-            },
-            {
-              "lead": "Defuse",
-              "text": "Shuffle every remaining Defuse card into the deck."
+            "lead": "Kittens",
+            "text": "Put 2 Exploding Kittens back."
+          },
+          {
+            "lead": "Defuse",
+            "text": "Shuffle 2 of the extra Defuse cards back into the deck, and remove the rest.",
+            "source": {
+              "page": 1,
+              "query": "Shuffle 2 of the extras back into the deck, and remove the rest from the game."
             }
+          }
           ]
         },
         "4": {
@@ -138205,7 +138228,11 @@
         },
         {
           "lead": "First flick",
-          "text": "A Runner’s first flick starts on the red circle in the Classroom and must leave that circle."
+          "text": "The repeat-until-you-leave rule is only for each Runner’s first flick of the game. If that flick stays on the red circle, or lands back on it, flick again until the penguin leaves.",
+          "source": {
+            "page": 5,
+            "query": "For each Runner’s first flick of the game, if he fails to move away from the red circle or the runner lands back on the red circle, he must repeat the flick until he moves his penguin away from the red circle."
+          }
         },
         {
           "lead": "Fish",
@@ -138417,6 +138444,128 @@
       }
     },
     "illusion": {
+      "teachingScript": {
+        "bullets": [
+          {
+            "text": "The arrow names a colour, and that colour should take up more of each next card. Equal amounts on neighbouring cards still count.",
+            "source": {
+              "page": 1,
+              "query": "the proportion of the designated colour on each card must get progressively higher following the direction of the arrow (equal values are also correct)"
+            },
+            "lead": "Goal"
+          },
+          {
+            "text": "Shuffle the 12 arrow cards and turn the top one face up in the centre.",
+            "source": {
+              "page": 2,
+              "query": "The 12 arrow cards are shuffled and placed face down on the edge of the table. The top arrow card is turned over and placed face up in the centre of the table."
+            },
+            "lead": "Setup at a glance",
+            "bullets": [
+              {
+                "text": "Shuffle the 98 colour cards with the colour side up, and place the top card beside the arrow.",
+                "source": {
+                  "page": 2,
+                  "query": "The 98 colour cards are also shuffled and are placed with the colour side facing up in a deck on the edge of the table, alongside the stack of arrow cards. The top colour card is taken from the deck and placed face up next to the arrow in the centre of the table."
+                }
+              },
+              {
+                "text": "Do not show the percentage on the back of a colour card.",
+                "source": {
+                  "page": 2,
+                  "query": "The back of the colour card (percentage information) must not be seen."
+                }
+              },
+              {
+                "text": "Draw lots for who starts.",
+                "source": {
+                  "page": 2,
+                  "query": "Lots are drawn to decide who should start."
+                }
+              }
+            ]
+          },
+          {
+            "text": "On your turn, either question the whole row, or draw a colour card and insert it in the row.",
+            "source": {
+              "page": 2,
+              "query": "they must decide either to query the validity of the entire row so far or they must take an additional colour card from the deck and insert it (hopefully correctly) into the row."
+            },
+            "lead": "On your turn",
+            "bullets": [
+              {
+                "text": "Put the new card at the left end, the right end, or between two cards, following the arrow.",
+                "source": {
+                  "page": 3,
+                  "query": "insert it into the existing row: all the way to the left, or all the way to the right, or between two cards."
+                }
+              },
+              {
+                "text": "If you do not believe the row, say so out loud, and turn the cards over.",
+                "source": {
+                  "page": 4,
+                  "query": "they must say loudly and clearly “I don’t believe it”. When this happens, all the cards played so far are turned over"
+                }
+              }
+            ]
+          },
+          {
+            "text": "The first player with 3 arrow cards wins. You can instead play all 12 arrows, and the most arrows wins.",
+            "source": {
+              "page": 5,
+              "query": "until someone obtains 3 arrow cards - that player is the winner. Of course, you could also play 12 rounds. Then the winner is the player with the most arrow cards."
+            },
+            "lead": "How it ends",
+            "bullets": [
+              {
+                "text": "If the row has at least one step that goes down, the player who questioned it takes the arrow.",
+                "source": {
+                  "page": 4,
+                  "query": "If the player queries correctly, i.e. there was at least one error in the row (regardless of who actually committed this error!), the questioning player receives the arrow card as a reward."
+                }
+              },
+              {
+                "text": "If the row really rises, the player who placed the last card takes the arrow.",
+                "source": {
+                  "page": 5,
+                  "query": "If the player makes an incorrect query (i.e. the entire row was correct), then the arrow card is awarded to the player who put down the final colour card immediately before the questioning player."
+                }
+              },
+              {
+                "text": "Clear the colour cards. The player who took the arrow starts the next round.",
+                "source": {
+                  "page": 5,
+                  "query": "All the colour cards are removed from the centre of the table and are no longer required. Now the next round is played. The game is prepared and the next round played exactly as described above. The new round begins with the player who previously received the arrow card."
+                }
+              }
+            ]
+          },
+          {
+            "text": "Two neighbouring cards with the same percentage still count as correct.",
+            "source": {
+              "page": 4,
+              "query": "If two immediately adjacent cards have identical percentage values, this is considered to be correct."
+            },
+            "lead": "New players miss",
+            "bullets": [
+              {
+                "text": "You may not swap cards that were played earlier.",
+                "source": {
+                  "page": 3,
+                  "query": "It is not permitted to retrospectively swap over any cards which were played earlier."
+                }
+              },
+              {
+                "text": "The percentages cover only the printable white area. The grey border is not included.",
+                "source": {
+                  "page": 1,
+                  "query": "The percentage values relate to the printable white area on the card (the grey border is not included)."
+                }
+              }
+            ]
+          }
+        ]
+      },
       "bggTime": {
         "min": 15,
         "max": 15
@@ -147030,179 +147179,6 @@
       "rulesStatus": "pending"
     },
     "monza": {
-      "teachingScript": {
-        "bullets": [
-          {
-            "text": "Race to be the first to cross the finish line and take home the Monza trophy.",
-            "source": {
-              "page": 2,
-              "query": "Who will be the first to cross the finish line and take home the coveted Monza trophy?"
-            },
-            "lead": "Goal",
-            "bullets": [
-              {
-                "text": "These steps are the basic game. The pro variation is explained later, and its extra tiles stay in the box.",
-                "source": {
-                  "page": 3,
-                  "query": "In the basic game, they remain in the box. The rules for the pro variation are explained later in the instructions."
-                }
-              }
-            ]
-          },
-          {
-            "text": "Choose the track parts you want. For the first games, use a shorter track or the classic oval, which the sheet calls medium.",
-            "source": {
-              "page": 3,
-              "query": "First, decide on a racetrack that you would like to play on. It is entirely up to you how many track parts you want to use and which ones. For the first few games, we recommend a shorter track or the classic oval track (medium)."
-            },
-            "lead": "Setup at a glance",
-            "bullets": [
-              {
-                "text": "Begin the layout with the starting space and end it with the finish line.",
-                "source": {
-                  "page": 3,
-                  "query": "Begin with the starting space and end with the finish line space."
-                }
-              },
-              {
-                "text": "Put the 6 colored dice in the center, where everyone can reach them.",
-                "source": {
-                  "page": 3,
-                  "query": "Place the 6 colored dice in the center of the table where everyone can easily reach them."
-                }
-              },
-              {
-                "text": "Each player takes a car on the starting space. The other cars stay in the box.",
-                "source": {
-                  "page": 3,
-                  "query": "Every player selects a racing car and places it on the starting space. The other racing cars stay in the box."
-                }
-              },
-              {
-                "text": "Set out as many trophy tiles as there are children.",
-                "source": {
-                  "page": 3,
-                  "query": "Place the same number of winner’s trophy tiles next to the racetrack as there are children."
-                }
-              },
-              {
-                "text": "The youngest child takes the starting tile and goes first.",
-                "source": {
-                  "page": 3,
-                  "query": "The youngest child takes the starting tile and goes first."
-                }
-              }
-            ]
-          },
-          {
-            "text": "Take turns clockwise. The child with the starting tile goes first and rolls all six dice.",
-            "source": {
-              "page": 3,
-              "query": "Take turns playing in a clockwise direction. The child with the starting tile goes first: Roll all six dice at once."
-            },
-            "lead": "On your turn",
-            "bullets": [
-              {
-                "text": "Place the dice step by step on the spaces, then move the car.",
-                "source": {
-                  "page": 3,
-                  "query": "place the appropriate dice step-by-step on the corre sponding space on the racetrack. Then move your racing car."
-                }
-              },
-              {
-                "text": "Your car can only go forward.",
-                "source": {
-                  "page": 4,
-                  "query": "Your racing car can only go forward."
-                }
-              },
-              {
-                "text": "Change lanes only if the front edge of the neighboring space is ahead of your car or your last die.",
-                "source": {
-                  "page": 4,
-                  "query": "You can only change lanes sideways if the front edge of the neighboring space is in front of the space occupied by your racing car or the last die rolled."
-                }
-              },
-              {
-                "text": "You may move over another car.",
-                "source": {
-                  "page": 4,
-                  "query": "You can also move over spaces occupied by another racing car."
-                }
-              },
-              {
-                "text": "If your turn ends on that car, move it back to the next free space in its lane, not onto an obstacle.",
-                "source": {
-                  "page": 4,
-                  "query": "If your turn ends on an occupied space, you overtake the racing car that is on that space. Move it back to the next possible free space (without any obstacle or other racing car) in the same lane"
-                }
-              },
-              {
-                "text": "If you cannot place another die, move onto the last die and stop. If you cannot place a die at all, you stay where you are.",
-                "source": {
-                  "page": 4,
-                  "query": "If you can no longer place dice because there is no suitable space in front of your last placed die, you move your racing car onto the space of that die and your turn is over. Of course, it may be that you cannot place a die at all. In this case, you just stay where you are."
-                }
-              }
-            ]
-          },
-          {
-            "text": "To finish, place a white die on the finishing space. Play then continues up to the child with the starting tile, so everyone has had the same number of turns.",
-            "source": {
-              "page": 5,
-              "query": "To cross the finish line, you have to place a white die on the finishing space. As soon as the first racing car reaches the finish line, play continues up to the child holding the starting tile, so that you all had the same number of turns."
-            },
-            "lead": "How it ends",
-            "bullets": [
-              {
-                "text": "If only one car crosses, that child is the only winner. If several cross together, the fewest dice used in that last round wins.",
-                "source": {
-                  "page": 5,
-                  "query": "If you are the only child to cross the finish line in your racing car, you are the only winner! If several racing cars cross the finish line at the same time, the child who used the fewest dice in the last round is the winner."
-                }
-              },
-              {
-                "text": "If that is also a tie, the winners share the trophy.",
-                "source": {
-                  "page": 5,
-                  "query": "If this also results in a tie, the winners share the trophy and celebrate their victory together."
-                }
-              }
-            ]
-          },
-          {
-            "text": "Gray spaces with a tire are obstacles, and you may not drive on them.",
-            "source": {
-              "page": 4,
-              "query": "The gray spaces (with a tire) are obstacle spaces. You are not allowed to drive on them."
-            },
-            "lead": "New players miss",
-            "bullets": [
-              {
-                "text": "A long run of one color with no black outline is a single space, so one die is enough to cross it.",
-                "source": {
-                  "page": 3,
-                  "query": "Treat these long spaces without black outlines as a single space,so a single die will be enough to move forward there."
-                }
-              },
-              {
-                "text": "In the last round, remember how many dice you used.",
-                "source": {
-                  "page": 5,
-                  "query": "In this last round, you all have to remember how many dice you used for driving."
-                }
-              },
-              {
-                "text": "The bonus step is its own variation, for the basic game or for the Monza Challenge. These steps do not use it.",
-                "source": {
-                  "page": 6,
-                  "query": "Bonus step game variation You can use this variation in the basic game, and also in the Monza Challenge."
-                }
-              }
-            ]
-          }
-        ]
-      },
       "bggTime": {
         "min": 10,
         "max": 15

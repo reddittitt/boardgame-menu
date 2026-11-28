@@ -21,7 +21,7 @@ const slugs = [
   "rhino-hero",
   "memoarrr",
   "exploding-kittens",
-  "monza",
+  "illusion",
   "icecool",
   "bang-the-dice-game"
 ];
