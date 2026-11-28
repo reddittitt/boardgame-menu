@@ -102,7 +102,7 @@ const overallTimesBatch2 = [
   { slug: "scythe", text: "115 min", index: "scythe", must: ["1-5 PLAYERS \u2022 115 MINUTES"] },
   { slug: "mr-jack-pocket", text: "about 15 min", index: "mr-jack-pocket", must: ["A game lasts about fifteen minutes and takes a maximum of eight turns."] },
   { slug: "no-thanks", text: "about 20 min", index: "no-thanks", must: ["about 20 minutes"] },
-  { slug: "monza", text: "approximately 15 min", index: "monza", must: ["Length of the game: approximately 15 minutes"] }
+  { slug: "monza", text: "10 - 15 minutes approx.", index: "monza", must: ["Length of the game: 10 - 15 minutes approx."] }
 ];
 const overallTimesBatch3 = [
   { slug: "photosynthesis", text: "45\u201360 min", index: "photosynthesis", page: 1, must: ["45-60 Minutes"] },
@@ -575,7 +575,7 @@ for (const row of firstGamesBatch3) {
 }
 
 const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-check("worker version", sw.includes('var VERSION = "2026.11.21.56";'));
+check("worker version", sw.includes('var VERSION = "2026.11.21.57";'));
 const fetchAt = sw.indexOf('self.addEventListener("fetch"');
 const originAt = sw.indexOf("if (url.origin !== self.location.origin) return;", fetchAt);
 check("fetch handler returns before other origins", originAt > fetchAt && originAt < sw.indexOf("respondWith", fetchAt));
