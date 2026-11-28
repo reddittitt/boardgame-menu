@@ -89,7 +89,7 @@ assert(wiki && wiki.items.length === 3, "wiki parser stops at the next section")
 assert(wiki.items[0].count === "85" && wiki.items[0].name === "Habitat Tiles", "wiki count");
 
 const sw = read("sw.js");
-assert(/var VERSION = "2026\.11\.21\.55";/.test(sw), "service worker version");
+assert(/var VERSION = "2026\.11\.21\.56";/.test(sw), "service worker version");
 assert(sw.includes("./components.json"), "components.json is a shell file");
 const fetchAt = sw.indexOf('addEventListener("fetch"');
 const originAt = sw.indexOf("url.origin !== self.location.origin", fetchAt);
